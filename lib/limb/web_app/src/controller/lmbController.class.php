@@ -185,7 +185,7 @@ class lmbController
         $this->setTemplate($template_path);
       }
 
-      $res = $this->$method();
+      $res = $this->_convertResponse($this->$method());
 
       $this->_passLocalAttributesToView();
 
@@ -222,6 +222,11 @@ class lmbController
     $view->copy($this->view);
     $this->view = $view;
     $this->toolkit->setView($view);
+  }
+
+  protected function _convertResponse($method_response)
+  {
+    return $method_response;
   }
 
   protected function _passLocalAttributesToView()

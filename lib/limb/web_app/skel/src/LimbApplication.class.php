@@ -2,7 +2,7 @@
 lmb_require('limb/web_app/src/lmbWebApplication.class.php');
 
 /**
- * class LimbApplication.
+ * class OneDayApplication.
  *
  * @package web_app
  * @version $Id$

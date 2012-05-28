@@ -103,6 +103,11 @@ class lmbHttpResponse
       return 200;
   }
 
+  function setDirective($directive_name, $value)
+  {
+    $this->addHeader($directive_name . ': ' . $value);
+  }
+
   function getDirective($directive_name)
   {
     $directive = null;
@@ -117,6 +122,10 @@ class lmbHttpResponse
       return $directive;
     else
       return false;
+  }
+
+  function setContentType($type) {
+    $this->addHeader('content-type', $type);
   }
 
   function getContentType()
