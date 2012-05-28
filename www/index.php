@@ -8,9 +8,9 @@
  */
 
 require_once(dirname(__FILE__) . '/../setup.php');
-require_once('src/LimbApplication.class.php');
+lmb_require('src/OneDayApplication.class.php');
 
-$application = new LimbApplication();
+$application = new OneDayApplication();
 $application->process();
 
 

@@ -1,7 +1,7 @@
 <?php
 lmb_require('limb/cms/src/lmbCmsApplication.class.php');
 
-class LimbApplication extends lmbCmsApplication
+class OneDayApplication extends lmbCmsApplication
 {
   /*function __construct()
   {
