@@ -4,8 +4,8 @@ lmb_require('src/model/User.class.php');
 
 /**
  *@Swaggerresource(
- *     basePath="http://one-day.ru/api_doc",
- *     swaggerVersion="1",
+ *     basePath="/api_doc",
+ *     swaggerVersion="1.0",
  *     apiVersion="1"
  * )
  *@Swagger (

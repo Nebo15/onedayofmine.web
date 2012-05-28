@@ -32,6 +32,19 @@ use DirectoryIterator,
 class Swagger
 {
     /**
+     * @var String
+     */
+    protected $basePath;
+    /**
+     * @var String
+     */
+    protected $version;
+    /**
+     * @var String
+     */
+    protected $apiVersion;
+
+    /**
      *
      * @var Array
      */
@@ -65,7 +78,7 @@ class Swagger
     /**
      *
      * @param string $path
-     * @return array
+     * @return Swagger
      */
     public static function discover($path)
     {
@@ -105,7 +118,7 @@ class Swagger
         $resources = $this->resources->getResource($basePath);
         $apiResource = $resources[$api];
         $apis = array();
-        $models = array();	
+        $models = array();
         foreach ($apiResource['apis'] as $api) {
             foreach ($api['operations'] as $op) {
                 $responseClass = $op['responseClass'];
@@ -114,7 +127,7 @@ class Swagger
                 }
             $models[$responseClass] = $this->models->results[$responseClass];
             }
-            $apis[] = $api;			
+            $apis[] = $api;
         }
         $apiResource['apis'] = $apis;
         $apiResource['models'] = $models;
@@ -160,6 +173,36 @@ class Swagger
     public function setFileList($fileList)
     {
         $this->_fileList = $fileList;
+        return $this;
+    }
+    /**
+     *
+     * @param  string $basePath
+     * @return Swagger
+     */
+    public function setBasePath($basePath)
+    {
+        $this->basePath = $basePath;
+        return $this;
+    }
+    /**
+     *
+     * @param  string $version Swagger version
+     * @return Swagger
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+        return $this;
+    }
+  /**
+   *
+   * @param  string $apiVersion
+   * @return Swagger
+   */
+    public function setApiVersion($apiVersion)
+    {
+        $this->apiVersion = $apiVersion;
         return $this;
     }
     /**
