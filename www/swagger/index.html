@@ -157,13 +157,17 @@
       <td width='500'>${description}</td>
     </tr>
     </script>
-    <div id='content_message'>
-      Enter the base URL of the API that you wish to explore, or try
-      <a onclick="$('#input_baseUrl').val('http://petstore.swagger.wordnik.com/api/resources.json'); apiSelectionController.showApi(); return false;" href="#">petstore.swagger.wordnik.com/api/resources.json</a>
-    </div>
     <p id='colophon' style='display:none'>
       Sexy API documentation from
       <a href="http://swagger.wordnik.com">Swagger</a>.
     </p>
   </body>
+  <script>
+      $(document).ready(function() {
+          if($('#input_baseUrl').val())
+            return;
+          var pathname = window.location.hostname;
+          $('#input_baseUrl').val('http://'+pathname+'/api_doc');
+      });
+  </script>
 </html>
