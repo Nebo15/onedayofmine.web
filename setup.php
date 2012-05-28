@@ -18,5 +18,6 @@ lmb_package_require('cms');
 lmb_env_setor('APP_DIR', $app_dir);
 lmb_env_setor('LIBS_DIR', $libs_dir);
 lmb_env_setor('LIMB_VAR_DIR', $app_dir . '/var/');
-lmb_env_setor('SERVER_NAME', $_SERVER['SERVER_NAME']);
+if(array_key_exists('SERVER_NAME', $_SERVER))
+  lmb_env_setor('SERVER_NAME', $_SERVER['SERVER_NAME']);
 lmb_env_setor('LIMB_APP_MODE' , 'production');
