@@ -1,0 +1,39 @@
+{
+    "endpoints": [
+        {
+            "name": "User methods",
+            "methods": [
+                {
+                    "MethodName": "Create new day",
+                    "Synopsis": "Add new day",
+                    "HTTPMethod": "POST",
+                    "URI": "/day/create",
+                    "RequiresOAuth": "Y",
+                    "parameters": [
+                        {
+                            "Name": "user_id",
+                            "Required": "Y",
+                            "Default": "",
+                            "Type": "integer",
+                            "Description": "User ID"
+                        },
+                        {
+                            "Name": "title",
+                            "Required": "Y",
+                            "Default": "",
+                            "Type": "string",
+                            "Description": "Day title (255 symbols)"
+                        },
+                        {
+                            "Name": "description",
+                            "Required": "Y",
+                            "Default": "",
+                            "Type": "string",
+                            "Description": "Day description (1023 symbols)"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
