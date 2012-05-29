@@ -5,7 +5,7 @@
             "methods": [
                 {
                     "MethodName": "Create new day",
-                    "Synopsis": "Add new day",
+                    "Synopsis": "Bla-bla-bla",
                     "HTTPMethod": "POST",
                     "URI": "/day/create",
                     "RequiresOAuth": "Y",
@@ -30,6 +30,21 @@
                             "Default": "",
                             "Type": "string",
                             "Description": "Day description (1023 symbols)"
+                        }
+                    ]
+                },
+                {
+                    "MethodName": "Get day by ID",
+                    "HTTPMethod": "GET",
+                    "URI": "/day/item/",
+                    "RequiresOAuth": "Y",
+                    "parameters": [
+                        {
+                            "Name": "id",
+                            "Required": "Y",
+                            "Default": "",
+                            "Type": "integer",
+                            "Description": "Day ID"
                         }
                     ]
                 }
