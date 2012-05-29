@@ -1,0 +1,38 @@
+<div class='tabs'>
+
+  <ul>
+    <li id='properties'><a>Свойства</a></li>
+  </ul>
+
+  <div id="tab_properties">
+    
+      
+        <dl class="field">
+          <dt>{{label for="title"}}title:{{/label}}</dt>
+          <dd>{{input id="title" name="title" type="text" title="title"/}}</dd>
+        </dl>
+      
+        <dl class="field">
+          <dt>{{label for="description"}}description:{{/label}}</dt>
+          <dd>{{textarea id="description" name="description" type="text" title="description" cols="40" rows="26"/}}</dd>
+        </dl>
+      
+        <dl class="field">
+          <dt>{{label for="start_time"}}start_time:{{/label}}</dt>
+          <dd> <? $value = $this->item->get("start_time") ? $this->item->get("start_time") : date(); ?>  {{date3Select id="start_time" name="start_time" title="start_time" year_class="date3select" lang="ru" value="{$value}" format="%s" /}}</dd>
+        </dl>
+      
+        <dl class="field">
+          <dt>{{label for="likes_count"}}likes_count:{{/label}}</dt>
+          <dd>{{input id="likes_count" name="likes_count" type="text" title="likes_count"/}}</dd>
+        </dl>
+      
+        <dl class="field">
+          <dt>{{label for="cip"}}cip:{{/label}}</dt>
+          <dd>{{input id="cip" name="cip" type="text" title="cip"/}}</dd>
+        </dl>
+      
+    
+  </div>
+
+</div>

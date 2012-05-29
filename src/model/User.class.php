@@ -1,4 +1,5 @@
 <?php
+lmb_require('src/model/BaseModel.class.php');
 
 /**
  *@SwaggerModel(
@@ -9,6 +10,5 @@
  */
 class User extends lmbActiveRecord
 {
-  protected $_db_table_name = 'user';
-  protected $_default_sort_params = array('id'=>'asc');
+
 }

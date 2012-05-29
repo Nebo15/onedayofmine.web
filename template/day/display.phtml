@@ -1,0 +1,10 @@
+{{wrap with="front_page_layout.phtml" in="content_zone"}}
+  <h1>Day</h1>  
+  {{list:list using="$this->items" as="$item"}}
+  <ul>
+    {{list:item}}
+            <li><a href="/day/item/{$item.id}">{$item.id}</a></li>
+    {{/list:item}}
+  </ul>
+  {{/list:list}}
+{{/wrap}}

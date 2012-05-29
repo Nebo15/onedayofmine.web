@@ -1,0 +1,23 @@
+{{wrap with="front_page_layout.phtml" in="content_zone"}}
+  <h1>Day #{$this->item.id}</h1>
+  <p><a href="/day/">к списку</a></p>
+  <ul>
+    <li>id: {$this->item.id}</li>
+  
+    <li>user_id: {$this->item.user_id}</li>
+  
+    <li>title: {$this->item.title}</li>
+  
+    <li>description: {$this->item.description}</li>
+  
+    <li>start_time: {$this->item.start_time}</li>
+  
+    <li>likes_count: {$this->item.likes_count}</li>
+  
+    <li>ctime: {$this->item.ctime}</li>
+  
+    <li>utime: {$this->item.utime}</li>
+  
+    <li>cip: {$this->item.cip}</li>
+  </ul>
+{{/wrap}}

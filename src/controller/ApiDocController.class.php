@@ -3,14 +3,20 @@ lmb_require('Swagger/*.php');
 
 class ApiDocController extends lmbController
 {
-  function doDisplay() {
-      $this->response->setContentType('application/json');
-      return $this->_createSwagger()->getResource('/api_doc');
+  function doDisplay()
+  {
+    return $this->_createSwagger()->getResource('/api_doc');
   }
 
-  function doUser() {
+  function doDay()
+  {
+    return $this->_doApi('/day');
+  }
+
+  protected function _doApi($path)
+  {
     $this->response->setContentType('application/json');
-    return $this->_createSwagger()->getApi('/api_doc', '/user');
+    return $this->_createSwagger()->getApi('/api_doc', $path);
   }
 
   protected function _createSwagger()
