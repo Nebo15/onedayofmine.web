@@ -4,18 +4,63 @@
             "name": "User methods",
             "methods": [
                 {
-                    "MethodName": "Create new day",
-                    "Synopsis": "Bla-bla-bla",
-                    "HTTPMethod": "POST",
-                    "URI": "/day/create",
+                    "MethodName": "Get all days",
+                    "HTTPMethod": "GET",
+                    "URI": "/day/",
+                    "RequiresOAuth": "Y",
+                    "parameters": []
+                },
+                {
+                    "MethodName": "Get day by ID",
+                    "HTTPMethod": "GET",
+                    "URI": "/day/item/",
                     "RequiresOAuth": "Y",
                     "parameters": [
                         {
-                            "Name": "user_id",
+                            "Name": "id",
                             "Required": "Y",
                             "Default": "",
                             "Type": "integer",
-                            "Description": "User ID"
+                            "Description": "Day ID"
+                        }
+                    ]
+                },
+                {
+                    "MethodName": "Create new day",
+                    "Synopsis": "Bla-bla-bla",
+                    "HTTPMethod": "POST",
+                    "URI": "day/create",
+                    "RequiresOAuth": "Y",
+                    "parameters": [
+                        {
+                            "Name": "title",
+                            "Required": "Y",
+                            "Default": "",
+                            "Type": "string",
+                            "Description": "Day title (255 symbols)"
+                        },
+                        {
+                            "Name": "description",
+                            "Required": "Y",
+                            "Default": "",
+                            "Type": "string",
+                            "Description": "Day description (1023 symbols)"
+                        }
+                    ]
+                },
+                {
+                    "MethodName": "Update day",
+                    "Synopsis": "Bla-bla-bla",
+                    "HTTPMethod": "POST",
+                    "URI": "day/update",
+                    "RequiresOAuth": "Y",
+                    "parameters": [
+                        {
+                            "Name": "id",
+                            "Required": "Y",
+                            "Default": "",
+                            "Type": "integer",
+                            "Description": "Day ID"
                         },
                         {
                             "Name": "title",
@@ -34,9 +79,24 @@
                     ]
                 },
                 {
-                    "MethodName": "Get day by ID",
-                    "HTTPMethod": "GET",
-                    "URI": "/day/item/",
+                    "MethodName": "Delete day by ID",
+                    "HTTPMethod": "POST",
+                    "URI": "/day/delete/",
+                    "RequiresOAuth": "Y",
+                    "parameters": [
+                        {
+                            "Name": "id",
+                            "Required": "Y",
+                            "Default": "",
+                            "Type": "integer",
+                            "Description": "Day ID"
+                        }
+                    ]
+                },
+                {
+                    "MethodName": "Restore day by ID",
+                    "HTTPMethod": "POST",
+                    "URI": "/day/restore/",
                     "RequiresOAuth": "Y",
                     "parameters": [
                         {
