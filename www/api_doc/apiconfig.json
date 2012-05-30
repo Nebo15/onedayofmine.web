@@ -2,7 +2,7 @@
     "onedayofmine":{
         "name":"One day of mine",
         "protocol":"http",
-        "baseURL":"onedayofmine.dev",
+        "baseURL":"onedayofmine.com",
         "publicPath":"/",
         "auth":"key",
         "keyParam":"api_key_var_name"
