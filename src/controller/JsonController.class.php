@@ -5,21 +5,22 @@ class JsonController extends lmbController
 {
   protected function _convertResponse($method_response)
   {
-    $this->_answerOk($method_response);
+    if(null != $method_response)
+      $this->_answerOk($method_response);
     return null; //a special for to "smart" IDE's
   }
 
-  protected function _answerOk($data)
+  protected function _answerOk($data = '')
   {
-    $this->_answer(200, $data);
+    $this->_answer(200, array('response' => $data));
     return null; //a special for to "smart" IDE's
   }
 
-  protected function _answerWithError($data)
+  protected function _answerWithError($data, $status = 500)
   {
     if(!is_array($data))
       $data = array($data);
-    $this->_answer(500, $data);
+    $this->_answer($status, array('errors' => $data));
     return null; //a special for to "smart" IDE's
   }
 

@@ -1,11 +1,27 @@
 <?php
-lmb_require('limb/cms/src/lmbCmsApplication.class.php');
+lmb_require('limb/web_app/src/lmbWebApplication.class.php');
 
-class OneDayApplication extends lmbCmsApplication
+class OneDayApplication extends lmbWebApplication
 {
-  /*function __construct()
+  protected function _registerFilters()
   {
-    //register your own custom filter chain here
+    $this->registerFilter(new lmbHandle('src/filter/ErrorHandlingFilter'));
+
+    $this->registerFilter(new lmbHandle('limb/profile/src/filter/lmbProfileReportingFilter'));
+
+    $this->registerFilter(new lmbHandle('limb/dbal/src/filter/lmbAutoDbTransactionFilter'));
+    $this->registerFilter(new lmbHandle('limb/web_app/src/filter/lmbSessionStartupFilter'));
+
+    $this->registerFilter(
+      new lmbHandle('limb/web_app/src/filter/lmbRequestDispatchingFilter',
+        array(new lmbHandle('limb/web_app/src/request/lmbRoutesRequestDispatcher')))
+    );
+    $this->registerFilter(new lmbHandle('limb/web_app/src/filter/lmbResponseTransactionFilter'));
+
+  	$this->registerFilter(new lmbHandle('limb/cms/src/filter/lmbCmsAccessPolicyFilter'));
+    $this->registerFilter(new lmbHandle('limb/web_app/src/filter/lmbActionPerformingFilter'));
+
+    $this->registerFilter(new lmbHandle('limb/web_app/src/filter/lmbViewRenderingFilter'));
   }
- */
 }
+

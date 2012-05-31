@@ -1,6 +1,48 @@
 {
     "endpoints": [
         {
+            "name": "Auth",
+            "methods": [
+                {
+                    "MethodName": "login",
+                    "HTTPMethod": "POST",
+                    "URI": "/auth/login",
+                    "RequiresOAuth": "N",
+                    "parameters": [
+                        {
+                            "Name": "fb_user_id",
+                            "Required": "Y",
+                            "Default": "",
+                            "Type": "string",
+                            "Description": "FaceBook user id"
+                        },
+                        {
+                            "Name": "fb_access_token",
+                            "Required": "Y",
+                            "Default": "",
+                            "Type": "string",
+                            "Description": "FaceBook access token"
+                        }                        
+                    ]
+                },
+                {
+                    "MethodName": "logout",
+                    "HTTPMethod": "POST",
+                    "URI": "/auth/logout/",
+                    "RequiresOAuth": "Y",
+                    "parameters": [
+                        {
+                            "Name": "access_token",
+                            "Required": "Y",
+                            "Default": "",
+                            "Type": "string",
+                            "Description": "Day ID"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
             "name": "User methods",
             "methods": [
                 {
@@ -24,7 +66,7 @@
                             "Description": "Day ID"
                         }
                     ]
-                },
+                },                
                 {
                     "MethodName": "Create new day",
                     "Synopsis": "Bla-bla-bla",
@@ -109,6 +151,6 @@
                     ]
                 }
             ]
-        }
+        }        
     ]
 }
