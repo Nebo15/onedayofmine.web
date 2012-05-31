@@ -96,7 +96,7 @@ class lmbErrorHandlingFilter implements lmbInterceptingFilter
   protected function _echoErrorBacktrace($error)
   {
     $message = $error['message'];
-    $trace = '';
+    $trace = new lmbBacktrace();
     $file = $error['file'];
     $line = $error['line'];
     $context = htmlspecialchars($this->_getFileContext($file, $line));
@@ -111,24 +111,24 @@ class lmbErrorHandlingFilter implements lmbInterceptingFilter
 
   protected function _echoExceptionBacktrace(Exception $e)
   {
-	$params = '';
-	if ($e instanceof lmbException)
-	{
-		$error = htmlspecialchars($e->getOriginalMessage());
-		foreach($e->getParams() as $name => $value)
-            $params .= $name . '  =>  ' . print_r($value, true) . PHP_EOL;
+  	$params = '';
+  	if ($e instanceof lmbException)
+  	{
+  		$error = htmlspecialchars($e->getOriginalMessage());
+  		foreach($e->getParams() as $name => $value)
+              $params .= $name . '  =>  ' . print_r($value, true) . PHP_EOL;
 
-		$params = htmlspecialchars($params);
-	}
-	else
-	{
-		$error = htmlspecialchars($e->getMessage());
-	}
+  		$params = htmlspecialchars($params);
+  	}
+  	else
+  	{
+  		$error = htmlspecialchars($e->getMessage());
+  	}
 
     if($e instanceof lmbException)
-      $trace = htmlspecialchars($e->getNiceTraceAsString());
+      $trace = $e->getBacktraceObject();
     else
-      $trace = htmlspecialchars($e->getTraceAsString());
+      $trace = new lmbBacktrace($e->getTrace());
 
     list($file, $line) = $this->_extractExceptionFileAndLine($e);
     $context = htmlspecialchars($this->_getFileContext($file, $line));
@@ -141,9 +141,11 @@ class lmbErrorHandlingFilter implements lmbInterceptingFilter
     echo $this->_renderTemplate($error, $params, $trace, $file, $line, $context, $request, $session);
   }
 
-  protected function _renderTemplate($error, $params, $trace, $file, $line, $context, $request, $session)
+  protected function _renderTemplate($error, $params, lmbBacktrace $trace, $file, $line, $context, $request, $session)
   {
     $formatted_error = nl2br($error);
+
+    $trace = $trace->toString();
 
     $body = <<<EOD
 <html>
