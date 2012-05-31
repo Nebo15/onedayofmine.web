@@ -1,6 +1,7 @@
 <?php
 lmb_require('limb/filter_chain/src/lmbInterceptingFilter.interface.php');
 lmb_require('limb/dbal/src/drivers/lmbAuditDbConnection.class.php');
+lmb_require('limb/cache2/src/wrappers/lmbLoggedCacheWrapper.class.php');
 
 set_include_path(dirname(__FILE__) . '/../../lib/PEAR' . PATH_SEPARATOR . get_include_path());
 
@@ -21,8 +22,8 @@ class lmbProfileReportingFilter implements lmbInterceptingFilter
       $this->start_time = microtime(true);
 
       $cache = $toolkit->getCache();
-      $cache = new lmbLoggedCache($cache, 'default');
-      $toolkit->setCache($cache);
+      $cache = new lmbLoggedCacheWrapper($cache, 'default');
+      $toolkit->setCache('default', $cache);
     }
 
     $filter_chain->next();
