@@ -49,14 +49,14 @@ class lmbBacktrace
     return (sizeof($this->backtrace)) ? $this->backtrace[0] : '';
   }
 
-  function toString()
+  function toString($lines_delimiter = "\n")
   {
     $trace_string = '';
 
     foreach($this->backtrace as $item)
     {
       $trace_string .= '* ';
-      $trace_string .= $this->_formatBacktraceItem($item) . "\n";
+      $trace_string .= $this->_formatBacktraceItem($item) . $lines_delimiter;
     }
     return $trace_string;
   }
