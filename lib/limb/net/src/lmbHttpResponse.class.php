@@ -145,7 +145,7 @@ class lmbHttpResponse
     );
 
     lmb_assert_array_with_key($messages, $status_code);
-    $this->addHeader($messages[$status_code].' '.$status_code);
+    $this->addHeader('HTTP/1.1 '.$status_code.' '.$messages[$status_code]);
   }
 
   function getStatus()
