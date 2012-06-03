@@ -4,9 +4,9 @@ lmb_require('limb/profile/src/lmbProfileBaseReporter.class.php');
 
 class lmbProfileJsonReporter extends lmbProfileBaseReporter
 {
-  function getReport()
+  function attachReport(lmbHttpResponse $response)
   {
-    return json_encode(array(
+    $json = json_encode(array(
       'main' => array(
         'time' => $this->script_time,
         'memory' => $this->script_memory,
@@ -15,5 +15,6 @@ class lmbProfileJsonReporter extends lmbProfileBaseReporter
       'sql' => $this->sql_queries,
       'cache' => $this->cache_queries
     ));
+    $response->addHeader('X-Limb-Profile: '.$json);
   }
 }

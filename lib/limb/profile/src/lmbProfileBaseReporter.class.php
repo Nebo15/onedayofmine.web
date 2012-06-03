@@ -45,5 +45,5 @@ abstract class lmbProfileBaseReporter
     $this->script_peak_memory = $peak_memory;
   }
 
-  abstract function getReport();
+  abstract function attachReport(lmbHttpResponse $response);
 }

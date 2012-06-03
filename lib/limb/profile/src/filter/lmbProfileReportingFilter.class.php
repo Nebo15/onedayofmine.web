@@ -38,13 +38,15 @@ class lmbProfileReportingFilter implements lmbInterceptingFilter
     	  memory_get_peak_usage()
       );
 
-      foreach ($conn->getStats() as $key => $info)
+      foreach ($conn->getStats() as $info)
         $reporter->addSqlQuery($info);
 
-      foreach ($cache->getRuntimeStats() as $key => $info)
+      foreach ($cache->getRuntimeStats() as $info)
         $reporter->addCacheQuery($info);
 
-      echo $reporter->getReport();
+      $response = lmbToolkit::instance()->getResponse();
+      $reporter->attachReport($response);
+      $response->commit();
     }
   }
 }

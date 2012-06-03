@@ -5,9 +5,6 @@ lmb_require('src/model/Day.class.php');
 class DayController extends JsonController
 {
   protected $_object_class_name = 'User';
-  protected $_form_name = 'object_form';
-  protected $_popup = true;
-  protected $_back_url = array();
 
   function doDisplay()
   {
@@ -26,7 +23,7 @@ class DayController extends JsonController
     $day = new Day();
 
     if(!$this->request->hasPost())
-      return $this->_answerWithError('Not a POST request');
+      return $this->_answer(null, 405, 'Not a POST request');
 
     return $this->_importAndSave($day, array('title', 'description'));
   }

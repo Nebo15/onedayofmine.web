@@ -3,32 +3,63 @@ lmb_require('limb/web_app/src/controller/lmbController.class.php');
 
 class JsonController extends lmbController
 {
-  protected function _convertResponse($method_response)
+  protected $check_auth = true;
+
+  function performAction()
   {
-    if(null != $method_response)
-      $this->_answerOk($method_response);
-    return null; //a special for to "smart" IDE's
+    if($this->is_forwarded)
+    {
+      return false;
+    }
+
+    if($this->check_auth && !$this->_isLoggedUser())
+      return $this->_answerUnauthorized();
+
+    if(method_exists($this, $method = $this->_mapCurrentActionToMethod()))
+    {
+      if($template_path = $this->findTemplateForAction($this->current_action))
+      {
+        $this->setTemplate($template_path);
+      }
+
+      $method_response = $this->$method();
+
+      $this->_passLocalAttributesToView();
+
+      if(is_string($method_response))
+        $this->response->write($method_response);
+      elseif(null != $method_response)
+        $this->response->write($this->_answer(json_encode($method_response)));
+
+      return $method_response;
+    }
+    elseif($template_path = $this->findTemplateForAction($this->current_action))
+    {
+      $this->setTemplate($template_path);
+      $this->_passLocalAttributesToView();
+      return;
+    }
+
+    throw new lmbException('No method defined in controller "' .
+      $this->getName(). '" for action "' . $this->current_action . '" ' .
+      'and no appropriate template found');
   }
 
-  protected function _answerOk($data = '')
+  protected function _isLoggedUser()
   {
-    $this->_answer(200, array('response' => $data));
-    return null; //a special for to "smart" IDE's
+    return $this->_answer((null != $this->toolkit->getUser()) ? true : false);
   }
 
-  protected function _answerWithError($data, $status = 500)
+  protected function _answerUnauthorized()
   {
-    if(!is_array($data))
-      $data = array($data);
-    $this->_answer($status, array('errors' => $data));
-    return null; //a special for to "smart" IDE's
+    return $this->_answer(null, 403, 'Access allowed only for registered users');
   }
 
-  protected function _answer($http_code, $data)
+  protected function _answer($message = null, $code = 200, $status = null)
   {
-    $this->response->setStatus($http_code);
-    $this->response->write(json_encode($data));
-    $this->response->commit();
-    return null; //a special for to "smart" IDE's
+    $this->response->setCode($code);
+    if($status)
+      $this->response->setStatus($status);
+    return json_encode($message);
   }
 }

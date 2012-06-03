@@ -1,6 +1,4 @@
 <?php
-ini_set('session.name', 'SESSID');
-
 error_reporting(E_ALL | ~E_STRICT);
 
 $app_dir = __DIR__;
@@ -31,3 +29,6 @@ lmb_require('src/model/*.class.php');
 lmb_require('limb/toolkit/src/lmbToolkit.class.php');
 lmb_require('src/toolkit/OneDayTools.class.php');
 lmbToolkit :: merge(new OneDayTools());
+
+lmb_env_set('SESSION_COOKIE_NAME', 'SESSID');
+ini_set('session.name', lmb_env_get('SESSION_COOKIE_NAME'));

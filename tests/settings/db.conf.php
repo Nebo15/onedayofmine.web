@@ -1,5 +1,3 @@
 <?php
 
-$conf = array('dsn' => 'mysql://root:secret@localhost/limbapp?charset=utf8');
-
-
+ $conf = array('dsn' => 'mysql://root:@localhost/one_day?charset=utf8');
