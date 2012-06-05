@@ -78,7 +78,11 @@ class DayController extends JsonController
     if($this->error_list->isValid())
     {
       $item->saveSkipValidation();
-      return $item;
+      $res = $item->export();
+      foreach($res as $key => $property)
+        if(is_object($property))
+          unset($res[$key]);
+      return $res;
     }
     else
     {

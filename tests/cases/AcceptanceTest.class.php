@@ -16,8 +16,8 @@ class AcceptanceTest extends WebTestCase
     User::delete();
 
     $user = new User();
-    $user->setFbUid($fb_user_id = $this->_createReadableRandomString(4));
-    $user->setFbAccessToken($fb_access_token = $this->_createReadableRandomString(4));
+    $user->setFbUid($fb_user_id = $this->_string(4));
+    $user->setFbAccessToken($fb_access_token = $this->_string(4));
     $user->save();
     lmbToolkit::instance()->getDefaultDbConnection()->commitTransaction();
     $this->user = $user;
@@ -52,6 +52,16 @@ class AcceptanceTest extends WebTestCase
     $this->assertEqual(2, count($errors));
     $this->assertEqual('title', $errors[0]->fields->Field);
     $this->assertEqual('description', $errors[1]->fields->Field);
+
+    $title = $this->_string(4);
+    $desc = $this->_string(8);
+    $day = $this->post('day/create', array('title' => $title, 'description' => $desc));
+    $this->assertEqual($title, $day->title);
+    $this->assertEqual($desc, $day->description);
+    $this->assertEqual($this->user->getId(), $day->user_id);
+    $this->assertTrue($day->ctime);
+    $this->assertTrue($day->utime);
+    $this->assertTrue($day->cip);
   }
 
   function get($url, $params = array())
@@ -106,7 +116,7 @@ class AcceptanceTest extends WebTestCase
     }
   }
 
-  protected function _createReadableRandomString($length = 6)
+  protected function _string($length = 6)
   {
     $conso = array("b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "r", "s", "t", "v", "w", "x", "y", "z");
     $vocal = array("a", "e", "i", "o", "u");
