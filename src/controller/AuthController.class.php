@@ -26,15 +26,12 @@ class AuthController extends JsonController
 
   function doIsLoggedIn()
   {
-    return $this->_isLoggedUser();
+    return $this->_answer($this->_isLoggedUser());
   }
 
   function doLogout()
   {
-    if(!$this->_isLoggedUser())
-      return $this->_answerUnauthorized();
-
-    $this->toolkit->resetUser();
+    if($this->session->valid()) $this->session->reset();
     return $this->_answer();
   }
 }

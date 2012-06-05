@@ -11,4 +11,12 @@ class Day extends BaseModel
       'user' => array( 'field' => 'user_id', 'class' => 'User'),
     );
   }
+
+  protected function _createValidator()
+  {
+    $validator = new lmbValidator();
+    $validator->addRequiredRule('title');
+    $validator->addRequiredRule('description');
+    return $validator;
+  }
 }

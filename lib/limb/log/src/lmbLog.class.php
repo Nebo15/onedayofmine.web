@@ -71,11 +71,11 @@ class lmbLog
 
   /**
    * Write message in log
-   * 
+   *
    * @param string $message log message
    * @param int $level
    * @param array $params log additional params
-   * @param lmbBacktrace $backtrace log backtrace, creating new if not assigned 
+   * @param lmbBacktrace $backtrace log backtrace, creating new if not assigned
    * @param string $entry_title log entry title
    */
   function log($message, $level = LOG_INFO, $params = array(), lmbBacktrace $backtrace = null, $entry_title = null)
@@ -89,6 +89,31 @@ class lmbLog
     }
 
     $this->_write($level, $message, $params, $backtrace, $entry_title);
+  }
+
+  function error($message, $params = array(), lmbBacktrace $backtrace = null, $entry_title = null)
+  {
+    $this->log($message, LOG_ERR, $params, $backtrace, $entry_title);
+  }
+
+  function warn($message, $params = array(), lmbBacktrace $backtrace = null, $entry_title = null)
+  {
+    $this->log($message, LOG_WARNING, $params, $backtrace, $entry_title);
+  }
+
+  function notice($message, $params = array(), lmbBacktrace $backtrace = null, $entry_title = null)
+  {
+    $this->log($message, LOG_NOTICE, $params, $backtrace, $entry_title);
+  }
+
+  function info($message, $params = array(), lmbBacktrace $backtrace = null, $entry_title = null)
+  {
+    $this->log($message, LOG_INFO, $params, $backtrace, $entry_title);
+  }
+
+  function debug($message, $params = array(), lmbBacktrace $backtrace = null, $entry_title = null)
+  {
+    $this->log($message, LOG_DEBUG, $params, $backtrace, $entry_title);
   }
 
   function logException(Exception $exception, $entry_title = null)

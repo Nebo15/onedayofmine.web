@@ -42,9 +42,16 @@ class AcceptanceTest extends WebTestCase
 
   function testAddDay()
   {
-    $res = $this->get('day/create');
+    $this->post('day/create');
     $this->assertResponse(403);
 
+    $this->_login();
+    $errors = $this->post('day/create');
+    $this->assertResponse(200);
+    $this->assertTrue('array', gettype($errors));
+    $this->assertEqual(2, count($errors));
+    $this->assertEqual('title', $errors[0]->fields->Field);
+    $this->assertEqual('description', $errors[1]->fields->Field);
   }
 
   function get($url, $params = array())
@@ -59,13 +66,9 @@ class AcceptanceTest extends WebTestCase
 
   protected function _decodeResponse($raw_response)
   {
-    list($body, $profile_info) = $this->_splitBodyAndProfile($raw_response);
-
-    $this->last_profile_info = $profile_info;
-
-    $decoded_body = json_decode($body);
-    if ($decoded_body === null && strlen($body) > 4) {
-      throw new lmbException("Can't parse response", array('url' => $this->getUrl(), 'raw' => $body));
+    $decoded_body = json_decode($raw_response);
+    if ($decoded_body === null && strlen($raw_response) > 4) {
+      throw new lmbException("Can't parse response", array('url' => $this->getUrl(), 'raw' => $raw_response));
     }
 
     return $decoded_body;

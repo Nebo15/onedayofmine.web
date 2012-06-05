@@ -25,7 +25,9 @@ class DayController extends JsonController
     if(!$this->request->hasPost())
       return $this->_answer(null, 405, 'Not a POST request');
 
-    return $this->_importAndSave($day, array('title', 'description'));
+    $day->setUser($this->toolkit->getUser());
+
+    return $this->_answer($this->_importAndSave($day, array('title', 'description')));
   }
 
   function doUpdate()

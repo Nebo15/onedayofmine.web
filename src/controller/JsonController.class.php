@@ -8,9 +8,7 @@ class JsonController extends lmbController
   function performAction()
   {
     if($this->is_forwarded)
-    {
       return false;
-    }
 
     if($this->check_auth && !$this->_isLoggedUser())
       return $this->_answerUnauthorized();
@@ -18,9 +16,7 @@ class JsonController extends lmbController
     if(method_exists($this, $method = $this->_mapCurrentActionToMethod()))
     {
       if($template_path = $this->findTemplateForAction($this->current_action))
-      {
         $this->setTemplate($template_path);
-      }
 
       $method_response = $this->$method();
 
@@ -28,8 +24,8 @@ class JsonController extends lmbController
 
       if(is_string($method_response))
         $this->response->write($method_response);
-      elseif(null != $method_response)
-        $this->response->write($this->_answer(json_encode($method_response)));
+      else
+        throw new lmbException("Method '$method' must return a string");
 
       return $method_response;
     }
@@ -47,7 +43,7 @@ class JsonController extends lmbController
 
   protected function _isLoggedUser()
   {
-    return $this->_answer((null != $this->toolkit->getUser()) ? true : false);
+    return (null != $this->toolkit->getUser()) ? true : false;
   }
 
   protected function _answerUnauthorized()
