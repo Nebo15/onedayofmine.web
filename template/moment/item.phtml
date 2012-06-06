@@ -1,0 +1,23 @@
+{{wrap with="front_page_layout.phtml" in="content_zone"}}
+  <h1>Moment #{$this->item.id}</h1>
+  <p><a href="/moment/">к списку</a></p>
+  <ul>
+    <li>id: {$this->item.id}</li>
+  
+    <li>day_id: {$this->item.day_id}</li>
+  
+    <li>description: {$this->item.description}</li>
+  
+    <li>type: {$this->item.type}</li>
+  
+    <li>fb_id: {$this->item.fb_id}</li>
+  
+    <li>likes_count: {$this->item.likes_count}</li>
+  
+    <li>ctime: {$this->item.ctime}</li>
+  
+    <li>utime: {$this->item.utime}</li>
+  
+    <li>cip: {$this->item.cip}</li>
+  </ul>
+{{/wrap}}
