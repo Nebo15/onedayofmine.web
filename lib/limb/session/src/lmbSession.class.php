@@ -26,10 +26,12 @@ class lmbSession implements ArrayAccess,Iterator,Countable
    * Starts session and installs driver
    * @param object Concrete session driver
    */
-  function start($storage = null)
+  function start($storage = null, $session_id = null)
   {
     if($storage)
       $storage->install();
+    if($session_id)
+      session_id($session_id);
     session_start();
   }
 
