@@ -10,7 +10,7 @@ class OneDayApplication extends lmbWebApplication
     $this->registerFilter(new lmbHandle('limb/profile/src/filter/lmbProfileReportingFilter'));
 
     $this->registerFilter(new lmbHandle('limb/dbal/src/filter/lmbAutoDbTransactionFilter'));
-    $this->registerFilter(new lmbHandle('limb/web_app/src/filter/lmbSessionStartupFilter'));
+    $this->registerFilter(new lmbHandle('src/filter/SessionStartupFilter'));
 
     $this->registerFilter(
       new lmbHandle('limb/web_app/src/filter/lmbRequestDispatchingFilter',
