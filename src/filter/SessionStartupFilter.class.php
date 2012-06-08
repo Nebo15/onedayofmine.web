@@ -3,7 +3,7 @@ lmb_require('limb/filter_chain/src/lmbInterceptingFilter.interface.php');
 lmb_require('limb/session/src/lmbSession.class.php');
 lmb_require('limb/session/src/lmbSessionNativeStorage.class.php');
 
-class lmbSessionStartupFilter implements lmbInterceptingFilter
+class SessionStartupFilter implements lmbInterceptingFilter
 {
   function run($filter_chain)
   {
@@ -15,6 +15,7 @@ class lmbSessionStartupFilter implements lmbInterceptingFilter
       $session_id = $_GET[$session_id_name];
     if(isset($_POST[$session_id_name]))
       $session_id = $_POST[$session_id_name];
+
     $session = lmbToolkit :: instance()->getSession();
     $session->start(new lmbSessionNativeStorage(), $session_id);
     $filter_chain->next();

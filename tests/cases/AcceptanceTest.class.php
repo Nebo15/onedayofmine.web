@@ -6,6 +6,8 @@ class AcceptanceTest extends WebTestCase
 {
   protected $base_api_url = "http://onedayofmine.dev/";
   protected $last_profile_info;
+  protected $access_token = 'AAAFnVo0zuqkBAFf2L4BA1RGA68JGnmMcfBPZCwSAgo1ZBMNFNlcxR6mGLCW2OMOD29en9KjZB9hYqRFZBSgeLH2jWJy9kFi0aoZAIZBQS1Faob83JdoXQW';
+
   /**
    * @var User
    */
@@ -14,26 +16,39 @@ class AcceptanceTest extends WebTestCase
   function setUp()
   {
     User::delete();
-
-    $user = new User();
-    $user->setFbUid($fb_user_id = $this->_string(4));
-    $user->setFbAccessToken($fb_access_token = $this->_string(4));
-    $user->save();
     lmbToolkit::instance()->getDefaultDbConnection()->commitTransaction();
-    $this->user = $user;
   }
 
-  function testLoginLogout()
+  function testIsLoggedIn()
   {
     $res = $this->get('auth/is_logged_in');
     $this->assertResponse(200);
     $this->assertFalse($res);
+  }
+
+  function testLogin_ByCookie()
+  {
+    $users = User::find();
+    $this->assertEqual(0, count($users));
 
     $this->_login();
     $res = $this->get('auth/is_logged_in');
     $this->assertResponse(200);
     $this->assertTrue($res);
 
+    $users = User::find();
+    $this->assertEqual(1, count($users));
+  }
+
+  function testLogin_ByGetParam()
+  {
+    $res = $this->get('auth/is_logged_in');
+    $this->assertResponse(200);
+    $this->assertFalse($res);
+  }
+
+  function testLogout()
+  {
     $this->_logout();
     $res = $this->get('auth/is_logged_in');
     $this->assertResponse(200);
@@ -53,15 +68,17 @@ class AcceptanceTest extends WebTestCase
     $this->assertEqual('title', $errors[0]->fields->Field);
     $this->assertEqual('description', $errors[1]->fields->Field);
 
+    $user = User::findOne();
+
     $title = $this->_string(4);
     $desc = $this->_string(8);
     $day = $this->post('day/create', array('title' => $title, 'description' => $desc));
     $this->assertEqual($title, $day->title);
     $this->assertEqual($desc, $day->description);
-    $this->assertEqual($this->user->getId(), $day->user_id);
+    $this->assertEqual($user->getId(), $day->user_id);
     $this->assertTrue($day->ctime);
     $this->assertTrue($day->utime);
-    $this->assertTrue($day->cip);
+//    $this->assertTrue($day->cip);
   }
 
   function get($url, $params = array())
@@ -87,8 +104,7 @@ class AcceptanceTest extends WebTestCase
   protected function _login()
   {
     $res = $this->post('auth/login/', array(
-        'fb_user_id' => $this->user->getFbUid(),
-        'fb_access_token' => $this->user->getFbAccessToken()
+        'fb_access_token' => $this->access_token
     ));
     $this->assertResponse(200);
 
