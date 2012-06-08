@@ -26,25 +26,37 @@ class AcceptanceTest extends WebTestCase
     $this->assertFalse($res);
   }
 
-  function testLogin_ByCookie()
+  function testLogin()
   {
-    $this->_login();
+    $res = $this->_login();
+    $this->assertTrue($res->sessid);
+    $this->assertTrue(property_exists($res->user, 'uid'));
+    $this->assertTrue(property_exists($res->user, 'name'));
+    $this->assertTrue(property_exists($res->user, 'pic_small'));
+    $this->assertTrue(property_exists($res->user, 'pic_square'));
+    $this->assertTrue(property_exists($res->user, 'pic_big'));
+    $this->assertTrue(property_exists($res->user, 'profile_url'));
+  }
+
+  function testLoginAndSetCookie()
+  {
+    $this->_loginAndSetCookie();
     $res = $this->get('auth/is_logged_in');
     $this->assertResponse(200);
     $this->assertTrue($res);
   }
 
-  function testLogin_ByGetParam()
+  function testSession_ByGetParam()
   {
-    $sessid = $this->_startSession();
+    $sessid = $this->_login()->sessid;
     $res = $this->get('auth/is_logged_in', array(lmb_env_get('SESSION_NAME') => $sessid));
     $this->assertResponse(200);
     $this->assertTrue($res);
   }
 
-  function testLogin_ByPostParam()
+  function testSession_ByPostParam()
   {
-    $sessid = $this->_startSession();
+    $sessid = $this->_login()->sessid;
     $res = $this->post('auth/is_logged_in', array(lmb_env_get('SESSION_NAME') => $sessid));
     $this->assertResponse(200);
     $this->assertTrue($res);
@@ -55,7 +67,7 @@ class AcceptanceTest extends WebTestCase
     $users = User::find();
     $this->assertEqual(0, count($users));
 
-    $this->_login();
+    $this->_loginAndSetCookie();
 
     $users = User::find();
     $this->assertEqual(1, count($users));
@@ -74,7 +86,7 @@ class AcceptanceTest extends WebTestCase
     $this->post('day/create');
     $this->assertResponse(403);
 
-    $this->_login();
+    $this->_loginAndSetCookie();
     $errors = $this->post('day/create');
     $this->assertResponse(200);
     $this->assertTrue('array', gettype($errors));
@@ -92,7 +104,7 @@ class AcceptanceTest extends WebTestCase
     $this->assertEqual($user->getId(), $day->user_id);
     $this->assertTrue($day->ctime);
     $this->assertTrue($day->utime);
-//    $this->assertTrue($day->cip);
+    $this->assertTrue($day->cip);
   }
 
   function get($url, $params = array())
@@ -115,20 +127,20 @@ class AcceptanceTest extends WebTestCase
     return $decoded_body;
   }
 
-  protected function _login()
+  protected function _loginAndSetCookie()
   {
-    $sessid = $this->_startSession();
+    $sessid = $this->_login()->sessid;
     $this->setCookie(lmb_env_get('SESSION_NAME'), $sessid);
   }
 
-  protected function _startSession()
+  protected function _login()
   {
     $res = $this->post('auth/login/', array(
       'fb_access_token' => $this->access_token
     ));
     $this->assertResponse(200);
 
-    return $res->sessid;
+    return $res;
   }
 
   protected function _logout()
