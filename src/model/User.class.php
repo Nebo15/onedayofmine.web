@@ -15,4 +15,21 @@ class User extends lmbActiveRecord
       'fb_uid = ? AND fb_access_token = ?', $fb_user_id, $fb_access_token
 		));
 	}
+
+  static function getFqlForGetUserInfo()
+  {
+    return 'SELECT
+      uid, name, pic_small, pic_square, pic_big, profile_url
+      FROM user WHERE uid = me()';
+  }
+
+  static function getFqlForGetUserFriendsInApplication()
+  {
+    return 'SELECT
+      uid, name, pic_small, pic_square, pic_big, profile_url
+      FROM user
+      WHERE is_app_user AND uid IN (SELECT uid2 FROM friend WHERE uid1 = me())';
+  }
+
+
 }

@@ -34,7 +34,7 @@ class OneDayTools extends lmbAbstractTools
   }
 
   /**
-   * @return Facebook
+   * @return OneDayFacebook
    */
   function getUserFacebook()
   {

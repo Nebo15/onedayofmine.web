@@ -112,6 +112,12 @@ class AcceptanceTest extends WebTestCase
     $this->assertTrue($day->cip);
   }
 
+  function testUserFiendsWithApp()
+  {
+    $this->_login();
+    var_dump($this->get('user/friends_in_app'));
+  }
+
   function get($url, $params = array())
   {
     return $this->_decodeResponse(parent::get($this->base_api_url . $url, $params));

@@ -3,6 +3,10 @@ lmb_require('limb/web_app/src/controller/lmbController.class.php');
 
 class JsonController extends lmbController
 {
+  /**
+   * @var OneDayTools
+   */
+  protected $toolkit;
   protected $check_auth = true;
 
   function performAction()
