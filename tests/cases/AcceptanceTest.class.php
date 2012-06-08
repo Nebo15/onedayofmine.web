@@ -50,7 +50,7 @@ class AcceptanceTest extends WebTestCase
     $this->assertTrue($res);
   }
 
-  function testLogin_fristTimeCreateNewUser()
+  function testLogin_firstCallCreateNewUser()
   {
     $users = User::find();
     $this->assertEqual(0, count($users));
