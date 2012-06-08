@@ -1,6 +1,6 @@
 <?php
 lmb_require('limb/toolkit/src/lmbAbstractTools.class.php');
-lmb_require('facebook/facebook.php');
+lmb_require('src/OneDayFacebook.class.php');
 
 class OneDayTools extends lmbAbstractTools
 {
@@ -9,6 +9,7 @@ class OneDayTools extends lmbAbstractTools
    * @var Facebook
    */
   protected $facebook;
+  protected $fb_app_access_token;
 
   function getUser()
   {
@@ -44,36 +45,23 @@ class OneDayTools extends lmbAbstractTools
 
   /**
    * @param string $access_token
-   * @return Facebook
+   * @return OneDayFacebook
    */
-  function getFacebook($access_token)
+  function getFacebook($access_token = null)
   {
     if(null != $this->facebook)
       return $this->facebook;
 
-    $this->facebook = new Facebook(array(
+    $this->facebook = new OneDayFacebook(array(
       'appId'  => lmbToolkit::instance()->getConf('common')->get('fb_app_id'),
       'secret' => lmbToolkit::instance()->getConf('common')->get('fb_app_secret'),
       'cookie' => false
     ));
 
-    $this->facebook->setAccessToken($access_token);
+    if($access_token)
+      $this->facebook->setAccessToken($access_token);
 
     return $this->facebook;
-  }
-
-  function makeUserFqlRequest($query)
-  {
-    $user = $this->getUser();
-    lmb_assert_true($user);
-    return $this->makeFqlRequest($user->getFbAccessToken(), $query);
-  }
-
-  function makeFqlRequest($access_token, $query)
-  {
-    return $this->getFacebook($access_token)->api(
-      array('method' => 'fql.query', 'query' => $query)
-    );
   }
 }
 

@@ -6,17 +6,22 @@ class AcceptanceTest extends WebTestCase
 {
   protected $base_api_url = "http://onedayofmine.dev/";
   protected $last_profile_info;
-  protected $access_token = 'AAAFnVo0zuqkBAFf2L4BA1RGA68JGnmMcfBPZCwSAgo1ZBMNFNlcxR6mGLCW2OMOD29en9KjZB9hYqRFZBSgeLH2jWJy9kFi0aoZAIZBQS1Faob83JdoXQW';
-
   /**
-   * @var User
+   * @var OneDayTools
    */
-  protected $user;
+  protected $toolkit;
+
+  protected $users = array();
 
   function setUp()
   {
+    $this->toolkit = lmbToolkit::instance();
     User::delete();
-    lmbToolkit::instance()->getDefaultDbConnection()->commitTransaction();
+
+    if(!count($this->users))
+      $this->users = $this->getTestUsers();
+
+    $this->toolkit->getDefaultDbConnection()->commitTransaction();
   }
 
   function testIsLoggedIn()
@@ -135,8 +140,9 @@ class AcceptanceTest extends WebTestCase
 
   protected function _login()
   {
+    $user = $this->users[0];
     $res = $this->post('auth/login/', array(
-      'fb_access_token' => $this->access_token
+      'fb_access_token' => $user->getFbAccessToken()
     ));
     $this->assertResponse(200);
 
@@ -174,5 +180,20 @@ class AcceptanceTest extends WebTestCase
       $password .= $vocal[rand(0, 4)];
     }
     return $password;
+  }
+
+  protected function getTestUsers()
+  {
+    $users_info = $this->toolkit->getFacebook()->getTestUsers();
+    lmb_assert_true(count($users_info['data']) > 1);
+    foreach($users_info['data'] as $key => $user_info)
+    {
+      $user = new User();
+      $user->setFbUserId($user_info['id']);
+      $user->setFbAccessToken($user_info['access_token']);
+
+      $users_info['data'][$key] = $user;
+    }
+    return $users_info['data'];
   }
 }
