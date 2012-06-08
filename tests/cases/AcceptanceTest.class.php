@@ -28,23 +28,37 @@ class AcceptanceTest extends WebTestCase
 
   function testLogin_ByCookie()
   {
-    $users = User::find();
-    $this->assertEqual(0, count($users));
-
     $this->_login();
     $res = $this->get('auth/is_logged_in');
     $this->assertResponse(200);
     $this->assertTrue($res);
-
-    $users = User::find();
-    $this->assertEqual(1, count($users));
   }
 
   function testLogin_ByGetParam()
   {
-    $res = $this->get('auth/is_logged_in');
+    $sessid = $this->_startSession();
+    $res = $this->get('auth/is_logged_in', array(lmb_env_get('SESSION_NAME') => $sessid));
     $this->assertResponse(200);
-    $this->assertFalse($res);
+    $this->assertTrue($res);
+  }
+
+  function testLogin_ByPostParam()
+  {
+    $sessid = $this->_startSession();
+    $res = $this->post('auth/is_logged_in', array(lmb_env_get('SESSION_NAME') => $sessid));
+    $this->assertResponse(200);
+    $this->assertTrue($res);
+  }
+
+  function testLogin_fristTimeCreateNewUser()
+  {
+    $users = User::find();
+    $this->assertEqual(0, count($users));
+
+    $this->_login();
+
+    $users = User::find();
+    $this->assertEqual(1, count($users));
   }
 
   function testLogout()
@@ -103,14 +117,18 @@ class AcceptanceTest extends WebTestCase
 
   protected function _login()
   {
+    $sessid = $this->_startSession();
+    $this->setCookie(lmb_env_get('SESSION_NAME'), $sessid);
+  }
+
+  protected function _startSession()
+  {
     $res = $this->post('auth/login/', array(
-        'fb_access_token' => $this->access_token
+      'fb_access_token' => $this->access_token
     ));
     $this->assertResponse(200);
 
-    $sessid = $res->sessid;
-
-    $this->setCookie(lmb_env_get('SESSION_COOKIE_NAME'), $sessid);
+    return $res->sessid;
   }
 
   protected function _logout()

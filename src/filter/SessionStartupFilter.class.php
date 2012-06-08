@@ -7,7 +7,7 @@ class SessionStartupFilter implements lmbInterceptingFilter
 {
   function run($filter_chain)
   {
-    $session_id_name = lmb_env_get('SESSION_COOKIE_NAME');
+    $session_id_name = lmb_env_get('SESSION_NAME');
     $session_id = null;
     if(isset($_COOKIE[$session_id_name]))
       $session_id = $_COOKIE[$session_id_name];
