@@ -2,8 +2,8 @@
 lmb_require('src/model/BaseModel.class.php');
 
 /**
- * @method string getFbUserId()
- * @method void setFbUserId(string $fb_user_id)
+ * @method string getFbUid()
+ * @method void setFbUid(string $fb_user_id)
  * @method string getFbAccessToken()
  * @method void setFbAccessToken(string $fb_access_token)
  */
