@@ -35,12 +35,6 @@ class AcceptanceTest extends WebTestCase
   {
     $res = $this->_login();
     $this->assertTrue($res->sessid);
-    $this->assertTrue(property_exists($res->user, 'uid'));
-    $this->assertTrue(property_exists($res->user, 'name'));
-    $this->assertTrue(property_exists($res->user, 'pic_small'));
-    $this->assertTrue(property_exists($res->user, 'pic_square'));
-    $this->assertTrue(property_exists($res->user, 'pic_big'));
-    $this->assertTrue(property_exists($res->user, 'profile_url'));
   }
 
   function testLoginAndSetCookie()
@@ -115,7 +109,11 @@ class AcceptanceTest extends WebTestCase
   function testUserFiendsWithApp()
   {
     $this->_login();
-    var_dump($this->get('user/friends_in_app'));
+
+    $friends_in_app = $this->get('user/friends_in_app');
+    $this->assertTrue(is_array($friends_in_app));
+    $this->assertEqual(1, count($friends_in_app));
+    $this->assertEqual($friends_in_app[0]->fb_user_id, $this->users[1]->getFbUserId());
   }
 
   function get($url, $params = array())
@@ -186,20 +184,5 @@ class AcceptanceTest extends WebTestCase
       $password .= $vocal[rand(0, 4)];
     }
     return $password;
-  }
-
-  protected function getTestUsers()
-  {
-    $users_info = $this->toolkit->getFacebook()->getTestUsers();
-    lmb_assert_true(count($users_info['data']) > 1);
-    foreach($users_info['data'] as $key => $user_info)
-    {
-      $user = new User();
-      $user->setFbUserId($user_info['id']);
-      $user->setFbAccessToken($user_info['access_token']);
-
-      $users_info['data'][$key] = $user;
-    }
-    return $users_info['data'];
   }
 }

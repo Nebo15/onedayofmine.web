@@ -49,14 +49,14 @@ class OneDayTools extends lmbAbstractTools
    */
   function getFacebook($access_token = null)
   {
-    if(null != $this->facebook)
-      return $this->facebook;
-
-    $this->facebook = new OneDayFacebook(array(
-      'appId'  => lmbToolkit::instance()->getConf('common')->get('fb_app_id'),
-      'secret' => lmbToolkit::instance()->getConf('common')->get('fb_app_secret'),
-      'cookie' => false
-    ));
+    if(null == $this->facebook)
+    {
+      $this->facebook = new OneDayFacebook(array(
+        'appId'  => lmbToolkit::instance()->getConf('common')->get('fb_app_id'),
+        'secret' => lmbToolkit::instance()->getConf('common')->get('fb_app_secret'),
+        'cookie' => false
+      ));
+    }
 
     if($access_token)
       $this->facebook->setAccessToken($access_token);

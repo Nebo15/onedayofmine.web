@@ -72,7 +72,6 @@ function lmb_assert_array_with_key(
   {
     $value_keys = array_keys((array) $array);
     $missed_keys = array_diff($key_or_keys, $value_keys);
-    if(0 === count($missed_keys))
       return;
   }
   else
@@ -115,7 +114,6 @@ function lmb_assert_reg_exp(
   if ($exception_class instanceof lmbException)
   {
   	$params = array(
-      'value type' => gettype($array),
       'pattern' => $pattern,
   	  'string' => $string,
     );
@@ -123,4 +121,26 @@ function lmb_assert_reg_exp(
   }
   else
     throw new $exception_class($message);
+}
+
+function lmb_assert_property(
+  $object_or_class,
+  $property_name,
+  $message = "Property %property% not exist",
+  $exception_class = 'lmbInvalidArgumentException')
+{
+  if(property_exists($object_or_class, $property_name))
+    return;
+
+  if ($exception_class instanceof lmbException)
+  {
+    $params = array(
+      'value type' => (is_object($object_or_class)) ? gettype($object_or_class) : $object_or_class,
+      'property_name' => $property_name,
+    );
+    throw new $exception_class($message, $params, 0, 1);
+  }
+  else
+    throw new $exception_class($message);
+
 }

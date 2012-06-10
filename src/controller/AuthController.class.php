@@ -13,16 +13,17 @@ class AuthController extends JsonController
     if(!$fb_access_token = $this->request->get('fb_access_token'))
       return $this->_answer('fb_access_token not given', 412);
 
-    $fb_user_info = reset($this->toolkit->getFacebook($fb_access_token)->makeQuery(User::getFqlForGetUserInfo()));
-    if(!$fb_user_info)
-      return $this->_answer('Wrong access token', 403);
-
-    if(!$user = User::findByFbIdAndToken($fb_user_info['uid'], $fb_access_token))
+    if(!$user = User::findByFbAccessToken($fb_access_token))
     {
       $user = new User();
-      $user->setFbUserId($fb_user_info['uid']);
       $user->setFbAccessToken($fb_access_token);
+      $fb_user_info = $user->getFbUserInfo();
+      $user->setFbUserId($fb_user_info->fb_user_id);
       $user->save();
+    }
+    else
+    {
+      $fb_user_info = $user->getFbUserInfo();
     }
     $this->toolkit->setUser($user);
     return $this->_answer(array('sessid' => session_id(), 'user' => $fb_user_info));
