@@ -15,11 +15,16 @@ class AcceptanceTest extends WebTestCase
 
   function setUp()
   {
+    parent::setUp();
+
     $this->toolkit = lmbToolkit::instance();
     User::delete();
 
-    if(!count($this->users))
-      $this->users = $this->getTestUsers();
+    $this->users = FbForTests::getTestUsers();
+    foreach($this->users as $user)
+    {
+      $user->save();
+    }
 
     $this->toolkit->getDefaultDbConnection()->commitTransaction();
   }
@@ -108,12 +113,15 @@ class AcceptanceTest extends WebTestCase
 
   function testUserFiendsWithApp()
   {
+    die();
     $this->_login();
 
-    $friends_in_app = $this->get('user/friends_in_app');
-    $this->assertTrue(is_array($friends_in_app));
-    $this->assertEqual(1, count($friends_in_app));
-    $this->assertEqual($friends_in_app[0]->fb_user_id, $this->users[1]->getFbUserId());
+    $response = $this->get('user/friends_in_app');
+    var_dump($response);
+    die();
+    $this->assertTrue(is_array($response->friends));
+    $this->assertEqual(1, count($response->friends));
+    $this->assertEqual($response->friends[0]->fb_user_id, $this->users[1]->getFbUserId());
   }
 
   function get($url, $params = array())

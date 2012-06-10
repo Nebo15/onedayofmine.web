@@ -7,7 +7,7 @@ lmb_require('src/model/BaseModel.class.php');
  * @method string getFbAccessToken()
  * @method void setFbAccessToken(string $fb_access_token)
  */
-class User extends lmbActiveRecord
+class User extends BaseModel
 {
   protected $user_info_from_fb;
 
@@ -43,6 +43,8 @@ class User extends lmbActiveRecord
     {
       $info = $this->_mapFbInfo($raw_info);
       $user = User::findByFbUid($info['fb_uid']);
+      if(!$user)
+        throw new lmbException("User not found by fb_uid", array('fb_uid' => $info['fb_uid']));
       $user->setUserInfo($info);
       $results[] = $user;
     }
@@ -79,4 +81,6 @@ class User extends lmbActiveRecord
     lmb_assert_true($this->getFbAccessToken());
     return lmbToolkit::instance()->getFacebook($this->getFbAccessToken());
   }
+
+
 }

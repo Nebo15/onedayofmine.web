@@ -5,6 +5,11 @@ class BaseModel extends lmbActiveRecord
 {
   protected $_default_sort_params = array('id'=>'asc');
 
+  function exportToSimpleObj()
+  {
+    return (object) $this->export();
+  }
+
   protected function _onBeforeCreate()
   {
     $this->cip = lmbIp::encode(lmbIp::getRemoteIp());

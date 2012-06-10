@@ -8,10 +8,11 @@ class UserController extends JsonController
 
   function doFriendsInApp()
   {
-    return $this->_answer(
-      $this->toolkit
-        ->getUserFacebook()
-        ->makeQuery(User::getFqlForGetUserFriendsInApplication())
-    );
+    $answer = new stdClass();
+    $answer->friends = array();
+    foreach($this->toolkit->getUser()->getGetUserFriendsInApplicationFromFb() as $friend)
+      $answer->friends[] = $friend->exportToSimpleObj();
+
+    return $this->_answer($answer);
   }
 }

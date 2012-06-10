@@ -11,6 +11,9 @@ class OneDayTools extends lmbAbstractTools
   protected $facebook;
   protected $fb_app_access_token;
 
+  /**
+   * @return User
+   */
   function getUser()
   {
     if(null != $this->user)

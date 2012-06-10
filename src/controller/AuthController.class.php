@@ -17,16 +17,21 @@ class AuthController extends JsonController
     {
       $user = new User();
       $user->setFbAccessToken($fb_access_token);
-      $fb_user_info = $user->getFbUserInfo();
-      $user->setFbUserId($fb_user_info->fb_user_id);
+      $fb_user_info = $user->getUserInfo();
+      $user->setFbUid($fb_user_info['fb_uid']);
       $user->save();
     }
     else
     {
-      $fb_user_info = $user->getFbUserInfo();
+      $fb_user_info = $user->getUserInfo();
     }
     $this->toolkit->setUser($user);
-    return $this->_answer(array('sessid' => session_id(), 'user' => $fb_user_info));
+
+    $answer = new stdClass();
+    $answer->sessid = session_id();
+    $answer->user = $user->exportToSimpleObj();
+
+    return $this->_answer($answer);
   }
 
   function doIsLoggedIn()
