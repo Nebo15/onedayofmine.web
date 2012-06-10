@@ -12,6 +12,11 @@ class UserTest extends UnitTestCase
     $this->users = FbForTests::getTestUsers();
   }
 
+  function setUp()
+  {
+    User::delete();
+  }
+
   function testLoadUserInfoFromFb()
   {
     $info = $this->users[0]->loadUserInfoFromFb();
@@ -30,5 +35,6 @@ class UserTest extends UnitTestCase
 
     $friends = $this->users[0]->getGetUserFriendsInApplicationFromFb();
     $this->assertEqual(1, count($friends));
+    $this->assertEqual($this->users[1]->getId(), $friends[0]->getId());
   }
 }
