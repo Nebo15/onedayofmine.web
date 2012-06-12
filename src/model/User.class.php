@@ -26,7 +26,7 @@ class User extends BaseModel
   function loadUserInfoFromFb()
   {
     $raw = $this->_getFacebook()->makeQuery('SELECT
-    uid, name, pic_small, pic_square, pic_big, profile_url
+    uid, name, sex, timezone, profile_update_time, pic_small, pic_square, pic_big, profile_url
     FROM user WHERE uid = me()');
     lmb_assert_true(count($raw));
     return $this->_mapFbInfo($raw[0]);
@@ -35,7 +35,7 @@ class User extends BaseModel
   function getGetUserFriendsInApplicationFromFb()
   {
     $raw_infos = $this->_getFacebook()->makeQuery('SELECT
-      uid, name, pic_small, pic_square, pic_big, profile_url
+      uid, name, sex, timezone, profile_update_time, pic_small, pic_square, pic_big, profile_url
       FROM user
       WHERE is_app_user AND uid IN (SELECT uid2 FROM friend WHERE uid1 = me())');
     $results = array();
@@ -63,17 +63,17 @@ class User extends BaseModel
 
   protected function _mapFbInfo($fb_results)
   {
-    $result = array();
-    $result['fb_uid']         = $fb_results['uid'];
-    $result['fb_name']        = $fb_results['name'];
-    $result['pic_small']      = $fb_results['pic_small'];
-    $result['pic_square']     = $fb_results['pic_square'];
-    $result['pic_big']        = $fb_results['pic_big'];
-    $result['fb_profile_url'] = $fb_results['profile_url'];
-    return $result;
+    $fb_results['fb_uid'] = $fb_results['uid'];
+    unset($fb_results['uid']);
+    $fb_results['fb_name']        = $fb_results['name'];
+    unset($fb_results['name']);
+    $fb_results['fb_profile_url'] = $fb_results['profile_url'];
+    unset($fb_results['profile_url']);
+    $fb_results['fb_profile_utime'] = $fb_results['profile_update_time'];
+    unset($fb_results['profile_update_time']);
+    return $fb_results;
   }
-
-    /**
+  /**
    * @return OneDayFacebook
    */
   protected function _getFacebook()
@@ -83,4 +83,13 @@ class User extends BaseModel
   }
 
 
+  function exportToSimpleObj()
+  {
+    $result = $this->export();
+    $result = array_merge($result, $result['user_info_from_fb']);
+    unset($result['user_info_from_fb']);
+    unset($result['fb_access_token']);
+    ksort($result);
+    return (object) $result;
+  }
 }

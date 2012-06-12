@@ -34,6 +34,21 @@ class AcceptanceTest extends WebTestCase
   {
     $res = $this->_login($this->main_user);
     $this->assertTrue($res->sessid);
+    $this->assertTrue($res->user);
+    $this->assertTrue(is_object($res->user));
+    $this->assertTrue($res->user->id);
+    $this->assertTrue($res->user->cip);
+    $this->assertTrue($res->user->ctime);
+    $this->assertTrue($res->user->utime);
+    $this->assertTrue($res->user->fb_uid);
+    $this->assertTrue($res->user->fb_profile_utime);
+    $this->assertTrue($res->user->fb_name);
+    $this->assertTrue($res->user->fb_profile_url);
+    $this->assertTrue($res->user->sex);
+    $this->assertTrue($res->user->timezone);
+    $this->assertTrue($res->user->pic_small);
+    $this->assertTrue($res->user->pic_square);
+    $this->assertTrue($res->user->pic_big);
   }
 
   function testLoginAndSetCookie()
