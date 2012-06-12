@@ -2,7 +2,7 @@
 lmb_require('src/controller/BaseJsonController.class.php');
 lmb_require('src/model/Day.class.php');
 
-class DayControllerBase extends BaseJsonController
+class DayController extends BaseJsonController
 {
   protected $_object_class_name = 'User';
 

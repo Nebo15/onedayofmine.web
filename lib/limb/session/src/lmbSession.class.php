@@ -32,7 +32,7 @@ class lmbSession implements ArrayAccess,Iterator,Countable
       $storage->install();
     if($session_id)
       session_id($session_id);
-    session_start();
+    return session_start();
   }
 
   /**

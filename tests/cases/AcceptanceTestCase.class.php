@@ -46,6 +46,7 @@ abstract class AcceptanceTestCase extends WebTestCase
   protected function _loginAndSetCookie(User $user)
   {
     $sessid = $this->_login($user)->result->sessid;
+    $this->assertTrue($sessid);
     $this->setCookie(lmb_env_get('SESSION_NAME'), $sessid);
   }
 
@@ -57,7 +58,6 @@ abstract class AcceptanceTestCase extends WebTestCase
     $this->assertProperty($res->result, 'sessid');
     $this->assertProperty($res->result, 'user');
     $this->assertResponse(200);
-
     return $res;
   }
 

@@ -1,6 +1,6 @@
 <?php
 
-class Complaint extends lmbActiveRecord
+class Complaint extends BaseModel
 {
   protected $_db_table_name = 'complaint';
 
@@ -11,25 +11,26 @@ class Complaint extends lmbActiveRecord
   protected function _defineRelations()
   {
     $this->_many_belongs_to = array (
-  'user' => 
+  'user' =>
   array (
     'field' => 'user_id',
     'class' => 'User',
     'can_be_null' => true,
   ),
-  'day' => 
+  'day' =>
   array (
     'field' => 'day_id',
     'class' => 'Day',
     'can_be_null' => true,
   ),
-  'moment' => 
+  'moment' =>
   array (
     'field' => 'moment_id',
     'class' => 'Moment',
     'can_be_null' => true,
   ),
 );
-  }
+
+  }
 
 }

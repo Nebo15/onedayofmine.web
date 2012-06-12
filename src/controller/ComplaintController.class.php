@@ -8,11 +8,15 @@ class ComplaintController extends BaseJsonController
 
   function doCreate()
   {
-    return $this->_answerOk('Ok');
+    return $this->_answerOk(array('complaint_id' => 222));
   }
 
   function doGet()
   {
-    return $this->_answerOk('Ok');
+    $complaint = new Complaint();
+    $complaint->setText('complaint_text1');
+    $complaint->setDayId(42);
+    $complaint->setMomentId(111);
+    return $this->_answerOk(array($complaint->exportToSimpleObj()));
   }
 }

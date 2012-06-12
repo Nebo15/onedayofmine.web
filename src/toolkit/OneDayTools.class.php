@@ -19,7 +19,7 @@ class OneDayTools extends lmbAbstractTools
     if(null != $this->user)
       return $this->user;
 
-    $this->user = lmbToolkit :: instance()->getSession()->get('User');
+    $this->user = User::findById(lmbToolkit :: instance()->getSession()->get('user_id'));
 
     return $this->user;
   }
@@ -27,13 +27,13 @@ class OneDayTools extends lmbAbstractTools
   function resetUser()
   {
     $this->user = null;
-    lmbToolkit :: instance()->getSession()->destroy('User');
+    lmbToolkit :: instance()->getSession()->destroy('user_id');
   }
 
   function setUser($user)
   {
     $this->user = $user;
-    lmbToolkit::instance()->getSession()->set('User', $user);
+    lmbToolkit::instance()->getSession()->set('user_id', $user->getId());
   }
 
   /**
@@ -65,6 +65,22 @@ class OneDayTools extends lmbAbstractTools
       $this->facebook->setAccessToken($access_token);
 
     return $this->facebook;
+  }
+
+  /**
+   * @return string
+   */
+  function getSessidFromRequest()
+  {
+    $sessid_name = lmb_env_get('SESSION_NAME');
+    $request = $this->toolkit->getRequest();
+    if($request->getPost($sessid_name))
+      return $request->getPost($sessid_name);
+    if($request->getGet($sessid_name))
+      return $request->getGet($sessid_name);
+    if($request->getCookie($sessid_name))
+      return $request->getCookie($sessid_name);
+    return '';
   }
 }
 

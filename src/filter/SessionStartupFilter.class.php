@@ -7,17 +7,12 @@ class SessionStartupFilter implements lmbInterceptingFilter
 {
   function run($filter_chain)
   {
-    $session_id_name = lmb_env_get('SESSION_NAME');
-    $session_id = null;
-    if(isset($_COOKIE[$session_id_name]))
-      $session_id = $_COOKIE[$session_id_name];
-    if(isset($_GET[$session_id_name]))
-      $session_id = $_GET[$session_id_name];
-    if(isset($_POST[$session_id_name]))
-      $session_id = $_POST[$session_id_name];
-
+    $sessid = lmbToolkit::instance()->getSessidFromRequest();
     $session = lmbToolkit :: instance()->getSession();
-    $session->start(new lmbSessionNativeStorage(), $session_id);
+    if($sessid)
+      $session->start(new lmbSessionNativeStorage(), $sessid);
+    else
+      $session->start(new lmbSessionNativeStorage());
     $filter_chain->next();
   }
 }
