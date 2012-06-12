@@ -15,10 +15,10 @@ class DayController extends JsonController
 
   function doItem()
   {
-    return Day::findById($this->request->id);
+    return Day::findById($this->request->id)->exportToSimpleObj();
   }
 
-  function doCreate()
+  function doBegin()
   {
     $day = new Day();
 
@@ -39,6 +39,11 @@ class DayController extends JsonController
       return $this->_answer(404, 'Day not found');
 
     return $this->_importAndSave($day, array('title', 'description'));
+  }
+
+  function doEnd()
+  {
+
   }
 
   function doDelete()
