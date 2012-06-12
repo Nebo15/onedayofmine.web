@@ -25,12 +25,46 @@ abstract class AcceptanceTestCase extends WebTestCase
 
   function get($url, $params = array())
   {
-    return $this->_decodeResponse(parent::get($this->base_api_url . $url, $params));
+    $result = $this->_decodeResponse(parent::get($this->base_api_url . $url, $params));
+    $this->assertTrue(property_exists($result, 'result'));
+    $this->assertTrue(property_exists($result, 'errors'));
+    $this->assertTrue(property_exists($result, 'status'));
+    $this->assertTrue(property_exists($result, 'code'));
+    return $result;
   }
 
   function post($url, $params = array())
   {
-    return $this->_decodeResponse(parent::post($this->base_api_url . $url, $params));
+    $result = $this->_decodeResponse(parent::post($this->base_api_url . $url, $params));
+    $this->assertTrue(property_exists($result, 'result'));
+    $this->assertTrue(property_exists($result, 'errors'));
+    $this->assertTrue(property_exists($result, 'status'));
+    $this->assertTrue(property_exists($result, 'code'));
+    return $result;
+  }
+
+  protected function _loginAndSetCookie(User $user)
+  {
+    $sessid = $this->_login($user)->result->sessid;
+    $this->setCookie(lmb_env_get('SESSION_NAME'), $sessid);
+  }
+
+  protected function _login(User $user)
+  {
+    $res = $this->post('auth/login/', array(
+      'fb_access_token' => $user->getFbAccessToken()
+    ));
+    $this->assertProperty($res->result, 'sessid');
+    $this->assertProperty($res->result, 'user');
+    $this->assertResponse(200);
+
+    return $res;
+  }
+
+  protected function _logout()
+  {
+    $this->post('auth/logout/');
+    $this->assertResponse(200);
   }
 
   protected function _decodeResponse($raw_response)
@@ -41,28 +75,6 @@ abstract class AcceptanceTestCase extends WebTestCase
     }
 
     return $decoded_body;
-  }
-
-  protected function _loginAndSetCookie(User $user)
-  {
-    $sessid = $this->_login($user)->sessid;
-    $this->setCookie(lmb_env_get('SESSION_NAME'), $sessid);
-  }
-
-  protected function _login(User $user)
-  {
-    $res = $this->post('auth/login/', array(
-      'fb_access_token' => $user->getFbAccessToken()
-    ));
-    $this->assertResponse(200);
-
-    return $res;
-  }
-
-  protected function _logout()
-  {
-    $this->post('auth/logout/');
-    $this->assertResponse(200);
   }
 
   protected function _splitBodyAndProfile($raw_response)
@@ -90,5 +102,15 @@ abstract class AcceptanceTestCase extends WebTestCase
       $password .= $vocal[rand(0, 4)];
     }
     return $password;
+  }
+
+  protected function assertProperty($obj, $property)
+  {
+    if(!is_object($obj))
+      return $this->fail("Expected a object but '".gettype($obj)."' given");
+    return $this->assertTrue(
+      property_exists($obj, $property),
+      sprintf("Property '%s' not found", $property)
+    );
   }
 }

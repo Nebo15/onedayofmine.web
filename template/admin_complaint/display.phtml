@@ -1,0 +1,76 @@
+{{wrap with="admin_page_layout.phtml" in="content_zone"}}
+
+  {{include file="_admin/selectors.phtml"/}}
+  {{include file="_admin_object/actions.phtml"/}}
+
+  <div id="header">
+    <h1>Complaint</h1>
+    <div class="header_actions">
+      {{apply template="object_action" action="create" is_link="true" title="Создать Complaint"/}}
+    </div>
+
+    {{include file='_admin/pager.phtml' items='{$this->items}'/}}
+  </div>
+
+  <div id="body">
+
+    {{list using="{$this->items}" as="$item" counter="$counter" parity='$parity'}}
+
+      <div class='list'>
+        <div class='list_actions'>
+          {{apply template="selectors_button" action="delete" title="Удалить" /}}
+        </div>
+        <table>
+          <tr>
+            <th>{{apply template="selectors_toggler"/}}</th>
+            <th>id
+            {{include file='_admin/sort_by_column.phtml' field='id'/}}
+            </th>
+            <th>user_id
+            {{include file='_admin/sort_by_column.phtml' field='user_id'/}}
+            </th>
+            <th>day_id
+            {{include file='_admin/sort_by_column.phtml' field='day_id'/}}
+            </th>
+            <th>moment_id
+            {{include file='_admin/sort_by_column.phtml' field='moment_id'/}}
+            </th>
+            <th>ctime
+            {{include file='_admin/sort_by_column.phtml' field='ctime'/}}
+            </th>
+            <th>cip
+            {{include file='_admin/sort_by_column.phtml' field='cip'/}}
+            </th>
+            <th>Действия</th>
+          </tr>
+
+          {{list:item}}
+            <tr class="{$parity}">
+              <td>{{apply template="selector" value="{$item.id}"/}}</td>
+              <td>{$item.id}</td>
+              <td>{$item.user_id}</td>
+              <td>{$item.day_id}</td>
+              <td>{$item.moment_id}</td>
+              <td>{$item.ctime|date:"d.m.Y"}</td>
+              <td>{$item.cip}</td>
+              <td class='actions'>
+                {{apply template="object_action_edit" item="{$item}"/}}
+                
+                {{apply template="object_action_delete" item="{$item}"/}}
+              </td>
+            </tr>
+          {{/list:item}}
+          {{list:empty}}
+            <div class="empty_list">Complaint отсутствуют</div>
+          {{/list:empty}}
+        </table>
+        <div class='list_actions'>
+          {{apply template="selectors_button" action="delete" title="Удалить" /}}
+        </div>
+      </div>
+
+    {{/list}}
+
+  </div>
+
+{{/wrap}}

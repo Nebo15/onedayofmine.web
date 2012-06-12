@@ -147,7 +147,7 @@ class lmbHttpResponse
 
   function setCode($code)
   {
-    $this->http_code = $code;
+    $this->http_code = (integer) $code;
   }
 
   function setStatus($status)
@@ -165,8 +165,14 @@ class lmbHttpResponse
 
     if ($status)
       return $status;
-    else
-      return 200;
+
+    if($this->http_code)
+    {
+      if(isset($this->http_default_statuses[$this->http_code]))
+        return $this->http_default_statuses[$this->http_code];
+    }
+
+    return 200;
   }
 
   function setDirective($directive_name, $value)

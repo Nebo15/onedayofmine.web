@@ -1,8 +1,8 @@
 <?php
-lmb_require('src/controller/JsonController.class.php');
+lmb_require('src/controller/BaseJsonController.class.php');
 lmb_require('src/model/Day.class.php');
 
-class DayController extends JsonController
+class DayControllerBase extends BaseJsonController
 {
   protected $_object_class_name = 'User';
 
@@ -23,11 +23,11 @@ class DayController extends JsonController
     $day = new Day();
 
     if(!$this->request->hasPost())
-      return $this->_answer(null, 405, 'Not a POST request');
+      return $this->_answerOk(null, 405, 'Not a POST request');
 
     $day->setUser($this->toolkit->getUser());
 
-    return $this->_answer($this->_importAndSave($day, array('title', 'description')));
+    return $this->_answerOk($this->_importAndSave($day, array('title', 'description')));
   }
 
   function doUpdate()
@@ -36,7 +36,7 @@ class DayController extends JsonController
       return $this->_answerWithError('Not a POST request');
 
     if(!$day = Day::findById($this->request->id))
-      return $this->_answer(404, 'Day not found');
+      return $this->_answerOk(404, 'Day not found');
 
     return $this->_importAndSave($day, array('title', 'description'));
   }
@@ -52,7 +52,7 @@ class DayController extends JsonController
       return $this->_answerWithError('Not a POST request');
 
     if(!$day = Day::findById($this->request->id))
-      return $this->_answer(404, 'Day not found');
+      return $this->_answerOk(404, 'Day not found');
 
     $day->setIsDelete(true);
     $day->save();
@@ -66,7 +66,7 @@ class DayController extends JsonController
       return $this->_answerWithError('Not a POST request');
 
     if(!$day = Day::findById($this->request->id))
-      return $this->_answer(404, 'Day not found');
+      return $this->_answerOk(404, 'Day not found');
 
     $day->setIsDelete(false);
     $day->save();

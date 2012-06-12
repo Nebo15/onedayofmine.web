@@ -1,8 +1,8 @@
 <?php
-lmb_require('src/controller/JsonController.class.php');
+lmb_require('src/controller/BaseJsonController.class.php');
 lmb_require('src/model/User.class.php');
 
-class UserController extends JsonController
+class UserControllerBase extends BaseJsonController
 {
   protected $_object_class_name = 'User';
 
@@ -13,6 +13,6 @@ class UserController extends JsonController
     foreach($this->toolkit->getUser()->getGetUserFriendsInApplicationFromFb() as $friend)
       $answer->friends[] = $friend->exportToSimpleObj();
 
-    return $this->_answer($answer);
+    return $this->_answerOk($answer);
   }
 }

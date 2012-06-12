@@ -8,12 +8,12 @@ class AuthTest extends AcceptanceTestCase
   {
     $res = $this->get('auth/is_logged_in');
     $this->assertResponse(200);
-    $this->assertFalse($res);
+    $this->assertFalse($res->result);
   }
 
   function testAuth_Login()
   {
-    $res = $this->_login($this->main_user);
+    $res = $this->_login($this->main_user)->result;
     $this->assertTrue($res->sessid);
     $this->assertTrue($res->user);
     $this->assertTrue(is_object($res->user));
@@ -37,23 +37,23 @@ class AuthTest extends AcceptanceTestCase
     $this->_loginAndSetCookie($this->main_user);
     $res = $this->get('auth/is_logged_in');
     $this->assertResponse(200);
-    $this->assertTrue($res);
+    $this->assertTrue($res->result);
   }
 
   function testAuth_Session_ByGetParam()
   {
-    $sessid = $this->_login($this->main_user)->sessid;
+    $sessid = $this->_login($this->main_user)->result->sessid;
     $res = $this->get('auth/is_logged_in', array(lmb_env_get('SESSION_NAME') => $sessid));
     $this->assertResponse(200);
-    $this->assertTrue($res);
+    $this->assertTrue($res->result);
   }
 
   function testAuth_Session_ByPostParam()
   {
-    $sessid = $this->_login($this->main_user)->sessid;
+    $sessid = $this->_login($this->main_user)->result->sessid;
     $res = $this->post('auth/is_logged_in', array(lmb_env_get('SESSION_NAME') => $sessid));
     $this->assertResponse(200);
-    $this->assertTrue($res);
+    $this->assertTrue($res->result);
   }
 
   function testAuth_Login_firstCallCreateNewUser()
@@ -72,6 +72,6 @@ class AuthTest extends AcceptanceTestCase
     $this->_logout();
     $res = $this->get('auth/is_logged_in');
     $this->assertResponse(200);
-    $this->assertFalse($res);
+    $this->assertFalse($res->result);
   }
 }

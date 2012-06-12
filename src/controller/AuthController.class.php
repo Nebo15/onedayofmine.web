@@ -1,17 +1,17 @@
 <?php
-lmb_require('src/controller/JsonController.class.php');
+lmb_require('src/controller/BaseJsonController.class.php');
 lmb_require('src/model/Day.class.php');
 
-class AuthController extends JsonController
+class AuthController extends BaseJsonController
 {
   protected $check_auth = false;
 
   function doLogin()
   {
     if(!$this->request->hasPost())
-      return $this->_answer(null, 405, 'Use POST, Luke');
+      return $this->_answerOk(null, 405, 'Use POST, Luke');
     if(!$fb_access_token = $this->request->get('fb_access_token'))
-      return $this->_answer('fb_access_token not given', 412);
+      return $this->_answerOk('fb_access_token not given', 412);
 
     if(!$user = User::findByFbAccessToken($fb_access_token))
     {
@@ -23,7 +23,7 @@ class AuthController extends JsonController
     }
     else
     {
-      $fb_user_info = $user->getUserInfo();
+      $user->loadUserInfoFromFb();
     }
     $this->toolkit->setUser($user);
 
@@ -31,18 +31,18 @@ class AuthController extends JsonController
     $answer->sessid = session_id();
     $answer->user = $user->exportToSimpleObj();
 
-    return $this->_answer($answer);
+    return $this->_answerOk($answer);
   }
 
   function doIsLoggedIn()
   {
-    return $this->_answer($this->_isLoggedUser());
+    return $this->_answerOk($this->_isLoggedUser());
   }
 
   function doLogout()
   {
     if($this->session->valid()) $this->session->reset();
-    return $this->_answer();
+    return $this->_answerOk();
   }
 }
 
