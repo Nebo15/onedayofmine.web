@@ -7,26 +7,20 @@ class AcceptanceTest extends WebTestCase
   protected $base_api_url = "http://onedayofmine.dev/";
   protected $last_profile_info;
   /**
-   * @var OneDayTools
+   * @var User
    */
-  protected $toolkit;
-
-  protected $users = array();
+  protected $main_user;
+  /**
+   * @var User
+   */
+  protected $additional_user;
 
   function setUp()
   {
     parent::setUp();
-
-    $this->toolkit = lmbToolkit::instance();
     User::delete();
-
-    $this->users = FbForTests::getTestUsers();
-    foreach($this->users as $user)
-    {
-      $user->save();
-    }
-
-    $this->toolkit->getDefaultDbConnection()->commitTransaction();
+    lmbToolkit::instance()->getDefaultDbConnection()->commitTransaction();
+    list($this->main_user, $this->additional_user) = FbForTests::getUsers();
   }
 
   function testIsLoggedIn()
@@ -38,13 +32,13 @@ class AcceptanceTest extends WebTestCase
 
   function testLogin()
   {
-    $res = $this->_login();
+    $res = $this->_login($this->main_user);
     $this->assertTrue($res->sessid);
   }
 
   function testLoginAndSetCookie()
   {
-    $this->_loginAndSetCookie();
+    $this->_loginAndSetCookie($this->main_user);
     $res = $this->get('auth/is_logged_in');
     $this->assertResponse(200);
     $this->assertTrue($res);
@@ -52,7 +46,7 @@ class AcceptanceTest extends WebTestCase
 
   function testSession_ByGetParam()
   {
-    $sessid = $this->_login()->sessid;
+    $sessid = $this->_login($this->main_user)->sessid;
     $res = $this->get('auth/is_logged_in', array(lmb_env_get('SESSION_NAME') => $sessid));
     $this->assertResponse(200);
     $this->assertTrue($res);
@@ -60,7 +54,7 @@ class AcceptanceTest extends WebTestCase
 
   function testSession_ByPostParam()
   {
-    $sessid = $this->_login()->sessid;
+    $sessid = $this->_login($this->main_user)->sessid;
     $res = $this->post('auth/is_logged_in', array(lmb_env_get('SESSION_NAME') => $sessid));
     $this->assertResponse(200);
     $this->assertTrue($res);
@@ -71,7 +65,7 @@ class AcceptanceTest extends WebTestCase
     $users = User::find();
     $this->assertEqual(0, count($users));
 
-    $this->_loginAndSetCookie();
+    $this->_loginAndSetCookie($this->main_user);
 
     $users = User::find();
     $this->assertEqual(1, count($users));
@@ -90,7 +84,7 @@ class AcceptanceTest extends WebTestCase
     $this->post('day/create');
     $this->assertResponse(403);
 
-    $this->_loginAndSetCookie();
+    $this->_loginAndSetCookie($this->main_user);
     $errors = $this->post('day/create');
     $this->assertResponse(200);
     $this->assertTrue('array', gettype($errors));
@@ -113,15 +107,13 @@ class AcceptanceTest extends WebTestCase
 
   function testUserFiendsWithApp()
   {
-    die();
-    $this->_login();
-
+    $this->main_user->save();
+    $this->additional_user->save();
+    $this->_login($this->main_user);
     $response = $this->get('user/friends_in_app');
-    var_dump($response);
-    die();
     $this->assertTrue(is_array($response->friends));
     $this->assertEqual(1, count($response->friends));
-    $this->assertEqual($response->friends[0]->fb_user_id, $this->users[1]->getFbUserId());
+    $this->assertEqual($response->friends[0]->fb_uid, $this->additional_user->getFbUid());
   }
 
   function get($url, $params = array())
@@ -144,15 +136,14 @@ class AcceptanceTest extends WebTestCase
     return $decoded_body;
   }
 
-  protected function _loginAndSetCookie()
+  protected function _loginAndSetCookie(User $user)
   {
-    $sessid = $this->_login()->sessid;
+    $sessid = $this->_login($user)->sessid;
     $this->setCookie(lmb_env_get('SESSION_NAME'), $sessid);
   }
 
-  protected function _login()
+  protected function _login(User $user)
   {
-    $user = $this->users[0];
     $res = $this->post('auth/login/', array(
       'fb_access_token' => $user->getFbAccessToken()
     ));

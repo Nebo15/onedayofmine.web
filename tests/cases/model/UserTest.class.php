@@ -3,23 +3,25 @@
 class UserTest extends UnitTestCase
 {
   /**
-   * @property [User]
+   * @var User
    */
-  protected $users;
-
-  function __construct()
-  {
-    $this->users = FbForTests::getTestUsers();
-  }
+  protected $main_user;
+  /**
+   * @var User
+   */
+  protected $additional_user;
 
   function setUp()
   {
+    parent::setUp();
     User::delete();
+    lmbToolkit::instance()->getDefaultDbConnection()->commitTransaction();
+    list($this->main_user, $this->additional_user) = FbForTests::getUsers();
   }
 
   function testLoadUserInfoFromFb()
   {
-    $info = $this->users[0]->loadUserInfoFromFb();
+    $info = $this->main_user->loadUserInfoFromFb();
     $this->assertTrue(isset($info['fb_uid']));
     $this->assertTrue(isset($info['fb_name']));
     $this->assertTrue(isset($info['pic_small']));
@@ -30,11 +32,10 @@ class UserTest extends UnitTestCase
 
   function testGetGetUserFriendsInApplicationFromFb()
   {
-    $this->users[0]->save();
-    $this->users[1]->save();
-
-    $friends = $this->users[0]->getGetUserFriendsInApplicationFromFb();
+    $this->main_user->save();
+    $this->additional_user->save();
+    $friends = $this->main_user->getGetUserFriendsInApplicationFromFb();
     $this->assertEqual(1, count($friends));
-    $this->assertEqual($this->users[1]->getId(), $friends[0]->getId());
+    $this->assertEqual($this->additional_user->getId(), $friends[0]->getId());
   }
 }

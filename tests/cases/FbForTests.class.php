@@ -2,7 +2,7 @@
 
 class FbForTests
 {
-  static function getTestUsers()
+  static function getUsers()
   {
     static $users;
     if(!$users)
@@ -14,7 +14,6 @@ class FbForTests
         $user = new User();
         $user->setFbUid($user_info['id']);
         $user->setFbAccessToken($user_info['access_token']);
-
         $users[] = $user;
       }
     }
