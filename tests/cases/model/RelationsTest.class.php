@@ -1,7 +1,7 @@
 <?php
-lmb_require('tests/cases/OneDayTestCase.class.php');
+lmb_require('tests/cases/odUnitTestCase.class.php');
 
-class RelationsTest extends OneDayTestCase
+class RelationsTest extends odUnitTestCase
 {
   function setUp()
   {

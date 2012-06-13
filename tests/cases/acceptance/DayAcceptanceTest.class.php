@@ -1,30 +1,35 @@
 <?php
-lmb_require('tests/cases/AcceptanceTestCase.class.php');
+lmb_require('tests/cases/odAcceptanceTestCase.class.php');
 
 
-class DayAcceptanceTest extends AcceptanceTestCase
+class DayAcceptanceTest extends odAcceptanceTestCase
 {
   function testDay_Begin()
   {
     $this->post('day/begin');
-    $this->assertResponse(403);
+    $this->assertResponse(400);
 
     $this->_loginAndSetCookie($this->main_user);
-    $errors = $this->post('day/begin');
-    $this->assertResponse(200);
-    $this->assertTrue('array', gettype($errors));
-    $this->assertEqual(2, count($errors));
-    $this->assertEqual('title', $errors[0]->fields->Field);
-    $this->assertEqual('description', $errors[1]->fields->Field);
+
+    $this->get('day/begin');
+    $this->assertResponse(405);
+
+
+    $errors = $this->post('day/begin')->errors;
+    $this->assertResponse(400);
+    $this->assertEqual('array', gettype($errors));
+
+    $this->assertTrue(0 < count($errors));
 
     $user = User::findOne();
 
     $params = array(
-      'title' => $this->_string(4),
-      'description' => $this->_string(8),
+      'title' => $this->generator->string(4),
+      'description' => $this->generator->string(8),
       'tags' => array('tag1', 'tag2')
     );
-    $day = $this->post('day/begin', $params);
+    $day = $this->post('day/begin', $params)->result;
+    $this->assertResponse(200);
     $this->assertEqual($params['title'], $day->title);
     $this->assertEqual($params['description'], $day->description);
     $this->assertEqual($params['tags'], $day->tags);
@@ -34,50 +39,77 @@ class DayAcceptanceTest extends AcceptanceTestCase
     $this->assertTrue($day->cip);
   }
 
-  //TODO
   function testDay_Item()
   {
-    $this->get('day/item', array('id' => 42));
+    $this->_loginAndSetCookie($this->main_user);
+    $day = $this->get('day/item', array('id' => 42))->result;
+    $this->assertResponse(200);
+    $this->assertTrue($day->id);
+    $this->assertTrue($day->title);
+    $this->assertTrue($day->img_url);
+    $this->assertTrue($day->description);
+    $this->assertTrue($day->ctime);
   }
 
-  //TODO
   function testDay_Items()
   {
-    $this->get('day/items', array('ids' => array(42, 42)));
+    $this->_loginAndSetCookie($this->main_user);
+    $days = $this->get('day/items', array('ids' => array(42, 42)))->result;
+    $this->assertResponse(200);
+    foreach($days as $day)
+    {
+      $this->assertTrue($day->id);
+      $this->assertTrue($day->title);
+      $this->assertTrue($day->img_url);
+      $this->assertTrue($day->description);
+      $this->assertTrue($day->ctime);
+    }
   }
 
   //TODO
   function testDay_Update()
   {
+    $this->_loginAndSetCookie($this->main_user);
     $this->post('day/update', array(
         'day_id' => 42,
         'tags' => array('tag1', 'tag2'),
         'top_moment_id' => 111)
     );
+    $this->assertResponse(200);
   }
 
   //TODO
   function testDay_AddMoment()
   {
-
+    $this->_loginAndSetCookie($this->main_user);
+    $this->post('day/add_moment', array(
+      ''
+    ));
+    $this->assertResponse(200);
   }
 
   //TODO
   function testDay_Comment()
   {
-
+    $this->_loginAndSetCookie($this->main_user);
+    $this->post('day/comment', array(
+      'text' => 'comment text'
+    ));
+    $this->assertResponse(200);
   }
 
   //TODO
   function testDay_End()
   {
-    $this->post('day/end', array(
-      'day_id' => 42
-    ));
+    $this->_loginAndSetCookie($this->main_user);
+    $this->post('day/end');
+    $this->assertResponse(200);
   }
 
   function testDay_Share()
   {
-
+    $this->_loginAndSetCookie($this->main_user);
+    $this->post('day/share');
+    $this->assertResponse(200);
   }
 }

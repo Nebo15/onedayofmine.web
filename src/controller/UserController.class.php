@@ -2,17 +2,21 @@
 lmb_require('src/controller/BaseJsonController.class.php');
 lmb_require('src/model/User.class.php');
 
-class UserControllerBase extends BaseJsonController
+class UserController extends BaseJsonController
 {
   protected $_object_class_name = 'User';
 
+  function doDays()
+  {
+    return $this->_answerOk(array(odMock::day(), odMock::day()));
+  }
+
   function doFriendsInApp()
   {
-    $answer = new stdClass();
-    $answer->friends = array();
+    $friends = array();
     foreach($this->toolkit->getUser()->getGetUserFriendsInApplicationFromFb() as $friend)
-      $answer->friends[] = $friend->exportToSimpleObj();
+      $friends[] = $friend->exportToSimpleObj();
 
-    return $this->_answerOk($answer);
+    return $this->_answerOk($friends);
   }
 }

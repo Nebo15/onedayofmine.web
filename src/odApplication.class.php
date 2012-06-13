@@ -1,7 +1,7 @@
 <?php
 lmb_require('limb/web_app/src/lmbWebApplication.class.php');
 
-class OneDayApplication extends lmbWebApplication
+class odApplication extends lmbWebApplication
 {
   protected function _registerFilters()
   {
@@ -20,7 +20,7 @@ class OneDayApplication extends lmbWebApplication
 
     if(0 === strpos(lmbToolkit::instance()->getRequest()->getUriPath(), '/lmb_'))
   	  $this->registerFilter(new lmbHandle('limb/cms/src/filter/lmbCmsAccessPolicyFilter'));
-    
+
     $this->registerFilter(new lmbHandle('limb/web_app/src/filter/lmbActionPerformingFilter'));
 
     $this->registerFilter(new lmbHandle('limb/web_app/src/filter/lmbViewRenderingFilter'));

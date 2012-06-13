@@ -15,7 +15,12 @@ class DayController extends BaseJsonController
 
   function doItem()
   {
-    return Day::findById($this->request->id)->exportToSimpleObj();
+    return $this->_answerOk(odMock::day());
+  }
+
+  function doItems()
+  {
+    return $this->_answerOk(array(odMock::day(), odMock::day()));
   }
 
   function doBegin()
@@ -23,11 +28,11 @@ class DayController extends BaseJsonController
     $day = new Day();
 
     if(!$this->request->hasPost())
-      return $this->_answerOk(null, 405, 'Not a POST request');
+      return $this->_answerWithError('Not a POST request', null, 405);
 
     $day->setUser($this->toolkit->getUser());
 
-    return $this->_answerOk($this->_importAndSave($day, array('title', 'description')));
+    return $this->_importSaveAndAnswer($day, array('title', 'description', 'tags'));
   }
 
   function doUpdate()
@@ -35,15 +40,20 @@ class DayController extends BaseJsonController
     if(!$this->request->hasPost())
       return $this->_answerWithError('Not a POST request');
 
-    if(!$day = Day::findById($this->request->id))
-      return $this->_answerOk(404, 'Day not found');
+    return $this->_answerOk();
 
-    return $this->_importAndSave($day, array('title', 'description'));
+//    if(!$day = Day::findById($this->request->id))
+//      return $this->_answerOk(404, 'Day not found');
+//
+//    return $this->_importSaveAndAnswer($day, array('top_moment_id', 'title', 'description', 'tags'));
   }
 
   function doEnd()
   {
+    if(!$this->request->hasPost())
+      return $this->_answerWithError('Not a POST request');
 
+    return $this->_answerOk();
   }
 
   function doDelete()
@@ -51,13 +61,15 @@ class DayController extends BaseJsonController
     if(!$this->request->hasPost())
       return $this->_answerWithError('Not a POST request');
 
-    if(!$day = Day::findById($this->request->id))
-      return $this->_answerOk(404, 'Day not found');
+    return $this->_answerOk();
 
-    $day->setIsDelete(true);
-    $day->save();
-
-    return $day;
+//    if(!$day = Day::findById($this->request->id))
+//      return $this->_answerOk(404, 'Day not found');
+//
+//    $day->setIsDelete(true);
+//    $day->save();
+//
+//    return $day;
   }
 
   function doRestore()
@@ -65,16 +77,42 @@ class DayController extends BaseJsonController
     if(!$this->request->hasPost())
       return $this->_answerWithError('Not a POST request');
 
-    if(!$day = Day::findById($this->request->id))
-      return $this->_answerOk(404, 'Day not found');
+    return $this->_answerOk();
 
-    $day->setIsDelete(false);
-    $day->save();
-
-    return $day;
+//    if(!$day = Day::findById($this->request->id))
+//      return $this->_answerOk(404, 'Day not found');
+//
+//    $day->setIsDelete(false);
+//    $day->save();
+//
+//    return $day;
   }
 
-  protected function _importAndSave($item, array $properties)
+  function doAddMoment()
+  {
+    if(!$this->request->hasPost())
+      return $this->_answerWithError('Not a POST request');
+
+    return $this->_answerOk();
+  }
+
+  function doComment()
+  {
+    if(!$this->request->hasPost())
+      return $this->_answerWithError('Not a POST request');
+
+    return $this->_answerOk();
+  }
+
+  function doShare()
+  {
+    if(!$this->request->hasPost())
+      return $this->_answerWithError('Not a POST request');
+
+    return $this->_answerOk();
+  }
+
+  protected function _importSaveAndAnswer($item, array $properties)
   {
     foreach($properties as $property)
       $item->set($property, $this->request->get($property));
@@ -87,11 +125,11 @@ class DayController extends BaseJsonController
       foreach($res as $key => $property)
         if(is_object($property))
           unset($res[$key]);
-      return $res;
+      return $this->_answerOk($res);
     }
     else
     {
-      return $this->error_list->export();
+      return $this->_answerWithError($this->error_list->export());
     }
   }
 }

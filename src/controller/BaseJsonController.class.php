@@ -1,10 +1,11 @@
 <?php
 lmb_require('limb/web_app/src/controller/lmbController.class.php');
+lmb_require('src/odMock.class.php');
 
 abstract class BaseJsonController extends lmbController
 {
   /**
-   * @var OneDayTools
+   * @var odOneDayTools
    */
   protected $toolkit;
   protected $check_auth = true;

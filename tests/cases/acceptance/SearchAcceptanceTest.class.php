@@ -1,8 +1,8 @@
 <?php
-lmb_require('tests/cases/AcceptanceTestCase.class.php');
+lmb_require('tests/cases/odAcceptanceTestCase.class.php');
 
 
-class SearchAcceptanceTest extends AcceptanceTestCase
+class SearchAcceptanceTest extends odAcceptanceTestCase
 {
   function testSearch_Suggest()
   {

@@ -1,6 +1,6 @@
 <?php
 
-class ObjectMother
+class odObjectMother
 {
   /**
    * @return User

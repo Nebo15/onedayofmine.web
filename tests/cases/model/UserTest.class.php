@@ -1,6 +1,7 @@
 <?php
+lmb_require('tests/cases/odUnitTestCase.class.php');
 
-class UserTest extends UnitTestCase
+class UserTest extends odUnitTestCase
 {
   /**
    * @var User

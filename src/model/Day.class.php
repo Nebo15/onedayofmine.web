@@ -14,6 +14,10 @@ class Day extends BaseModel
     $this->_has_many = array(
       'moments' => array( 'field' => 'day_id', 'class' => 'Moment'),
     );
+
+    $this->_has_one = array(
+      'top_moment' => array('field' => 'top_moment_id', 'class' => 'Moment', 'can_be_null' => true)
+    );
   }
 
   protected function _createValidator()

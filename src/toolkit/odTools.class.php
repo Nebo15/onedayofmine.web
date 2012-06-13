@@ -1,8 +1,8 @@
 <?php
 lmb_require('limb/toolkit/src/lmbAbstractTools.class.php');
-lmb_require('src/OneDayFacebook.class.php');
+lmb_require('src/odFacebook.class.php');
 
-class OneDayTools extends lmbAbstractTools
+class odTools extends lmbAbstractTools
 {
   protected $user;
   /**
@@ -37,7 +37,7 @@ class OneDayTools extends lmbAbstractTools
   }
 
   /**
-   * @return OneDayFacebook
+   * @return odFacebook
    */
   function getUserFacebook()
   {
@@ -48,13 +48,13 @@ class OneDayTools extends lmbAbstractTools
 
   /**
    * @param string $access_token
-   * @return OneDayFacebook
+   * @return odFacebook
    */
   function getFacebook($access_token = null)
   {
     if(null == $this->facebook)
     {
-      $this->facebook = new OneDayFacebook(array(
+      $this->facebook = new odFacebook(array(
         'appId'  => lmbToolkit::instance()->getConf('common')->get('fb_app_id'),
         'secret' => lmbToolkit::instance()->getConf('common')->get('fb_app_secret'),
         'cookie' => false

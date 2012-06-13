@@ -1,7 +1,7 @@
 <?php
 lmb_require('facebook/facebook.php');
 
-class OneDayFacebook extends Facebook
+class odFacebook extends Facebook
 {
   function makeQuery($query)
   {

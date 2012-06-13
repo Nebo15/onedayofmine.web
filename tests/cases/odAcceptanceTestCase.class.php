@@ -1,11 +1,11 @@
 <?php
 lmb_require('limb/tests_runner/lib/simpletest/web_tester.php');
+lmb_require('tests/cases/odObjectMother.class.php');
 
-
-abstract class AcceptanceTestCase extends WebTestCase
+abstract class odAcceptanceTestCase extends WebTestCase
 {
   /**
-   * @var ObjectMother
+   * @var OdObjectMother
    */
   protected $generator;
 
@@ -22,7 +22,7 @@ abstract class AcceptanceTestCase extends WebTestCase
 
   function setUp()
   {
-    $this->generator = new ObjectMother();
+    $this->generator = new odObjectMother();
     parent::setUp();
     User::delete();
     lmbToolkit::instance()->getDefaultDbConnection()->commitTransaction();
@@ -32,20 +32,20 @@ abstract class AcceptanceTestCase extends WebTestCase
   function get($url, $params = array())
   {
     $result = $this->_decodeResponse(parent::get($this->base_api_url . $url, $params));
-    $this->assertTrue(property_exists($result, 'result'));
-    $this->assertTrue(property_exists($result, 'errors'));
-    $this->assertTrue(property_exists($result, 'status'));
-    $this->assertTrue(property_exists($result, 'code'));
+    $this->assertProperty($result, 'result');
+    $this->assertProperty($result, 'errors');
+    $this->assertProperty($result, 'status');
+    $this->assertProperty($result, 'code');
     return $result;
   }
 
   function post($url, $params = array())
   {
     $result = $this->_decodeResponse(parent::post($this->base_api_url . $url, $params));
-    $this->assertTrue(property_exists($result, 'result'));
-    $this->assertTrue(property_exists($result, 'errors'));
-    $this->assertTrue(property_exists($result, 'status'));
-    $this->assertTrue(property_exists($result, 'code'));
+    $this->assertProperty($result, 'result');
+    $this->assertProperty($result, 'errors');
+    $this->assertProperty($result, 'status');
+    $this->assertProperty($result, 'code');
     return $result;
   }
 

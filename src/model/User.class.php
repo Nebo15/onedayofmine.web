@@ -83,7 +83,7 @@ class User extends BaseModel
     return $fb_results;
   }
   /**
-   * @return OneDayFacebook
+   * @return odFacebook
    */
   protected function _getFacebook()
   {
@@ -95,7 +95,10 @@ class User extends BaseModel
   function exportToSimpleObj()
   {
     $result = $this->export();
-    $result = array_merge($result, $result['user_info_from_fb']);
+    if($result['user_info_from_fb'])
+      $result = array_merge($result, $result['user_info_from_fb']);
+    else
+      $result = array_merge($result, $this->loadUserInfoFromFb());
     unset($result['user_info_from_fb']);
     unset($result['fb_access_token']);
     ksort($result);
