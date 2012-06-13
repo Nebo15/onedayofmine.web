@@ -2,7 +2,7 @@
 lmb_require('tests/cases/AcceptanceTestCase.class.php');
 
 
-class SearchTest extends AcceptanceTestCase
+class SearchAcceptanceTest extends AcceptanceTestCase
 {
   function testSearch_Suggest()
   {

@@ -2,7 +2,7 @@
 lmb_require('tests/cases/AcceptanceTestCase.class.php');
 
 
-class DayTest extends AcceptanceTestCase
+class DayAcceptanceTest extends AcceptanceTestCase
 {
   function testDay_Begin()
   {

@@ -2,7 +2,7 @@
 lmb_require('tests/cases/AcceptanceTestCase.class.php');
 
 
-class MomentTest extends AcceptanceTestCase
+class MomentAcceptanceTest extends AcceptanceTestCase
 {
   function testMoment_Update()
   {

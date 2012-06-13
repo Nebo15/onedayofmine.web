@@ -2,7 +2,7 @@
 lmb_require('tests/cases/AcceptanceTestCase.class.php');
 
 
-class AuthTest extends AcceptanceTestCase
+class AuthAcceptanceTest extends AcceptanceTestCase
 {
   function testAuth_IsLoggedIn()
   {
