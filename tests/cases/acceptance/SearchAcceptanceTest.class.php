@@ -4,13 +4,15 @@ lmb_require('tests/cases/odAcceptanceTestCase.class.php');
 
 class SearchAcceptanceTest extends odAcceptanceTestCase
 {
-  function testSearch_Suggest()
+  function testSuggest()
   {
-
+    $res = $this->get('search/suggest');
+    $this->assertResponse(200);
   }
 
-  function testSearch_Search()
+  function testSearch()
   {
-
+    $res = $this->get('search/text');
+    $this->assertResponse(200);
   }
 }

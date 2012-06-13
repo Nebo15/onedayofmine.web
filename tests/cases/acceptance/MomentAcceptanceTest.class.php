@@ -4,18 +4,27 @@ lmb_require('tests/cases/odAcceptanceTestCase.class.php');
 
 class MomentAcceptanceTest extends odAcceptanceTestCase
 {
-  function testMoment_Update()
+  function testUpdate()
   {
-
+    $this->post('moment/update');
+    $this->assertResponse(200);
   }
 
-  function testMoment_Delete()
+  function testDelete()
   {
-
+    $this->post('moment/delete');
+    $this->assertResponse(200);
   }
 
-  function testMoment_Share()
+  function testComment()
   {
+    $this->post('moment/comment');
+    $this->assertResponse(200);
+  }
 
+  function testShare()
+  {
+    $this->post('moment/share');
+    $this->assertResponse(200);
   }
 }
