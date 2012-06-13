@@ -10,6 +10,10 @@ class Day extends BaseModel
     $this->_many_belongs_to = array(
       'user' => array( 'field' => 'user_id', 'class' => 'User'),
     );
+
+    $this->_has_many = array(
+      'moments' => array( 'field' => 'day_id', 'class' => 'Moment'),
+    );
   }
 
   protected function _createValidator()

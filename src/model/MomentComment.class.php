@@ -11,17 +11,9 @@ class MomentComment extends lmbActiveRecord
   protected function _defineRelations()
   {
     $this->_many_belongs_to = array (
-  'user' => 
-  array (
-    'field' => 'user_id',
-    'class' => 'User',
-  ),
-  'moment' => 
-  array (
-    'field' => 'moment_id',
-    'class' => 'Moment',
-  ),
-);
-  }
+      'user' => array ( 'field' => 'user_id', 'class' => 'User'),
+      'moment' => array ( 'field' => 'moment_id', 'class' => 'Moment'),
+    );
+  }
 
 }

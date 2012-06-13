@@ -11,6 +11,15 @@ class User extends BaseModel
 {
   protected $user_info_from_fb;
 
+  protected function _defineRelations()
+  {
+    $this->_has_many = array (
+      'days' => array ('field' => 'user_id', 'class' => 'Day'),
+      'days_comments' => array ('field' => 'user_id', 'class' => 'DayComment'),
+      'moments_comments' => array ('field' => 'user_id', 'class' => 'MomentComment'),
+    );
+  }
+
   function setUserInfo($user_info)
   {
     $this->user_info_from_fb = $user_info;

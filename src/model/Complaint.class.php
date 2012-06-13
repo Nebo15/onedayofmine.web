@@ -11,26 +11,10 @@ class Complaint extends BaseModel
   protected function _defineRelations()
   {
     $this->_many_belongs_to = array (
-  'user' =>
-  array (
-    'field' => 'user_id',
-    'class' => 'User',
-    'can_be_null' => true,
-  ),
-  'day' =>
-  array (
-    'field' => 'day_id',
-    'class' => 'Day',
-    'can_be_null' => true,
-  ),
-  'moment' =>
-  array (
-    'field' => 'moment_id',
-    'class' => 'Moment',
-    'can_be_null' => true,
-  ),
-);
-
+      'user' => array ('field' => 'user_id', 'class' => 'User', 'can_be_null' => true),
+      'day' => array ('field' => 'day_id', 'class' => 'Day', 'can_be_null' => true),
+      'moment' => array ('field' => 'moment_id', 'class' => 'Moment', 'can_be_null' => true),
+    );
   }
 
 }

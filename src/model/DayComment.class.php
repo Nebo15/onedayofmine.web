@@ -11,17 +11,10 @@ class DayComment extends lmbActiveRecord
   protected function _defineRelations()
   {
     $this->_many_belongs_to = array (
-  'user' => 
-  array (
-    'field' => 'user_id',
-    'class' => 'User',
-  ),
-  'day' => 
-  array (
-    'field' => 'day_id',
-    'class' => 'Day',
-  ),
-);
-  }
+      'user' => array ('field' => 'user_id', 'class' => 'User'),
+      'day' =>  array ('field' => 'day_id', 'class' => 'Day'),
+    );
+
+  }
 
 }

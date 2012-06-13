@@ -4,6 +4,11 @@ lmb_require('limb/tests_runner/lib/simpletest/web_tester.php');
 
 abstract class AcceptanceTestCase extends WebTestCase
 {
+  /**
+   * @var ObjectMother
+   */
+  protected $generator;
+
   protected $base_api_url = "http://onedayofmine.dev/";
   protected $last_profile_info;
   /**
@@ -17,6 +22,7 @@ abstract class AcceptanceTestCase extends WebTestCase
 
   function setUp()
   {
+    $this->generator = new ObjectMother();
     parent::setUp();
     User::delete();
     lmbToolkit::instance()->getDefaultDbConnection()->commitTransaction();
@@ -88,20 +94,6 @@ abstract class AcceptanceTestCase extends WebTestCase
     } else {
       return array($raw_response, '{}');
     }
-  }
-
-  protected function _string($length = 6)
-  {
-    $conso = array("b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "r", "s", "t", "v", "w", "x", "y", "z");
-    $vocal = array("a", "e", "i", "o", "u");
-    $password = "";
-    srand((double)microtime() * 1000000);
-    $max = $length / 2;
-    for ($i = 1; $i <= $max; $i++) {
-      $password .= $conso[rand(0, 19)];
-      $password .= $vocal[rand(0, 4)];
-    }
-    return $password;
   }
 
   protected function assertProperty($obj, $property)
