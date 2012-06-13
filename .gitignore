@@ -6,5 +6,6 @@
 .project
 .settings
 var/*
+tests/var/*
 nbproject
 .sublime*
