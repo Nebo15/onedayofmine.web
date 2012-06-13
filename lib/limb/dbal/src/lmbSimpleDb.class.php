@@ -143,6 +143,14 @@ class lmbSimpleDb
     return $this;
   }
 
+  function truncateTable($table)
+  {
+    $info = $this->conn->getDatabaseInfo();
+    foreach($info->getTableList() as $table)
+      $this->conn->newStatement(sprintf("TRUNCATE TABLE %s", $this->quote($table)))->execute();
+    return $this;
+  }
+
   function truncateDb()
   {
     $info = $this->conn->getDatabaseInfo();

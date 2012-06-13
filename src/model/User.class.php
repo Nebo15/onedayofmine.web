@@ -28,7 +28,7 @@ class User extends BaseModel
   function getUserInfo()
   {
     if(!$this->user_info_from_fb)
-      $this->user_info_from_fb = $this->loadUserInfoFromFb();
+      $this->loadUserInfoFromFb();
     return $this->user_info_from_fb;
   }
 
@@ -38,10 +38,10 @@ class User extends BaseModel
     uid, name, sex, timezone, profile_update_time, pic_small, pic_square, pic_big, profile_url
     FROM user WHERE uid = me()');
     lmb_assert_true(count($raw));
-    return $this->_mapFbInfo($raw[0]);
+    $this->user_info_from_fb = $this->_mapFbInfo($raw[0]);
   }
 
-  function getGetUserFriendsInApplicationFromFb()
+  function getUserFriendsInApplicationFromFb()
   {
     $raw_infos = $this->_getFacebook()->makeQuery('SELECT
       uid, name, sex, timezone, profile_update_time, pic_small, pic_square, pic_big, profile_url

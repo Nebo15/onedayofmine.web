@@ -1,7 +1,6 @@
 <?php
 lmb_require('tests/cases/odAcceptanceTestCase.class.php');
 
-
 class UserAcceptanceTest extends odAcceptanceTestCase
 {
   function testUser_Days()
@@ -26,7 +25,8 @@ class UserAcceptanceTest extends odAcceptanceTestCase
     $this->additional_user->save();
     $this->_loginAndSetCookie($this->main_user);
 
-    $friends = $this->get('user/friends_in_app')->result;
+    $result = $this->get('user/friends_in_app');
+    $friends = $result->result;
     $this->assertResponse(200);
     $this->assertTrue(is_array($friends));
     $this->assertEqual(1, count($friends));

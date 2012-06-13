@@ -5,9 +5,8 @@ class RelationsTest extends odUnitTestCase
 {
   function setUp()
   {
+    odTestsTools::truncateTablesOf('Day');
     parent::setUp();
-    User::delete();
-    Day::delete();
   }
 
   function testUserToDayRelation()

@@ -1,6 +1,5 @@
 <?php
 lmb_require('limb/tests_runner/lib/simpletest/web_tester.php');
-lmb_require('tests/cases/odObjectMother.class.php');
 
 abstract class odAcceptanceTestCase extends WebTestCase
 {
@@ -24,15 +23,15 @@ abstract class odAcceptanceTestCase extends WebTestCase
   {
     $this->generator = new odObjectMother();
     parent::setUp();
-    User::delete();
-    lmbToolkit::instance()->getDefaultDbConnection()->commitTransaction();
-    list($this->main_user, $this->additional_user) = FbForTests::getUsers();
+    odTestsTools::truncateTablesOf('User');
+    list($this->main_user, $this->additional_user) = odTestsTools::getUsers();
   }
 
   function get($url, $params = array())
   {
     $result = $this->_decodeResponse(parent::get($this->base_api_url . $url, $params));
-    $this->assertProperty($result, 'result');
+    if(!property_exists($result, 'result'))
+      $this->fail('Wrong API response format: '.lmb_var_export($result));
     $this->assertProperty($result, 'errors');
     $this->assertProperty($result, 'status');
     $this->assertProperty($result, 'code');
