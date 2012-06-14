@@ -35,6 +35,7 @@ abstract class odAcceptanceTestCase extends WebTestCase
     $this->assertProperty($result, 'errors');
     $this->assertProperty($result, 'status');
     $this->assertProperty($result, 'code');
+    $this->_addRecordToPostmanWriter($url, $params, 'GET');
     return $result;
   }
 
@@ -45,7 +46,22 @@ abstract class odAcceptanceTestCase extends WebTestCase
     $this->assertProperty($result, 'errors');
     $this->assertProperty($result, 'status');
     $this->assertProperty($result, 'code');
+    $this->_addRecordToPostmanWriter($url, $params, 'POST');
     return $result;
+  }
+
+  protected function _addRecordToPostmanWriter($url_path, $params, $method)
+  {
+    $trace = debug_backtrace();
+    $class_name = get_called_class();
+    $method_name = $trace[2]['function'];
+    $class_ref = new ReflectionClass($class_name);
+    $method_ref = $class_ref->getMethod($method_name);
+    $is_example = (bool) (false !== strpos($method_ref->getDocComment(), 'example'));
+    if($is_example)
+      lmbToolkit::instance()
+        ->getPostmanWriter()
+        ->addRequest($class_name.' - '.$method_name, $url_path, $method, $params);
   }
 
   protected function _loginAndSetCookie(User $user)

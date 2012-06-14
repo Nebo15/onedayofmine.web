@@ -4,7 +4,7 @@ lmb_require('tests/cases/odAcceptanceTestCase.class.php');
 
 class DayAcceptanceTest extends odAcceptanceTestCase
 {
-  function testDay_Begin()
+  function testBegin_Negative()
   {
     $this->post('day/begin');
     $this->assertResponse(400);
@@ -14,12 +14,18 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $this->get('day/begin');
     $this->assertResponse(405);
 
-
     $errors = $this->post('day/begin')->errors;
     $this->assertResponse(400);
     $this->assertEqual('array', gettype($errors));
-
     $this->assertTrue(0 < count($errors));
+  }
+
+  /**
+   *@example
+   */
+  function testBegin()
+  {
+    $this->_loginAndSetCookie($this->main_user);
 
     $user = User::findOne();
 
@@ -39,7 +45,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $this->assertTrue($day->cip);
   }
 
-  function testDay_Item()
+  function testItem()
   {
     $this->_loginAndSetCookie($this->main_user);
     $day = $this->get('day/item', array('id' => 42))->result;
@@ -51,7 +57,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $this->assertTrue($day->ctime);
   }
 
-  function testDay_Items()
+  function testItems()
   {
     $this->_loginAndSetCookie($this->main_user);
     $days = $this->get('day/items', array('ids' => array(42, 42)))->result;
@@ -66,8 +72,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     }
   }
 
-  //TODO
-  function testDay_Update()
+  function testUpdate()
   {
     $this->_loginAndSetCookie($this->main_user);
     $this->post('day/update', array(
@@ -78,8 +83,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $this->assertResponse(200);
   }
 
-  //TODO
-  function testDay_AddMoment()
+  function testAddMoment()
   {
     $this->_loginAndSetCookie($this->main_user);
     $this->post('day/add_moment', array(
@@ -88,8 +92,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $this->assertResponse(200);
   }
 
-  //TODO
-  function testDay_Comment()
+  function testComment()
   {
     $this->_loginAndSetCookie($this->main_user);
     $this->post('day/comment', array(
@@ -98,15 +101,14 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $this->assertResponse(200);
   }
 
-  //TODO
-  function testDay_End()
+  function testEnd()
   {
     $this->_loginAndSetCookie($this->main_user);
     $this->post('day/end');
     $this->assertResponse(200);
   }
 
-  function testDay_Share()
+  function testShare()
   {
     $this->_loginAndSetCookie($this->main_user);
     $this->post('day/share');

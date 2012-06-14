@@ -8,3 +8,5 @@ lmb_env_set('LIMB_VAR_DIR', dirname(__FILE__) . '/../var/');
 lmb_require(__DIR__.'/odTestsTools.class.php');
 lmb_require(__DIR__.'/odObjectMother.class.php');
 
+lmbToolkit::instance()->getPostmanWriter()->deleteFile();
+

@@ -6,13 +6,6 @@ class DayController extends BaseJsonController
 {
   protected $_object_class_name = 'User';
 
-  function doDisplay()
-  {
-    $result = array();
-    lmbArrayHelper::toFlatArray(Day::find(), $result);
-    return $result;
-  }
-
   function doItem()
   {
     return $this->_answerOk(odMock::day());
@@ -42,10 +35,10 @@ class DayController extends BaseJsonController
 
     return $this->_answerOk();
 
-//    if(!$day = Day::findById($this->request->id))
-//      return $this->_answerOk(404, 'Day not found');
-//
-//    return $this->_importSaveAndAnswer($day, array('top_moment_id', 'title', 'description', 'tags'));
+    if(!$day = Day::findById($this->request->id))
+      return $this->_answerOk(404, 'Day not found');
+
+    return $this->_importSaveAndAnswer($day, array('top_moment_id', 'title', 'description', 'tags'));
   }
 
   function doEnd()
@@ -53,7 +46,7 @@ class DayController extends BaseJsonController
     if(!$this->request->hasPost())
       return $this->_answerWithError('Not a POST request');
 
-    return $this->_answerOk();
+    return $this->_answerOk(odMock::day());
   }
 
   function doDelete()
@@ -63,29 +56,13 @@ class DayController extends BaseJsonController
 
     return $this->_answerOk();
 
-//    if(!$day = Day::findById($this->request->id))
-//      return $this->_answerOk(404, 'Day not found');
-//
-//    $day->setIsDelete(true);
-//    $day->save();
-//
-//    return $day;
-  }
+    if(!$day = Day::findById($this->request->id))
+      return $this->_answerOk(404, 'Day not found');
 
-  function doRestore()
-  {
-    if(!$this->request->hasPost())
-      return $this->_answerWithError('Not a POST request');
+    $day->setIsDelete(true);
+    $day->save();
 
-    return $this->_answerOk();
-
-//    if(!$day = Day::findById($this->request->id))
-//      return $this->_answerOk(404, 'Day not found');
-//
-//    $day->setIsDelete(false);
-//    $day->save();
-//
-//    return $day;
+    return $day;
   }
 
   function doAddMoment()
@@ -93,7 +70,7 @@ class DayController extends BaseJsonController
     if(!$this->request->hasPost())
       return $this->_answerWithError('Not a POST request');
 
-    return $this->_answerOk();
+    return $this->_answerOk(array(odMock::moment(), odMock::moment()));
   }
 
   function doComment()

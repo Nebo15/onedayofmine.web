@@ -1,15 +1,26 @@
 <?php
 lmb_require('limb/toolkit/src/lmbAbstractTools.class.php');
 lmb_require('src/odFacebook.class.php');
+lmb_require('src/PostmanWriter.class.php');
 
 class odTools extends lmbAbstractTools
 {
+  /**
+   * @var User
+   */
   protected $user;
   /**
    * @var Facebook
    */
   protected $facebook;
+  /**
+   * @var string
+   */
   protected $fb_app_access_token;
+  /**
+   * @var PostmanWriter
+   */
+  protected $postman_writer;
 
   /**
    * @return User
@@ -81,6 +92,13 @@ class odTools extends lmbAbstractTools
     if($request->getCookie($sessid_name))
       return $request->getCookie($sessid_name);
     return '';
+  }
+
+  function getPostmanWriter()
+  {
+    if(!$this->postman_writer)
+      $this->postman_writer = new PostmanWriter(lmb_var_dir().'/postman.json');
+    return $this->postman_writer;
   }
 }
 
