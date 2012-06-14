@@ -1,31 +1,46 @@
-
 # 1. Общие положения #
 
-Пользователь регистрируется за пределами back-end'а. На него передается только facebook'овский access_token. Делается запрос на /auth/login, в ответ приходит sessid, который нужно выставлять в куку 'SESSID'(или передавать GET или POST параметром 'SESSID'), для всех приватных запросов.
+Пользователь регистрируется за пределами back-end'а. На него передается только facebook'овский access_token. 
+Делается запрос на /auth/login, в ответ приходит sessid, который нужно выставлять в куку 
+'SESSID'(или передавать GET или POST параметром 'SESSID'), для всех приватных запросов.
 
     Структура ответа:
     {
-      'status' => <http code>,
+      'code'   => <http code>
+      'status' => <http status>,
       'result' => <mixed>,
       'errors' => [ <string>, <string>, ... ]
     }
 
-## 2. Пользователи ##
+Поля code и status для клиентов, которые почему-то не умеют нормально обрабатывать стандартные HTTP-шные коды и статусы.
 
-### 2.1 Регистрация/аутентификация /auth/login - публичный ###
+# 2. Тестирование API "ручками" #
+  * устанавливаем приложение для хрома https://chrome.google.com/webstore/detail/fdmmgilgnpjigdojojpjoooidkmcomcm
+  * сохраняем и импортируем в него файлик https://raw.github.com/daeq/one-day-of-mine/master/www/api_doc/postman.json
+
+# 3. Описание API #
+
+## 3.1 Аутентификация  ##
+
+### 3.1.1 Регистрация/аутентификация /auth/login - публичный ###
 
     Запрос:
       'fb_access_token' => <string 255>
     Ответ(поле result):
-      'user_id' => <int 11>
+      'session' => <int 11>
+      'user' => информация о пользователе
 
-### 2.2 Проверка сессии /auth/is_logged_in - приватный ###
+### 3.1.2 Проверка сессии /auth/is_logged_in - приватный ###
     Запрос: пустой
     Ответ: <boolean>
 
-### 2.3 Выход /auth/logout - публичный ###
+### 3.1.3 Выход /auth/logout - публичный ###
     Запрос: пустой
     Ответ: пустой
+
+
+## 3.2 Пользователи ##
+
 
 ### 2.4 Список fb-друзей с установленным приложением ###
     Запрос: пустой
@@ -70,51 +85,4 @@
 5.1 создание жалобы модератору - day_id, text - complaint_id
 5.2 саджест для поиска - text - [text]
 5.3 полнотекстовый поиск - text - [user], [day], [moment]
-5.4 список моих дней - [day]
-
-Внешние сущности
-
-Пользователь (user)
-id
-fb_user_id
-fb_access_token
-ctime / utime / cip
-
-День (day)
-id
-user
-title
-description
-start_time
-ctime - время создания
-utime - время обновления
-cip - ip с которого создан
-likes_count
-[moment] - sorted asc by ctime
-[comment] - sorted asc by ctime
-
-Момент (moment)
-id
-day_id
-description
-type - видео или фото
-fb_id (vid or pid)
-ctime / utime / cip
-likes_count
-[comment] - sorted asc by ctime
-
-Комментарий к дню (DayComment)
-id
-user_id
-day_id
-text
-ctime / utime / cip
-likes_count
-
-Комментарий к моменту (MomentComment)
-id
-user_id
-moment_id
-text
-ctime / utime / cip
-likes_count
+5.4 список моих дней [day]
