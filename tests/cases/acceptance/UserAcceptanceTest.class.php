@@ -3,7 +3,10 @@ lmb_require('tests/cases/odAcceptanceTestCase.class.php');
 
 class UserAcceptanceTest extends odAcceptanceTestCase
 {
-  function testUser_Days()
+  /**
+   *@example
+   */
+  function testDays()
   {
     $this->_loginAndSetCookie($this->main_user);
 
@@ -19,7 +22,10 @@ class UserAcceptanceTest extends odAcceptanceTestCase
     }
   }
 
-  function testUser_FiendsWithApp()
+  /**
+   *@example
+   */
+  function testFiendsWithApp()
   {
     $this->main_user->save();
     $this->additional_user->save();

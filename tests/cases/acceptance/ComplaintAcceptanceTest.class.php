@@ -4,7 +4,10 @@ lmb_require('tests/cases/odAcceptanceTestCase.class.php');
 
 class ComplaintAcceptanceTest extends odAcceptanceTestCase
 {
-  function testComplaint_Create()
+  /**
+   *@example
+   */
+  function testCreate()
   {
     $this->_loginAndSetCookie($this->main_user);
     $res = $this->post('/complaint/create', array('day_id' => 42, 'text' => 'complaint_text'));
@@ -16,7 +19,10 @@ class ComplaintAcceptanceTest extends odAcceptanceTestCase
     }
   }
 
-  function testComplaint_Get()
+  /**
+   *@example
+   */
+  function testGet()
   {
     $this->_loginAndSetCookie($this->main_user);
     $res = $this->get('/complaint/get');

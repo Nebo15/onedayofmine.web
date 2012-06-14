@@ -4,14 +4,20 @@ lmb_require('tests/cases/odAcceptanceTestCase.class.php');
 
 class AuthAcceptanceTest extends odAcceptanceTestCase
 {
-  function testAuth_IsLoggedIn()
+  /**
+   *@example
+   */
+  function testIsLoggedIn()
   {
     $res = $this->get('auth/is_logged_in');
     $this->assertResponse(200);
     $this->assertFalse($res->result);
   }
 
-  function testAuth_Login()
+  /**
+   *@example
+   */
+  function testLogin()
   {
     $res = $this->_login($this->main_user)->result;
     $this->assertTrue($res->sessid);
@@ -32,7 +38,7 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
     $this->assertTrue($res->user->pic_big);
   }
 
-  function testAuth_LoginAndSetCookie()
+  function testLogin_AndSetCookie()
   {
     $this->_loginAndSetCookie($this->main_user);
     $res = $this->get('auth/is_logged_in');
@@ -40,7 +46,7 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
     $this->assertTrue($res->result);
   }
 
-  function testAuth_Session_ByGetParam()
+  function testLogin_Session_ByGetParam()
   {
     $sessid = $this->_login($this->main_user)->result->sessid;
     $res = $this->get('auth/is_logged_in', array(lmb_env_get('SESSION_NAME') => $sessid));
@@ -48,7 +54,7 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
     $this->assertTrue($res->result);
   }
 
-  function testAuth_Session_ByPostParam()
+  function testLogin_Session_ByPostParam()
   {
     $sessid = $this->_login($this->main_user)->result->sessid;
     $res = $this->post('auth/is_logged_in', array(lmb_env_get('SESSION_NAME') => $sessid));
@@ -56,7 +62,7 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
     $this->assertTrue($res->result);
   }
 
-  function testAuth_Login_firstCallCreateNewUser()
+  function testLogin_firstCallCreateNewUser()
   {
     $users = User::find();
     $this->assertEqual(0, count($users));
@@ -67,7 +73,10 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
     $this->assertEqual(1, count($users));
   }
 
-  function testAuth_Logout()
+  /**
+   *@example
+   */
+  function testLogout()
   {
     $this->_logout();
     $res = $this->get('auth/is_logged_in');
