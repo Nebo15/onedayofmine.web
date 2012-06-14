@@ -45,6 +45,9 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $this->assertTrue($day->cip);
   }
 
+  /**
+   *@example
+   */
   function testItem()
   {
     $this->_loginAndSetCookie($this->main_user);
@@ -57,6 +60,9 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $this->assertTrue($day->ctime);
   }
 
+  /**
+   *@example
+   */
   function testItems()
   {
     $this->_loginAndSetCookie($this->main_user);
@@ -72,6 +78,9 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     }
   }
 
+  /**
+   *@example
+   */
   function testUpdate()
   {
     $this->_loginAndSetCookie($this->main_user);
@@ -83,6 +92,9 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $this->assertResponse(200);
   }
 
+  /**
+   *@example
+   */
   function testAddMoment()
   {
     $this->_loginAndSetCookie($this->main_user);
@@ -92,6 +104,9 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $this->assertResponse(200);
   }
 
+  /**
+   *@example
+   */
   function testComment()
   {
     $this->_loginAndSetCookie($this->main_user);
@@ -101,6 +116,9 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $this->assertResponse(200);
   }
 
+  /**
+   *@example
+   */
   function testEnd()
   {
     $this->_loginAndSetCookie($this->main_user);
@@ -108,6 +126,9 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $this->assertResponse(200);
   }
 
+  /**
+   *@example
+   */
   function testShare()
   {
     $this->_loginAndSetCookie($this->main_user);

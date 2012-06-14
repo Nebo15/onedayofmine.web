@@ -97,7 +97,7 @@ class odTools extends lmbAbstractTools
   function getPostmanWriter()
   {
     if(!$this->postman_writer)
-      $this->postman_writer = new PostmanWriter(lmb_var_dir().'/postman.json');
+      $this->postman_writer = new PostmanWriter(lmb_env_get('APP_DIR').'/www/api_doc/postman.json');
     return $this->postman_writer;
   }
 }

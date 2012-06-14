@@ -28,7 +28,7 @@ class PostmanWriter
     $request->url = '{{host}}'.$url_path;
     $request->method = $method;
     $request->headers = '';
-    $request->data = http_build_query($data);
+    $request->data = $data ? http_build_query($data) : '';
     $request->dataMode = 'params';
     $request->timestamp = 0;
     $request->time = time();
@@ -39,7 +39,7 @@ class PostmanWriter
   {
     $output = new stdClass();
     $output->id = $this->collection_id;
-    $output->name = 'onedayofmine-'.time();
+    $output->name = 'onedayofmine - '.date('d.m.y H:i:s');
     $output->timestamp = time();
     $output->requests = $this->requests;
     file_put_contents($this->file, json_encode($output));
