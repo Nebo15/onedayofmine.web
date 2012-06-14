@@ -56,7 +56,7 @@ abstract class odAcceptanceTestCase extends WebTestCase
     $method_name = $trace[2]['function'];
     $class_ref = new ReflectionClass($class_name);
     $method_ref = $class_ref->getMethod($method_name);
-    $is_example = (bool) (false !== strpos($method_ref->getDocComment(), 'example'));
+    $is_example = (bool) (false !== strpos($method_ref->getDocComment(), '@example'));
     if($is_example)
       lmbToolkit::instance()
         ->getPostmanWriter()

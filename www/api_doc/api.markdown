@@ -1,7 +1,7 @@
 # 1. Общие положения #
 
-Пользователь регистрируется за пределами back-end'а. На него передается только facebook'овский access_token. 
-Делается запрос на /auth/login, в ответ приходит sessid, который нужно выставлять в куку 
+Пользователь регистрируется за пределами back-end'а. На него передается только facebook'овский access_token.
+Делается запрос на /auth/login, в ответ приходит sessid, который нужно выставлять в куку
 'SESSID'(или передавать GET или POST параметром 'SESSID'), для всех приватных запросов.
 
     Структура ответа:
@@ -18,6 +18,7 @@
   * устанавливаем приложение для хрома https://chrome.google.com/webstore/detail/fdmmgilgnpjigdojojpjoooidkmcomcm
   * сохраняем и импортируем в него файлик https://raw.github.com/daeq/one-day-of-mine/master/www/api_doc/postman.json
   * в окружении(в центре шапки, справа от глазика) задаем переменную host = 'http://api.onedayofmine.com/' именно со слешем в конце
+  * чтобы протестировать пользовательские методы, сначала вызываем AuthAcceptanceTest - testLogin
 
 # 3. Описание API #
 

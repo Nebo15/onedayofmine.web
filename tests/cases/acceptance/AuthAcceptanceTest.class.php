@@ -19,7 +19,9 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
    */
   function testLogin()
   {
-    $res = $this->_login($this->main_user)->result;
+    $res = $res = $this->post('auth/login/', array(
+      'fb_access_token' => $this->main_user->getFbAccessToken()
+    ))->result;
     $this->assertTrue($res->sessid);
     $this->assertTrue($res->user);
     $this->assertTrue(is_object($res->user));
