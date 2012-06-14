@@ -8,7 +8,6 @@ abstract class odAcceptanceTestCase extends WebTestCase
    */
   protected $generator;
 
-  protected $base_api_url = "http://onedayofmine.dev/";
   protected $last_profile_info;
   /**
    * @var User
@@ -29,7 +28,7 @@ abstract class odAcceptanceTestCase extends WebTestCase
 
   function get($url, $params = array())
   {
-    $result = $this->_decodeResponse(parent::get($this->base_api_url . $url, $params));
+    $result = $this->_decodeResponse(parent::get(lmb_env_get('HOST_NAME') . $url, $params));
     if(!property_exists($result, 'result'))
       $this->fail('Wrong API response format: '.lmb_var_export($result));
     $this->assertProperty($result, 'errors');
@@ -41,7 +40,7 @@ abstract class odAcceptanceTestCase extends WebTestCase
 
   function post($url, $params = array())
   {
-    $result = $this->_decodeResponse(parent::post($this->base_api_url . $url, $params));
+    $result = $this->_decodeResponse(parent::post(lmb_env_get('HOST_NAME') . $url, $params));
     $this->assertProperty($result, 'result');
     $this->assertProperty($result, 'errors');
     $this->assertProperty($result, 'status');
