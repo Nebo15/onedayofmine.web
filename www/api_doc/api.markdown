@@ -17,6 +17,7 @@
 # 2. Тестирование API "ручками" #
   * устанавливаем приложение для хрома https://chrome.google.com/webstore/detail/fdmmgilgnpjigdojojpjoooidkmcomcm
   * сохраняем и импортируем в него файлик https://raw.github.com/daeq/one-day-of-mine/master/www/api_doc/postman.json
+  * в окружении задаем переменную host = 'api.onedayofmine.com' (в центре шапки, справа от глазика)
 
 # 3. Описание API #
 
