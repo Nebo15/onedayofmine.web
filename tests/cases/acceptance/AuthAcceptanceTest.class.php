@@ -80,7 +80,9 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
    */
   function testLogout()
   {
-    $this->_logout();
+    $this->post('auth/logout/');
+    $this->assertResponse(200);
+
     $res = $this->get('auth/is_logged_in');
     $this->assertResponse(200);
     $this->assertFalse($res->result);

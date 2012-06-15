@@ -81,12 +81,6 @@ abstract class odAcceptanceTestCase extends WebTestCase
     return $res;
   }
 
-  protected function _logout()
-  {
-    $this->post('auth/logout/');
-    $this->assertResponse(200);
-  }
-
   protected function _decodeResponse($raw_response)
   {
     $decoded_body = json_decode($raw_response);
