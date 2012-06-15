@@ -10,3 +10,4 @@ lmb_require(__DIR__.'/odObjectMother.class.php');
 
 lmbToolkit::instance()->getPostmanWriter()->deleteFile();
 
+odTestsTools::checkServer(lmb_env_get('HOST_NAME'));

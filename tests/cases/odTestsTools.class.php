@@ -33,4 +33,16 @@ class odTestsTools
       $db->truncateTable($model->getTableName());
     }
   }
+
+  static function checkServer($uri_string)
+  {
+    $uri = new lmbUri($uri_string);
+    @$fp = fsockopen($uri->getHost(), $uri->getPort() ?: 80, $errno, $errstr, 30);
+    if (!$fp) {
+      echo("Can't connect to server '$uri_string': $errstr ($errno)\n");
+      exit(1);
+    } else {
+      fclose($fp);
+    }
+  }
 }
