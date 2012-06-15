@@ -15,10 +15,17 @@
 Поля code и status для клиентов, которые почему-то не умеют нормально обрабатывать стандартные HTTP-шные коды и статусы.
 
 # 2. Тестирование API "ручками" #
+
+Установка:
   * устанавливаем приложение для хрома https://chrome.google.com/webstore/detail/fdmmgilgnpjigdojojpjoooidkmcomcm
   * сохраняем и импортируем в него файлик https://raw.github.com/daeq/one-day-of-mine/master/www/api_doc/postman.json
   * в окружении(в центре шапки, справа от глазика) задаем переменную host = 'http://api.onedayofmine.com/' именно со слешем в конце
-  * чтобы протестировать пользовательские методы, сначала вызываем AuthAcceptanceTest - testLogin
+  * 
+Аутентификация:
+  * заходим на страницу https://developers.facebook.com/apps/395096410536617/permissions?role=test+users и жмакаем Show Token у любого пользователя
+  * выбираем AuthAcceptanceTest-testLogin и меняем параметр access_token на тот, который скопировали
+  * запускаем AuthAcceptanceTest-testLogin
+  * теперь можно вызывать пользовательские методы
 
 # 3. Описание API #
 
