@@ -17,6 +17,7 @@ class odMock
     $user->sex = "male";
     $user->timezone = "3";
     $user->utime = 1339621518;
+    $user->is_fake = true;
     return $user;
   }
 
@@ -40,6 +41,7 @@ adipiscing mollis eget, porttitor nec sem. Nulla elementum pretium
 turpis, id fermentum magna mollis a. Donec sit amet eleifend arcu.'
 EOD;
     $day->ctime = 1330000000;
+    $day->is_fake = true;
     return $day;
   }
 
@@ -58,6 +60,7 @@ Vestibulum id purus risus. Phasellus eu sapien et dui tempus pharetra.
 EOD;
     $comment->likes_count = 123;
     $comment->ctime = 1331000000;
+    $comment->is_fake = true;
     return $comment;
   }
 
@@ -73,9 +76,11 @@ Integer consequat dignissim nisi, non tincidunt metus interdum non.
 Phasellus purus sem, convallis vitae rutrum nec, vulputate in ante.
 Vestibulum id purus risus. Phasellus eu sapien et dui tempus pharetra.
 EOD;
+    $moment->img_url = 'http://upload.wikimedia.org/wikipedia/commons/8/84/Example.svg';
     $moment->type = 'photo';
     $moment->likes_count = 43;
     $moment->ctime = 1330500000;
+    $moment->is_fake = true;
     return $moment;
   }
 

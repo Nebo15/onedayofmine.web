@@ -49,6 +49,19 @@ abstract class odAcceptanceTestCase extends WebTestCase
     return $result;
   }
 
+  function postWithFile($url, $params = array(), $files)
+  {
+    $url = new SimpleUrl(lmb_env_get('HOST_NAME') . $url);
+    $response = $this->_decodeResponse(parent::postWithFile($url, $files));
+
+    var_dump($response); die();
+//    $this->assertProperty($result, 'result');
+//    $this->assertProperty($result, 'errors');
+//    $this->assertProperty($result, 'status');
+//    $this->assertProperty($result, 'code');
+    return $result;
+  }
+
   protected function _addRecordToPostmanWriter($url_path, $params, $method)
   {
     $trace = debug_backtrace();

@@ -70,7 +70,23 @@ class DayController extends BaseJsonController
     if(!$this->request->hasPost())
       return $this->_answerWithError('Not a POST request');
 
-    return $this->_answerOk(array(odMock::moment(), odMock::moment()));
+    $errors = $this->_checkPropertiesExists(array('day_id', 'description', 'image_name', 'image_content'));
+    if(count($errors))
+      return $this->_answerWithError($errors);
+
+    if(!$day = Day::findById($this->request->get('day_id')))
+      return $this->_answerWithError("Day not found by id");
+
+    $moment = new Moment();
+    $moment->setDay($day);
+    $moment->setDescription($this->request->get('description'));
+
+    $moment->save();
+
+    if($this->error_list->isEmpty())
+      return $this->_answerOk($moment->exportToSimpleObj());
+    else
+      return $this->_answerWithError($this->error_list->export());
   }
 
   function doComment()
@@ -108,5 +124,15 @@ class DayController extends BaseJsonController
     {
       return $this->_answerWithError($this->error_list->export());
     }
+  }
+
+  protected function _checkPropertiesExists(array $properties)
+  {
+    foreach($properties as $property)
+    {
+      if(!$this->request->has($property))
+        $this->addError("Property '$property' not found in request");
+    }
+    return $this->error_list;
   }
 }
