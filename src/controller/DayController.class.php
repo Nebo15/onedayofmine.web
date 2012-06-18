@@ -80,7 +80,11 @@ class DayController extends BaseJsonController
     $moment = new Moment();
     $moment->setDay($day);
     $moment->setDescription($this->request->get('description'));
-
+    $moment->save();
+    $moment->attachImage(
+      $this->request->get('image_name'),
+      base64_decode($this->request->get('image_content'))
+    );
     $moment->save();
 
     if($this->error_list->isEmpty())
