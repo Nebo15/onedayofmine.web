@@ -5,7 +5,10 @@
 .buildpath
 .project
 .settings
+
 var/*
 tests/var/*
+www/media
+
 nbproject
 .sublime*
