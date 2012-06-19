@@ -29,7 +29,7 @@ class Moment extends lmbActiveRecord
     return $this->getImagePath();
   }
 
-  function exportToSimpleObj()
+  function exportForApi()
   {
     $moment = new stdClass();
     $moment->id = $this->getId();

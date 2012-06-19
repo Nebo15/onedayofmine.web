@@ -20,8 +20,8 @@ class odObjectMother
     $day = new Day();
     $day->setTitle($this->string(25));
     $day->setDescription($this->string(255));
-    if($user)
-      $day->setUser($user);
+    $day->setStartTime(time());
+    $day->setUser($user ?: $this->user());
     return $day;
   }
 

@@ -14,17 +14,29 @@ class Day extends BaseModel
     $this->_has_many = array(
       'moments' => array( 'field' => 'day_id', 'class' => 'Moment'),
     );
-
-    $this->_has_one = array(
-      'top_moment' => array('field' => 'top_moment_id', 'class' => 'Moment', 'can_be_null' => true)
-    );
   }
 
   protected function _createValidator()
   {
     $validator = new lmbValidator();
+    $validator->addRequiredRule('user');
+    $validator->addRequiredObjectRule('user', 'User');
     $validator->addRequiredRule('title');
     $validator->addRequiredRule('description');
     return $validator;
+  }
+
+  function exportForApi()
+  {
+    $export = new stdClass();
+    $export->id = $this->getId();
+    $export->user_id = $this->getUserId();
+    $export->title = $this->getTitle();
+    $export->description = $this->getDescription();
+    $export->time_offset = $this->getTimeOffset();
+    $export->likes_count = $this->getLikesCount();
+    $export->ctime = $this->getCreateTime();
+    $export->utime = $this->getUpdateTime();
+    return $export;
   }
 }

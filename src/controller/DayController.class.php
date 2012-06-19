@@ -1,6 +1,6 @@
 <?php
 lmb_require('src/controller/BaseJsonController.class.php');
-lmb_require('src/model/Day.class.php');
+lmb_require('src/model/DayTest.class.php');
 
 class DayController extends BaseJsonController
 {
@@ -8,7 +8,18 @@ class DayController extends BaseJsonController
 
   function doItem()
   {
-    return $this->_answerOk(odMock::day());
+    $id = $this->request->get('id');
+    $day = Day::findById($id);
+    if($day && !$day->getIsDeleted())
+    {
+      $answer = $day->exportForApi();
+      $answer->moments = array();
+      foreach($day->getMoments() as $moment)
+        $answer->moments[] = $moment->exportForApi();
+      return $this->_answerOk($answer);
+    }
+    else
+      return $this->_answerNotFound("Day with id='$id' not found");
   }
 
   function doItems()
@@ -25,7 +36,7 @@ class DayController extends BaseJsonController
 
     $day->setUser($this->toolkit->getUser());
 
-    return $this->_importSaveAndAnswer($day, array('title', 'description', 'tags'));
+    return $this->_importSaveAndAnswer($day, array('title', 'description', 'tags', 'time_offset'));
   }
 
   function doUpdate()
@@ -38,7 +49,7 @@ class DayController extends BaseJsonController
     if(!$day = Day::findById($this->request->id))
       return $this->_answerOk(404, 'Day not found');
 
-    return $this->_importSaveAndAnswer($day, array('top_moment_id', 'title', 'description', 'tags'));
+    return $this->_importSaveAndAnswer($day, array('title', 'description', 'tags', 'time_offset'));
   }
 
   function doEnd()
@@ -88,7 +99,7 @@ class DayController extends BaseJsonController
     $moment->save();
 
     if($this->error_list->isEmpty())
-      return $this->_answerOk($moment->exportToSimpleObj());
+      return $this->_answerOk($moment->exportForApi());
     else
       return $this->_answerWithError($this->error_list->export());
   }

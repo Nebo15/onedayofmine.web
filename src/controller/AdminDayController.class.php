@@ -1,6 +1,6 @@
 <?php
 lmb_require('limb/cms/src/controller/lmbAdminObjectController.class.php');
-lmb_require('src/model/Day.class.php');
+lmb_require('src/model/DayTest.class.php');
 
 class AdminDayController extends lmbAdminObjectController
 {

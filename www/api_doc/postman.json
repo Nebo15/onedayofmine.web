@@ -1,115 +1,37 @@
 {
-  "id":"collection_4fe08bb799f84",
-  "name":"onedayofmine - 19.06.12 17:25:17",
-  "timestamp":1340115917,
+  "id":"collection_4fe0b70a089b4",
+  "name":"onedayofmine - 19.06.12 20:29:54",
+  "timestamp":1340126994,
   "requests":[
     {
-      "collectionId":"collection_4fe08bb799f84",
-      "id":"request_4fe08bb89ab75",
-      "name":"AuthAcceptanceTest - testIsLoggedIn",
-      "description":"",
-      "url":"{{host}}auth\/is_logged_in",
-      "method":"GET",
-      "headers":"",
-      "data":"",
-      "dataMode":"params",
-      "timestamp":0,
-      "time":1340115896
-    },
-    {
-      "collectionId":"collection_4fe08bb799f84",
-      "id":"request_4fe08bb94eb0c",
-      "name":"AuthAcceptanceTest - testLogin",
-      "description":"",
-      "url":"{{host}}auth\/login\/",
-      "method":"POST",
-      "headers":"",
-      "data":"fb_access_token=AAAFnVo0zuqkBAHP99xtBPltjGyR7ipTiGVFy6JRSXrC7mNcJvkrwZCWHOErkWZBzge2rKX1SZBxf7vWMihZBJqpNIQEgGpusaTegESZBirXJhisT9F7Q3",
-      "dataMode":"params",
-      "timestamp":0,
-      "time":1340115897
-    },
-    {
-      "collectionId":"collection_4fe08bb799f84",
-      "id":"request_4fe08bbc70cca",
-      "name":"AuthAcceptanceTest - testLogout",
-      "description":"",
-      "url":"{{host}}auth\/logout\/",
-      "method":"POST",
-      "headers":"",
-      "data":"",
-      "dataMode":"params",
-      "timestamp":0,
-      "time":1340115900
-    },
-    {
-      "collectionId":"collection_4fe08bb799f84",
-      "id":"request_4fe08bbc857ae",
-      "name":"AuthAcceptanceTest - testLogout",
-      "description":"",
-      "url":"{{host}}auth\/is_logged_in",
-      "method":"GET",
-      "headers":"",
-      "data":"",
-      "dataMode":"params",
-      "timestamp":0,
-      "time":1340115900
-    },
-    {
-      "collectionId":"collection_4fe08bb799f84",
-      "id":"request_4fe08bbd5ced5",
-      "name":"ComplaintAcceptanceTest - testCreate",
-      "description":"",
-      "url":"{{host}}\/complaint\/create",
-      "method":"POST",
-      "headers":"",
-      "data":"day_id=42&text=complaint_text",
-      "dataMode":"params",
-      "timestamp":0,
-      "time":1340115901
-    },
-    {
-      "collectionId":"collection_4fe08bb799f84",
-      "id":"request_4fe08bbe2341b",
-      "name":"ComplaintAcceptanceTest - testGet",
-      "description":"",
-      "url":"{{host}}\/complaint\/get",
-      "method":"GET",
-      "headers":"",
-      "data":"",
-      "dataMode":"params",
-      "timestamp":0,
-      "time":1340115902
-    },
-    {
-      "collectionId":"collection_4fe08bb799f84",
-      "id":"request_4fe08bbfd6d88",
+      "collectionId":"collection_4fe0b70a089b4",
+      "id":"request_4fe0b70cabb73",
       "name":"DayAcceptanceTest - testBegin",
       "description":"",
       "url":"{{host}}day\/begin",
       "method":"POST",
       "headers":"",
-      "data":"title=voku&description=gijovore&tags%5B0%5D=tag1&tags%5B1%5D=tag2",
+      "data":"title=soxe&description=gazikasu&time_offset=1340126988&tags%5B0%5D=tag1&tags%5B1%5D=tag2",
       "dataMode":"params",
       "timestamp":0,
-      "time":1340115903
+      "time":1340126988
     },
     {
-      "collectionId":"collection_4fe08bb799f84",
-      "id":"request_4fe08bc0a09df",
+      "collectionId":"collection_4fe0b70a089b4",
+      "id":"request_4fe0b70d84e6f",
       "name":"DayAcceptanceTest - testItem",
       "description":"",
       "url":"{{host}}day\/item",
       "method":"GET",
       "headers":"",
-      "data":"id=42",
+      "data":"id=1",
       "dataMode":"params",
       "timestamp":0,
-      "time":1340115904
+      "time":1340126989
     },
     {
-      "collectionId":"collection_4fe08bb799f84",
-      "id":"request_4fe08bc1700e8",
+      "collectionId":"collection_4fe0b70a089b4",
+      "id":"request_4fe0b70f17f58",
       "name":"DayAcceptanceTest - testItems",
       "description":"",
       "url":"{{host}}day\/items",
@@ -118,11 +40,11 @@
       "data":"ids%5B0%5D=42&ids%5B1%5D=42",
       "dataMode":"params",
       "timestamp":0,
-      "time":1340115905
+      "time":1340126991
     },
     {
-      "collectionId":"collection_4fe08bb799f84",
-      "id":"request_4fe08bc23bc53",
+      "collectionId":"collection_4fe0b70a089b4",
+      "id":"request_4fe0b70fcee05",
       "name":"DayAcceptanceTest - testUpdate",
       "description":"",
       "url":"{{host}}day\/update",
@@ -131,24 +53,24 @@
       "data":"day_id=42&tags%5B0%5D=tag1&tags%5B1%5D=tag2&top_moment_id=111",
       "dataMode":"params",
       "timestamp":0,
-      "time":1340115906
+      "time":1340126991
     },
     {
-      "collectionId":"collection_4fe08bb799f84",
-      "id":"request_4fe08bc313063",
+      "collectionId":"collection_4fe0b70a089b4",
+      "id":"request_4fe0b7109c152",
       "name":"DayAcceptanceTest - testAddMoment",
       "description":"",
       "url":"{{host}}day\/add_moment",
       "method":"POST",
       "headers":"",
-      "data":"day_id=1&description=rurafigabawuhizilunoxanarodawuniyamarodoxunamisukanegahusiyikixesekediyuliduyovezenajucagumomexavekutexatubovozociyihulizudihanahuyufoduvapiyihubalefuwavunayadeyafawecolofefikeronoreyihimemomisonizodi&image_name=foo%2Fbar%2Fexample.png&image_content=iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAAXNSR0IArs4c6QAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9wGEg47HYlSsqsAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAOUlEQVQI13VOQQ4AIAiC1v%2B%2FTAcKZysOTkQUApCEDpI11YH7EQdJ103jsBA68MG8dutUPrdIFp5xF8lAKftzc%2FYPAAAAAElFTkSuQmCC",
+      "data":"day_id=1&description=daxeyidejecabixuxovukejubiwonoboxuzojacokaresijihalolorihigufenafiwinucucojogojisofamopogurecalepetadobaneyozehoyivihegifuweyemilarizotizojuxipucegetivuhodewotewewubikafozahixeyaropepuzocukodedubanefo&image_name=foo%2Fbar%2Fexample.png&image_content=iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAAXNSR0IArs4c6QAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9wGEg47HYlSsqsAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAOUlEQVQI13VOQQ4AIAiC1v%2B%2FTAcKZysOTkQUApCEDpI11YH7EQdJ103jsBA68MG8dutUPrdIFp5xF8lAKftzc%2FYPAAAAAElFTkSuQmCC",
       "dataMode":"params",
       "timestamp":0,
-      "time":1340115907
+      "time":1340126992
     },
     {
-      "collectionId":"collection_4fe08bb799f84",
-      "id":"request_4fe08bc3ce335",
+      "collectionId":"collection_4fe0b70a089b4",
+      "id":"request_4fe0b7115dbde",
       "name":"DayAcceptanceTest - testComment",
       "description":"",
       "url":"{{host}}day\/comment",
@@ -157,11 +79,11 @@
       "data":"text=comment+text",
       "dataMode":"params",
       "timestamp":0,
-      "time":1340115907
+      "time":1340126993
     },
     {
-      "collectionId":"collection_4fe08bb799f84",
-      "id":"request_4fe08bc4962e0",
+      "collectionId":"collection_4fe0b70a089b4",
+      "id":"request_4fe0b71223fb6",
       "name":"DayAcceptanceTest - testEnd",
       "description":"",
       "url":"{{host}}day\/end",
@@ -170,11 +92,11 @@
       "data":"",
       "dataMode":"params",
       "timestamp":0,
-      "time":1340115908
+      "time":1340126994
     },
     {
-      "collectionId":"collection_4fe08bb799f84",
-      "id":"request_4fe08bc5affe3",
+      "collectionId":"collection_4fe0b70a089b4",
+      "id":"request_4fe0b712e0f97",
       "name":"DayAcceptanceTest - testShare",
       "description":"",
       "url":"{{host}}day\/share",
@@ -183,111 +105,7 @@
       "data":"",
       "dataMode":"params",
       "timestamp":0,
-      "time":1340115909
-    },
-    {
-      "collectionId":"collection_4fe08bb799f84",
-      "id":"request_4fe08bc6a919d",
-      "name":"MomentAcceptanceTest - testUpdate",
-      "description":"",
-      "url":"{{host}}moment\/update",
-      "method":"POST",
-      "headers":"",
-      "data":"",
-      "dataMode":"params",
-      "timestamp":0,
-      "time":1340115910
-    },
-    {
-      "collectionId":"collection_4fe08bb799f84",
-      "id":"request_4fe08bc7c9be0",
-      "name":"MomentAcceptanceTest - testDelete",
-      "description":"",
-      "url":"{{host}}moment\/delete",
-      "method":"POST",
-      "headers":"",
-      "data":"",
-      "dataMode":"params",
-      "timestamp":0,
-      "time":1340115911
-    },
-    {
-      "collectionId":"collection_4fe08bb799f84",
-      "id":"request_4fe08bc8a144c",
-      "name":"MomentAcceptanceTest - testComment",
-      "description":"",
-      "url":"{{host}}moment\/comment",
-      "method":"POST",
-      "headers":"",
-      "data":"",
-      "dataMode":"params",
-      "timestamp":0,
-      "time":1340115912
-    },
-    {
-      "collectionId":"collection_4fe08bb799f84",
-      "id":"request_4fe08bc96a341",
-      "name":"MomentAcceptanceTest - testShare",
-      "description":"",
-      "url":"{{host}}moment\/share",
-      "method":"POST",
-      "headers":"",
-      "data":"",
-      "dataMode":"params",
-      "timestamp":0,
-      "time":1340115913
-    },
-    {
-      "collectionId":"collection_4fe08bb799f84",
-      "id":"request_4fe08bc98171c",
-      "name":"SearchAcceptanceTest - testSuggest",
-      "description":"",
-      "url":"{{host}}search\/suggest",
-      "method":"GET",
-      "headers":"",
-      "data":"",
-      "dataMode":"params",
-      "timestamp":0,
-      "time":1340115913
-    },
-    {
-      "collectionId":"collection_4fe08bb799f84",
-      "id":"request_4fe08bc99802d",
-      "name":"SearchAcceptanceTest - testSearch",
-      "description":"",
-      "url":"{{host}}search\/text",
-      "method":"GET",
-      "headers":"",
-      "data":"",
-      "dataMode":"params",
-      "timestamp":0,
-      "time":1340115913
-    },
-    {
-      "collectionId":"collection_4fe08bb799f84",
-      "id":"request_4fe08bca61a45",
-      "name":"UserAcceptanceTest - testDays",
-      "description":"",
-      "url":"{{host}}user\/days",
-      "method":"GET",
-      "headers":"",
-      "data":"",
-      "dataMode":"params",
-      "timestamp":0,
-      "time":1340115914
-    },
-    {
-      "collectionId":"collection_4fe08bb799f84",
-      "id":"request_4fe08bcbb6198",
-      "name":"UserAcceptanceTest - testFiendsWithApp",
-      "description":"",
-      "url":"{{host}}user\/friends_in_app",
-      "method":"GET",
-      "headers":"",
-      "data":"",
-      "dataMode":"params",
-      "timestamp":0,
-      "time":1340115915
+      "time":1340126994
     }
   ]
 }

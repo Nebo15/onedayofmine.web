@@ -1,6 +1,6 @@
 <?php
 lmb_require('src/controller/BaseJsonController.class.php');
-lmb_require('src/model/Day.class.php');
+lmb_require('src/model/DayTest.class.php');
 
 class AuthController extends BaseJsonController
 {
@@ -29,7 +29,7 @@ class AuthController extends BaseJsonController
 
     $answer = new stdClass();
     $answer->sessid = session_id();
-    $answer->user = $user->exportToSimpleObj();
+    $answer->user = $user->exportForApi();
 
     return $this->_answerOk($answer);
   }

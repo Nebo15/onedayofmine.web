@@ -15,7 +15,7 @@ class UserController extends BaseJsonController
   {
     $friends = array();
     foreach($this->toolkit->getUser()->getUserFriendsInApplicationFromFb() as $friend)
-      $friends[] = $friend->exportToSimpleObj();
+      $friends[] = $friend->exportForApi();
 
     return $this->_answerOk($friends);
   }

@@ -17,6 +17,6 @@ class ComplaintController extends BaseJsonController
     $complaint->setText('complaint_text1');
     $complaint->setDayId(42);
     $complaint->setMomentId(111);
-    return $this->_answerOk(array($complaint->exportToSimpleObj()));
+    return $this->_answerOk(array($complaint->exportForApi()));
   }
 }

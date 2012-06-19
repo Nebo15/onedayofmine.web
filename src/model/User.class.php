@@ -92,7 +92,7 @@ class User extends BaseModel
   }
 
 
-  function exportToSimpleObj()
+  function exportForApi()
   {
     $result = $this->export();
     if($result['user_info_from_fb'])

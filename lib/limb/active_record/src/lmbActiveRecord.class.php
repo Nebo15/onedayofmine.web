@@ -1170,7 +1170,7 @@ class lmbActiveRecord extends lmbObject
       $field = $this->_composed_of[$property]['field'];
     else
       $field = $property;
-    
+
     // for BC
     if(isset($this->_composed_of[$property]['getter']))
     {
