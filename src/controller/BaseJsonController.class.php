@@ -1,6 +1,7 @@
 <?php
 lmb_require('limb/web_app/src/controller/lmbController.class.php');
 lmb_require('src/odMock.class.php');
+lmb_require('src/Json.class.php');
 
 abstract class BaseJsonController extends lmbController
 {
@@ -90,12 +91,12 @@ abstract class BaseJsonController extends lmbController
     if($status)
       $this->response->setStatus($status);
 
-    return json_encode(
+    return Json::indent(json_encode(
       array(
         'code' => $code,
         'status' => $this->response->getStatus(),
         'result' => $result,
         'errors' => $errors)
-    );
+    ));
   }
 }

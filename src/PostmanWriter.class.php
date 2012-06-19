@@ -1,4 +1,5 @@
 <?php
+lmb_require('src/Json.class.php');
 
 class PostmanWriter
 {
@@ -42,6 +43,6 @@ class PostmanWriter
     $output->name = 'onedayofmine - '.date('d.m.y H:i:s');
     $output->timestamp = time();
     $output->requests = $this->requests;
-    file_put_contents($this->file, json_encode($output));
+    file_put_contents($this->file, Json::indent(json_encode($output)));
   }
 }
