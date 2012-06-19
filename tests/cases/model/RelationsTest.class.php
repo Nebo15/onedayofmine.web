@@ -5,7 +5,7 @@ class RelationsTest extends odUnitTestCase
 {
   function setUp()
   {
-    odTestsTools::truncateTablesOf('Day');
+    odTestsTools::truncateTablesOf('Day', 'Moment', 'DayComment', 'MomentComment');
     parent::setUp();
   }
 

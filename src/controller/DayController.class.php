@@ -9,6 +9,24 @@ class DayController extends BaseJsonController
   function doItem()
   {
     $id = $this->request->get('id');
+    if(is_array($id))
+    {
+      $answer = array();
+      foreach($id as $one_id)
+        $answer[$one_id] = $this->_item($one_id);
+      return $this->_answerOk($answer);
+    }
+    else
+    {
+      if($answer = $this->_item($id))
+        return $this->_answerOk($answer);
+      else
+        return $this->_answerNotFound("Day with id='$id' not found");
+    }
+  }
+
+  function _item($id)
+  {
     $day = Day::findById($id);
     if($day && !$day->getIsDeleted())
     {
@@ -16,15 +34,8 @@ class DayController extends BaseJsonController
       $answer->moments = array();
       foreach($day->getMoments() as $moment)
         $answer->moments[] = $moment->exportForApi();
-      return $this->_answerOk($answer);
+      return $answer;
     }
-    else
-      return $this->_answerNotFound("Day with id='$id' not found");
-  }
-
-  function doItems()
-  {
-    return $this->_answerOk(array(odMock::day(), odMock::day()));
   }
 
   function doBegin()

@@ -23,6 +23,7 @@ class Day extends BaseModel
     $validator->addRequiredObjectRule('user', 'User');
     $validator->addRequiredRule('title');
     $validator->addRequiredRule('description');
+    $validator->addRequiredRule('time_offset');
     return $validator;
   }
 

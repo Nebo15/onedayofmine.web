@@ -98,30 +98,34 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   /**
    *@example
    */
-  function estSetMainImage()
+  function testItem_Many()
   {
-    $day = $this->generator->day();
-    $this->generator->moment($day);
-    $day->getUser()->save();
-    $day->save();
-  }
+    $user1 = $this->generator->user();
+    $day1 = $this->generator->day($user1);
+    $user1->addToDays($day1);
+    $day1->addToMoments($this->generator->moment($day1));
+    $user1->save();
+    $day1_id = $day1->getId();
 
-  /**
-   *@example
-   */
-  function testItems()
-  {
+    $user2 = $this->generator->user();
+    $day2 = $this->generator->day($user2);
+    $user2->addToDays($day2);
+    $day2->addToMoments($this->generator->moment($day2));
+    $user2->save();
+    $day2_id = $day2->getId();
+
     $this->_loginAndSetCookie($this->main_user);
-    $days = $this->get('day/items', array('ids' => array(42, 42)))->result;
+    $response = $this->get('day/item', array('id' => array($day1_id, $day2_id)));
+    $loaded_days = $response->result;
+
     $this->assertResponse(200);
-    foreach($days as $day)
-    {
-      $this->assertTrue($day->id);
-      $this->assertTrue($day->title);
-      $this->assertTrue($day->img_url);
-      $this->assertTrue($day->description);
-      $this->assertTrue($day->ctime);
-    }
+    $this->assertEqual(array($day1_id, $day2_id), array_keys(get_object_vars($loaded_days)));
+    $this->assertEqual($day1->getId(), $loaded_days->$day1_id->id);
+    $this->assertEqual($day1->getUserId(), $loaded_days->$day1_id->user_id);
+    $this->assertEqual($day1->getMoments()->at(0)->getId(), $loaded_days->$day1_id->moments[0]->id);
+    $this->assertEqual($day2->getId(), $loaded_days->$day2_id->id);
+    $this->assertEqual($day2->getUserId(), $loaded_days->$day2_id->user_id);
+    $this->assertEqual($day2->getMoments()->at(0)->getId(), $loaded_days->$day2_id->moments[0]->id);
   }
 
   /**

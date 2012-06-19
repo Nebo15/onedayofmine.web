@@ -20,7 +20,7 @@ class odObjectMother
     $day = new Day();
     $day->setTitle($this->string(25));
     $day->setDescription($this->string(255));
-    $day->setStartTime(time());
+    $day->setTimeOffset(0);
     $day->setUser($user ?: $this->user());
     return $day;
   }
