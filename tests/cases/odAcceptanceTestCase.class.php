@@ -41,10 +41,10 @@ abstract class odAcceptanceTestCase extends WebTestCase
   function post($url, $params = array())
   {
     $result = $this->_decodeResponse(parent::post(lmb_env_get('HOST_NAME') . $url, $params));
-    $this->assertProperty($result, 'result');
-    $this->assertProperty($result, 'errors');
-    $this->assertProperty($result, 'status');
-    $this->assertProperty($result, 'code');
+    $this->assertProperty($result, 'result', "Not found 'result' part in $url response");
+    $this->assertProperty($result, 'errors', "Not found 'errors' part in $url response");
+    $this->assertProperty($result, 'status', "Not found 'status' part in $url response");
+    $this->assertProperty($result, 'code', "Not found 'code' part in $url response");
     $this->_addRecordToPostmanWriter($url, $params, 'POST');
     return $result;
   }
@@ -52,13 +52,11 @@ abstract class odAcceptanceTestCase extends WebTestCase
   function postWithFile($url, $params = array(), $files)
   {
     $url = new SimpleUrl(lmb_env_get('HOST_NAME') . $url);
-    $response = $this->_decodeResponse(parent::postWithFile($url, $files));
-
-    var_dump($response); die();
-//    $this->assertProperty($result, 'result');
-//    $this->assertProperty($result, 'errors');
-//    $this->assertProperty($result, 'status');
-//    $this->assertProperty($result, 'code');
+    $result = $this->_decodeResponse(parent::postWithFile($url, $files));
+    $this->assertProperty($result, 'result', "Not found 'result' part in $url response");
+    $this->assertProperty($result, 'errors', "Not found 'errors' part in $url response");
+    $this->assertProperty($result, 'status', "Not found 'status' part in $url response");
+    $this->assertProperty($result, 'code', "Not found 'code' part in $url response");
     return $result;
   }
 
