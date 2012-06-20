@@ -5,14 +5,34 @@ lmb_require('src/model/User.class.php');
 class UserController extends BaseJsonController
 {
   protected $_object_class_name = 'User';
+  protected $check_auth = false;
 
   function doDays()
   {
-    return $this->_answerOk(array(odMock::day(), odMock::day()));
+    $id = $this->request->get('id');
+    if(!$id)
+    {
+      $user = $this->toolkit->getUser();
+    }
+    else
+    {
+      if(!$this->toolkit->getUser())
+        $this->_answerUnauthorized();
+      if(!$user = User::findById($id))
+        return $this->_answerNotFound("User with id $id not found");
+    }
+
+    $answer = array();
+    foreach($user->getDays() as $day)
+      $answer[] = $day->exportForApi();
+
+    return $this->_answerOk($answer);
   }
 
   function doFriendsInApp()
   {
+    if(!$this->toolkit->getUser())
+      $this->_answerUnauthorized();
     $friends = array();
     foreach($this->toolkit->getUser()->getUserFriendsInApplicationFromFb() as $friend)
       $friends[] = $friend->exportForApi();

@@ -6,11 +6,30 @@ class UserAcceptanceTest extends odAcceptanceTestCase
   /**
    *@example
    */
-  function testDays()
+  function testDays_CurrentUser()
   {
     $this->_loginAndSetCookie($this->main_user);
 
-    $days = $this->get('user/days')->result;
+    $days = $this->get('user/days/')->result;
+    $this->assertResponse(200);
+    foreach($days as $day)
+    {
+      $this->assertTrue($day->id);
+      $this->assertTrue($day->title);
+      $this->assertTrue($day->img_url);
+      $this->assertTrue($day->description);
+      $this->assertTrue($day->ctime);
+    }
+  }
+
+  /**
+   *@example
+   */
+  function testDays_AnotherUser()
+  {
+    $this->_loginAndSetCookie($this->main_user);
+
+    $days = $this->get('user/days/'.$this->additional_user->getId())->result;
     $this->assertResponse(200);
     foreach($days as $day)
     {

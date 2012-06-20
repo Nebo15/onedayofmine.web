@@ -14,7 +14,11 @@ class User extends BaseModel
   protected function _defineRelations()
   {
     $this->_has_many = array (
-      'days' => array ('field' => 'user_id', 'class' => 'Day'),
+      'days' => array (
+        'field' => 'user_id',
+        'class' => 'Day',
+        'criteria' =>'`day`.`is_deleted` = 0'
+      ),
       'days_comments' => array ('field' => 'user_id', 'class' => 'DayComment'),
       'moments_comments' => array ('field' => 'user_id', 'class' => 'MomentComment'),
     );
