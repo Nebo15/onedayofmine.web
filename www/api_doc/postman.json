@@ -1,12 +1,12 @@
 {
-  "id":"collection_4fe0caa42e015",
-  "name":"onedayofmine - 19.06.12 21:53:46",
-  "timestamp":1340132026,
+  "id":"collection_4fe218746eece",
+  "name":"onedayofmine - 20.06.12 21:38:02",
+  "timestamp":1340217482,
   "requests":[
     {
-      "collectionId":"collection_4fe0caa42e015",
-      "id":"request_4fe0caa537c75",
-      "name":"AuthAcceptanceTest - testIsLoggedIn",
+      "collectionId":"collection_4fe218746eece",
+      "id":"request_4fe2187572831",
+      "name":"Auth - IsLoggedIn",
       "description":"",
       "url":"{{host}}auth\/is_logged_in",
       "method":"GET",
@@ -14,25 +14,25 @@
       "data":"",
       "dataMode":"params",
       "timestamp":0,
-      "time":1340132005
+      "time":1340217461
     },
     {
-      "collectionId":"collection_4fe0caa42e015",
-      "id":"request_4fe0caa5e129a",
-      "name":"AuthAcceptanceTest - testLogin",
+      "collectionId":"collection_4fe218746eece",
+      "id":"request_4fe21876209c9",
+      "name":"Auth - Login",
       "description":"",
       "url":"{{host}}auth\/login\/",
       "method":"POST",
       "headers":"",
-      "data":"fb_access_token=AAAFnVo0zuqkBAEdZCv5BuQVycfBfZBU5jb0vKJJGGIZA7OprX4B34eSWmEmGokfKLx5ZBmVZBh4mmmHeNWZC5ZB9uJjUUVwMmCjF8qr0zdS5lsdeHiryDnE",
+      "data":"fb_access_token=AAAFnVo0zuqkBAGHPprZA59ZBCsisbK11DJBZBpkRxVDAarmaj5xx5Tb65eBNINN6FfjSJcDKwQfpwwdZC0T95h5IGZAoGLZA0Jk0EVPfCtuDvsVs3YvLXA",
       "dataMode":"params",
       "timestamp":0,
-      "time":1340132005
+      "time":1340217462
     },
     {
-      "collectionId":"collection_4fe0caa42e015",
-      "id":"request_4fe0caa9109a5",
-      "name":"AuthAcceptanceTest - testLogout",
+      "collectionId":"collection_4fe218746eece",
+      "id":"request_4fe2187929b24",
+      "name":"Auth - Logout",
       "description":"",
       "url":"{{host}}auth\/logout\/",
       "method":"POST",
@@ -40,12 +40,12 @@
       "data":"",
       "dataMode":"params",
       "timestamp":0,
-      "time":1340132009
+      "time":1340217465
     },
     {
-      "collectionId":"collection_4fe0caa42e015",
-      "id":"request_4fe0caa9251ce",
-      "name":"AuthAcceptanceTest - testLogout",
+      "collectionId":"collection_4fe218746eece",
+      "id":"request_4fe218793ea3a",
+      "name":"Auth - Logout",
       "description":"",
       "url":"{{host}}auth\/is_logged_in",
       "method":"GET",
@@ -53,12 +53,12 @@
       "data":"",
       "dataMode":"params",
       "timestamp":0,
-      "time":1340132009
+      "time":1340217465
     },
     {
-      "collectionId":"collection_4fe0caa42e015",
-      "id":"request_4fe0caa9e3247",
-      "name":"ComplaintAcceptanceTest - testCreate",
+      "collectionId":"collection_4fe218746eece",
+      "id":"request_4fe2187a03aec",
+      "name":"Complaint - Create",
       "description":"",
       "url":"{{host}}\/complaint\/create",
       "method":"POST",
@@ -66,12 +66,12 @@
       "data":"day_id=42&text=complaint_text",
       "dataMode":"params",
       "timestamp":0,
-      "time":1340132009
+      "time":1340217466
     },
     {
-      "collectionId":"collection_4fe0caa42e015",
-      "id":"request_4fe0caaaaf8a3",
-      "name":"ComplaintAcceptanceTest - testGet",
+      "collectionId":"collection_4fe218746eece",
+      "id":"request_4fe2187abb13b",
+      "name":"Complaint - Get",
       "description":"",
       "url":"{{host}}\/complaint\/get",
       "method":"GET",
@@ -79,25 +79,25 @@
       "data":"",
       "dataMode":"params",
       "timestamp":0,
-      "time":1340132010
+      "time":1340217466
     },
     {
-      "collectionId":"collection_4fe0caa42e015",
-      "id":"request_4fe0caac736da",
-      "name":"DayAcceptanceTest - testBegin",
+      "collectionId":"collection_4fe218746eece",
+      "id":"request_4fe2187c6f577",
+      "name":"Day - Begin",
       "description":"",
       "url":"{{host}}day\/begin",
       "method":"POST",
       "headers":"",
-      "data":"title=suru&description=doporedu&time_offset=1340132012&tags%5B0%5D=tag1&tags%5B1%5D=tag2",
+      "data":"title=zano&description=jujomani&time_offset=1340217468&tags%5B0%5D=tag1&tags%5B1%5D=tag2",
       "dataMode":"params",
       "timestamp":0,
-      "time":1340132012
+      "time":1340217468
     },
     {
-      "collectionId":"collection_4fe0caa42e015",
-      "id":"request_4fe0caad52d9e",
-      "name":"DayAcceptanceTest - testItem",
+      "collectionId":"collection_4fe218746eece",
+      "id":"request_4fe2187d4bde5",
+      "name":"Day - Item",
       "description":"",
       "url":"{{host}}day\/item",
       "method":"GET",
@@ -105,12 +105,12 @@
       "data":"id=1",
       "dataMode":"params",
       "timestamp":0,
-      "time":1340132013
+      "time":1340217469
     },
     {
-      "collectionId":"collection_4fe0caa42e015",
-      "id":"request_4fe0caaf292ed",
-      "name":"DayAcceptanceTest - testItem_Many",
+      "collectionId":"collection_4fe218746eece",
+      "id":"request_4fe2187f09013",
+      "name":"Day - Item_Many",
       "description":"",
       "url":"{{host}}day\/item",
       "method":"GET",
@@ -118,12 +118,12 @@
       "data":"id%5B0%5D=1&id%5B1%5D=2",
       "dataMode":"params",
       "timestamp":0,
-      "time":1340132015
+      "time":1340217471
     },
     {
-      "collectionId":"collection_4fe0caa42e015",
-      "id":"request_4fe0caafe9e61",
-      "name":"DayAcceptanceTest - testUpdate",
+      "collectionId":"collection_4fe218746eece",
+      "id":"request_4fe2187ff0acd",
+      "name":"Day - Update",
       "description":"",
       "url":"{{host}}day\/update",
       "method":"POST",
@@ -131,25 +131,25 @@
       "data":"day_id=42&tags%5B0%5D=tag1&tags%5B1%5D=tag2&top_moment_id=111",
       "dataMode":"params",
       "timestamp":0,
-      "time":1340132015
+      "time":1340217471
     },
     {
-      "collectionId":"collection_4fe0caa42e015",
-      "id":"request_4fe0cab0c0333",
-      "name":"DayAcceptanceTest - testAddMoment",
+      "collectionId":"collection_4fe218746eece",
+      "id":"request_4fe218810a90b",
+      "name":"Day - AddMoment",
       "description":"",
       "url":"{{host}}day\/add_moment",
       "method":"POST",
       "headers":"",
-      "data":"day_id=1&description=sulupayafegocejupobodisazigotofirogavajulirivumepizoyowuhamuwokihoravubenotepasasowijomoturirayuribinarasekepakesexaxerihecuhawupujaxudijiwunafelagekuwodupeyehigipanorugivoruzazajecazacipuxumalafuwuwa&image_name=foo%2Fbar%2Fexample.png&image_content=iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAAXNSR0IArs4c6QAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9wGEg47HYlSsqsAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAOUlEQVQI13VOQQ4AIAiC1v%2B%2FTAcKZysOTkQUApCEDpI11YH7EQdJ103jsBA68MG8dutUPrdIFp5xF8lAKftzc%2FYPAAAAAElFTkSuQmCC",
+      "data":"day_id=1&description=favehivedabemiliwaneweyahupapohosacunufoyebiviximivetomupacasexeluhuwirosoficazimowenefajegusahadicubosokudiyabixusefumidolowoxujuyesocamanihixalinokucitihihanidiyubuxidiyizopijabocaforikupumojimekexi&image_name=foo%2Fbar%2Fexample.png&image_content=iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAAXNSR0IArs4c6QAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9wGEg47HYlSsqsAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAOUlEQVQI13VOQQ4AIAiC1v%2B%2FTAcKZysOTkQUApCEDpI11YH7EQdJ103jsBA68MG8dutUPrdIFp5xF8lAKftzc%2FYPAAAAAElFTkSuQmCC",
       "dataMode":"params",
       "timestamp":0,
-      "time":1340132016
+      "time":1340217473
     },
     {
-      "collectionId":"collection_4fe0caa42e015",
-      "id":"request_4fe0cab187b36",
-      "name":"DayAcceptanceTest - testComment",
+      "collectionId":"collection_4fe218746eece",
+      "id":"request_4fe21882261a3",
+      "name":"Day - Comment",
       "description":"",
       "url":"{{host}}day\/comment",
       "method":"POST",
@@ -157,12 +157,12 @@
       "data":"text=comment+text",
       "dataMode":"params",
       "timestamp":0,
-      "time":1340132017
+      "time":1340217474
     },
     {
-      "collectionId":"collection_4fe0caa42e015",
-      "id":"request_4fe0cab2551aa",
-      "name":"DayAcceptanceTest - testEnd",
+      "collectionId":"collection_4fe218746eece",
+      "id":"request_4fe21882de779",
+      "name":"Day - End",
       "description":"",
       "url":"{{host}}day\/end",
       "method":"POST",
@@ -170,12 +170,12 @@
       "data":"",
       "dataMode":"params",
       "timestamp":0,
-      "time":1340132018
+      "time":1340217474
     },
     {
-      "collectionId":"collection_4fe0caa42e015",
-      "id":"request_4fe0cab330067",
-      "name":"DayAcceptanceTest - testShare",
+      "collectionId":"collection_4fe218746eece",
+      "id":"request_4fe21883a243b",
+      "name":"Day - Share",
       "description":"",
       "url":"{{host}}day\/share",
       "method":"POST",
@@ -183,12 +183,12 @@
       "data":"",
       "dataMode":"params",
       "timestamp":0,
-      "time":1340132019
+      "time":1340217475
     },
     {
-      "collectionId":"collection_4fe0caa42e015",
-      "id":"request_4fe0cab3f1ebf",
-      "name":"MomentAcceptanceTest - testUpdate",
+      "collectionId":"collection_4fe218746eece",
+      "id":"request_4fe2188464da4",
+      "name":"Moment - Update",
       "description":"",
       "url":"{{host}}moment\/update",
       "method":"POST",
@@ -196,12 +196,12 @@
       "data":"",
       "dataMode":"params",
       "timestamp":0,
-      "time":1340132019
+      "time":1340217476
     },
     {
-      "collectionId":"collection_4fe0caa42e015",
-      "id":"request_4fe0cab4be83c",
-      "name":"MomentAcceptanceTest - testDelete",
+      "collectionId":"collection_4fe218746eece",
+      "id":"request_4fe2188528325",
+      "name":"Moment - Delete",
       "description":"",
       "url":"{{host}}moment\/delete",
       "method":"POST",
@@ -209,12 +209,12 @@
       "data":"",
       "dataMode":"params",
       "timestamp":0,
-      "time":1340132020
+      "time":1340217477
     },
     {
-      "collectionId":"collection_4fe0caa42e015",
-      "id":"request_4fe0cab58855d",
-      "name":"MomentAcceptanceTest - testComment",
+      "collectionId":"collection_4fe218746eece",
+      "id":"request_4fe2188601c01",
+      "name":"Moment - Comment",
       "description":"",
       "url":"{{host}}moment\/comment",
       "method":"POST",
@@ -222,12 +222,12 @@
       "data":"",
       "dataMode":"params",
       "timestamp":0,
-      "time":1340132021
+      "time":1340217478
     },
     {
-      "collectionId":"collection_4fe0caa42e015",
-      "id":"request_4fe0cab654197",
-      "name":"MomentAcceptanceTest - testShare",
+      "collectionId":"collection_4fe218746eece",
+      "id":"request_4fe21886b93e0",
+      "name":"Moment - Share",
       "description":"",
       "url":"{{host}}moment\/share",
       "method":"POST",
@@ -235,12 +235,12 @@
       "data":"",
       "dataMode":"params",
       "timestamp":0,
-      "time":1340132022
+      "time":1340217478
     },
     {
-      "collectionId":"collection_4fe0caa42e015",
-      "id":"request_4fe0cab66691d",
-      "name":"SearchAcceptanceTest - testSuggest",
+      "collectionId":"collection_4fe218746eece",
+      "id":"request_4fe21886cc936",
+      "name":"Search - Suggest",
       "description":"",
       "url":"{{host}}search\/suggest",
       "method":"GET",
@@ -248,12 +248,12 @@
       "data":"",
       "dataMode":"params",
       "timestamp":0,
-      "time":1340132022
+      "time":1340217478
     },
     {
-      "collectionId":"collection_4fe0caa42e015",
-      "id":"request_4fe0cab679b7f",
-      "name":"SearchAcceptanceTest - testSearch",
+      "collectionId":"collection_4fe218746eece",
+      "id":"request_4fe21886e03eb",
+      "name":"Search - Search",
       "description":"",
       "url":"{{host}}search\/text",
       "method":"GET",
@@ -261,12 +261,12 @@
       "data":"",
       "dataMode":"params",
       "timestamp":0,
-      "time":1340132022
+      "time":1340217478
     },
     {
-      "collectionId":"collection_4fe0caa42e015",
-      "id":"request_4fe0cab749949",
-      "name":"UserAcceptanceTest - testDays",
+      "collectionId":"collection_4fe218746eece",
+      "id":"request_4fe21887a5cd5",
+      "name":"User - Days",
       "description":"",
       "url":"{{host}}user\/days",
       "method":"GET",
@@ -274,12 +274,12 @@
       "data":"",
       "dataMode":"params",
       "timestamp":0,
-      "time":1340132023
+      "time":1340217479
     },
     {
-      "collectionId":"collection_4fe0caa42e015",
-      "id":"request_4fe0cab8a5d82",
-      "name":"UserAcceptanceTest - testFiendsWithApp",
+      "collectionId":"collection_4fe218746eece",
+      "id":"request_4fe218890d08e",
+      "name":"User - FiendsWithApp",
       "description":"",
       "url":"{{host}}user\/friends_in_app",
       "method":"GET",
@@ -287,7 +287,7 @@
       "data":"",
       "dataMode":"params",
       "timestamp":0,
-      "time":1340132024
+      "time":1340217481
     }
   ]
 }

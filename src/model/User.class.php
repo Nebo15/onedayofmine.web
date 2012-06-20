@@ -74,12 +74,14 @@ class User extends BaseModel
   {
     $fb_results['fb_uid'] = $fb_results['uid'];
     unset($fb_results['uid']);
-    $fb_results['fb_name']        = $fb_results['name'];
+    $fb_results['fb_name'] = $fb_results['name'];
     unset($fb_results['name']);
     $fb_results['fb_profile_url'] = $fb_results['profile_url'];
     unset($fb_results['profile_url']);
-    $fb_results['fb_profile_utime'] = $fb_results['profile_update_time'];
+    $fb_results['fb_profile_utime'] = (int) $fb_results['profile_update_time'];
     unset($fb_results['profile_update_time']);
+    $fb_results['fb_timezone'] = $fb_results['timezone'];
+    unset($fb_results['timezone']);
     return $fb_results;
   }
   /**
@@ -101,6 +103,7 @@ class User extends BaseModel
       $result = array_merge($result, $this->loadUserInfoFromFb());
     unset($result['user_info_from_fb']);
     unset($result['fb_access_token']);
+    unset($result['cip']);
     ksort($result);
     return (object) $result;
   }

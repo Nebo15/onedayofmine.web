@@ -9,7 +9,11 @@ class odTestsTools
     if(!$users_info)
     {
       $users_info = lmbToolkit::instance()->getFacebook()->getTestUsers();
-      lmb_assert_true(count($users_info) > 1);
+      if(0 == count($users_info))
+      {
+        echo "Can't load test users from Facebook".PHP_EOL;
+        exit(1);
+      }
     }
     $users = array();
     foreach($users_info as $user_info)

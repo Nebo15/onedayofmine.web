@@ -41,31 +41,40 @@
 
 ### 3.2.1 Дни указанного пользователя /user/days/{id} - публичный ###
     Запрос: ответ
-    Ответ (поле result):
+    Ответ (поле result): [
       "id": <int 11> 42,
       "title": <string 255> "My loooooooooooooong day",
       "img_url": <string 255> "http:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/84\/Example.svg",
       "description": <string 1023> "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\nQuisque volutpat egestas elit, id ornare risus cursus non.\nInteger consequat dignissim nisi, non tincidunt metus interdum non.\nPhasellus purus sem, convallis vitae rutrum nec, vulputate in ante.\nVestibulum id purus risus. Phasellus eu sapien et dui tempus pharetra.\nDuis congue dolor et dolor lacinia scelerisque. Suspendisse potenti.\nMauris non ultricies mi. Aliquam erat volutpat. Pellentesque non justo\nfacilisis tellus semper venenatis scelerisque ultricies justo.\nNullam ultricies mattis placerat. Maecenas metus est, convallis\nadipiscing mollis eget, porttitor nec sem. Nulla elementum pretium\nturpis, id fermentum magna mollis a. Donec sit amet eleifend arcu.'",
       "ctime": <int 11> 1330000000
+    ]
 
-### 3.2.1 Дни текущего пользователя /user/days/ - публичный ###
+### 3.2.1 Дни текущего пользователя /user/days/ - приватный ###
     Запрос: ответ
-    Ответ:
-
+    Ответ: [
+      "id": <int 11> 42,
+      "title": <string 255> "My loooooooooooooong day",
+      "img_url": <string 255> "http:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/84\/Example.svg",
+      "description": <string 1023> "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\nQuisque volutpat egestas elit, id ornare risus cursus non.\nInteger consequat dignissim nisi, non tincidunt metus interdum non.\nPhasellus purus sem, convallis vitae rutrum nec, vulputate in ante.\nVestibulum id purus risus. Phasellus eu sapien et dui tempus pharetra.\nDuis congue dolor et dolor lacinia scelerisque. Suspendisse potenti.\nMauris non ultricies mi. Aliquam erat volutpat. Pellentesque non justo\nfacilisis tellus semper venenatis scelerisque ultricies justo.\nNullam ultricies mattis placerat. Maecenas metus est, convallis\nadipiscing mollis eget, porttitor nec sem. Nulla elementum pretium\nturpis, id fermentum magna mollis a. Donec sit amet eleifend arcu.'",
+      "ctime": <int 10> 1330000000
+    ]
 
 ### 3.2.1 Список fb-друзей с установленным приложением ###
     Запрос: пустой
     Ответ: [
-      {
-        'user_id' =>   <int 11>,
-        'name' => <string>,
-        'gender' => 'female'|'male',
-        'link' => <string>,
-        'timezone' => <int>,
-        '' =>
-      },
+      "id": <int 11> 2,
+      "ctime": <int 10> 1340217482,
+      "fb_name": <string ?> "Elizabeth Amciejhdgbeg Liwitz",
+      "fb_profile_url": <string ?>"http:\/\/www.facebook.com\/profile.php?id=100003950847257",
+      "fb_profile_utime": <int 10> 1340211454,
+      "fb_uid": <string 15> "100003950847257",
+      "fb_timezone": <int 2> null,
+      "pic_big": <string ?> "http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v2\/yp\/r\/yDnr5YfbJCH.gif",
+      "pic_small": <string ?> "http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v1\/yP\/r\/FdhqUFlRalU.jpg",
+      "pic_square": <string ?> "http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v2\/y9\/r\/IB7NOFmPw2a.gif",
+      "sex": <enum: male|female|null> "female",
+      "utime": <int 10> 1340217482
     ]
-
 
 ## 3. Дни ##
 

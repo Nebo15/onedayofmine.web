@@ -67,11 +67,12 @@ abstract class odAcceptanceTestCase extends WebTestCase
     $method_name = $trace[2]['function'];
     $class_ref = new ReflectionClass($class_name);
     $method_ref = $class_ref->getMethod($method_name);
+    $call_name = str_replace('AcceptanceTest', '', $class_name).' - '.str_replace('test', '', $method_name);
     $is_example = (bool) (false !== strpos($method_ref->getDocComment(), '@example'));
     if($is_example)
       lmbToolkit::instance()
         ->getPostmanWriter()
-        ->addRequest($class_name.' - '.$method_name, $url_path, $method, $params);
+        ->addRequest($call_name, $url_path, $method, $params);
   }
 
   protected function _loginAndSetCookie(User $user)
