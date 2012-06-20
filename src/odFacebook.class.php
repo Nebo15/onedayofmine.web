@@ -15,7 +15,7 @@ class odFacebook extends Facebook
     $params = array(
       'access_token' => $this->getApplicationAccessToken()
     );
-    $user = $this->api("/".$this->getAppId()."/accounts/test-users", "GET", $params);
-    return $user;
+    $users = $this->api("/".$this->getAppId()."/accounts/test-users", "GET", $params);
+    return $users['data'];
   }
 }

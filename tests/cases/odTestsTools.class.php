@@ -9,10 +9,10 @@ class odTestsTools
     if(!$users_info)
     {
       $users_info = lmbToolkit::instance()->getFacebook()->getTestUsers();
-      lmb_assert_true(count($users_info['data']) > 1);
+      lmb_assert_true(count($users_info) > 1);
     }
     $users = array();
-    foreach($users_info['data'] as $user_info)
+    foreach($users_info as $user_info)
     {
       $user = new User();
       $user->setFbUid($user_info['id']);

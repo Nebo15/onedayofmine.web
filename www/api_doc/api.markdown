@@ -14,18 +14,7 @@
 
 Поля code и status для клиентов, которые почему-то не умеют нормально обрабатывать стандартные HTTP-шные коды и статусы.
 
-# 2. Тестирование API "ручками" #
-
-Установка:
-  * устанавливаем приложение для хрома https://chrome.google.com/webstore/detail/fdmmgilgnpjigdojojpjoooidkmcomcm
-  * сохраняем и импортируем в него файлик https://raw.github.com/daeq/one-day-of-mine/master/www/api_doc/postman.json
-  * в окружении(в центре шапки, справа от глазика) задаем переменную host = 'http://api.onedayofmine.com/' именно со слешем в конце
-
-Аутентификация:
-  * заходим на страницу https://developers.facebook.com/apps/395096410536617/permissions?role=test+users и жмакаем Show Token у любого пользователя
-  * выбираем AuthAcceptanceTest-testLogin и меняем параметр access_token на тот, который скопировали
-  * запускаем AuthAcceptanceTest-testLogin
-  * теперь можно вызывать пользовательские методы
+! Если в ответе присутствует поле fake = true, это значит, что вызов еще не реализован и ответ берется просто из конфига.
 
 # 3. Описание API #
 
@@ -50,8 +39,21 @@
 
 ## 3.2 Пользователи ##
 
+### 3.2.1 Дни указанного пользователя /user/days/{id} - публичный ###
+    Запрос: ответ
+    Ответ (поле result):
+      "id": <int 11> 42,
+      "title": <string 255> "My loooooooooooooong day",
+      "img_url": <string 255> "http:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/84\/Example.svg",
+      "description": <string 1023> "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\nQuisque volutpat egestas elit, id ornare risus cursus non.\nInteger consequat dignissim nisi, non tincidunt metus interdum non.\nPhasellus purus sem, convallis vitae rutrum nec, vulputate in ante.\nVestibulum id purus risus. Phasellus eu sapien et dui tempus pharetra.\nDuis congue dolor et dolor lacinia scelerisque. Suspendisse potenti.\nMauris non ultricies mi. Aliquam erat volutpat. Pellentesque non justo\nfacilisis tellus semper venenatis scelerisque ultricies justo.\nNullam ultricies mattis placerat. Maecenas metus est, convallis\nadipiscing mollis eget, porttitor nec sem. Nulla elementum pretium\nturpis, id fermentum magna mollis a. Donec sit amet eleifend arcu.'",
+      "ctime": <int 11> 1330000000
 
-### 2.4 Список fb-друзей с установленным приложением ###
+### 3.2.1 Дни текущего пользователя /user/days/ - публичный ###
+    Запрос: ответ
+    Ответ:
+
+
+### 3.2.1 Список fb-друзей с установленным приложением ###
     Запрос: пустой
     Ответ: [
       {

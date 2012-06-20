@@ -4,11 +4,54 @@
   <meta charset=utf-8>
   <title>Welcome to API of OneDayOfMine.com</title>
 <body>
-<h2>Links</h2>
+<h1>Welcome to API of OneDayOfMine.com</h1>
+
+<h2>Ссылки</h2>
 <ul>
   <li>
-    <a href="https://github.com/daeq/one-day-of-mine/blob/master/www/api_doc/api.markdown">Документация на API</a>
+    <a href="/api_doc/api.markdown">Документация на API</a>
   </li>
 </ul>
+
+<h2>Тестирование API "ручками"</h2>
+
+Установка:
+<ul>
+  <li>
+    устанавливаем <a href="https://chrome.google.com/webstore/detail/fdmmgilgnpjigdojojpjoooidkmcomcm">приложение</a>
+    для хрома
+  </li>
+  <li>сохраняем и и мпортируем в него <a href="/api_doc/postman.json">файлик</a></li>
+  <li>в окружении(в центре шапки, справа от глазика) задаем переменную host = 'http://api.onedayofmine.com/' именно со
+    слешем в конце
+  </li>
+</ul>
+
+Аутентификация:
+<ul>
+  <li>выбираем AuthAcceptanceTest-testLogin и меняем параметр access_token на один из преведенных ниже</li>
+  <li>запускаем AuthAcceptanceTest-testLogin</li>
+  <li>теперь можно вызывать пользовательские методы</li>
+</ul>
+
+Пользователи для тестирования:
+{{list using="{$#users}"}}
+<ul>
+  {{list:item}}
+  <li>
+    ID: {$item.id}
+    <ul>
+      <li>access_token: {$item.access_token}</li>
+      <li><a href="{$item.login_url}">login by user</a></li>
+    </ul>
+  </li>
+  {{/list:item}}
+  {{list:empty}}
+  <p>Facebook don't return test users. Damn!</p>
+  <img src="http://gifsforum.com/images/gif/F5/grand/rafresh-refresh-F5-eccbc87e4b5ce2fe28308fd9f2a7baf3-185.gif"/>
+  {{/list:empty}}
+</ul>
+{{/list}}
+
 </body>
 </html>
