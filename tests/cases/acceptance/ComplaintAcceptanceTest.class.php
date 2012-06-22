@@ -4,19 +4,32 @@ lmb_require('tests/cases/odAcceptanceTestCase.class.php');
 
 class ComplaintAcceptanceTest extends odAcceptanceTestCase
 {
+  function setUp()
+  {
+    parent::setUp();
+    odTestsTools::truncateTablesOf('Day', 'Complaint');
+  }
+
   /**
    *@example
    */
   function testCreate()
   {
+    $day = $this->generator->day();
+    $day->save();
+
     $this->_loginAndSetCookie($this->main_user);
-    $res = $this->post('/complaint/create', array('day_id' => 42, 'text' => 'complaint_text'));
+    $res = $this->post('/complaint/create', array(
+      'day_id' => $day->getId(), 'text' => $text = $this->generator->string()
+    ));
     $this->assertResponse(200);
-    if($this->assertEqual(200, $res->code))
-    {
-      $this->assertProperty($res->result, 'complaint_id');
-      $this->assertEqual(222, $res->result->complaint_id);
-    }
+
+    $loaded_complaints = Complaint::find();
+    $this->assertEqual(1, count($loaded_complaints));
+
+    $this->assertProperty($res->result, 'id');
+    $this->assertEqual($loaded_complaints->at(0)->getId(), $res->result->id);
+    $this->assertEqual($loaded_complaints->at(0)->getText(), $text);
   }
 
   /**
@@ -25,13 +38,18 @@ class ComplaintAcceptanceTest extends odAcceptanceTestCase
   function testGet()
   {
     $this->_loginAndSetCookie($this->main_user);
+
+    $complaint = $this->generator->complaint();
+    $complaint->save();
+
     $res = $this->get('/complaint/get');
-    if($this->assertEqual(200, $res->code))
-    {
-      $this->assertTrue(is_array($res->result));
-      $this->assertProperty($res->result[0], 'text');
-      $this->assertProperty($res->result[0], 'day_id');
-      $this->assertProperty($res->result[0], 'moment_id');
-    }
+
+    $this->assertResponse(200);
+    $this->assertTrue(is_array($res->result));
+    $this->assertEqual(1, count($res->result));
+    $this->assertEqual($complaint->getId(), $res->result[0]->id);
+    $this->assertEqual($complaint->getDayId(), $res->result[0]->day_id);
+    $this->assertEqual($complaint->getCreateTime(), $res->result[0]->ctime);
+    $this->assertEqual($complaint->getText(), $res->result[0]->text);
   }
 }

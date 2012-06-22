@@ -8,15 +8,20 @@ class ComplaintController extends BaseJsonController
 
   function doCreate()
   {
-    return $this->_answerOk(array('complaint_id' => 222));
+    if(!$this->request->hasPost())
+      return $this->_answerNotPost();
+
+    if(!Day::findById($this->request->get('day_id')))
+      return $this->_answerWithError("Day with id '".$this->request->get('day_id')."' not found");
+
+    return $this->_importSaveAndAnswer(new Complaint(), array('day_id', 'text'));
   }
 
   function doGet()
   {
-    $complaint = new Complaint();
-    $complaint->setText('complaint_text1');
-    $complaint->setDayId(42);
-    $complaint->setMomentId(111);
-    return $this->_answerOk(array($complaint->exportForApi()));
+    $answer = array();
+    foreach(Complaint::find() as $complaint)
+      $answer[] = $complaint->exportForApi();
+    return $this->_answerOk($answer);
   }
 }

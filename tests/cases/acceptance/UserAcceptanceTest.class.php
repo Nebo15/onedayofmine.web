@@ -27,6 +27,7 @@ class UserAcceptanceTest extends odAcceptanceTestCase
    */
   function testDays_AnotherUser()
   {
+    $this->additional_user->save();
     $this->_loginAndSetCookie($this->main_user);
 
     $days = $this->get('user/days/'.$this->additional_user->getId())->result;

@@ -62,6 +62,14 @@ class odObjectMother
     return $comment;
   }
 
+  function complaint($day = null)
+  {
+    $complaint = new Complaint();
+    $complaint->setDay($day ?: $this->day());
+    $complaint->setText($this->string(522));
+    return $complaint;
+  }
+
   function string($length = 6)
   {
     $conso = array("b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "r", "s", "t", "v", "w", "x", "y", "z");

@@ -62,6 +62,37 @@ abstract class BaseJsonController extends lmbController
     return (null != $this->toolkit->getUser()) ? true : false;
   }
 
+  protected function _checkPropertiesInRequest(array $properties)
+  {
+    foreach($properties as $property)
+    {
+      if(!$this->request->get($property))
+        $this->error_list->addError("Property '$property' not found in request");
+    }
+    return $this->error_list->export();
+  }
+
+  protected function _importSaveAndAnswer($item, array $properties)
+  {
+    foreach($properties as $property)
+      $item->set($property, $this->request->get($property));
+
+    $item->validate($this->error_list);
+    if($this->error_list->isValid())
+    {
+      $item->saveSkipValidation();
+      $res = $item->exportForApi();
+      foreach($res as $key => $property)
+        if(is_object($property))
+          unset($res[$key]);
+      return $this->_answerOk($res);
+    }
+    else
+    {
+      return $this->_answerWithError($this->error_list->export());
+    }
+  }
+
   protected function _answerUnauthorized()
   {
     return $this->_answerWithError('Access allowed only for registered users', null, 403);
@@ -72,16 +103,31 @@ abstract class BaseJsonController extends lmbController
     return $this->_answer($result, array(), $status, $code);
   }
 
-  protected function _answerWithError($errors = null, $status = null, $code = 400)
+  protected function _answerWithError($errors, $status = null, $code = 400)
   {
     if(!is_array($errors))
+    {
+      if(!$errors)
+        throw new lmbException("Error can't be empty");
       $errors = array($errors);
+    }
+    else
+    {
+      if(!count($errors))
+        throw new lmbException("Error can't be empty");
+    }
+
     return $this->_answer(null, $errors, $status, $code);
   }
 
   protected function _answerNotFound($message)
   {
     return $this->_answer($message, array(), $message, 404);
+  }
+
+  protected function _answerNotPost($message = 'Not a POST request')
+  {
+    return $this->_answerWithError($message, null, 405);
   }
 
   protected function _answer($result, array $errors, $status, $code)

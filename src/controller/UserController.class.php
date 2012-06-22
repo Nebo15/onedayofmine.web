@@ -12,12 +12,12 @@ class UserController extends BaseJsonController
     $id = $this->request->get('id');
     if(!$id)
     {
+      if(!$this->toolkit->getUser())
+        return $this->_answerUnauthorized();
       $user = $this->toolkit->getUser();
     }
     else
     {
-      if(!$this->toolkit->getUser())
-        $this->_answerUnauthorized();
       if(!$user = User::findById($id))
         return $this->_answerNotFound("User with id $id not found");
     }
