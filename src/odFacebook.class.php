@@ -9,13 +9,4 @@ class odFacebook extends Facebook
       array('method' => 'fql.query', 'query' => $query)
     );
   }
-
-  function getTestUsers()
-  {
-    $params = array(
-      'access_token' => $this->getApplicationAccessToken()
-    );
-    $users = $this->api("/".$this->getAppId()."/accounts/test-users", "GET", $params);
-    return $users['data'];
-  }
 }

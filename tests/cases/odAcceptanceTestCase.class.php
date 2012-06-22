@@ -28,35 +28,31 @@ abstract class odAcceptanceTestCase extends WebTestCase
 
   function get($url, $params = array())
   {
-    $result = $this->_decodeResponse(parent::get(lmb_env_get('HOST_NAME') . $url, $params));
-    if(!property_exists($result, 'result'))
-      $this->fail('Wrong API response format: '.lmb_var_export($result));
-    $this->assertProperty($result, 'errors');
-    $this->assertProperty($result, 'status');
-    $this->assertProperty($result, 'code');
-    $this->_addRecordToPostmanWriter($url, $params, 'GET');
+    $raw_response = parent::get(lmb_env_get('HOST_NAME') . $url, $params);
+    $result = $this->_decodeResponse($raw_response);
+    if(
+      !property_exists($result, 'result') ||
+      !property_exists($result, 'errors') ||
+      !property_exists($result, 'status') ||
+      !property_exists($result, 'code')
+    )
+      $this->fail('Wrong response structure:'.PHP_EOL.$raw_response);
+    $this->_addRecordToPostmanWriter($url, $params, 'POST');
     return $result;
   }
 
   function post($url, $params = array())
   {
-    $result = $this->_decodeResponse(parent::post(lmb_env_get('HOST_NAME') . $url, $params));
-    $this->assertProperty($result, 'result', "Not found 'result' part in $url response");
-    $this->assertProperty($result, 'errors', "Not found 'errors' part in $url response");
-    $this->assertProperty($result, 'status', "Not found 'status' part in $url response");
-    $this->assertProperty($result, 'code', "Not found 'code' part in $url response");
+    $raw_response = parent::post(lmb_env_get('HOST_NAME') . $url, $params);
+    $result = $this->_decodeResponse($raw_response);
+    if(
+      !property_exists($result, 'result') ||
+      !property_exists($result, 'errors') ||
+      !property_exists($result, 'status') ||
+      !property_exists($result, 'code')
+    )
+      $this->fail('Wrong response structure:'.PHP_EOL.$raw_response);
     $this->_addRecordToPostmanWriter($url, $params, 'POST');
-    return $result;
-  }
-
-  function postWithFile($url, $params = array(), $files)
-  {
-    $url = new SimpleUrl(lmb_env_get('HOST_NAME') . $url);
-    $result = $this->_decodeResponse(parent::postWithFile($url, $files));
-    $this->assertProperty($result, 'result', "Not found 'result' part in $url response");
-    $this->assertProperty($result, 'errors', "Not found 'errors' part in $url response");
-    $this->assertProperty($result, 'status', "Not found 'status' part in $url response");
-    $this->assertProperty($result, 'code', "Not found 'code' part in $url response");
     return $result;
   }
 
@@ -116,13 +112,13 @@ abstract class odAcceptanceTestCase extends WebTestCase
     }
   }
 
-  protected function assertProperty($obj, $property)
+  protected function assertProperty($obj, $property, $message = "Property '%s' not found")
   {
     if(!is_object($obj))
       return $this->fail("Expected a object but '".gettype($obj)."' given");
     return $this->assertTrue(
       property_exists($obj, $property),
-      sprintf("Property '%s' not found", $property)
+      sprintf($message, $property)
     );
   }
 }
