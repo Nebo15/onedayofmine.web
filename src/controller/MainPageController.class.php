@@ -7,4 +7,11 @@ class MainPageController extends lmbController
   {
     $this->users = lmbToolkit::instance()->getFacebook()->getTestUsers();
   }
+
+  function doUpdate()
+  {
+    echo '<pre>';
+    system(lmb_env_get('APP_DIR').'/bin/update.sh');
+    die();
+  }
 }
