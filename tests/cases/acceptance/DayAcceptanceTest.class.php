@@ -38,19 +38,16 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $params = array(
       'title' => $this->generator->string(4),
       'description' => $this->generator->string(8),
-      'time_offset' => $time = time(),
-      'tags' => array('tag1', 'tag2')
+      'time_offset' => $time = time()
     );
     $day = $this->post('day/begin', $params)->result;
     $this->assertResponse(200);
     $this->assertEqual($params['title'], $day->title);
     $this->assertEqual($params['description'], $day->description);
-    $this->assertEqual($params['tags'], $day->tags);
     $this->assertEqual($user->getId(), $day->user_id);
     $this->assertTrue($day->time_offset);
     $this->assertTrue($day->ctime);
     $this->assertTrue($day->utime);
-    $this->assertTrue($day->cip);
   }
 
   /**
