@@ -5,16 +5,20 @@ class odTestsTools
 {
   static function getUsers()
   {
-    static $users_info;
-    if(!$users_info)
+    $users_file = lmb_var_dir().'/fb_test_users.txt';
+    if(!file_exists($users_file))
     {
       $users_info = lmbToolkit::instance()->getFacebook()->getTestUsers();
-      if(0 == count($users_info))
+      if(!$users_info)
       {
         echo "Can't load test users from Facebook".PHP_EOL;
         exit(1);
       }
+      file_put_contents($users_file, serialize($users_info));
     }
+
+    $users_info = unserialize(file_get_contents($users_file));
+
     $users = array();
     foreach($users_info as $user_info)
     {
