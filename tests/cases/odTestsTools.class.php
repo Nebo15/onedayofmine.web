@@ -5,10 +5,10 @@ class odTestsTools
 {
   static function getUsers()
   {
-    $users_file = lmb_var_dir().'/fb_test_users.txt';
+    $users_file = lmb_var_dir().'/fb_test_users.json';
     if(!file_exists($users_file))
     {
-      $users_info = self::loadTestUsersFromFb();
+      $users_info = self::tryToLoadUsersFromFb();
       if(!$users_info)
       {
         echo "Can't load test users from Facebook".PHP_EOL;
@@ -16,18 +16,27 @@ class odTestsTools
       }
       self::saveFbInfoToFile($users_info, $users_file);
     }
-
-    $users_info = self::loadFbInfoFromFile($users_file);
-
-    $users = array();
-    foreach($users_info as $user_info)
+    else
     {
-      $user = new User();
-      $user->setFbUid($user_info['id']);
-      $user->setFbAccessToken($user_info['access_token']);
-      $users[] = $user;
+      $users_info = self::loadFbInfoFromFile($users_file);
+      $is_users_info_valid = self::checkAccessTokensExpiration($users_info);
+      if(!$is_users_info_valid)
+      {
+        unlink($users_file);
+        return self::getUsers();
+      }
     }
-    return $users;
+    return self::mapUsersInfoToModel($users_info);
+  }
+
+  static function loadTestUsersFromFb()
+  {
+    $fb = lmbToolkit::instance()->getFacebook();
+    $params = array(
+      'access_token' => $fb->getApplicationAccessToken()
+    );
+    $users = $fb->api("/".$fb->getAppId()."/accounts/test-users", "GET", $params);
+    return $users['data'];
   }
 
   static function truncateTablesOf($model_classes)
@@ -54,41 +63,56 @@ class odTestsTools
     }
   }
 
-  protected static function loadTestUsersFromFb($attempts = 10)
+  protected static function tryToLoadUsersFromFb()
   {
-    echo "Try to load test users from fb (attempt remaining $attempts)...";
-    $fb = lmbToolkit::instance()->getFacebook();
-    if(!$attempts)
-      throw new lmbException("Can't get facebook users");
-    $params = array(
-      'access_token' => $fb->getApplicationAccessToken()
-    );
-    $users = $fb->api("/".$fb->getAppId()."/accounts/test-users", "GET", $params);
-    if(!count($users['data']))
-      return self::loadTestUsersFromFb($attempts--);
-    echo "SUCCESS!\n";
-    return $users['data'];
+    $users_info = array();
+    for($attempts = 10; $attempts; $attempts--)
+    {
+      echo "Try to load test users from fb (attempt remaining $attempts)...\n";
+      $users_info = self::loadTestUsersFromFb();
+      if(count($users_info))
+        break;
+    }
+    return $users_info;
+  }
+
+  protected static function checkAccessTokensExpiration($users_info)
+  {
+    foreach($users_info as $user_info)
+    {
+      $fb = lmbToolkit::instance()->getFacebook($user_info->access_token);
+      try {
+        $fb->api('/me');
+      }
+      catch(FacebookApiException $e)
+      {
+        echo $e->getType().PHP_EOL;
+        return false;
+      }
+    }
+    return true;
   }
 
   protected static function saveFbInfoToFile($users_info, $file)
   {
-    $fp = fopen($file, 'w');
-
-    foreach($users_info as $user_info)
-      fputcsv($fp, array($user_info['id'], $user_info['access_token']));
-
-    fclose($fp);
+    file_put_contents($file, Json::indent(json_encode($users_info)));
   }
 
   protected static function loadFbInfoFromFile($file)
   {
-    $users_info = array();
-    if (($handle = fopen($file, "r")) !== FALSE) {
-      while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
-        $users_info[] = array('id' => $data[0], 'access_token' => $data[1]);
-      }
-      fclose($handle);
+    return json_decode(file_get_contents($file));
+  }
+
+  protected static function mapUsersInfoToModel($users_info)
+  {
+    $users = array();
+    foreach($users_info as $user_info)
+    {
+      $user = new User();
+      $user->setFbUid($user_info->id);
+      $user->setFbAccessToken($user_info->access_token);
+      $users[] = $user;
     }
-    return $users_info;
+    return $users;
   }
 }

@@ -1,11 +1,12 @@
 <?php
 lmb_require('src/controller/BaseJsonController.class.php');
+lmb_require('tests/cases/odTestsTools.class.php');
 
 class MainPageController extends lmbController
 {
   function doDisplay()
   {
-    $this->users = lmbToolkit::instance()->getFacebook()->getTestUsers();
+    $this->users = odTestsTools::loadTestUsersFromFb();
   }
 
   function doDeploy()

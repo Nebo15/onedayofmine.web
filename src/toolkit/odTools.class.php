@@ -10,9 +10,9 @@ class odTools extends lmbAbstractTools
    */
   protected $user;
   /**
-   * @var Facebook
+   * @var array
    */
-  protected $facebook;
+  protected $facebooks = array();
   /**
    * @var string
    */
@@ -63,19 +63,19 @@ class odTools extends lmbAbstractTools
    */
   function getFacebook($access_token = null)
   {
-    if(null == $this->facebook)
+    if(!isset($this->facebooks[$access_token]))
     {
-      $this->facebook = new odFacebook(array(
+      $this->facebooks[$access_token] = new odFacebook(array(
         'appId'  => lmbToolkit::instance()->getConf('common')->get('fb_app_id'),
         'secret' => lmbToolkit::instance()->getConf('common')->get('fb_app_secret'),
         'cookie' => false
       ));
     }
 
-    if($access_token)
-      $this->facebook->setAccessToken($access_token);
+    if($this->facebooks[$access_token])
+      $this->facebooks[$access_token]->setAccessToken($access_token);
 
-    return $this->facebook;
+    return $this->facebooks[$access_token];
   }
 
   /**
