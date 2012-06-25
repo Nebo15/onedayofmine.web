@@ -1,6 +1,7 @@
 <?php
+lmb_require('src/model/BaseModel.class.php');
 
-class DayComment extends lmbActiveRecord
+class DayComment extends BaseModel
 {
   protected $_db_table_name = 'day_comment';
 
@@ -14,7 +15,14 @@ class DayComment extends lmbActiveRecord
       'user' => array ('field' => 'user_id', 'class' => 'User'),
       'day' =>  array ('field' => 'day_id', 'class' => 'Day'),
     );
-
   }
 
+  protected function _createValidator()
+  {
+    $validator = new lmbValidator();
+    $validator->addRequiredObjectRule('user', 'User', 'User is required');
+    $validator->addRequiredObjectRule('day', 'Day', 'Day is required');
+    $validator->addRequiredRule('text');
+    return $validator;
+  }
 }

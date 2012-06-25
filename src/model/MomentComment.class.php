@@ -1,6 +1,7 @@
 <?php
+lmb_require('src/model/BaseModel.class.php');
 
-class MomentComment extends lmbActiveRecord
+class MomentComment extends BaseModel
 {
   protected $_db_table_name = 'moment_comment';
 
@@ -16,4 +17,12 @@ class MomentComment extends lmbActiveRecord
     );
   }
 
+  protected function _createValidator()
+  {
+    $validator = new lmbValidator();
+    $validator->addRequiredObjectRule('user', 'User', 'User is required');
+    $validator->addRequiredObjectRule('moment', 'Moment', 'Moment is required');
+    $validator->addRequiredRule('text');
+    return $validator;
+  }
 }

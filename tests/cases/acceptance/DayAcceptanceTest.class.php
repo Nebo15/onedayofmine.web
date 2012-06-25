@@ -7,7 +7,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   function setUp()
   {
     parent::setUp();
-    odTestsTools::truncateTablesOf('Day', 'Moment');
+    odTestsTools::truncateTablesOf('Day', 'Moment', 'DayComment');
   }
 
   function testBegin_Negative()
@@ -169,11 +169,19 @@ class DayAcceptanceTest extends odAcceptanceTestCase
    */
   function testComment()
   {
+    $day = $this->generator->day($this->main_user);
+    $day->save();
+
     $this->_loginAndSetCookie($this->main_user);
-    $this->post('day/comment', array(
-      'text' => 'comment text'
-    ));
+    $res = $this->post('day/comment', array(
+      'day_id' => $day->getId(),
+      'text' => $text = $this->generator->string(255)
+    ))->result;
+
     $this->assertResponse(200);
+    $this->assertEqual(1, $res->id);
+    $this->assertEqual($day->getId(), $res->day_id);
+    $this->assertEqual($text, $res->text);
   }
 
   /**

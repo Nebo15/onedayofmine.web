@@ -120,7 +120,19 @@ class DayController extends BaseJsonController
     if(!$this->request->hasPost())
       return $this->_answerWithError('Not a POST request');
 
-    return $this->_answerOk();
+    $comment = new DayComment();
+    $comment->setText($this->request->get('text'));
+    $comment->setDay(Day::findById($this->request->get('day_id')));
+    $comment->setUser($this->toolkit->getUser());
+    $comment->validate($this->error_list);
+
+    if($this->error_list->isEmpty())
+    {
+      $comment->saveSkipValidation();
+      return $this->_answerOk($comment->exportForApi());
+    }
+    else
+      return $this->_answerWithError($this->error_list->export());
   }
 
   function doShare()
