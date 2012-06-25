@@ -35,6 +35,7 @@ class odObjectMother
     $comment = new DayComment();
     $comment->setDay($day ?: $this->day());
     $comment->setUser($user ?: $this->user());
+    $comment->setText($this->string(255));
     return $comment;
   }
 
@@ -58,6 +59,7 @@ class odObjectMother
   {
     $comment = new MomentComment();
     $comment->setMoment($moment ?: $this->moment());
+    $comment->setText($this->string(255));
     $comment->setUser($user ?: $this->user());
     return $comment;
   }
