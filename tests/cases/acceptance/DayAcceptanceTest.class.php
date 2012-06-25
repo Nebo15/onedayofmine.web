@@ -38,7 +38,10 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $params = array(
       'title' => $this->generator->string(4),
       'description' => $this->generator->string(8),
-      'time_offset' => $time = time()
+      'time_offset' => $time = time(),
+      'occupation' => $this->generator->string(),
+      'age' => $this->generator->integer(2),
+      'type' => $this->generator->integer(1)
     );
     $day = $this->post('day/begin', $params)->result;
     $this->assertResponse(200);
@@ -195,7 +198,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
 
     $this->_loginAndSetCookie($this->main_user);
     $this->post('day/end', array('day_id' => $day->getId()))->result;
-    
+
     $this->assertResponse(200);
 
     $res = $this->post('day/add_moment', array(

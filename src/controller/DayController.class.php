@@ -47,7 +47,7 @@ class DayController extends BaseJsonController
 
     $day->setUser($this->toolkit->getUser());
 
-    return $this->_importSaveAndAnswer($day, array('title', 'description', 'tags', 'time_offset'));
+    return $this->_importSaveAndAnswer($day, array('title', 'description', 'time_offset', 'occupation', 'age', 'type'));
   }
 
   function doUpdate()
@@ -60,7 +60,7 @@ class DayController extends BaseJsonController
     if(!$day = Day::findById($this->request->id))
       return $this->_answerOk(404, 'Day not found');
 
-    return $this->_importSaveAndAnswer($day, array('title', 'description', 'tags', 'time_offset'));
+    return $this->_importSaveAndAnswer($day, array('title', 'description', 'time_offset', 'occupation', 'age', 'type'));
   }
 
   function doEnd()

@@ -24,6 +24,9 @@ class Day extends BaseModel
     $validator->addRequiredRule('title');
     $validator->addRequiredRule('description');
     $validator->addRequiredRule('time_offset');
+    $validator->addRequiredRule('occupation');
+    $validator->addRequiredRule('age');
+    $validator->addRequiredRule('type');
     return $validator;
   }
 
@@ -35,6 +38,9 @@ class Day extends BaseModel
     $export->title = $this->getTitle();
     $export->description = $this->getDescription();
     $export->time_offset = $this->getTimeOffset();
+    $export->occupation = $this->getOccupation();
+    $export->age = $this->getAge();
+    $export->type = $this->getType();
     $export->likes_count = $this->getLikesCount();
     $export->ctime = $this->getCreateTime();
     $export->utime = $this->getUpdateTime();

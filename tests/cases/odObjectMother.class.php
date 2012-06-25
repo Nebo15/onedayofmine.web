@@ -21,6 +21,9 @@ class odObjectMother
     $day->setTitle($this->string(25));
     $day->setDescription($this->string(255));
     $day->setTimeOffset(0);
+    $day->setOccupation($this->string(25));
+    $day->setAge($this->integer(2));
+    $day->setType($this->integer(1));
     $day->setUser($user ?: $this->user());
     return $day;
   }
@@ -84,5 +87,10 @@ class odObjectMother
       $password .= $vocal[rand(0, 4)];
     }
     return $password;
+  }
+
+  function integer($length = 4)
+  {
+    return rand(1, 10^($length+1) - 1);
   }
 }
