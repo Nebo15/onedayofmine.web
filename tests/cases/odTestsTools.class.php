@@ -11,7 +11,7 @@ class odTestsTools
 
   static function loadUsersInfo()
   {
-    $users_file = lmb_env_get('APP_DIR').'/tests/var/fb_test_users.json';
+    $users_file = lmb_env_get('APP_DIR').'/var/fb_test_users.json';
     if(!file_exists($users_file))
     {
       echo "Try to load test users from fb...\n";
@@ -94,7 +94,7 @@ class odTestsTools
 
   protected static function saveFbInfoToFile($users_info, $file)
   {
-    file_put_contents($file, Json::indent(json_encode($users_info)));
+    lmbFs::safeWrite($file, Json::indent(json_encode($users_info)));
   }
 
   protected static function loadFbInfoFromFile($file)
