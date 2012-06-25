@@ -4,7 +4,7 @@ lmb_require('tests/cases/odTestsTools.class.php');
 
 class MainPageController extends lmbController
 {
-  
+
 
   function doDeploy()
   {

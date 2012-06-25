@@ -72,6 +72,9 @@ class odTestsTools
 
   protected static function checkAccessTokensExpiration($users_info)
   {
+    static $is_checked = true;
+    if($is_checked)
+      return true;
     foreach($users_info as $user_info)
     {
       $fb = lmbToolkit::instance()->getFacebook($user_info->access_token);
@@ -82,9 +85,10 @@ class odTestsTools
       {
         if(0 === strpos($e->getMessage(), "Session has expired at unix time"))
           return false;
-        echo $e->getMessage().PHP_EOL;
+        echo $e->getType().': '.$e->getMessage().PHP_EOL;
       }
     }
+    $is_checked = true;
     return true;
   }
 
