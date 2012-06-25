@@ -35,14 +35,17 @@
 </ul>
 
 Пользователи для тестирования:
-{{list using="{$#users}"}}
+<pre>
+<?php $users = odTestsTools::loadUsersInfo(); ?>
+</pre>
+{{list using="{$users}"}}
 <ul>
   {{list:item}}
   <li>
-    ID: {$item.id}
+    ID: {$item->id}
     <ul>
-      <li>access_token: {$item.access_token}</li>
-      <li><a href="{$item.login_url}">login by user</a></li>
+      <li>access_token: {$item->access_token}</li>
+      <li><a href="{$item->login_url}">login by user</a></li>
     </ul>
   </li>
   {{/list:item}}

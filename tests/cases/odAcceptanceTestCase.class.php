@@ -23,7 +23,7 @@ abstract class odAcceptanceTestCase extends WebTestCase
     $this->generator = new odObjectMother();
     parent::setUp();
     odTestsTools::truncateTablesOf('User');
-    list($this->main_user, $this->additional_user) = odTestsTools::getUsers();
+    list($this->main_user, $this->additional_user) = odTestsTools::getUsers($quiet = false);
   }
 
   function get($url, $params = array())

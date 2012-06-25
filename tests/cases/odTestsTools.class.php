@@ -5,10 +5,17 @@ class odTestsTools
 {
   static function getUsers()
   {
-    $users_file = lmb_var_dir().'/fb_test_users.json';
+    $users_info = self::loadUsersInfo();
+    return self::mapUsersInfoToModel($users_info);
+  }
+
+  static function loadUsersInfo()
+  {
+    $users_file = lmb_env_get('APP_DIR').'/tests/var/fb_test_users.json';
     if(!file_exists($users_file))
     {
-      $users_info = self::tryToLoadUsersFromFb();
+      echo "Try to load test users from fb...\n";
+      $users_info = self::loadTestUsersFromFb();
       if(!$users_info)
       {
         echo "Can't load test users from Facebook".PHP_EOL;
@@ -26,10 +33,10 @@ class odTestsTools
         return self::getUsers();
       }
     }
-    return self::mapUsersInfoToModel($users_info);
+    return $users_info;
   }
 
-  static function loadTestUsersFromFb()
+  protected static function loadTestUsersFromFb()
   {
     $fb = lmbToolkit::instance()->getFacebook();
     $params = array(
@@ -63,19 +70,6 @@ class odTestsTools
     }
   }
 
-  protected static function tryToLoadUsersFromFb()
-  {
-    $users_info = array();
-    for($attempts = 10; $attempts; $attempts--)
-    {
-      echo "Try to load test users from fb (attempt remaining $attempts)...\n";
-      $users_info = self::loadTestUsersFromFb();
-      if(count($users_info))
-        break;
-    }
-    return $users_info;
-  }
-
   protected static function checkAccessTokensExpiration($users_info)
   {
     foreach($users_info as $user_info)
@@ -86,8 +80,9 @@ class odTestsTools
       }
       catch(FacebookApiException $e)
       {
-        echo $e->getType().PHP_EOL;
-        return false;
+        if(0 === strpos($e->getMessage(), "Session has expired at unix time"))
+          return false;
+        echo $e->getMessage().PHP_EOL;
       }
     }
     return true;
@@ -108,6 +103,7 @@ class odTestsTools
     $users = array();
     foreach($users_info as $user_info)
     {
+      $user_info = (object) $user_info;
       $user = new User();
       $user->setFbUid($user_info->id);
       $user->setFbAccessToken($user_info->access_token);

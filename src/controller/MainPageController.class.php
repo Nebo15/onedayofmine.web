@@ -4,10 +4,7 @@ lmb_require('tests/cases/odTestsTools.class.php');
 
 class MainPageController extends lmbController
 {
-  function doDisplay()
-  {
-    $this->users = odTestsTools::loadTestUsersFromFb();
-  }
+  
 
   function doDeploy()
   {
