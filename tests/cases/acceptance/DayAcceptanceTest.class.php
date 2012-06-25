@@ -194,8 +194,8 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $day->save();
 
     $this->_loginAndSetCookie($this->main_user);
-    $res = $this->post('day/end', array('day_id' => $day->getId()))->result;
-
+    $this->post('day/end', array('day_id' => $day->getId()))->result;
+    
     $this->assertResponse(200);
 
     $res = $this->post('day/add_moment', array(
