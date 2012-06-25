@@ -68,7 +68,13 @@ class DayController extends BaseJsonController
     if(!$this->request->hasPost())
       return $this->_answerWithError('Not a POST request');
 
-    return $this->_answerOk(odMock::day());
+    if(!$day = Day::findById($this->request->get('day_id')))
+      return $this->_answerOk(404, 'Day not found');
+
+    $day->setIsEnded(1);
+    $day->save();
+
+    return $this->_answerOk();
   }
 
   function doDelete()
@@ -76,9 +82,7 @@ class DayController extends BaseJsonController
     if(!$this->request->hasPost())
       return $this->_answerWithError('Not a POST request');
 
-    return $this->_answerOk();
-
-    if(!$day = Day::findById($this->request->id))
+    if(!$day = Day::findById($this->request->get('id')))
       return $this->_answerOk(404, 'Day not found');
 
     $day->setIsDelete(true);
@@ -98,6 +102,9 @@ class DayController extends BaseJsonController
 
     if(!$day = Day::findById($this->request->get('day_id')))
       return $this->_answerWithError("Day not found by id");
+
+    if($day->getIsEnded())
+      return $this->_answerWithError("Day is closed");
 
     $moment = new Moment();
     $moment->setDay($day);

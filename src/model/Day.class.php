@@ -38,6 +38,7 @@ class Day extends BaseModel
     $export->likes_count = $this->getLikesCount();
     $export->ctime = $this->getCreateTime();
     $export->utime = $this->getUpdateTime();
+    $export->is_ended = $this->getIsEnded();
     return $export;
   }
 }

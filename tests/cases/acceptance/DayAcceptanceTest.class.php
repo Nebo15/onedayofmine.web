@@ -74,6 +74,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $this->assertEqual($day->getTimeOffset(), $loaded_day->time_offset);
     $this->assertEqual($day->getLikesCount(), $loaded_day->likes_count);
     $this->assertEqual($day->getCreateTime(), $loaded_day->ctime);
+    $this->assertEqual($day->getIsEnded(), $loaded_day->is_ended);
     $this->assertEqual($moment1->getId(), $loaded_day->moments[0]->id);
     $this->assertEqual($moment2->getId(), $loaded_day->moments[1]->id);
   }
@@ -189,9 +190,21 @@ class DayAcceptanceTest extends odAcceptanceTestCase
    */
   function testEnd()
   {
+    $day = $this->generator->day($this->main_user);
+    $day->save();
+
     $this->_loginAndSetCookie($this->main_user);
-    $this->post('day/end');
+    $res = $this->post('day/end', array('day_id' => $day->getId()))->result;
+
     $this->assertResponse(200);
+
+    $res = $this->post('day/add_moment', array(
+      'day_id' => $day_id = $day->getId(),
+      'description' => $this->generator->string(200),
+      'image_name' => $this->generator->string(),
+      'image_content' => $this->generator->string(),
+    ))->errors;
+    $this->assertEqual(1, count($res));
   }
 
   /**
