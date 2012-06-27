@@ -57,6 +57,11 @@ class odTools extends lmbAbstractTools
     return $this->getFacebook($user->getFbAccessToken());
   }
 
+  function getAppFacebook()
+  {
+    return lmbToolkit::instance()->getFacebook();
+  }
+
   /**
    * @param string $access_token
    * @return odFacebook
@@ -99,6 +104,11 @@ class odTools extends lmbAbstractTools
     if(!$this->postman_writer)
       $this->postman_writer = new PostmanWriter(lmb_env_get('APP_DIR').'/www/api_doc/postman.json');
     return $this->postman_writer;
+  }
+
+  function getSiteUrl($path = '')
+  {
+    return $this->toolkit->getConf('common')->site_base_url.$path;
   }
 }
 

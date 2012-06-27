@@ -57,6 +57,14 @@ abstract class BaseJsonController extends lmbController
       'and no appropriate template found');
   }
 
+  /**
+   * @return User
+   */
+  protected function _getUser()
+  {
+    return $this->toolkit->getUser();
+  }
+
   protected function _isLoggedUser()
   {
     return (null != $this->toolkit->getUser()) ? true : false;

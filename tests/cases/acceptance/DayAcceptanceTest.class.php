@@ -215,8 +215,14 @@ class DayAcceptanceTest extends odAcceptanceTestCase
    */
   function testShare()
   {
+    $day = $this->generator->day($this->main_user);
+    $day->save();
+
     $this->_loginAndSetCookie($this->main_user);
-    $this->post('day/share');
+    $res = $this->post('day/share', array('day_id' => $day->getId()))->result;
     $this->assertResponse(200);
+
+    $this->assertProperty($res, 'id');
+    $this->assertTrue($res->id);
   }
 }

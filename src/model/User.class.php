@@ -64,6 +64,11 @@ class User extends BaseModel
     return $results;
   }
 
+  function getFacebookUser()
+  {
+    return new FacebookUser($this);
+  }
+
   static function findByFbAccessToken($fb_access_token)
   {
     return User::findOne(array('fb_access_token = ?', $fb_access_token));
@@ -88,13 +93,13 @@ class User extends BaseModel
     unset($fb_results['timezone']);
     return $fb_results;
   }
+
   /**
    * @return odFacebook
    */
   protected function _getFacebook()
   {
-    lmb_assert_true($this->getFbAccessToken());
-    return lmbToolkit::instance()->getFacebook($this->getFbAccessToken());
+    return $this->getFacebookUser()->getFacebook();
   }
 
 

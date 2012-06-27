@@ -147,6 +147,15 @@ class DayController extends BaseJsonController
     if(!$this->request->hasPost())
       return $this->_answerWithError('Not a POST request');
 
-    return $this->_answerOk();
+    if(!$day = Day::findById($this->request->get('day_id')))
+      return $this->_answerWithError("Day not found by id");
+
+    $response = $this->_getUser()->getFacebookUser()->postOnWall(
+      $day->getTitle(),
+      'http://cs304502.userapi.com/v304502999/1500/ojzZ6YQmPe0.jpg',
+      $this->toolkit->getSiteUrl('/day/item/'.$day->getId())
+    );
+
+    return $this->_answerOk($response);
   }
 }
