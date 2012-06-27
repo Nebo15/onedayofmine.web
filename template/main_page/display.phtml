@@ -1,60 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset=utf-8>
-  <title>Welcome to API of OneDayOfMine.com</title>
+  <meta charset="utf-8">
+  <title>OneDayOfMine API</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!-- Le styles -->
+  <link href="http://current.bootstrapcdn.com/bootstrap-v204/css/bootstrap.css" rel="stylesheet">
+  <style>
+    body {
+      padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+    }
+  </style>
+  <link href="http://current.bootstrapcdn.com/bootstrap-v204/css/bootstrap-responsive.css" rel="stylesheet">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+</head>
+
 <body>
-<h1>Welcome to API of OneDayOfMine.com</h1>
 
-<h2>Ссылки</h2>
-<ul>
-  <li>
-    <a href="/api_doc/api.markdown">Документация на API</a>
-  </li>
-</ul>
+<div class="container">
 
-<h2>Тестирование API "ручками"</h2>
+  <h1>Welcome to API of OneDayOfMine.com</h1>
 
-Установка:
-<ul>
-  <li>
-    устанавливаем <a href="https://chrome.google.com/webstore/detail/fdmmgilgnpjigdojojpjoooidkmcomcm">приложение</a>
-    для хрома
-  </li>
-  <li>сохраняем и и мпортируем в него <a href="/api_doc/postman.json">файлик</a></li>
-  <li>в окружении(в центре шапки, справа от глазика) задаем переменную host = 'http://api.onedayofmine.com/' именно со
-    слешем в конце
-  </li>
-</ul>
-
-Аутентификация:
-<ul>
-  <li>выбираем Auth-Login и меняем параметр access_token на один из преведенных ниже</li>
-  <li>запускаем Auth-Login</li>
-  <li>теперь можно вызывать пользовательские методы</li>
-</ul>
-
-Пользователи для тестирования:
-<pre>
-<?php $users = odTestsTools::loadUsersInfo(); ?>
-</pre>
-{{list using="{$users}"}}
-<ul>
-  {{list:item}}
-  <li>
-    ID: {$item->id}
-    <ul>
-      <li>access_token: {$item->access_token}</li>
-      <li><a href="{$item->login_url}">login by user</a></li>
+  <div class="tabbable"> <!-- Only required for left/right tabs -->
+    <ul class="nav nav-tabs">
+      <li class="active"><a href="#tab1" data-toggle="tab">Документация</a></li>
+      <li><a href="#tab2" data-toggle="tab">Тестирование "ручками"</a></li>
     </ul>
-  </li>
-  {{/list:item}}
-  {{list:empty}}
-  <p>Facebook don't return test users. Damn!</p>
-  <img src="http://gifsforum.com/images/gif/F5/grand/rafresh-refresh-F5-eccbc87e4b5ce2fe28308fd9f2a7baf3-185.gif"/>
-  {{/list:empty}}
-</ul>
-{{/list}}
+    <div class="tab-content">
+      <div class="tab-pane active" id="tab1">
+        <h2 id="docs">Документация</h2>
 
+        <div id="docs-content">
+          <div class="alert alert-info">
+            Загружаю...
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane" id="tab2">
+        <h2 id="manual-tests">Тестирование API "ручками"</h2>
+
+        Установка:
+        <ul>
+          <li>
+            устанавливаем <a href="https://chrome.google.com/webstore/detail/fdmmgilgnpjigdojojpjoooidkmcomcm">приложение</a>
+            для хрома
+          </li>
+          <li>сохраняем и импортируем в него <a href="/api_doc/postman.json">файлик</a></li>
+          <li>в окружении(в центре шапки, справа от глазика) задаем переменную host = 'http://api.onedayofmine.com/'
+            именно со
+            слешем в конце
+          </li>
+        </ul>
+
+        Аутентификация:
+        <ul>
+          <li>выбираем Auth-Login и меняем параметр access_token на один из преведенных ниже</li>
+          <li>запускаем Auth-Login</li>
+          <li>теперь можно вызывать пользовательские методы</li>
+        </ul>
+
+        Пользователи для тестирования:
+        <?php
+        ob_start();
+        $users = odTestsTools::loadUsersInfo();
+        $out = ob_get_contents();
+        ob_end_clean();
+        ?>
+        {{list using="{$users}"}}
+        <ul>
+          {{list:item}}
+          <li>
+            ID: {$item->id}
+            <ul>
+              <li>access_token: {$item->access_token}</li>
+              <li><a href="{$item->login_url}">login by user</a></li>
+            </ul>
+          </li>
+          {{/list:item}}
+          {{list:empty}}
+          {$out}
+          <img
+            src="http://gifsforum.com/images/gif/F5/grand/rafresh-refresh-F5-eccbc87e4b5ce2fe28308fd9f2a7baf3-185.gif"/>
+          {{/list:empty}}
+        </ul>
+        {{/list}}
+      </div>
+    </div>
+  </div>
+
+
+</div>
+<!-- /container -->
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+<script src="http://current.bootstrapcdn.com/bootstrap-v204/js/bootstrap.js"></script>
+<script src="http://pagedown.googlecode.com/hg/Markdown.Converter.js"></script>
+<script type="text/javascript">
+  (function () {
+    $.get('/api_doc/api.markdown', function (data) {
+      var converter = new Markdown.Converter();
+      $("#docs-content").html(converter.makeHtml(data));
+    });
+
+  })();
+</script>
 </body>
 </html>
