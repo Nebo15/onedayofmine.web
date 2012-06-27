@@ -58,8 +58,23 @@ class MomentAcceptanceTest extends odAcceptanceTestCase
    */
   function testShare()
   {
+    $day = $this->generator->day($this->additional_user);
+    $day->save();
+
+    $moment = $this->generator->moment($day);
+    $moment->save();
+
+    $moment->attachImage($this->generator->image_name(), $this->generator->image());
+    $moment->save();
+
     $this->_loginAndSetCookie($this->main_user);
-    $this->post('moment/share');
+    $res = $this->post('moment/share', array('moment_id' => $moment->getId()))->result;
     $this->assertResponse(200);
+
+    var_dump($res);
+
+    $this->assertTrue($res);
+    $this->assertProperty($res, 'id');
+    $this->assertTrue($res->id);
   }
 }

@@ -22,7 +22,6 @@ class FacebookUser
   {
     //http://developers.facebook.com/docs/reference/api/post/
     return $this->getFacebook()->api("/me/feed", "post", array(
-      'type' => 'photo',
       'name' => $message,
       'picture' => $image_url,
       'link' => $link,

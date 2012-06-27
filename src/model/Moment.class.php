@@ -24,6 +24,13 @@ class Moment extends lmbActiveRecord
     );
   }
 
+  protected function _createValidator()
+  {
+    $validator = new lmbValidator();
+    $validator->addRequiredObjectRule('day', 'Day');
+    return $validator;
+  }
+
   function getImageUrl()
   {
     return $this->getImagePath();

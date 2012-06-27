@@ -49,8 +49,14 @@ class odObjectMother
   function moment(Day $day = null)
   {
     $moment = new Moment();
+    $moment->setDescription('description '.$this->string(125));
     $moment->setDay($day ?: $this->day());
     return $moment;
+  }
+
+  function momentWithImage(Day $day = null)
+  {
+
   }
 
   /**
@@ -80,7 +86,7 @@ class odObjectMother
     $conso = array("b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "r", "s", "t", "v", "w", "x", "y", "z");
     $vocal = array("a", "e", "i", "o", "u");
     $password = "";
-    srand((double)microtime() * 1000000);
+    srand((double) microtime() * 1000000);
     $max = $length / 2;
     for ($i = 1; $i <= $max; $i++) {
       $password .= $conso[rand(0, 19)];
@@ -92,5 +98,15 @@ class odObjectMother
   function integer($length = 4)
   {
     return rand(1, 10^($length+1) - 1);
+  }
+
+  function image()
+  {
+    return base64_decode('iVBORw0KGgoAAAANSUhEUgAAATkAAAE5AQMAAADRL8WyAAAAAXNSR0IArs4c6QAAAAZQTFRFAAAA////pdmf3QAAANZJREFUeNrt2jEKg0AQheERi5QeIUfxaPFoHiVHsEwhvjAyOAsmgRHS/a/axc9yecyqnTNqMxukyXpptk5azAwIBJbhTU1eDj0OjwCBwItwjiUQCPwzjFbrfbUBgcAS9A0QCLwIMw7j4D2kfeYCAoEFWLrQ8ExAILAI9SNr03dAILAIs+Kescl5rD2FQCCwCCXls4RZcREgEFiCkbE9hZH2IzIQCKxDSVlk8V7WX05qQCBwh3kV/7G5IkAgsA4lBbxLhz9fxQOBwBr89v/g4nC1CBAILMM34TG2uvMH+igAAAAASUVORK5CYII=');
+  }
+
+  function image_name()
+  {
+    return $this->string().'.png';
   }
 }

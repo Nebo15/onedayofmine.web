@@ -215,7 +215,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
    */
   function testShare()
   {
-    $day = $this->generator->day($this->main_user);
+    $day = $this->generator->day($this->additional_user);
     $day->save();
 
     $this->_loginAndSetCookie($this->main_user);
