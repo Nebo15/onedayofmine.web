@@ -1,59 +1,59 @@
 {
-  "id":"collection_4feb52015def1",
-  "name":"onedayofmine - 27.06.12 21:33:42",
-  "timestamp":1340822022,
+  "id":"collection_4fede14f24212",
+  "name":"onedayofmine - 29.06.12 20:09:39",
+  "timestamp":1340989779,
   "requests":[
     {
-      "collectionId":"collection_4feb52015def1",
-      "id":"request_4feb52024fdc0",
-      "name":"Moment - Update",
+      "collectionId":"collection_4fede14f24212",
+      "id":"request_4fede14f490da",
+      "name":"Auth - IsLoggedIn",
       "description":"",
-      "url":"{{host}}moment\/update",
+      "url":"{{host}}auth\/is_logged_in",
       "method":"POST",
       "headers":"",
       "data":"",
       "dataMode":"params",
       "timestamp":0,
-      "time":1340822018
+      "time":1340989775
     },
     {
-      "collectionId":"collection_4feb52015def1",
-      "id":"request_4feb52032e709",
-      "name":"Moment - Delete",
+      "collectionId":"collection_4fede14f24212",
+      "id":"request_4fede15000785",
+      "name":"Auth - Login",
       "description":"",
-      "url":"{{host}}moment\/delete",
+      "url":"{{host}}auth\/login\/",
+      "method":"POST",
+      "headers":"",
+      "data":"fb_access_token=AAAFnVo0zuqkBAGnPZC4q8oFwk1YQko9YYJSNi3MHdk5JxUY3735n3sq9a6Us3itsQmoAv6fUPQHMINH8wcEhxWKZCQLir9XraZCCzlALYWSnw7F3ZAGH",
+      "dataMode":"params",
+      "timestamp":0,
+      "time":1340989775
+    },
+    {
+      "collectionId":"collection_4fede14f24212",
+      "id":"request_4fede1536991c",
+      "name":"Auth - Logout",
+      "description":"",
+      "url":"{{host}}auth\/logout\/",
       "method":"POST",
       "headers":"",
       "data":"",
       "dataMode":"params",
       "timestamp":0,
-      "time":1340822019
+      "time":1340989779
     },
     {
-      "collectionId":"collection_4feb52015def1",
-      "id":"request_4feb520409807",
-      "name":"Moment - Comment",
+      "collectionId":"collection_4fede14f24212",
+      "id":"request_4fede1537e59f",
+      "name":"Auth - Logout",
       "description":"",
-      "url":"{{host}}moment\/comment",
+      "url":"{{host}}auth\/is_logged_in",
       "method":"POST",
       "headers":"",
-      "data":"moment_id=1&text=jexutucejelizokumusaxewumuwefawihohusejusomokupuvezonumuwekukaloxoricumosulavawijufusowizamejuzaritonamaduguzalexocihubebirekinufetolaxidamadujunenuhideborijakilafuhaledumewohefofiketicewepayuhaxifezefipufujerivuwikuxahikalohehirevorevufagoravinajijoxove",
+      "data":"",
       "dataMode":"params",
       "timestamp":0,
-      "time":1340822020
-    },
-    {
-      "collectionId":"collection_4feb52015def1",
-      "id":"request_4feb52061ecf3",
-      "name":"Moment - Share",
-      "description":"",
-      "url":"{{host}}moment\/share",
-      "method":"POST",
-      "headers":"",
-      "data":"moment_id=1",
-      "dataMode":"params",
-      "timestamp":0,
-      "time":1340822022
+      "time":1340989779
     }
   ]
 }

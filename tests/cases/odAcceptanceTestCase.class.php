@@ -37,7 +37,7 @@ abstract class odAcceptanceTestCase extends WebTestCase
       !property_exists($result, 'code')
     )
       $this->fail('Wrong response structure:'.PHP_EOL.$raw_response);
-    $this->_addRecordToPostmanWriter($url, $params, 'POST');
+    $this->_addRecordsToWriters($url, $params, 'POST', $result->result);
     return $result;
   }
 
@@ -52,11 +52,11 @@ abstract class odAcceptanceTestCase extends WebTestCase
       !property_exists($result, 'code')
     )
       $this->fail('Wrong response structure:'.PHP_EOL.$raw_response);
-    $this->_addRecordToPostmanWriter($url, $params, 'POST');
+    $this->_addRecordsToWriters($url, $params, 'POST', $result->result);
     return $result;
   }
 
-  protected function _addRecordToPostmanWriter($url_path, $params, $method)
+  protected function _addRecordsToWriters($url_path, $params, $method, $response)
   {
     $trace = debug_backtrace();
     $class_name = get_called_class();
@@ -65,10 +65,16 @@ abstract class odAcceptanceTestCase extends WebTestCase
     $method_ref = $class_ref->getMethod($method_name);
     $call_name = str_replace('AcceptanceTest', '', $class_name).' - '.str_replace('test', '', $method_name);
     $is_example = (bool) (false !== strpos($method_ref->getDocComment(), '@example'));
-    if($is_example)
-      lmbToolkit::instance()
-        ->getPostmanWriter()
-        ->addRequest($call_name, $url_path, $method, $params);
+
+    if(!$is_example)
+      return;
+
+    lmbToolkit::instance()
+      ->getPostmanWriter()
+      ->addRequest($call_name, $url_path, $method, $params);
+    lmbToolkit::instance()
+      ->getApiToMarkdownWriter()
+      ->addRequest($call_name, $url_path, $method, $params, $response);
   }
 
   protected function _loginAndSetCookie(User $user)

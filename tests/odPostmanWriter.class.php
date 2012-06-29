@@ -1,7 +1,7 @@
 <?php
 lmb_require('src/Json.class.php');
 
-class PostmanWriter
+class odPostmanWriter
 {
   protected $file;
   protected $collection_id;

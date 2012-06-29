@@ -1,7 +1,8 @@
 <?php
 lmb_require('limb/toolkit/src/lmbAbstractTools.class.php');
 lmb_require('src/odFacebook.class.php');
-lmb_require('src/PostmanWriter.class.php');
+lmb_require('tests/odPostmanWriter.class.php');
+lmb_require('tests/odApiToMarkdownWriter.class.php');
 
 class odTools extends lmbAbstractTools
 {
@@ -18,9 +19,14 @@ class odTools extends lmbAbstractTools
    */
   protected $fb_app_access_token;
   /**
-   * @var PostmanWriter
+   * @var odPostmanWriter
    */
   protected $postman_writer;
+
+  /**
+   * @var odApiToMarkDownWriter
+   */
+  protected $api_to_markdown_writer;
 
   /**
    * @return User
@@ -102,8 +108,18 @@ class odTools extends lmbAbstractTools
   function getPostmanWriter()
   {
     if(!$this->postman_writer)
-      $this->postman_writer = new PostmanWriter(lmb_env_get('APP_DIR').'/www/api_doc/postman.json');
+      $this->postman_writer = new odPostmanWriter(lmb_env_get('APP_DIR').'/www/api_doc/postman.json');
     return $this->postman_writer;
+  }
+
+  /**
+   * @return odApiToMarkDownWriter
+   */
+  function getApiToMarkdownWriter()
+  {
+    if(!$this->api_to_markdown_writer)
+      $this->api_to_markdown_writer = new odApiToMarkdownWriter(lmb_env_get('APP_DIR').'/www/api_doc/api_docs.markdown');
+    return $this->api_to_markdown_writer;
   }
 
   function getSiteUrl($path = '')
