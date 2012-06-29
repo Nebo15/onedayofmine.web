@@ -16,7 +16,6 @@ class UserAcceptanceTest extends odAcceptanceTestCase
     {
       $this->assertTrue($day->id);
       $this->assertTrue($day->title);
-      $this->assertTrue($day->img_url);
       $this->assertTrue($day->description);
       $this->assertTrue($day->ctime);
     }
@@ -36,7 +35,6 @@ class UserAcceptanceTest extends odAcceptanceTestCase
     {
       $this->assertTrue($day->id);
       $this->assertTrue($day->title);
-      $this->assertTrue($day->img_url);
       $this->assertTrue($day->description);
       $this->assertTrue($day->ctime);
     }
