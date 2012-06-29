@@ -101,7 +101,10 @@ class DayController extends BaseJsonController
       return $this->_answerWithError($errors);
 
     if(!$day = Day::findById($this->request->get('day_id')))
-      return $this->_answerWithError("Day not found by id");
+      return $this->_answerNotFound("Day not found by id");
+
+    if($day->getUserId() != $this->_getUser()->getId())
+      return $this->_answerNotFound("Day not found by id");
 
     if($day->getIsEnded())
       return $this->_answerWithError("Day is closed");

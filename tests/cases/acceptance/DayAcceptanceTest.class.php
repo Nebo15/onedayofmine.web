@@ -168,6 +168,22 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $this->assertProperty($res, 'ctime');
   }
 
+  function testAddMoment_WrongUser()
+  {
+    $day = $this->generator->day($this->additional_user);
+    $day->save();
+
+    $this->_loginAndSetCookie($this->main_user);
+    $this->post('day/add_moment', array(
+      'day_id' => $day_id = $day->getId(),
+      'description' => $description = $this->generator->string(200),
+      'image_name' => $image_path = 'foo/bar/example.png',
+      'image_content' => 'iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAAXNSR0IArs4c6QAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9wGEg47HYlSsqsAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAOUlEQVQI13VOQQ4AIAiC1v+/TAcKZysOTkQUApCEDpI11YH7EQdJ103jsBA68MG8dutUPrdIFp5xF8lAKftzc/YPAAAAAElFTkSuQmCC'
+    ))->result;
+
+    $this->assertResponse(404);
+  }
+
   /**
    *@example
    */
