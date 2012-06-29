@@ -269,4 +269,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $this->assertProperty($res, 'id');
     $this->assertTrue($res->id);
   }
+
+  //@TODO
+  function testSearch() {}
 }
