@@ -40,6 +40,9 @@ class UserAcceptanceTest extends odAcceptanceTestCase
     }
   }
 
+  //@TODO
+  function testDays_UserNotFound() {}
+
   /**
    *@example
    */
