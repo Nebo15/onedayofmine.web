@@ -74,6 +74,9 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
     $this->assertEqual(1, count($users));
   }
 
+  //@TODO
+  function testLogin_WrongAccessToken() {}
+
   function testLogout()
   {
     $this->post('auth/logout/');

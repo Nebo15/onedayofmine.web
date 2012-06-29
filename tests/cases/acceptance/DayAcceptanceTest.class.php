@@ -10,6 +10,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     odTestsTools::truncateTablesOf('Day', 'Moment', 'DayComment');
   }
 
+  //@TODO separate
   function testBegin_Negative()
   {
     $this->post('day/begin');
@@ -82,6 +83,9 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $this->assertEqual($moment2->getId(), $loaded_day->moments[1]->id);
   }
 
+  //@TODO
+  function testItem_NotFound() {}
+
   function testItem_DeletedDay()
   {
     $day = $this->generator->day();
@@ -115,18 +119,24 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $user2->save();
     $day2_id = $day2->getId();
 
+    $not_exist_day_id = rand(100, 1000);
+
     $this->_loginAndSetCookie($this->main_user);
-    $response = $this->get('day/item', array('id' => array($day1_id, $day2_id)));
+    $response = $this->get('day/item', array('id' => array($day1_id, $day2_id,$not_exist_day_id )));
     $loaded_days = $response->result;
 
     $this->assertResponse(200);
-    $this->assertEqual(array($day1_id, $day2_id), array_keys(get_object_vars($loaded_days)));
+    $this->assertEqual(
+      array($day1_id, $day2_id, $not_exist_day_id),
+      array_keys(get_object_vars($loaded_days))
+    );
     $this->assertEqual($day1->getId(), $loaded_days->$day1_id->id);
     $this->assertEqual($day1->getUserId(), $loaded_days->$day1_id->user_id);
     $this->assertEqual($day1->getMoments()->at(0)->getId(), $loaded_days->$day1_id->moments[0]->id);
     $this->assertEqual($day2->getId(), $loaded_days->$day2_id->id);
     $this->assertEqual($day2->getUserId(), $loaded_days->$day2_id->user_id);
     $this->assertEqual($day2->getMoments()->at(0)->getId(), $loaded_days->$day2_id->moments[0]->id);
+    $this->assertEqual(null, $loaded_days->$not_exist_day_id);
   }
 
   /**
@@ -142,6 +152,12 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     );
     $this->assertResponse(200);
   }
+
+  //@TODO
+  function testUpdate_NotFound() {}
+
+  //@TODO
+  function testUpdate_WrongUser() {}
 
   /**
    *@example
@@ -167,6 +183,9 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $this->assertEqual(0, $res->likes_count);
     $this->assertProperty($res, 'ctime');
   }
+
+  //@TODO
+  function testAddMoment_NotFound() {}
 
   function testAddMoment_WrongUser()
   {
@@ -204,6 +223,9 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $this->assertEqual($text, $res->text);
   }
 
+  //@TODO
+  function testComment_NotFound() {}
+
   /**
    *@example
    */
@@ -225,6 +247,12 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     ))->errors;
     $this->assertEqual(1, count($res));
   }
+
+  //@TODO
+  function testEnd_NotFound() {}
+
+  //@TODO
+  function testEnd_WrongUser() {}
 
   /**
    *@example
