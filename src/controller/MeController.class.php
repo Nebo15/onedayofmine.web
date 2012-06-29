@@ -2,7 +2,7 @@
 lmb_require('src/controller/BaseJsonController.class.php');
 lmb_require('src/model/User.class.php');
 
-class UserController extends BaseJsonController
+class MeController extends BaseJsonController
 {
   protected $_object_class_name = 'User';
   protected $check_auth = false;

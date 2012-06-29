@@ -2,7 +2,7 @@
 lmb_require('tests/cases/odAcceptanceTestCase.class.php');
 
 
-class MomentAcceptanceTest extends odAcceptanceTestCase
+class MomentsAcceptanceTest extends odAcceptanceTestCase
 {
   function setUp()
   {
@@ -22,8 +22,7 @@ class MomentAcceptanceTest extends odAcceptanceTestCase
     $moment->save();
 
     $this->_loginAndSetCookie($this->main_user);
-    $res = $this->post('moment/update', array(
-      'moment_id' => $moment->getId(),
+    $res = $this->post('moments/'.$moment->getId().'/update', array(
       'description' => $desc = $this->generator->string(255))
     )->result;
     $this->assertResponse(200);
@@ -49,7 +48,7 @@ class MomentAcceptanceTest extends odAcceptanceTestCase
     $moment->save();
 
     $this->_loginAndSetCookie($this->main_user);
-    $this->post('moment/delete', array('moment_id' => $moment->getId()));
+    $this->post('moments/'.$moment->getId().'/delete');
 
     $this->assertResponse(200);
     $this->assertFalse(Moment::findById($moment->getId()));
@@ -73,8 +72,7 @@ class MomentAcceptanceTest extends odAcceptanceTestCase
     $moment->save();
 
     $this->_loginAndSetCookie($this->main_user);
-    $res = $this->post('moment/comment', array(
-      'moment_id' => $moment->getId(),
+    $res = $this->post('moments/'.$moment->getId().'/comment', array(
       'text' => $text = $this->generator->string(255)
     ))->result;
 
@@ -87,29 +85,9 @@ class MomentAcceptanceTest extends odAcceptanceTestCase
   //@TODO
   function testComment_MomentNotFound() {}
 
-  /**
-   * @example
-   */
-  function testShare()
-  {
-    $day = $this->generator->day($this->additional_user);
-    $day->save();
-
-    $moment = $this->generator->moment($day);
-    $moment->save();
-
-    $moment->attachImage($this->generator->image_name(), $this->generator->image());
-    $moment->save();
-
-    $this->_loginAndSetCookie($this->main_user);
-    $res = $this->post('moment/share', array('moment_id' => $moment->getId()))->result;
-    $this->assertResponse(200);
-
-    $this->assertTrue($res);
-    $this->assertProperty($res, 'id');
-    $this->assertTrue($res->id);
-  }
-
   //@TODO
   function testShare_MomentNotFound() {}
+
+//TODO
+//GET /moments/<momentId>/like
 }

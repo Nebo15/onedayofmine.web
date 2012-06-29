@@ -13,15 +13,15 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   //@TODO separate
   function testBegin_Negative()
   {
-    $this->post('day/begin');
+    $this->post('days/begin');
     $this->assertResponse(400);
 
     $this->_loginAndSetCookie($this->main_user);
 
-    $this->get('day/begin');
+    $this->get('days/begin');
     $this->assertResponse(405);
 
-    $errors = $this->post('day/begin')->errors;
+    $errors = $this->post('days/begin')->errors;
     $this->assertResponse(400);
     $this->assertEqual('array', gettype($errors));
     $this->assertTrue(0 < count($errors));
@@ -44,7 +44,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
       'age' => $this->generator->integer(2),
       'type' => $this->generator->integer(1)
     );
-    $day = $this->post('day/begin', $params)->result;
+    $day = $this->post('days/begin', $params)->result;
     $this->assertResponse(200);
     $this->assertEqual($params['title'], $day->title);
     $this->assertEqual($params['description'], $day->description);
@@ -68,7 +68,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $day->save();
 
     $this->_loginAndSetCookie($this->main_user);
-    $response = $this->get('day/item', array('id' => $day->getId()));
+    $response = $this->get('days/'.$day->getId().'/item');
 
     $loaded_day = $response->result;
     $this->assertResponse(200);
@@ -94,7 +94,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $day->save();
 
     $this->_loginAndSetCookie($this->main_user);
-    $response = $this->get('day/item', array('id' => $day->getId()));
+    $response = $this->get('days/'.$day->getId().'/item');
 
     $response->result;
     $this->assertResponse(404);
@@ -122,7 +122,8 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $not_exist_day_id = rand(100, 1000);
 
     $this->_loginAndSetCookie($this->main_user);
-    $response = $this->get('day/item', array('id' => array($day1_id, $day2_id,$not_exist_day_id )));
+    $ids_string = implode(';', array($day1_id, $day2_id, $not_exist_day_id ));
+    $response = $this->get('days/'.$ids_string.'/item');
     $loaded_days = $response->result;
 
     $this->assertResponse(200);
@@ -141,12 +142,12 @@ class DayAcceptanceTest extends odAcceptanceTestCase
 
   /**
    *@example
+   *@TODO
    */
   function testUpdate()
   {
     $this->_loginAndSetCookie($this->main_user);
-    $this->post('day/update', array(
-        'day_id' => 42,
+    $this->post('days/42/update', array(
         'tags' => array('tag1', 'tag2'),
         'top_moment_id' => 111)
     );
@@ -168,8 +169,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $day->save();
 
     $this->_loginAndSetCookie($this->main_user);
-    $res = $this->post('day/add_moment', array(
-      'day_id' => $day_id = $day->getId(),
+    $res = $this->post('days/'.$day->getId().'/add_moment', array(
       'description' => $description = $this->generator->string(200),
       'image_name' => $image_path = 'foo/bar/example.png',
       'image_content' => 'iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAAXNSR0IArs4c6QAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9wGEg47HYlSsqsAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAOUlEQVQI13VOQQ4AIAiC1v+/TAcKZysOTkQUApCEDpI11YH7EQdJ103jsBA68MG8dutUPrdIFp5xF8lAKftzc/YPAAAAAElFTkSuQmCC'
@@ -177,7 +177,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
 
     $this->assertResponse(200);
     $this->assertEqual(1, $res->id);
-    $this->assertEqual($day_id, $res->day_id);
+    $this->assertEqual($day->getId(), $res->day_id);
     $this->assertEqual($description, $res->description);
     $this->assertProperty($res, 'img_url');
     $this->assertEqual(0, $res->likes_count);
@@ -193,8 +193,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $day->save();
 
     $this->_loginAndSetCookie($this->main_user);
-    $this->post('day/add_moment', array(
-      'day_id' => $day_id = $day->getId(),
+    $this->post('days/'.$day->getId().'/add_moment', array(
       'description' => $description = $this->generator->string(200),
       'image_name' => $image_path = 'foo/bar/example.png',
       'image_content' => 'iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAAXNSR0IArs4c6QAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9wGEg47HYlSsqsAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAOUlEQVQI13VOQQ4AIAiC1v+/TAcKZysOTkQUApCEDpI11YH7EQdJ103jsBA68MG8dutUPrdIFp5xF8lAKftzc/YPAAAAAElFTkSuQmCC'
@@ -212,8 +211,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $day->save();
 
     $this->_loginAndSetCookie($this->main_user);
-    $res = $this->post('day/comment', array(
-      'day_id' => $day->getId(),
+    $res = $this->post('days/'.$day->getId().'/comment', array(
       'text' => $text = $this->generator->string(255)
     ))->result;
 
@@ -235,12 +233,11 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $day->save();
 
     $this->_loginAndSetCookie($this->main_user);
-    $this->post('day/end', array('day_id' => $day->getId()))->result;
+    $this->post('days/'.$day->getId().'/end')->result;
 
     $this->assertResponse(200);
 
-    $res = $this->post('day/add_moment', array(
-      'day_id' => $day_id = $day->getId(),
+    $res = $this->post('days/'.$day->getId().'/add_moment', array(
       'description' => $this->generator->string(200),
       'image_name' => $this->generator->string(),
       'image_content' => $this->generator->string(),
@@ -263,7 +260,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $day->save();
 
     $this->_loginAndSetCookie($this->main_user);
-    $res = $this->post('day/share', array('day_id' => $day->getId()))->result;
+    $res = $this->post('days/'.$day->getId().'/share')->result;
     $this->assertResponse(200);
 
     $this->assertProperty($res, 'id');

@@ -2,7 +2,7 @@
 lmb_require('tests/cases/odAcceptanceTestCase.class.php');
 
 
-class ComplaintAcceptanceTest extends odAcceptanceTestCase
+class ComplaintsAcceptanceTest extends odAcceptanceTestCase
 {
   function setUp()
   {
@@ -19,8 +19,8 @@ class ComplaintAcceptanceTest extends odAcceptanceTestCase
     $day->save();
 
     $this->_loginAndSetCookie($this->main_user);
-    $res = $this->post('/complaint/create', array(
-      'day_id' => $day->getId(), 'text' => $text = $this->generator->string()
+    $res = $this->post('/complaints/'.$day->getId().'/create', array(
+      'text' => $text = $this->generator->string()
     ));
     $this->assertResponse(200);
 
@@ -35,14 +35,14 @@ class ComplaintAcceptanceTest extends odAcceptanceTestCase
   /**
    *@example
    */
-  function testGet()
+  function testDisplay()
   {
     $this->_loginAndSetCookie($this->main_user);
 
     $complaint = $this->generator->complaint();
     $complaint->save();
 
-    $res = $this->get('/complaint/get');
+    $res = $this->get('/complaints/');
 
     $this->assertResponse(200);
     $this->assertTrue(is_array($res->result));

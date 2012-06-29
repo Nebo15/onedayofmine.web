@@ -41,6 +41,8 @@ class lmbRoutes
       if(!$this->_properRequestMethod($route, $request_method))
         continue;
 
+
+
       return $this->_applyDispatchFilter($route, $result);
     }
 
@@ -206,7 +208,7 @@ class lmbRoutes
   {
     if(!lmb_env_get('LIMB_HTTP_OFFSET_PATH'))
       return 0;
-    
+
     $base_path = $uri->toString(array('protocol', 'user', 'password', 'host', 'port'))
                  . '/' . lmb_env_get('LIMB_HTTP_OFFSET_PATH');
     $base_path_uri = new lmbUri(rtrim($base_path, '/'));
@@ -227,7 +229,7 @@ class lmbRoutes
     $path = $route['path'];
     if(lmb_env_get('LIMB_HTTP_OFFSET_PATH', ''))
       $http_offset = '/' . lmb_env_get('LIMB_HTTP_OFFSET_PATH');
-    else 
+    else
       $http_offset = '';
 
     if(!$this->_routeParamsMeetRequirements($route, $params))

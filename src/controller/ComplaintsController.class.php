@@ -2,7 +2,7 @@
 lmb_require('src/controller/BaseJsonController.class.php');
 lmb_require('src/model/Complaint.class.php');
 
-class ComplaintController extends BaseJsonController
+class ComplaintsController extends BaseJsonController
 {
   protected $_object_class_name = 'Complaint';
 
@@ -11,13 +11,13 @@ class ComplaintController extends BaseJsonController
     if(!$this->request->hasPost())
       return $this->_answerNotPost();
 
-    if(!Day::findById($this->request->get('day_id')))
+    if(!Day::findById($this->request->id))
       return $this->_answerWithError("Day with id '".$this->request->get('day_id')."' not found");
 
     return $this->_importSaveAndAnswer(new Complaint(), array('day_id', 'text'));
   }
 
-  function doGet()
+  function doDisplay()
   {
     $answer = array();
     foreach(Complaint::find() as $complaint)

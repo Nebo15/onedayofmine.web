@@ -1,6 +1,9 @@
 <?php
 lmb_require('src/model/BaseModel.class.php');
 
+/**
+ * @static Day findById()
+ */
 class Day extends BaseModel
 {
   protected $_lazy_attributes = array('description');
