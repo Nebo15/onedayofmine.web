@@ -33,26 +33,25 @@ class odApiToMarkdownWriter
 
   function saveFile()
   {
-    $output = "# API examples #".PHP_EOL;
-    $output .= " Version: ".date('d.m.y H:i:s').PHP_EOL;
+    $n = PHP_EOL;
+    $nn = $n.$n;
+    $output = "# API examples #".$nn;
+    $output .= " Version: ".date('d.m.y H:i:s').$nn;
     foreach($this->requests as $request)
     {
-      $output .= PHP_EOL;
-      $output .= '## '.$request->name.' ##'.PHP_EOL;
-      $output .= 'Url: '.$request->url.PHP_EOL;
-      $output .= 'Method: '.$request->method.PHP_EOL;
+      $output .= '## '.$request->name.' ##'.$nn;
+      $output .= $request->method.' '.$request->url.$nn;
       if(count($request->data))
       {
-        $output .= 'Request: '.PHP_EOL;
-        $output .= '```'.Json::indent(json_encode($request->data)).PHP_EOL.'```'.PHP_EOL;
+        $output .= 'Request: '.$n;
+        $output .= '```json'.$n.Json::indent(json_encode($request->data)).$n.'```'.$nn;
       }
       else
       {
-        $output .= 'Request: empty'.PHP_EOL;
+        $output .= 'Request: `empty`'.$n;
       }
-      $output .= 'Response: '.PHP_EOL;
-      $output .= '```'.Json::indent(json_encode($request->response)).PHP_EOL.'```'.PHP_EOL;
-      $output .= PHP_EOL;
+      $output .= 'Response: '.$n;
+      $output .= '```'.$n.Json::indent(json_encode($request->response)).$n.'```'.$nn;
     }
     file_put_contents($this->file, $output);
   }
