@@ -8,7 +8,13 @@ class MomentController extends BaseJsonController
 
   function doUpdate()
   {
-    return $this->_answerOk(odMock::moment());
+    if(!$this->request->hasPost())
+      return $this->_answerWithError('Not a POST request');
+
+    if(!$moment = Moment::findById($this->request->get('moment_id')))
+      return $this->_answerWithError("Moment not found by id");
+
+    return $this->_importSaveAndAnswer($moment, array('description'));
   }
 
   function doShare()
@@ -23,8 +29,6 @@ class MomentController extends BaseJsonController
     $img_url = lmb_env_get('HOST_NAME').$moment->getImageUrl();
     $link = $this->toolkit->getSiteUrl('/day/item/'.$moment->getDay()->getId().'#'.$moment->getId());
     $response = $this->_getUser()->getFacebookUser()->postOnWall($message, $img_url, $link);
-
-    $response['data'] = array($message, $img_url, $link);
 
     return $this->_answerOk($response);
   }

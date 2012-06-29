@@ -59,6 +59,8 @@ class Moment extends lmbActiveRecord
 
   function getImagePath()
   {
+    if(!$this->getImageExt())
+      return '';
     if(!$this->getId())
       throw new lmbException("Can't create image path, because moment have no id");
     if(!$this->getDayId())

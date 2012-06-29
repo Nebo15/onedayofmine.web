@@ -15,9 +15,19 @@ class MomentAcceptanceTest extends odAcceptanceTestCase
    */
   function testUpdate()
   {
+    $day = $this->generator->day($this->main_user);
+    $day->save();
+
+    $moment = $this->generator->moment($day);
+    $moment->save();
+
     $this->_loginAndSetCookie($this->main_user);
-    $this->post('moment/update');
+    $res = $this->post('moment/update', array(
+      'moment_id' => $moment->getId(),
+      'description' => $desc = $this->generator->string(255))
+    )->result;
     $this->assertResponse(200);
+    $this->assertEqual($res->description, $desc);
   }
 
   /**
@@ -70,8 +80,6 @@ class MomentAcceptanceTest extends odAcceptanceTestCase
     $this->_loginAndSetCookie($this->main_user);
     $res = $this->post('moment/share', array('moment_id' => $moment->getId()))->result;
     $this->assertResponse(200);
-
-    var_dump($res);
 
     $this->assertTrue($res);
     $this->assertProperty($res, 'id');
