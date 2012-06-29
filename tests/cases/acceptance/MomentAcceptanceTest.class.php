@@ -27,18 +27,39 @@ class MomentAcceptanceTest extends odAcceptanceTestCase
       'description' => $desc = $this->generator->string(255))
     )->result;
     $this->assertResponse(200);
+
     $this->assertEqual($res->description, $desc);
+
+    $loaded_moment = Moment::findById($moment->getId());
+    $this->assertEqual($loaded_moment->getDescription(), $desc);
   }
+
+  //@TODO
+  function testUpdate_MomentNotFound() {}
 
   /**
    * @example
    */
   function testDelete()
   {
+    $day = $this->generator->day($this->main_user);
+    $day->save();
+
+    $moment = $this->generator->moment($day);
+    $moment->save();
+
     $this->_loginAndSetCookie($this->main_user);
-    $this->post('moment/delete');
+    $this->post('moment/delete', array('moment_id' => $moment->getId()));
+
     $this->assertResponse(200);
+    $this->assertFalse(Moment::findById($moment->getId()));
   }
+
+  //@TODO
+  function testDelete_WrongUser() {}
+
+  //@TODO
+  function testDelete_MomentNotFound() {}
 
   /**
    * @example
@@ -63,6 +84,9 @@ class MomentAcceptanceTest extends odAcceptanceTestCase
     $this->assertEqual($text, $res->text);
   }
 
+  //@TODO
+  function testComment_MomentNotFound() {}
+
   /**
    * @example
    */
@@ -85,4 +109,7 @@ class MomentAcceptanceTest extends odAcceptanceTestCase
     $this->assertProperty($res, 'id');
     $this->assertTrue($res->id);
   }
+
+  //@TODO
+  function testShare_MomentNotFound() {}
 }
