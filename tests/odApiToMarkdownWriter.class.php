@@ -40,10 +40,10 @@ class odApiToMarkdownWriter
     foreach($this->requests as $request)
     {
       $output .= '## '.$request->name.' ##'.$nn;
-      $output .= $request->method.' '.$request->url.$nn;
+      $output .= '`'.$request->method.' '.$request->url.'`'.$nn;
       if(count($request->data))
       {
-        $output .= 'Request: '.$n;
+        $output .= 'Request: '.$nn;
         $data = Json::indent(json_encode($request->data));
         $output .= '    '.str_replace($n, $n.'    ', $data).$nn;
       }
@@ -51,7 +51,7 @@ class odApiToMarkdownWriter
       {
         $output .= 'Request: `empty`'.$nn;
       }
-      $output .= 'Response: '.$n;
+      $output .= 'Response: '.$nn;
       $data = Json::indent(json_encode($request->response));
       $output .= '    '.str_replace($n, $n.'    ', $data).$nn;
     }
