@@ -118,7 +118,7 @@ class odTools extends lmbAbstractTools
   function getApiToMarkdownWriter()
   {
     if(!$this->api_to_markdown_writer)
-      $this->api_to_markdown_writer = new odApiToMarkdownWriter(lmb_env_get('APP_DIR').'/www/api_doc/api_docs.markdown');
+      $this->api_to_markdown_writer = new odApiToMarkdownWriter(lmb_env_get('APP_DIR').'/www/api_doc/examples.markdown');
     return $this->api_to_markdown_writer;
   }
 

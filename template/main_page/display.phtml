@@ -26,19 +26,26 @@
 
   <div class="tabbable tabs-left"> <!-- Only required for left/right tabs -->
     <ul class="nav nav-tabs">
-      <li class="active"><a href="#tab1" data-toggle="tab">Документация</a></li>
-      <li><a href="#tab2" data-toggle="tab">Тестирование "ручками"</a></li>
+      <li class="active"><a href="#tab-doc" data-toggle="tab">Документация</a></li>
+      <li><a href="#tab-examples" data-toggle="tab">Примеры вызовов</a></li>
+      <li><a href="#tab-testing" data-toggle="tab">Тестирование "ручками"</a></li>
     </ul>
     <div class="tab-content">
-      <div class="tab-pane active" id="tab1">
-
-        <div id="docs-content">
+      <div class="tab-pane active" id="tab-doc">
+        <div id="doc-content">
           <div class="alert alert-info">
             Загружаю...
           </div>
         </div>
       </div>
-      <div class="tab-pane" id="tab2">
+      <div class="tab-pane active" id="tab-examples">
+        <div id="examples-content">
+          <div class="alert alert-info">
+            Загружаю...
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane" id="tab-testing">
 
         <h3>Установка:</h3>
         <ul>
@@ -98,9 +105,14 @@
 <script src="http://pagedown.googlecode.com/hg/Markdown.Converter.js"></script>
 <script type="text/javascript">
   (function () {
-    $.get('/api_doc/api.markdown', function (data) {
+    $.get('/api_doc/doc.markdown', function (data) {
       var converter = new Markdown.Converter();
-      $("#docs-content").html(converter.makeHtml(data));
+      $("#doc-content").html(converter.makeHtml(data));
+    });
+
+    $.get('/api_doc/examples.markdown', function (data) {
+      var converter = new Markdown.Converter();
+      $("#examples-content").html(converter.makeHtml(data));
     });
 
   })();

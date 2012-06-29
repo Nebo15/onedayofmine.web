@@ -44,14 +44,16 @@ class odApiToMarkdownWriter
       if(count($request->data))
       {
         $output .= 'Request: '.$n;
-        $output .= '```json'.$n.Json::indent(json_encode($request->data)).$n.'```'.$nn;
+        $data = Json::indent(json_encode($request->data));
+        $output .= '    '.str_replace($n, $n.'    ', $data).$nn;
       }
       else
       {
-        $output .= 'Request: `empty`'.$n;
+        $output .= 'Request: `empty`'.$nn;
       }
       $output .= 'Response: '.$n;
-      $output .= '```'.$n.Json::indent(json_encode($request->response)).$n.'```'.$nn;
+      $data = Json::indent(json_encode($request->response));
+      $output .= '    '.str_replace($n, $n.'    ', $data).$nn;
     }
     file_put_contents($this->file, $output);
   }

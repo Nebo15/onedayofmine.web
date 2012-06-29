@@ -1,59 +1,46 @@
 {
-  "id":"collection_4fedebc8869ee",
-  "name":"onedayofmine - 29.06.12 20:54:20",
-  "timestamp":1340992460,
+  "id":"collection_4fedf1c7c5fe4",
+  "name":"onedayofmine - 29.06.12 21:19:54",
+  "timestamp":1340993994,
   "requests":[
     {
-      "collectionId":"collection_4fedebc8869ee",
-      "id":"request_4fedebc96a3e3",
-      "name":"Moment - Update",
+      "collectionId":"collection_4fedf1c7c5fe4",
+      "id":"request_4fedf1c8b1732",
+      "name":"User - Days_CurrentUser",
       "description":"",
-      "url":"{{host}}moment\/update",
-      "method":"POST",
-      "headers":"",
-      "data":"moment_id=1&description=tavihipopizoxamiherafufusutobedojuhojujukenekavohivihukuyarulotosajuxoyezinemezotogavozotorakewakabewunokadukasayuconajesujajacojazabizinahuguyaxavecapoduvicudizapupilarobusuzizoyayivalimimoyitilebuloninekivehokagagotodaharanajixogiforijixodewekayatajacu",
-      "dataMode":"params",
-      "timestamp":0,
-      "time":1340992457
-    },
-    {
-      "collectionId":"collection_4fedebc8869ee",
-      "id":"request_4fedebca30457",
-      "name":"Moment - Delete",
-      "description":"",
-      "url":"{{host}}moment\/delete",
+      "url":"{{host}}user\/days\/",
       "method":"POST",
       "headers":"",
       "data":"",
       "dataMode":"params",
       "timestamp":0,
-      "time":1340992458
+      "time":1340993992
     },
     {
-      "collectionId":"collection_4fedebc8869ee",
-      "id":"request_4fedebcb04351",
-      "name":"Moment - Comment",
+      "collectionId":"collection_4fedf1c7c5fe4",
+      "id":"request_4fedf1c982942",
+      "name":"User - Days_AnotherUser",
       "description":"",
-      "url":"{{host}}moment\/comment",
+      "url":"{{host}}user\/days\/1",
       "method":"POST",
       "headers":"",
-      "data":"moment_id=1&text=zunuwicuganusotosiwazuceyavapobirikicikerugemudanuhiyevuliwuhunukujilovapakazigilibewodehugiwomasosamifanicibeziwuvotuxaxapoxaxiwitecujilibivuxizogopatigedahasarekohogofefugamatoxewitaxudayohidofelecirenuhacatuhipapixoromuhonibuxanijakobiroluhayulunapuyu",
+      "data":"",
       "dataMode":"params",
       "timestamp":0,
-      "time":1340992459
+      "time":1340993993
     },
     {
-      "collectionId":"collection_4fedebc8869ee",
-      "id":"request_4fedebccf2687",
-      "name":"Moment - Share",
+      "collectionId":"collection_4fedf1c7c5fe4",
+      "id":"request_4fedf1cad74bb",
+      "name":"User - FiendsWithApp",
       "description":"",
-      "url":"{{host}}moment\/share",
+      "url":"{{host}}user\/friends_in_app",
       "method":"POST",
       "headers":"",
-      "data":"moment_id=1",
+      "data":"",
       "dataMode":"params",
       "timestamp":0,
-      "time":1340992460
+      "time":1340993994
     }
   ]
 }
