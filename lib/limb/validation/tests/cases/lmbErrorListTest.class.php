@@ -70,5 +70,13 @@ class lmbErrorListTest extends UnitTestCase
     $this->assertEqual($errors[0]['fields'], array('Field_1' => $new_field_names['passretype'], 'Field_2' => $new_field_names['pass']));
   }
 
+  function testGetReadable()
+  {
+    $list = new lmbErrorList();
+    $list->addError('foo');
+    $list[] = 'bar';
+    $this->assertEqual($list->getReadable(), array('foo', 'bar'));
+  }
+
 
 }

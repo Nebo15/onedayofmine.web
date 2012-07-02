@@ -2,9 +2,9 @@
 /*
  * Limb PHP Framework
  *
- * @link http://limb-project.com 
+ * @link http://limb-project.com
  * @copyright  Copyright &copy; 2004-2009 BIT(http://bit-creative.com)
- * @license    LGPL http://www.gnu.org/copyleft/lesser.html 
+ * @license    LGPL http://www.gnu.org/copyleft/lesser.html
  */
 lmb_require('limb/core/src/lmbCollection.class.php');
 lmb_require('limb/validation/src/lmbErrorMessage.class.php');
@@ -48,7 +48,7 @@ class lmbErrorList extends lmbCollection
   {
     return $this->isEmpty();
   }
-  
+
   /**
   * Returns all processed error list with formatted messages
   * @see lmbErrorList :: addError()
@@ -63,9 +63,14 @@ class lmbErrorList extends lmbCollection
     return $result;
   }
 
-  function renameFields($new_field_names) 
-  {   
+  function renameFields($new_field_names)
+  {
     foreach($this as $message)
-      $message->renameFields($new_field_names);      
+      $message->renameFields($new_field_names);
+  }
+
+  function offsetSet($offset, $value)
+  {
+    $this->addError($value);
   }
 }
