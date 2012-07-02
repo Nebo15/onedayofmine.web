@@ -22,6 +22,24 @@ class User extends BaseModel
       'days_comments' => array ('field' => 'user_id', 'class' => 'DayComment'),
       'moments_comments' => array ('field' => 'user_id', 'class' => 'MomentComment'),
     );
+    $this->_has_many_to_many = array(
+      'favourite_days' => array(
+        'field' => 'user_id',
+        'foreign_field' => 'day_id',
+        'table' => 'day_favourite',
+        'class' => 'Day',
+        'criteria' => '`day`.`is_deleted` = 0'),
+      'followers' => array(
+        'field' => 'user_id',
+        'foreign_field' => 'follower_user_id',
+        'table' => 'user_following',
+        'class' => 'User'),
+      'following' => array(
+        'field' => 'follower_user_id',
+        'foreign_field' => 'user_id',
+        'table' => 'user_following',
+        'class' => 'User'),
+    );
   }
 
   function setUserInfo($user_info)
@@ -36,6 +54,7 @@ class User extends BaseModel
     return $this->user_info_from_fb;
   }
 
+  //todo-high
   function loadUserInfoFromFb()
   {
     $raw = $this->_getFacebook()->makeQuery('SELECT
@@ -45,6 +64,7 @@ class User extends BaseModel
     $this->user_info_from_fb = $this->_mapFbInfo($raw[0]);
   }
 
+  //todo-high
   function getUserFriendsInApplicationFromFb()
   {
     $raw_infos = $this->_getFacebook()->makeQuery('SELECT
