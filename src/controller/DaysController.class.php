@@ -107,10 +107,10 @@ class DaysController extends BaseJsonController
     if(!$day = Day::findById($this->request->id))
       return $this->_answerOk(404, 'Day not found');
 
-    $day->setIsDelete(true);
+    $day->setIsDeleted(1);
     $day->save();
 
-    return $day;
+    return $this->_answerOk();
   }
 
   function doAddMoment()

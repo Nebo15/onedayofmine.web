@@ -269,8 +269,21 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   //@TODO
   function testEnd_WrongUser() {}
 
-  //@TODO
-  function testDelete() {}
+  /**
+   *@example
+   */
+  function testDelete()
+  {
+    $day = $this->generator->day($this->main_user);
+    $day->save();
+
+    $this->_loginAndSetCookie($this->main_user);
+    $this->post('days/'.$day->getId().'/delete')->result;
+    $this->assertResponse(200);
+
+    $loaded_day = Day::findById($day->getId());
+    $this->assertEqual(1, $loaded_day->getIsDeleted());
+  }
 
   //@TODO
   function testDelete_NotFound() {}

@@ -103,7 +103,7 @@ abstract class BaseJsonController extends lmbController
 
   protected function _answerUnauthorized()
   {
-    return $this->_answerWithError('Access allowed only for registered users', null, 403);
+    return $this->_answerWithError('Access allowed only for registered users', null, 401);
   }
 
   protected function _answerOk($result = null, $status = null, $code = 200)
