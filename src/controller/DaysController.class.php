@@ -167,7 +167,6 @@ class DaysController extends BaseJsonController
       return $this->_answerWithError($this->error_list->export());
   }
 
-  //@TODO image
   function doShare()
   {
     if(!$this->request->hasPost())
@@ -178,7 +177,7 @@ class DaysController extends BaseJsonController
 
     $response = $this->_getUser()->getFacebookUser()->postOnWall(
       $day->getTitle(),
-      'http://cs304502.userapi.com/v304502999/1500/ojzZ6YQmPe0.jpg',
+      $this->toolkit->getSiteUrl($day->getMoments()->at(0)->getImageUrl()),
       $this->toolkit->getSiteUrl('/day/item/'.$day->getId())
     );
 

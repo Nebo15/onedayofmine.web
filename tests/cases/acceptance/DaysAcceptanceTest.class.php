@@ -286,6 +286,9 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $day = $this->generator->day($this->additional_user);
     $day->save();
 
+    $moment = $this->generator->moment($day);
+    $moment->save();
+
     $this->_loginAndSetCookie($this->main_user);
     $res = $this->post('days/'.$day->getId().'/share')->result;
     $this->assertResponse(200);

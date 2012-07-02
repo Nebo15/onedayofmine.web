@@ -6,7 +6,7 @@ lmb_require('src/Json.class.php');
 abstract class BaseJsonController extends lmbController
 {
   /**
-   * @var odOneDayTools
+   * @var odTools
    */
   protected $toolkit;
   protected $check_auth = true;
