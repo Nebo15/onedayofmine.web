@@ -74,8 +74,15 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
     $this->assertEqual(1, count($users));
   }
 
-  //@TODO
-  function testLogin_WrongAccessToken() {}
+  function testLogin_WrongAccessToken()
+  {
+    $errors = $res = $this->post('auth/login/', array(
+      'fb_access_token' => 'Wrong access token'
+    ))->errors;
+    $this->assertResponse(403);
+    $this->assertEqual(1, count($errors));
+    $this->assertEqual('Invalid OAuth access token.', $errors[0]);
+  }
 
   function testLogout()
   {

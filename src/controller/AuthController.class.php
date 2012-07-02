@@ -15,11 +15,18 @@ class AuthController extends BaseJsonController
 
     if(!$user = User::findByFbAccessToken($fb_access_token))
     {
-      $user = new User();
-      $user->setFbAccessToken($fb_access_token);
-      $fb_user_info = $user->getUserInfo();
-      $user->setFbUid($fb_user_info['fb_uid']);
-      $user->save();
+      try
+      {
+        $user = new User();
+        $user->setFbAccessToken($fb_access_token);
+        $fb_user_info = $user->getUserInfo();
+        $user->setFbUid($fb_user_info['fb_uid']);
+        $user->save();
+      }
+      catch (FacebookApiException $e)
+      {
+        return $this->_answerWithError($e->getMessage(), null, 403);
+      }
     }
     else
     {
