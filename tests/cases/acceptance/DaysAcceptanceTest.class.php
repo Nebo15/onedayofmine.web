@@ -194,7 +194,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     ))->result;
 
     $this->assertResponse(200);
-    $this->assertEqual(1, $res->id);
+    $this->assertEqual($day->getMoments()->at(0)->getId(), $res->id);
     $this->assertEqual($day->getId(), $res->day_id);
     $this->assertEqual($description, $res->description);
     $this->assertProperty($res, 'img_url');
@@ -234,7 +234,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     ))->result;
 
     $this->assertResponse(200);
-    $this->assertEqual(1, $res->id);
+    $this->assertEqual($day->getComments()->at(0)->getId(), $res->id);
     $this->assertEqual($day->getId(), $res->day_id);
     $this->assertEqual($text, $res->text);
   }
@@ -269,9 +269,6 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   //@TODO
   function testEnd_WrongUser() {}
 
-  /**
-   *@example
-   */
   function testDelete()
   {
     $day = $this->generator->day($this->main_user);
@@ -279,6 +276,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
 
     $this->_loginAndSetCookie($this->main_user);
     $this->post('days/'.$day->getId().'/delete')->result;
+
     $this->assertResponse(200);
 
     $loaded_day = Day::findById($day->getId());

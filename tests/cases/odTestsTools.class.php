@@ -50,11 +50,9 @@ class odTestsTools
   {
     if(!is_array($model_classes))
       $model_classes = func_get_args();
-    $db = new lmbSimpleDb(lmbToolkit::instance()->getDefaultDbConnection());
     foreach($model_classes as $model_class)
     {
-      $model = new $model_class;
-      $db->truncateTable($model->getTableName());
+      $model_class::delete();
     }
   }
 

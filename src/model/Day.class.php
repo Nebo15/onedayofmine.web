@@ -16,6 +16,7 @@ class Day extends BaseModel
 
     $this->_has_many = array(
       'moments' => array( 'field' => 'day_id', 'class' => 'Moment'),
+      'comments' => array( 'field' => 'day_id', 'class' => 'DayComment'),
     );
   }
 

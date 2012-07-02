@@ -20,7 +20,7 @@ class UserTest extends odUnitTestCase
     $this->additional_user->save();
 
     $friends = $this->main_user->getUserFriendsInApplicationFromFb();
-    $this->assertEqual(1, count($friends));
-    $this->assertEqual($this->additional_user->getId(), $friends[0]->getId());
+    if($this->assertEqual(1, count($friends)))
+      $this->assertEqual($this->additional_user->getId(), $friends[0]->getId());
   }
 }

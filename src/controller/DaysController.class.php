@@ -69,7 +69,11 @@ class DaysController extends BaseJsonController
 
     $day->setUser($this->toolkit->getUser());
 
-    return $this->_importSaveAndAnswer($day, array('title', 'description', 'time_offset', 'occupation', 'age', 'type'));
+    $response = $this->_importSaveAndAnswer($day, array('title', 'description', 'time_offset', 'occupation', 'age', 'type'));
+
+//    $this->_getUser()->getFacebookUser()->beginDay($day);
+
+    return $response;
   }
 
   function doUpdate()
@@ -175,11 +179,22 @@ class DaysController extends BaseJsonController
     if(!$day = Day::findById($this->request->id))
       return $this->_answerWithError("Day not found by id");
 
-    $response = $this->_getUser()->getFacebookUser()->postOnWall(
-      $day->getTitle(),
-      $this->toolkit->getSiteUrl($day->getMoments()->at(0)->getImageUrl()),
-      $this->toolkit->getSiteUrl('/day/item/'.$day->getId())
-    );
+    $response = $this->_getUser()->getFacebookUser()->shareDay($day);
+
+    return $this->_answerOk($response);
+  }
+
+  function doLike()
+  {
+    if(!$this->request->hasPost())
+      return $this->_answerWithError('Not a POST request');
+
+    if(!$day = Day::findById($this->request->id))
+      return $this->_answerWithError("Day not found by id");
+
+    $response = $this->_getUser()
+                  ->getFacebookUser()
+                  ->likeDay($day);
 
     return $this->_answerOk($response);
   }

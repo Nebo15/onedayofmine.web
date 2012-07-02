@@ -77,8 +77,8 @@ class MomentsAcceptanceTest extends odAcceptanceTestCase
     ))->result;
 
     $this->assertResponse(200);
-    $this->assertEqual(1, $res->id);
-    $this->assertEqual($day->getId(), $res->moment_id);
+    $this->assertEqual($moment->getComments()->at(0)->getId(), $res->id);
+    $this->assertEqual($moment->getId(), $res->moment_id);
     $this->assertEqual($text, $res->text);
   }
 

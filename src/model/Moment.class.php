@@ -17,7 +17,7 @@ class Moment extends lmbActiveRecord
   protected function _defineRelations()
   {
     $this->_has_many = array (
-      'moment_comments' => array ('field' => 'moment_id', 'class' => 'MomentComment'),
+      'comments' => array ('field' => 'moment_id', 'class' => 'MomentComment'),
     );
     $this->_many_belongs_to = array (
       'day' => array ('field' => 'day_id', 'class' => 'Day')
