@@ -22,21 +22,24 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
     $res = $res = $this->post('auth/login/', array(
       'fb_access_token' => $this->main_user->getFbAccessToken()
     ))->result;
-    $this->assertTrue($res->sessid);
-    $this->assertTrue($res->user);
-    $this->assertTrue(is_object($res->user));
-    $this->assertTrue($res->user->id);
-    $this->assertTrue($res->user->ctime);
-    $this->assertTrue($res->user->utime);
-    $this->assertTrue($res->user->fb_uid);
-    $this->assertTrue($res->user->fb_profile_utime);
-    $this->assertTrue($res->user->fb_name);
-    $this->assertTrue($res->user->fb_profile_url);
-    $this->assertProperty($res->user, 'fb_timezone');
-    $this->assertTrue($res->user->sex);
-    $this->assertTrue($res->user->pic_small);
-    $this->assertTrue($res->user->pic_square);
-    $this->assertTrue($res->user->pic_big);
+    if($this->assertResponse(200))
+    {
+      $this->assertTrue($res->sessid);
+      $this->assertTrue($res->user);
+      $this->assertTrue(is_object($res->user));
+      $this->assertTrue($res->user->id);
+      $this->assertTrue($res->user->ctime);
+      $this->assertTrue($res->user->utime);
+      $this->assertTrue($res->user->fb_uid);
+      $this->assertTrue($res->user->fb_profile_utime);
+      $this->assertTrue($res->user->fb_name);
+      $this->assertTrue($res->user->fb_profile_url);
+      $this->assertProperty($res->user, 'fb_timezone');
+      $this->assertTrue($res->user->sex);
+      $this->assertTrue($res->user->pic_small);
+      $this->assertTrue($res->user->pic_square);
+      $this->assertTrue($res->user->pic_big);
+    }
   }
 
   function testLogin_AndSetCookie()

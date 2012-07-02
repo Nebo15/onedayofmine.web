@@ -113,6 +113,9 @@ abstract class BaseJsonController extends lmbController
 
   protected function _answerWithError($errors, $status = null, $code = 400)
   {
+    if($errors instanceof lmbErrorList)
+      $errors = $errors->getReadable();
+
     if(!is_array($errors))
     {
       if(!$errors)

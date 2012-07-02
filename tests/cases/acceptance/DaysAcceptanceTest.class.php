@@ -87,18 +87,19 @@ class DayAcceptanceTest extends odAcceptanceTestCase
 
     $this->_loginAndSetCookie($this->main_user);
     $response = $this->get('days/'.$day->getId().'/item');
-
-    $loaded_day = $response->result;
-    $this->assertResponse(200);
-    $this->assertEqual($day->getId(), $loaded_day->id);
-    $this->assertEqual($day->getTitle(), $loaded_day->title);
-    $this->assertEqual($day->getDescription(), $loaded_day->description);
-    $this->assertEqual($day->getTimeOffset(), $loaded_day->time_offset);
-    $this->assertEqual($day->getLikesCount(), $loaded_day->likes_count);
-    $this->assertEqual($day->getCreateTime(), $loaded_day->ctime);
-    $this->assertEqual($day->getIsEnded(), $loaded_day->is_ended);
-    $this->assertEqual($moment1->getId(), $loaded_day->moments[0]->id);
-    $this->assertEqual($moment2->getId(), $loaded_day->moments[1]->id);
+    if($this->assertResponse(200))
+    {
+      $loaded_day = $response->result;
+      $this->assertEqual($day->getId(), $loaded_day->id);
+      $this->assertEqual($day->getTitle(), $loaded_day->title);
+      $this->assertEqual($day->getDescription(), $loaded_day->description);
+      $this->assertEqual($day->getTimeOffset(), $loaded_day->time_offset);
+      $this->assertEqual($day->getLikesCount(), $loaded_day->likes_count);
+      $this->assertEqual($day->getCreateTime(), $loaded_day->ctime);
+      $this->assertEqual($day->getIsEnded(), $loaded_day->is_ended);
+      $this->assertEqual($moment1->getId(), $loaded_day->moments[0]->id);
+      $this->assertEqual($moment2->getId(), $loaded_day->moments[1]->id);
+    }
   }
 
   //todo-
@@ -193,13 +194,15 @@ class DayAcceptanceTest extends odAcceptanceTestCase
       'image_content' => 'iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAAXNSR0IArs4c6QAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9wGEg47HYlSsqsAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAOUlEQVQI13VOQQ4AIAiC1v+/TAcKZysOTkQUApCEDpI11YH7EQdJ103jsBA68MG8dutUPrdIFp5xF8lAKftzc/YPAAAAAElFTkSuQmCC'
     ))->result;
 
-    $this->assertResponse(200);
-    $this->assertEqual($day->getMoments()->at(0)->getId(), $res->id);
-    $this->assertEqual($day->getId(), $res->day_id);
-    $this->assertEqual($description, $res->description);
-    $this->assertProperty($res, 'img_url');
-    $this->assertEqual(0, $res->likes_count);
-    $this->assertProperty($res, 'ctime');
+    if($this->assertResponse(200))
+    {
+      $this->assertEqual($day->getMoments()->at(0)->getId(), $res->id);
+      $this->assertEqual($day->getId(), $res->day_id);
+      $this->assertEqual($description, $res->description);
+      $this->assertProperty($res, 'img_url');
+      $this->assertEqual(0, $res->likes_count);
+      $this->assertProperty($res, 'ctime');
+    }
   }
 
   //todo-low
@@ -233,10 +236,12 @@ class DayAcceptanceTest extends odAcceptanceTestCase
       'text' => $text = $this->generator->string(255)
     ))->result;
 
-    $this->assertResponse(200);
-    $this->assertEqual($day->getComments()->at(0)->getId(), $res->id);
-    $this->assertEqual($day->getId(), $res->day_id);
-    $this->assertEqual($text, $res->text);
+    if($this->assertResponse(200))
+    {
+      $this->assertEqual($day->getComments()->at(0)->getId(), $res->id);
+      $this->assertEqual($day->getId(), $res->day_id);
+      $this->assertEqual($text, $res->text);
+    }
   }
 
   //todo-

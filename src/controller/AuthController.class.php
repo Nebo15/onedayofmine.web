@@ -13,25 +13,12 @@ class AuthController extends BaseJsonController
     if(!$fb_access_token = $this->request->get('fb_access_token'))
       return $this->_answerOk('fb_access_token not given', 412);
 
+    if(!$this->toolkit->getFacebook($fb_access_token)->validateAccessToken($this->error_list))
+      return $this->_answerWithError($this->error_list, null, 403);
+
     if(!$user = User::findByFbAccessToken($fb_access_token))
-    {
-      try
-      {
-        $user = new User();
-        $user->setFbAccessToken($fb_access_token);
-        $fb_user_info = $user->getUserInfo();
-        $user->setFbUid($fb_user_info['fb_uid']);
-        $user->save();
-      }
-      catch (FacebookApiException $e)
-      {
-        return $this->_answerWithError($e->getMessage(), null, 403);
-      }
-    }
-    else
-    {
-      $user->loadUserInfoFromFb();
-    }
+      $user = $this->_register($fb_access_token);
+
     $this->toolkit->setUser($user);
 
     $answer = new stdClass();
@@ -39,6 +26,16 @@ class AuthController extends BaseJsonController
     $answer->user = $user->exportForApi();
 
     return $this->_answerOk($answer);
+  }
+
+  function _register($fb_access_token)
+  {
+    $user = new User();
+    $user->setFbAccessToken($fb_access_token);
+    $fb_user_info = $user->getUserInfo();
+    $user->setFbUid($fb_user_info['fb_uid']);
+    $user->save();
+    return $user;
   }
 
   function doIsLoggedIn()

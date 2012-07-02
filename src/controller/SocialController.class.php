@@ -8,8 +8,9 @@ class SocialController extends BaseJsonController
   {
     if(!$this->toolkit->getUser())
       $this->_answerUnauthorized();
+    
     $friends = array();
-    foreach($this->toolkit->getUser()->getUserFriendsInApplicationFromFb() as $friend)
+    foreach($this->toolkit->getUser()->getFacebookUser()->getUserFriendsInApplication() as $friend)
       $friends[] = $friend->exportForApi();
 
     return $this->_answerOk($friends);
