@@ -10,6 +10,24 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     odTestsTools::truncateTablesOf('Day', 'Moment', 'DayComment');
   }
 
+  /**
+   *@example
+   */
+  function testCurrentUserDays()
+  {
+    $this->_loginAndSetCookie($this->main_user);
+
+    $days = $this->get('my/days/')->result;
+    $this->assertResponse(200);
+    foreach($days as $day)
+    {
+      $this->assertTrue($day->id);
+      $this->assertTrue($day->title);
+      $this->assertTrue($day->description);
+      $this->assertTrue($day->ctime);
+    }
+  }
+
   //@TODO separate
   function testBegin_Negative()
   {
@@ -251,6 +269,15 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   //@TODO
   function testEnd_WrongUser() {}
 
+  //@TODO
+  function testDelete() {}
+
+  //@TODO
+  function testDelete_NotFound() {}
+
+  //@TODO
+  function testDelete_WrongUser() {}
+
   /**
    *@example
    */
@@ -268,5 +295,18 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   }
 
   //@TODO
+  function testLike() {}
+
+  //@TODO
   function testSearch() {}
+
+  //@TODO
+  function testFollowing() {}
+
+  //@TODO
+  function testNew() {}
+
+  //@TODO
+  function testInteresting() {}
+
 }

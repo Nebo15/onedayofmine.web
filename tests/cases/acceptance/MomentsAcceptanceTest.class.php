@@ -86,8 +86,5 @@ class MomentsAcceptanceTest extends odAcceptanceTestCase
   function testComment_MomentNotFound() {}
 
   //@TODO
-  function testShare_MomentNotFound() {}
-
-//TODO
-//GET /moments/<momentId>/like
+  function testLike() {}
 }

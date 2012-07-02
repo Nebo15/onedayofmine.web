@@ -1,6 +1,6 @@
 # API examples #
 
- Version: 29.06.12 23:26:47
+ Version: 02.07.12 12:09:55
 
 ## Auth - IsLoggedIn ##
 
@@ -19,15 +19,15 @@ Response:
 Request: 
 
     {
-      "fb_access_token":"AAAFnVo0zuqkBADJUOZCLgTXLZCJWpfrZA8wv3g9ZATMKsnkRV5yaQPXmS1ZCiSMJxaC3EjKsEvKk0HRrVZBaGwRqLV1hK8LaivOZAdkcnThVUbTceEOGVpG"
+      "fb_access_token":"AAAFnVo0zuqkBACCdgjAA4iM5W53ynzvvfjLBSOFgKYXR1AKSgKyhHard8xi5ej36VxHtsdrcvwBqUvptGRDZAgPDgBGz1pNMvUPCZBlyXQuuFGsDHM"
     }
 
 Response: 
 
     {
-      "sessid":"jpmr9m0kbo48bcqdk2gm5seb14",
+      "sessid":"tn8foglc3bd65ke7replmddch1",
       "user":{
-        "ctime":1341001582,
+        "ctime":1341220173,
         "fb_name":"foo",
         "fb_profile_url":"http:\/\/www.facebook.com\/profile.php?id=100004010804750",
         "fb_profile_utime":1340810718,
@@ -38,7 +38,7 @@ Response:
         "pic_small":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v1\/yP\/r\/FdhqUFlRalU.jpg",
         "pic_square":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v2\/y9\/r\/IB7NOFmPw2a.gif",
         "sex":"female",
-        "utime":1341001582
+        "utime":1341220173
       }
     }
 
@@ -49,15 +49,15 @@ Response:
 Request: 
 
     {
-      "text":"lepoji"
+      "text":"yoheze"
     }
 
 Response: 
 
     {
       "day_id":null,
-      "text":"lepoji",
-      "ctime":1341001586,
+      "text":"yoheze",
+      "ctime":1341220177,
       "id":1
     }
 
@@ -73,9 +73,21 @@ Response:
       {
         "id":1,
         "day_id":1,
-        "ctime":1341001587,
-        "text":"xikenatosapinovivarehudanirawaronazagosuvekezavohibilasupecijoduvaxawixiwewukorobofivukefivigujubezuwukodemixafutejifoxefoxerekomelefuyeciwumuwejavixoxajoluzopidateworubiwikotowifodaviweluzuhazuluratolifugunalotivibosilolovesafeguyomamozuseseyixucilihufafugedihadodikapamemisekoyogapigohidiyimadirisapakapakuwesalenocudagarodojohuxufexokeremejuruporoxuwipugusixijawatekelutovepebeducukowinicibelunacupitehiruxocupaxuwonegiweyefimekavajaruyiramagedacomegeranorubabudeyojuhuxodacefaxonaxagiyukuxevutotanuzetanujobehijasipiku"
+        "ctime":1341220178,
+        "text":"tesizagopucogowopeketusuberefisuvelolomarivufiroyadoyomubafasucigigoforohiribegujenedagadikuhihizifaguyigiyexadamolotovucarepuxilasowodagahafigodojujasigewugokotahisesuluzolehixoketasujivifaguginuxawefoyizaduvicinolugelejojicumubehabavukuwajusuratujagotifuloviyarugeyihovorimenacuhemaxowejotesefuvanaveretarehocicipuhigibuwojuracadulogaxukaritobesetuxoxomesajohipoguvatagerubohoxapowimesaluyolikojatajukuyenecihogadokoxuvonehuxobirenuhikusihucibafizagowozaputolezujekodafibeyalamifofulacuzoridojiyofawemupiyanelobiritoloma"
       }
+    ]
+
+## Day - CurrentUserDays ##
+
+`POST {{host}}my/days/`
+
+Request: `empty`
+
+Response: 
+
+    [
+      
     ]
 
 ## Day - Begin ##
@@ -85,12 +97,12 @@ Response:
 Request: 
 
     {
-      "title":"kuso",
-      "description":"bihahice",
-      "time_offset":1341001589,
-      "occupation":"royuha",
-      "age":7,
-      "type":2
+      "title":"waho",
+      "description":"pivireko",
+      "time_offset":1341220181,
+      "occupation":"goxewe",
+      "age":2,
+      "type":3
     }
 
 Response: 
@@ -98,15 +110,15 @@ Response:
     {
       "id":1,
       "user_id":1,
-      "title":"kuso",
-      "description":"bihahice",
-      "time_offset":"1341001589",
-      "occupation":"royuha",
-      "age":"7",
-      "type":"2",
+      "title":"waho",
+      "description":"pivireko",
+      "time_offset":"1341220181",
+      "occupation":"goxewe",
+      "age":"2",
+      "type":"3",
       "likes_count":null,
-      "ctime":1341001589,
-      "utime":1341001589,
+      "ctime":1341220181,
+      "utime":1341220181,
       "is_ended":null
     }
 
@@ -121,39 +133,39 @@ Response:
     {
       "id":1,
       "user_id":1,
-      "title":"miravisinokaxijabatazipo",
-      "description":"nubusicekabewenoximutenipabikuzututimutuxodocojugutugeluhijokenajenucesuzosalazoworazaxenexunizusisovesodevijogalugiyasijihubetovekisajukakowiyemasehevizalukasanatedabidehuzafijuwihodetigatuhezulabirawucobegefayiraserukewonusuyokiwakuzigatefowutidemisefe",
+      "title":"secoxinexayuwoxiyezezola",
+      "description":"fefeneliyurukecububebeguhegupicotezeresihelopinokiwewahalibuyatoloyadirexacinicuduhuzicecakagasowosugejajeruzovarabirayogetikidabucedikiwujosaxeduwocomebevirupovozucejuhotutigunapiwaxuhohupupenigoxinageduwewekezeluconepafamotojihutidumudejisevafuvofevene",
       "time_offset":0,
-      "occupation":"todabuyuvajudijixilugoke",
-      "age":3,
-      "type":10,
+      "occupation":"menijizotisojulugatafoca",
+      "age":5,
+      "type":9,
       "likes_count":0,
-      "ctime":1341001589,
-      "utime":1341001589,
+      "ctime":1341220181,
+      "utime":1341220181,
       "is_ended":null,
       "moments":[
         {
           "id":1,
           "day_id":1,
-          "description":"description macepuhusiyujetacuhubibofeyanazugagubiroxinexekudowaduvecojoverukuwijidezoluyuwamogomuxiseginulusekasigogonamegubipilicasene",
+          "description":"description nidimopirotuxefujikenolasukayipizowiliyadozuxaxepelayufositocecayunejilidelanehapogiredeyuyaducaxoledutegajolixuhamunifilami",
           "img_url":"",
           "likes_count":0,
-          "ctime":1341001589
+          "ctime":1341220181
         },
         {
           "id":2,
           "day_id":1,
-          "description":"description wikanagatusegibalobekuficiwaguhaloduwecifoyehunonizumalitesudubiraminibojuciwohefejolofazufawesilaxusuruwopokucidefidevaguga",
+          "description":"description fimapugofapohehagefayagofufowucakifumesomelopowocawadasecuzuwayerafamutudatoxinupezolobimakecenokovupivosilibulihejobefikixi",
           "img_url":"",
           "likes_count":0,
-          "ctime":1341001589
+          "ctime":1341220181
         }
       ]
     }
 
 ## Day - Item_Many ##
 
-`POST {{host}}days/1;2;838/item`
+`POST {{host}}days/1;2;895/item`
 
 Request: `empty`
 
@@ -163,52 +175,52 @@ Response:
       "1":{
         "id":1,
         "user_id":1,
-        "title":"josaxeluyirixosepurireyo",
-        "description":"xapuvujovojuwaxulukexokujicawogovonipujerofisajayolojuvojuvanuwevewedatovugiyipufurivefafugoyazojubizohopidizojatutihuriwufoxakezituduromofimiralesogedadevalaheruhozulisoxadikixagajefipumafokotonorudepamonuhiyipewotiteluzotomelagikupunatupojaxaxinowupote",
+        "title":"pebipojifiveyonokarawora",
+        "description":"neyadesipevoracusopugiremafogigoxayukikuyasigokumuvolizumaposoliyepeyuhudukesofasuxaluzuzipohugejonevucuvigidirokixujusekezoheyibiwohurajumihahopalubafikadokageladobosepawugamohusecutibudiwevemuyirowewocatiwamijikabiwawoniyumulanejexejozarisubazamofemoye",
         "time_offset":0,
-        "occupation":"mecirufifitawewohelokano",
-        "age":4,
-        "type":4,
+        "occupation":"kumewofinebuxenidatonota",
+        "age":8,
+        "type":11,
         "likes_count":0,
-        "ctime":1341001591,
-        "utime":1341001591,
+        "ctime":1341220183,
+        "utime":1341220183,
         "is_ended":null,
         "moments":[
           {
             "id":1,
             "day_id":1,
-            "description":"description dowupadomefasegamahisevacagapicokupuzoriyuridusizudohuseyulinifukovemiwegizekoyerazuzohupokagiyojobodufejatowobivukororalaho",
+            "description":"description bujoxuyogevunenesanivoniducojevehafazaxelogubogoxohomocotahamalodiyasuhamibigegabivihudayecilificaroxuweluxodavapirukoyefuti",
             "img_url":"",
             "likes_count":0,
-            "ctime":1341001591
+            "ctime":1341220183
           }
         ]
       },
       "2":{
         "id":2,
         "user_id":2,
-        "title":"reloruyosaberegopewohosu",
-        "description":"heguzigefanahusodajicotuyihemotobusulujizuseteyukekizahumifufutaxefehixehimuxewerasohupomotoriwiwuvalojofosafihutumuxatewibixuzowoxelazizosagubuxixopodecawubosunidutanovaxuduxakowukujidalazaziramedudufuxeyokepahudilevukoyegikozisalucegucohovirudaduxirowu",
+        "title":"xohobicetuliribozigepepo",
+        "description":"zajudicegezufevavejabejumowubesunayomayojusifinusudohirofisewefekazufuniweyusiyejabinohoduyukagohepidaxujuyuhujiyedibidalacofeninawofopinimujukegisezukexifavoleveyuzilizujevopuhegecorucozumicesafoniginivehegirivobirafoyobaxobakirozafokidozocomafafesabocu",
         "time_offset":0,
-        "occupation":"seyubixuwomiwixakewivowa",
-        "age":7,
-        "type":3,
+        "occupation":"mizonijijidumadurufaraxi",
+        "age":1,
+        "type":7,
         "likes_count":0,
-        "ctime":1341001591,
-        "utime":1341001591,
+        "ctime":1341220183,
+        "utime":1341220183,
         "is_ended":null,
         "moments":[
           {
             "id":2,
             "day_id":2,
-            "description":"description xidicayujozusovesuyopizenuyaserisozowutanobakukavevewopepinevatixogoruwaruhusocizuvopedawojivabovejifanuzuwomucituhefelaboru",
+            "description":"description lajufanodofexujakerulowixomonewujaxigedeberuhuyokinojehazoxicomexewatumoharicificogecipahipegatakiganoxovihubigafineyahapuno",
             "img_url":"",
             "likes_count":0,
-            "ctime":1341001591
+            "ctime":1341220183
           }
         ]
       },
-      "838":null
+      "895":null
     }
 
 ## Day - Update ##
@@ -236,7 +248,7 @@ Response:
 Request: 
 
     {
-      "description":"fakohivowalufijocezoxalimumurogowopagexapebovemutiriradaxixihajatuguhazulapakacaposatohokafohiwakayofunizavefulopayeyaxejayonoruvipumanigevidedojazegunixifefojujuyubihetasuhunoxiwajesevururuzuwuwukafa",
+      "description":"saweviyuwejodenenipacayufigeduroyibobunufupedapopawojorijuxirigizehuguwisetumemametocejifaxutakojotimizayozezilivafumigosamifudimucujadetaropadegedowejiluxirucawabagakuhurubodebeyurejacarofowaxudabibe",
       "image_name":"foo\/bar\/example.png",
       "image_content":"iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAAXNSR0IArs4c6QAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9wGEg47HYlSsqsAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAOUlEQVQI13VOQQ4AIAiC1v+\/TAcKZysOTkQUApCEDpI11YH7EQdJ103jsBA68MG8dutUPrdIFp5xF8lAKftzc\/YPAAAAAElFTkSuQmCC"
     }
@@ -246,10 +258,10 @@ Response:
     {
       "id":1,
       "day_id":1,
-      "description":"fakohivowalufijocezoxalimumurogowopagexapebovemutiriradaxixihajatuguhazulapakacaposatohokafohiwakayofunizavefulopayeyaxejayonoruvipumanigevidedojazegunixifefojujuyubihetasuhunoxiwajesevururuzuwuwukafa",
+      "description":"saweviyuwejodenenipacayufigeduroyibobunufupedapopawojorijuxirigizehuguwisetumemametocejifaxutakojotimizayozezilivafumigosamifudimucujadetaropadegedowejiluxirucawabagakuhurubodebeyurejacarofowaxudabibe",
       "img_url":"\/media\/1\/day\/1\/3be2bf26d78895e6327c58ab29561c9217e3caa0.png",
       "likes_count":null,
-      "ctime":1341001593
+      "ctime":1341220185
     }
 
 ## Day - Comment ##
@@ -259,41 +271,41 @@ Response:
 Request: 
 
     {
-      "text":"vomayomejopakukotorehukobixegekacudunihuhuyorekebupewuyupofudiwalufuniwuhomubuhawukoxemicohagakobiriyikafudasigihidaxorujufizigucupuhufiverisuzumafevojariribupatacucelupaheyegeketafagonukitusicolabuziyewunafulubozelicocovogumobimucehugoyisejozezewafuxusa"
+      "text":"tusonanixacijuwovocicopasofelokapavaderulolorepiyobagibujegoyixiroroyetezafilozelukonipururilibadovaxilurilajikololufuwuwikeyegabucumivacefisifajicipuhelopebukawibeyulacilodixifuyoxadeworupaxemutesakotumulejihejalimefabodudiwuzizehodopicudedinixavadovetu"
     }
 
 Response: 
 
     {
-      "text":"vomayomejopakukotorehukobixegekacudunihuhuyorekebupewuyupofudiwalufuniwuhomubuhawukoxemicohagakobiriyikafudasigihidaxorujufizigucupuhufiverisuzumafevojariribupatacucelupaheyegeketafagonukitusicolabuziyewunafulubozelicocovogumobimucehugoyisejozezewafuxusa",
+      "text":"tusonanixacijuwovocicopasofelokapavaderulolorepiyobagibujegoyixiroroyetezafilozelukonipururilibadovaxilurilajikololufuwuwikeyegabucumivacefisifajicipuhelopebukawibeyulacilodixifuyoxadeworupaxemutesakotumulejihejalimefabodudiwuzizehodopicudedinixavadovetu",
       "day":{
         "id":1,
         "user_id":1,
-        "title":"pobikuxayuyidonacamehunu",
-        "occupation":"saxuboberowunawewozaxedu",
-        "age":5,
-        "type":1,
+        "title":"zugevohoredotireheleyuzo",
+        "occupation":"tuwigisafipobozucukavone",
+        "age":6,
+        "type":6,
         "is_ended":null,
         "time_offset":0,
         "likes_count":0,
         "is_deleted":0,
-        "ctime":1341001594,
-        "utime":1341001594,
+        "ctime":1341220186,
+        "utime":1341220186,
         "cip":0
       },
       "user":{
         "id":1,
         "fb_uid":"100004010804750",
-        "fb_access_token":"AAAFnVo0zuqkBADJUOZCLgTXLZCJWpfrZA8wv3g9ZATMKsnkRV5yaQPXmS1ZCiSMJxaC3EjKsEvKk0HRrVZBaGwRqLV1hK8LaivOZAdkcnThVUbTceEOGVpG",
-        "ctime":1341001594,
-        "utime":1341001594,
+        "fb_access_token":"AAAFnVo0zuqkBACCdgjAA4iM5W53ynzvvfjLBSOFgKYXR1AKSgKyhHard8xi5ej36VxHtsdrcvwBqUvptGRDZAgPDgBGz1pNMvUPCZBlyXQuuFGsDHM",
+        "ctime":1341220186,
+        "utime":1341220186,
         "cip":0
       },
       "cip":2130706433,
       "user_id":1,
       "day_id":1,
-      "ctime":1341001595,
-      "utime":1341001595,
+      "ctime":1341220187,
+      "utime":1341220187,
       "id":1
     }
 
@@ -314,9 +326,9 @@ Response:
 Request: 
 
     {
-      "description":"vejotudamuteluburirefucutivopigesidinemufahoberotewudutulimuyojogibotisusunogajukaxibihicolumopogokudaxubinepuhuzalutolomuvurepubuwabozadikojorevajitojarademodisurosivodalivavicacowezimasuvukivudipufo",
-      "image_name":"jicuta",
-      "image_content":"kisoye"
+      "description":"tediconudiyaconuxutibamuhafupuzegayexigayacaxowopikiruluxivimowoxocofevanudenufalisajazesotaniyigufijunuwogenekuyabefunuvebevutayulewuconezatezolayibilosicilonesurixofibamonikumepitahimeyudihokuherito",
+      "image_name":"miyayo",
+      "image_content":"lamepo"
     }
 
 Response: 
@@ -332,45 +344,8 @@ Request: `empty`
 Response: 
 
     {
-      "id":"100004010804750_106773516133008"
+      "id":"100004010804750_108887695921590"
     }
-
-## Me - Days ##
-
-`POST {{host}}me/days/`
-
-Request: `empty`
-
-Response: 
-
-    [
-      
-    ]
-
-## Me - FiendsWithApp ##
-
-`POST {{host}}me/friends_in_app`
-
-Request: `empty`
-
-Response: 
-
-    [
-      {
-        "ctime":1341001599,
-        "fb_name":"bar",
-        "fb_profile_url":"http:\/\/www.facebook.com\/profile.php?id=100004036783679",
-        "fb_profile_utime":1340810728,
-        "fb_timezone":null,
-        "fb_uid":"100004036783679",
-        "id":2,
-        "pic_big":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v2\/yL\/r\/HsTZSDw4avx.gif",
-        "pic_small":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v1\/yi\/r\/odA9sNLrE86.jpg",
-        "pic_square":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v2\/yo\/r\/UlIqmHJn-SK.gif",
-        "sex":"male",
-        "utime":1341001599
-      }
-    ]
 
 ## Moments - Update ##
 
@@ -379,7 +354,7 @@ Response:
 Request: 
 
     {
-      "description":"yinipagovuzuyonucukigikixamivelozudizejojereyafucinecuvuyekorukividowipatekokisidatabicuvirejuzamaxepilesozajoniverovotifeyijupobiciyixogusilazemibehovidoxirigoxehovakuzapihirodoyekowiloyadataluvadafagonihagivavaxisehikitalacekakihojodiyezomoxekiroducuci"
+      "description":"viyosihudififaxujojenimucuzesimicedowinuxonaticabejixukutehezowaduvukeyebikoxiwuwamozurohuberugowatejonedudakuyeciyahitilotaruviziredasebohiteroriwubilihamufehavumucafayinosalesefotofawoxuyadodirasojigugubogowilibopuhiweruyomiyakevofunapoyifebezicebumovi"
     }
 
 Response: 
@@ -387,10 +362,10 @@ Response:
     {
       "id":1,
       "day_id":1,
-      "description":"yinipagovuzuyonucukigikixamivelozudizejojereyafucinecuvuyekorukividowipatekokisidatabicuvirejuzamaxepilesozajoniverovotifeyijupobiciyixogusilazemibehovidoxirigoxehovakuzapihirodoyekowiloyadataluvadafagonihagivavaxisehikitalacekakihojodiyezomoxekiroducuci",
+      "description":"viyosihudififaxujojenimucuzesimicedowinuxonaticabejixukutehezowaduvukeyebikoxiwuwamozurohuberugowatejonedudakuyeciyahitilotaruviziredasebohiteroriwubilihamufehavumucafayinosalesefotofawoxuyadodirasojigugubogowilibopuhiweruyomiyakevofunapoyifebezicebumovi",
       "img_url":"",
       "likes_count":0,
-      "ctime":1341001600
+      "ctime":1341220190
     }
 
 ## Moments - Delete ##
@@ -410,49 +385,37 @@ Response:
 Request: 
 
     {
-      "text":"foyanuxadowulawiwetonupecamopazoyuwiyopakizonokecacozowatevemobisuxonisuxosilavifudanugehunotifekabupovihiwopofomeyahahidojuhigorenaxepavixebacilanofogenicucemonawijirawilurikaputoruzanabokijumakupayipehaxoginudaxakifecixemenufaxapilupenovatugobibezavume"
+      "text":"jowojulojicehokajalahicabucogacivufawitazomenuluyuxelugixefalesafugakudeviselacezupeyowocuxigisikuloxidoduxiyuyuyihuhaseciwedisilagereyofojavebotepalejiwavusilarojebebebejurepesakaloreyifiyisifavegulegodudoguwoyejimebowufinemepodabevafuwisoboxegepezigaxo"
     }
 
 Response: 
 
     {
-      "text":"foyanuxadowulawiwetonupecamopazoyuwiyopakizonokecacozowatevemobisuxonisuxosilavifudanugehunotifekabupovihiwopofomeyahahidojuhigorenaxepavixebacilanofogenicucemonawijirawilurikaputoruzanabokijumakupayipehaxoginudaxakifecixemenufaxapilupenovatugobibezavume",
+      "text":"jowojulojicehokajalahicabucogacivufawitazomenuluyuxelugixefalesafugakudeviselacezupeyowocuxigisikuloxidoduxiyuyuyihuhaseciwedisilagereyofojavebotepalejiwavusilarojebebebejurepesakaloreyifiyisifavegulegodudoguwoyejimebowufinemepodabevafuwisoboxegepezigaxo",
       "moment":{
         "id":1,
         "day_id":1,
         "image_ext":"",
         "fb_id":"",
         "likes_count":0,
-        "ctime":1341001602,
-        "utime":1341001602,
+        "ctime":1341220192,
+        "utime":1341220192,
         "cip":0
       },
       "user":{
         "id":1,
         "fb_uid":"100004010804750",
-        "fb_access_token":"AAAFnVo0zuqkBADJUOZCLgTXLZCJWpfrZA8wv3g9ZATMKsnkRV5yaQPXmS1ZCiSMJxaC3EjKsEvKk0HRrVZBaGwRqLV1hK8LaivOZAdkcnThVUbTceEOGVpG",
-        "ctime":1341001602,
-        "utime":1341001602,
+        "fb_access_token":"AAAFnVo0zuqkBACCdgjAA4iM5W53ynzvvfjLBSOFgKYXR1AKSgKyhHard8xi5ej36VxHtsdrcvwBqUvptGRDZAgPDgBGz1pNMvUPCZBlyXQuuFGsDHM",
+        "ctime":1341220192,
+        "utime":1341220192,
         "cip":0
       },
       "cip":2130706433,
       "user_id":1,
       "moment_id":1,
-      "ctime":1341001603,
-      "utime":1341001603,
+      "ctime":1341220192,
+      "utime":1341220192,
       "id":1
-    }
-
-## Moments - Share ##
-
-`POST {{host}}moments/1/share`
-
-Request: `empty`
-
-Response: 
-
-    {
-      "id":"100004010804750_106773592799667"
     }
 
 ## User - Days ##

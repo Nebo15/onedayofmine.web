@@ -10,13 +10,18 @@ $conf = array(
     )
   ),
 
-  'ControllerAction' => array(
-    'path' => '/:controller:/:action:',
+  'MyControllerAction' => array(
+    'path' => '/my/:controller:/:action:',
     'defaults' => array( 'action' => 'display')
   ),
 
-  'ControllerIdAction' => array(
-    'path' => '/:controller/:id/:action/',
+  'MyControllerIdAction' => array(
+    'path' => '/my/:controller/:id/:action/',
+  ),
+
+  'ControllerAction' => array(
+    'path' => '/:controller:/:action:',
+    'defaults' => array( 'action' => 'display')
   ),
 
   'ControllerIdAction' => array(

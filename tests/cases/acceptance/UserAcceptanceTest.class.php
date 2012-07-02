@@ -3,7 +3,6 @@ lmb_require('tests/cases/odAcceptanceTestCase.class.php');
 
 class UserAcceptanceTest extends odAcceptanceTestCase
 {
-
   /**
    *@example
    */
@@ -25,4 +24,10 @@ class UserAcceptanceTest extends odAcceptanceTestCase
 
   //@TODO
   function testDays_UserNotFound() {}
+
+  //@TODO
+  function testFollowing() {}
+
+  //@TODO
+  function testFollowers() {}
 }
