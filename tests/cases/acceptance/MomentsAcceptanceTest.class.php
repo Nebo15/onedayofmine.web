@@ -33,7 +33,7 @@ class MomentsAcceptanceTest extends odAcceptanceTestCase
     $this->assertEqual($loaded_moment->getDescription(), $desc);
   }
 
-  //@TODO
+  //todo
   function testUpdate_MomentNotFound() {}
 
   /**
@@ -54,10 +54,10 @@ class MomentsAcceptanceTest extends odAcceptanceTestCase
     $this->assertFalse(Moment::findById($moment->getId()));
   }
 
-  //@TODO
+  //todo
   function testDelete_WrongUser() {}
 
-  //@TODO
+  //todo
   function testDelete_MomentNotFound() {}
 
   /**
@@ -82,9 +82,9 @@ class MomentsAcceptanceTest extends odAcceptanceTestCase
     $this->assertEqual($text, $res->text);
   }
 
-  //@TODO
+  //todo
   function testComment_MomentNotFound() {}
 
-  //@TODO
+  //todo-high
   function testLike() {}
 }

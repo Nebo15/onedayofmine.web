@@ -28,7 +28,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     }
   }
 
-  //@TODO separate
+  //TODO separate
   function testBegin_Negative()
   {
     $this->post('days/begin');
@@ -101,7 +101,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $this->assertEqual($moment2->getId(), $loaded_day->moments[1]->id);
   }
 
-  //@TODO
+  //todo-
   function testItem_NotFound() {}
 
   function testItem_DeletedDay()
@@ -160,7 +160,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
 
   /**
    *@example
-   *@TODO
+   *todo-high
    */
   function testUpdate()
   {
@@ -172,10 +172,10 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $this->assertResponse(200);
   }
 
-  //@TODO
+  //todo
   function testUpdate_NotFound() {}
 
-  //@TODO
+  //todo
   function testUpdate_WrongUser() {}
 
   /**
@@ -202,7 +202,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $this->assertProperty($res, 'ctime');
   }
 
-  //@TODO
+  //todo-low
   function testAddMoment_NotFound() {}
 
   function testAddMoment_WrongUser()
@@ -239,7 +239,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $this->assertEqual($text, $res->text);
   }
 
-  //@TODO
+  //todo-
   function testComment_NotFound() {}
 
   /**
@@ -263,12 +263,15 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $this->assertEqual(1, count($res));
   }
 
-  //@TODO
+  //todo
   function testEnd_NotFound() {}
 
-  //@TODO
+  //todo
   function testEnd_WrongUser() {}
 
+  /**
+   * @example
+   */
   function testDelete()
   {
     $day = $this->generator->day($this->main_user);
@@ -283,10 +286,10 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $this->assertEqual(1, $loaded_day->getIsDeleted());
   }
 
-  //@TODO
+  //todo
   function testDelete_NotFound() {}
 
-  //@TODO
+  //todo
   function testDelete_WrongUser() {}
 
   /**
@@ -308,19 +311,27 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $this->assertTrue($res->id);
   }
 
-  //@TODO
+  //todo-high
   function testLike() {}
 
-  //@TODO
+  //todo-high
   function testSearch() {}
 
-  //@TODO
-  function testFollowing() {}
+  //todo-high
+  function testFollowingUsers() {}
 
-  //@TODO
+  //todo-high
   function testNew() {}
 
-  //@TODO
+  //todo-high
   function testInteresting() {}
 
+  //todo-high
+  function testFavourites() {}
+
+  //todo-high
+  function testAddToFavourites() {}
+
+  //todo-high
+  function testRemoveFromFavourites() {}
 }

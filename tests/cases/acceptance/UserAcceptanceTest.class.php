@@ -3,31 +3,33 @@ lmb_require('tests/cases/odAcceptanceTestCase.class.php');
 
 class UserAcceptanceTest extends odAcceptanceTestCase
 {
-  /**
-   *@example
-   */
-  function testDays()
-  {
-    $this->additional_user->save();
-    $this->_loginAndSetCookie($this->main_user);
-
-    $days = $this->get('users/'.$this->additional_user->getId().'/days')->result;
-    $this->assertResponse(200);
-    foreach($days as $day)
-    {
-      $this->assertTrue($day->id);
-      $this->assertTrue($day->title);
-      $this->assertTrue($day->description);
-      $this->assertTrue($day->ctime);
-    }
-  }
-
-  //@TODO
-  function testDays_UserNotFound() {}
-
-  //@TODO
+  //todo-high
   function testFollowing() {}
 
-  //@TODO
+  //todo-high
   function testFollowers() {}
+
+  //todo-high
+  function testFollow() {}
+
+  //todo-high
+  function testUnfollow() {}
+
+  //todo-high
+  function testProfile() {}
+
+  //todo-high
+  function testProfileUpdate() {}
+
+  //todo-high
+  function testSettings() {}
+
+  //todo-high
+  function testSettingsUpdate() {}
+
+  //todo-high
+  function testActivity() {}
+
+  //todo-high
+  function testSearch() {}
 }
