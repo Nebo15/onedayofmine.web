@@ -1,5 +1,6 @@
 <?php
 lmb_require('limb/dbal/src/lmbSimpleDb.class.php');
+lmb_require('limb/cache2/src/drivers/lmbCacheMemoryConnection.class.php');
 
 class odTestsTools
 {
@@ -11,8 +12,10 @@ class odTestsTools
 
   static function loadUsersInfo()
   {
-    $users_file = lmb_env_get('APP_DIR').'/var/fb_test_users.json';
-    if(!file_exists($users_file))
+    static $cache;
+    if(!$cache)
+      $cache = new lmbCacheMemoryConnection('memory:');
+    if(!$users_info = $cache->get('fb_test_users'))
     {
       echo "Try to load test users from fb...\n";
       $users_info = self::loadTestUsersFromFb();
@@ -21,16 +24,15 @@ class odTestsTools
         echo "Can't load test users from Facebook".PHP_EOL;
         exit(1);
       }
-      self::saveFbInfoToFile($users_info, $users_file);
+      $cache->set('fb_test_users', $users_info);
     }
     else
     {
-      $users_info = self::loadFbInfoFromFile($users_file);
       $is_users_info_valid = self::checkAccessTokensExpiration($users_info);
       if(!$is_users_info_valid)
       {
-        unlink($users_file);
-        return self::getUsers();
+        $cache->delete('fb_test_users');
+        return self::loadUsersInfo();
       }
     }
     return $users_info;
@@ -88,16 +90,6 @@ class odTestsTools
     }
     $is_checked = true;
     return true;
-  }
-
-  protected static function saveFbInfoToFile($users_info, $file)
-  {
-    lmbFs::safeWrite($file, Json::indent(json_encode($users_info)));
-  }
-
-  protected static function loadFbInfoFromFile($file)
-  {
-    return json_decode(file_get_contents($file));
   }
 
   protected static function mapUsersInfoToModel($users_info)
