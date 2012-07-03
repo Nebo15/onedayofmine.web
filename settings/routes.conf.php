@@ -10,6 +10,16 @@ $conf = array(
     )
   ),
 
+  'MyAction' => array(
+    'path' => '/my/:action:',
+    'defaults' => array('controller' => 'users', 'action' => 'display')
+  ),
+		
+	'MyActionId' => array(
+		'path' => '/my/:id:/:action:',
+		'defaults' => array('controller' => 'users')
+	),
+
   'MyControllerAction' => array(
     'path' => '/my/:controller:/:action:',
     'defaults' => array( 'action' => 'display')

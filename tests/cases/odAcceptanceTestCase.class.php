@@ -99,7 +99,10 @@ abstract class odAcceptanceTestCase extends WebTestCase
   {
     $decoded_body = json_decode($raw_response);
     if ($decoded_body === null && strlen($raw_response) > 4) {
-      throw new lmbException("Can't parse response", array('url' => $this->getUrl(), 'raw' => $raw_response));
+      throw new lmbException("Can't parse response", array(
+      		'url' => $this->getUrl(),
+      		'raw' => $raw_response
+      ));
     }
 
     return $decoded_body;

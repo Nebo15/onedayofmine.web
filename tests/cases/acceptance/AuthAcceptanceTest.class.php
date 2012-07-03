@@ -75,6 +75,11 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
 
     $users = User::find();
     $this->assertEqual(1, count($users));
+
+    $this->_loginAndSetCookie($this->main_user);
+
+    $users = User::find();
+    $this->assertEqual(1, count($users));
   }
 
   function testLogin_WrongAccessToken()

@@ -7,7 +7,7 @@ class odApplication extends lmbWebApplication
   {
     $this->registerFilter(new lmbHandle('src/filter/ErrorHandlingFilter'));
 
-    $this->registerFilter(new lmbHandle('limb/profile/src/filter/lmbProfileReportingFilter'));
+//     $this->registerFilter(new lmbHandle('limb/profile/src/filter/lmbProfileReportingFilter'));
 
     $this->registerFilter(new lmbHandle('limb/dbal/src/filter/lmbAutoDbTransactionFilter'));
     $this->registerFilter(new lmbHandle('src/filter/SessionStartupFilter'));

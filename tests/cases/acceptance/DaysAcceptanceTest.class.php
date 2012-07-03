@@ -1,31 +1,12 @@
 <?php
 lmb_require('tests/cases/odAcceptanceTestCase.class.php');
 
-
 class DayAcceptanceTest extends odAcceptanceTestCase
 {
   function setUp()
   {
     parent::setUp();
     odTestsTools::truncateTablesOf('Day', 'Moment', 'DayComment');
-  }
-
-  /**
-   *@example
-   */
-  function testCurrentUserDays()
-  {
-    $this->_loginAndSetCookie($this->main_user);
-
-    $days = $this->get('my/days/')->result;
-    $this->assertResponse(200);
-    foreach($days as $day)
-    {
-      $this->assertTrue($day->id);
-      $this->assertTrue($day->title);
-      $this->assertTrue($day->description);
-      $this->assertTrue($day->ctime);
-    }
   }
 
   //TODO separate
