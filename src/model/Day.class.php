@@ -78,4 +78,14 @@ class Day extends BaseModel
 			$criteria->add(lmbSQLCriteria::greater('id', $to_id));
 		return Day::find(array('criteria' => $criteria));
   }
+
+  static function findUnfinished(User $user)
+  {
+  	$criteria = lmbSQLCriteria::equal('is_deleted', 0);
+  	$criteria->add(lmbSQLCriteria::equal('is_ended', 0));
+  	$days = $user->getDays()->find(array('criteria' => $criteria));
+  	if(count($days) > 1)
+  		throw new lmbException("User {$user->getId()} has more than one open day");
+  	return $days->at(0);
+  }
 }

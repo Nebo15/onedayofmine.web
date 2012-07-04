@@ -38,97 +38,6 @@ class DaysController extends BaseJsonController
     }
   }
 
-  function doBegin()
-  {
-    $day = new Day();
-
-    if(!$this->request->hasPost())
-      return $this->_answerWithError('Not a POST request', null, 405);
-
-    $day->setUser($this->toolkit->getUser());
-
-    $response = $this->_importSaveAndAnswer($day, array('title', 'description', 'time_offset', 'occupation', 'age', 'type'));
-
-//    $this->_getUser()->getFacebookUser()->beginDay($day);
-
-    return $response;
-  }
-
-  function doUpdate()
-  {
-    if(!$this->request->hasPost())
-      return $this->_answerWithError('Not a POST request');
-
-    return $this->_answerOk();
-
-    if(!$day = Day::findById($this->request->id))
-      return $this->_answerNotFound('Day not found');
-
-    return $this->_importSaveAndAnswer($day, array('title', 'description', 'time_offset', 'occupation', 'age', 'type'));
-  }
-
-  function doEnd()
-  {
-    if(!$this->request->hasPost())
-      return $this->_answerWithError('Not a POST request');
-
-    if(!$day = Day::findById($this->request->id))
-      return $this->_answerNotFound('Day not found');
-
-    $day->setIsEnded(1);
-    $day->save();
-
-    return $this->_answerOk();
-  }
-
-  function doDelete()
-  {
-    if(!$this->request->hasPost())
-      return $this->_answerWithError('Not a POST request');
-
-    if(!$day = Day::findById($this->request->id))
-      return $this->_answerNotFound('Day not found');
-
-    $day->setIsDeleted(1);
-    $day->save();
-
-    return $this->_answerOk();
-  }
-
-  function doAddMoment()
-  {
-    if(!$this->request->hasPost())
-      return $this->_answerWithError('Not a POST request');
-
-    $errors = $this->_checkPropertiesInRequest(array('id', 'description', 'image_name', 'image_content'));
-    if(count($errors))
-      return $this->_answerWithError($errors);
-
-    if(!$day = Day::findById($this->request->id))
-      return $this->_answerNotFound("Day not found by id");
-
-    if($day->getUserId() != $this->_getUser()->getId())
-      return $this->_answerNotFound("Day not found by id");
-
-    if($day->getIsEnded())
-      return $this->_answerWithError("Day is closed");
-
-    $moment = new Moment();
-    $moment->setDay($day);
-    $moment->setDescription($this->request->get('description'));
-    $moment->save();
-    $moment->attachImage(
-      $this->request->get('image_name'),
-      base64_decode($this->request->get('image_content'))
-    );
-    $moment->save();
-
-    if($this->error_list->isEmpty())
-      return $this->_answerOk($moment->exportForApi());
-    else
-      return $this->_answerWithError($this->error_list->export());
-  }
-
   function doComment()
   {
     if(!$this->request->hasPost())
@@ -175,6 +84,34 @@ class DaysController extends BaseJsonController
                   ->likeDay($day);
 
     return $this->_answerOk($response);
+  }
+
+  function doUpdate()
+  {
+  	if(!$this->request->hasPost())
+  		return $this->_answerWithError('Not a POST request');
+
+  	return $this->_answerOk();
+
+  	if(!$day = Day::findById($this->request->id))
+  		return $this->_answerNotFound('Day not found');
+
+  	return $this->_importSaveAndAnswer($day, array('title', 'description', 'time_offset', 'occupation', 'age', 'type'));
+  }
+
+
+  function doDelete()
+  {
+  	if(!$this->request->hasPost())
+  		return $this->_answerWithError('Not a POST request');
+
+  	if(!$day = Day::findById($this->request->id))
+  		return $this->_answerNotFound('Day not found');
+
+  	$day->setIsDeleted(1);
+  	$day->save();
+
+  	return $this->_answerOk();
   }
 
   function doFollowingUsers()
@@ -225,5 +162,10 @@ class DaysController extends BaseJsonController
   	$favourites->save();
 
   	return $this->_answerOk();
+  }
+
+  function doMy()
+  {
+  	return $this->_answerOk($this->_getUser()->getDays());
   }
 }

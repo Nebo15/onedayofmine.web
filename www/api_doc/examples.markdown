@@ -1,6 +1,6 @@
 # API examples #
 
- Version: 04.07.12 18:07:16
+ Version: 04.07.12 20:03:19
 
 ## Auth - IsLoggedIn ##
 
@@ -19,46 +19,46 @@ Response:
 Request: 
 
     {
-      "fb_access_token":"AAAFnVo0zuqkBAGUHuJ9ifrZBL0YJNMm3JtS1Xuml2zC90rBh0cvGhNb21LWAqLO8w8zbpgN6X4QQo8U8ZACa07FmIb793nRBZBnHoWnDZAWBZBEvLrtzd"
+      "fb_access_token":"AAAFnVo0zuqkBAPVZBqcXJXiMOB4CH1eCpN6jsRYNW0R9mKnLZB4JrZC3sLBGC0n9CZBRL3GgcHIDw5lHm8HEsWtxkOyERAnNLGKgmXM9sIZBjAoW71MYy"
     }
 
 Response: 
 
     {
-      "sessid":"lso2ss0dqrooggbjl8ucn6hok4",
+      "sessid":"062jkq8kgcosgakue2q5i3f7c4",
       "user":{
-        "ctime":1341414368,
+        "ctime":1341421331,
         "fb_name":"foo",
         "fb_profile_url":"http:\/\/www.facebook.com\/profile.php?id=100004010804750",
         "fb_profile_utime":1340810718,
         "fb_timezone":"3",
         "fb_uid":"100004010804750",
-        "id":651,
+        "id":1001,
         "pic_big":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v2\/yp\/r\/yDnr5YfbJCH.gif",
         "pic_small":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v1\/yP\/r\/FdhqUFlRalU.jpg",
         "pic_square":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v2\/y9\/r\/IB7NOFmPw2a.gif",
         "sex":"female",
-        "utime":1341414368
+        "utime":1341421331
       }
     }
 
 ## Complaints - Create ##
 
-`POST {{host}}/complaints/418/create`
+`POST {{host}}/complaints/635/create`
 
 Request: 
 
     {
-      "text":"niyofi"
+      "text":"xewepi"
     }
 
 Response: 
 
     {
       "day_id":null,
-      "text":"niyofi",
-      "ctime":1341414379,
-      "id":36
+      "text":"xewepi",
+      "ctime":1341421342,
+      "id":40
     }
 
 ## Complaints - Display ##
@@ -71,144 +71,234 @@ Response:
 
     [
       {
-        "id":37,
-        "day_id":419,
-        "ctime":1341414381,
-        "text":"vupalareredolelatediruduzocudipuhabogobuyapepapegoturutimuloganififedegalomuvahavuxewizekixolidiyezamefuboxusawicowugofogagomegiremaloziguguzakatazuzaraguwofadohoxogudisekomotayofuxodaruxozuperiyuhajulorumecibejucibojumexamilejolorukevupugodinaziwelepejawomaluvavajibukeniwaroricavokatavahecahuholenonahecucokatavafihusifosirucafiworazozakefalugimipacozogireroximipifimixosesuyakijigedixosipibabimeduvusijejemosududehucunopirodawecihobicevibikajimomirafapovoyozafetevunikibovehezovovuwetocogariherafapitijizitujipalemazite"
+        "id":41,
+        "day_id":636,
+        "ctime":1341421344,
+        "text":"wixahecikekosazitawezepuyogoheyawofadepimufadasuhifesohopihutazizatajesuguzebogedirofulokopaxisusebusowupohiliyiyijakoxoliwebifoyasoxinihubojugelikuhepotibozelulamepasuwonarolahoxicijuxepuputucegogumarufetohukapiruhigukowatujunixarizutolusudehodihekodetudawososegodujiyukagovegasorowepumipadelexihadadifefusiyebicuzovicenapuninoroyodacebosucopaniwezuridemosulepebolazixoluludunuhixuzadirolacakatofogakozoratacaruxozacovirunuyevazuderafehuleyajurewoxofimonezemuhihutifukijepoceyuxunajuvukodusilujalidocibocaxubowixanozukata"
       }
     ]
 
-## Day - Begin ##
+## CurrentDay - Start ##
 
-`POST {{host}}days/begin`
+`POST {{host}}current_day/start`
 
 Request: 
 
     {
-      "title":"gede",
-      "description":"niyurumu",
-      "time_offset":1341414385,
-      "occupation":"lezave",
-      "age":4,
-      "type":8
+      "title":"jeze",
+      "description":"zupevago",
+      "time_offset":1341421348,
+      "occupation":"xapuli",
+      "age":3,
+      "type":4
     }
 
 Response: 
 
     {
-      "id":420,
-      "user_id":661,
-      "title":"gede",
-      "description":"niyurumu",
-      "time_offset":"1341414385",
-      "occupation":"lezave",
-      "age":"4",
-      "type":"8",
+      "id":637,
+      "user_id":1011,
+      "title":"jeze",
+      "description":"zupevago",
+      "time_offset":"1341421348",
+      "occupation":"xapuli",
+      "age":"3",
+      "type":"4",
       "likes_count":null,
-      "ctime":1341414385,
-      "utime":1341414385,
-      "is_ended":null
+      "ctime":1341421348,
+      "utime":1341421348,
+      "is_ended":0
     }
+
+## CurrentDay - CreateMoment ##
+
+`POST {{host}}current_day/moment_create`
+
+Request: 
+
+    {
+      "description":"yovelibuhubidodifegolimiwatuximodebiwapazisakonibojiduxubozudisetoxivisobewedeyacepecigacayarolejexatixoxodabadahojefileselezusefiluceruzozutacuwijuyogocozanojodopebafuxazigapamucirebozutiradowozuxaxo",
+      "image_name":"foo\/bar\/example.png",
+      "image_content":"iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAAXNSR0IArs4c6QAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9wGEg47HYlSsqsAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAOUlEQVQI13VOQQ4AIAiC1v+\/TAcKZysOTkQUApCEDpI11YH7EQdJ103jsBA68MG8dutUPrdIFp5xF8lAKftzc\/YPAAAAAElFTkSuQmCC"
+    }
+
+Response: 
+
+    {
+      "id":111,
+      "day_id":638,
+      "description":"yovelibuhubidodifegolimiwatuximodebiwapazisakonibojiduxubozudisetoxivisobewedeyacepecigacayarolejexatixoxodabadahojefileselezusefiluceruzozutacuwijuyogocozanojodopebafuxazigapamucirebozutiradowozuxaxo",
+      "img_url":"\/media\/1012\/day\/638\/fd3ef37e2f86d23aa4a8ed0594302da8c359bc53.png",
+      "likes_count":null,
+      "ctime":1341421349
+    }
+
+## CurrentDay - Finish ##
+
+`POST {{host}}current_day/finish`
+
+Request: `empty`
+
+Response: 
+
+    null
 
 ## Day - Item ##
 
-`POST {{host}}days/421/item`
+`POST {{host}}days/640/item`
 
 Request: `empty`
 
 Response: 
 
     {
-      "id":421,
-      "user_id":662,
-      "title":"higehuxuvigiditayibudexa",
-      "description":"jaxupotixovamopegenukizexogipedumuxavorojerubabelicocabuwelirijanecewoxacizatahapeyoluregasupaxagukasegowawifasomolupafodupoxiwalafamewenowotinecudobekaguxaloguyeyevosekibayikanisiwatabodijeheteriyewetulokutuhilamafivezasejimuyigotunaruzewetelekitaxogizi",
+      "id":640,
+      "user_id":1014,
+      "title":"pepiwitenocokexahicepaba",
+      "description":"kanuruxomehudocimigizayewikuriyarizemubufevezutikuyeburuhawupoyahulotisutifohufoxazuyoverofalakobukogasumurovuloyirubecobewijedebicepogaruwisecosolocijatapakokigisufuxovogizecozijabofowowamarorenufirudulacivabadavevociwivihesofufoweremovevojuwafotefivuza",
       "time_offset":0,
-      "occupation":"sofanejizecejudelukotogo",
+      "occupation":"sepuvuxikederediyokisano",
       "age":7,
-      "type":9,
+      "type":4,
       "likes_count":0,
-      "ctime":1341414385,
-      "utime":1341414385,
+      "ctime":1341421352,
+      "utime":1341421352,
       "is_ended":0,
       "moments":[
         {
-          "id":51,
-          "day_id":421,
-          "description":"description zikigizuwizusolazutacerisategifeyivayobojaratadocuxadipurecuvedovuvorumuwazifagezajapuyegacugasacitohasagoreturozuwiwotavuba",
+          "id":112,
+          "day_id":640,
+          "description":"description sawigitaxocegofidopenulefuyexugizazanokelirodufenoparujowebodegajajuxogefuzesapeyajidokuxesarufudivafujexerinavijabitelotare",
           "img_url":"",
           "likes_count":0,
-          "ctime":1341414385
+          "ctime":1341421352
         },
         {
-          "id":52,
-          "day_id":421,
-          "description":"description hovekidatohedocehotabanisitemecoyubelalayonajojikasifexuwogewebofacofivafefiyicepotoborugudadaxeguxilopizoduhaguzupurawuzuza",
+          "id":113,
+          "day_id":640,
+          "description":"description lavufiraficeyavomenenabofemadadigukelakoniyimodubohitekupuboyagacopirucalaruvowumakelodunasijusenexadujizulovepejumosivetita",
           "img_url":"",
           "likes_count":0,
-          "ctime":1341414385
+          "ctime":1341421352
         }
       ]
     }
 
 ## Day - Item_Many ##
 
-`POST {{host}}days/423;424;975/item`
+`POST {{host}}days/642;643;509/item`
 
 Request: `empty`
 
 Response: 
 
     {
-      "423":{
-        "id":423,
-        "user_id":666,
-        "title":"vadokucepogiveyopukusici",
-        "description":"becidegozalabepahemacalacabujohezeyatavojawenekotuvozeyajuwosabonuteciyisovadazubosuzozepuzeyuxiyosadolukazijuketajorezecumayemuzaxawexamusuwaficigoteyufexatezopuvedononemehoyecacukusikirayitilixififorocugahefedijucokotehiwozogaciwobureyuragoripofujugola",
+      "642":{
+        "id":642,
+        "user_id":1018,
+        "title":"panivopisepanodutejeloki",
+        "description":"vamiterapusogiyopobodoginatipolexuyihipumemoxekidefederonefacolupenuwasekabenesovuxugipoyoxaleyurivinivupudafoturixudisagicoxupilezuvoxepulotatetihubuxenuxeyiyevujirayedezulohahizemupaviloxebogehupacomaputubalajuwuyikehereyusesekoyuvivikupowusowigayiliwe",
         "time_offset":0,
-        "occupation":"lagasoxucuzewezujixezazu",
+        "occupation":"gociligezozebomipocusose",
+        "age":1,
+        "type":3,
+        "likes_count":0,
+        "ctime":1341421355,
+        "utime":1341421355,
+        "is_ended":0,
+        "moments":[
+          {
+            "id":114,
+            "day_id":642,
+            "description":"description goneviwogeyigovafefexudogaruxapasamisecusajuvacukejegiyinijipupebatokurawuzibanihurijiyudehofuzayoxemijelexikixohigibalalowo",
+            "img_url":"",
+            "likes_count":0,
+            "ctime":1341421355
+          }
+        ]
+      },
+      "643":{
+        "id":643,
+        "user_id":1019,
+        "title":"rikewesowejacivijiyoguca",
+        "description":"rotekunarulemupexihevenonidinipafenihasuzafiyovufafukorufolofuxehiyimomitoxokomitomajazixegakalonehuzokokeloyujonutuzokucoyitefesigofolixujutomemediyihacamunoceceyexevodapuvacegatasafogopojozexuroginepafederememajoxijihocebufotecetojuzifovozeveyoxecawalu",
+        "time_offset":0,
+        "occupation":"zuwovefaforibojufusizuto",
         "age":4,
         "type":8,
         "likes_count":0,
-        "ctime":1341414388,
-        "utime":1341414388,
+        "ctime":1341421355,
+        "utime":1341421355,
         "is_ended":0,
         "moments":[
           {
-            "id":53,
-            "day_id":423,
-            "description":"description gujipulofegukicazunadojinudesuzuwehegobezegevenofayetewecupoxiroxucaranokozabiyemunedemajaxerizilarafasixotudodopowobewejopu",
+            "id":115,
+            "day_id":643,
+            "description":"description kayuxanicodiperihiyihaboticewuvezocuwokujijuwulalenonikedirujefecefuxivabacuciziwifecipazadepesopupikerimojidebuvehuvubozaci",
             "img_url":"",
             "likes_count":0,
-            "ctime":1341414388
+            "ctime":1341421355
           }
         ]
       },
-      "424":{
-        "id":424,
-        "user_id":667,
-        "title":"woposusamoyixuhopocaxowi",
-        "description":"bapixedevuzeraxobalehexehirosazodidayejogedujusedarimivoyimomijibipututufuxiwixurikacaxuneruwunulaxabideluvemofadiharafanodetohavahutecajukulizicevoluxutukiropituhigepifulimefiruhaxazicebozidomifotohusomadosopuvibobacaxaravaluvarabevilufarobefadafefahoba",
+      "509":null
+    }
+
+## Day - Comment ##
+
+`POST {{host}}days/644/comment`
+
+Request: 
+
+    {
+      "text":"hewejuzanavehokupoxemucibakolulocebicunobexecefobabixabufesogajejevijebenurofuhawesokoricefekirowedasanabaweyakojanovahulidoxomodowotezomozixegeloyewabepaciyidafuwujusoroficesidotuvogeyewuwuxuyoyenibahererewoyisojuceducuwuzosubemakogacukupemebocazezagoze"
+    }
+
+Response: 
+
+    {
+      "text":"hewejuzanavehokupoxemucibakolulocebicunobexecefobabixabufesogajejevijebenurofuhawesokoricefekirowedasanabaweyakojanovahulidoxomodowotezomozixegeloyewabepaciyidafuwujusoroficesidotuvogeyewuwuxuyoyenibahererewoyisojuceducuwuzosubemakogacukupemebocazezagoze",
+      "day":{
+        "id":644,
+        "user_id":1021,
+        "title":"vumubupewobifogivehizaze",
+        "occupation":"lifijonasufavudokesolagi",
+        "age":2,
+        "type":2,
+        "is_ended":0,
         "time_offset":0,
-        "occupation":"tohacipumamagebafeyakeba",
-        "age":7,
-        "type":1,
         "likes_count":0,
-        "ctime":1341414388,
-        "utime":1341414388,
-        "is_ended":0,
-        "moments":[
-          {
-            "id":54,
-            "day_id":424,
-            "description":"description vuniyeforuvapudofiyefewajicuhefadopacoxopotanuwokobidurihojizirafafeyabirosapiwuhumitaxavaposaxukafebawoyivibolemusazifovopi",
-            "img_url":"",
-            "likes_count":0,
-            "ctime":1341414388
-          }
-        ]
+        "is_deleted":0,
+        "ctime":1341421357,
+        "utime":1341421357,
+        "cip":0
       },
-      "975":null
+      "user":{
+        "id":1021,
+        "fb_uid":"100004010804750",
+        "fb_access_token":"AAAFnVo0zuqkBAPVZBqcXJXiMOB4CH1eCpN6jsRYNW0R9mKnLZB4JrZC3sLBGC0n9CZBRL3GgcHIDw5lHm8HEsWtxkOyERAnNLGKgmXM9sIZBjAoW71MYy",
+        "ctime":1341421357,
+        "utime":1341421357,
+        "cip":0
+      },
+      "cip":2130706433,
+      "user_id":1021,
+      "day_id":644,
+      "ctime":1341421359,
+      "utime":1341421359,
+      "id":19
+    }
+
+## Day - ShareDay ##
+
+`POST {{host}}days/645/share`
+
+Request: `empty`
+
+Response: 
+
+    {
+      "id":"100004010804750_111160429027650"
     }
 
 ## Day - Update ##
@@ -229,103 +319,9 @@ Response:
 
     null
 
-## Day - AddMoment ##
-
-`POST {{host}}days/425/add_moment`
-
-Request: 
-
-    {
-      "description":"romejuzasomokuxazebovonomozanoxalelojixuferigirewoyohigofeyoyuxefecitulujamipavivocadewenozipuvofufuvowasesemitecojabamixizijofipeleyemopaxanokikovixezosugusemesurodahogawovajaxanojinalozadikujamicofe",
-      "image_name":"foo\/bar\/example.png",
-      "image_content":"iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAAXNSR0IArs4c6QAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9wGEg47HYlSsqsAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAOUlEQVQI13VOQQ4AIAiC1v+\/TAcKZysOTkQUApCEDpI11YH7EQdJ103jsBA68MG8dutUPrdIFp5xF8lAKftzc\/YPAAAAAElFTkSuQmCC"
-    }
-
-Response: 
-
-    {
-      "id":55,
-      "day_id":425,
-      "description":"romejuzasomokuxazebovonomozanoxalelojixuferigirewoyohigofeyoyuxefecitulujamipavivocadewenozipuvofufuvowasesemitecojabamixizijofipeleyemopaxanokikovixezosugusemesurodahogawovajaxanojinalozadikujamicofe",
-      "img_url":"\/media\/670\/day\/425\/e29d1772d6ee5223b62a168d5241e0e7de37f1e2.png",
-      "likes_count":null,
-      "ctime":1341414394
-    }
-
-## Day - Comment ##
-
-`POST {{host}}days/427/comment`
-
-Request: 
-
-    {
-      "text":"rarijorehowomatubaducayecudugidusolumahovanefedalebiluvixulakizahebolenelanihovoyudetuwivesawofabaximesulamowekobidokukahahatiforadaluzuzinusurokonotuxubacorelehijokenetagiyufepobesuhocekopuxukapomadefesafujopebeheyepebacuzicigireworixujapunidoxacikapizi"
-    }
-
-Response: 
-
-    {
-      "text":"rarijorehowomatubaducayecudugidusolumahovanefedalebiluvixulakizahebolenelanihovoyudetuwivesawofabaximesulamowekobidokukahahatiforadaluzuzinusurokonotuxubacorelehijokenetagiyufepobesuhocekopuxukapomadefesafujopebeheyepebacuzicigireworixujapunidoxacikapizi",
-      "day":{
-        "id":427,
-        "user_id":673,
-        "title":"jinopasosivubexoroxoyubo",
-        "occupation":"saliminaxubogowuwuxuwoya",
-        "age":2,
-        "type":10,
-        "is_ended":0,
-        "time_offset":0,
-        "likes_count":0,
-        "is_deleted":0,
-        "ctime":1341414396,
-        "utime":1341414396,
-        "cip":0
-      },
-      "user":{
-        "id":673,
-        "fb_uid":"100004010804750",
-        "fb_access_token":"AAAFnVo0zuqkBAGUHuJ9ifrZBL0YJNMm3JtS1Xuml2zC90rBh0cvGhNb21LWAqLO8w8zbpgN6X4QQo8U8ZACa07FmIb793nRBZBnHoWnDZAWBZBEvLrtzd",
-        "ctime":1341414396,
-        "utime":1341414396,
-        "cip":0
-      },
-      "cip":2130706433,
-      "user_id":673,
-      "day_id":427,
-      "ctime":1341414397,
-      "utime":1341414397,
-      "id":9
-    }
-
-## Day - End ##
-
-`POST {{host}}days/428/end`
-
-Request: `empty`
-
-Response: 
-
-    null
-
-## Day - End ##
-
-`POST {{host}}days/428/add_moment`
-
-Request: 
-
-    {
-      "description":"robiwagapuvohicocehopupikivadaxozugoyixikohofekesoxemivubizatuyovamonefuzipavukiresasizozuxowokixuhidijawufowiciwopidigamawexayozafapifikecayasoweguvidenupicidasedevesarojixugogitayuhivuwukuxahujagafu",
-      "image_name":"tilane",
-      "image_content":"rijafo"
-    }
-
-Response: 
-
-    null
-
 ## Day - DeleteDay ##
 
-`POST {{host}}days/429/delete`
+`POST {{host}}days/646/delete`
 
 Request: `empty`
 
@@ -333,21 +329,9 @@ Response:
 
     null
 
-## Day - ShareDay ##
+## Day - GetFavouriteDays ##
 
-`POST {{host}}days/430/share`
-
-Request: `empty`
-
-Response: 
-
-    {
-      "id":"100004010804750_111062722370754"
-    }
-
-## Day - GetFollowingUsers ##
-
-`POST {{host}}/my/days/following_users/`
+`POST {{host}}days/favourites`
 
 Request: `empty`
 
@@ -355,73 +339,118 @@ Response:
 
     [
       {
-        "id":431,
-        "user_id":679,
-        "title":"pisosimakopegacurucivevi",
-        "description":"jihivohisunihadimajewomorocekahomifegisuhelihidosizicidodacigefoxeyawibawisabuwohufehecilaxonahelanevikocasaxiwajupihozovujeyotewepowugubuzulocovojahetafakasamihadabezahuyotalisomubabegejumolowixuyuxavuxiweyibimariguyitekadesaciwuvovocizadumibadexawokati",
+        "id":647,
+        "user_id":1026,
+        "title":"gipayokopitazenikufukuhi",
+        "description":"nihahacavabawucerabehazejafudozogesikosaxoforebelanogibireloyikarapategoyijisetalewotufecocubidolosayuvujakumacukunavomuhiweyuzeponineluluwuyuwewemibulemepidivofehoronamezihotadesadalohucinudofelubuyihuyisoruxeyakerojocupepopupoyidelavateyisurafetizukibu",
         "time_offset":0,
-        "occupation":"mumazegixebuketedehalare",
-        "age":6,
-        "type":10,
+        "occupation":"sezoweliwijayasazemeboxi",
+        "age":4,
+        "type":8,
         "likes_count":0,
-        "ctime":1341414404,
-        "utime":1341414404,
+        "ctime":1341421366,
+        "utime":1341421366,
+        "is_ended":0
+      }
+    ]
+
+## Day - AddToFavourites ##
+
+`POST {{host}}/days/648/favourite`
+
+Request: `empty`
+
+Response: 
+
+    null
+
+## Day - RemoveFromFavourites ##
+
+`POST {{host}}/days/649/unfavourite`
+
+Request: `empty`
+
+Response: 
+
+    null
+
+## Day - GetFollowingUsersDays ##
+
+`POST {{host}}days/following_users/`
+
+Request: `empty`
+
+Response: 
+
+    [
+      {
+        "id":650,
+        "user_id":1033,
+        "title":"koduxehirepuzokiramavofa",
+        "description":"hulevapekewedenoyetipatihuvawewafejujufohadekobeyowiwiyalogezakahocorekuhihodezabopujiyogabefekicicotipazusadodalozogunibisayaramotegegadugepekacewegeweyimupaxawihawigukifuxizuxohadakaruxayogojiwazacepekivekocotevagiyaruxurekikenivataniluciputeyutudetage",
+        "time_offset":0,
+        "occupation":"budisicazigitobuciropedu",
+        "age":1,
+        "type":3,
+        "likes_count":0,
+        "ctime":1341421371,
+        "utime":1341421371,
         "is_ended":0
       },
       {
-        "id":432,
-        "user_id":679,
-        "title":"kocuyihiwoxurisuwexuwiha",
-        "description":"dotivodadedolijelapopehugitivuxumilefijeyiyeyeselebunewovigilalusufukifexarujeforatamiwefavidamozorecusuxewerazegokojayigobexidudogepugifatocobelezopugopeditehubicikecijokemeruvirenudacepumusikocobajeyotecehuyudivepumatuzeledicarimiceyapazidayukivuriwixe",
+        "id":651,
+        "user_id":1033,
+        "title":"katacevibefumecijulusube",
+        "description":"loyacenubumapevezokacuwepuyanolujedipogomovadijafogenanabififomizixifafowuvumabovexehilexiwafemaxetanutexijereyerusugafaradujozazogiruwimavanolapabofexuguripitijucuxulecaliyusizohayazafisofijijilekupibabuxolulobeyumanawopafurofulolivikofunopizininarevepu",
         "time_offset":0,
-        "occupation":"zofigojetemifigehosiriwo",
-        "age":1,
-        "type":6,
+        "occupation":"fisufagiwusitudekolulase",
+        "age":5,
+        "type":2,
         "likes_count":0,
-        "ctime":1341414404,
-        "utime":1341414404,
+        "ctime":1341421371,
+        "utime":1341421371,
         "is_ended":0
       }
     ]
 
-## Day - GetFollowingUsers ##
+## Day - GetFollowingUsersDays ##
 
-`POST {{host}}/my/days/following_users/`
+`POST {{host}}days/following_users/`
 
 Request: 
 
     {
-      "from":431
+      "from":650
     }
 
 Response: 
 
     [
       {
-        "id":432,
-        "user_id":679,
-        "title":"kocuyihiwoxurisuwexuwiha",
-        "description":"dotivodadedolijelapopehugitivuxumilefijeyiyeyeselebunewovigilalusufukifexarujeforatamiwefavidamozorecusuxewerazegokojayigobexidudogepugifatocobelezopugopeditehubicikecijokemeruvirenudacepumusikocobajeyotecehuyudivepumatuzeledicarimiceyapazidayukivuriwixe",
+        "id":651,
+        "user_id":1033,
+        "title":"katacevibefumecijulusube",
+        "description":"loyacenubumapevezokacuwepuyanolujedipogomovadijafogenanabififomizixifafowuvumabovexehilexiwafemaxetanutexijereyerusugafaradujozazogiruwimavanolapabofexuguripitijucuxulecaliyusizohayazafisofijijilekupibabuxolulobeyumanawopafurofulolivikofunopizininarevepu",
         "time_offset":0,
-        "occupation":"zofigojetemifigehosiriwo",
-        "age":1,
-        "type":6,
+        "occupation":"fisufagiwusitudekolulase",
+        "age":5,
+        "type":2,
         "likes_count":0,
-        "ctime":1341414404,
-        "utime":1341414404,
+        "ctime":1341421371,
+        "utime":1341421371,
         "is_ended":0
       }
     ]
 
-## Day - GetFollowingUsers ##
+## Day - GetFollowingUsersDays ##
 
-`POST {{host}}/my/days/following_users/`
+`POST {{host}}days/following_users/`
 
 Request: 
 
     {
-      "from":431,
-      "to":432
+      "from":650,
+      "to":651
     }
 
 Response: 
@@ -432,7 +461,7 @@ Response:
 
 ## Day - GetNewDays ##
 
-`POST {{host}}/days/new/`
+`POST {{host}}days/new/`
 
 Request: `empty`
 
@@ -440,60 +469,31 @@ Response:
 
     [
       {
-        "id":434,
-        "user_id":681,
-        "title":"cuhilidozuwowawoyidaluli",
-        "description":"dujawerapazekigehijoneyuparejajibonuyaxihusohuwinafapazaholovocoliretivujirikidureyalujopokenidubohofatinecuvewenoputuseraramocilegokuduhexalomunayeyinirataxupefuyivamajedocotirowigefumuyetisujolasufaheveyixidofebegihawariyudebohewinowidocekereruxuyoyigu",
+        "id":653,
+        "user_id":1035,
+        "title":"rupujuvabadowuyorepowapo",
+        "description":"koyicekiwivivasubixotabesahadujineciriciyuboworuhipupogesijohohuzelovicohakatuzunizafajurorukutefayurarucazubuwinurozuporanucejelegahuyexuguxalixaduzomixapujugofivihoxanacifiwanuxisebikononokofafiwasedovegihopagenewuxenedubecawufigefupipudacelipeliruvoyu",
         "time_offset":0,
-        "occupation":"gaxuyesawewaxewavozivaco",
+        "occupation":"cidohowolowapebimitozapu",
         "age":2,
-        "type":4,
+        "type":6,
         "likes_count":0,
-        "ctime":1341414406,
-        "utime":1341414406,
+        "ctime":1341421375,
+        "utime":1341421375,
         "is_ended":0
       },
       {
-        "id":435,
-        "user_id":680,
-        "title":"zoniguhuyirakovuhatejipa",
-        "description":"pesibohabozozazocomijaguxotixiviwizudezayuyucusanarufusapipiyeyovurucocapuxoxiwesiguhuzujijexebocopagoforalirexesafucavisasijodijopijojuxolibevomupicezomogujegocugipikijuyedozoridoyalitogabitagumumuhosecoxalirifisozigamepajudusisukefidanipacosokofowoxiwa",
+        "id":654,
+        "user_id":1034,
+        "title":"pijovebewiwayihasuzowilo",
+        "description":"tehoxezofijiduruhevihihulixufukuforayivabapacazekovoharoninojuripepiwerumazijuxotolutasepezufikowuhohumodihilagavocisotezodahiyakatodakerotavudipecebumanidocaxigideviredeluhinuvicukiwufusebitefurujejipokuhuramoxuhovisitociyehifivicefidikonumitodigozumake",
         "time_offset":0,
-        "occupation":"suhemejoxibabuwepumokeze",
-        "age":2,
-        "type":5,
+        "occupation":"kejayuwapoceyohuwixemita",
+        "age":7,
+        "type":7,
         "likes_count":0,
-        "ctime":1341414406,
-        "utime":1341414406,
-        "is_ended":0
-      }
-    ]
-
-## Day - GetNewDays ##
-
-`POST {{host}}/days/new/`
-
-Request: 
-
-    {
-      "from":434
-    }
-
-Response: 
-
-    [
-      {
-        "id":435,
-        "user_id":680,
-        "title":"zoniguhuyirakovuhatejipa",
-        "description":"pesibohabozozazocomijaguxotixiviwizudezayuyucusanarufusapipiyeyovurucocapuxoxiwesiguhuzujijexebocopagoforalirexesafucavisasijodijopijojuxolibevomupicezomogujegocugipikijuyedozoridoyalitogabitagumumuhosecoxalirifisozigamepajudusisukefidanipacosokofowoxiwa",
-        "time_offset":0,
-        "occupation":"suhemejoxibabuwepumokeze",
-        "age":2,
-        "type":5,
-        "likes_count":0,
-        "ctime":1341414406,
-        "utime":1341414406,
+        "ctime":1341421375,
+        "utime":1341421375,
         "is_ended":0
       }
     ]
@@ -505,8 +505,37 @@ Response:
 Request: 
 
     {
-      "from":434,
-      "to":435
+      "from":653
+    }
+
+Response: 
+
+    [
+      {
+        "id":654,
+        "user_id":1034,
+        "title":"pijovebewiwayihasuzowilo",
+        "description":"tehoxezofijiduruhevihihulixufukuforayivabapacazekovoharoninojuripepiwerumazijuxotolutasepezufikowuhohumodihilagavocisotezodahiyakatodakerotavudipecebumanidocaxigideviredeluhinuvicukiwufusebitefurujejipokuhuramoxuhovisitociyehifivicefidikonumitodigozumake",
+        "time_offset":0,
+        "occupation":"kejayuwapoceyohuwixemita",
+        "age":7,
+        "type":7,
+        "likes_count":0,
+        "ctime":1341421375,
+        "utime":1341421375,
+        "is_ended":0
+      }
+    ]
+
+## Day - GetNewDays ##
+
+`POST {{host}}days/new/`
+
+Request: 
+
+    {
+      "from":653,
+      "to":654
     }
 
 Response: 
@@ -515,9 +544,9 @@ Response:
       
     ]
 
-## Day - GetFavouriteDays ##
+## Day - CurrentUserDays ##
 
-`POST {{host}}my/days/favourites`
+`POST {{host}}days/my`
 
 Request: `empty`
 
@@ -525,65 +554,59 @@ Response:
 
     [
       {
-        "id":437,
-        "user_id":682,
-        "title":"rovamofiwabayamuvevodezo",
-        "description":"jazomihanugogupisusuwudawazaxohewebewemefocimozarodiserimirejupagimaxukapinafigufegusujalumoxayarefihirubayarazonepacuhixohovaxinayopirisivetocezolapopimuhezasifohofukumacayakuvuzepixakajehuxiragocopivotowaroyozifuniyuzewusicuganotemizenixiguzesizokuwawi",
+        "id":656,
+        "user_id":1036,
+        "title":"vipenopeguxokipebapipogo",
+        "description":"zocazudedamoriwilivuhopipekezukumizimasigaguralapazuzikixovurawarupayesalubayidirajipofimujadahozuxucicimapepoxatavexuwexanajoverogofegomobamugecanuzejunuxurodegeyitabayafiyiralazenegafaxosabukukacegalilewakeferosutuyisopopupubojerosadicitexezigolahawuve",
         "time_offset":0,
-        "occupation":"zajicujekerayosulevexusa",
-        "age":6,
-        "type":11,
+        "occupation":"suwutecikudugiredenabano",
+        "age":2,
+        "type":2,
         "likes_count":0,
-        "ctime":1341414408,
-        "utime":1341414408,
+        "ctime":1341421377,
+        "utime":1341421377,
+        "is_ended":0
+      },
+      {
+        "id":657,
+        "user_id":1036,
+        "title":"hasacasogotaruyuyusejale",
+        "description":"bayuhihikivitafopopasuzazocebeyakubohegovacicejobusoxowuhucejajoyekasoxiruzogekegazatoyutajacotuzafotadezacalilomesafofurizodosawutixuxuzucejizuxozajazususorexigozamuzivawanozimunoditolipavipubidikayadojonedahowedifizosofetetutaxojalotuzubemurikodenubobo",
+        "time_offset":0,
+        "occupation":"rigocucabipirijokimasate",
+        "age":3,
+        "type":8,
+        "likes_count":0,
+        "ctime":1341421377,
+        "utime":1341421377,
         "is_ended":0
       }
     ]
 
-## Day - AddToFavourites ##
-
-`POST {{host}}/days/438/favourite`
-
-Request: `empty`
-
-Response: 
-
-    null
-
-## Day - RemoveFromFavourites ##
-
-`POST {{host}}/days/439/unfavourite`
-
-Request: `empty`
-
-Response: 
-
-    null
-
 ## Moments - Update ##
 
-`POST {{host}}moments/57/update`
+`POST {{host}}moments/117/update`
 
 Request: 
 
     {
-      "description":"wawuxololecimemeruceliwazebaxegokapewubejatujebubafisapohisayuxeyipokibosopuzozutalidubeponirewivejazeyodiracicutigumehaborofifuwiduyalapadosemetogebijahusikukalizepikamivatenibotagadiyuxesematileyolihepunamivarufolanelepujelopematohevokejakudisiseyamibo"
+      "description":"bagajaloxipipijevunemuxurokawuvuyuyebebuvolegoturehafabuvixohomeremovipidazevojeyomaviyizofelolabusokejihexabamuwubimufiverayaguyutegavikopewajozegijeyatihoripikewikocohodativowafalagarivezewerozajavitutijidanehukicazuhufajuvewajisameloyiyiwakasigohiripu"
     }
 
 Response: 
 
     {
-      "id":57,
-      "day_id":440,
-      "description":"wawuxololecimemeruceliwazebaxegokapewubejatujebubafisapohisayuxeyipokibosopuzozutalidubeponirewivejazeyodiracicutigumehaborofifuwiduyalapadosemetogebijahusikukalizepikamivatenibotagadiyuxesematileyolihepunamivarufolanelepujelopematohevokejakudisiseyamibo",
+      "id":117,
+      "day_id":658,
+      "description":"bagajaloxipipijevunemuxurokawuvuyuyebebuvolegoturehafabuvixohomeremovipidazevojeyomaviyizofelolabusokejihexabamuwubimufiverayaguyutegavikopewajozegijeyatihoripikewikocohodativowafalagarivezewerozajavitutijidanehukicazuhufajuvewajisameloyiyiwakasigohiripu",
       "img_url":"",
       "likes_count":0,
-      "ctime":1341414414
+      "ctime":1341421379
     }
 
 ## Moments - Delete ##
 
-`POST {{host}}moments/58/delete`
+`POST {{host}}moments/118/delete`
 
 Request: `empty`
 
@@ -593,42 +616,42 @@ Response:
 
 ## Moments - Comment ##
 
-`POST {{host}}moments/59/comment`
+`POST {{host}}moments/119/comment`
 
 Request: 
 
     {
-      "text":"gizazihinusowubakisikoyedikeyufalafenivaliwehujogugovayusejiciviruxajogodazixecajetamocayevaxinimerucupexiroxowecikigitawidobodiboharujikuhesamosujuhabanaviwuzusezecewihasufavubavedomozefufasulodibuyebohevacuduferoxixakagaxovuduzacasegilehidivocohusoyuvo"
+      "text":"sezefobebetawerojexiyadexefumajaheliyivutizitogazapudofubevijarolacemuhejevaxucubovahudeguwibifinevadagijumayicugudivewagoredotocisapuruwadosatubukofewixisageseyemigalafiwusitomamohecavofuduhafopewulumewawixepezusabivelucozeliremafujadanamakibamanehudera"
     }
 
 Response: 
 
     {
-      "text":"gizazihinusowubakisikoyedikeyufalafenivaliwehujogugovayusejiciviruxajogodazixecajetamocayevaxinimerucupexiroxowecikigitawidobodiboharujikuhesamosujuhabanaviwuzusezecewihasufavubavedomozefufasulodibuyebohevacuduferoxixakagaxovuduzacasegilehidivocohusoyuvo",
+      "text":"sezefobebetawerojexiyadexefumajaheliyivutizitogazapudofubevijarolacemuhejevaxucubovahudeguwibifinevadagijumayicugudivewagoredotocisapuruwadosatubukofewixisageseyemigalafiwusitomamohecavofuduhafopewulumewawixepezusabivelucozeliremafujadanamakibamanehudera",
       "moment":{
-        "id":59,
-        "day_id":442,
+        "id":119,
+        "day_id":660,
         "image_ext":"",
         "fb_id":"",
         "likes_count":0,
-        "ctime":1341414418,
-        "utime":1341414418,
+        "ctime":1341421383,
+        "utime":1341421383,
         "cip":0
       },
       "user":{
-        "id":690,
+        "id":1039,
         "fb_uid":"100004010804750",
-        "fb_access_token":"AAAFnVo0zuqkBAGUHuJ9ifrZBL0YJNMm3JtS1Xuml2zC90rBh0cvGhNb21LWAqLO8w8zbpgN6X4QQo8U8ZACa07FmIb793nRBZBnHoWnDZAWBZBEvLrtzd",
-        "ctime":1341414418,
-        "utime":1341414418,
+        "fb_access_token":"AAAFnVo0zuqkBAPVZBqcXJXiMOB4CH1eCpN6jsRYNW0R9mKnLZB4JrZC3sLBGC0n9CZBRL3GgcHIDw5lHm8HEsWtxkOyERAnNLGKgmXM9sIZBjAoW71MYy",
+        "ctime":1341421383,
+        "utime":1341421383,
         "cip":0
       },
       "cip":2130706433,
-      "user_id":690,
-      "moment_id":59,
-      "ctime":1341414419,
-      "utime":1341414419,
-      "id":5
+      "user_id":1039,
+      "moment_id":119,
+      "ctime":1341421384,
+      "utime":1341421384,
+      "id":9
     }
 
 ## Social - FacebookFiends ##
@@ -641,63 +664,24 @@ Response:
 
     [
       {
-        "ctime":1341414420,
+        "ctime":1341421384,
         "fb_name":"bar",
         "fb_profile_url":"http:\/\/www.facebook.com\/profile.php?id=100004036783679",
         "fb_profile_utime":1340810728,
         "fb_timezone":null,
         "fb_uid":"100004036783679",
-        "id":692,
+        "id":1041,
         "pic_big":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v2\/yL\/r\/HsTZSDw4avx.gif",
         "pic_small":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v1\/yi\/r\/odA9sNLrE86.jpg",
         "pic_square":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v2\/yo\/r\/UlIqmHJn-SK.gif",
         "sex":"male",
-        "utime":1341414420
-      }
-    ]
-
-## User - CurrentUserDays ##
-
-`POST {{host}}my/days/`
-
-Request: `empty`
-
-Response: 
-
-    [
-      {
-        "id":443,
-        "user_id":693,
-        "title":"bununisisukasilazomaxiwe",
-        "description":"xapumujerilofivoludemopedezadecupoyapehevozugototuxamimivituwoxilumucofulavoyijojaxorejivajiwazezigagixopojidofivafikiwapasihosefujejabuveluzojoriduzudicuzemoromucocasulavetadepejigicegaroselafizepoduvukiziwivacapajugupugucelarusozireyoxofoxerilujoxupayo",
-        "time_offset":0,
-        "occupation":"zomuvupoxagukiwozajumigu",
-        "age":5,
-        "type":9,
-        "likes_count":0,
-        "ctime":1341414422,
-        "utime":1341414422,
-        "is_ended":0
-      },
-      {
-        "id":444,
-        "user_id":693,
-        "title":"tiruvodajimoyuxikanuzetu",
-        "description":"bucafihoduyesovunijucopobijodilajijibiganakawacerekodumajowijepotufomixupedejetupatobewebotexeyigahonasakunobetojikesasowizotuhucipitetadewamiwubafokukegeyuhewewiyitosuwibecucabevecapemigotabimucepocegaseyokubajagukololasisalokumikonaziwekulozorekazofohu",
-        "time_offset":0,
-        "occupation":"polujabiyayucisokenalaya",
-        "age":5,
-        "type":11,
-        "likes_count":0,
-        "ctime":1341414422,
-        "utime":1341414422,
-        "is_ended":0
+        "utime":1341421384
       }
     ]
 
 ## User - UserByIdDays ##
 
-`POST {{host}}users/694/days/`
+`POST {{host}}users/1042/days/`
 
 Request: `empty`
 
@@ -705,38 +689,38 @@ Response:
 
     [
       {
-        "id":445,
-        "user_id":694,
-        "title":"lufujopimeviwewemawubuwa",
-        "description":"huwemuhepecikuculerufumikumojesidiyikawukuloxirexedacomiludofujehexokororamipawijuninuxuxarawujafewiyihimocaxumevurezigupuxiwenamenevuyepahixototezoxanicixuseyatipihisunuketabiludefovedofubazopigubuviyayofuboyazaxolalowitogejigeluxecoyetuxofuwarebawumiso",
+        "id":661,
+        "user_id":1042,
+        "title":"fewufabagifevedozuteloka",
+        "description":"vedesifefopuligevuhabexeyemeguzuhafunegozosikutaxufugahakolisinunoxadavayinekekegifirinagupukaxuxozuwocogobowexazalimuroyepejifefafayevawowofotatatadexanijuyicasedomuwesobujozaxohabacirelixiritogetanisihahecayegumelarurijedacehokofakidosewipamahuduvolabi",
         "time_offset":0,
-        "occupation":"mobalucifucomacipuvunija",
-        "age":1,
-        "type":1,
+        "occupation":"hikogomoyozowamacovofoye",
+        "age":5,
+        "type":9,
         "likes_count":0,
-        "ctime":1341414424,
-        "utime":1341414424,
+        "ctime":1341421387,
+        "utime":1341421387,
         "is_ended":0
       },
       {
-        "id":446,
-        "user_id":694,
-        "title":"royepuyuvegudefufebiyefe",
-        "description":"mafugedamupimuxaxitipuhexumezisirukudibojoculubekowurahizoxujilumuvijofolenugidogupucukarebuwiwehixikahokorihofitokuroxebudukufonagudisigecibebobipogiyejacobejijilibazekavehudehobidusibofabipecawadojiwaxayalasisulehidimayanacecaditunobirireyederewowexohi",
+        "id":662,
+        "user_id":1042,
+        "title":"narokapohatikihupirunoha",
+        "description":"wiluteyefonenikalesevagagilofipuwuzijuyirixaxeferurezulajuxihimalirokigubafujefufujarokurelusuzalowofavaducigekicoromusafazubuyinogovuyuxukahopemacudozewufuxajixidonapibunesasahocimatebufucijubirineyifixupibujahudadazecavezuwojexeyatoxekufoyipamogibemusi",
         "time_offset":0,
-        "occupation":"kekibibuyabewuxonefofuwa",
-        "age":2,
-        "type":9,
+        "occupation":"maxojuwuroyibirecomexebi",
+        "age":1,
+        "type":6,
         "likes_count":0,
-        "ctime":1341414424,
-        "utime":1341414424,
+        "ctime":1341421387,
+        "utime":1341421387,
         "is_ended":0
       }
     ]
 
 ## User - Followers ##
 
-`POST {{host}}my/followers`
+`POST {{host}}users/followers`
 
 Request: `empty`
 
@@ -748,7 +732,7 @@ Response:
 
 ## User - Followers ##
 
-`POST {{host}}my/followers`
+`POST {{host}}users/followers`
 
 Request: `empty`
 
@@ -756,24 +740,24 @@ Response:
 
     [
       {
-        "ctime":1341414426,
+        "ctime":1341421389,
         "fb_name":"bar",
         "fb_profile_url":"http:\/\/www.facebook.com\/profile.php?id=100004036783679",
         "fb_profile_utime":1340810728,
         "fb_timezone":"0",
         "fb_uid":"100004036783679",
-        "id":697,
+        "id":1045,
         "pic_big":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v2\/yL\/r\/HsTZSDw4avx.gif",
         "pic_small":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v1\/yi\/r\/odA9sNLrE86.jpg",
         "pic_square":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v2\/yo\/r\/UlIqmHJn-SK.gif",
         "sex":"male",
-        "utime":1341414426
+        "utime":1341421389
       }
     ]
 
 ## User - Following ##
 
-`POST {{host}}my/following`
+`POST {{host}}users/following`
 
 Request: `empty`
 
@@ -785,7 +769,7 @@ Response:
 
 ## User - Following ##
 
-`POST {{host}}my/following`
+`POST {{host}}users/following`
 
 Request: `empty`
 
@@ -793,24 +777,24 @@ Response:
 
     [
       {
-        "ctime":1341414428,
+        "ctime":1341421391,
         "fb_name":"bar",
         "fb_profile_url":"http:\/\/www.facebook.com\/profile.php?id=100004036783679",
         "fb_profile_utime":1340810728,
         "fb_timezone":"0",
         "fb_uid":"100004036783679",
-        "id":699,
+        "id":1047,
         "pic_big":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v2\/yL\/r\/HsTZSDw4avx.gif",
         "pic_small":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v1\/yi\/r\/odA9sNLrE86.jpg",
         "pic_square":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v2\/yo\/r\/UlIqmHJn-SK.gif",
         "sex":"male",
-        "utime":1341414428
+        "utime":1341421391
       }
     ]
 
 ## User - Follow ##
 
-`POST {{host}}users/701/follow`
+`POST {{host}}users/1049/follow`
 
 Request: `empty`
 
@@ -820,7 +804,7 @@ Response:
 
 ## User - Unfollow ##
 
-`POST {{host}}users/703/unfollow`
+`POST {{host}}users/1051/unfollow`
 
 Request: `empty`
 
