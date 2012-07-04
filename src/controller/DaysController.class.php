@@ -38,7 +38,7 @@ class DaysController extends BaseJsonController
     }
   }
 
-  function doComment()
+  function doCommentCreate()
   {
     if(!$this->request->hasPost())
       return $this->_answerWithError('Not a POST request');

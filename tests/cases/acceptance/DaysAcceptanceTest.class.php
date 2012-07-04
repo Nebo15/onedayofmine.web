@@ -39,23 +39,6 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     }
   }
 
-  //TODO
-  function testItem_NotFound() {}
-
-  function testItem_DeletedDay()
-  {
-    $day = $this->generator->day();
-    $day->getUser()->save();
-    $day->setIsDeleted(1);
-    $day->save();
-
-    $this->_loginAndSetCookie($this->main_user);
-    $response = $this->get('days/'.$day->getId().'/item');
-
-    $response->result;
-    $this->assertResponse(404);
-  }
-
   /**
    *@example
    */
@@ -96,16 +79,34 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $this->assertEqual(null, $loaded_days->$not_exist_day_id);
   }
 
+  //TODO
+  function testItem_NotFound() {
+  }
+
+  function testItem_DeletedDay()
+  {
+  	$day = $this->generator->day();
+  	$day->getUser()->save();
+  	$day->setIsDeleted(1);
+  	$day->save();
+
+  	$this->_loginAndSetCookie($this->main_user);
+  	$response = $this->get('days/'.$day->getId().'/item');
+
+  	$response->result;
+  	$this->assertResponse(404);
+  }
+
   /**
    *@example
    */
-  function testComment()
+  function testCommentCreate()
   {
     $day = $this->generator->day($this->main_user);
     $day->save();
 
     $this->_loginAndSetCookie($this->main_user);
-    $res = $this->post('days/'.$day->getId().'/comment', array(
+    $res = $this->post('days/'.$day->getId().'/comment_create', array(
       'text' => $text = $this->generator->string(255)
     ))->result;
 
@@ -118,7 +119,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   }
 
   //TODO
-  function testComment_NotFound() {}
+  function testCommentCreate_NotFound() {}
 
   /**
    *@example
