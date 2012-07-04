@@ -62,7 +62,7 @@ class DaysController extends BaseJsonController
     return $this->_answerOk();
 
     if(!$day = Day::findById($this->request->id))
-      return $this->_answerOk(404, 'Day not found');
+      return $this->_answerNotFound('Day not found');
 
     return $this->_importSaveAndAnswer($day, array('title', 'description', 'time_offset', 'occupation', 'age', 'type'));
   }
@@ -73,7 +73,7 @@ class DaysController extends BaseJsonController
       return $this->_answerWithError('Not a POST request');
 
     if(!$day = Day::findById($this->request->id))
-      return $this->_answerOk(404, 'Day not found');
+      return $this->_answerNotFound('Day not found');
 
     $day->setIsEnded(1);
     $day->save();
@@ -87,7 +87,7 @@ class DaysController extends BaseJsonController
       return $this->_answerWithError('Not a POST request');
 
     if(!$day = Day::findById($this->request->id))
-      return $this->_answerOk(404, 'Day not found');
+      return $this->_answerNotFound('Day not found');
 
     $day->setIsDeleted(1);
     $day->save();
@@ -195,5 +195,35 @@ class DaysController extends BaseJsonController
   function doFavourites()
   {
 		return $this->_answerOk($this->_getUser()->getFavouriteDays());
+  }
+
+  function doFavourite()
+  {
+  	if(!$this->request->hasPost())
+  		return $this->_answerWithError('Not a POST request');
+
+  	if(!$day = Day::findById($this->request->id))
+  		return $this->_answerNotFoound('Day not found');
+
+  	$favourites = $this->_getUser()->getFavouriteDays();
+  	$favourites->add($day);
+  	$favourites->save();
+
+  	return $this->_answerOk();
+  }
+
+  function doUnfavourite()
+  {
+  	if(!$this->request->hasPost())
+  		return $this->_answerWithError('Not a POST request');
+
+  	if(!$day = Day::findById($this->request->id))
+  		return $this->_answerNotFoound('Day not found');
+
+  	$favourites = $this->_getUser()->getFavouriteDays();
+  	$favourites->remove($day);
+  	$favourites->save();
+
+  	return $this->_answerOk();
   }
 }

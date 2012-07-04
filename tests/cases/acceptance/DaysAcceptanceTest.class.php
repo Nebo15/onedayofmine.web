@@ -257,7 +257,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   /**
    * @example
    */
-  function testDelete()
+  function testDeleteDay()
   {
     $day = $this->generator->day($this->main_user);
     $day->save();
@@ -277,10 +277,20 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   //TODO
   function testDelete_WrongUser() {}
 
+  //TODO
+  function testRestoreDay() {}
+
+  //TODO
+  function testRestoreDay_NotFound() {}
+
+  //TODO
+  function testRestoreDay_WrongUser() {}
+
+
   /**
    *@example
    */
-  function testShare()
+  function testShareDay()
   {
     $day = $this->generator->day($this->additional_user);
     $day->save();
@@ -305,7 +315,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   /**
    * @example
    */
-  function testFollowingUsers()
+  function testGetFollowingUsers()
   {
 		$this->main_user->save();
 		$this->additional_user->addToFollowers($this->main_user);
@@ -346,7 +356,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   /**
    * @example
    */
-  function testNew()
+  function testGetNewDays()
   {
   	$this->main_user->save();
   	$this->additional_user->save();
@@ -382,12 +392,12 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   }
 
   //TODO
-  function testInteresting() {}
+  function testGetInterestingDays() {}
 
   /**
    * @example
    */
-  function testFavourites()
+  function testGetFavouriteDays()
   {
   	$this->additional_user->save();
   	$day = $this->generator->day($this->additional_user);
@@ -410,7 +420,21 @@ class DayAcceptanceTest extends odAcceptanceTestCase
    */
   function testAddToFavourites()
   {
+  	$this->main_user->save();
+  	$this->additional_user->save();
+  	$day = $this->generator->day($this->additional_user);
+  	$day->save();
 
+  	$this->assertEqual(0, $this->main_user->getFavouriteDays()->count());
+
+  	$this->_loginAndSetCookie($this->main_user);
+  	$this->post('/days/'.$day->getId().'/favourite');
+
+  	if($this->assertResponse(200))
+  	{
+  		$this->assertEqual(1, $this->main_user->getFavouriteDays()->count());
+  		$this->assertEqual($day->getId(), $this->main_user->getFavouriteDays()->at(0)->getId());
+  	}
   }
 
   /**
@@ -418,6 +442,18 @@ class DayAcceptanceTest extends odAcceptanceTestCase
    */
   function testRemoveFromFavourites()
   {
+  	$this->main_user->save();
+  	$this->additional_user->save();
+  	$day = $this->generator->day($this->additional_user);
+  	$day->save();
 
+  	$this->main_user->getFavouriteDays()->add($day);
+  	$this->main_user->save();
+
+  	$this->_loginAndSetCookie($this->main_user);
+  	$this->post('/days/'.$day->getId().'/unfavourite');
+
+  	if($this->assertResponse(200))
+  		$this->assertEqual(0, $this->main_user->getFavouriteDays()->count());
   }
 }
