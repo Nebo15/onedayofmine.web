@@ -303,7 +303,9 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   //TODO
   function testSearch() {}
 
-  //TODO
+  /**
+   * @example
+   */
   function testFollowingUsers()
   {
 		$this->main_user->save();
@@ -313,18 +315,72 @@ class DayAcceptanceTest extends odAcceptanceTestCase
 		$day1 = $this->generator->day($this->additional_user);
 		$day1->save();
 		$day2 = $this->generator->day($this->additional_user);
-		$day2->setIsDeleted(1);
 		$day2->save();
+		$day3 = $this->generator->day($this->additional_user);
+		$day3->setIsDeleted(1);
+		$day3->save();
 
 		$this->_loginAndSetCookie($this->main_user);
-		$days = $this->post('/my/days/following_users/')->result;
+
+		$days = $this
+			->get('/my/days/following_users/')
+			->result;
+		$this->assertResponse(200);
+		$this->assertEqual(2, count($days));
+		$this->assertEqual($day1->getId(), $days[0]->id);
+		$this->assertEqual($day2->getId(), $days[1]->id);
+
+		$days = $this
+			->get('/my/days/following_users/', array('from' => $day1->getId()))
+		  ->result;
 		$this->assertResponse(200);
 		$this->assertEqual(1, count($days));
-		$this->assertEqual($day1->getId(), $days[0]->id);
+		$this->assertEqual($day2->getId(), $days[0]->id);
+
+		$days = $this
+			->get('/my/days/following_users/', array('from' => $day1->getId(), 'to' => $day2->getId()))
+			->result;
+		$this->assertResponse(200);
+		$this->assertEqual(0, count($days));
   }
 
-  //TODO
-  function testNew() {}
+  /**
+   * @example
+   */
+  function testNew()
+  {
+  	$this->main_user->save();
+  	$this->additional_user->save();
+
+  	$day1 = $this->generator->day($this->additional_user);
+  	$day1->save();
+  	$day2 = $this->generator->day($this->main_user);
+  	$day2->save();
+  	$day3 = $this->generator->day($this->main_user);
+  	$day3->setIsDeleted(1);
+  	$day3->save();
+
+  	$this->_loginAndSetCookie($this->additional_user);
+
+  	$result = $this->get('/days/new/')->result;
+  	$this->assertResponse(200);
+  	$this->assertEqual(2, count($result));
+  	$this->assertEqual($day1->getId(), $result[0]->id);
+  	$this->assertEqual($day2->getId(), $result[1]->id);
+
+  	$result = $this
+  		->get('/days/new/', array('from' => $day1->getId()))
+  		->result;
+  	$this->assertResponse(200);
+  	$this->assertEqual(1, count($result));
+  	$this->assertEqual($day2->getId(), $result[0]->id);
+
+  	$result = $this
+  		->get('/days/new/', array('from' => $day1->getId(), 'to' => $day2->getId()))
+  		->result;
+  	$this->assertResponse(200);
+  	$this->assertEqual(0, count($result));
+  }
 
   //TODO
   function testInteresting() {}

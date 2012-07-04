@@ -53,13 +53,29 @@ class Day extends BaseModel
   }
 
   /**
-   * @param array $ids
-   * @return lmbCollection
+   * @return lmbCollectionInterface
    */
-  static function findByUsersIds(array $ids)
+  static function findByUsersIds(array $ids, $from_id = null, $to_id = null)
   {
 		$criteria = lmbSQLCriteria::in('user_id', $ids);
-		$criteria->addAnd('is_deleted = 0');
+		$criteria->add('is_deleted = 0');
+		if($from_id)
+			$criteria->add(lmbSQLCriteria::greater('id', $from_id));
+		if($to_id)
+			$criteria->add(lmbSQLCriteria::greater('id', $to_id));
+		return Day::find(array('criteria' => $criteria));
+  }
+
+  /**
+   * @return lmbCollectionInterface
+   */
+  static function findNew($from_id = null, $to_id = null)
+  {
+		$criteria = lmbSQLCriteria::equal('is_deleted', 0);
+		if($from_id)
+			$criteria->add(lmbSQLCriteria::greater('id', $from_id));
+		if($to_id)
+			$criteria->add(lmbSQLCriteria::greater('id', $to_id));
 		return Day::find(array('criteria' => $criteria));
   }
 }

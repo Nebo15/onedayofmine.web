@@ -179,7 +179,16 @@ class DaysController extends BaseJsonController
 
   function doFollowingUsers()
   {
+  	$from = $this->request->getFiltered('from', FILTER_SANITIZE_NUMBER_INT);
+  	$to = $this->request->getFiltered('to', FILTER_SANITIZE_NUMBER_INT);
   	$users_ids = lmbArrayHelper::getColumnValues('id', $this->_getUser()->getFollowing());
-		return $this->_answerOk(Day::findByUsersIds($users_ids));
+		return $this->_answerOk(Day::findByUsersIds($users_ids, $from, $to));
+  }
+
+  function doNew()
+  {
+  	$from = $this->request->getFiltered('from', FILTER_SANITIZE_NUMBER_INT);
+  	$to = $this->request->getFiltered('to', FILTER_SANITIZE_NUMBER_INT);
+  	return $this->_answerOk(Day::findNew($from, $to));
   }
 }
