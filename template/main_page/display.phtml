@@ -68,27 +68,23 @@
         </ul>
 
         <h3>Пользователи для тестирования:</h3>
-        <?php
-        ob_start();
-        $users = odTestsTools::loadUsersInfo();
-        $out = ob_get_contents();
-        ob_end_clean();
-        ?>
+        <?php $users = odTestsTools::loadUsersInfo(); ?>
+
         {{list using="{$users}"}}
         <ul>
           {{list:item}}
           <li>
-            ID: {$item->id}
+            ID: {$item.id}
             <ul>
-              <li>access_token: {$item->access_token}</li>
-              <li><a href="{$item->login_url}">login by user</a></li>
+              <li>access_token: {$item.access_token}</li>
+              <li><a href="{$item.login_url}">login by user</a></li>
             </ul>
           </li>
           {{/list:item}}
           {{list:empty}}
-          {$out}
-          <img
-            src="http://gifsforum.com/images/gif/F5/grand/rafresh-refresh-F5-eccbc87e4b5ce2fe28308fd9f2a7baf3-185.gif"/>
+          	{$out}
+          	<img
+            	src="http://gifsforum.com/images/gif/F5/grand/rafresh-refresh-F5-eccbc87e4b5ce2fe28308fd9f2a7baf3-185.gif"/>
           {{/list:empty}}
         </ul>
         {{/list}}
