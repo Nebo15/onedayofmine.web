@@ -62,7 +62,7 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 		$day->save();
 
 		$this->_loginAndSetCookie($this->main_user);
-		$loaded_day = $this->post('current_day')->result;
+		$loaded_day = $this->get('current_day')->result;
 
 		$this->assertResponse(200);
 		$this->assertEqual($loaded_day->title, $day->title);
@@ -80,7 +80,7 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 		$day->save();
 
 		$this->_loginAndSetCookie($this->main_user);
-		$loaded_day = $this->post('current_day')->result;
+		$loaded_day = $this->get('current_day')->result;
 
 		$this->assertResponse(404);
 	}
