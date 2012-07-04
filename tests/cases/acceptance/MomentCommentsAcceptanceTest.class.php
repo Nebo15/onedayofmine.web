@@ -1,0 +1,41 @@
+<?php
+lmb_require('tests/cases/odAcceptanceTestCase.class.php');
+
+class MomentCommentsAcceptanceTest extends odAcceptanceTestCase
+{
+	function setUp()
+	{
+		parent::setUp();
+		odTestsTools::truncateTablesOf('Day', 'Moment', 'MomentComment');
+	}
+
+	function testUpdate()
+	{
+		$this->main_user->save();
+		$comment = $this->generator->momentComment(null, $this->main_user);
+		$comment->save();
+		$new_comment_text = $this->generator->string(8);
+
+		$this->_loginAndSetCookie($this->main_user);
+		$this->post('/moment_comments/'.$comment->getId().'/update', array('text' => $new_comment_text));
+		$this->assertResponse(200);
+
+		$loaded_comment = MomentComment::findById($comment->getId());
+		$this->assertEqual($new_comment_text, $loaded_comment->getText());
+	}
+
+	function testUpdate_WrongUser()
+	{
+		$this->main_user->save();
+		$comment = $this->generator->momentComment(null, $this->main_user);
+		$comment->save();
+		$new_comment_text = $this->generator->string(8);
+
+		$this->_loginAndSetCookie($this->additional_user);
+		$this->post('/moment_comments/'.$comment->getId().'/update', array('text' => $new_comment_text));
+		$this->assertResponse(404);
+	}
+
+/*
+	POST /moment_comments/<comment_id>/delete */
+}

@@ -42,6 +42,14 @@ class User extends BaseModel
     );
   }
 
+  protected function _createValidator()
+  {
+  	$validator = new lmbValidator();
+  	$validator->addRequiredRule('fb_uid');
+  	$validator->addRequiredRule('fb_access_token');
+  	return $validator;
+  }
+
   function setUserInfo($user_info)
   {
     $this->user_info_from_fb = $user_info;

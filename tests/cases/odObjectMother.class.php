@@ -8,6 +8,8 @@ class odObjectMother
   function user()
   {
     $user = new User();
+    $user->setFbUid($this->string(5));
+    $user->setFbAccessToken($this->string(50));
     return $user;
   }
 
