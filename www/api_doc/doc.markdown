@@ -22,11 +22,35 @@
 
 ### 3.1.1 Регистрация/аутентификация /auth/login - публичный ###
 
+Описание:
+
     Запрос:
-      'fb_access_token' => <string 255>
+      'fb_access_token' => <string 255>    
     Ответ(поле result):
       'session' => <int 11>
       'user' => информация о пользователе
+      
+Пример:
+
+      {
+        "fb_access_token":"AAAFnVo0zuqkBADJUOZCLgTXLZCJWpfrZA8wv3g9ZATMKsnkRV5yaQPXmS1ZCiSMJxaC3EjKsEvKk0HRrVZBaGwRqLV1hK8LaivOZAdkcnThVUbTceEOGVpG"
+      }
+      {
+        "sessid":"jpmr9m0kbo48bcqdk2gm5seb14",
+        "user":{
+          "ctime":1341001582,
+          "fb_name":"foo",
+          "fb_profile_url":"http:\/\/www.facebook.com\/profile.php?id=100004010804750",
+          "fb_profile_utime":1340810718,
+          "fb_timezone":"3",
+          "fb_uid":"100004010804750",
+          "id":1,
+          "pic_big":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v2\/yp\/r\/yDnr5YfbJCH.gif",
+          "pic_small":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v1\/yP\/r\/FdhqUFlRalU.jpg",
+          "pic_square":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v2\/y9\/r\/IB7NOFmPw2a.gif",
+          "sex":"female",
+          "utime":1341001582
+     }
 
 ### 3.1.2 Проверка сессии /auth/is_logged_in - приватный ###
     Запрос: пустой
@@ -37,72 +61,76 @@
     Ответ: пустой
 
 
-## 3.2 Пользователи ##
+## 3.2 Новости ##
 
-### 3.2.1 Дни указанного пользователя /user/days/{id} - публичный ###
-    Запрос: ответ
-    Ответ (поле result): [
-      "id": <int 11> 42,
-      "title": <string 255> "My loooooooooooooong day",
-      "img_url": <string 255> "http:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/84\/Example.svg",
-      "description": <string 1023> "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\nQuisque volutpat egestas elit, id ornare risus cursus non.\nInteger consequat dignissim nisi, non tincidunt metus interdum non.\nPhasellus purus sem, convallis vitae rutrum nec, vulputate in ante.\nVestibulum id purus risus. Phasellus eu sapien et dui tempus pharetra.\nDuis congue dolor et dolor lacinia scelerisque. Suspendisse potenti.\nMauris non ultricies mi. Aliquam erat volutpat. Pellentesque non justo\nfacilisis tellus semper venenatis scelerisque ultricies justo.\nNullam ultricies mattis placerat. Maecenas metus est, convallis\nadipiscing mollis eget, porttitor nec sem. Nulla elementum pretium\nturpis, id fermentum magna mollis a. Donec sit amet eleifend arcu.'",
-      "ctime": <int 11> 1330000000
-    ]
+GET /news?from=<id последней присутствующей в приложении новости>&to=<id первой присутствующей в приложении новости>
 
-### 3.2.1 Дни текущего пользователя /user/days/ - приватный ###
-    Запрос: ответ
-    Ответ: [
-      "id": <int 11> 42,
-      "title": <string 255> "My loooooooooooooong day",
-      "img_url": <string 255> "http:\/\/upload.wikimedia.org\/wikipedia\/commons\/8\/84\/Example.svg",
-      "description": <string 1023> "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\nQuisque volutpat egestas elit, id ornare risus cursus non.\nInteger consequat dignissim nisi, non tincidunt metus interdum non.\nPhasellus purus sem, convallis vitae rutrum nec, vulputate in ante.\nVestibulum id purus risus. Phasellus eu sapien et dui tempus pharetra.\nDuis congue dolor et dolor lacinia scelerisque. Suspendisse potenti.\nMauris non ultricies mi. Aliquam erat volutpat. Pellentesque non justo\nfacilisis tellus semper venenatis scelerisque ultricies justo.\nNullam ultricies mattis placerat. Maecenas metus est, convallis\nadipiscing mollis eget, porttitor nec sem. Nulla elementum pretium\nturpis, id fermentum magna mollis a. Donec sit amet eleifend arcu.'",
-      "ctime": <int 10> 1330000000
-    ]
+[TO DISCUSS] Как пушить на телефон новости?
 
-### 3.2.1 Список fb-друзей с установленным приложением ###
-    Запрос: пустой
-    Ответ: [
-      "id": <int 11> 2,
-      "ctime": <int 10> 1340217482,
-      "fb_name": <string ?> "Elizabeth Amciejhdgbeg Liwitz",
-      "fb_profile_url": <string ?>"http:\/\/www.facebook.com\/profile.php?id=100003950847257",
-      "fb_profile_utime": <int 10> 1340211454,
-      "fb_uid": <string 15> "100003950847257",
-      "fb_timezone": <int 2> null,
-      "pic_big": <string ?> "http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v2\/yp\/r\/yDnr5YfbJCH.gif",
-      "pic_small": <string ?> "http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v1\/yP\/r\/FdhqUFlRalU.jpg",
-      "pic_square": <string ?> "http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v2\/y9\/r\/IB7NOFmPw2a.gif",
-      "sex": <enum: male|female|null> "female",
-      "utime": <int 10> 1340217482
-    ]
+## 3.3 Дни ##
 
-## 3. Дни ##
+GET /my/days/following?from=<dayId>&to=<dayId>
+GET /my/days/new?from=<dayId>&to=<dayId>
+GET /my/days/interesting?from=<dayId>&to=<dayId>
 
-### 3.1 список дней по критериям ###
+GET /days/search - должен уметь искать по неполной строке
 
-### 3.2 просмотр дня /day/item/$id ###
-Запрос: {}
-Ответ: {    'id' => <int 11>,   'user' => {     'user_id' => <int 11>,     'fb_user_id' => <string 16>   },      'title' => <string 255>,   'description' => <string 1023>,   'start_time' => <timestamp>,   'ctime' => <timestamp>,   'utime' => <timestamp>,   'likes_count' => <int 11>,   'moments' => [   ],   'comments' => [   ] }
+## 3.4 День ##
 
-3.3 просмотр нескольких дней /day/items/$id1,$id2,$id3...
-Запрос: {}
-Ответ: {
-}
++GET /days/<dayId>/item - '/item' потом уберу
 
-3.4 создание дня  - [tag_name], day_type, occupation) - day_id
-3.5 редактирование дня - [tag_name], top_photo_id
-3.6 завершение дня - day_id
-3.7 добавление части  - day_id, type, fb_id, timestamp, description - moment
-3.8 комментирование дня - day_id, text - day_comment
++GET /days/<dayId>/comment
+GET /days/<dayId>/like
++-GET /days/<dayId>/share
 
-4. Моменты
-4.1 обновление части - moment_id, fb_id, timestamp, description - moment
-4.2 комментирование момента - moment_id, text - moment_comment
-4.3 удаление части  - moment_id
-4.4 расшаривание части в fb - id'шник записи на стене
+## 3.5 Моменты ##
++GET /moments/<momentId>/comment
+GET /moments/<momentId>/like
 
-5. Прочее
-5.1 создание жалобы модератору - day_id, text - complaint_id
-5.2 саджест для поиска - text - [text]
-5.3 полнотекстовый поиск - text - [user], [day], [moment]
-5.4 список моих дней [day]
+POST /moments/<momentId>/comments/<commentId>/update
+
+## 3.6 Моё ##
++GET /my/days
++POST /my/days/<dayId>/delete
++POST /my/days/<dayId>/restore
++POST /my/days/<dayId>/update
+
++-POST /my/days/<dayId>/moments/<momentId>/update
+
+GET /my/favourites
+POST /my/favourites
+POST /my/favourites/<dayId>/delete
+
++GET /my/following
++POST /users/<userId>/follow
++POST /users/<userId>/unfollow
++GET /my/followers
+
+GET /my/profile
+POST /my/profile/update
+
+GET /my/settings
+POST /my/settings/<settingId>
+
+## 3.7 Добавление дней ##
+GET /my/currentDay - запрашивается при старте приложения, возвращает текущий наполняемый день пользователя
+POST /my/currentDay/start
+POST /my/currentDay/addMoment
+POST /my/currentDay/finish
+
+## 3.8 Пользователи ##
+GET /users/<userId>
+GET /users/<userId>/days
+GET /users/<userId>/following
+GET /users/<userId>/followers
+GET /users/<userId>/activity
+GET /users/search
+
+## 3.9 Соц. сети ##
+GET /social/facebook_friends
+POST /social/facebook_invite
+POST /social/twitter_connect
+POST /social/email_invite
+
+## 3.10 Жалобы ##
+POST /complaints/create
