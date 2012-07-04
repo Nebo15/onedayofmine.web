@@ -33,7 +33,7 @@ class MomentsAcceptanceTest extends odAcceptanceTestCase
     $this->assertEqual($loaded_moment->getDescription(), $desc);
   }
 
-  //todo
+  //TODO
   function testUpdate_MomentNotFound() {}
 
   /**

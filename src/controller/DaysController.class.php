@@ -6,28 +6,6 @@ class DaysController extends BaseJsonController
 {
   protected $_object_class_name = 'User';
 
-  function doDisplay()
-  {
-    $id = $this->request->get('id');
-    if(!$id)
-    {
-      if(!$this->toolkit->getUser())
-        return $this->_answerUnauthorized();
-      $user = $this->toolkit->getUser();
-    }
-    else
-    {
-      if(!$user = User::findById($id))
-        return $this->_answerNotFound("User with id $id not found");
-    }
-
-    $answer = array();
-    foreach($user->getDays() as $day)
-      $answer[] = $day->exportForApi();
-
-    return $this->_answerOk($answer);
-  }
-
   function doItem()
   {
     $id = $this->request->get('id');
@@ -197,5 +175,11 @@ class DaysController extends BaseJsonController
                   ->likeDay($day);
 
     return $this->_answerOk($response);
+  }
+
+  function doFollowingUsers()
+  {
+  	$users_ids = lmbArrayHelper::getColumnValues('id', $this->_getUser()->getFollowing());
+		return $this->_answerOk(Day::findByUsersIds($users_ids));
   }
 }

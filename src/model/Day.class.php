@@ -51,4 +51,15 @@ class Day extends BaseModel
     $export->is_ended = $this->getIsEnded();
     return $export;
   }
+
+  /**
+   * @param array $ids
+   * @return lmbCollection
+   */
+  static function findByUsersIds(array $ids)
+  {
+		$criteria = lmbSQLCriteria::in('user_id', $ids);
+		$criteria->addAnd('is_deleted = 0');
+		return Day::find(array('criteria' => $criteria));
+  }
 }

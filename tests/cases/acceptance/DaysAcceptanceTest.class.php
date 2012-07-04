@@ -9,7 +9,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     odTestsTools::truncateTablesOf('Day', 'Moment', 'DayComment');
   }
 
-  //TODO separate
+   //TODO
   function testBegin_Negative()
   {
     $this->post('days/begin');
@@ -83,7 +83,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     }
   }
 
-  //todo-
+  //TODO
   function testItem_NotFound() {}
 
   function testItem_DeletedDay()
@@ -142,7 +142,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
 
   /**
    *@example
-   *todo-high
+   *TODO
    */
   function testUpdate()
   {
@@ -154,10 +154,10 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $this->assertResponse(200);
   }
 
-  //todo
+  //TODO
   function testUpdate_NotFound() {}
 
-  //todo
+  //TODO
   function testUpdate_WrongUser() {}
 
   /**
@@ -186,7 +186,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     }
   }
 
-  //todo-low
+  //TODO
   function testAddMoment_NotFound() {}
 
   function testAddMoment_WrongUser()
@@ -225,7 +225,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     }
   }
 
-  //todo-
+  //TODO
   function testComment_NotFound() {}
 
   /**
@@ -249,10 +249,10 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $this->assertEqual(1, count($res));
   }
 
-  //todo
+  //TODO
   function testEnd_NotFound() {}
 
-  //todo
+  //TODO
   function testEnd_WrongUser() {}
 
   /**
@@ -272,10 +272,10 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $this->assertEqual(1, $loaded_day->getIsDeleted());
   }
 
-  //todo
+  //TODO
   function testDelete_NotFound() {}
 
-  //todo
+  //TODO
   function testDelete_WrongUser() {}
 
   /**
@@ -297,27 +297,44 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $this->assertTrue($res->id);
   }
 
-  //todo-high
+  //TODO
   function testLike() {}
 
-  //todo-high
+  //TODO
   function testSearch() {}
 
-  //todo-high
-  function testFollowingUsers() {}
+  //TODO
+  function testFollowingUsers()
+  {
+		$this->main_user->save();
+		$this->additional_user->addToFollowers($this->main_user);
+		$this->additional_user->save();
 
-  //todo-high
+		$day1 = $this->generator->day($this->additional_user);
+		$day1->save();
+		$day2 = $this->generator->day($this->additional_user);
+		$day2->setIsDeleted(1);
+		$day2->save();
+
+		$this->_loginAndSetCookie($this->main_user);
+		$days = $this->post('/my/days/following_users/')->result;
+		$this->assertResponse(200);
+		$this->assertEqual(1, count($days));
+		$this->assertEqual($day1->getId(), $days[0]->id);
+  }
+
+  //TODO
   function testNew() {}
 
-  //todo-high
+  //TODO
   function testInteresting() {}
 
-  //todo-high
+  //TODO
   function testFavourites() {}
 
-  //todo-high
+  //TODO
   function testAddToFavourites() {}
 
-  //todo-high
+  //TODO
   function testRemoveFromFavourites() {}
 }

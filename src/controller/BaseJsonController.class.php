@@ -108,6 +108,20 @@ abstract class BaseJsonController extends lmbController
 
   protected function _answerOk($result = null, $status = null, $code = 200)
   {
+  	if(is_object($result))
+  	{
+  		if($result instanceof lmbCollectionInterface)
+  		{
+	  		$result_array = array();
+	  		foreach($result as $object)
+	  			$result_array[] = $object->exportForApi();
+	  		$result = $result_array;
+  		}
+  		elseif($result instanceof BaseModel)
+  		{
+  			$result = $result->exportForApi();
+  		}
+  	}
     return $this->_answer($result, array(), $status, $code);
   }
 

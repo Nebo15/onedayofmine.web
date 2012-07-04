@@ -22,19 +22,19 @@ class SocialAcceptanceTest extends odAcceptanceTestCase
 
   /**
    * example
-   * todo-high
+   * TODO
    */
   function testFacebookInvite() {}
 
   /**
    * example
-   * todo-high
+   * TODO
    */
   function testTwitterConnect() {}
 
   /**
    * example
-   * todo-high
+   * TODO
    */
   function testEmailInvite() {}
 }
