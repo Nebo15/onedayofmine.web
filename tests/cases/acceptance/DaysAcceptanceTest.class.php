@@ -9,7 +9,6 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     odTestsTools::truncateTablesOf('Day', 'Moment', 'DayComment');
   }
 
-   //TODO
   function testBegin_Negative()
   {
     $this->post('days/begin');
@@ -376,7 +375,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   	$this->assertEqual($day2->getId(), $result[0]->id);
 
   	$result = $this
-  		->get('/days/new/', array('from' => $day1->getId(), 'to' => $day2->getId()))
+  		->get('days/new/', array('from' => $day1->getId(), 'to' => $day2->getId()))
   		->result;
   	$this->assertResponse(200);
   	$this->assertEqual(0, count($result));
@@ -385,12 +384,40 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   //TODO
   function testInteresting() {}
 
-  //TODO
-  function testFavourites() {}
+  /**
+   * @example
+   */
+  function testFavourites()
+  {
+  	$this->additional_user->save();
+  	$day = $this->generator->day($this->additional_user);
+  	$day->save();
 
-  //TODO
-  function testAddToFavourites() {}
+  	$this->main_user->getFavouriteDays()->add($day);
+  	$this->main_user->save();
 
-  //TODO
-  function testRemoveFromFavourites() {}
+		$this->_loginAndSetCookie($this->main_user);
+		$days = $this->get('my/days/favourites')->result;
+		if($this->assertResponse(200))
+		{
+			$this->assertEqual(1, count($days));
+			$this->assertEqual($day->getId(), $days[0]->id);
+		}
+  }
+
+  /**
+   * @example
+   */
+  function testAddToFavourites()
+  {
+
+  }
+
+  /**
+   * @example
+   */
+  function testRemoveFromFavourites()
+  {
+
+  }
 }
