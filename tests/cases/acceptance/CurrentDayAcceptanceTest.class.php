@@ -55,6 +55,39 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 	/**
 	 *@example
 	 */
+	function testGetCurrentDay()
+	{
+		$day = $this->generator->day($this->main_user);
+		$day->setIsEnded(0);
+		$day->save();
+
+		$this->_loginAndSetCookie($this->main_user);
+		$loaded_day = $this->post('current_day')->result;
+
+		$this->assertResponse(200);
+		$this->assertEqual($loaded_day->title, $day->title);
+		$this->assertEqual($loaded_day->description, $day->description);
+		$this->assertEqual($this->main_user->getId(), $day->user_id);
+		$this->assertEqual($loaded_day->time_offset, $day->time_offset);
+		$this->assertEqual($loaded_day->ctime, $day->ctime);
+		$this->assertEqual($loaded_day->utime, $day->utime);
+	}
+
+	function testGetCurrentDay_WithoutUnfinishedDay()
+	{
+		$day = $this->generator->day($this->main_user);
+		$day->setIsEnded(1);
+		$day->save();
+
+		$this->_loginAndSetCookie($this->main_user);
+		$loaded_day = $this->post('current_day')->result;
+
+		$this->assertResponse(404);
+	}
+
+	/**
+	 *@example
+	 */
 	function testCreateMoment()
 	{
 		$day = $this->generator->day($this->main_user);
@@ -77,10 +110,6 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 			$this->assertEqual(0, $res->likes_count);
 			$this->assertProperty($res, 'ctime');
 		}
-	}
-
-	//TODO
-	function testCreateMoment_NotFound() {
 	}
 
 	/**

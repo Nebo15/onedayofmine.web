@@ -4,6 +4,14 @@ lmb_require('src/model/DayTest.class.php');
 
 class CurrentDayController extends BaseJsonController
 {
+	function doDisplay()
+	{
+		if(!$day = Day::findUnfinished($this->_getUser()))
+			return $this->_answerNotFound('Unfinished day not found');
+
+		return $this->_answerOk($day);
+	}
+
 	function doStart()
 	{
 		$day = new Day();
