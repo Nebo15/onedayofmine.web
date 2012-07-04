@@ -36,6 +36,30 @@ class MomentCommentsAcceptanceTest extends odAcceptanceTestCase
 		$this->assertResponse(404);
 	}
 
-/*
-	POST /moment_comments/<comment_id>/delete */
+	function testDelete()
+	{
+		$this->main_user->save();
+		$comment = $this->generator->momentComment(null, $this->main_user);
+		$comment->save();
+		$new_comment_text = $this->generator->string(8);
+
+		$this->_loginAndSetCookie($this->main_user);
+		$this->post('/moment_comments/'.$comment->getId().'/delete', array('text' => $new_comment_text));
+		$this->assertResponse(200);
+
+		$loaded_comment = MomentComment::findById($comment->getId());
+		$this->assertFalse($loaded_comment);
+	}
+
+	function testDelete_WrongUser()
+	{
+		$this->main_user->save();
+		$comment = $this->generator->momentComment(null, $this->main_user);
+		$comment->save();
+		$new_comment_text = $this->generator->string(8);
+
+		$this->_loginAndSetCookie($this->additional_user);
+		$this->post('/moment_comments/'.$comment->getId().'/delete', array('text' => $new_comment_text));
+		$this->assertResponse(404);
+	}
 }
