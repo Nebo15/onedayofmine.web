@@ -16,12 +16,4 @@ class ComplaintsController extends BaseJsonController
 
     return $this->_importSaveAndAnswer(new Complaint(), array('day_id', 'text'));
   }
-
-  function doDisplay()
-  {
-    $answer = array();
-    foreach(Complaint::find() as $complaint)
-      $answer[] = $complaint->exportForApi();
-    return $this->_answerOk($answer);
-  }
 }
