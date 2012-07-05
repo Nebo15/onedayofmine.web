@@ -25,7 +25,6 @@ class ComplaintsAcceptanceTest extends odAcceptanceTestCase
     $this->assertResponse(200);
 
     $loaded_complaint = Complaint::find()->at(0);
-    $this->assertEqual(1, count($loaded_complaints));
     $this->assertProperty($res->result, 'id');
     $this->assertEqual($loaded_complaint->getId(), $res->result->id);
     $this->assertEqual($loaded_complaint->getText(), $text);
