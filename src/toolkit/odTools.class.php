@@ -1,8 +1,6 @@
 <?php
 lmb_require('limb/toolkit/src/lmbAbstractTools.class.php');
 lmb_require('src/odFacebook.class.php');
-lmb_require('tests/odPostmanWriter.class.php');
-lmb_require('tests/odApiToMarkdownWriter.class.php');
 
 class odTools extends lmbAbstractTools
 {
@@ -18,16 +16,6 @@ class odTools extends lmbAbstractTools
    * @var string
    */
   protected $fb_app_access_token;
-  /**
-   * @var odPostmanWriter
-   */
-  protected $postman_writer;
-
-  /**
-   * @var odApiToMarkDownWriter
-   */
-  protected $api_to_markdown_writer;
-
   /**
    * @return User
    */
@@ -56,7 +44,7 @@ class odTools extends lmbAbstractTools
   /**
    * @return odFacebook
    */
-  function getUserFacebook()
+  function getLoggedUserFacebook()
   {
     $user = $this->getUser();
     lmb_assert_true($user);
@@ -76,17 +64,23 @@ class odTools extends lmbAbstractTools
   {
     if(!isset($this->facebooks[$access_token]))
     {
-      $this->facebooks[$access_token] = new odFacebook(array(
-        'appId'  => lmbToolkit::instance()->getConf('common')->get('fb_app_id'),
-        'secret' => lmbToolkit::instance()->getConf('common')->get('fb_app_secret'),
-        'cookie' => false
-      ));
+    	$config = array(
+    			'appId'  => lmbToolkit::instance()->getConf('common')->get('fb_app_id'),
+    			'secret' => lmbToolkit::instance()->getConf('common')->get('fb_app_secret'),
+    			'cookie' => false
+     );
+      $this->facebooks[$access_token] =
+      	lmbToolkit::instance()->createFacebookConnection($access_token, $config);
+      if($access_token)
+      	$this->facebooks[$access_token]->setAccessToken($access_token);
     }
 
-    if($this->facebooks[$access_token])
-      $this->facebooks[$access_token]->setAccessToken($access_token);
-
     return $this->facebooks[$access_token];
+  }
+
+  function createFacebookConnection($access_token, $config)
+  {
+  	return new odFacebook($config);
   }
 
   /**
@@ -103,23 +97,6 @@ class odTools extends lmbAbstractTools
     if($request->getCookie($sessid_name))
       return $request->getCookie($sessid_name);
     return '';
-  }
-
-  function getPostmanWriter()
-  {
-    if(!$this->postman_writer)
-      $this->postman_writer = new odPostmanWriter(lmb_env_get('APP_DIR').'/www/api_doc/postman.json');
-    return $this->postman_writer;
-  }
-
-  /**
-   * @return odApiToMarkDownWriter
-   */
-  function getApiToMarkdownWriter()
-  {
-    if(!$this->api_to_markdown_writer)
-      $this->api_to_markdown_writer = new odApiToMarkdownWriter(lmb_env_get('APP_DIR').'/www/api_doc/examples.markdown');
-    return $this->api_to_markdown_writer;
   }
 
   function getSiteUrl($path = '')

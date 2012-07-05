@@ -7,7 +7,7 @@ class FacebookUser
    */
   protected $user;
 
-  function __construct(User $user)
+  function __construct(User $user = null)
   {
     $this->user = $user;
   }
@@ -21,28 +21,32 @@ class FacebookUser
     return lmbToolkit::instance()->getFacebook($this->user->getFbAccessToken());
   }
 
-  function getUserInfo()
+  static function getUserInfo($fb_access_token)
   {
-    $raw = $this->getFacebook()->makeQuery(
+  	lmb_assert_true($fb_access_token);
+  	$facebook = lmbToolkit::instance()->getFacebook($fb_access_token);
+    $raw = $facebook->makeQuery(
       'SELECT
         uid, name, sex, timezone, profile_update_time, pic_small, pic_square, pic_big, profile_url
         FROM user WHERE uid = me()');
     lmb_assert_true(count($raw));
-    return $this->_mapFbInfo($raw[0]);
+    return self::_mapFbInfo($raw[0]);
   }
 
-  protected function _mapFbInfo($fb_results)
+  static protected function _mapFbInfo($fb_results)
   {
     $fb_results['fb_uid'] = $fb_results['uid'];
     unset($fb_results['uid']);
-    $fb_results['fb_name'] = $fb_results['name'];
-    unset($fb_results['name']);
     $fb_results['fb_profile_url'] = $fb_results['profile_url'];
     unset($fb_results['profile_url']);
     $fb_results['fb_profile_utime'] = (int) $fb_results['profile_update_time'];
     unset($fb_results['profile_update_time']);
-    $fb_results['fb_timezone'] = $fb_results['timezone'];
-    unset($fb_results['timezone']);
+    $fb_results['fb_pic_big'] = $fb_results['pic_big'];
+    unset($fb_results['pic_big']);
+    $fb_results['fb_pic_square'] = $fb_results['pic_square'];
+    unset($fb_results['pic_square']);
+    $fb_results['fb_pic_small'] = $fb_results['pic_small'];
+    unset($fb_results['pic_small']);
     return $fb_results;
   }
 

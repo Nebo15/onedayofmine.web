@@ -32,8 +32,7 @@ class AuthController extends BaseJsonController
   {
     $user = new User();
     $user->setFbAccessToken($fb_access_token);
-    $fb_user_info = $user->getUserInfo();
-    $user->setFbUid($fb_user_info['fb_uid']);
+    $user->import(FacebookUser::getUserInfo($fb_access_token));
     $user->save();
     return $user;
   }

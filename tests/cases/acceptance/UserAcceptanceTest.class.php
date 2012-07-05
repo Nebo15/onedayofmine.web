@@ -6,7 +6,7 @@ class UserAcceptanceTest extends odAcceptanceTestCase
   function setUp()
   {
     parent::setUp();
-    odTestsTools::truncateTablesOf('Day', 'UserFollowing');
+    odTestsTools::truncateTablesOf('Day');
   }
 
   /**

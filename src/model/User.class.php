@@ -9,8 +9,6 @@ lmb_require('src/model/BaseModel.class.php');
  */
 class User extends BaseModel
 {
-  protected $user_info_from_fb;
-
   protected function _defineRelations()
   {
     $this->_has_many = array (
@@ -45,23 +43,22 @@ class User extends BaseModel
   protected function _createValidator()
   {
   	$validator = new lmbValidator();
+  	$validator->addRequiredRule('name');
   	$validator->addRequiredRule('fb_uid');
   	$validator->addRequiredRule('fb_access_token');
+  	$validator->addRequiredRule('fb_profile_url');
+  	$validator->addRequiredRule('fb_profile_utime');
+  	$validator->addRequiredRule('fb_pic_big');
+  	$validator->addRequiredRule('fb_pic_square');
+  	$validator->addRequiredRule('fb_pic_small');
+  	$validator->addRequiredRule('timezone');
+  	$validator->addRequiredRule('sex');
   	return $validator;
   }
 
-  function setUserInfo($user_info)
-  {
-    $this->user_info_from_fb = $user_info;
-  }
-
-  function getUserInfo()
-  {
-    if(!$this->user_info_from_fb)
-      $this->user_info_from_fb = $this->getFacebookUser()->getUserInfo();
-    return $this->user_info_from_fb;
-  }
-
+  /**
+   * @return FacebookUser
+   */
   function getFacebookUser()
   {
     return new FacebookUser($this);
@@ -80,14 +77,8 @@ class User extends BaseModel
   function exportForApi()
   {
     $result = $this->export();
-    if($result['user_info_from_fb'])
-      $result = array_merge($result, $result['user_info_from_fb']);
-    else
-      $result = array_merge($result, $this->getUserInfo());
-    unset($result['user_info_from_fb']);
     unset($result['fb_access_token']);
     unset($result['cip']);
-    ksort($result);
     return (object) $result;
   }
 }

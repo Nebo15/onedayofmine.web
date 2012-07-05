@@ -10,6 +10,14 @@ class odObjectMother
     $user = new User();
     $user->setFbUid($this->string(5));
     $user->setFbAccessToken($this->string(50));
+    $user->setFbProfileUrl($this->string(50));
+    $user->setFbProfileUtime($this->integer(11));
+    $user->setFbPicBig($this->string(50));
+    $user->setFbPicSquare($this->string(50));
+    $user->setFbPicSmall($this->string(50));
+    $user->setName($this->string(50));
+    $user->setTimezone($this->integer(1));
+    $user->setSex('female');
     return $user;
   }
 

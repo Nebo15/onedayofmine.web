@@ -18,12 +18,18 @@ abstract class odAcceptanceTestCase extends WebTestCase
    */
   protected $additional_user;
 
+  /**
+   * @var odTestsTools
+   */
+  protected $toolkit;
+
   function setUp()
   {
     $this->generator = new odObjectMother();
+    $this->toolkit = lmbToolkit::instance();
     parent::setUp();
-    odTestsTools::truncateTablesOf('User');
-    list($this->main_user, $this->additional_user) = odTestsTools::getUsers($quiet = false);
+    $this->toolkit->truncateTablesOf('User');
+    list($this->main_user, $this->additional_user) = $this->toolkit->getTestsUsers($quiet = false);
   }
 
   function get($url, $params = array())
