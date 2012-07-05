@@ -103,6 +103,22 @@ class odTools extends lmbAbstractTools
   {
     return $this->toolkit->getConf('common')->site_base_url.$path;
   }
+
+  function loadTestsUsersInfo()
+  {
+  	$fb = lmbToolkit::instance()->getFacebook();
+  	$params = array(
+  			'access_token' => $fb->getApplicationAccessToken()
+  	);
+  	$users = $fb->api("/".$fb->getAppId()."/accounts/test-users", "GET", $params);
+
+  	if(!$users['data'])
+  	{
+  		echo "Can't load test users from Facebook".PHP_EOL;
+  		exit(1);
+  	}
+  	return $users['data'];
+  }
 }
 
 

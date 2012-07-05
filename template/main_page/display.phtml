@@ -68,7 +68,7 @@
         </ul>
 
         <h3>Пользователи для тестирования:</h3>
-        <?php $users = odTestsTools::loadUsersInfo(); ?>
+        <?php $users = $this->toolkit->loadTestsUsersInfo(); ?>
 
         {{list using="{$users}"}}
         <ul>
@@ -82,7 +82,6 @@
           </li>
           {{/list:item}}
           {{list:empty}}
-          	{$out}
           	<img
             	src="http://gifsforum.com/images/gif/F5/grand/rafresh-refresh-F5-eccbc87e4b5ce2fe28308fd9f2a7baf3-185.gif"/>
           {{/list:empty}}
