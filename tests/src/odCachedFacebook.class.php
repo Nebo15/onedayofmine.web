@@ -34,11 +34,21 @@ class odCachedFacebook
 
 	function api($arguments)
 	{
-		var_dump(serialize($arguments));
+		$arguments = func_get_args();
 		$hash = md5(serialize($arguments));
 		if($cached_value = $this->cache->get($hash))
+		{
+			lmbToolkit::instance()
+			->getLog()
+			->info('Facebook cache request: ', array('arguments' => $arguments));
 			return $cached_value;
-		$result = $this->original->api($arguments);
+		}
+		$start_time = microtime(true);
+		$result = call_user_func_array(array($this->original, 'api'), $arguments);
+		$delta = microtime(true) - $start_time;
+		lmbToolkit::instance()
+			->getLog()
+			->error('Facebook real request: ', array('arguments' => $arguments, 'time' => $delta));
 		$this->cache->set($hash, $result);
 		return $result;
 	}
