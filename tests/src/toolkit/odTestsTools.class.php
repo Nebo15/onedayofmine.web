@@ -35,7 +35,7 @@ class odTestsTools extends lmbAbstractTools
 	function getTestsUsers()
 	{
 		$users = array();
-		foreach($this->loadTestsUsersInfo() as $user_info)
+		foreach(lmbToolkit::instance()->loadTestsUsersInfo() as $user_info)
 		{
 			$user_info = (object) $user_info;
 			$user = new User();
@@ -60,7 +60,7 @@ class odTestsTools extends lmbAbstractTools
 	function checkServer($uri_string)
 	{
 		$uri = new lmbUri($uri_string);
-		@$fp = fsockopen($uri->getHost(), $uri->getPort() ?: 80, $errno, $errstr, 30);
+		$fp = @fsockopen($uri->getHost(), $uri->getPort() ?: 80, $errno, $errstr, 30);
 		if (!$fp) {
 			echo("Can't connect to server '$uri_string': $errstr ($errno)\n");
 			exit(1);
