@@ -43,7 +43,8 @@ class User extends BaseModel
   protected function _createValidator()
   {
   	$validator = new lmbValidator();
-  	$validator->addRequiredRule('name');
+  	$validator->addRequiredRule('first_name');
+  	$validator->addRequiredRule('last_name');
   	$validator->addRequiredRule('fb_uid');
   	$validator->addRequiredRule('fb_access_token');
   	$validator->addRequiredRule('fb_profile_url');

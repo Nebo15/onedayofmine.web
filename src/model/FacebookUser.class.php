@@ -27,7 +27,7 @@ class FacebookUser
   	$facebook = lmbToolkit::instance()->getFacebook($fb_access_token);
     $raw = $facebook->makeQuery(
       'SELECT
-        uid, name, sex, timezone, profile_update_time, pic_small, pic_square, pic_big, profile_url
+        uid, first_name, last_name, sex, timezone, profile_update_time, pic_small, pic_square, pic_big, profile_url
         FROM user WHERE uid = me()');
     lmb_assert_true(count($raw));
     return self::_mapFbInfo($raw[0]);
@@ -53,7 +53,7 @@ class FacebookUser
   function getUserFriendsInApplication()
   {
     $raw_infos = $this->getFacebook()->makeQuery('SELECT
-      uid, name, sex, timezone, profile_update_time, pic_small, pic_square, pic_big, profile_url
+      uid, first_name, last_name, sex, timezone, profile_update_time, pic_small, pic_square, pic_big, profile_url
       FROM user
       WHERE is_app_user AND uid IN (SELECT uid2 FROM friend WHERE uid1 = me())');
     $results = array();

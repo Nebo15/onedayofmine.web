@@ -15,7 +15,8 @@ class odObjectMother
     $user->setFbPicBig($this->string(50));
     $user->setFbPicSquare($this->string(50));
     $user->setFbPicSmall($this->string(50));
-    $user->setName($this->string(50));
+    $user->setFirstName($this->string(50));
+    $user->setLastName($this->string(50));
     $user->setTimezone($this->integer(1));
     $user->setSex('female');
     return $user;
