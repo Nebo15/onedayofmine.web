@@ -1,7 +1,6 @@
 <?php
 lmb_require('tests/src/odPostmanWriter.class.php');
 lmb_require('tests/src/odApiToMarkdownWriter.class.php');
-lmb_require('tests/src/odCachedFacebook.class.php');
 
 class odTestsTools extends lmbAbstractTools
 {
@@ -67,15 +66,6 @@ class odTestsTools extends lmbAbstractTools
 		} else {
 			fclose($fp);
 		}
-	}
-
-	function createFacebookConnection($access_token, $config)
-	{
-		return new odCachedFacebook(
-				$config,
-				lmbToolkit::instance()
-				->createCacheConnectionByDSN('file:///'.lmb_var_dir().'/facebook_cache/'.$access_token)
-		);
 	}
 }
 

@@ -1,6 +1,7 @@
 <?php
 lmb_require('limb/toolkit/src/lmbAbstractTools.class.php');
 lmb_require('src/odFacebook.class.php');
+lmb_require('tests/src/odCachedFacebook.class.php');
 
 class odTools extends lmbAbstractTools
 {
@@ -80,7 +81,14 @@ class odTools extends lmbAbstractTools
 
   function createFacebookConnection($access_token, $config)
   {
-  	return new odFacebook($config);
+  	if(!lmbToolkit::instance()->getConf('common')->fb_cache_enabled)
+  		return new odFacebook($config);
+  	else
+  		return new odCachedFacebook(
+  				$config,
+  				lmbToolkit::instance()
+  				->createCacheConnectionByDSN('file:///'.lmb_var_dir().'/facebook_cache/'.$access_token)
+  		);
   }
 
   /**

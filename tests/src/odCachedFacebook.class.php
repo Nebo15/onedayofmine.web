@@ -19,7 +19,7 @@ class odCachedFacebook
 
 	function __call($name, $arguments)
 	{
-	  return call_user_func_array(array($this->original, $name), $arguments);
+		return call_user_func_array(array($this->original, $name), $arguments);
 	}
 
 	function makeQuery($query)
@@ -34,11 +34,26 @@ class odCachedFacebook
 
 	function api($arguments)
 	{
+		var_dump(serialize($arguments));
 		$hash = md5(serialize($arguments));
 		if($cached_value = $this->cache->get($hash))
 			return $cached_value;
 		$result = $this->original->api($arguments);
 		$this->cache->set($hash, $result);
 		return $result;
+	}
+
+	function validateAccessToken($error_list)
+	{
+		try
+		{
+			$this->api('/me');
+			return true;
+		}
+		catch (Exception $e)
+		{
+			$error_list[] = $e->getMessage();
+			return false;
+		}
 	}
 }
