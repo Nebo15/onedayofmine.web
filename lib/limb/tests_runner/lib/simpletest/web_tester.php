@@ -431,7 +431,7 @@ class NoTextExpectation extends TextExpectation {
  *    @subpackage WebTester
  */
 class WebTestCase extends SimpleTestCase {
-    private $browser;
+    protected $browser;
     private $ignore_errors = false;
 
     /**

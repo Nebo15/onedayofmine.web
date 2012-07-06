@@ -127,6 +127,15 @@ abstract class odAcceptanceTestCase extends WebTestCase
     }
   }
 
+  function assertResponse($responses)
+  {
+  	$responses = (is_array($responses) ? $responses : array($responses));
+    $code = $this->browser->getResponseCode();
+    $message = sprintf('%s', "Expecting response in [" .
+    	implode(", ", $responses) . "] got [$code] in response:".($this->browser->getContent()));
+    return $this->assertTrue(in_array($code, $responses), $message);
+  }
+
   protected function assertProperty($obj, $property, $message = "Property '%s' not found")
   {
     if(!is_object($obj))
