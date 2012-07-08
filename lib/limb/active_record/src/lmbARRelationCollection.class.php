@@ -130,8 +130,14 @@ abstract class lmbARRelationCollection implements lmbCollectionInterface
     return $this;
   }
 
-  static function createFullARQueryForRelation($calling_class, $relation_info, $conn, $params = array())
+  static function createFullARQueryForRelation($relation_info, $conn, $params = array())
   {
+    if(function_exists('get_called_class')) { // FIXME
+      $calling_class = get_called_class();
+    } else {
+      throw new lmbException('You\'r PHP version doesn\'t support get_called_class().');
+    }
+
     if(!isset($params['sort']) && isset($relation_info['sort_params']))
       $params['sort'] = $relation_info['sort_params'];
 
