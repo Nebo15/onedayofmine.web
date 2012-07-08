@@ -5,7 +5,7 @@ class MyController extends BaseJsonController
 {
 	function doProfile()
 	{
-
+		return $this->_answerOk($this->_getUser());
 	}
 
 	function doSettings()

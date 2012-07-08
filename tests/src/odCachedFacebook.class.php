@@ -38,9 +38,9 @@ class odCachedFacebook
 		$hash = md5(serialize($arguments));
 		if($cached_value = $this->cache->get($hash))
 		{
-			lmbToolkit::instance()
-			->getLog()
-			->info('Facebook cache request: ', array('arguments' => $arguments));
+// 			lmbToolkit::instance()
+// 			->getLog()
+// 			->info('Facebook cache request: ', array('arguments' => $arguments));
 			return $cached_value;
 		}
 		$start_time = microtime(true);
@@ -48,7 +48,7 @@ class odCachedFacebook
 		$delta = microtime(true) - $start_time;
 		lmbToolkit::instance()
 			->getLog()
-			->error('Facebook real request: ', array('arguments' => $arguments, 'time' => $delta));
+			->error('Facebook real request: ', array('arguments' => $arguments, 'time' => $delta, 'result' => $result));
 		$this->cache->set($hash, $result);
 		return $result;
 	}
