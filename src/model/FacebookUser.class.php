@@ -26,36 +26,45 @@ class FacebookUser
   	lmb_assert_true($fb_access_token);
   	$facebook = lmbToolkit::instance()->getFacebook($fb_access_token);
     $raw = $facebook->makeQuery(
-      'SELECT
-        uid, first_name, last_name, sex, timezone, profile_update_time, pic_small, pic_square, pic_big, profile_url
-        FROM user WHERE uid = me()');
+      'SELECT '.implode(',', self::_getUserFbFieldsMap()).' FROM user WHERE uid = me()');
     lmb_assert_true(count($raw));
     return self::_mapFbInfo($raw[0]);
   }
 
-  static protected function _mapFbInfo($fb_results)
+  static protected function _getUserFbFieldsMap()
   {
-    $fb_results['fb_uid'] = $fb_results['uid'];
-    unset($fb_results['uid']);
-    $fb_results['fb_profile_url'] = $fb_results['profile_url'];
-    unset($fb_results['profile_url']);
-    $fb_results['fb_profile_utime'] = (int) $fb_results['profile_update_time'];
-    unset($fb_results['profile_update_time']);
-    $fb_results['fb_pic_big'] = $fb_results['pic_big'];
-    unset($fb_results['pic_big']);
-    $fb_results['fb_pic_square'] = $fb_results['pic_square'];
-    unset($fb_results['pic_square']);
-    $fb_results['fb_pic_small'] = $fb_results['pic_small'];
-    unset($fb_results['pic_small']);
-    return $fb_results;
+  	return array('uid', 'first_name', 'last_name', 'sex', 'timezone', 'profile_update_time',
+  	  'pic_small', 'pic_square', 'pic_big', 'profile_url', 'work', 'current_location',
+  		'birthday_date');
+  }
+
+  static protected function _mapFbInfo($fb)
+  {
+  	return array(
+  			'fb_uid'           => $fb['uid'],
+  			'first_name'       => $fb['first_name'],
+  			'last_name'        => $fb['last_name'],
+  			'sex'              => $fb['sex'],
+  			'timezone'         => $fb['timezone'],
+  			'fb_profile_url'   => $fb['profile_url'],
+  			'fb_profile_utime' => $fb['profile_update_time'],
+  			'fb_pic_small'     => $fb['pic_small'],
+  			'fb_pic_square'    => $fb['pic_square'],
+  			'fb_pic_big'       => $fb['pic_big'],
+  			'occupation'       => isset($fb['work']['position']['name'])
+    	 													? $fb['work']['position']['name']
+  															: '',
+  			'current_location' => isset($fb['current_location']['name'])
+    														? $fb['current_location']['name']
+  															: '',
+  			'birthday'         => date('Y-m-d', strtotime($fb['birthday_date']))
+  	);
   }
 
   function getUserFriendsInApplication()
   {
-    $raw_infos = $this->getFacebook()->makeQuery('SELECT
-      uid, first_name, last_name, sex, timezone, profile_update_time, pic_small, pic_square, pic_big, profile_url
-      FROM user
-      WHERE is_app_user AND uid IN (SELECT uid2 FROM friend WHERE uid1 = me())');
+    $raw_infos = $this->getFacebook()->makeQuery('SELECT '.implode(',', self::_getUserFbFieldsMap()).
+      ' FROM user WHERE is_app_user AND uid IN (SELECT uid2 FROM friend WHERE uid1 = me())');
     $results = array();
     foreach($raw_infos as $raw_info)
     {

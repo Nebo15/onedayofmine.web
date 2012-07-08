@@ -35,11 +35,12 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
       $this->assertTrue($res->user->first_name);
       $this->assertTrue($res->user->last_name);
       $this->assertTrue($res->user->fb_profile_url);
-      $this->assertProperty($res->user, 'timezone');
+      $this->assertEqual($this->main_user->timezone, $res->user->timezone);
       $this->assertTrue($res->user->sex);
       $this->assertTrue($res->user->fb_pic_small);
       $this->assertTrue($res->user->fb_pic_square);
       $this->assertTrue($res->user->fb_pic_big);
+      $this->assertTrue($res->user->birthday);
     }
   }
 

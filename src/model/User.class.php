@@ -54,6 +54,7 @@ class User extends BaseModel
   	$validator->addRequiredRule('fb_pic_small');
   	$validator->addRequiredRule('timezone');
   	$validator->addRequiredRule('sex');
+  	$validator->addRequiredRule('birthday');
   	return $validator;
   }
 

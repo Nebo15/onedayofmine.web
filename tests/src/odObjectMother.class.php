@@ -19,6 +19,8 @@ class odObjectMother
     $user->setLastName($this->string(50));
     $user->setTimezone($this->integer(1));
     $user->setSex('female');
+    $user->setOccupation($this->string(50));
+    $user->setBirthday($this->date_sql());
     return $user;
   }
 
@@ -119,5 +121,10 @@ class odObjectMother
   function image_name()
   {
     return $this->string().'.png';
+  }
+
+  function date_sql()
+  {
+		return rand(1900, 1990).'-'.rand(1, 12).'-'.rand(1, 29);
   }
 }
