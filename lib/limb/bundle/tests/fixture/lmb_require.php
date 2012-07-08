@@ -1,2 +1,2 @@
 <?php
- from
+ 'from';

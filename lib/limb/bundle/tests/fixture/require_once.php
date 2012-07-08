@@ -1,2 +1,2 @@
 <?php
- world
+ 'world';

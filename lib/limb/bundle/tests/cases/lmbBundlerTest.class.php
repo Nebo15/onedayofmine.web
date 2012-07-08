@@ -8,7 +8,7 @@ class lmbBundlerTest extends UnitTestCase
 
   function __construct()
   {
-    $this->fixture_dir = realpath(dirname(__FILE__).'/../fixture') . DIRECTORY_SEPARATOR;    
+    $this->fixture_dir = realpath(dirname(__FILE__).'/../fixture') . DIRECTORY_SEPARATOR;
   }
 
   function testGetDependenciesFromFile()
@@ -101,7 +101,7 @@ class lmbBundlerTest extends UnitTestCase
   function testCleanUpFile()
   {
     $cleaned = lmbBundler::cleanUpFile($this->fixture_dir . 'first-level.php');
-    $this->assertIdentical('bundler!', trim($cleaned));
+    $this->assertIdentical("'bundler!';", trim($cleaned));
   }
 
   function testMakeBundle()
@@ -113,7 +113,7 @@ class lmbBundlerTest extends UnitTestCase
     $bundler->makeBundle($without_tags = true);
     $content = ob_get_contents();
     ob_end_clean();
-    $this->assertIdentical(trim($content), 'hello world from bundler!');
+    $this->assertIdentical(trim($content), "'hello'; 'world'; 'from'; 'bundler!';");
   }
 }
 

@@ -1,2 +1,2 @@
 <?php
- hello
+ 'hello';
