@@ -3,6 +3,13 @@ lmb_require('facebook/facebook.php');
 
 class odFacebook extends Facebook
 {
+	function __construct($config)
+	{
+		if('cli' == php_sapi_name())
+			session_id('CLI');
+		parent::__construct($config);
+	}
+
   function makeQuery($query)
   {
     return $this->api(
