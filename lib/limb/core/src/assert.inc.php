@@ -111,9 +111,10 @@ function lmb_assert_reg_exp(
   }
 
   $message = str_replace('%pattern%', $pattern, $message);
-  if ($exception_class instanceof lmbException)
+  if (is_subclass_of($exception_class, 'lmbException') || $exception_class == 'lmbException')
   {
   	$params = array(
+      'value type' => gettype($string),
       'pattern' => $pattern,
   	  'string' => $string,
     );

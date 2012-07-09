@@ -47,7 +47,7 @@ abstract class odAcceptanceTestCase extends WebTestCase
     return $result;
   }
 
-  function post($url, $params = array())
+  function post($url, $params = array(), $content_type = false)
   {
     $raw_response = parent::post(lmb_env_get('HOST_NAME') . $url, $params);
     $result = $this->_decodeResponse($raw_response);
@@ -127,7 +127,7 @@ abstract class odAcceptanceTestCase extends WebTestCase
     }
   }
 
-  function assertResponse($responses)
+  function assertResponse($responses, $message = '%s')
   {
   	$responses = (is_array($responses) ? $responses : array($responses));
     $code = $this->browser->getResponseCode();

@@ -5,6 +5,8 @@
 .buildpath
 .project
 .settings
+.DS_Store
+*.sublime*
 
 var/*
 tests/var/*

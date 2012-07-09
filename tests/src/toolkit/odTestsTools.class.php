@@ -46,7 +46,7 @@ class odTestsTools extends lmbAbstractTools
 		return $users;
 	}
 
-	function truncateTablesOf($model_classes)
+	static function truncateTablesOf($model_classes)
 	{
 		if(!is_array($model_classes))
 			$model_classes = func_get_args();
