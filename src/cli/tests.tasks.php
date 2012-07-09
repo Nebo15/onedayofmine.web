@@ -5,8 +5,15 @@
  */
 function task_od_remove_fbcache($argv)
 {
+	lmb_require('limb/fs/src/lmbFs.class.php');
+	lmbFs::rm(taskman_prop('PROJECT_DIR').'/var/facebook_cache');
+	lmbFs::rm(taskman_prop('PROJECT_DIR').'/tests/var/facebook_cache');
 }
 
+/**
+ * @desc Parse lj community
+ * @param unknown_type $argv
+ */
 function task_od_parse_lj($argv)
 {
 	$app_dir = taskman_prop('PROJECT_DIR');
