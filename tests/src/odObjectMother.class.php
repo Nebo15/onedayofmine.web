@@ -125,6 +125,6 @@ class odObjectMother
 
   function date_sql()
   {
-		return rand(1900, 1990).'-'.rand(1, 12).'-'.rand(1, 29);
+		return sprintf("%1d-%2$02d-%3$02d", rand(1900, 1990), rand(0, 1), rand(1, 29));
   }
 }
