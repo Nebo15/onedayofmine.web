@@ -28,18 +28,70 @@ class MyAcceptanceTest extends odAcceptanceTestCase
 			$this->assertEqual($this->main_user->fb_pic_square, $profile->fb_pic_square);
 			$this->assertEqual($this->main_user->fb_pic_big, $profile->fb_pic_big);
 			$this->assertEqual($this->main_user->occupation, $profile->occupation);
+      $this->assertEqual($this->main_user->location, $profile->location);
+      $this->assertEqual($this->main_user->birthday, $profile->birthday);
 		}
 	}
 	/**
 	 * @example
 	 */
-	function doUpdateProfile()
+	function testUpdateProfile()
 	{
+    $this->main_user->save();
+    $this->_loginAndSetCookie($this->main_user);
+
 		$update = new stdClass();
 		$update->first_name = $this->generator->string(25);
 		$update->last_name = $this->generator->string(25);
 		$update->occupation = $this->generator->string(25);
+    $update->location = $this->generator->string(25);
+    $update->birthday = $this->generator->date_sql();
+
+    $updated_profile = $this->post('/my/profile', (array) $update)->result;
+
+    if($this->assertResponse(200))
+    {
+      $this->assertEqual($update->first_name, $updated_profile->first_name);
+      $this->assertEqual($update->last_name, $updated_profile->last_name);
+      $this->assertEqual($update->occupation, $updated_profile->occupation);
+      $this->assertEqual($update->location, $updated_profile->location);
+      $this->assertEqual($update->birthday, $updated_profile->birthday);
+
+      $loaded_user = User::findById($this->main_user->getId());
+
+      $this->assertEqual($loaded_user->first_name, $updated_profile->first_name);
+      $this->assertEqual($loaded_user->last_name, $updated_profile->last_name);
+      $this->assertEqual($loaded_user->occupation, $updated_profile->occupation);
+      $this->assertEqual($loaded_user->location, $updated_profile->location);
+      $this->assertEqual($loaded_user->birthday, $updated_profile->birthday);
+    }
 	}
+
+  /**
+   * @example
+   */
+  function testUpdateProfile_Partial()
+  {
+    $this->main_user->save();
+    $this->_loginAndSetCookie($this->main_user);
+
+    $update = new stdClass();
+    $update->first_name = $this->generator->string(25);
+    $update->birthday = $this->generator->date_sql();
+
+    $updated_profile = $this->post('/my/profile', (array) $update)->result;
+
+    if($this->assertResponse(200))
+    {
+      $this->assertEqual($update->first_name, $updated_profile->first_name);
+      $this->assertEqual($update->birthday, $updated_profile->birthday);
+
+      $loaded_user = User::findById($this->main_user->getId());
+
+      $this->assertEqual($loaded_user->first_name, $updated_profile->first_name);
+      $this->assertEqual($loaded_user->birthday, $updated_profile->birthday);
+    }
+  }
 	/**
 	 *@example
 	 */

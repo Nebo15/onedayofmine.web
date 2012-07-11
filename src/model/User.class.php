@@ -79,6 +79,7 @@ class User extends BaseModel
   function exportForApi()
   {
     $result = $this->export();
+
     unset($result['fb_access_token']);
     unset($result['cip']);
     return (object) $result;
