@@ -3,6 +3,12 @@ lmb_require('tests/cases/odAcceptanceTestCase.class.php');
 
 class MyAcceptanceTest extends odAcceptanceTestCase
 {
+  function setUp()
+  {
+    parent::setUp();
+    odTestsTools::truncateTablesOf('UserSettings');
+  }
+
   /**
    *@public
    */
@@ -97,13 +103,65 @@ class MyAcceptanceTest extends odAcceptanceTestCase
 	 */
 	function testSettings()
 	{
+    $this->main_user->save();
 
+    $settings = new UserSettings();
+    $settings->setNotificationsNewDays(1);
+    $settings->setNotificationsNewComments(0);
+    $settings->setNotificationsRelatedActivity(1);
+    $settings->setNotificationsShootingPhotos(0);
+    $settings->setPhotosSaveOriginal(1);
+    $settings->setPhotosSaveFiltered(0);
+
+    $this->main_user->setSettings($settings);
+    $this->main_user->save();
+
+    $this->_loginAndSetCookie($this->main_user);
+
+    $settings = $this->get("/my/settings/")->result;
+
+    $this->assertEqual(1, $settings->notifications_new_days);
+    $this->assertEqual(0, $settings->notifications_new_comments);
+    $this->assertEqual(1, $settings->notifications_related_activity);
+    $this->assertEqual(0, $settings->notifications_shooting_photos);
+    $this->assertEqual(1, $settings->photos_save_original);
+    $this->assertEqual(0, $settings->photos_save_filtered);
 	}
 	/**
 	 * @public
 	 */
-	function doUpdateSettings()
+	function testUpdateSettings()
 	{
+    $this->main_user->save();
 
+    $settings = new UserSettings();
+    $settings->setNotificationsNewDays(0);
+    $settings->setNotificationsNewComments(0);
+    $settings->setNotificationsRelatedActivity(0);
+    $settings->setNotificationsShootingPhotos(0);
+    $settings->setPhotosSaveOriginal(0);
+    $settings->setPhotosSaveFiltered(0);
+
+    $this->main_user->setSettings($settings);
+    $this->main_user->save();
+
+    $this->_loginAndSetCookie($this->main_user);
+
+    $settings = new UserSettings();
+    $settings->setNotificationsNewDays(1);
+    $settings->setNotificationsNewComments(1);
+    $settings->setNotificationsRelatedActivity(1);
+    $settings->setNotificationsShootingPhotos(1);
+    $settings->setPhotosSaveOriginal(1);
+    $settings->setPhotosSaveFiltered(1);
+
+    $settings = $this->post("/my/settings/", $settings->export())->result;
+
+    $this->assertEqual(1, $settings->notifications_new_days);
+    $this->assertEqual(1, $settings->notifications_new_comments);
+    $this->assertEqual(1, $settings->notifications_related_activity);
+    $this->assertEqual(1, $settings->notifications_shooting_photos);
+    $this->assertEqual(1, $settings->photos_save_original);
+    $this->assertEqual(1, $settings->photos_save_filtered);
 	}
 }
