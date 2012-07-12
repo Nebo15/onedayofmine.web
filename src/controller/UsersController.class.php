@@ -6,21 +6,22 @@ class UsersController extends BaseJsonController
 {
   protected $check_auth = true;
 
+  function doItem()
+  {
+    if(!$user = User::findById($this->request->id))
+      return $this->_answerNotFound("User with id {$this->request->id} not found");
+    else
+      return $this->_answerOk($user);
+  }
+
   function doDays()
   {
-  	if(!$this->request->has('id'))
-  	{
-  		if(!$user = $this->_getUser())
-  			return $this->_answerUnauthorized();
-  	}
-  	else
-  	{
-  		if(!$user = User::findById($this->request->id))
-  			return $this->_answerNotFound("User with id {$this->request->id} not found");
-  	}
+    $user_or_answer = $this->_loadUserFromRequest();
+    if(!is_object($user_or_answer))
+      return $user_or_answer;
 
     $answer = array();
-    foreach($user->getDays() as $day)
+    foreach($user_or_answer->getDays() as $day)
       $answer[] = $day->exportForApi();
 
     return $this->_answerOk($answer);
@@ -28,16 +29,24 @@ class UsersController extends BaseJsonController
 
   function doFollowers()
   {
+    $user_or_answer = $this->_loadUserFromRequest();
+    if(!is_object($user_or_answer))
+      return $user_or_answer;
+
     $response = array();
-    foreach($this->_getUser()->getFollowers() as $follower)
+    foreach($user_or_answer->getFollowers() as $follower)
       $response[] = $follower->exportForApi();
     return $this->_answerOk($response);
   }
 
   function doFollowing()
   {
+    $user_or_answer = $this->_loadUserFromRequest();
+    if(!is_object($user_or_answer))
+      return $user_or_answer;
+
     $response = array();
-    foreach($this->_getUser()->getFollowing() as $follower)
+    foreach($user_or_answer->getFollowing() as $follower)
       $response[] = $follower->exportForApi();
     return $this->_answerOk($response);
   }
@@ -64,5 +73,21 @@ class UsersController extends BaseJsonController
   	$following->save();
 
   	return $this->_answerOk();
+  }
+
+  protected function _loadUserFromRequest()
+  {
+    if(!$this->request->has('id'))
+  	{
+      if(!$user = $this->_getUser())
+        return $this->_answerUnauthorized();
+  	}
+    else
+    {
+      if(!$user = User::findById($this->request->id))
+      return $this->_answerNotFound("User with id {$this->request->id} not found");
+    }
+
+    return $user;
   }
 }

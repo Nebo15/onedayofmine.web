@@ -89,6 +89,8 @@ class User extends BaseModel
 
     unset($result['fb_access_token']);
     unset($result['cip']);
+    unset($result['user_settings_id']);
+    ksort($result);
     return (object) $result;
   }
 
