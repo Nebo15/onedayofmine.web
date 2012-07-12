@@ -94,6 +94,35 @@ class odApiToMarkdownWriter
         $data = Json::indent(json_encode($request->responseData));
         $output .= '    '.str_replace($n, $n.'    ', $data).$nn;
 
+        /*if(is_array($request->responseData)) {
+          array_walk_recursive($request->responseData, function(&$item, $key) {
+            if($item instanceof stdClass) {
+              $item = (array) $item;
+            }
+          });
+
+          foreach ($request->responseData as $key => $value) {
+            // TODO find better way to do this
+            $found = false;
+            foreach ($request->responseDescription as $param) {
+              if($param['name'] == $key) {
+                $found = true;
+              }
+            }
+
+            if(!$found) {
+              $request->responseDescription[] = array(
+                'required'    => false,
+                'type'        => 'String',
+                'name'        => $key,
+                'description' => 'Describe me!'
+              );
+            }
+          }
+        }*/
+
+        // var_dump((array) $request->responseData);
+
         if(count($request->responseDescription) > 0) {
           $output .= 'Response params: '.$nn;
           $output .= '<table width="100%" border="1"><tr><th width="150">Name</th><th width="40">Type</th><th>Description</th></tr>'.$nn;
