@@ -1,8 +1,25 @@
 <?php
+lmb_require('src/model/BaseModel.class.php');
+
 /**
- * Created by JetBrains PhpStorm.
- * User: korchasa
- * Date: 7/11/12
- * Time: 5:44 PM
- * To change this template use File | Settings | File Templates.
+ * @method null setNotificationsNewDays($int)
+ * @method null setNotificationsNewComments($int)
+ * @method null setNotificationsRelatedActivity($int)
+ * @method null setNotificationsShootingPhotos($int)
+ * @method null setPhotosSaveOriginal($int)
+ * @method null setPhotosSaveFiltered($int)
  */
+class UserSettings extends BaseModel
+{
+  static function createDefault()
+  {
+    $item = new UserSettings();
+    $item->setNotificationsNewDays(1);
+    $item->setNotificationsNewComments(1);
+    $item->setNotificationsRelatedActivity(1);
+    $item->setNotificationsShootingPhotos(1);
+    $item->setPhotosSaveOriginal(1);
+    $item->setPhotosSaveFiltered(1);
+    return $item;
+  }
+}

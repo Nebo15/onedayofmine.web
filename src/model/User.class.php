@@ -11,6 +11,13 @@ class User extends BaseModel
 {
   protected function _defineRelations()
   {
+    $this->_has_one = array (
+      'user_settings' => array (
+        'field' => 'user_settings_id',
+        'class' => 'UserSettings',
+        'can_be_null' => true
+      )
+    );
     $this->_has_many = array (
       'days' => array (
         'field' => 'user_id',
@@ -83,5 +90,19 @@ class User extends BaseModel
     unset($result['fb_access_token']);
     unset($result['cip']);
     return (object) $result;
+  }
+
+  function setSettings(UserSettings $settings)
+  {
+    $this->setUserSettings($settings);
+  }
+
+  function getSettings()
+  {
+    if(!$item = $this->getUserSettings())
+    {
+      $item = UserSettings::createDefault($this);
+    }
+    return $item;
   }
 }

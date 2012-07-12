@@ -22,6 +22,22 @@ class MyController extends BaseJsonController
 
 	function doSettings()
 	{
-
+    $user = $this->_getUser();
+    if(!$this->request->hasPost())
+      return $this->_answerOk($user->getSettings());
+    else
+    {
+      $settings = $user->getSettings();
+      foreach($this->request->export() as $property => $value)
+      {
+        if($settings->has($property))
+          $settings->set($property, (int) $value);
+      }
+      $settings->save($this->error_list);
+      if($this->error_list->isValid())
+        return $this->_answerOk($settings);
+      else
+        return $this->_answerWithError($this->error_list);
+    }
 	}
 }
