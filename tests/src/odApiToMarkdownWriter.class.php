@@ -97,7 +97,7 @@ class odApiToMarkdownWriter
         if(count($request->responseDescription) > 0) {
           $output .= 'Response params: '.$nn;
           $output .= '<table width="100%" border="1"><tr><th width="150">Name</th><th width="40">Type</th><th>Description</th></tr>'.$nn;
-          var_dump($request->responseDescription);
+
           foreach ($request->responseDescription as $param) {
             $output .= "<tr><td>{$param['name']}</td><td>{$param['type']}</td><td>{$param['description']}</td></tr>";
           }
