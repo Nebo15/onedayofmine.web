@@ -49,6 +49,8 @@ abstract class odAcceptanceTestCase extends WebTestCase
 
   function post($url, $params = array(), $content_type = false)
   {
+    if(is_object($params))
+      $params = (array) $params;
     $raw_response = parent::post(lmb_env_get('HOST_NAME') . $url, $params);
     $result = $this->_decodeResponse($raw_response);
     if(
@@ -95,7 +97,7 @@ abstract class odAcceptanceTestCase extends WebTestCase
     $paramParser = function($description, $required) {
       $tokens = explode(' ', $description);
 
-      if(count($tokens) < 2) 
+      if(count($tokens) < 2)
         throw new lmbException("You need to descripte both type and name in dock block for method {$call_name}.");
 
       return array(

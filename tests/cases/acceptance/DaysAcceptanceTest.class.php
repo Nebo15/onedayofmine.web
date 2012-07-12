@@ -30,7 +30,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
       $this->assertEqual($day->getId(), $loaded_day->id);
       $this->assertEqual($day->getTitle(), $loaded_day->title);
       $this->assertEqual($day->getDescription(), $loaded_day->description);
-      $this->assertEqual($day->getTimeOffset(), $loaded_day->time_offset);
+      $this->assertEqual($day->getTimezone(), $loaded_day->timezone);
       $this->assertEqual($day->getLikesCount(), $loaded_day->likes_count);
       $this->assertEqual($day->getCreateTime(), $loaded_day->ctime);
       $this->assertEqual($day->getIsEnded(), $loaded_day->is_ended);
@@ -124,7 +124,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   /**
    *@public
    */
-  function testShareDay()
+  function estShareDay()
   {
     $day = $this->generator->day($this->additional_user);
     $day->save();

@@ -22,7 +22,7 @@ class CurrentDayController extends BaseJsonController
 
 		$day->setUser($this->_getUser());
 
-		$response = $this->_importSaveAndAnswer($day, array('title', 'description', 'time_offset', 'occupation', 'age', 'type'));
+		$response = $this->_importSaveAndAnswer($day, array('title', 'description', 'timezone', 'occupation', 'age', 'type'));
 
 		//$this->_getUser()->getFacebookUser()->beginDay($day);
 

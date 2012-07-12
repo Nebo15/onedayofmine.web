@@ -122,8 +122,7 @@ class odTools extends lmbAbstractTools
 
   	if(!$users['data'])
   	{
-  		echo "Can't load test users from Facebook".PHP_EOL;
-  		exit(1);
+  		return array();
   	}
   	return $users['data'];
   }

@@ -27,7 +27,7 @@ class Day extends BaseModel
     $validator->addRequiredObjectRule('user', 'User');
     $validator->addRequiredRule('title');
     $validator->addRequiredRule('description');
-    $validator->addRequiredRule('time_offset');
+    $validator->addRequiredRule('timezone');
     $validator->addRequiredRule('occupation');
     $validator->addRequiredRule('age');
     $validator->addRequiredRule('type');
@@ -41,7 +41,7 @@ class Day extends BaseModel
     $export->user_id = $this->getUserId();
     $export->title = $this->getTitle();
     $export->description = $this->getDescription();
-    $export->time_offset = $this->getTimeOffset();
+    $export->timezone = $this->getTimezone();
     $export->occupation = $this->getOccupation();
     $export->age = $this->getAge();
     $export->type = $this->getType();
@@ -50,6 +50,17 @@ class Day extends BaseModel
     $export->utime = $this->getUpdateTime();
     $export->is_ended = $this->getIsEnded();
     return $export;
+  }
+
+  static function getTypes()
+  {
+    return array(
+      'working',
+      'day-off',
+      'holiday',
+      'trip',
+      'special_event'
+    );
   }
 
   /**
