@@ -10,7 +10,20 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   *@public
+   * @public
+   * @description Returns basic Day entity by given Day ID.
+   * @param int id Day ID
+   * @result-param int user_id
+   * @result-param string title
+   * @result-param string description
+   * @result-param int time_offset UTC time zone offset
+   * @result-param string occupation
+   * @result-param int type One of pre-defined types: {working, day-off, holiday, trip, special_event}
+   * @result-param int likes_count
+   * @result-param int ctime Creation time
+   * @result-param int utime Last update time
+   * @result-param bool is_ended TRUE if day is ended, else - FALSE
+   * @result-param Moment[] moments Array of day moments
    */
   function testItem()
   {
@@ -40,7 +53,9 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   *@public
+   * @public
+   * @param string ids List of ID's, that was separated by ";".
+   * @result-param Day[] days Associative array of (day_id => Day)
    */
   function testItem_Many()
   {
@@ -98,7 +113,17 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   *@public
+   * @public
+   * @param int day_id
+   * @param string text Comment contents
+   * @result-param string text Same text as inputed to verifi successfull delivery
+   * @result-param Day day
+   * @result-param User user
+   * @result-param int user_id Same as user.id
+   * @result-param int day_id Same as day.id
+   * @result-param int ctime Creation time
+   * @result-param int utime Update time
+   * @result-param int id Comment ID
    */
   function testCommentCreate()
   {
@@ -122,7 +147,8 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   function testCommentCreate_NotFound() {}
 
   /**
-   *@public
+   * @public
+   * @param int day_id
    */
   function testShareDay()
   {
@@ -148,7 +174,8 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   function testSearch() {}
 
   /**
-   *@public
+   * @public
+   * @param int day_id
    *TODO
    */
   function testUpdate()
@@ -171,6 +198,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
 
   /**
    * @public
+   * @param int day_id
    */
   function testDeleteDay()
   {
