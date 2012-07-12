@@ -26,7 +26,7 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 	}
 
 	/**
-	 *@example
+	 *@public
 	 */
 	function testStart()
 	{
@@ -53,7 +53,7 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 	}
 
 	/**
-	 *@example
+	 *@public
 	 */
 	function testGetCurrentDay()
 	{
@@ -86,7 +86,7 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 	}
 
 	/**
-	 *@example
+	 *@public
 	 */
 	function testCreateMoment()
 	{
@@ -113,7 +113,7 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 	}
 
 	/**
-	 *@example
+	 *@public
 	 */
 	function testFinish()
 	{

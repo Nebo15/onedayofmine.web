@@ -19,15 +19,18 @@ class odApiToMarkdownWriter
       unlink($this->file);
   }
 
-  function addRequest($name, $url_path, $method, array $data = array(), $response)
+  function addRequest($name, $url_path, $method, $description = null, array $requestData = array(), array $requestDescription = array(), $responseData, array $responseDescription = array())
   {
     $request = new stdClass();
     $request->name = $name;
-    $request->description = '';
-    $request->url = '{{host}}'.$url_path;
+    $request->url = $url_path;
     $request->method = $method;
-    $request->data = $data;
-    $request->response = $response;
+    $request->description = $description;
+    $request->requestData = $requestData;
+    $request->requestDescription = $requestDescription;
+    $request->responseData = $responseData;
+    $request->responseDescription = $responseDescription;
+
     $this->requests[] = $request;
   }
 
@@ -40,20 +43,71 @@ class odApiToMarkdownWriter
     foreach($this->requests as $request)
     {
       $output .= '## '.$request->name.' ##'.$nn;
+      $output .= $request->description.$nn;
       $output .= '`'.$request->method.' '.$request->url.'`'.$nn;
-      if(count($request->data))
+      $output .= '### Request: ###'.$nn;
+
+      // REQUEST
+      if(count($request->requestData))
       {
-        $output .= 'Request: '.$nn;
-        $data = Json::indent(json_encode($request->data));
+        $data = Json::indent(json_encode($request->requestData));
         $output .= '    '.str_replace($n, $n.'    ', $data).$nn;
+
+        foreach ($request->requestData as $key => $value) {
+          // TODO find better way to do this
+          $found = false;
+          foreach ($request->requestDescription as $param) {
+            if($param['name'] == $key) {
+              $found = true;
+            }
+          }
+
+          if(!$found) {
+            $request->requestDescription[] = array(
+              'required'    => true,
+              'type'        => 'String',
+              'name'        => $key,
+              'description' => 'Describe me!'
+            );
+          }
+        }
+
+        if(count($request->requestDescription) > 0) {
+          $output .= 'Request params: '.$nn;
+          $output .= '<table width="100%" border="1"><tr><th width="150">Name</th><th width="40">Type</th><th width="40">Required</th><th>Description</th></tr>'.$nn;
+
+          foreach ($request->requestDescription as $param) {
+            $param['required'] = $param['required'] ? 'Y' : 'N';
+            $output .= "<tr><td>{$param['name']}</td><td>{$param['type']}</td><td>{$param['required']}</td><td>{$param['description']}</td></tr>";
+          }
+          $output .= '</table>'.$nn;
+        }
       }
       else
       {
-        $output .= 'Request: `empty`'.$nn;
+        $output .= '`empty`'.$nn;
       }
-      $output .= 'Response: '.$nn;
-      $data = Json::indent(json_encode($request->response));
-      $output .= '    '.str_replace($n, $n.'    ', $data).$nn;
+
+      // RESPONCE
+      $output .= '### Response: ###'.$nn;
+      if(count($request->responseData)) {
+        $data = Json::indent(json_encode($request->responseData));
+        $output .= '    '.str_replace($n, $n.'    ', $data).$nn;
+
+        if(count($request->responseDescription) > 0) {
+          $output .= 'Response params: '.$nn;
+          $output .= '<table width="100%" border="1"><tr><th width="150">Name</th><th width="40">Type</th><th>Description</th></tr>'.$nn;
+          var_dump($request->responseDescription);
+          foreach ($request->responseDescription as $param) {
+            $output .= "<tr><td>{$param['name']}</td><td>{$param['type']}</td><td>{$param['description']}</td></tr>";
+          }
+          $output .= '</table>'.$nn;
+        }
+      }
+      else
+      {
+        $output .= '`empty`'.$nn;
+      }
     }
     file_put_contents($this->file, $output);
   }

@@ -10,7 +10,7 @@ class UserAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @example
+   * @public
    */
   function testUserByIdDays()
   {
@@ -30,7 +30,7 @@ class UserAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @example
+   * @public
    */
   function testFollowers()
   {
@@ -54,7 +54,7 @@ class UserAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @example
+   * @public
    */
   function testFollowing()
   {
@@ -78,7 +78,7 @@ class UserAcceptanceTest extends odAcceptanceTestCase
   }
 
 	/**
-	 * @example
+	 * @public
 	 */
   function testFollow()
   {
@@ -94,7 +94,7 @@ class UserAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @example
+   * @public
    */
   function testUnfollow()
   {
@@ -113,32 +113,32 @@ class UserAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-	 * @example
+	 * @public
 	 */
   function testProfile() {}
 
   /**
-	 * @example
+	 * @public
 	 */
   function testProfileUpdate() {}
 
   /**
-	 * @example
+	 * @public
 	 */
   function testSettings() {}
 
   /**
-	 * @example
+	 * @public
 	 */
   function testSettingsUpdate() {}
 
   /**
-	 * @example
+	 * @public
 	 */
   function testActivity() {}
 
   /**
-	 * @example
+	 * @public
 	 */
   function testSearch() {}
 }

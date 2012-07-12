@@ -10,7 +10,7 @@ class MomentsAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @example
+   * @public
    */
   function testUpdate()
   {
@@ -36,7 +36,7 @@ class MomentsAcceptanceTest extends odAcceptanceTestCase
   function testUpdate_MomentNotFound() {}
 
   /**
-   * @example
+   * @public
    */
   function testDelete()
   {
@@ -60,7 +60,7 @@ class MomentsAcceptanceTest extends odAcceptanceTestCase
   function testDelete_MomentNotFound() {}
 
   /**
-   * @example
+   * @public
    */
   function testComment()
   {

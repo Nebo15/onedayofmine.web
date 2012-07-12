@@ -4,7 +4,7 @@ lmb_require('tests/cases/odAcceptanceTestCase.class.php');
 class MyAcceptanceTest extends odAcceptanceTestCase
 {
   /**
-   *@example
+   *@public
    */
 	function testProfile()
 	{
@@ -33,7 +33,7 @@ class MyAcceptanceTest extends odAcceptanceTestCase
 		}
 	}
 	/**
-	 * @example
+	 * @public
 	 */
 	function testUpdateProfile()
 	{
@@ -68,7 +68,7 @@ class MyAcceptanceTest extends odAcceptanceTestCase
 	}
 
   /**
-   * @example
+   * @public
    */
   function testUpdateProfile_Partial()
   {
@@ -93,14 +93,14 @@ class MyAcceptanceTest extends odAcceptanceTestCase
     }
   }
 	/**
-	 *@example
+	 *@public
 	 */
 	function testSettings()
 	{
 
 	}
 	/**
-	 * @example
+	 * @public
 	 */
 	function doUpdateSettings()
 	{
