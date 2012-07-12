@@ -10,7 +10,7 @@ taskman_propsetor('TASKS_MASKS', 'limb/*/cli/*.tasks.php' . PATH_SEPARATOR .
 																 'src/cli/*.tasks.php'  . PATH_SEPARATOR .
 		                             'tests/cli/*tasks.php');
 
-taskman_propsetor('PROJECT_DIR', $limb_dir.'../../');
+taskman_propsetor('PROJECT_DIR', $limb_dir.'/../../');
 taskman_propsetor('LIMB_DIR', $limb_dir.'/../');
 
 lmb_cli_init_tasks();

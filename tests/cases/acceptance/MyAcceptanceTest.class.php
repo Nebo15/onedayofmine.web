@@ -10,7 +10,7 @@ class MyAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   *@example
+   *@public
    */
 	function testProfile()
 	{
@@ -39,7 +39,7 @@ class MyAcceptanceTest extends odAcceptanceTestCase
 		}
 	}
 	/**
-	 * @example
+	 * @public
 	 */
 	function testUpdateProfile()
 	{
@@ -74,7 +74,7 @@ class MyAcceptanceTest extends odAcceptanceTestCase
 	}
 
   /**
-   * @example
+   * @public
    */
   function testUpdateProfile_Partial()
   {
@@ -99,7 +99,7 @@ class MyAcceptanceTest extends odAcceptanceTestCase
     }
   }
 	/**
-	 *@example
+	 *@public
 	 */
 	function testSettings()
 	{
@@ -128,7 +128,7 @@ class MyAcceptanceTest extends odAcceptanceTestCase
     $this->assertEqual(0, $settings->photos_save_filtered);
 	}
 	/**
-	 * @example
+	 * @public
 	 */
 	function testUpdateSettings()
 	{

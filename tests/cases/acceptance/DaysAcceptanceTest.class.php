@@ -10,7 +10,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   *@example
+   *@public
    */
   function testItem()
   {
@@ -40,7 +40,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   *@example
+   *@public
    */
   function testItem_Many()
   {
@@ -98,7 +98,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   *@example
+   *@public
    */
   function testCommentCreate()
   {
@@ -122,9 +122,9 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   function testCommentCreate_NotFound() {}
 
   /**
-   *@example
+   *@public
    */
-  function estShareDay()
+  function testShareDay()
   {
     $day = $this->generator->day($this->additional_user);
     $day->save();
@@ -148,7 +148,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   function testSearch() {}
 
   /**
-   *@example
+   *@public
    *TODO
    */
   function testUpdate()
@@ -170,7 +170,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @example
+   * @public
    */
   function testDeleteDay()
   {
@@ -207,7 +207,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @example
+   * @public
    */
   function testGetFavouriteDays()
   {
@@ -228,7 +228,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @example
+   * @public
    */
   function testAddToFavourites()
   {
@@ -250,7 +250,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @example
+   * @public
    */
   function testRemoveFromFavourites()
   {
@@ -270,7 +270,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @example
+   * @public
    */
   function testGetFollowingUsersDays()
   {
@@ -311,7 +311,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @example
+   * @public
    */
   function testGetNewDays()
   {
@@ -353,7 +353,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @example
+   * @public
    */
   function testCurrentUserDays()
   {

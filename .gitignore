@@ -7,6 +7,8 @@
 .settings
 .DS_Store
 *.sublime*
+.tags
+.tags_sorted_by_file
 
 var/*
 tests/var/*

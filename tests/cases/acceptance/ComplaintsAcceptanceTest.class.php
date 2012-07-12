@@ -11,7 +11,7 @@ class ComplaintsAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   *@example
+   *@public
    */
   function testCreate()
   {
