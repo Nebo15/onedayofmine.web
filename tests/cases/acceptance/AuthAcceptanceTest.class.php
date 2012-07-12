@@ -5,6 +5,8 @@ lmb_require('tests/cases/odAcceptanceTestCase.class.php');
 class AuthAcceptanceTest extends odAcceptanceTestCase
 {
   /**
+   * @description Returns user authentication status.
+   * @result-param boolean TRUE used is logged id, else - FALSE
    * @public
    */
   function testIsLoggedIn()
@@ -17,9 +19,10 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
 
   /**
    * @public
-   * @description This method is pretty much simple, it gets user credentials, auth user and returns session id in respond.
-   * @param String[118] fb_access_token Facebook access token <a href="http://developers.facebook.com/">FB Dev</a>
-   * @result-param sessid String[32] PHP user session id.
+   * @description User authorization.
+   * @param String[118] fb_access_token <a href="https://developers.facebook.com/docs/authentication/server-side/">Facebook access token</a>, we preffer <a href="https://developers.facebook.com/roadmap/offline-access-removal/">Long-Time Access Token</a>
+   * @result-param sessid String[32] Session ID for future requests
+   * @result-param User User Authorized user information
    */
   function testLogin()
   {
