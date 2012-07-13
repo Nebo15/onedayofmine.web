@@ -84,7 +84,7 @@ class odApiToMarkdownWriter
       foreach ($value as $request) {
         $output .= "1. <a href='#".$request->getHashTag()."'>".$request->getName()."</a>".PHP_EOL;
         $methodsOutput .= $request->buildDescription();
-        $methodsOutput .= '<a href="#toc">^ back to Table of conetens</a>'.PHP_EOL.PHP_EOL;
+        $methodsOutput .= PHP_EOL.'<a href="#toc">^ back to Table of conetens</a>'.PHP_EOL.PHP_EOL;
         $methodsOutput .= '* * *'.PHP_EOL;
       }
     }
