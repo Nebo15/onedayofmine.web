@@ -66,11 +66,14 @@ class odApiToMarkdownWriter_Element {
    * @return string markdowned text
    */
   public function buildDescription() {
-    // $this->requestData  = $this->_stdClassToArray($this->requestData);
-    // $this->responseData = $this->_stdClassToArray($this->responseData);
+    $this->requestData  = $this->_stdClassToArray($this->requestData);
+    $this->responseData = $this->_stdClassToArray($this->responseData);
 
     $this->_allocateUndescribedRequestParams();
-    // $this->_allocateUndescribedResponseParams(); // TODO disable allocation of responce after filling all phpdocks
+    $this->_allocateUndescribedResponseParams(); // TODO disable allocation of responce after filling all phpdocks
+
+    $this->_allocateDeprecatedRequestParams();
+    $this->_allocateDeprecatedResponseParams();
 
     if(count($this->requestDescription)) {
       $requestDescriptionTableRows = '';
@@ -81,8 +84,8 @@ class odApiToMarkdownWriter_Element {
 ###### Params: ######
 <table width="100%" border="1">
 <tr>
-  <th width="150">Name</th>
   <th width="40">Type</th>
+  <th width="150">Name</th>
   <th width="40">Required</th>
   <th>Description</th>
 </tr>
@@ -102,8 +105,8 @@ TBL;
 ###### Fields: ######
 <table width="100%" border="1">
 <tr>
-  <th width="150">Name</th>
   <th width="40">Type</th>
+  <th width="150">Name</th>
   <th>Description</th>
 </tr>
 {$responseDescriptionTableRows}
@@ -175,8 +178,26 @@ EOT;
     }
   }
 
+  protected function _allocateDeprecatedRequestParams() {
+    foreach ($this->requestDescription as $key => $value) {
+      if(!array_key_exists($value['name'], $this->requestData)) {
+        $this->requestDescription[$key]['name'] = "<s>{$this->requestDescription[$key]['name']}</s>";
+      }
+    }
+  }
+
+  protected function _allocateDeprecatedResponseParams() {
+    if(is_array($this->responseData)) {
+      foreach ($this->responseDescription as $key => $value) {
+        if(!array_key_exists($value['name'], $this->responseData)) {
+          $this->responseDescription[$key]['name'] = "<s>{$this->responseDescription[$key]['name']}</s>";
+        }
+      }
+    }
+  }
+
   protected function _allocateUndescribedResponseParams() { // FIXME
-    if(count($this->responseData)) {
+    if(is_array($this->responseData)) {
       foreach ($this->responseData as $key => $value) {
         // TODO find better way to do this
         $found = false;
