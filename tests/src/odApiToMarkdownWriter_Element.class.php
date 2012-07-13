@@ -68,14 +68,43 @@ class odApiToMarkdownWriter_Element {
   public function buildDescription() {
     $this->_allocateUndescribedRequestParams();
 
-    $requestDescriptionTableRows = '';
-    foreach ($this->requestDescription as $requestDescriptionElement) {
-      $requestDescriptionTableRows .= $this->_arrayToHTMLRows($requestDescriptionElement).PHP_EOL;
+    if(count($this->requestDescription)) {
+      $requestDescriptionTableRows = '';
+      foreach ($this->requestDescription as $requestDescriptionElement) {
+        $requestDescriptionTableRows .= $this->_arrayToHTMLRows($requestDescriptionElement).PHP_EOL;
+      }
+      $requestDescriptionTable = <<<TBL
+<table width="100%" border="1">
+<tr>
+  <th width="150">Name</th>
+  <th width="40">Type</th>
+  <th width="40">Required</th>
+  <th>Description</th>
+</tr>
+{$requestDescriptionTableRows}
+</table>
+TBL;
+    } else {
+      $requestDescriptionTable = '';
     }
 
-    $responseDescriptionTableRows = '';
-    foreach ($this->responseDescription as $responseDescriptionElement) {
-      $responseDescriptionTableRows .= $this->_arrayToHTMLRows($responseDescriptionElement).PHP_EOL;
+    if(count($this->responseDescription)) {
+      $responseDescriptionTableRows = '';
+      foreach ($this->responseDescription as $responseDescriptionElement) {
+        $responseDescriptionTableRows .= $this->_arrayToHTMLRows($responseDescriptionElement).PHP_EOL;
+      }
+      $responseDescriptionTable = <<<TBL
+<table width="100%" border="1">
+<tr>
+  <th width="150">Name</th>
+  <th width="40">Type</th>
+  <th>Description</th>
+</tr>
+{$responseDescriptionTableRows}
+</table>
+TBL;
+    } else {
+      $responseDescriptionTable = '';
     }
 
     $exampleRequestString  = count($this->requestData)  ? $this->_dataToNiceJson($this->requestData)  : '    empty';
@@ -89,34 +118,14 @@ class odApiToMarkdownWriter_Element {
 `{$this->method} {$this->uri}`
 
 ##### Request: #####
-<table width="100%" border="1">
-<tr>
-  <th width="150">Name</th>
-  <th width="40">Type</th>
-  <th width="40">Required</th>
-  <th>Description</th>
-</tr>
-{$requestDescriptionTableRows}
-</table>
-Example request:
-
+{$requestDescriptionTable}
+###### Example request: ######
 {$exampleRequestString}
 
-
 ##### Response: #####
-<table width="100%" border="1">
-<tr>
-  <th width="150">Name</th>
-  <th width="40">Type</th>
-  <th>Description</th>
-</tr>
-{$responseDescriptionTableRows}
-</table>
-Example response:
-
+{$requestDescriptionTable}
+###### Example response: ######
 {$exampleResponseString}
-
-
 EOT;
   }
 
