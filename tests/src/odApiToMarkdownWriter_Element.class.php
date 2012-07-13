@@ -66,8 +66,8 @@ class odApiToMarkdownWriter_Element {
    * @return string markdowned text
    */
   public function buildDescription() {
-    $this->requestData  = $this->_stdClassToArray($this->requestData);
-    $this->responseData = $this->_stdClassToArray($this->responseData);
+    // $this->requestData  = $this->_stdClassToArray($this->requestData);
+    // $this->responseData = $this->_stdClassToArray($this->responseData);
 
     $this->_allocateUndescribedRequestParams();
     // $this->_allocateUndescribedResponseParams(); // TODO disable allocation of responce after filling all phpdocks
@@ -129,7 +129,7 @@ TBL;
 {$exampleRequestString}
 
 ##### Response: #####
-{$requestDescriptionTable}
+{$responseDescriptionTable}
 ###### Example response: ######
 {$exampleResponseString}
 EOT;
