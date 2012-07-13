@@ -1,5 +1,6 @@
 <?php
 lmb_require('src/Json.class.php');
+lmb_require('tests/src/odApiToMarkdownWriter_Element.class.php');
 
 class odApiToMarkdownWriter
 {
@@ -19,125 +20,78 @@ class odApiToMarkdownWriter
       unlink($this->file);
   }
 
-  function addRequest($name, $url_path, $method, $description = null, array $requestData = array(), array $requestDescription = array(), $responseData, array $responseDescription = array())
+  function addRequest($name, $method, $uri, $requestData, $responseData, array $docBlockEntities)
   {
-    $request = new stdClass();
-    $request->name = $name;
-    $request->url = $url_path;
-    $request->method = $method;
-    $request->description = $description;
-    $request->requestData = $requestData;
-    $request->requestDescription = $requestDescription;
-    $request->responseData = $responseData;
-    $request->responseDescription = $responseDescription;
+    // Returns associative array based on dockblock description, assumes there are always type and name params.
+    $paramParser = function($description, $required = true) 
+    {
+      $tokens = explode(' ', $description);
 
-    $this->requests[] = $request;
+      if(count($tokens) < 2)
+        throw new lmbException("You need to descripte both type and name in dock block for method {$call_name}.");
+
+      $result = array(
+        'type'        => array_shift($tokens),
+        'name'        => array_shift($tokens)
+      );
+
+      if(!is_null($required))
+        $result['required'] = $required;
+
+      $result['description'] = implode(' ', $tokens);
+
+      return $result;
+    };
+
+    $description = array_key_exists('description', $docBlockEntities) ? $docBlockEntities['description'] : null;
+
+    $requestDescription = array();
+    if(array_key_exists('option', $docBlockEntities)) {
+      foreach ($docBlockEntities['option'] as $option) {
+        $requestDescription[] = $paramParser($option, false);
+      }
+    }
+    if(array_key_exists('param', $docBlockEntities)) {
+      foreach ($docBlockEntities['param'] as $param) {
+        $requestDescription[] = $paramParser($param, true);
+      }
+    }
+
+    $responseDescription = array();
+    if(array_key_exists('result-param', $docBlockEntities)) {
+      foreach ($docBlockEntities['result-param'] as $param) {
+        $responseDescription[] = $paramParser($param, null);
+      }
+    }
+
+    list($group, $name) = explode(' - ', $name);
+
+    $this->requests[$group][] = new odApiToMarkdownWriter_Element($name, $method, $uri, $description, $requestData, $requestDescription, $responseData, $responseDescription);
   }
 
   function saveFile()
   {
-    $n = PHP_EOL;
-    $nn = $n.$n;
-    $output = "# API examples #".$nn;
-    $output .= " Version: ".date('d.m.y H:i:s').$nn;
-    foreach($this->requests as $request)
-    {
-      $output .= '## '.$request->name.' ##'.$nn;
-      $output .= $request->description.$nn;
-      $output .= '`'.$request->method.' '.$request->url.'`'.$nn;
-      $output .= '### Request: ###'.$nn;
+    $output = "# API #".PHP_EOL;
+    $output .= " Version: ".date('d.m.y H:i:s').PHP_EOL.PHP_EOL;
+    $output .= "## Table of contents: ##".PHP_EOL;
+    $output .= "<a name='toc'></a>".PHP_EOL;
 
-      // REQUEST
-      if(count($request->requestData))
-      {
-        $data = Json::indent(json_encode($request->requestData));
-        $output .= '    '.str_replace($n, $n.'    ', $data).$nn;
-
-        foreach ($request->requestData as $key => $value) {
-          // TODO find better way to do this
-          $found = false;
-          foreach ($request->requestDescription as $param) {
-            if($param['name'] == $key) {
-              $found = true;
-            }
-          }
-
-          if(!$found) {
-            $request->requestDescription[] = array(
-              'required'    => true,
-              'type'        => 'String',
-              'name'        => $key,
-              'description' => 'Describe me!'
-            );
-          }
-        }
-
-        if(count($request->requestDescription) > 0) {
-          $output .= 'Request params: '.$nn;
-          $output .= '<table width="100%" border="1"><tr><th width="150">Name</th><th width="40">Type</th><th width="40">Required</th><th>Description</th></tr>'.$nn;
-
-          foreach ($request->requestDescription as $param) {
-            $param['required'] = $param['required'] ? 'Y' : 'N';
-            $output .= "<tr><td>{$param['name']}</td><td>{$param['type']}</td><td>{$param['required']}</td><td>{$param['description']}</td></tr>";
-          }
-          $output .= '</table>'.$nn;
-        }
-      }
-      else
-      {
-        $output .= '`empty`'.$nn;
-      }
-
-      // RESPONCE
-      $output .= '### Response: ###'.$nn;
-      if(count($request->responseData)) {
-        $data = Json::indent(json_encode($request->responseData));
-        $output .= '    '.str_replace($n, $n.'    ', $data).$nn;
-
-        /*if(is_array($request->responseData)) {
-          array_walk_recursive($request->responseData, function(&$item, $key) {
-            if($item instanceof stdClass) {
-              $item = (array) $item;
-            }
-          });
-
-          foreach ($request->responseData as $key => $value) {
-            // TODO find better way to do this
-            $found = false;
-            foreach ($request->responseDescription as $param) {
-              if($param['name'] == $key) {
-                $found = true;
-              }
-            }
-
-            if(!$found) {
-              $request->responseDescription[] = array(
-                'required'    => false,
-                'type'        => 'String',
-                'name'        => $key,
-                'description' => 'Describe me!'
-              );
-            }
-          }
-        }*/
-
-        // var_dump((array) $request->responseData);
-
-        if(count($request->responseDescription) > 0) {
-          $output .= 'Response params: '.$nn;
-          $output .= '<table width="100%" border="1"><tr><th width="150">Name</th><th width="40">Type</th><th>Description</th></tr>'.$nn;
-
-          foreach ($request->responseDescription as $param) {
-            $output .= "<tr><td>{$param['name']}</td><td>{$param['type']}</td><td>{$param['description']}</td></tr>";
-          }
-          $output .= '</table>'.$nn;
-        }
-      }
-      else
-      {
-        $output .= '`empty`'.$nn;
+    $methodsOutput = '';
+    foreach ($this->requests as $group => $value) {
+      $output .= PHP_EOL."### <a href='#{$group}'>{$group}</a> ###".PHP_EOL;
+      $methodsOutput .= PHP_EOL."### {$group} ###".PHP_EOL;
+      $methodsOutput .= "<a name='{$group}'></a>".PHP_EOL;
+      foreach ($value as $request) {
+        $output .= "1. <a href='#".$request->getHashTag()."'>".$request->getName()."</a>".PHP_EOL;
+        $methodsOutput .= $request->buildDescription();
+        $methodsOutput .= '<a href="#toc">^ back to Table of conetens</a>'.PHP_EOL.PHP_EOL;
+        $methodsOutput .= '* * *'.PHP_EOL;
       }
     }
+
+    $output .= PHP_EOL.PHP_EOL."## API methods ##".PHP_EOL;
+    $output .= $methodsOutput;
+
     file_put_contents($this->file, $output);
   }
 }

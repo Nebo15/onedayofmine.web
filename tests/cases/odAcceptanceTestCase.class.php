@@ -72,7 +72,6 @@ abstract class odAcceptanceTestCase extends WebTestCase
     $class_ref = new ReflectionClass($class_name);
     $method_ref = $class_ref->getMethod($method_name);
     $call_name = str_replace('AcceptanceTest', '', $class_name).' - '.str_replace('test', '', $method_name);
-    $is_example = (bool) (false !== strpos($method_ref->getDocComment(), '@show'));
 
     preg_match_all('#@([a-zA-Z0-9\-]+)([^\n\r]*)#i', $method_ref->getDocComment(), $out);
 
@@ -93,45 +92,9 @@ abstract class odAcceptanceTestCase extends WebTestCase
       ->getPostmanWriter()
       ->addRequest($call_name, $url_path, $method, $params);
 
-    // Returns associative array based on dockblock description, assumes there are always type and name params.
-    $paramParser = function($description, $required) {
-      $tokens = explode(' ', $description);
-
-      if(count($tokens) < 2)
-        throw new lmbException("You need to descripte both type and name in dock block for method {$call_name}.");
-
-      return array(
-        'required'    => $required,
-        'type'        => array_shift($tokens),
-        'name'        => array_shift($tokens),
-        'description' => implode(' ', $tokens)
-      );
-    };
-
-    $description = array_key_exists('description', $docBlockEntities) ? $docBlockEntities['description'] : null;
-
-    $requestParams = array();
-    if(array_key_exists('option', $docBlockEntities)) {
-      foreach ($docBlockEntities['option'] as $option) {
-        $requestParams[] = $paramParser($option, false);
-      }
-    }
-    if(array_key_exists('param', $docBlockEntities)) {
-      foreach ($docBlockEntities['param'] as $param) {
-        $requestParams[] = $paramParser($param, true);
-      }
-    }
-
-    $responseParams = array();
-    if(array_key_exists('result-param', $docBlockEntities)) {
-      foreach ($docBlockEntities['result-param'] as $param) {
-        $responseParams[] = $paramParser($param, true);
-      }
-    }
-
     lmbToolkit::instance()
       ->getApiToMarkdownWriter()
-      ->addRequest($call_name, $url_path, $method, $description, $params, $requestParams, $response, $responseParams);
+      ->addRequest($call_name, $method, $url_path, $params, $response, $docBlockEntities);
 
   }
 
