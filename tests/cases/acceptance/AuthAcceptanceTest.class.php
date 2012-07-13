@@ -22,7 +22,7 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
    * @description User authorization.
    * @param string[118] fb_access_token Facebook access token
    * @result-param string[32] sessid Session ID for future requests
-   * @result-param User User Authorized user information
+   * @result-param User user Authorized user information
    */
   function testLogin()
   {

@@ -27,16 +27,17 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 
 	/**
 	 * @public
-	 * @param String title Title name for this day
-	 * @param String description Description for this day
-	 * @param int time_offset UTC time zone offset
-	 * @param String occupation Thing that user are planning to do during current day
-	 * @param int type [0:working, 1:day-off, 2:holiday, 3:trip, 4:special event]
+	 * @description Starts a day
+	 * @param string title Title name for this day
+	 * @param string description Description for this day
+	 * @param int timezone UTC time zone offset
+	 * @param string occupation Thing that user are planning to do during current day
+	 * @param string type One of pre-defined types: {working, day-off, holiday, trip, special_event}
 	 * @result-param int id Day ID
 	 * @result-param int user_id
 	 * @result-param string title
 	 * @result-param string description
-	 * @result-param int time_offset UTC time zone
+	 * @result-param int timezone UTC time zone
 	 * @result-param string occupation
 	 * @result-param string type One of pre-defined types: {working, day-off, holiday, trip, special_event}
 	 * @result-param int|null likes_count
@@ -68,7 +69,7 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 	 * @result-param int user_id
 	 * @result-param string title
 	 * @result-param string description
-	 * @result-param int time_offset UTC time zone offset
+	 * @result-param int timezone UTC time zone offset
 	 * @result-param string occupation
 	 * @result-param string type One of pre-defined types: {working, day-off, holiday, trip, special_event}
 	 * @result-param int|null likes_count
@@ -112,6 +113,7 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 	 * @param string image_name
 	 * @param string image_content File contents, that was previously encoded by base64
 	 * @result-param int id Moment ID
+	 * @result-param int day_id ID day that moment belongs to
 	 * @result-param string description Moment description
 	 * @result-param string img_url URL to file image
 	 * @result-param int|null likes_count
