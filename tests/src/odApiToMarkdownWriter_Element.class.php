@@ -66,7 +66,11 @@ class odApiToMarkdownWriter_Element {
    * @return string markdowned text
    */
   public function buildDescription() {
+    $this->requestData  = $this->_stdClassToArray($this->requestData);
+    $this->responseData = $this->_stdClassToArray($this->responseData);
+
     $this->_allocateUndescribedRequestParams();
+    // $this->_allocateUndescribedResponseParams(); // TODO disable allocation of responce after filling all phpdocks
 
     if(count($this->requestDescription)) {
       $requestDescriptionTableRows = '';
@@ -74,6 +78,7 @@ class odApiToMarkdownWriter_Element {
         $requestDescriptionTableRows .= $this->_arrayToHTMLRows($requestDescriptionElement).PHP_EOL;
       }
       $requestDescriptionTable = <<<TBL
+###### Params: ######
 <table width="100%" border="1">
 <tr>
   <th width="150">Name</th>
@@ -94,6 +99,7 @@ TBL;
         $responseDescriptionTableRows .= $this->_arrayToHTMLRows($responseDescriptionElement).PHP_EOL;
       }
       $responseDescriptionTable = <<<TBL
+###### Fields: ######
 <table width="100%" border="1">
 <tr>
   <th width="150">Name</th>
@@ -130,20 +136,21 @@ EOT;
   }
 
   protected function _dataToNiceJson($data) {
-    $data = $this->_stdClassToArray($data);
     return '    '.str_replace(PHP_EOL, PHP_EOL.'    ', Json::indent(json_encode($data))).PHP_EOL.PHP_EOL;
   }
 
   private function _stdClassToArray($stdClass) {
-    if(count($stdClass)) {
+    if($stdClass instanceof stdClass)
       $stdClass = (array) $stdClass;
 
+    if(is_array($stdClass)) {
       array_walk_recursive($stdClass, function(&$item, $key) {
         if($item instanceof stdClass) {
           $item = (array) $item;
         }
       });
     }
+
     return $stdClass;
   }
 
@@ -168,22 +175,24 @@ EOT;
     }
   }
 
-  protected function _allocateUndescribedResponseParams() {
-    foreach ($this->responseData as $key => $value) {
-      // TODO find better way to do this
-      $found = false;
-      foreach ($this->responseDescription as $param) {
-        if($param['name'] == $key) {
-          $found = true;
+  protected function _allocateUndescribedResponseParams() { // FIXME
+    if(count($this->responseData)) {
+      foreach ($this->responseData as $key => $value) {
+        // TODO find better way to do this
+        $found = false;
+        foreach ($this->responseDescription as $param) {
+          if($param['name'] == $key) {
+            $found = true;
+          }
         }
-      }
 
-      if(!$found) {
-        $this->responseDescription[] = array(
-          'type'        => '[type]',
-          'name'        => $key,
-          'description' => '[description]'
-        );
+        if(!$found) {
+          $this->responseDescription[] = array(
+            'type'        => '[type]',
+            'name'        => $key,
+            'description' => '[description]'
+          );
+        }
       }
     }
   }
