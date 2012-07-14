@@ -16,7 +16,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
    * @result-param int user_id
    * @result-param string title
    * @result-param string description
-   * @result-param int time_offset UTC time zone offset
+   * @result-param int timezone UTC time zone offset
    * @result-param string occupation
    * @result-param int type One of pre-defined types: {working, day-off, holiday, trip, special_event}
    * @result-param int likes_count

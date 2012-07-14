@@ -5,9 +5,9 @@ lmb_require('tests/cases/odAcceptanceTestCase.class.php');
 class AuthAcceptanceTest extends odAcceptanceTestCase
 {
   /**
-   * @description Returns user authentication status.
-   * @result-param boolean TRUE used is logged id, else - FALSE
    * @public
+   * @description Returns user authentication status.
+   * @result-param boolean - TRUE user is logged id, else - FALSE
    */
   function testIsLoggedIn()
   {
@@ -20,9 +20,9 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
   /**
    * @public
    * @description User authorization.
-   * @param String[118] fb_access_token <a href="https://developers.facebook.com/docs/authentication/server-side/">Facebook access token</a>, we preffer <a href="https://developers.facebook.com/roadmap/offline-access-removal/">Long-Time Access Token</a>
-   * @result-param sessid String[32] Session ID for future requests
-   * @result-param User User Authorized user information
+   * @param string[118] fb_access_token Facebook access token
+   * @result-param string[32] sessid Session ID for future requests
+   * @result-param User user Authorized user information
    */
   function testLogin()
   {
