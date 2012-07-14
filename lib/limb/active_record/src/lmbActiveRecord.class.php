@@ -1224,7 +1224,7 @@ class lmbActiveRecord extends lmbObject
 
   protected function _setAutoTimes()
   {
-    if($this->isNew() && $this->_hasCreateTime())
+    if($this->isNew() && $this->_hasCreateTime() && !$this->_getRaw($this->_ctime_field))
       $this->_setRaw($this->_ctime_field, $this->_makeCreateTime());
 
     if($this->_hasUpdateTime())
