@@ -5,9 +5,8 @@ lmb_require('tests/cases/odAcceptanceTestCase.class.php');
 class AuthAcceptanceTest extends odAcceptanceTestCase
 {
   /**
-   * @public
-   * @description Returns user authentication status.
-   * @result-param boolean - TRUE user is logged id, else - FALSE
+   * @api description Returns user authentication status.
+   * @api result boolean - TRUE user is logged id, else - FALSE
    */
   function testIsLoggedIn()
   {
@@ -18,11 +17,10 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
 
 
   /**
-   * @public
-   * @description User authorization.
-   * @param string[118] fb_access_token Facebook access token
-   * @result-param string[32] sessid Session ID for future requests
-   * @result-param User user Authorized user information
+   * @api description User authorization.
+   * @api input param string[118] fb_access_token Facebook access token
+   * @api result string[32] sessid Session ID for future requests
+   * @api result User user Authorized user information
    */
   function testLogin()
   {

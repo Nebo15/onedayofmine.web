@@ -11,13 +11,12 @@ class ComplaintsAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @public
-   * @param int id ID of abused comment
-   * @param string text Abuse description message
-   * @result-param int day_id
-   * @result-param string text
-   * @result-param int ctime Creation time, unix timestamp
-   * @result-param int id Complaint ID
+   * @api input param int id ID of abused comment
+   * @api input param string text Abuse description message
+   * @api result int day_id
+   * @api result string text
+   * @api result int ctime Creation time, unix timestamp
+   * @api result int id Complaint ID
    */
   function testCreate()
   {
