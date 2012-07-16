@@ -1,6 +1,9 @@
 <?php
 lmb_require('src/model/BaseModel.class.php');
 
+/**
+ * @api
+ */
 class MomentComment extends BaseModel
 {
   protected $_db_table_name = 'moment_comment';

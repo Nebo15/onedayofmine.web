@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @api
+ */
 class Complaint extends BaseModel
 {
   protected $_db_table_name = 'complaint';
