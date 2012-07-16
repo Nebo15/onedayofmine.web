@@ -129,6 +129,13 @@ class DaysController extends BaseJsonController
   	return $this->_answerOk(Day::findNew($from, $to));
   }
 
+  function doInteresting()
+  {
+    $from = $this->request->getFiltered('from', FILTER_SANITIZE_NUMBER_INT);
+    $to = $this->request->getFiltered('to', FILTER_SANITIZE_NUMBER_INT);
+    return $this->_answerOk(Day::findInteresting($from, $to));
+  }
+
   function doFavourites()
   {
 		return $this->_answerOk($this->_getUser()->getFavouriteDays());

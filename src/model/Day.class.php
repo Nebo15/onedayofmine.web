@@ -74,7 +74,7 @@ class Day extends BaseModel
 		if($from_id)
 			$criteria->add(lmbSQLCriteria::greater('id', $from_id));
 		if($to_id)
-			$criteria->add(lmbSQLCriteria::greater('id', $to_id));
+			$criteria->add(lmbSQLCriteria::less('id', $to_id));
 		return Day::find(array('criteria' => $criteria));
   }
 
@@ -87,7 +87,7 @@ class Day extends BaseModel
 		if($from_id)
 			$criteria->add(lmbSQLCriteria::greater('id', $from_id));
 		if($to_id)
-			$criteria->add(lmbSQLCriteria::greater('id', $to_id));
+			$criteria->add(lmbSQLCriteria::less('id', $to_id));
 		return Day::find(array('criteria' => $criteria));
   }
 
@@ -99,5 +99,20 @@ class Day extends BaseModel
   	if(count($days) > 1)
   		throw new lmbException("User {$user->getId()} has more than one open day");
   	return $days->at(0);
+  }
+
+  static function findInteresting($from_id = null, $to_id = null)
+  {
+    $criteria = lmbSQLCriteria::equal('is_deleted', 0);
+    if($from_id)
+      $criteria->add(lmbSQLCriteria::greater('id', $from_id));
+    if($to_id)
+      $criteria->add(lmbSQLCriteria::less('id', $to_id));
+    $query = lmbARQuery::create('Day');
+    $query->addCriteria($criteria);
+    $seconds_in_day = 86400;
+    $current_time = time();
+    $query->addRawOrder("(($current_time-`ctime`)/$seconds_in_day)/`likes_count` ASC");
+    return $query->fetch();
   }
 }
