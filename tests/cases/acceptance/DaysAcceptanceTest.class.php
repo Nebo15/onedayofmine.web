@@ -375,7 +375,9 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   	$this->assertEqual(0, count($result));
   }
 
-  //TODO
+  /**
+   * @api
+   */
   function testGetInterestingDays()
   {
     $this->main_user->save();
