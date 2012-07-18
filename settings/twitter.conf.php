@@ -6,3 +6,8 @@ $conf = array(
   'twitter_authorize_url'     => 'https://api.twitter.com/oauth/authorize',
   'twitter_access_token_url'  => 'https://api.twitter.com/oauth/access_token'
 );
+
+// Twitter test user credenatials:
+// User: ODMTestUser
+// Email: test@onedayofmine.com
+// Password: test@onedayofmine.com
