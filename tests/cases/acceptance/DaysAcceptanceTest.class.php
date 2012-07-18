@@ -10,20 +10,19 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @public
-   * @description Returns basic Day entity by given Day ID.
-   * @param int id Day ID
-   * @result-param int user_id
-   * @result-param string title
-   * @result-param string description
-   * @result-param int timezone UTC time zone offset
-   * @result-param string occupation
-   * @result-param int type One of pre-defined types: {working, day-off, holiday, trip, special_event}
-   * @result-param int likes_count
-   * @result-param int ctime Creation time
-   * @result-param int utime Last update time
-   * @result-param bool is_ended TRUE if day is ended, else - FALSE
-   * @result-param Moment[] moments Array of day moments
+   * @api description Returns basic Day entity by given Day ID.
+   * @api input param int id Day ID
+   * @api result int user_id
+   * @api result string title
+   * @api result string description
+   * @api result int timezone UTC time zone offset
+   * @api result string occupation
+   * @api result int type One of pre-defined types: {working, day-off, holiday, trip, special_event}
+   * @api result int likes_count
+   * @api result int ctime Creation time
+   * @api result int utime Last update time
+   * @api result bool is_ended TRUE if day is ended, else - FALSE
+   * @api result Moment[] moments Array of day moments
    */
   function testItem()
   {
@@ -53,9 +52,9 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @public
-   * @param string ids List of ID's, that was separated by ";".
-   * @result-param Day[] days Associative array of (day_id => Day)
+   * @api description Get few days in one request.
+   * @api input param string ids List of ID's, that was separated by ";".
+   * @api result Day[] days Associative array of (day_id => Day)
    */
   function testItem_Many()
   {
@@ -113,17 +112,17 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @public
-   * @param int day_id
-   * @param string text Comment contents
-   * @result-param string text Same text as inputed to verifi successfull delivery
-   * @result-param Day day
-   * @result-param User user
-   * @result-param int user_id Same as user.id
-   * @result-param int day_id Same as day.id
-   * @result-param int ctime Creation time
-   * @result-param int utime Update time
-   * @result-param int id Comment ID
+   * @api description Create moment in specified day
+   * @api input param int day_id
+   * @api input param string text Comment contents
+   * @api result string text Same text as inputed to verifi successfull delivery
+   * @api result Day day
+   * @api result User user
+   * @api result int user_id Same as user.id
+   * @api result int day_id Same as day.id
+   * @api result int ctime Creation time
+   * @api result int utime Update time
+   * @api result int id Comment ID
    */
   function testCommentCreate()
   {
@@ -147,10 +146,10 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   function testCommentCreate_NotFound() {}
 
   /**
-   * @public
-   * @param int day_id
+   * @api description Share a day
+   * @api input param int day_id
    */
-  function estShareDay()
+  function estShareDay() // TODO why est?!
   {
     $day = $this->generator->day($this->additional_user);
     $day->save();
@@ -174,8 +173,8 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   function testSearch() {}
 
   /**
-   * @public
-   * @param int day_id
+   * @api description Updates a day
+   * @api input param int day_id
    *TODO
    */
   function testUpdate()
@@ -213,8 +212,8 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @public
-   * @param int day_id
+   * @api description Deletes a day
+   * @api input param int day_id
    */
   function testDeleteDay()
   {
@@ -251,7 +250,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @public
+   * @api
    */
   function testGetFavouriteDays()
   {
@@ -272,7 +271,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @public
+   * @api
    */
   function testAddToFavourites()
   {
@@ -294,7 +293,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @public
+   * @api
    */
   function testRemoveFromFavourites()
   {
@@ -314,7 +313,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @public
+   * @api
    */
   function testGetFollowingUsersDays()
   {
@@ -355,7 +354,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @public
+   * @api
    */
   function testGetNewDays()
   {
@@ -392,7 +391,9 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   	$this->assertEqual(0, count($result));
   }
 
-  //TODO
+  /**
+   * @api
+   */
   function testGetInterestingDays()
   {
     $this->main_user->save();
@@ -444,7 +445,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @public
+   * @api
    */
   function testCurrentUserDays()
   {

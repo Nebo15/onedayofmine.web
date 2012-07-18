@@ -10,7 +10,7 @@ class UserAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @public
+   * @api
    */
   function testUserByIdDays()
   {
@@ -30,7 +30,7 @@ class UserAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @public
+   * @api
    */
   function testUserById()
   {
@@ -46,11 +46,7 @@ class UserAcceptanceTest extends odAcceptanceTestCase
     }
   }
 
-  /**
-   * @public
-   */
-  function testFollowers()
-  {
+  function testEmptyFollowers() {
     $this->main_user->save();
     $this->additional_user->save();
 
@@ -59,6 +55,17 @@ class UserAcceptanceTest extends odAcceptanceTestCase
     $followers = $this->get('users/followers')->result;
     $this->assertResponse(200);
     $this->assertEqual(0, count($followers));
+  }
+
+  /**
+   * @api
+   */
+  function testFollowers()
+  {
+    $this->main_user->save();
+    $this->additional_user->save();
+
+    $this->_loginAndSetCookie($this->main_user);
 
     $followers = $this->main_user->getFollowers();
     $followers->add($this->additional_user);
@@ -71,7 +78,7 @@ class UserAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @public
+   * @api
    */
   function testFollowersByUserId()
   {
@@ -95,7 +102,7 @@ class UserAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @public
+   * @api
    */
   function testFollowing()
   {
@@ -119,7 +126,7 @@ class UserAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @public
+   * @api
    */
   function testFollowingByUserId()
   {
@@ -144,7 +151,7 @@ class UserAcceptanceTest extends odAcceptanceTestCase
 
 
   /**
-	 * @public
+	 * @api
 	 */
   function testFollow()
   {
@@ -160,7 +167,7 @@ class UserAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @public
+   * @api
    */
   function testUnfollow()
   {
@@ -179,12 +186,12 @@ class UserAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-	 * @public
+	 * @api
 	 */
   function testActivity() {}
 
   /**
-	 * @public
+	 * @api
 	 */
   function testSearch() {}
 }

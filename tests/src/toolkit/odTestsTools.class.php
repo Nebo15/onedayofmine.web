@@ -1,6 +1,7 @@
 <?php
 lmb_require('tests/src/odPostmanWriter.class.php');
 lmb_require('tests/src/odApiToMarkdownWriter.class.php');
+lmb_require('tests/src/odModelToEntitiesWriter.class.php');
 
 class odTestsTools extends lmbAbstractTools
 {
@@ -14,6 +15,14 @@ class odTestsTools extends lmbAbstractTools
 	 */
 	protected $api_to_markdown_writer;
 
+	/**
+	 * @var odModelToEntitiesWriter
+	 */
+	protected $model_to_entities_writer;
+
+	/**
+	 * @return odPostmanWriter
+	 */
 	function getPostmanWriter()
 	{
 		if(!$this->postman_writer)
@@ -29,6 +38,15 @@ class odTestsTools extends lmbAbstractTools
 		if(!$this->api_to_markdown_writer)
 			$this->api_to_markdown_writer = new odApiToMarkdownWriter(lmb_env_get('APP_DIR').'/www/api_doc/examples.markdown');
 		return $this->api_to_markdown_writer;
+	}
+
+	/**
+	 * @return odModelToEntitiesWriter
+	 */
+	function getModelToEntitiesWriter() {
+		if(!$this->model_to_entities_writer)
+			$this->model_to_entities_writer = new odModelToEntitiesWriter(lmb_env_get('APP_DIR').'/www/api_doc/entities.markdown');
+		return $this->model_to_entities_writer;
 	}
 
 	function getTestsUsers()

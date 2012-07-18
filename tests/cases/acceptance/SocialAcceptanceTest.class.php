@@ -4,7 +4,7 @@ lmb_require('tests/cases/odAcceptanceTestCase.class.php');
 class SocialAcceptanceTest extends odAcceptanceTestCase
 {
   /**
-   *@public
+   * @api
    */
   function testFacebookFiends()
   {

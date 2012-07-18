@@ -1,6 +1,8 @@
 <?php
 lmb_require('src/Json.class.php');
 lmb_require('tests/src/odApiToMarkdownWriter_Element.class.php');
+lmb_require('lib/DocCommentParser/Patterns/AbstractComment.pattern.php');
+lmb_require('lib/DocCommentParser/Patterns/APIComment.pattern.php');
 
 class odApiToMarkdownWriter
 {
@@ -20,53 +22,46 @@ class odApiToMarkdownWriter
       unlink($this->file);
   }
 
-  function addRequest($name, $method, $uri, $requestData, $responseData, array $docBlockEntities)
+  function addRequest($name, $method, $uri, $requestData, $responseData, DocCommentParser $docCommentEntities)
   {
-    // Returns associative array based on dockblock description, assumes there are always type and name params.
-    $paramParser = function($description, $required = true) 
-    {
-      $tokens = explode(' ', $description);
+    // Apply pattern
+    $docCommentEntities->applyPattern(new APICommentPattern());
 
-      if(count($tokens) < 2)
-        throw new lmbException("You need to descripte both type and name in dock block for method {$call_name}.");
-
-      $result = array(
-        'type'        => array_shift($tokens),
-        'name'        => array_shift($tokens)
-      );
-
-      if(!is_null($required))
-        $result['required'] = $required;
-
-      $result['description'] = implode(' ', $tokens);
-
-      return $result;
-    };
-
-    $description = array_key_exists('description', $docBlockEntities) ? $docBlockEntities['description'] : null;
+    // Find description
+    $tmp = $docCommentEntities->getFilteredGroup('api', function(DocComment $comment) {
+      return $comment->category == 'description';
+    });
+    $description = count($tmp) ? $tmp[0]->description : null;
 
     $requestDescription = array();
-    if(array_key_exists('option', $docBlockEntities)) {
-      foreach ($docBlockEntities['option'] as $option) {
-        $requestDescription[] = $paramParser($option, false);
-      }
-    }
-    if(array_key_exists('param', $docBlockEntities)) {
-      foreach ($docBlockEntities['param'] as $param) {
-        $requestDescription[] = $paramParser($param, true);
-      }
+    $requestDescriptionComments = $docCommentEntities->getFilteredGroup('api', function(DocComment $comment) {
+      return $comment->category == 'input';
+    });
+    foreach($requestDescriptionComments as $comment) {
+      $requestDescription[] = array(
+        'type' => $comment->type,
+        'name' => $comment->name,
+        'required' => $comment->required,
+        'description' => $comment->description
+      );
     }
 
     $responseDescription = array();
-    if(array_key_exists('result-param', $docBlockEntities)) {
-      foreach ($docBlockEntities['result-param'] as $param) {
-        $responseDescription[] = $paramParser($param, null);
-      }
+    $responseDescriptionComments = $docCommentEntities->getFilteredGroup('api', function(DocComment $comment) {
+      return $comment->category == 'result';
+    });
+    foreach($responseDescriptionComments as $comment) {
+      $responseDescription[] = array(
+        'type' => $comment->type,
+        'name' => $comment->name,
+        'description' => $comment->description
+      );
     }
 
     list($group, $name) = explode(' - ', $name);
 
-    $this->requests[$group][] = new odApiToMarkdownWriter_Element($name, $method, $uri, $description, $requestData, $requestDescription, $responseData, $responseDescription);
+    // Notice: it ignores all api examples, except last one
+    $this->requests[$group][$name] = new odApiToMarkdownWriter_Element($name, $method, $uri, $description, $requestData, $requestDescription, $responseData, $responseDescription);
   }
 
   function saveFile()

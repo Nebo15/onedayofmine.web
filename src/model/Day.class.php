@@ -2,6 +2,7 @@
 lmb_require('src/model/BaseModel.class.php');
 
 /**
+ * @api field int id User ID
  * @static Day findById()
  */
 class Day extends BaseModel

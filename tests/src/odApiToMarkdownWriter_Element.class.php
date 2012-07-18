@@ -99,6 +99,14 @@ TBL;
     if(count($this->responseDescription)) {
       $responseDescriptionTableRows = '';
       foreach ($this->responseDescription as $responseDescriptionElement) {
+        // Entities finder
+        if($responseDescriptionElement['type'][0] != strtolower($responseDescriptionElement['type'][0])) {
+          $entityName = $responseDescriptionElement['type'];
+          if(substr($responseDescriptionElement['type'], -2) == '[]')
+            $entityName = substr($responseDescriptionElement['type'], 0, -2);
+
+          $responseDescriptionElement['type'] = "<a href='#Entity:{$entityName}'>{$responseDescriptionElement['type']}</a>";
+        }
         $responseDescriptionTableRows .= $this->_arrayToHTMLRows($responseDescriptionElement).PHP_EOL;
       }
       $responseDescriptionTable = <<<TBL
@@ -159,6 +167,9 @@ EOT;
 
   protected function _allocateUndescribedRequestParams() {
     foreach ($this->requestData as $key => $value) {
+      if(is_null($value))
+        continue;
+
       // TODO find better way to do this
       $found = false;
       foreach ($this->requestDescription as $param) {

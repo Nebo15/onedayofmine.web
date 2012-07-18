@@ -26,24 +26,23 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 	}
 
 	/**
-	 * @public
-	 * @description Starts a day
-	 * @param string title Title name for this day
-	 * @param string description Description for this day
-	 * @param int timezone UTC time zone offset
-	 * @param string occupation Thing that user are planning to do during current day
-	 * @param string type One of pre-defined types: {working, day-off, holiday, trip, special_event}
-	 * @result-param int id Day ID
-	 * @result-param int user_id
-	 * @result-param string title
-	 * @result-param string description
-	 * @result-param int timezone UTC time zone
-	 * @result-param string occupation
-	 * @result-param string type One of pre-defined types: {working, day-off, holiday, trip, special_event}
-	 * @result-param int|null likes_count
-	 * @result-param int ctime Creation time, unix timestamp
-	 * @result-param int utime Last update time, unix timestamp
-	 * @result-param boolean is_ended Always FALSE for new days
+	 * @api description Starts a day
+	 * @api input param string title Title name for this day
+	 * @api input param string description Description for this day
+	 * @api input param int timezone UTC time zone offset
+	 * @api input param string occupation Thing that user are planning to do during current day
+	 * @api input param string type One of pre-defined types: {working, day-off, holiday, trip, special_event}
+	 * @api result int id Day ID
+	 * @api result int user_id
+	 * @api result string title
+	 * @api result string description
+	 * @api result int timezone UTC time zone
+	 * @api result string occupation
+	 * @api result string type One of pre-defined types: {working, day-off, holiday, trip, special_event}
+	 * @api result int|null likes_count
+	 * @api result int ctime Creation time, unix timestamp
+	 * @api result int utime Last update time, unix timestamp
+	 * @api result boolean is_ended Always FALSE for new days
 	 */
 	function testStart()
 	{
@@ -64,18 +63,18 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 	}
 
 	/**
-	 * @public
-	 * @result-param int id Day ID
-	 * @result-param int user_id
-	 * @result-param string title
-	 * @result-param string description
-	 * @result-param int timezone UTC time zone offset
-	 * @result-param string occupation
-	 * @result-param string type One of pre-defined types: {working, day-off, holiday, trip, special_event}
-	 * @result-param int|null likes_count
-	 * @result-param int ctime Creation time, unix timestamp
-	 * @result-param int utime Last update time, unix timestamp
-	 * @result-param boolean is_ended TRUE if day is ended, else - FALSE
+	 * @api description Returns current day
+	 * @api result int id Day ID
+	 * @api result int user_id
+	 * @api result string title
+	 * @api result string description
+	 * @api result int timezone UTC time zone offset
+	 * @api result string occupation
+	 * @api result string type One of pre-defined types: {working, day-off, holiday, trip, special_event}
+	 * @api result int|null likes_count
+	 * @api result int ctime Creation time, unix timestamp
+	 * @api result int utime Last update time, unix timestamp
+	 * @api result boolean is_ended TRUE if day is ended, else - FALSE
 	 */
 	function testGetCurrentDay()
 	{
@@ -108,16 +107,16 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 	}
 
 	/**
-	 * @public
-	 * @param string description
-	 * @param string image_name
-	 * @param string image_content File contents, that was previously encoded by base64
-	 * @result-param int id Moment ID
-	 * @result-param int day_id ID day that moment belongs to
-	 * @result-param string description Moment description
-	 * @result-param string img_url URL to file image
-	 * @result-param int|null likes_count
-	 * @result-param int ctime Moment creation time, unix timestamp
+	 * @api description Creates moment
+	 * @api input param string description
+	 * @api input param string image_name
+	 * @api input param string image_content File contents, that was previously encoded by base64
+	 * @api result int id Moment ID
+	 * @api result int day_id ID day that moment belongs to
+	 * @api result string description Moment description
+	 * @api result string img_url URL to file image
+	 * @api result int|null likes_count
+	 * @api result int ctime Moment creation time, unix timestamp
 	 */
 	function testCreateMoment()
 	{
@@ -144,23 +143,22 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 	}
 
   /**
-   * @public
-   * @param string title
-   * @param string description
-   * @param int timezone
-   * @param string location
-   * @param string type
-   * @result-param int id Day ID
-   * @result-param int user_id
-   * @result-param string title
-   * @result-param string description
-   * @result-param int timezone UTC time zone offset
-   * @result-param string occupation
-   * @result-param string type One of pre-defined types: {working, day-off, holiday, trip, special_event}
-   * @result-param int|null likes_count
-   * @result-param int ctime Creation time, unix timestamp
-   * @result-param int utime Last update time, unix timestamp
-   * @result-param boolean is_ended TRUE if day is ended, else - FALSE
+   * @api input param string title
+   * @api input param string description
+   * @api input param int timezone
+   * @api input param string location
+   * @api input param string type
+   * @api result result int id Day ID
+   * @api result result int user_id
+   * @api result result string title
+   * @api result result string description
+   * @api result result int timezone UTC time zone offset
+   * @api result result string occupation
+   * @api result result string type One of pre-defined types: {working, day-off, holiday, trip, special_event}
+   * @api result result int|null likes_count
+   * @api result result int ctime Creation time, unix timestamp
+   * @api result result int utime Last update time, unix timestamp
+   * @api result result boolean is_ended TRUE if day is ended, else - FALSE
    */
   function testUpdate()
   {
@@ -189,7 +187,7 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
   }
 
 	/**
-	 *@public
+	 * @api description Finish current day.
 	 */
 	function testFinish()
 	{

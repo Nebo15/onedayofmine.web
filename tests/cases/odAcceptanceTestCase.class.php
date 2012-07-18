@@ -1,5 +1,6 @@
 <?php
 lmb_require('limb/tests_runner/lib/simpletest/web_tester.php');
+lmb_require('lib/DocCommentParser/*.class.php');
 
 abstract class odAcceptanceTestCase extends WebTestCase
 {
@@ -42,7 +43,8 @@ abstract class odAcceptanceTestCase extends WebTestCase
       !property_exists($result, 'status') ||
       !property_exists($result, 'code')
     )
-      $this->fail('Wrong response structure:'.PHP_EOL.$raw_response);
+
+    $this->fail('Wrong response structure:'.PHP_EOL.$raw_response);
     $this->_addRecordsToWriters($url, $params, 'POST', $result->result);
     return $result;
   }
@@ -59,7 +61,8 @@ abstract class odAcceptanceTestCase extends WebTestCase
       !property_exists($result, 'status') ||
       !property_exists($result, 'code')
     )
-      $this->fail('Wrong response structure:'.PHP_EOL.$raw_response);
+
+    $this->fail('Wrong response structure:'.PHP_EOL.$raw_response);
     $this->_addRecordsToWriters($url, $params, 'POST', $result->result);
     return $result;
   }
@@ -73,20 +76,10 @@ abstract class odAcceptanceTestCase extends WebTestCase
     $method_ref = $class_ref->getMethod($method_name);
     $call_name = str_replace('AcceptanceTest', '', $class_name).' - '.str_replace('test', '', $method_name);
 
-    preg_match_all('#@([a-zA-Z0-9\-]+)([^\n\r]*)#i', $method_ref->getDocComment(), $out);
+    $doc_comment = DocCommentParser::tokenize($method_ref->getDocComment());
 
-    $docBlockEntities = array();
-    foreach ($out[1] as $key => $name) {
-      if($name == 'option' || $name == 'param' || $name == 'result-param') {
-        $docBlockEntities[$name][] = trim($out[2][$key]);
-      } else {
-        $docBlockEntities[$name] = trim($out[2][$key]);
-      }
-    }
-
-    if(!array_key_exists('public', $docBlockEntities)) {
+    if(!$doc_comment->hasGroup('api'))
       return;
-    }
 
     lmbToolkit::instance()
       ->getPostmanWriter()
@@ -94,7 +87,7 @@ abstract class odAcceptanceTestCase extends WebTestCase
 
     lmbToolkit::instance()
       ->getApiToMarkdownWriter()
-      ->addRequest($call_name, $method, $url_path, $params, $response, $docBlockEntities);
+      ->addRequest($call_name, $method, $url_path, $params, $response, $doc_comment);
 
   }
 

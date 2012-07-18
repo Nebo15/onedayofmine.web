@@ -19,3 +19,12 @@ Access token should be sent to /auth/login API call, that returns session id key
 Data flow diagramm:
 
 ![Sequence diagramm](http://www.websequencediagrams.com/cgi-bin/cdraw?lz=dGl0bGUgQXV0aG9yaXphdGlvbiBmbG93CgpBcHAtPkZiOiBBY3F1aXJlIGFjY2VzcyB0b2tlbiAoQVQpCkZiLT5BcHA6IEFUACUKRXhjaGFuZ2UgQVQgZm9yIExvbmctVGVybSBBVAAoCgAJDQBmBQBEBVNldAAkDSBhcwAXClBJOiAvYXV0aC9sb2dpbiArAHMFUEkANAhFU1NJRApub3RlIG92ZXIgQXBwLAAwBVdhaXQAgQcFdXNlci1hYwCBYQV0aGF0IHNob3VsZCBiZSBzZW50IHRvIHNlcnZlcgBnC0FQSSBjYWxsAF8LSFRUUCAyMDAgKyBKU09OIGRhdGE&s=omegapple)
+
+## Known bugs ##
+### API documentation bugs ###
+* In-URI params are shown as deprecated
+* Array-type responses are shown as deprecated and appear in params list by array keys
+
+### API bugs ###
+* API methods are not fully implemented
+* No security checks on input data
