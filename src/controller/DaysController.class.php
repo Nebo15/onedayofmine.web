@@ -91,12 +91,10 @@ class DaysController extends BaseJsonController
   	if(!$this->request->hasPost())
   		return $this->_answerWithError('Not a POST request');
 
-  	return $this->_answerOk();
-
   	if(!$day = Day::findById($this->request->id))
   		return $this->_answerNotFound('Day not found');
 
-  	return $this->_importSaveAndAnswer($day, array('title', 'description', 'time_offset', 'occupation', 'age', 'type'));
+  	return $this->_importSaveAndAnswer($day, array('title', 'description', 'timezone', 'location', 'type'));
   }
 
 

@@ -180,12 +180,28 @@ class DayAcceptanceTest extends odAcceptanceTestCase
    */
   function testUpdate()
   {
+    $day = $this->generator->day($this->main_user);
+    $day->setIsEnded(0);
+    $day->save();
+
   	$this->_loginAndSetCookie($this->main_user);
-  	$this->post('days/42/update', array(
-  			'tags' => array('tag1', 'tag2'),
-  			'top_moment_id' => 111)
-  	);
-  	$this->assertResponse(200);
+
+  	$this->post('days/'.$day->getId().'/update', array(
+      'title' => $title = $this->generator->string(),
+      'description' => $desc = $this->generator->string(),
+      'timezone' => $timezone = $this->generator->integer(1),
+      'location' => $location = $this->generator->string(),
+      'type' => $type = 'working'
+  	));
+    if($this->assertResponse(200))
+    {
+      $loaded_day = Day::findById($day->getId());
+      $this->assertEqual($loaded_day->getTitle(), $title);
+      $this->assertEqual($loaded_day->getDescription(), $desc);
+      $this->assertEqual($loaded_day->getTimezone(), $timezone);
+      $this->assertEqual($loaded_day->getLocation(), $location);
+      $this->assertEqual($loaded_day->getType(), $type);
+    }
   }
 
   //TODO
