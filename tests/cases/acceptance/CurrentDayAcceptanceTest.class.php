@@ -143,23 +143,22 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 	}
 
   /**
-   * @public
-   * @param string title
-   * @param string description
-   * @param int timezone
-   * @param string location
-   * @param string type
-   * @result-param int id Day ID
-   * @result-param int user_id
-   * @result-param string title
-   * @result-param string description
-   * @result-param int timezone UTC time zone offset
-   * @result-param string occupation
-   * @result-param string type One of pre-defined types: {working, day-off, holiday, trip, special_event}
-   * @result-param int|null likes_count
-   * @result-param int ctime Creation time, unix timestamp
-   * @result-param int utime Last update time, unix timestamp
-   * @result-param boolean is_ended TRUE if day is ended, else - FALSE
+   * @api input param string title
+   * @api input param string description
+   * @api input param int timezone
+   * @api input param string location
+   * @api input param string type
+   * @api result result int id Day ID
+   * @api result result int user_id
+   * @api result result string title
+   * @api result result string description
+   * @api result result int timezone UTC time zone offset
+   * @api result result string occupation
+   * @api result result string type One of pre-defined types: {working, day-off, holiday, trip, special_event}
+   * @api result result int|null likes_count
+   * @api result result int ctime Creation time, unix timestamp
+   * @api result result int utime Last update time, unix timestamp
+   * @api result result boolean is_ended TRUE if day is ended, else - FALSE
    */
   function testUpdate()
   {
