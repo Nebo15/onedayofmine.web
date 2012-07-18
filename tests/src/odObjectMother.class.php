@@ -108,6 +108,13 @@ class odObjectMother
     return $password;
   }
 
+  function news(User $creator, User $recipient) {
+    $news = new News();
+    $news->setRecipient($recipient);
+    $news->setUser($creator);
+    $news->setTitle($creator->first_name . ' likes ' . $recipient->first_name);
+  }
+
   function integer($length = 4)
   {
     return rand(1, 10^($length+1) - 1);
