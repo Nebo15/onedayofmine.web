@@ -108,11 +108,15 @@ class odObjectMother
     return $password;
   }
 
-  function news(User $creator, User $recipient) {
+  function news(User $creator = null, User $recipient = null) {
+    $creator   = $creator   ?: $this->user();
+    $recipient = $recipient ?: $this->user();
+
     $news = new News();
     $news->setRecipient($recipient);
     $news->setUser($creator);
-    $news->setTitle($creator->first_name . ' likes ' . $recipient->first_name);
+    $news->setText($creator->first_name . ' likes ' . $recipient->first_name);
+    return $news;
   }
 
   function integer($length = 4)
