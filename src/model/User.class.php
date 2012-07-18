@@ -27,6 +27,8 @@ class User extends BaseModel
       ),
       'days_comments' => array ('field' => 'user_id', 'class' => 'DayComment'),
       'moments_comments' => array ('field' => 'user_id', 'class' => 'MomentComment'),
+      'news' => array ('field' => 'recipient_id', 'class' => 'News'),
+      'created_news' => array ('field' => 'user_id', 'class' => 'News'),
     );
     $this->_has_many_to_many = array(
       'favourite_days' => array(
