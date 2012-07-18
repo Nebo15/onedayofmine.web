@@ -22,12 +22,25 @@ class CurrentDayController extends BaseJsonController
 
 		$day->setUser($this->_getUser());
 
-		$response = $this->_importSaveAndAnswer($day, array('title', 'description', 'timezone', 'occupation', 'age', 'type'));
+		$response = $this->_importSaveAndAnswer($day, array('title', 'description', 'timezone', 'location', 'type'));
 
 		//$this->_getUser()->getFacebookUser()->beginDay($day);
 
 		return $response;
 	}
+
+  function doUpdate()
+  {
+    if(!$this->request->hasPost())
+      return $this->_answerWithError('Not a POST request');
+
+    if(!$day = Day::findUnfinished($this->_getUser()))
+      return $this->_answerNotFound('Unfinished day not found');
+
+    $response = $this->_importSaveAndAnswer($day, array('title', 'description', 'timezone', 'location', 'type'));
+
+    return $response;
+  }
 
 	function doFinish()
 	{

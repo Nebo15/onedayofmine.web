@@ -34,8 +34,7 @@ class odObjectMother
     $day->setTitle($this->string(25));
     $day->setDescription($this->string(255));
     $day->setTimezone(0);
-    $day->setOccupation($this->string(25));
-    $day->setAge($this->integer(2));
+    $day->setLocation($this->string(25));
     $types = Day::getTypes();
     $day->setType($types[array_rand($types)]);
     $day->setUser($user ?: $this->user());

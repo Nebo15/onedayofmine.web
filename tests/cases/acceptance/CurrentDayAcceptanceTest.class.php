@@ -142,6 +142,51 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 		}
 	}
 
+  /**
+   * @public
+   * @param string title
+   * @param string description
+   * @param int timezone
+   * @param string location
+   * @param string type
+   * @result-param int id Day ID
+   * @result-param int user_id
+   * @result-param string title
+   * @result-param string description
+   * @result-param int timezone UTC time zone offset
+   * @result-param string occupation
+   * @result-param string type One of pre-defined types: {working, day-off, holiday, trip, special_event}
+   * @result-param int|null likes_count
+   * @result-param int ctime Creation time, unix timestamp
+   * @result-param int utime Last update time, unix timestamp
+   * @result-param boolean is_ended TRUE if day is ended, else - FALSE
+   */
+  function testUpdate()
+  {
+    $day = $this->generator->day($this->main_user);
+    $day->setIsEnded(0);
+    $day->save();
+
+    $this->_loginAndSetCookie($this->main_user);
+
+    $this->post('current_day/update', array(
+        'title' => $title = $this->generator->string(),
+        'description' => $desc = $this->generator->string(),
+        'timezone' => $timezone = $this->generator->integer(1),
+        'location' => $location = $this->generator->string(),
+        'type' => $type = 'working'
+    ));
+    if($this->assertResponse(200))
+    {
+      $loaded_day = Day::findById($day->getId());
+      $this->assertEqual($loaded_day->getTitle(), $title);
+      $this->assertEqual($loaded_day->getDescription(), $desc);
+      $this->assertEqual($loaded_day->getTimezone(), $timezone);
+      $this->assertEqual($loaded_day->getLocation(), $location);
+      $this->assertEqual($loaded_day->getType(), $type);
+    }
+  }
+
 	/**
 	 * @api description Finish current day.
 	 */
@@ -158,12 +203,6 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 
 	//TODO
 	function testEnd_NotFound() {}
-
-	//TODO
-	function testUpdate()
-	{
-
-	}
 
 
 	/* GET /my/current_day - запрашивается при старте приложения, возвращает текущий наполняемый день пользователя */

@@ -1,0 +1,3 @@
+[submodule "lib/og-proxy"]
+	path = lib/og-proxy
+	url = git://github.com/korchasa/facebook-open-graph-proxy.git

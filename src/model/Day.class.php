@@ -29,8 +29,7 @@ class Day extends BaseModel
     $validator->addRequiredRule('title');
     $validator->addRequiredRule('description');
     $validator->addRequiredRule('timezone');
-    $validator->addRequiredRule('occupation');
-    $validator->addRequiredRule('age');
+    $validator->addRequiredRule('location');
     $validator->addRequiredRule('type');
     return $validator;
   }
@@ -43,8 +42,7 @@ class Day extends BaseModel
     $export->title = $this->getTitle();
     $export->description = $this->getDescription();
     $export->timezone = $this->getTimezone();
-    $export->occupation = $this->getOccupation();
-    $export->age = $this->getAge();
+    $export->location = $this->getLocation();
     $export->type = $this->getType();
     $export->likes_count = $this->getLikesCount();
     $export->ctime = $this->getCreateTime();
