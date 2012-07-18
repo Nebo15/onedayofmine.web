@@ -10,18 +10,13 @@ class NewsAcceptanceTest extends odAcceptanceTestCase
     odTestsTools::truncateTablesOf('News');
   }
 
-  function estCreate()
-  {
-    //$this->main_user, $this->additional_user
-
-    $news = $this->generator->news($creator, $recipient);
-    $news->save();
-
-    var_dump($recipient->getNews());
+  // TODO
+  function testGetNewNews() {
 
   }
 
-  function estGet() {
+  // TODO
+  function testGetArchiveNews() {
 
   }
 }
