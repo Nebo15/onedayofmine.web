@@ -18,6 +18,14 @@ class odTools extends lmbAbstractTools
    */
   protected $fb_app_access_token;
   /**
+   * @var odTwitter
+   */
+  protected $twitter;
+  /**
+   * @var odNewsObserver
+   */
+  protected $news_observer;
+  /**
    * @return User
    */
   function getUser()
@@ -89,6 +97,24 @@ class odTools extends lmbAbstractTools
   				lmbToolkit::instance()
   				->createCacheConnectionByDSN('file:///'.lmb_var_dir().'/facebook_cache/'.$access_token)
   		);
+  }
+
+  /**
+   * @return odTwitter
+   */
+  function getTwitter() {
+    if(!$this->twitter)
+      $this->twitter = new odTwitter();
+    return $this->twitter;
+  }
+
+  /**
+   * @return odNewsObserver
+   */
+  function getNewsObserver() {
+    if(!$this->news_observer)
+      $this->news_observer = new odNewsObserver();
+    return $this->news_observer;
   }
 
   /**
