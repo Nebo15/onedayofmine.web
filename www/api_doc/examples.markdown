@@ -1,5 +1,5 @@
 # API #
- Version: 18.07.12 12:48:51
+ Version: 19.07.12 15:27:49
 
 ## Table of contents: ##
 <a name='toc'></a>
@@ -9,7 +9,7 @@
 1. <a href='#bbc87c2030342e7f8609accf937e12ee'>Login</a>
 
 ### <a href='#Complaints'>Complaints</a> ###
-1. <a href='#39c5f2823bf707f62f3d7ecd20c77580'>Create</a>
+1. <a href='#9227b7d646d05f929bf01e89de0141fb'>Create</a>
 
 ### <a href='#CurrentDay'>CurrentDay</a> ###
 1. <a href='#aef4d0c381bfa1dccfdd2216f8f188ef'>Start</a>
@@ -19,23 +19,23 @@
 1. <a href='#edffd7a5f673999b16ade68463815ffe'>Finish</a>
 
 ### <a href='#Day'>Day</a> ###
-1. <a href='#e38f307bcb0f0f215861d2dd4de5258d'>Item</a>
-1. <a href='#04b339cad5650af7928f99475eb8a95c'>Item_Many</a>
-1. <a href='#fd29ff2dac124f5b7083bd1fefbd5770'>CommentCreate</a>
-1. <a href='#025885a62fb7aee0c5b22071615c3100'>Update</a>
-1. <a href='#9bcec97f2e3d721585e2bf167c82c992'>DeleteDay</a>
+1. <a href='#0f48aa58b40009e1d77d09f0c6418169'>Item</a>
+1. <a href='#1769e68c5a9d0fa59c499233dc33a0cc'>Item_Many</a>
+1. <a href='#4b294ea621ec8fd1569ed4b0d895ae27'>CommentCreate</a>
+1. <a href='#dd5111529e2c289bd373aa6d8c51a5a6'>Update</a>
+1. <a href='#f61c2876030b13dd7f599ded2d03bbc3'>DeleteDay</a>
 1. <a href='#9a54a19098a30dcbd74124cbddb1ab6c'>GetFavouriteDays</a>
-1. <a href='#49885cd357626e24f6d70e27f2ead714'>AddToFavourites</a>
-1. <a href='#e707b5525abccf1ccbb048a56679e8e8'>RemoveFromFavourites</a>
+1. <a href='#8ad564d81f93dc4592dd9747ddda98f0'>AddToFavourites</a>
+1. <a href='#ac9c105bc0929139a37ac0d634725ce5'>RemoveFromFavourites</a>
 1. <a href='#1c5e784108f8a36beb283dc7a3e34030'>GetFollowingUsersDays</a>
 1. <a href='#ed1af553a9d8b9117548d9a3996ebab5'>GetNewDays</a>
 1. <a href='#58c74019b980810ae9e042bb65573a7a'>GetInterestingDays</a>
 1. <a href='#f2c5afe4a024dc21f1c43ff206afb8f1'>CurrentUserDays</a>
 
 ### <a href='#Moments'>Moments</a> ###
-1. <a href='#bbfca779fb2386810e15737e70b9909c'>Update</a>
-1. <a href='#d91b78bc568a1cb48c96aafe0052dea4'>Delete</a>
-1. <a href='#0a5a975a0cf97aafd895c3764b3fc776'>Comment</a>
+1. <a href='#093cece53721d5c2719d5cceaf73a42f'>Update</a>
+1. <a href='#dd260226c14dea1f06133cdb250ce307'>Delete</a>
+1. <a href='#955ef89215098e4b8ba8b686d3f225f5'>Comment</a>
 
 ### <a href='#My'>My</a> ###
 1. <a href='#7c42c715a02e964a2889306b19fe292c'>Profile</a>
@@ -44,18 +44,23 @@
 1. <a href='#85578e28a8c20f5cd81c7ca1e4de3b08'>Settings</a>
 1. <a href='#93fdb34170033523c95e7443bb659e3d'>UpdateSettings</a>
 
+### <a href='#News'>News</a> ###
+1. <a href='#3292f47a05d97e9f9f13470ea62f442c'>GetNewNews</a>
+1. <a href='#ac58b5d4856554754127b2e90d5832a3'>GetArchiveNews</a>
+1. <a href='#a82a80c9be8111df7bc209e3e3470f58'>FirstGetNews</a>
+
 ### <a href='#Social'>Social</a> ###
 1. <a href='#71917347c17968e3b4669c7949094d34'>FacebookFiends</a>
 
 ### <a href='#User'>User</a> ###
-1. <a href='#73a7c51cbef9bf4604c2c712f3970166'>UserByIdDays</a>
-1. <a href='#3516c606568a49eedff3b8750efd59ca'>UserById</a>
+1. <a href='#bec2c9e54df778017ef46d923343806a'>UserByIdDays</a>
+1. <a href='#9bde9641241c14c85b592784fb08a940'>UserById</a>
 1. <a href='#0907aac9dba2a8f9700b9333f7e36795'>Followers</a>
-1. <a href='#19efb47b1a60f751f4898d6218dda624'>FollowersByUserId</a>
+1. <a href='#095533d47f2e91e73e4abd92dc591302'>FollowersByUserId</a>
 1. <a href='#774c23c770724885bdc9325b3159b700'>Following</a>
-1. <a href='#59941e13284e2b218ad35dfe6f54b23b'>FollowingByUserId</a>
-1. <a href='#9308966d9906a196a72cf93395dd37cf'>Follow</a>
-1. <a href='#75354f977239b0a06d41c3e35d1338b6'>Unfollow</a>
+1. <a href='#aef6e0d28ad74910e0bbde2e665d0e21'>FollowingByUserId</a>
+1. <a href='#878bc2797a2b88d85cd27a164c2c89ea'>Follow</a>
+1. <a href='#5f20fbc33efe69b31f06b5c4a36b6948'>Unfollow</a>
 
 
 ## API methods ##
@@ -111,7 +116,7 @@ User authorization.
 </table>
 ###### Example request: ######
     {
-      "fb_access_token":"AAAFnVo0zuqkBAH1r4AtZCI0hZCDzHAHZBW4bZC4CHY7mocGeFp9iwA762AWwhBkUTqBhm1kDXj2l05JJac5bMeeHMVEzlFZBG3fJwTtCDZB3dJW1XIxuXq"
+      "fb_access_token":"AAAFnVo0zuqkBABr12CUn6WR1HNBMPrbfAPAH9PemNPZAR9jEli7QSJJKZCPfhG9HEbHCrwWU3Y2FWAcrmgZAuWyBshAh3YCgGWbqmlZBwOSbqZB2YoqYG"
     }
 
 
@@ -130,10 +135,10 @@ User authorization.
 </table>
 ###### Example response: ######
     {
-      "sessid":"97rvm6r2thh3guv86r1p1aspq3",
+      "sessid":"is7qhl16ngvf0qf9alevjbrmv2",
       "user":{
         "birthday":"1992-08-08",
-        "ctime":1342604923,
+        "ctime":1342700859,
         "current_location":"",
         "fb_pic_big":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v2\/yL\/r\/HsTZSDw4avx.gif",
         "fb_pic_small":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v1\/yi\/r\/odA9sNLrE86.jpg",
@@ -142,12 +147,12 @@ User authorization.
         "fb_profile_utime":"1341686153",
         "fb_uid":"100004093051334",
         "first_name":"foo",
-        "id":20869,
+        "id":10907,
         "last_name":"foo",
         "occupation":"",
         "sex":"male",
         "timezone":"3",
-        "utime":1342604923
+        "utime":1342700859
       }
     }
 
@@ -159,10 +164,10 @@ User authorization.
 ### Complaints ###
 <a name='Complaints'></a>
 #### Create ####
-<a name="39c5f2823bf707f62f3d7ecd20c77580"></a>
+<a name="9227b7d646d05f929bf01e89de0141fb"></a>
 
 
-`POST /complaints/129/create`
+`POST /complaints/805/create`
 
 ##### Request: #####
 ###### Params: ######
@@ -179,7 +184,7 @@ User authorization.
 </table>
 ###### Example request: ######
     {
-      "text":"huxavu"
+      "text":"javihi"
     }
 
 
@@ -201,9 +206,9 @@ User authorization.
 ###### Example response: ######
     {
       "day_id":null,
-      "text":"huxavu",
-      "ctime":1342604925,
-      "id":249
+      "text":"javihi",
+      "ctime":1342700861,
+      "id":129
     }
 
 
@@ -240,11 +245,11 @@ Starts a day
     {
       "id":null,
       "user_id":null,
-      "title":"fixuxayezuwigikunelobuyu",
-      "description":"jowejohidadayefuvudurizafuyegulisexaxapufocacecufasurozurufuvoliwemolasotosuyorayeyibulovonigubagitonehecucatofocahazotojejifepeweceserojowaluvibapatetanarokacenapamazuxoxevowusiwitimerayuhufocoziyujuvedixukikazatijepekufirehovepabekayefewilusahanugusime",
+      "title":"finuyacedijemoseseticiva",
+      "description":"heluxolovadusiziyizadiwonekoguticajuvopivomifizaxugamavukarozecanibefivuhemitinokoruwivepiwiwurekopigenisayimicugoracihoxagocuzinizozigonadusawuwizuxerokulitiwebuzajetukuwaboyucuvuditihaxurogonasulesogiwefoceruhohagiganuwomeyafenudoluyotuyewadaferimagexo",
       "timezone":0,
-      "location":"piboboxusigovufesalufuli",
-      "type":"holiday",
+      "location":"zogoviyayogowunewutemifi",
+      "type":"special_event",
       "likes_count":null,
       "ctime":null,
       "utime":null,
@@ -277,16 +282,16 @@ Starts a day
 </table>
 ###### Example response: ######
     {
-      "id":130,
-      "user_id":20877,
-      "title":"fixuxayezuwigikunelobuyu",
-      "description":"jowejohidadayefuvudurizafuyegulisexaxapufocacecufasurozurufuvoliwemolasotosuyorayeyibulovonigubagitonehecucatofocahazotojejifepeweceserojowaluvibapatetanarokacenapamazuxoxevowusiwitimerayuhufocoziyujuvedixukikazatijepekufirehovepabekayefewilusahanugusime",
+      "id":806,
+      "user_id":10915,
+      "title":"finuyacedijemoseseticiva",
+      "description":"heluxolovadusiziyizadiwonekoguticajuvopivomifizaxugamavukarozecanibefivuhemitinokoruwivepiwiwurekopigenisayimicugoracihoxagocuzinizozigonadusawuwizuxerokulitiwebuzajetukuwaboyucuvuditihaxurogonasulesogiwefoceruhohagiganuwomeyafenudoluyotuyewadaferimagexo",
       "timezone":"0",
-      "location":"piboboxusigovufesalufuli",
-      "type":"holiday",
+      "location":"zogoviyayogowunewutemifi",
+      "type":"special_event",
       "likes_count":null,
-      "ctime":1342604925,
-      "utime":1342604925,
+      "ctime":1342700862,
+      "utime":1342700862,
       "is_ended":0
     }
 
@@ -329,16 +334,16 @@ Returns current day
 </table>
 ###### Example response: ######
     {
-      "id":131,
-      "user_id":20878,
-      "title":"tupevaladocurerozedazuse",
-      "description":"wetofitumagaginiforeniwojadadicuworujewumabonicogocohumoyovacuzuroxuyowetubekazivakazuruliyihulumeyibovopucuyanoduvatiyaxusasacamapivejefehaluxisopicipujedakefugokudojebomilezazinababekakokirijapisuwonefuracososotocaxiwebiwemexajoyuzawihufunuserohifatepi",
+      "id":807,
+      "user_id":10916,
+      "title":"keluwaguluxetibumizeliru",
+      "description":"dejihesanabuyomonejizisidifupazolefosuxazubunipaxumukahisijesezapaveyokurexayigokopovugijituwobevuponurajihezibeficulekoxasotocinogapufukifeyatatobadexumisegotokuwuwuxalanefekucibavudelunonemufexuhofotozuzewavugivexefeyorerosivufurusowozotonukegemipidawo",
       "timezone":0,
-      "location":"cojoxaviyihavorijipuceku",
-      "type":"special_event",
+      "location":"xaheyetehunesicukeyozaga",
+      "type":"working",
       "likes_count":0,
-      "ctime":1342604925,
-      "utime":1342604925,
+      "ctime":1342700862,
+      "utime":1342700862,
       "is_ended":0
     }
 
@@ -368,7 +373,7 @@ Creates moment
 </table>
 ###### Example request: ######
     {
-      "description":"nitocemazuhonanekemetizeturomiguxusujadebidimoxuzedovayizifizilulavogucejawuwosobomoxijuzihuyoweticunafukusasezocimuwovuhavasonifokovipanejanewitenicekejamuvalurosejenumubudupudalekunobasubawoxibevice",
+      "description":"gemapanuvuzadoselafiluzekasapoyobiwonemekimidasihubotubadodomalimecurihubomayatezoyosuvusumazurifoluhowemelelapiwicimujavojotufurituhidoxiderosihozorexecadocesoxipazoyufaduwohapevamopiwojubarulabewuga",
       "image_name":"foo\/bar\/example.png",
       "image_content":"iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAAXNSR0IArs4c6QAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9wGEg47HYlSsqsAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAOUlEQVQI13VOQQ4AIAiC1v+\/TAcKZysOTkQUApCEDpI11YH7EQdJ103jsBA68MG8dutUPrdIFp5xF8lAKftzc\/YPAAAAAElFTkSuQmCC"
     }
@@ -393,12 +398,12 @@ Creates moment
 </table>
 ###### Example response: ######
     {
-      "id":45,
-      "day_id":133,
-      "description":"nitocemazuhonanekemetizeturomiguxusujadebidimoxuzedovayizifizilulavogucejawuwosobomoxijuzihuyoweticunafukusasezocimuwovuhavasonifokovipanejanewitenicekejamuvalurosejenumubudupudalekunobasubawoxibevice",
-      "img_url":"\/media\/20880\/day\/133\/a4ff652fdec33946629db715fa1b6e574957bc72.png",
+      "id":279,
+      "day_id":809,
+      "description":"gemapanuvuzadoselafiluzekasapoyobiwonemekimidasihubotubadodomalimecurihubomayatezoyosuvusumazurifoluhowemelelapiwicimujavojotufurituhidoxiderosihozorexecadocesoxipazoyufaduwohapevamopiwojubarulabewuga",
+      "img_url":"\/media\/10918\/day\/809\/6ef09c5f04399f4f0a2a24362ec79a1c8c1c0352.png",
       "likes_count":null,
-      "ctime":1342604926
+      "ctime":1342700862
     }
 
 
@@ -429,10 +434,10 @@ Creates moment
 </table>
 ###### Example request: ######
     {
-      "title":"zetado",
-      "description":"venoki",
-      "timezone":3,
-      "location":"coripa",
+      "title":"yimane",
+      "description":"cobito",
+      "timezone":9,
+      "location":"xorelu",
       "type":"working"
     }
 
@@ -472,16 +477,16 @@ Creates moment
 </table>
 ###### Example response: ######
     {
-      "id":134,
-      "user_id":20881,
-      "title":"zetado",
-      "description":"venoki",
-      "timezone":"3",
-      "location":"coripa",
+      "id":810,
+      "user_id":10919,
+      "title":"yimane",
+      "description":"cobito",
+      "timezone":"9",
+      "location":"xorelu",
       "type":"working",
       "likes_count":0,
-      "ctime":1342604926,
-      "utime":1342604926,
+      "ctime":1342700862,
+      "utime":1342700862,
       "is_ended":0
     }
 
@@ -511,10 +516,10 @@ Finish current day.
 ### Day ###
 <a name='Day'></a>
 #### Item ####
-<a name="e38f307bcb0f0f215861d2dd4de5258d"></a>
+<a name="0f48aa58b40009e1d77d09f0c6418169"></a>
 Returns basic Day entity by given Day ID.
 
-`POST days/136/item`
+`POST days/812/item`
 
 ##### Request: #####
 ###### Params: ######
@@ -556,33 +561,33 @@ Returns basic Day entity by given Day ID.
 </table>
 ###### Example response: ######
     {
-      "id":136,
-      "user_id":20883,
-      "title":"xamigehikesujosevipuhiku",
-      "description":"huzapikenowewupusovelihowefosebujadumigugajabuzonocujetatutijolowimecohewikulenuciyiyonopecucinubufatikizokidukelerezabimamipulizosobagawilumududohayesekayudenazawuhabaricahezizenunehukawinerinimomixayufefaralabulexunojazunilahumabidesekelumivuvotehakebu",
+      "id":812,
+      "user_id":10921,
+      "title":"pecuxocavezohaboyafamupu",
+      "description":"hepejubizotihakagejemizoperoxuladumiyizuhojitoruyuhinebapotinarodacanayovejibuluyojizemibezikifirenajizatepohasasapokafejayotafejonofivuwesajehajutoyucecuyocafiwodaguzagodizepegezafakecebakapeyohanefoxehutucufadediravojawukopoxaxawokanabobasapurazewenofu",
       "timezone":0,
-      "location":"tuhuvocudakazadurobaxido",
-      "type":"working",
+      "location":"xasisaloyowoxiyevevoxuno",
+      "type":"trip",
       "likes_count":0,
-      "ctime":1342604926,
-      "utime":1342604926,
+      "ctime":1342700862,
+      "utime":1342700862,
       "is_ended":0,
       "moments":[
         {
-          "id":46,
-          "day_id":136,
-          "description":"description janelogapizuwofoduxinurolawimuwozefedinowisocukewevececikuxutopobocafiwubisalakehanemiwumosakewibupemefixusexanafanosenaceji",
+          "id":280,
+          "day_id":812,
+          "description":"description fikewawukiruzohayacofatuxekajunikuxadozidijajohetezulotezakezuwexonukimicurilusagocohoyeyepuhihadodihobelovunicocaleyerusetu",
           "img_url":"",
           "likes_count":0,
-          "ctime":1342604926
+          "ctime":1342700862
         },
         {
-          "id":47,
-          "day_id":136,
-          "description":"description nohijuxohazazixokizifevikarikenubojerazuguzakuyohukigazojobozipujuhucewefunirikujokixedeyayutixalabiluwosegetifajineyoluwevi",
+          "id":281,
+          "day_id":812,
+          "description":"description vilodijikadamayokikulupucixuwoxidehevoxavufedaxipekufuyelucenuxogayatofivetumikawobatugavelegezilumasosizijibonumiwamajekopi",
           "img_url":"",
           "likes_count":0,
-          "ctime":1342604926
+          "ctime":1342700862
         }
       ]
     }
@@ -592,10 +597,10 @@ Returns basic Day entity by given Day ID.
 
 * * *
 #### Item_Many ####
-<a name="04b339cad5650af7928f99475eb8a95c"></a>
+<a name="1769e68c5a9d0fa59c499233dc33a0cc"></a>
 Get few days in one request.
 
-`POST days/137;138;245/item`
+`POST days/813;814;471/item`
 
 ##### Request: #####
 ###### Params: ######
@@ -621,60 +626,60 @@ Get few days in one request.
   <th>Description</th>
 </tr>
 <tr><td><a href='#Entity:Day'>Day[]</a></td><td><s>days</s></td><td>Associative array of (day_id => Day)</td></tr>
-<tr><td>[type]</td><td><s>137</s></td><td>[description]</td></tr>
-<tr><td>[type]</td><td><s>138</s></td><td>[description]</td></tr>
-<tr><td>[type]</td><td><s>245</s></td><td>[description]</td></tr>
+<tr><td>[type]</td><td><s>813</s></td><td>[description]</td></tr>
+<tr><td>[type]</td><td><s>814</s></td><td>[description]</td></tr>
+<tr><td>[type]</td><td><s>471</s></td><td>[description]</td></tr>
 
 </table>
 ###### Example response: ######
     {
-      "137":{
-        "id":137,
-        "user_id":20885,
-        "title":"takemobewezolojuxeyuguli",
-        "description":"xahocojowobopejupiwibuyexuyoyuvoyakasovimogabiboyucutujozekucarafabutolanogidefadebugemerucozotatobimisabupadogebederimekiyehomakimuyaxubidagemeripefanipixudexiwekonetitutufeguvoduwomidehetavinajakapawebamewecugupojocibotukeyohesulidinosexoharuwupuniseka",
+      "813":{
+        "id":813,
+        "user_id":10923,
+        "title":"rejanesosuyabejepiyotazi",
+        "description":"coputuhipameyuximilekacowipelenizakocofowoxomogukohotemiwaxegetemayitafivahexifefizuwilomeworiyaruseyuxoyazosazupusekabujunukidahokereyikujabexohiboranuwazenaguyibiwudexihuvanasivepejijeruluseloxesamimonexajipaxakaponanucahiyatifafoyoxotehejamokakuguweca",
         "timezone":0,
-        "location":"wuwapapitonudoyojujasile",
+        "location":"webaxijokizisobewiboyosu",
         "type":"trip",
         "likes_count":0,
-        "ctime":1342604926,
-        "utime":1342604926,
+        "ctime":1342700862,
+        "utime":1342700862,
         "is_ended":0,
         "moments":[
           {
-            "id":48,
-            "day_id":137,
-            "description":"description nerecuwotigunolidoranuzaxuwogagolubisuhijigugokekuluxezojumizojepexegarirukunofuviwozukeruxipazanukobajoxolemihefaxayemideco",
+            "id":282,
+            "day_id":813,
+            "description":"description revojunegelenujabiweganawajehusudisilavomeyabedaxukaducucefehugikuxucomixepuroyisenugovezusexusetibugikaxuzisuzegididuwayiko",
             "img_url":"",
             "likes_count":0,
-            "ctime":1342604926
+            "ctime":1342700862
           }
         ]
       },
-      "138":{
-        "id":138,
-        "user_id":20886,
-        "title":"miwefugitinupujadaxiduca",
-        "description":"muzigixonicasihabiyazahedulisowamusokinuciyofeyesukococapitedilokajosusolomowiwijefexenitesuxamegubusorahatapiruwuhocufudusubagezedoxovayihicukutorumurisepoloyizabuxobohegegohuhuvotijisudasanofimakivowabarebugusugukuxibirifodowifidaraceladoyopavuconagasi",
+      "814":{
+        "id":814,
+        "user_id":10924,
+        "title":"bejuzetivibibajovagiwuzo",
+        "description":"jekidosamupevowujuyunotedaruvozazesabehifuxumovoporajelinakevelosaxolagobapivejeculehuwuyedopimeseyanatigecarekojocisukidihocoyobuxibidexajipogumemagusekucisahoyahusegipibagebonivokidolehagivaracemexaxugadetovilaziyivenutedekasunixemalojahasogohacakizaxa",
         "timezone":0,
-        "location":"zocigudiyacatixevuyurute",
-        "type":"day-off",
+        "location":"rawuhotehapenimagunapexi",
+        "type":"special_event",
         "likes_count":0,
-        "ctime":1342604926,
-        "utime":1342604926,
+        "ctime":1342700862,
+        "utime":1342700862,
         "is_ended":0,
         "moments":[
           {
-            "id":49,
-            "day_id":138,
-            "description":"description kotofofiwayonivimijufonahafozideduferevilofudunomunolarocukajilikituyilegigenozariranetidasirayusozifexizawiyonihanumelikabu",
+            "id":283,
+            "day_id":814,
+            "description":"description tazinemurujujixamiyivireguyazumocihiwolinolukexuwuhiguyixupuvamunolemuvurawulovenaxozugusorixagewovenihatacawuleyedudetodegu",
             "img_url":"",
             "likes_count":0,
-            "ctime":1342604926
+            "ctime":1342700862
           }
         ]
       },
-      "245":null
+      "471":null
     }
 
 
@@ -682,10 +687,10 @@ Get few days in one request.
 
 * * *
 #### CommentCreate ####
-<a name="fd29ff2dac124f5b7083bd1fefbd5770"></a>
+<a name="4b294ea621ec8fd1569ed4b0d895ae27"></a>
 Create moment in specified day
 
-`POST days/140/comment_create`
+`POST days/816/comment_create`
 
 ##### Request: #####
 ###### Params: ######
@@ -702,7 +707,7 @@ Create moment in specified day
 </table>
 ###### Example request: ######
     {
-      "text":"xujufovofuyehijenefacubibuwipedifilefededarinuwaguhewewuhohuyijaxomazomatanezejajimaxezayezusebicisadafugodabikebumudibatazijuzimomiwolajifezirulayipurezisepovajeraxafapemiyanegixokicedosolisoseyijavumemikutololofideguzoholuzepemegupojurapatuwumudowakavo"
+      "text":"cahavelamevahebozafomesejihehihepinexulehalimigimefuruhukigodibobicumigosojadisixumitomahotefocejaduserebupametecaxoyexacipekomowipizaxacifisuyoconufefeyomelubenititimubokonekicupehomenunuxifeduxunetibafilidimovomezufiyabalabebisocoxegexevebicivamunezimi"
     }
 
 
@@ -728,28 +733,28 @@ Create moment in specified day
 </table>
 ###### Example response: ######
     {
-      "text":"xujufovofuyehijenefacubibuwipedifilefededarinuwaguhewewuhohuyijaxomazomatanezejajimaxezayezusebicisadafugodabikebumudibatazijuzimomiwolajifezirulayipurezisepovajeraxafapemiyanegixokicedosolisoseyijavumemikutololofideguzoholuzepemegupojurapatuwumudowakavo",
+      "text":"cahavelamevahebozafomesejihehihepinexulehalimigimefuruhukigodibobicumigosojadisixumitomahotefocejaduserebupametecaxoyexacipekomowipizaxacifisuyoconufefeyomelubenititimubokonekicupehomenunuxifeduxunetibafilidimovomezufiyabalabebisocoxegexevebicivamunezimi",
       "day":{
-        "id":140,
-        "user_id":20890,
-        "title":"vonozusiraxizanuvigajehe",
-        "location":"nurulaxegipuzabowiyamofu",
-        "type":"holiday",
+        "id":816,
+        "user_id":10928,
+        "title":"seruyokedidonuxepufipida",
+        "location":"zubifarezujuzolalacomati",
+        "type":"day-off",
         "is_ended":0,
         "timezone":0,
         "likes_count":0,
         "is_deleted":0,
-        "ctime":1342604926,
-        "utime":1342604926,
+        "ctime":1342700863,
+        "utime":1342700863,
         "cip":0
       },
       "user":{
-        "id":20890,
+        "id":10928,
         "user_settings_id":0,
         "first_name":"foo",
         "last_name":"foo",
         "fb_uid":"100004093051334",
-        "fb_access_token":"AAAFnVo0zuqkBAH1r4AtZCI0hZCDzHAHZBW4bZC4CHY7mocGeFp9iwA762AWwhBkUTqBhm1kDXj2l05JJac5bMeeHMVEzlFZBG3fJwTtCDZB3dJW1XIxuXq",
+        "fb_access_token":"AAAFnVo0zuqkBABr12CUn6WR1HNBMPrbfAPAH9PemNPZAR9jEli7QSJJKZCPfhG9HEbHCrwWU3Y2FWAcrmgZAuWyBshAh3YCgGWbqmlZBwOSbqZB2YoqYG",
         "fb_profile_url":"http:\/\/www.facebook.com\/profile.php?id=100004093051334",
         "fb_profile_utime":1341686153,
         "timezone":3,
@@ -762,16 +767,16 @@ Create moment in specified day
         "occupation":"",
         "birthday":"1992-08-08",
         "sex":"male",
-        "ctime":1342604926,
-        "utime":1342604926,
+        "ctime":1342700863,
+        "utime":1342700863,
         "cip":0
       },
       "cip":2130706433,
-      "user_id":20890,
-      "day_id":140,
-      "ctime":1342604926,
-      "utime":1342604926,
-      "id":6
+      "user_id":10928,
+      "day_id":816,
+      "ctime":1342700863,
+      "utime":1342700863,
+      "id":30
     }
 
 
@@ -779,10 +784,10 @@ Create moment in specified day
 
 * * *
 #### Update ####
-<a name="025885a62fb7aee0c5b22071615c3100"></a>
+<a name="dd5111529e2c289bd373aa6d8c51a5a6"></a>
 Updates a day
 
-`POST days/141/update`
+`POST days/817/update`
 
 ##### Request: #####
 ###### Params: ######
@@ -803,10 +808,10 @@ Updates a day
 </table>
 ###### Example request: ######
     {
-      "title":"sasaga",
-      "description":"diruba",
-      "timezone":10,
-      "location":"livote",
+      "title":"tivuda",
+      "description":"sigoyu",
+      "timezone":3,
+      "location":"muwira",
       "type":"working"
     }
 
@@ -835,16 +840,16 @@ Updates a day
 </table>
 ###### Example response: ######
     {
-      "id":141,
-      "user_id":20891,
-      "title":"sasaga",
-      "description":"diruba",
-      "timezone":"10",
-      "location":"livote",
+      "id":817,
+      "user_id":10929,
+      "title":"tivuda",
+      "description":"sigoyu",
+      "timezone":"3",
+      "location":"muwira",
       "type":"working",
       "likes_count":0,
-      "ctime":1342604926,
-      "utime":1342604927,
+      "ctime":1342700863,
+      "utime":1342700863,
       "is_ended":0
     }
 
@@ -853,10 +858,10 @@ Updates a day
 
 * * *
 #### DeleteDay ####
-<a name="9bcec97f2e3d721585e2bf167c82c992"></a>
+<a name="f61c2876030b13dd7f599ded2d03bbc3"></a>
 Deletes a day
 
-`POST days/142/delete`
+`POST days/818/delete`
 
 ##### Request: #####
 ###### Params: ######
@@ -905,16 +910,16 @@ Deletes a day
 ###### Example response: ######
     [
       {
-        "id":143,
-        "user_id":20893,
-        "title":"codevohibubaxusobekubuya",
-        "description":"getezurawitasocuhazevohobedipizovobopowigilukitomoxejazelayunuverubemurolapupelabekemetuloxupogamekucasidejopoticayilolugewobazihemekayileduzunaziribahelacifayikewopoguyeyugibeyoruvuhabepajipoxilidokabezewamosavizarujaforokifuzemejisevikejahamecahihidufi",
+        "id":819,
+        "user_id":10931,
+        "title":"hoziruxofofinezenirogulo",
+        "description":"kodubisunejurulahafavafexorepipudoxaficotipekulobisutucipowadecedulelizayipenuyinikelivuficezapacukimetexesegiyofezivonukogevuluvokedarulekoxelapisefehiwiyojemafujezuhehocaxigixuwacasupinuyazaxekujohigetawupoxewulixabiyumucehigibifewukoxukojasorivobopiso",
         "timezone":0,
-        "location":"kuwidedoweyugezofowayiju",
-        "type":"day-off",
+        "location":"lerowanawikajimocetafoha",
+        "type":"trip",
         "likes_count":0,
-        "ctime":1342604927,
-        "utime":1342604927,
+        "ctime":1342700863,
+        "utime":1342700863,
         "is_ended":0
       }
     ]
@@ -924,10 +929,10 @@ Deletes a day
 
 * * *
 #### AddToFavourites ####
-<a name="49885cd357626e24f6d70e27f2ead714"></a>
+<a name="8ad564d81f93dc4592dd9747ddda98f0"></a>
 
 
-`POST /days/144/favourite`
+`POST /days/820/favourite`
 
 ##### Request: #####
 
@@ -942,10 +947,10 @@ Deletes a day
 
 * * *
 #### RemoveFromFavourites ####
-<a name="e707b5525abccf1ccbb048a56679e8e8"></a>
+<a name="ac9c105bc0929139a37ac0d634725ce5"></a>
 
 
-`POST /days/145/unfavourite`
+`POST /days/821/unfavourite`
 
 ##### Request: #####
 
@@ -980,8 +985,8 @@ Deletes a day
 </table>
 ###### Example request: ######
     {
-      "from":146,
-      "to":147
+      "from":822,
+      "to":823
     }
 
 
@@ -1014,8 +1019,8 @@ Deletes a day
 </table>
 ###### Example request: ######
     {
-      "from":149,
-      "to":150
+      "from":825,
+      "to":826
     }
 
 
@@ -1048,8 +1053,8 @@ Deletes a day
 </table>
 ###### Example request: ######
     {
-      "from":152,
-      "to":154
+      "from":828,
+      "to":830
     }
 
 
@@ -1068,16 +1073,16 @@ Deletes a day
 ###### Example response: ######
     [
       {
-        "id":153,
-        "user_id":20903,
-        "title":"cucaromawohevozoropidiri",
-        "description":"yareropadilupukimagacamodiyenoxivivigenewufitiyesajojolikevudokudajelutevusimotavaxawenasecoyisapuluwahicuciporewilowuwigugajufuxowovahubekidayunerehivihariyumolemelocidicemuguhujigacidodanixuyededevesumavocanironojolituciwuyuhafahuwoyomatamevucasipekoye",
+        "id":829,
+        "user_id":10941,
+        "title":"bowipebiyenageyiwibokece",
+        "description":"waxotamasanazelojesinujelosemoveyoxovetimeminudufukovoyajopokecebuyohogoyohirehogonujifocolicitamoxohanevoredufenojudineguremekuberejanayamacokijolifusexeresahoguzicirurazovehacorerepipexegazibubalobavavikasivesipeyamuloyefujazowaxibodituxiciyotuwasexira",
         "timezone":0,
-        "location":"nuguzeyenenirolonoreyume",
-        "type":"trip",
+        "location":"yarejuxaganadonuxiziruro",
+        "type":"working",
         "likes_count":2,
-        "ctime":1342518528,
-        "utime":1342604928,
+        "ctime":1342614464,
+        "utime":1342700864,
         "is_ended":0
       }
     ]
@@ -1112,29 +1117,29 @@ Deletes a day
 ###### Example response: ######
     [
       {
-        "id":156,
-        "user_id":20905,
-        "title":"jolugegoyufacanenazayuta",
-        "description":"yacocebuwowisamagoninelicuyaxajogipesidijuzufibeciwivedudaxucaveperexotatoducahavatihujixelukahumugerumepogowiwiniduligesohavizelanadakosikibacivekarinegujukegonowowekivozuyalohoxukegofipiyukipacelixafubayivegodobegeyowurahajenoviyugubakokilifixetufirusu",
+        "id":832,
+        "user_id":10943,
+        "title":"zanejinojagilaramodeloga",
+        "description":"sakiveyixekecapebuyuletovanuliyareniriziwewunehigemomakehugonavanenatisiwimexoxayevinasodulocevoneveviwozezubuzufokoyamazusaditotixizofuzavuboyaneyikemehaminecetuvoruricipafihowadenirutahejenahetufemewahunisesupelacahekorusufevevepigupokecacohiwerasateye",
         "timezone":0,
-        "location":"jakiwatelakowunogevozote",
-        "type":"special_event",
+        "location":"kopifalikiyeyesadijuvore",
+        "type":"trip",
         "likes_count":0,
-        "ctime":1342604928,
-        "utime":1342604928,
+        "ctime":1342700864,
+        "utime":1342700864,
         "is_ended":0
       },
       {
-        "id":157,
-        "user_id":20905,
-        "title":"cerolabamacosayafepadawa",
-        "description":"kawurebejasohuxuzirawebokeluwahekagumejukamoyenuyabonakuluwezamehojozoperazilinesicerifaguhedonemufinovavotagenuwidibelehomimawuxukesapixerapazetawokebozibinulevoviyexuriyasupizefesezosucewipohedesubenunawapumofazavoduxukipowoxisuwexekomunutodovukuvexati",
+        "id":833,
+        "user_id":10943,
+        "title":"xitesusamivenimafozuyata",
+        "description":"riduracapolugiyefuhalatazamenutaluzayaciwimabikekolutazofiyomowuloyexuxolesivatasazehubilufupuvuvojosejapurebenomidolafucevojiragutugabobodabovicugibikavavatiguluxozukapiciducevetovayihosuduyiwudutixebuxawujihakagepizemafiragoxuhogesalibocexijavupofaxemi",
         "timezone":0,
-        "location":"gowidafudevabeyutasapari",
-        "type":"trip",
+        "location":"zududegoluzimimekawafoji",
+        "type":"working",
         "likes_count":0,
-        "ctime":1342604928,
-        "utime":1342604928,
+        "ctime":1342700864,
+        "utime":1342700864,
         "is_ended":0
       }
     ]
@@ -1147,10 +1152,10 @@ Deletes a day
 ### Moments ###
 <a name='Moments'></a>
 #### Update ####
-<a name="bbfca779fb2386810e15737e70b9909c"></a>
+<a name="093cece53721d5c2719d5cceaf73a42f"></a>
 
 
-`POST moments/54/update`
+`POST moments/288/update`
 
 ##### Request: #####
 ###### Params: ######
@@ -1166,7 +1171,7 @@ Deletes a day
 </table>
 ###### Example request: ######
     {
-      "description":"yiwiwukujucidasicemabobudimoguxakoveragubenaletimeniyimayuvawokekamugoyeyilerawaleseyakudabuvegamodojayemeranihuwuhofopetihizisidufixaselemutoyitahuvufilibiyoxanamedasimanayitorunewoyefurasidaponovegelolegazudigugafecumokizufiputufapomotipuzoveyupavavaro"
+      "description":"ceyofusolubamizatarodexotilizokazewagixojuvomoyewizuyurohagesijoxavarotupisahojafecafovitatipabidunomesavecabefesekuyahofucozagayoxebiluzixuxafihilatowususozuvurogogomadefamepoyuxosopepezidolololojuwijamolamecebocicowaguwosejaxozodevibasinoxinuforusuyimi"
     }
 
 
@@ -1189,12 +1194,12 @@ Deletes a day
 </table>
 ###### Example response: ######
     {
-      "id":54,
-      "day_id":162,
-      "description":"yiwiwukujucidasicemabobudimoguxakoveragubenaletimeniyimayuvawokekamugoyeyilerawaleseyakudabuvegamodojayemeranihuwuhofopetihizisidufixaselemutoyitahuvufilibiyoxanamedasimanayitorunewoyefurasidaponovegelolegazudigugafecumokizufiputufapomotipuzoveyupavavaro",
+      "id":288,
+      "day_id":838,
+      "description":"ceyofusolubamizatarodexotilizokazewagixojuvomoyewizuyurohagesijoxavarotupisahojafecafovitatipabidunomesavecabefesekuyahofucozagayoxebiluzixuxafihilatowususozuvurogogomadefamepoyuxosopepezidolololojuwijamolamecebocicowaguwosejaxozodevibasinoxinuforusuyimi",
       "img_url":"",
       "likes_count":0,
-      "ctime":1342604928
+      "ctime":1342700865
     }
 
 
@@ -1202,10 +1207,10 @@ Deletes a day
 
 * * *
 #### Delete ####
-<a name="d91b78bc568a1cb48c96aafe0052dea4"></a>
+<a name="dd260226c14dea1f06133cdb250ce307"></a>
 
 
-`POST moments/55/delete`
+`POST moments/289/delete`
 
 ##### Request: #####
 
@@ -1220,10 +1225,10 @@ Deletes a day
 
 * * *
 #### Comment ####
-<a name="0a5a975a0cf97aafd895c3764b3fc776"></a>
+<a name="955ef89215098e4b8ba8b686d3f225f5"></a>
 
 
-`POST moments/56/comment`
+`POST moments/290/comment`
 
 ##### Request: #####
 ###### Params: ######
@@ -1239,7 +1244,7 @@ Deletes a day
 </table>
 ###### Example request: ######
     {
-      "text":"cihewizezupemayinolajesupiburerowucohayebiriniyahefosunehiduxoporojusedotogejahomigakomohipajawuwaxijugavihapitabugesocuhocovupibicelekatoheguheyirifonijibamisizowebapowuzaxehovukupujumezuyolukejilufevajolilamodarizawuboritasamayokovokagokoniwayuhovenite"
+      "text":"cemomatiraresukemorivecoxisozasakasugejunufazikihazalavepibipopuxewarazadajasonuvibapolagisogevamogavagujizujizazuhivotufevirimafofuxiwazufehaledowukixixozigipefojafagabimenunopepuwinodigebotenahohiwexepifadolotedezewaruyebiledovuzohidirefayujafejuluwehu"
     }
 
 
@@ -1265,24 +1270,24 @@ Deletes a day
 </table>
 ###### Example response: ######
     {
-      "text":"cihewizezupemayinolajesupiburerowucohayebiriniyahefosunehiduxoporojusedotogejahomigakomohipajawuwaxijugavihapitabugesocuhocovupibicelekatoheguheyirifonijibamisizowebapowuzaxehovukupujumezuyolukejilufevajolilamodarizawuboritasamayokovokagokoniwayuhovenite",
+      "text":"cemomatiraresukemorivecoxisozasakasugejunufazikihazalavepibipopuxewarazadajasonuvibapolagisogevamogavagujizujizazuhivotufevirimafofuxiwazufehaledowukixixozigipefojafagabimenunopepuwinodigebotenahohiwexepifadolotedezewaruyebiledovuzohidirefayujafejuluwehu",
       "moment":{
-        "id":56,
-        "day_id":164,
+        "id":290,
+        "day_id":840,
         "image_ext":"0",
         "fb_id":"",
         "likes_count":0,
-        "ctime":1342604929,
-        "utime":1342604929,
+        "ctime":1342700865,
+        "utime":1342700865,
         "cip":0
       },
       "user":{
-        "id":20918,
+        "id":10956,
         "user_settings_id":0,
         "first_name":"foo",
         "last_name":"foo",
         "fb_uid":"100004093051334",
-        "fb_access_token":"AAAFnVo0zuqkBAH1r4AtZCI0hZCDzHAHZBW4bZC4CHY7mocGeFp9iwA762AWwhBkUTqBhm1kDXj2l05JJac5bMeeHMVEzlFZBG3fJwTtCDZB3dJW1XIxuXq",
+        "fb_access_token":"AAAFnVo0zuqkBABr12CUn6WR1HNBMPrbfAPAH9PemNPZAR9jEli7QSJJKZCPfhG9HEbHCrwWU3Y2FWAcrmgZAuWyBshAh3YCgGWbqmlZBwOSbqZB2YoqYG",
         "fb_profile_url":"http:\/\/www.facebook.com\/profile.php?id=100004093051334",
         "fb_profile_utime":1341686153,
         "timezone":3,
@@ -1295,16 +1300,16 @@ Deletes a day
         "occupation":"",
         "birthday":"1992-08-08",
         "sex":"male",
-        "ctime":1342604929,
-        "utime":1342604929,
+        "ctime":1342700865,
+        "utime":1342700865,
         "cip":0
       },
       "cip":2130706433,
-      "user_id":20918,
-      "moment_id":56,
-      "ctime":1342604929,
-      "utime":1342604929,
-      "id":22
+      "user_id":10956,
+      "moment_id":290,
+      "ctime":1342700865,
+      "utime":1342700865,
+      "id":110
     }
 
 
@@ -1356,7 +1361,7 @@ Deletes a day
 ###### Example response: ######
     {
       "birthday":"1992-08-08",
-      "ctime":1342604929,
+      "ctime":1342700865,
       "fb_pic_big":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v2\/yL\/r\/HsTZSDw4avx.gif",
       "fb_pic_small":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v1\/yi\/r\/odA9sNLrE86.jpg",
       "fb_pic_square":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v2\/yo\/r\/UlIqmHJn-SK.gif",
@@ -1364,7 +1369,7 @@ Deletes a day
       "fb_profile_utime":1341686153,
       "fb_uid":"100004093051334",
       "first_name":"foo",
-      "id":20919,
+      "id":10957,
       "last_name":"foo",
       "location":"",
       "occupation":"",
@@ -1372,7 +1377,7 @@ Deletes a day
       "timezone":3,
       "twitter_access_token":"",
       "twitter_access_token_secret":"",
-      "utime":1342604929
+      "utime":1342700865
     }
 
 
@@ -1403,11 +1408,11 @@ Deletes a day
 </table>
 ###### Example request: ######
     {
-      "first_name":"xeloxasoholewexudifehagi",
-      "last_name":"wozatotikosejafifibicehu",
-      "occupation":"finuvirumijokucuyayesexu",
-      "location":"gotuwisigezumoleyadasifa",
-      "birthday":"1952-01-09"
+      "first_name":"fufozasixufunisiwoyigiwe",
+      "last_name":"degojasuzilepuzikuhipaxi",
+      "occupation":"segozejocusuwevemesaricu",
+      "location":"foyonukewiwayadenuxeceka",
+      "birthday":"1980-01-20"
     }
 
 
@@ -1443,25 +1448,25 @@ Deletes a day
 </table>
 ###### Example response: ######
     {
-      "birthday":"1952-01-09",
-      "ctime":1342604929,
+      "birthday":"1980-01-20",
+      "ctime":1342700865,
       "fb_pic_big":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v2\/yL\/r\/HsTZSDw4avx.gif",
       "fb_pic_small":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v1\/yi\/r\/odA9sNLrE86.jpg",
       "fb_pic_square":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v2\/yo\/r\/UlIqmHJn-SK.gif",
       "fb_profile_url":"http:\/\/www.facebook.com\/profile.php?id=100004093051334",
       "fb_profile_utime":1341686153,
       "fb_uid":"100004093051334",
-      "first_name":"xeloxasoholewexudifehagi",
-      "id":20920,
-      "last_name":"wozatotikosejafifibicehu",
-      "location":"gotuwisigezumoleyadasifa",
-      "occupation":"finuvirumijokucuyayesexu",
+      "first_name":"fufozasixufunisiwoyigiwe",
+      "id":10958,
+      "last_name":"degojasuzilepuzikuhipaxi",
+      "location":"foyonukewiwayadenuxeceka",
+      "occupation":"segozejocusuwevemesaricu",
       "sex":"male",
       "timezone":3,
       "twitter_access_token":"",
       "twitter_access_token_secret":"",
       "uip":2130706433,
-      "utime":1342604929
+      "utime":1342700865
     }
 
 
@@ -1489,8 +1494,8 @@ Deletes a day
 </table>
 ###### Example request: ######
     {
-      "first_name":"layurorumajesijuheyivifo",
-      "birthday":"1943-00-25"
+      "first_name":"jukeruzabajotepogisagixo",
+      "birthday":"1955-01-04"
     }
 
 
@@ -1526,16 +1531,16 @@ Deletes a day
 </table>
 ###### Example response: ######
     {
-      "birthday":"1943-00-25",
-      "ctime":1342604929,
+      "birthday":"1955-01-04",
+      "ctime":1342700865,
       "fb_pic_big":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v2\/yL\/r\/HsTZSDw4avx.gif",
       "fb_pic_small":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v1\/yi\/r\/odA9sNLrE86.jpg",
       "fb_pic_square":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v2\/yo\/r\/UlIqmHJn-SK.gif",
       "fb_profile_url":"http:\/\/www.facebook.com\/profile.php?id=100004093051334",
       "fb_profile_utime":1341686153,
       "fb_uid":"100004093051334",
-      "first_name":"layurorumajesijuheyivifo",
-      "id":20921,
+      "first_name":"jukeruzabajotepogisagixo",
+      "id":10959,
       "last_name":"foo",
       "location":"",
       "occupation":"",
@@ -1544,7 +1549,7 @@ Deletes a day
       "twitter_access_token":"",
       "twitter_access_token_secret":"",
       "uip":2130706433,
-      "utime":1342604929
+      "utime":1342700865
     }
 
 
@@ -1581,7 +1586,7 @@ Deletes a day
 </table>
 ###### Example response: ######
     {
-      "id":7,
+      "id":39,
       "notifications_new_days":1,
       "notifications_new_comments":0,
       "notifications_related_activity":1,
@@ -1649,7 +1654,7 @@ Deletes a day
 </table>
 ###### Example response: ######
     {
-      "id":8,
+      "id":40,
       "notifications_new_days":1,
       "notifications_new_comments":1,
       "notifications_related_activity":1,
@@ -1658,6 +1663,656 @@ Deletes a day
       "photos_save_filtered":1,
       "uip":2130706433
     }
+
+
+<a href="#toc">^ back to Table of conetens</a>
+
+* * *
+
+### News ###
+<a name='News'></a>
+#### GetNewNews ####
+<a name="3292f47a05d97e9f9f13470ea62f442c"></a>
+Get list of news that was created after specified news.
+
+`POST social/news`
+
+##### Request: #####
+###### Params: ######
+<table width="100%" border="1">
+<tr>
+  <th width="40">Type</th>
+  <th width="150">Name</th>
+  <th width="40">Required</th>
+  <th>Description</th>
+</tr>
+<tr><td>int</td><td>last</td><td>1</td><td>ID of latest present in application news</td></tr>
+
+</table>
+###### Example request: ######
+    {
+      "last":840
+    }
+
+
+
+##### Response: #####
+###### Fields: ######
+<table width="100%" border="1">
+<tr>
+  <th width="40">Type</th>
+  <th width="150">Name</th>
+  <th>Description</th>
+</tr>
+<tr><td><a href='#Entity:News'>News[]</a></td><td><s>-</s></td><td>List of news that was created after $last (if list is empty adittionally outputs HTTP code 304)</td></tr>
+
+</table>
+###### Example response: ######
+    [
+      {
+        "id":841,
+        "recipient_id":10962,
+        "user_id":10964,
+        "text":"bar loves foo",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      }
+    ]
+
+
+<a href="#toc">^ back to Table of conetens</a>
+
+* * *
+#### GetArchiveNews ####
+<a name="ac58b5d4856554754127b2e90d5832a3"></a>
+Get specified range of news, logic: $first < NEWS < $last
+
+`POST social/news`
+
+##### Request: #####
+###### Params: ######
+<table width="100%" border="1">
+<tr>
+  <th width="40">Type</th>
+  <th width="150">Name</th>
+  <th width="40">Required</th>
+  <th>Description</th>
+</tr>
+<tr><td>int</td><td>first</td><td>1</td><td>Lowest limit of range</td></tr>
+<tr><td>int</td><td>last</td><td>1</td><td>Highest limit of range</td></tr>
+
+</table>
+###### Example request: ######
+    {
+      "first":843,
+      "last":846
+    }
+
+
+
+##### Response: #####
+###### Fields: ######
+<table width="100%" border="1">
+<tr>
+  <th width="40">Type</th>
+  <th width="150">Name</th>
+  <th>Description</th>
+</tr>
+<tr><td><a href='#Entity:News'>News[]</a></td><td><s>-</s></td><td>List of news in specified range</td></tr>
+<tr><td>[type]</td><td>1</td><td>[description]</td></tr>
+
+</table>
+###### Example response: ######
+    [
+      {
+        "id":844,
+        "recipient_id":10965,
+        "user_id":10968,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":845,
+        "recipient_id":10965,
+        "user_id":10969,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      }
+    ]
+
+
+<a href="#toc">^ back to Table of conetens</a>
+
+* * *
+#### FirstGetNews ####
+<a name="a82a80c9be8111df7bc209e3e3470f58"></a>
+Get list of latest news (size is defined by application, by default is 50).
+
+`POST social/news`
+
+##### Request: #####
+
+###### Example request: ######
+    empty
+
+##### Response: #####
+###### Fields: ######
+<table width="100%" border="1">
+<tr>
+  <th width="40">Type</th>
+  <th width="150">Name</th>
+  <th>Description</th>
+</tr>
+<tr><td><a href='#Entity:News'>News[]</a></td><td><s>List</s></td><td>of news</td></tr>
+<tr><td>[type]</td><td>1</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>2</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>3</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>4</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>5</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>6</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>7</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>8</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>9</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>10</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>11</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>12</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>13</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>14</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>15</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>16</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>17</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>18</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>19</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>20</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>21</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>22</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>23</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>24</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>25</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>26</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>27</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>28</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>29</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>30</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>31</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>32</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>33</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>34</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>35</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>36</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>37</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>38</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>39</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>40</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>41</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>42</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>43</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>44</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>45</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>46</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>47</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>48</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>49</td><td>[description]</td></tr>
+
+</table>
+###### Example response: ######
+    [
+      {
+        "id":848,
+        "recipient_id":10972,
+        "user_id":10973,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":849,
+        "recipient_id":10972,
+        "user_id":10974,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":850,
+        "recipient_id":10972,
+        "user_id":10975,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":851,
+        "recipient_id":10972,
+        "user_id":10976,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":852,
+        "recipient_id":10972,
+        "user_id":10977,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":853,
+        "recipient_id":10972,
+        "user_id":10978,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":854,
+        "recipient_id":10972,
+        "user_id":10979,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":855,
+        "recipient_id":10972,
+        "user_id":10980,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":856,
+        "recipient_id":10972,
+        "user_id":10981,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":857,
+        "recipient_id":10972,
+        "user_id":10982,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":858,
+        "recipient_id":10972,
+        "user_id":10983,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":859,
+        "recipient_id":10972,
+        "user_id":10984,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":860,
+        "recipient_id":10972,
+        "user_id":10985,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":861,
+        "recipient_id":10972,
+        "user_id":10986,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":862,
+        "recipient_id":10972,
+        "user_id":10987,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":863,
+        "recipient_id":10972,
+        "user_id":10988,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":864,
+        "recipient_id":10972,
+        "user_id":10989,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":865,
+        "recipient_id":10972,
+        "user_id":10990,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":866,
+        "recipient_id":10972,
+        "user_id":10991,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":867,
+        "recipient_id":10972,
+        "user_id":10992,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":868,
+        "recipient_id":10972,
+        "user_id":10993,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":869,
+        "recipient_id":10972,
+        "user_id":10994,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":870,
+        "recipient_id":10972,
+        "user_id":10995,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":871,
+        "recipient_id":10972,
+        "user_id":10996,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":872,
+        "recipient_id":10972,
+        "user_id":10997,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":873,
+        "recipient_id":10972,
+        "user_id":10998,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":874,
+        "recipient_id":10972,
+        "user_id":10999,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":875,
+        "recipient_id":10972,
+        "user_id":11000,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":876,
+        "recipient_id":10972,
+        "user_id":11001,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":877,
+        "recipient_id":10972,
+        "user_id":11002,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":878,
+        "recipient_id":10972,
+        "user_id":11003,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":879,
+        "recipient_id":10972,
+        "user_id":11004,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":880,
+        "recipient_id":10972,
+        "user_id":11005,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":881,
+        "recipient_id":10972,
+        "user_id":11006,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":882,
+        "recipient_id":10972,
+        "user_id":11007,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":883,
+        "recipient_id":10972,
+        "user_id":11008,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":884,
+        "recipient_id":10972,
+        "user_id":11009,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":885,
+        "recipient_id":10972,
+        "user_id":11010,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":886,
+        "recipient_id":10972,
+        "user_id":11011,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":887,
+        "recipient_id":10972,
+        "user_id":11012,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":888,
+        "recipient_id":10972,
+        "user_id":11013,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":889,
+        "recipient_id":10972,
+        "user_id":11014,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":890,
+        "recipient_id":10972,
+        "user_id":11015,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":891,
+        "recipient_id":10972,
+        "user_id":11016,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":892,
+        "recipient_id":10972,
+        "user_id":11017,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":893,
+        "recipient_id":10972,
+        "user_id":11018,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":894,
+        "recipient_id":10972,
+        "user_id":11019,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":895,
+        "recipient_id":10972,
+        "user_id":11020,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":896,
+        "recipient_id":10972,
+        "user_id":11021,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      },
+      {
+        "id":897,
+        "recipient_id":10972,
+        "user_id":11022,
+        "text":"foo loves bar",
+        "day_id":0,
+        "moment_id":0,
+        "ctime":1342700866
+      }
+    ]
 
 
 <a href="#toc">^ back to Table of conetens</a>
@@ -1692,20 +2347,20 @@ Deletes a day
     [
       {
         "birthday":"1980-08-08",
-        "ctime":1342604929,
-        "fb_pic_big":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v2\/yL\/r\/HsTZSDw4avx.gif",
-        "fb_pic_small":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v1\/yi\/r\/odA9sNLrE86.jpg",
-        "fb_pic_square":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v2\/yo\/r\/UlIqmHJn-SK.gif",
+        "ctime":1342700867,
+        "fb_pic_big":"http:\/\/profile.ak.fbcdn.net\/hprofile-ak-snc4\/273807_100004087981387_670665721_n.jpg",
+        "fb_pic_small":"http:\/\/profile.ak.fbcdn.net\/hprofile-ak-snc4\/273807_100004087981387_670665721_t.jpg",
+        "fb_pic_square":"http:\/\/profile.ak.fbcdn.net\/hprofile-ak-snc4\/273807_100004087981387_670665721_q.jpg",
         "fb_profile_url":"http:\/\/www.facebook.com\/profile.php?id=100004087981387",
-        "fb_profile_utime":1341683761,
+        "fb_profile_utime":1342526485,
         "fb_uid":"100004087981387",
         "first_name":"bar",
-        "id":20925,
+        "id":11024,
         "last_name":"bar",
         "location":"",
         "occupation":"",
         "sex":"male",
-        "timezone":0,
+        "timezone":3,
         "twitter_access_token":"",
         "twitter_access_token_secret":"",
         "user_info":{
@@ -1715,15 +2370,15 @@ Deletes a day
           "sex":"male",
           "timezone":null,
           "fb_profile_url":"http:\/\/www.facebook.com\/profile.php?id=100004087981387",
-          "fb_profile_utime":"1341683761",
-          "fb_pic_small":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v1\/yi\/r\/odA9sNLrE86.jpg",
-          "fb_pic_square":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v2\/yo\/r\/UlIqmHJn-SK.gif",
-          "fb_pic_big":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v2\/yL\/r\/HsTZSDw4avx.gif",
+          "fb_profile_utime":"1342526485",
+          "fb_pic_small":"http:\/\/profile.ak.fbcdn.net\/hprofile-ak-snc4\/273807_100004087981387_670665721_t.jpg",
+          "fb_pic_square":"http:\/\/profile.ak.fbcdn.net\/hprofile-ak-snc4\/273807_100004087981387_670665721_q.jpg",
+          "fb_pic_big":"http:\/\/profile.ak.fbcdn.net\/hprofile-ak-snc4\/273807_100004087981387_670665721_n.jpg",
           "occupation":"",
-          "current_location":"",
+          "current_location":"San Antonio, Texas",
           "birthday":"1980-08-08"
         },
-        "utime":1342604929
+        "utime":1342700867
       }
     ]
 
@@ -1735,10 +2390,10 @@ Deletes a day
 ### User ###
 <a name='User'></a>
 #### UserByIdDays ####
-<a name="73a7c51cbef9bf4604c2c712f3970166"></a>
+<a name="bec2c9e54df778017ef46d923343806a"></a>
 
 
-`POST users/20926/days/`
+`POST users/11025/days/`
 
 ##### Request: #####
 
@@ -1760,29 +2415,29 @@ Deletes a day
 ###### Example response: ######
     [
       {
-        "id":165,
-        "user_id":20926,
-        "title":"naxopoxapohesapulefoteva",
-        "description":"feyohetakizalezefivibicokonoceyeruxudizibusihoxigoyedazisicoyaziyulalipikeyoyudamakodecoxamogihahohodudidafayefekizizaguhorifusirudowehukizetaravopotupapenodegofepuruyahuhaduduposepehanozobalapufawafacidekeduzugidivohohexomisorivupuhocoyerucumajevizaxute",
+        "id":841,
+        "user_id":11025,
+        "title":"xonicozixayunutemifedilo",
+        "description":"vajeseralisoyanixininicetasovulidovodeyixofusokihubumacahoxatepucesetivogumusumuviverukupeyenifowuxilogoropenahepamexudidavonuhevayawaxixitenusabajubijanawacakuhebanumejevufiyepecititepihorolubizijixosolucecoraherupenuwanecitacanuseradolekalolapahaxajije",
         "timezone":0,
-        "location":"patunayamobupibisobezuxa",
-        "type":"working",
+        "location":"zonubocayotaharezakikize",
+        "type":"trip",
         "likes_count":0,
-        "ctime":1342604929,
-        "utime":1342604929,
+        "ctime":1342700867,
+        "utime":1342700867,
         "is_ended":0
       },
       {
-        "id":166,
-        "user_id":20926,
-        "title":"bipagujanuwozimulacicaxi",
-        "description":"nowawoninimakalecibulobificafosohitahenuwuxecelatizacupemohohujimarokapedimetujikerihasowukayorewedakokidututajakunodelugucanopeyoneluwitikiroparasojatiyotimevezerefiyubekoburobelelayeyovezituxejaxezupemijagelotuwodojudemugegilaweyevizaneluyatowulavilelo",
+        "id":842,
+        "user_id":11025,
+        "title":"jupobipiveduvijawajoholu",
+        "description":"xotucegodufijojetiliredomohejiyadocexexufapivutijayupapawulahejizisuviwusilijayojunuyayozexesatopenezehovobawutawebojumehepunerasamonogekelagajakexogebisomexajijufunifusicutibatuvugomuludedixihahumitacocofawuzoxeledukedivuyabexisisokonixenuzicewagamesejo",
         "timezone":0,
-        "location":"jayineralumilunegomemuzo",
-        "type":"trip",
+        "location":"dafatahukofipayarebodato",
+        "type":"holiday",
         "likes_count":0,
-        "ctime":1342604929,
-        "utime":1342604929,
+        "ctime":1342700867,
+        "utime":1342700867,
         "is_ended":0
       }
     ]
@@ -1792,10 +2447,10 @@ Deletes a day
 
 * * *
 #### UserById ####
-<a name="3516c606568a49eedff3b8750efd59ca"></a>
+<a name="9bde9641241c14c85b592784fb08a940"></a>
 
 
-`POST users/20928/item/`
+`POST users/11027/item/`
 
 ##### Request: #####
 
@@ -1833,7 +2488,7 @@ Deletes a day
 ###### Example response: ######
     {
       "birthday":"1992-08-08",
-      "ctime":1342604930,
+      "ctime":1342700867,
       "fb_pic_big":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v2\/yL\/r\/HsTZSDw4avx.gif",
       "fb_pic_small":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v1\/yi\/r\/odA9sNLrE86.jpg",
       "fb_pic_square":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v2\/yo\/r\/UlIqmHJn-SK.gif",
@@ -1841,7 +2496,7 @@ Deletes a day
       "fb_profile_utime":1341686153,
       "fb_uid":"100004093051334",
       "first_name":"foo",
-      "id":20928,
+      "id":11027,
       "last_name":"foo",
       "location":"",
       "occupation":"",
@@ -1849,7 +2504,7 @@ Deletes a day
       "timezone":3,
       "twitter_access_token":"",
       "twitter_access_token_secret":"",
-      "utime":1342604930
+      "utime":1342700867
     }
 
 
@@ -1882,23 +2537,23 @@ Deletes a day
     [
       {
         "birthday":"1980-08-08",
-        "ctime":1342604930,
-        "fb_pic_big":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v2\/yL\/r\/HsTZSDw4avx.gif",
-        "fb_pic_small":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v1\/yi\/r\/odA9sNLrE86.jpg",
-        "fb_pic_square":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v2\/yo\/r\/UlIqmHJn-SK.gif",
+        "ctime":1342700867,
+        "fb_pic_big":"http:\/\/profile.ak.fbcdn.net\/hprofile-ak-snc4\/273807_100004087981387_670665721_n.jpg",
+        "fb_pic_small":"http:\/\/profile.ak.fbcdn.net\/hprofile-ak-snc4\/273807_100004087981387_670665721_t.jpg",
+        "fb_pic_square":"http:\/\/profile.ak.fbcdn.net\/hprofile-ak-snc4\/273807_100004087981387_670665721_q.jpg",
         "fb_profile_url":"http:\/\/www.facebook.com\/profile.php?id=100004087981387",
-        "fb_profile_utime":1341683761,
+        "fb_profile_utime":1342526485,
         "fb_uid":"100004087981387",
         "first_name":"bar",
-        "id":20933,
+        "id":11032,
         "last_name":"bar",
         "location":"",
         "occupation":"",
         "sex":"male",
-        "timezone":0,
+        "timezone":3,
         "twitter_access_token":"",
         "twitter_access_token_secret":"",
-        "utime":1342604930
+        "utime":1342700867
       }
     ]
 
@@ -1907,10 +2562,10 @@ Deletes a day
 
 * * *
 #### FollowersByUserId ####
-<a name="19efb47b1a60f751f4898d6218dda624"></a>
+<a name="095533d47f2e91e73e4abd92dc591302"></a>
 
 
-`POST users/20934/followers`
+`POST users/11033/followers`
 
 ##### Request: #####
 
@@ -1932,23 +2587,23 @@ Deletes a day
     [
       {
         "birthday":"1980-08-08",
-        "ctime":1342604930,
-        "fb_pic_big":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v2\/yL\/r\/HsTZSDw4avx.gif",
-        "fb_pic_small":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v1\/yi\/r\/odA9sNLrE86.jpg",
-        "fb_pic_square":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v2\/yo\/r\/UlIqmHJn-SK.gif",
+        "ctime":1342700867,
+        "fb_pic_big":"http:\/\/profile.ak.fbcdn.net\/hprofile-ak-snc4\/273807_100004087981387_670665721_n.jpg",
+        "fb_pic_small":"http:\/\/profile.ak.fbcdn.net\/hprofile-ak-snc4\/273807_100004087981387_670665721_t.jpg",
+        "fb_pic_square":"http:\/\/profile.ak.fbcdn.net\/hprofile-ak-snc4\/273807_100004087981387_670665721_q.jpg",
         "fb_profile_url":"http:\/\/www.facebook.com\/profile.php?id=100004087981387",
-        "fb_profile_utime":1341683761,
+        "fb_profile_utime":1342526485,
         "fb_uid":"100004087981387",
         "first_name":"bar",
-        "id":20935,
+        "id":11034,
         "last_name":"bar",
         "location":"",
         "occupation":"",
         "sex":"male",
-        "timezone":0,
+        "timezone":3,
         "twitter_access_token":"",
         "twitter_access_token_secret":"",
-        "utime":1342604930
+        "utime":1342700867
       }
     ]
 
@@ -1982,23 +2637,23 @@ Deletes a day
     [
       {
         "birthday":"1980-08-08",
-        "ctime":1342604930,
-        "fb_pic_big":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v2\/yL\/r\/HsTZSDw4avx.gif",
-        "fb_pic_small":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v1\/yi\/r\/odA9sNLrE86.jpg",
-        "fb_pic_square":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v2\/yo\/r\/UlIqmHJn-SK.gif",
+        "ctime":1342700868,
+        "fb_pic_big":"http:\/\/profile.ak.fbcdn.net\/hprofile-ak-snc4\/273807_100004087981387_670665721_n.jpg",
+        "fb_pic_small":"http:\/\/profile.ak.fbcdn.net\/hprofile-ak-snc4\/273807_100004087981387_670665721_t.jpg",
+        "fb_pic_square":"http:\/\/profile.ak.fbcdn.net\/hprofile-ak-snc4\/273807_100004087981387_670665721_q.jpg",
         "fb_profile_url":"http:\/\/www.facebook.com\/profile.php?id=100004087981387",
-        "fb_profile_utime":1341683761,
+        "fb_profile_utime":1342526485,
         "fb_uid":"100004087981387",
         "first_name":"bar",
-        "id":20937,
+        "id":11036,
         "last_name":"bar",
         "location":"",
         "occupation":"",
         "sex":"male",
-        "timezone":0,
+        "timezone":3,
         "twitter_access_token":"",
         "twitter_access_token_secret":"",
-        "utime":1342604930
+        "utime":1342700868
       }
     ]
 
@@ -2007,10 +2662,10 @@ Deletes a day
 
 * * *
 #### FollowingByUserId ####
-<a name="59941e13284e2b218ad35dfe6f54b23b"></a>
+<a name="aef6e0d28ad74910e0bbde2e665d0e21"></a>
 
 
-`POST users/20938/following`
+`POST users/11037/following`
 
 ##### Request: #####
 
@@ -2032,23 +2687,23 @@ Deletes a day
     [
       {
         "birthday":"1980-08-08",
-        "ctime":1342604930,
-        "fb_pic_big":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v2\/yL\/r\/HsTZSDw4avx.gif",
-        "fb_pic_small":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v1\/yi\/r\/odA9sNLrE86.jpg",
-        "fb_pic_square":"http:\/\/profile.ak.fbcdn.net\/static-ak\/rsrc.php\/v2\/yo\/r\/UlIqmHJn-SK.gif",
+        "ctime":1342700868,
+        "fb_pic_big":"http:\/\/profile.ak.fbcdn.net\/hprofile-ak-snc4\/273807_100004087981387_670665721_n.jpg",
+        "fb_pic_small":"http:\/\/profile.ak.fbcdn.net\/hprofile-ak-snc4\/273807_100004087981387_670665721_t.jpg",
+        "fb_pic_square":"http:\/\/profile.ak.fbcdn.net\/hprofile-ak-snc4\/273807_100004087981387_670665721_q.jpg",
         "fb_profile_url":"http:\/\/www.facebook.com\/profile.php?id=100004087981387",
-        "fb_profile_utime":1341683761,
+        "fb_profile_utime":1342526485,
         "fb_uid":"100004087981387",
         "first_name":"bar",
-        "id":20939,
+        "id":11038,
         "last_name":"bar",
         "location":"",
         "occupation":"",
         "sex":"male",
-        "timezone":0,
+        "timezone":3,
         "twitter_access_token":"",
         "twitter_access_token_secret":"",
-        "utime":1342604930
+        "utime":1342700868
       }
     ]
 
@@ -2057,10 +2712,10 @@ Deletes a day
 
 * * *
 #### Follow ####
-<a name="9308966d9906a196a72cf93395dd37cf"></a>
+<a name="878bc2797a2b88d85cd27a164c2c89ea"></a>
 
 
-`POST users/20941/follow`
+`POST users/11040/follow`
 
 ##### Request: #####
 
@@ -2075,10 +2730,10 @@ Deletes a day
 
 * * *
 #### Unfollow ####
-<a name="75354f977239b0a06d41c3e35d1338b6"></a>
+<a name="5f20fbc33efe69b31f06b5c4a36b6948"></a>
 
 
-`POST users/20943/unfollow`
+`POST users/11042/unfollow`
 
 ##### Request: #####
 

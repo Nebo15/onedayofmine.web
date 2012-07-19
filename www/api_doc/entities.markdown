@@ -64,6 +64,19 @@
 </table>
 
 * * *
+### News ###
+<a name="Entity:News"></a>
+###### Fields: ######
+<table width="100%" border="1">
+<tr>
+  <th width="40">Type</th>
+  <th width="150">Name</th>
+  <th>Description</th>
+</tr>
+<tr><td>uint(11)</td><td>id</td><td>News ID</td></tr><tr><td>uint(11)</td><td>recipient_id</td><td>Recipient ID - user, that shoud recieve message</td></tr><tr><td>uint(11)</td><td>user_id</td><td>User ID - uset, that created news event</td></tr><tr><td>string(255)</td><td>text</td><td>Text of news message</td></tr><tr><td>uint(11)</td><td>day_id</td><td>ID of day, on wich this news is linked to.</td></tr><tr><td>uint(11)</td><td>moment_id</td><td>ID of moment, on wich this news is linked to.</td></tr><tr><td>uint(11)</td><td>ctime</td><td>Unix timestamp, time of news creation</td></tr>
+</table>
+
+* * *
 ### User ###
 <a name="Entity:User"></a>
 ###### Fields: ######
