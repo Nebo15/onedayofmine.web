@@ -46,7 +46,6 @@ class lmbProfileReportingFilter implements lmbInterceptingFilter
 
       $response = lmbToolkit::instance()->getResponse();
       $reporter->attachReport($response);
-      $response->commit();
     }
   }
 }
