@@ -16,7 +16,7 @@ class SocialController extends BaseJsonController
     return $this->_answerOk($friends);
   }
 
-  // TODO add related objects to response
+  // TODO add related objects (day/moment) to response
   function doNews() {
     if($this->request->getRequestMethod() != 'GET')
       return $this->_answerWithError('Not a GET request');
@@ -47,16 +47,6 @@ class SocialController extends BaseJsonController
 
       $news = News::findNewForUser($user, $first, $last, $limit);
     }
-    // foreach ($news as $value) {
-    //   # code...
-    // }
-    // var_dump($this->toolkit->getDefaultDbConnection()->getQueries());
-    //file_put_contents(lmb_env_get('APP_DIR').'/var/queries.log', $this->toolkit->getDefaultDbConnection()->getQueries());
-
-    /*if($news->count())
-      foreach ($news as $entry) {
-        $entry->setDayData($entry->getDay());
-      }*/
 
     return $this->_answerOk($news);
   }
