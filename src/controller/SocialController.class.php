@@ -16,6 +16,7 @@ class SocialController extends BaseJsonController
     return $this->_answerOk($friends);
   }
 
+  // TODO add related objects to response
   function doNews() {
     if($this->request->getRequestMethod() != 'GET')
       return $this->_answerWithError('Not a GET request');
@@ -23,25 +24,40 @@ class SocialController extends BaseJsonController
     $limit = lmbToolkit::instance()->getConf('common')->default_news_count;
     $user  = $this->toolkit->getUser();
 
-    if($this->request->has('last')) {
-      $last  = $this->request->getFiltered('last', FILTER_SANITIZE_NUMBER_INT);
+    $first = $this->request->has('first') ? $this->request->getFiltered('first', FILTER_SANITIZE_NUMBER_INT) : null;
+    $last  = $this->request->has('last')  ? $this->request->getFiltered('last', FILTER_SANITIZE_NUMBER_INT)  : null;
 
-      if($this->request->has('first')) {
-        // Get from archive (SELECT ... WHERE $first < id AND id < $last)
-        $first = $this->request->getFiltered('first', FILTER_SANITIZE_NUMBER_INT);
-        $news = News::findNewForUser($user, $first, $last);
-      } else {
-        // Get new after id (SELECT ... WHERE $last < id)
-        $news = News::findNewForUser($user, $last);
+    if(is_null($first) && is_null($last)) {               // SELECT ... FROM ... ORDER BY DESC LIMIT 100
+      $news = $user->getNews();
+      $news->paginate(0, $limit);
 
-        // If there are no new news, we return specific status code
-        if(!$news->count())
-          return $this->_answerOk($news, 'Not Modified', 304);
-      }
-    } else { // Get last N news request
-      $news = $user->getNews(array('limit' => $limit));
+    } elseif(!is_null($first) && is_null($last)) {        // SELECT ... FROM ... WHERE id < $first ORDER BY DESC LIMIT 100
+      $news = News::findNewForUser($user, null, $first, $limit);
+
+    } elseif(is_null($first) && !is_null($last)) {        // SELECT ... FROM ... WHERE id > $last ORDER BY DESC LIMIT 100
+      $news = News::findNewForUser($user, $last, null, $limit);
+
+      // If there are no new news, we return specific status code
+      if(!$news->count())
+        return $this->_answerOk($news, 'Not Modified', 304);
+
+    } else {                                              // SELECT ... FROM ... WHERE $first < id AND id < $last ORDER BY DESC LIMIT 100
+      if($last <= $first)
+        return $this->_answerWithError("Last ID '{$last}' can't be less or equal to first ID '{$first}'.");
+
+      $news = News::findNewForUser($user, $first, $last, $limit);
     }
+    // foreach ($news as $value) {
+    //   # code...
+    // }
+    // var_dump($this->toolkit->getDefaultDbConnection()->getQueries());
+    //file_put_contents(lmb_env_get('APP_DIR').'/var/queries.log', $this->toolkit->getDefaultDbConnection()->getQueries());
 
-    return $this->_answerOk($news, 303);
+    /*if($news->count())
+      foreach ($news as $entry) {
+        $entry->setDayData($entry->getDay());
+      }*/
+
+    return $this->_answerOk($news);
   }
 }

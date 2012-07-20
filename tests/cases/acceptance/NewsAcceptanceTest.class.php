@@ -11,9 +11,9 @@ class NewsAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @api description Get list of news that was created after specified news.
+   * @api description Get list of news that was created after specified news. SQL logic representation: SELECT ... FROM ... WHERE id > $last ORDER BY DESC LIMIT 100
    * @api input param int last ID of latest present in application news
-   * @api result News[] - List of news that was created after $last (if list is empty adittionally outputs HTTP code 304)
+   * @api result News[100] - List of news that was created after $last (if list is empty adittionally outputs HTTP code 304)
    */
   function testGetNewNews() {
     $this->main_user->save(); // Save user to have static ID
@@ -59,12 +59,41 @@ class NewsAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @api description Get specified range of news, logic: $first < NEWS < $last
-   * @api input param int first Lowest limit of range
-   * @api input param int last Highest limit of range
-   * @api result News[] - List of news in specified range
+   * @api description Get list of news that was created before specified news. SQL logic representation: SELECT ... FROM ... WHERE id < $first ORDER BY DESC LIMIT 100
+   * @api input param int last ID of latest present in application news
+   * @api result News[100] - List of news that was created after $last (if list is empty adittionally outputs HTTP code 304)
    */
-  function testGetArchiveNews() {
+  function testGetOldNews() {
+    $this->main_user->save(); // Save user to have static ID
+    $this->_loginAndSetCookie($this->main_user);
+
+    // Adding new news
+    $ids = array();
+    for($i = 0; $i < 6; $i++) {
+      $news = $this->generator->news();
+      $news->setRecipient($this->main_user);
+      $news->setText('foo loves bar');
+      $news->save();
+      $ids[] = $news->getId();
+    }
+
+    $params = array(
+      'first' => $ids[3],
+    );
+    $response = $this->get('social/news', $params);
+    $this->assertResponse(200);
+    $this->assertTrue(count($response->result) == 3);
+    $this->assertTrue($response->result[0]->id == $ids[2]); // pay attention to order
+    $this->assertTrue($response->result[1]->id == $ids[1]);
+    $this->assertTrue($response->result[2]->id == $ids[0]);
+  }
+
+  /**
+   * @api description Get specified range of news. SQL logic representation: SELECT ... FROM ... WHERE $first < id AND id < $last ORDER BY DESC LIMIT 100
+   * @api input param int last Highest limit of range
+   * @api result News[100] - List of news in specified range
+   */
+  function testGetNewsRange() {
     $this->main_user->save(); // Save user to have static ID
     $this->_loginAndSetCookie($this->main_user);
 
@@ -85,28 +114,34 @@ class NewsAcceptanceTest extends odAcceptanceTestCase
     $response = $this->get('social/news', $params);
     $this->assertResponse(200);
     $this->assertTrue(count($response->result) == 2);
-    $this->assertTrue($response->result[0]->id == $ids[2]);
-    $this->assertTrue($response->result[1]->id == $ids[3]);
+    $this->assertTrue($response->result[1]->id == $ids[2]); // pay attention, order is reversed
+    $this->assertTrue($response->result[0]->id == $ids[3]);
   }
 
   /**
-   * @api description Get list of latest news (size is defined by application, by default is 50).
-   * @api result News[] List of news
+   * @api description Get list of latest news. SQL logic representation: SELECT ... FROM ... ORDER BY DESC LIMIT 100
+   * @api result News[100] List of news
    */
-  function testFirstGetNews() {
+  function testGetLastNews() {
     $this->main_user->save(); // Save user to have static ID
     $this->_loginAndSetCookie($this->main_user);
 
     // Adding new news
-    for($i = 0; $i < lmbToolkit::instance()->getConf('common')->default_news_count; $i++) {
+    $ids = array();
+    for($i = 0; $i < lmbToolkit::instance()->getConf('common')->default_news_count*2; $i++) {
       $news = $this->generator->news();
       $news->setRecipient($this->main_user);
       $news->setText('foo loves bar');
       $news->save();
+      $ids[] = $news->getId();
     }
 
     $response = $this->get('social/news');
     $this->assertResponse(200);
     $this->assertTrue(count($response->result) == lmbToolkit::instance()->getConf('common')->default_news_count);
+    // change order
+    rsort($ids);
+    $this->assertTrue($response->result[0]->id == $ids[0]); // pay attention, order is reversed
+    $this->assertTrue($response->result[1]->id == $ids[1]);
   }
 }

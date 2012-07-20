@@ -11,6 +11,8 @@
  */
 class News extends BaseModel
 {
+  protected $_default_sort_params = array('id'=>'desc');
+
   protected function _defineRelations()
   {
     $this->_many_belongs_to = array (
@@ -21,17 +23,30 @@ class News extends BaseModel
     );
   }
 
+  function exportForApi()
+  {
+    $exported = $this->export();
+    
+    return (object) $exported;
+  }
+
   /**
    * @return lmbCollectionInterface
    */
-  static function findNewForUser(User $user, $from_id = null, $to_id = null)
+  static function findNewForUser(User $user, $from_id = null, $to_id = null, $limit = null)
   {
-    // We can do this with $user->getNews(CRITERIA HERE), but i dont know how slow it is in limb or even is it support this type of request
+    $params = array();
+
     $criteria = lmbSQLCriteria::equal('recipient_id', $user->getId());
     if(!is_null($from_id))
       $criteria->add(lmbSQLCriteria::greater('id', $from_id));
     if(!is_null($to_id))
       $criteria->add(lmbSQLCriteria::less('id', $to_id));
-    return News::find(array('criteria' => $criteria));
+    $params['criteria'] = $criteria;
+
+    if(!is_null($limit))
+      $params['limit'] = $limit;
+
+    return News::find($params);
   }
 }
