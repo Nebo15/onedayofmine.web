@@ -1,4 +1,4 @@
 <?php
 
 $conf['enabled'] = true;
-$conf['profile_reporter'] = 'lmbProfileJsonReporter';
+$conf['profile_reporter'] = 'lmbProfileFakeReporter';
