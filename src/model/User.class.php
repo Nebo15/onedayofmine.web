@@ -89,7 +89,7 @@ class User extends BaseModel
   function exportForApi()
   {
     $result = $this->export();
-
+    // TODO remove twitter credentials
     unset($result['fb_access_token']);
     unset($result['cip']);
     unset($result['user_settings_id']);

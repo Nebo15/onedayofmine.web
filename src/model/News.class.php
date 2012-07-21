@@ -26,7 +26,7 @@ class News extends BaseModel
   function exportForApi()
   {
     $exported = $this->export();
-    
+    // todo add related objects (day/moment) to response
     return (object) $exported;
   }
 
