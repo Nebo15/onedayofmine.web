@@ -53,12 +53,20 @@ class UsersController extends BaseJsonController
 
   function doFollow()
   {
+    if($this->_getUser()->getId() == $this->request->id)
+      return $this->_answerWithError("You can't follow youself.");
+
   	if(!$user = User::findById($this->request->id))
   		return $this->_answerNotFound("User not found by id '{$this->request->id}'");
 
   	$following = $this->_getUser()->getFollowing();
   	$following->add($user);
   	$following->save();
+
+    // Notify user that somebody follow hem
+    $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_FOLLOW, $user);
+
+    file_put_contents(lmb_env_get('APP_DIR').'/var/queries.log', implode(PHP_EOL, $this->toolkit->getDefaultDbConnection()->getQueries()));
 
   	return $this->_answerOk();
   }

@@ -31,6 +31,10 @@ class MomentsController extends BaseJsonController
     if($this->error_list->isEmpty())
     {
       $comment->saveSkipValidation();
+
+      // Notify friends about new comment in moment
+      $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_COMMENT, $comment);
+
       return $this->_answerOk($comment->exportForApi());
     }
     else
@@ -49,6 +53,9 @@ class MomentsController extends BaseJsonController
       return $this->_answerWithError("Moment not found by id");
 
     $moment->destroy();
+
+    // Delete corresponding news
+    lmbActiveRecord :: delete('News', 'moment_id='.$moment->getId());
 
     return $this->_answerOk();
   }

@@ -26,6 +26,9 @@ class CurrentDayController extends BaseJsonController
 
 		//$this->_getUser()->getFacebookUser()->beginDay($day);
 
+		// Notify friends about new day
+    $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_DAY, $day);
+
 		return $response;
 	}
 
@@ -78,8 +81,13 @@ class CurrentDayController extends BaseJsonController
 		);
 		$moment->save();
 
-		if($this->error_list->isEmpty())
+
+		if($this->error_list->isEmpty()) {
+			// Notify friends about new moment
+	    $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_MOMENT, $moment);
+
 			return $this->_answerOk($moment->exportForApi());
+		}
 		else
 			return $this->_answerWithError($this->error_list->export());
 	}

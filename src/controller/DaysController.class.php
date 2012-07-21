@@ -52,6 +52,10 @@ class DaysController extends BaseJsonController
     if($this->error_list->isEmpty())
     {
       $comment->saveSkipValidation();
+
+      // Notify friends about new comment in day
+      $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_COMMENT, $comment);
+
       return $this->_answerOk($comment->exportForApi());
     }
     else
@@ -83,6 +87,9 @@ class DaysController extends BaseJsonController
                   ->getFacebookUser()
                   ->likeDay($day);
 
+    // Notify friends about day like
+    $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_LIKE, $day);
+
     return $this->_answerOk($response);
   }
 
@@ -108,6 +115,9 @@ class DaysController extends BaseJsonController
 
   	$day->setIsDeleted(1);
   	$day->save();
+
+    // Delete corresponding news
+    lmbActiveRecord :: delete('News', 'day_id='.$day->getId());
 
   	return $this->_answerOk();
   }
