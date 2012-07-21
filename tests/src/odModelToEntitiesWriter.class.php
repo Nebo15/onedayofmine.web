@@ -1,4 +1,6 @@
 <?php
+lmb_require('lib/DocCommentParser/DocComment.class.php');
+lmb_require('lib/DocCommentParser/DocCommentParser.class.php');
 lmb_require('lib/DocCommentParser/Patterns/AbstractComment.pattern.php');
 lmb_require('lib/DocCommentParser/Patterns/APIEntityComment.pattern.php');
 
