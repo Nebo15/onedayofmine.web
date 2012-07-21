@@ -4,5 +4,5 @@ ini_set('display_errors', true);
 
 require_once(__DIR__.'/../src/Proxy.php');
 
-$proxy = new Proxy(__DIR__.'/../www/objects', '/objects');
+$proxy = new Proxy(dirname($_SERVER['SCRIPT_FILENAME']));
 echo $proxy->process($_REQUEST);

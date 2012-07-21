@@ -17,11 +17,15 @@ class Proxy
 
   function doCreateObjectPage(CallRequest $request)
   {
-    if(!file_exists($request->path))
-      mkdir(basename($request->path), 0775, true);
-    $og_url = 'http://'.$_SERVER['SERVER_NAME'].$request->path;
+    $full_path = $_SERVER['DOCUMENT_ROOT'].$request->path;
+    if(!file_exists(dirname($full_path)))
+      mkdir(dirname($full_path), 0775, true);
 
-    file_put_contents($request->path, $this->createObjectXml($request, $og_url));
+    $og_url = 'http://'.$_SERVER['HTTP_HOST'].$request->path;
+
+    file_put_contents($full_path, $this->createObjectXml($request, $og_url));
+
+    echo $og_url;
   }
 
   protected function createObjectXml(CallRequest $request, $object_url)

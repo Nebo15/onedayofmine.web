@@ -13,6 +13,8 @@
 var/*
 tests/var/*
 www/media
+www/proxy.php
+www/tests
 
 nbproject
 .sublime*
