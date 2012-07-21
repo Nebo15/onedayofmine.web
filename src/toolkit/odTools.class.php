@@ -109,7 +109,7 @@ class odTools extends lmbAbstractTools
 
   function getSiteUrl($path = '')
   {
-    return $this->toolkit->getConf('common')->site_base_url.$path;
+    return lmb_env_get('HOST_NAME').$path;
   }
 
   function loadTestsUsersInfo()
