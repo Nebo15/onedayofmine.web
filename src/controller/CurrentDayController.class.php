@@ -24,7 +24,8 @@ class CurrentDayController extends BaseJsonController
 
 		$response = $this->_importSaveAndAnswer($day, array('title', 'description', 'timezone', 'location', 'type'));
 
-		//$this->_getUser()->getFacebookUser()->beginDay($day);
+    if(!count($this->error_list) && $this->request->getPost('export_to_fb'))
+		  $this->_getUser()->getFacebookUser()->beginDay($day, $this->request->getPost('force_url'));
 
 		return $response;
 	}
