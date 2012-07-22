@@ -12,10 +12,15 @@ class PagesController extends lmbController
     $this->day = Day::findById($id);
     if(!$this->day || $this->day->getIsDeleted())
       return $this->_answerNotFound();
+  }
 
-    $this->host_name = lmb_env_get('HOST_NAME');
-    $this->fb_app_namespace = $this->toolkit->getConf('common')->fb_app_namespace;
-    $this->fb_app_id = $this->toolkit->getConf('common')->fb_app_id;
+  function doMoment()
+  {
+    $id = $this->request->get('id');
+
+    $this->moment = Moment::findById($id);
+    if(!$this->moment || $this->moment->getDay()->getIsDeleted())
+      return $this->_answerNotFound();
   }
 
 }

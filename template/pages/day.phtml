@@ -1,11 +1,11 @@
 <? $this->title = $this->day->getTitle(); ?>
 {{wrap with="layout.phtml"}}
   {{into slot="meta"}}
-    <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# {$#fb_app_namespace}: http://ogp.me/ns/fb/{$#fb_app_namespace}#">
-    <meta property="fb:app_id" content="{$#fb_app_id}" />
     <meta property="og:type" content="{$#fb_app_namespace}:day" />
     <meta property="og:url" content="{$#host_name}pages/{$#day.id}/day" />
     <meta property="og:title" content="{$#day.title}" />
+    <meta property="one-day-of-mine:location" content="{$#day.location}" />
+    <meta property="one-day-of-mine:type" content="{$#day.type}" />
   {{/into}}
   {{into slot="content"}}
     <h1>Day #{$this->day.id}</h1>

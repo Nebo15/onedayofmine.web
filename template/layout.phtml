@@ -1,8 +1,15 @@
+<?php
+  $this->host_name = lmb_env_get('HOST_NAME');
+  $this->fb_app_namespace = $this->toolkit->getConf('common')->fb_app_namespace;
+  $this->fb_app_id = $this->toolkit->getConf('common')->fb_app_id;
+?>
 <!DOCTYPE html>
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   <title>{$#title}</title>
+  <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# {$#fb_app_namespace}: http://ogp.me/ns/fb/{$#fb_app_namespace}#">
+  <meta property="fb:app_id" content="{$#fb_app_id}" />
   {{slot id='meta'/}}
 </head>
 <body>

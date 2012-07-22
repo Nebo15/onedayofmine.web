@@ -105,4 +105,38 @@ class FacebookUser
       'object' => $day_url
     ));
   }
+
+  function addMoment(Moment $moment, $day_url)
+  {
+    return $this->getFacebook()->api("/me/one-day-of-mine:add_moment", "post", array(
+      'day' => $day_url,
+      'image' => lmbToolkit::instance()->getSiteUrl($moment->getImageUrl()),
+      'message' => $moment->getDescription()
+    ));
+  }
+
+  function shareMoment(Moment $moment, $moment_url)
+  {
+    $image_url = lmbToolkit::instance()->getSiteUrl($moment->getImageUrl());
+    return $this->getFacebook()->api("/me/feed", "post", array(
+      'name' => $moment->getDay()->getTitle(),
+      'picture' => $image_url,
+      'link' => $moment_url,
+      'description' => $moment->getDescription(),
+    ));
+  }
+
+  function likeMoment($moment_url)
+  {
+    return $this->getFacebook()->api("/me/og.likes", "post", array(
+      'object' => $moment_url
+    ));
+  }
+
+  function endDay($day_url)
+  {
+    return $this->getFacebook()->api("/me/one-day-of-mine:end", "post", array(
+      'day' => $day_url
+    ));
+  }
 }

@@ -1,0 +1,22 @@
+<? $this->title = $this->moment->getDay()->getTitle(); ?>
+{{wrap with="layout.phtml"}}
+{{into slot="meta"}}
+  <meta property="og:type"   content="{$#fb_app_namespace}:moment" />
+  <meta property="og:url"    content="{$#host_name}pages/{$#moment.id}/moment" />
+  <meta property="og:title"  content="{$#moment.description}" />
+  <meta property="og:description"  content="{$#moment.description}" />
+  <meta property="og:image"  content="https://s-static.ak.fbcdn.net/images/devsite/attachment_blank.png" />
+  <meta property="one-day-of-mine:location" content="{$#day.location}" />
+  {{/into}}
+  {{into slot="content"}}
+<h1>Moment #{$#moment.id}</h1>
+<ul>
+  <li>id: {$this->moment.id}</li>
+  <li>description: {$this->moment.description}</li>
+  <li>start_time: {$this->day.start_time}</li>
+  <li>likes_count: {$this->day.likes_count}</li>
+  <li>ctime: {$this->day.ctime}</li>
+  <li>utime: {$this->day.utime}</li>
+</ul>
+{{/into}}
+  {{/wrap}}
