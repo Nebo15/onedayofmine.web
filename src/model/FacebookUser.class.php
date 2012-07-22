@@ -78,33 +78,31 @@ class FacebookUser
     return $results;
   }
 
-  function beginDay(Day $day)
+  function beginDay($day_url)
   {
     return $this->getFacebook()->api("/me/one-day-of-mine:begin", "post", array(
-      'day' => lmbToolkit::instance()->getSiteUrl('/days/'.$day->getId().'/item')
+      'day' => $day_url
     ));
   }
 
-  function shareDay(Day $day)
+  function shareDay(Day $day, $day_url)
   {
-    //http://developers.facebook.com/docs/reference/api/post/
+    if(count($day->getMoments()))
+      $image_url = lmbToolkit::instance()->getSiteUrl($day->getMoments()->at(0)->getImageUrl());
+    else
+      $image_url = '';
     return $this->getFacebook()->api("/me/feed", "post", array(
       'name' => $day->getTitle(),
-      'picture' => $this->getSiteUrl($day->getMoments()->at(0)->getImageUrl()),
-      'link' => $this->getSiteUrl('/days/'.$day->getId().'/item'),
+      'picture' => $image_url,
+      'link' => $day_url,
       'description' => 'Visit onedayofmine.com for more info',
     ));
   }
 
-  function likeDay(Day $link_to_object)
+  function likeDay($day_url)
   {
     return $this->getFacebook()->api("/me/og.likes", "post", array(
-      'object' => $link_to_object
+      'object' => $day_url
     ));
-  }
-
-  function getSiteUrl($path)
-  {
-    return lmbToolkit::instance()->getSiteUrl($path);
   }
 }
