@@ -117,11 +117,13 @@ class NewsObserverAcceptanceTest extends odAcceptanceTestCase
   }
 
   // TODO
-  function testRespondYouInComments() {
+  function testRespondYouInComments()
+  {
 
   }
 
-  function testFollow() {
+  function testFollow()
+  {
     // We need 3 users: Dum
     $user = $this->generator->user();
     $user->save();
@@ -164,7 +166,8 @@ class NewsObserverAcceptanceTest extends odAcceptanceTestCase
     }
   }
 
-  function _checkFollowingMessage($recipient, $follower, $followed, $message, $news_count = 1) {
+  function _checkFollowingMessage($recipient, $follower, $followed, $message, $news_count = 1)
+  {
     // Check following in DB
     $this->assertTrue(UserFollowing::isFollowing($follower, $followed));
     // Check news
@@ -177,13 +180,18 @@ class NewsObserverAcceptanceTest extends odAcceptanceTestCase
     $this->assertEqual($news->at(0)->text, sprintf($message, "{$follower->first_name} {$follower->last_name}", "{$followed->first_name} {$followed->last_name}"));
   }
 
-  // TODO something
+  // TODO
   function testRegister() {
 
   }
 
   // TODO
   function testLikeDay() {
+
+  }
+
+  // TODO
+  function testLikeMoment() {
 
   }
 }

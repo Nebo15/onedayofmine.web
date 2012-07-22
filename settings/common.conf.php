@@ -6,4 +6,5 @@ $conf = array(
   'fb_app_id' => '395096410536617',
   'fb_app_secret' => '67ffc19dd0fd52d953f92478f4663459',
   'default_news_count' => 100,
+  'fb_app_namespace' => 'one-day-of-mine',
 );

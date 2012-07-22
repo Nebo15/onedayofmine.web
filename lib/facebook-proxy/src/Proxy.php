@@ -7,7 +7,7 @@ class Proxy
   {
     switch ($http_request_params['action'])
     {
-      case 'create_object':
+      case 'create_page':
         $this->doCreateObjectPage(CallRequest::create(json_decode($http_request_params['params'])));
         break;
       default:
@@ -23,7 +23,7 @@ class Proxy
 
     $og_url = 'http://'.$_SERVER['HTTP_HOST'].$request->path;
 
-    file_put_contents($full_path, $this->createObjectXml($request, $og_url));
+    file_put_contents($full_path, $request->content);
 
     echo $og_url;
   }

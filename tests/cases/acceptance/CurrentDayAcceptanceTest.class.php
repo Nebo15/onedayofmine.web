@@ -51,15 +51,18 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 		$user = User::findOne();
 
 		$params = $this->generator->day()->exportForApi();
+    $params->export_to_fb = false;
 
 		$day = $this->post('current_day/start', $params)->result;
-		$this->assertResponse(200);
-		$this->assertEqual($params->title, $day->title);
-		$this->assertEqual($params->description, $day->description);
-		$this->assertEqual($user->getId(), $day->user_id);
-		$this->assertEqual($params->timezone, $day->timezone);
-		$this->assertTrue($day->ctime);
-		$this->assertTrue($day->utime);
+		if($this->assertResponse(200))
+    {
+      $this->assertEqual($params->title, $day->title);
+      $this->assertEqual($params->description, $day->description);
+      $this->assertEqual($user->getId(), $day->user_id);
+      $this->assertEqual($params->timezone, $day->timezone);
+      $this->assertTrue($day->ctime);
+      $this->assertTrue($day->utime);
+    }
 	}
 
 	/**
@@ -101,8 +104,8 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 		$day->save();
 
 		$this->_loginAndSetCookie($this->main_user);
-		$loaded_day = $this->get('current_day')->result;
-
+    
+		$this->get('current_day');
 		$this->assertResponse(404);
 	}
 

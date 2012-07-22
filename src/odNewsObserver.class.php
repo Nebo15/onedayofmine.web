@@ -38,13 +38,13 @@ class odNewsObserver {
         if($object instanceof Day) {
           $news->setText($this->getMessage(self::MSG_LIKE_DAY,    $username, $object->getTitle()));
         } elseif($object instanceof Moment) {
-          $news->setText($this->getMessage(self::MSG_LIKE_MOMENT, $username, $object->getDay()->getTitle()));
+          $news->setText($this->getMessage(self::MSG_LIKE_MOMENT, $username, $object->getDay()->getTitle())); // TODO moment like not implemented
         } else {
           throw new lmbException("Can't create news, uknown model passed. Day or Moment expected.");
         }
         break;
 
-      case self::ACTION_NEW_COMMENT:
+      case self::ACTION_NEW_COMMENT: // TODO not tested
         if($object instanceof DayComment) {
           $news->setText($this->getMessage(self::MSG_COMMENT_DAY,    $username, $object->getDay()->getTitle()));
         } elseif($object instanceof MomentComment) {
@@ -83,7 +83,7 @@ class odNewsObserver {
         $news->setMoment($object);
         break;
 
-      case self::ACTION_NEW_USER:
+      case self::ACTION_NEW_USER: // TODO not implemented
         // Get FB users
         // Find registered in our app FB users
         // Send them notification

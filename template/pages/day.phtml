@@ -1,0 +1,24 @@
+<? $this->title = $this->day->getTitle(); ?>
+{{wrap with="layout.phtml"}}
+  {{into slot="meta"}}
+    <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# {$#fb_app_namespace}: http://ogp.me/ns/fb/{$#fb_app_namespace}#">
+    <meta property="fb:app_id" content="{$#fb_app_id}" />
+    <meta property="og:type" content="{$#fb_app_namespace}:day" />
+    <meta property="og:url" content="{$#host_name}pages/{$#day.id}/day" />
+    <meta property="og:title" content="{$#day.title}" />
+  {{/into}}
+  {{into slot="content"}}
+    <h1>Day #{$this->day.id}</h1>
+    <ul>
+      <li>id: {$this->day.id}</li>
+      <li>user_id: {$this->day.user_id}</li>
+      <li>title: {$this->day.title}</li>
+      <li>description: {$this->day.description}</li>
+      <li>start_time: {$this->day.start_time}</li>
+      <li>likes_count: {$this->day.likes_count}</li>
+      <li>ctime: {$this->day.ctime}</li>
+      <li>utime: {$this->day.utime}</li>
+      <li>cip: {$this->day.cip}</li>
+    </ul>
+  {{/into}}
+{{/wrap}}
