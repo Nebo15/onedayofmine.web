@@ -5,6 +5,7 @@ lmb_require('src/model/DayTest.class.php');
 class DaysController extends BaseJsonController
 {
   protected $_object_class_name = 'User';
+  protected $check_auth = false;
 
   function doItem()
   {
@@ -40,6 +41,9 @@ class DaysController extends BaseJsonController
 
   function doCommentCreate()
   {
+    if(!$this->_isLoggedUser())
+      return $this->_answerUnauthorized();
+
     if(!$this->request->hasPost())
       return $this->_answerWithError('Not a POST request');
 
@@ -66,13 +70,16 @@ class DaysController extends BaseJsonController
     if(!$day = Day::findById($this->request->id))
       return $this->_answerWithError("Day not found by id");
 
-    $response = $this->_getUser()->getFacebookUser()->shareDay($day);
+//    $response = $this->_getUser()->getFacebookUser()->shareDay($day);
 
     return $this->_answerOk($response);
   }
 
   function doLike()
   {
+    if(!$this->_isLoggedUser())
+      return $this->_answerUnauthorized();
+
     if(!$this->request->hasPost())
       return $this->_answerWithError('Not a POST request');
 
@@ -88,6 +95,9 @@ class DaysController extends BaseJsonController
 
   function doUpdate()
   {
+    if(!$this->_isLoggedUser())
+      return $this->_answerUnauthorized();
+
   	if(!$this->request->hasPost())
   		return $this->_answerWithError('Not a POST request');
 
@@ -100,6 +110,9 @@ class DaysController extends BaseJsonController
 
   function doDelete()
   {
+    if(!$this->_isLoggedUser())
+      return $this->_answerUnauthorized();
+
   	if(!$this->request->hasPost())
   		return $this->_answerWithError('Not a POST request');
 
@@ -114,6 +127,9 @@ class DaysController extends BaseJsonController
 
   function doFollowingUsers()
   {
+    if(!$this->_isLoggedUser())
+      return $this->_answerUnauthorized();
+
   	$from = $this->request->getFiltered('from', FILTER_SANITIZE_NUMBER_INT);
   	$to = $this->request->getFiltered('to', FILTER_SANITIZE_NUMBER_INT);
   	$users_ids = lmbArrayHelper::getColumnValues('id', $this->_getUser()->getFollowing());
@@ -136,11 +152,17 @@ class DaysController extends BaseJsonController
 
   function doFavourites()
   {
+    if(!$this->_isLoggedUser())
+      return $this->_answerUnauthorized();
+
 		return $this->_answerOk($this->_getUser()->getFavouriteDays());
   }
 
   function doFavourite()
   {
+    if(!$this->_isLoggedUser())
+      return $this->_answerUnauthorized();
+
   	if(!$this->request->hasPost())
   		return $this->_answerWithError('Not a POST request');
 
@@ -156,6 +178,9 @@ class DaysController extends BaseJsonController
 
   function doUnfavourite()
   {
+    if(!$this->_isLoggedUser())
+      return $this->_answerUnauthorized();
+
   	if(!$this->request->hasPost())
   		return $this->_answerWithError('Not a POST request');
 
@@ -171,6 +196,9 @@ class DaysController extends BaseJsonController
 
   function doMy()
   {
+    if(!$this->_isLoggedUser())
+      return $this->_answerUnauthorized();
+
   	return $this->_answerOk($this->_getUser()->getDays());
   }
 }
