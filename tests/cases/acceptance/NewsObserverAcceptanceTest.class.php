@@ -1,5 +1,6 @@
 <?php
 lmb_require('tests/cases/odAcceptanceTestCase.class.php');
+lmb_require('src/odNewsObserver.class.php');
 
 
 class NewsObserverAcceptanceTest extends odAcceptanceTestCase
@@ -9,33 +10,34 @@ class NewsObserverAcceptanceTest extends odAcceptanceTestCase
     parent::setUp();
     odTestsTools::truncateTablesOf('News', 'Day', 'DayComment', 'Moment', 'MomentComment', 'User', 'UserFollowing');
     // Users should have fixed ids in each test
-    $this->additional_user->save();
     $this->main_user->save();
+    // Bar follow Foo
+    $this->additional_user->getFollowing()->add($this->main_user);
+    $this->additional_user->save();
     // Login since we use pure API calls
     $this->_loginAndSetCookie($this->main_user);
   }
 
   function testCreateDay()
   {
-    // Bar follow Foo
-    $this->additional_user->getFollowing()->add($this->main_user);
-
     $params = $this->generator->day($this->main_user)->exportForApi();
     $day = $this->post('current_day/start', $params)->result;
 
     if($this->assertResponse(200)) {
-      $news = $this->additional_user->getNews();
-      $this->assertEqual($news->count(), 1);
-      $this->assertEqual($this->main_user->getId(), $news->at(0)->getUser()->getId());
-      $this->assertEqual($day->id, $news->at(0)->day_id);
+      $this->_checkMessage($this->additional_user,
+                           $this->main_user,
+                           $this->additional_user,
+                           odNewsObserver::MSG_DAY_CREATED,
+                           array(
+                            $this->_getUsername($this->main_user),
+                            $params->title,
+                           ),
+                           $news_count = 1);
     }
   }
 
   function testDeleteDay()
   {
-    // Bar follow Foo
-    $this->additional_user->getFollowing()->add($this->main_user);
-
     // Create and enshure it was created
     $this->testCreateDay();
     $this->assertEqual($this->additional_user->getNews()->count(), 1);
@@ -49,11 +51,42 @@ class NewsObserverAcceptanceTest extends odAcceptanceTestCase
     }
   }
 
+  function testCreateDayComment()
+  {
+    $user = $this->generator->user();
+    $user->save();
+
+    $day = $this->generator->day($this->main_user);
+    $day->save();
+
+    $this->generator->dayComment($day, $user)->save();
+
+    $response = $this->post('days/'.$day->getId().'/comment_create', array(
+      'text' => $text = $this->generator->string(255)
+    ));
+
+    if($this->assertResponse(200))
+    {
+      // Followers dont spammed by comment messages
+      $this->assertEqual($this->additional_user->getNews()->count(), 0);
+      // But users, that took place in conversation are notified
+      $this->_checkMessage($user,
+                           $this->main_user,
+                           $user,
+                           odNewsObserver::MSG_DAY_COMMENT,
+                           array(
+                            $this->_getUsername($this->main_user),
+                            $day->getTitle(),
+                           ),
+                           $news_count = 1);
+    }
+  }
+
+  // NOTICE: not needed
+  function testDeleteDayComment(){}
+
   function testCreateMoment()
   {
-    // Bar follow Foo
-    $this->additional_user->getFollowing()->add($this->main_user);
-
     $day = $this->generator->day($this->main_user);
     $day->setIsEnded(0);
     $day->save();
@@ -66,18 +99,20 @@ class NewsObserverAcceptanceTest extends odAcceptanceTestCase
 
     if($this->assertResponse(200))
     {
-      $news = News::findNewForUser($this->additional_user);
-      $this->assertEqual($news->count(), 1);
-      $this->assertEqual($res->day_id, $news->at(0)->day_id);
-      $this->assertEqual($day->getMoments()->at(0)->getId(), $news->at(0)->moment_id);
+      $this->_checkMessage($this->additional_user,
+                           $this->main_user,
+                           $this->additional_user,
+                           odNewsObserver::MSG_MOMENT_CREATED,
+                           array(
+                            $this->_getUsername($this->main_user),
+                            $day->getTitle(),
+                           ),
+                           $news_count = 1);
     }
   }
 
   function testDeleteMoment()
   {
-    // Bar follow Foo
-    $this->additional_user->getFollowing()->add($this->main_user);
-
     // Create and enshure it was created
     $this->testCreateMoment();
     $this->assertEqual($this->additional_user->getNews()->count(), 1);
@@ -89,57 +124,49 @@ class NewsObserverAcceptanceTest extends odAcceptanceTestCase
     }
   }
 
-  // TODO
-  function estCreateDayComment()
+  function testCreateMomentComment()
   {
-    $day = $this->generator->day($this->main_user);
-    $day->save();
+    $user = $this->generator->user();
+    $user->save();
 
-    $response = $this->post('days/'.$day->getId().'/comment_create', array(
-      'text' => $text = $this->generator->string(255)
-    ));
-
-    if($this->assertResponse(200))
-    {
-      $this->assertEqual($day->getComments()->at(0)->getId(), $response->result->id);
-      $this->assertEqual($day->getId(), $response->result->day_id);
-      $this->assertEqual($text, $response->result->text);
-    }
-  }
-
-  // NOTICE: not needed
-  function testDeleteDayComment(){}
-
-  // TODO
-  function estCreateMomentComment()
-  {
     $day = $this->generator->day($this->main_user);
     $day->save();
 
     $moment = $this->generator->moment($day);
     $moment->save();
 
+    $this->generator->momentComment($moment, $user)->save();
+
     $res = $this->post('moments/'.$moment->getId().'/comment', array(
       'text' => $text = $this->generator->string(255)
     ))->result;
 
-    $this->assertResponse(200);
-    $this->assertEqual($moment->getComments()->at(0)->getId(), $res->id);
-    $this->assertEqual($moment->getId(), $res->moment_id);
-    $this->assertEqual($text, $res->text);
+    if($this->assertResponse(200))
+    {
+      // Followers dont spammed by comment messages
+      $this->assertEqual($this->additional_user->getNews()->count(), 0);
+      // But users, that took place in conversation are notified
+      $this->_checkMessage($user,
+                           $this->main_user,
+                           $user,
+                           odNewsObserver::MSG_MOMENT_COMMENT,
+                           array(
+                            $this->_getUsername($this->main_user),
+                            $day->getTitle(),
+                           ),
+                           $news_count = 1);
+    }
   }
 
   // NOTICE: not needed
   function testDeleteMomentComment(){}
 
-  // TODO
-  function estRespondYouInComments()
-  {
-
-  }
-
   function testFollow()
   {
+    // Remove default following
+    $this->additional_user->getFollowing()->remove($this->main_user);
+    $this->additional_user->save();
+
     // We need 3 users: Dum
     $user = $this->generator->user();
     $user->save();
@@ -151,7 +178,7 @@ class NewsObserverAcceptanceTest extends odAcceptanceTestCase
     $this->post('users/'.$this->main_user->getId().'/follow');
     if($this->assertResponse(200)) {
       // Foo recieve: Bar follows you
-      $this->_checkFollowingMessage($this->main_user, $this->additional_user, $this->main_user, odNewsObserver::MSG_FOLLOW_YOU);
+      $this->_checkFollowMessage($this->main_user, $this->additional_user, $this->main_user, odNewsObserver::MSG_FOLLOW_DIRECT);
     }
     // Login as Foo
     $this->_loginAndSetCookie($this->main_user);
@@ -160,49 +187,90 @@ class NewsObserverAcceptanceTest extends odAcceptanceTestCase
     $this->post('users/'.$user->getId().'/follow');
     if($this->assertResponse(200)) {
       // Bar recieve: Foo follows Dum
-      $this->_checkFollowingMessage($this->additional_user, $this->main_user, $user, odNewsObserver::MSG_FOLLOW);
+      $this->_checkFollowMessage($this->additional_user, $this->main_user, $user, odNewsObserver::MSG_FOLLOW);
 
       // Dum recieve: Foo follows you
-      $this->_checkFollowingMessage($user, $this->main_user, $user, odNewsObserver::MSG_FOLLOW_YOU);
+      $this->_checkFollowMessage($user, $this->main_user, $user, odNewsObserver::MSG_FOLLOW_DIRECT);
     }
 
     // Foo follows Bar
     $this->post('users/'.$this->additional_user->getId().'/follow');
     if($this->assertResponse(200)) {
       // Bar recieve 2nd message: Foo follows you
-      $this->_checkFollowingMessage($this->additional_user, $this->main_user, $this->additional_user, odNewsObserver::MSG_FOLLOW_YOU, 2);
+      $this->_checkFollowMessage($this->additional_user, $this->main_user, $this->additional_user, odNewsObserver::MSG_FOLLOW_DIRECT, 2);
 
       // Dum dont recieve any news messages since he dont follow anyone
       $this->assertEqual($user->getNews()->count(), 1);
     }
   }
 
-  function _checkFollowingMessage($recipient, $follower, $followed, $message, $news_count = 1)
+  // TODO
+  function testRegister()
   {
-    // Check following in DB
-    $this->assertTrue(UserFollowing::isFollowing($follower, $followed));
-    // Check news
+
+  }
+
+  function testLikeDay()
+  {
+    $day = $this->generator->day($this->additional_user);
+    $day->save();
+
+    $this->_loginAndSetCookie($this->main_user);
+    $response = $this->post('days/'.$day->getId().'/like');
+    if($this->assertResponse(200))
+    {
+      $this->_checkMessage($this->additional_user,
+                           $this->main_user,
+                           $this->additional_user,
+                           odNewsObserver::MSG_DAY_LIKED,
+                           array(
+                            $this->_getUsername($this->main_user),
+                            $day->getTitle(),
+                           ),
+                           $news_count = 1);
+    }
+  }
+
+  // TODO not implemented
+  function estLikeMoment()
+  {
+    // ...
+    if($this->assertResponse(200))
+    {
+      $this->_checkMessage($this->additional_user,
+                           $this->main_user,
+                           $this->additional_user,
+                           odNewsObserver::MSG_MOMENT_LIKED,
+                           array(
+                            $this->_getUsername($this->main_user),
+                            $day->getTitle(),
+                           ),
+                           $news_count = 1);
+    }
+  }
+
+  protected function _checkMessage($recipient, $follower, $followed, $message, $params, $news_count = 1)
+  {
+    // Get news
     $news = $recipient->getNews();
     // Enshure we created news
     $this->assertEqual($news->count(), $news_count);
     // Enshure that sender ID was set correctly
     $this->assertEqual($news->at(0)->getUser()->getId(), $follower->getId());
     // Check message
-    $this->assertEqual($news->at(0)->text, sprintf($message, "{$follower->first_name} {$follower->last_name}", "{$followed->first_name} {$followed->last_name}"));
+    $this->assertEqual($news->at(0)->text, odNewsObserver::getMessage($message, $params));
   }
 
-  // TODO
-  function testRegister() {
-
+  protected function _checkFollowMessage($recipient, $follower, $followed, $message, $news_count = 1)
+  {
+    // Check following in DB
+    $this->assertTrue(UserFollowing::isFollowing($follower, $followed));
+    // Check message
+    $params = array($this->_getUsername($follower), $this->_getUsername($followed));
+    $this->_checkMessage($recipient, $follower, $followed, $message, $params, $news_count);
   }
 
-  // TODO
-  function testLikeDay() {
-
-  }
-
-  //
-  function testLikeMoment() {
-
+  protected function _getUsername(User $user) {
+    return "{$user->first_name} {$user->last_name}";
   }
 }
