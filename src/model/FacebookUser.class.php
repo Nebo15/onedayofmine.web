@@ -71,7 +71,7 @@ class FacebookUser
       $info = $this->_mapFbInfo($raw_info);
       $user = User::findByFbUid($info['fb_uid']);
       if(!$user)
-        throw new lmbException("User not found by fb_uid", array('fb_uid' => $info['fb_uid']));
+        continue;
       $user->setUserInfo($info);
       $results[] = $user;
     }
