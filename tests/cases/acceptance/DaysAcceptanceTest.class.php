@@ -166,8 +166,20 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     }
   }
 
-  //TODO
-  function testLike() {}
+  /**
+   * @api
+   * TODO
+   */
+  function testLike() {
+    $day = $this->generator->day($this->additional_user);
+    $day->save();
+
+    $this->_loginAndSetCookie($this->main_user);
+    $response = $this->post('days/'.$day->getId().'/like');
+
+    $this->assertResponse(200);
+    $this->assertEqual(Day::findOne()->getLikesCount(), 1);
+  }
 
   //TODO
   function testSearch() {}
