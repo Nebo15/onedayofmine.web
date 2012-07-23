@@ -1,16 +1,12 @@
 <?php
-lmb_require('src/model/BaseModel.class.php');
+lmb_require('src/model/Comment.class.php');
 
 /**
  * @api
  */
-class MomentComment extends BaseModel
+class MomentComment extends Comment
 {
   protected $_db_table_name = 'moment_comment';
-
-  protected $_default_sort_params = array('id'=>'asc');
-
-  protected $_lazy_attributes = array('text');
 
   protected function _defineRelations()
   {
