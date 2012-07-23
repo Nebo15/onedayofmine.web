@@ -90,14 +90,18 @@ class DaysController extends BaseJsonController
     if(!$day = Day::findById($this->request->id))
       return $this->_answerWithError("Day not found by id");
 
-    $response = $this->_getUser()
-                  ->getFacebookUser()
-                  ->likeDay($day);
+    // TODO FIXME
+    // $response = $this->_getUser()
+    //               ->getFacebookUser()
+    //               ->likeDay($day);
 
     // Notify friends about day like
     $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_LIKE, $day);
 
-    return $this->_answerOk($response);
+    $day->setLikesCount($day->getLikesCount() + 1);
+    $day->save();
+
+    return $this->_answerOk('TODO'); //$response
   }
 
   function doUpdate()
