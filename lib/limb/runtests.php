@@ -149,8 +149,8 @@ foreach($tests as $test)
 }
 
 if(!$res)
-  out("=========== TESTS HAD ERRORS(see above) ===========\n");
+  out("\e[41m=========== TESTS HAD ERRORS(see above) ===========\e[0m\n");
 else
-  out("=========== ALL TESTS PASSED ===========\n");
+  out("\e[42m=========== ALL TESTS PASSED =========== \e[0m\n");
 
 exit($res ? 0 : 1);
