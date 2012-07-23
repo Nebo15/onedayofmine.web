@@ -11,7 +11,7 @@ class PagesController extends lmbController
 
     $this->day = Day::findById($id);
     if(!$this->day || $this->day->getIsDeleted())
-      return $this->_answerNotFound();
+      return $this->forward('pages', 'not_found');
   }
 
   function doMoment()
@@ -20,7 +20,12 @@ class PagesController extends lmbController
 
     $this->moment = Moment::findById($id);
     if(!$this->moment || $this->moment->getDay()->getIsDeleted())
-      return $this->_answerNotFound();
+      return $this->forward('pages', 'not_found');
+  }
+
+  function doNotFound()
+  {
+    $this->response->setCode(404);
   }
 
 }
