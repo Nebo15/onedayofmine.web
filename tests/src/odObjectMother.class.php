@@ -67,9 +67,13 @@ class odObjectMother
     return $moment;
   }
 
-  function momentWithImage(Day $day = null)
+  function momentSavedWithImage(Day $day = null)
   {
-
+    $moment = $this->moment($day);
+    $moment->save();
+    $moment->attachImage('foo.gif', file_get_contents('http://placehold.it/300x300'));
+    $moment->save();
+    return $moment;
   }
 
   /**

@@ -78,11 +78,15 @@ class FacebookUser
     return $results;
   }
 
-  function beginDay($day_url)
+  /**
+   * @param $day_url
+   * @return string fb_id
+   */
+  function shareDayBegin($day_url)
   {
     return $this->getFacebook()->api("/me/one-day-of-mine:begin", "post", array(
       'day' => $day_url
-    ));
+    ))['id'];
   }
 
   function shareDay(Day $day, $day_url)
@@ -99,41 +103,29 @@ class FacebookUser
     ));
   }
 
-  function likeDay($day_url)
+  function shareDayLike($day_url)
   {
     return $this->getFacebook()->api("/me/og.likes", "post", array(
       'object' => $day_url
     ));
   }
 
-  function addMoment(Moment $moment, $day_url)
+  function shareMomentAdd($moment_url, $day_url)
   {
     return $this->getFacebook()->api("/me/one-day-of-mine:add_moment", "post", array(
-      'day' => $day_url,
-      'image' => lmbToolkit::instance()->getSiteUrl($moment->getImageUrl()),
-      'message' => $moment->getDescription()
-    ));
+      'moment' => $moment_url,
+      'day' => $day_url
+    ))['id'];
   }
 
-  function shareMoment(Moment $moment, $moment_url)
-  {
-    $image_url = lmbToolkit::instance()->getSiteUrl($moment->getImageUrl());
-    return $this->getFacebook()->api("/me/feed", "post", array(
-      'name' => $moment->getDay()->getTitle(),
-      'picture' => $image_url,
-      'link' => $moment_url,
-      'description' => $moment->getDescription(),
-    ));
-  }
-
-  function likeMoment($moment_url)
+  function shareMomentLike($moment_url)
   {
     return $this->getFacebook()->api("/me/og.likes", "post", array(
       'object' => $moment_url
     ));
   }
 
-  function endDay($day_url)
+  function shareDayEnd($day_url)
   {
     return $this->getFacebook()->api("/me/one-day-of-mine:end", "post", array(
       'day' => $day_url

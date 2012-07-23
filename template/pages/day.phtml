@@ -5,7 +5,7 @@
     <meta property="og:url" content="{$#host_name}pages/{$#day.id}/day" />
     <meta property="og:title" content="{$#day.title}" />
     <meta property="one-day-of-mine:location" content="{$#day.location}" />
-    <meta property="one-day-of-mine:type" content="{$#day.type}" />
+    <meta property="one-day-of-mine:type" content="some type" />
   {{/into}}
   {{into slot="content"}}
     <h1>Day #{$this->day.id}</h1>

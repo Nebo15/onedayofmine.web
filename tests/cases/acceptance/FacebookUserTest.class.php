@@ -12,11 +12,10 @@ class FacebookUserTest extends odUnitTestCase
     $day->setTitle('testBeginDay');
     $day->save();
 
-    $path = '/pages/'.$day->getId().'/day';
+    $day_url = $this->_copyDayPageToProxy($day);
 
-    $this->createProxyClient()->copyObjectPageToProxy($path);
-
-    $this->main_user->getFacebookUser()->beginDay($this->proxy_host.$path);
+    $fb_id = $this->main_user->getFacebookUser()->shareDayBegin($day_url);
+    $this->assertTrue($fb_id);
   }
 
   function testLikeDay()
@@ -25,12 +24,10 @@ class FacebookUserTest extends odUnitTestCase
     $day->setTitle('testLikeDay');
     $day->save();
 
-    $path = '/pages/'.$day->getId().'/day';
+    $day_url = $this->_copyDayPageToProxy($day);
 
-    $this->createProxyClient()->copyObjectPageToProxy($path);
-
-    $this->main_user->getFacebookUser()->beginDay($this->proxy_host.$path);
-    $this->additional_user->getFacebookUser()->likeDay($this->proxy_host.$path);
+    $this->main_user->getFacebookUser()->shareDayBegin($day_url);
+    $this->additional_user->getFacebookUser()->shareDayLike($day_url);
   }
 
   function testAddMoment()
@@ -39,17 +36,37 @@ class FacebookUserTest extends odUnitTestCase
     $day->setTitle('testAddMoment - Day');
     $day->save();
 
+    $day_url = $this->_copyDayPageToProxy($day);
+    $fb_id = $this->main_user->getFacebookUser()->shareDayBegin($day_url);
+    $day->setFbId($fb_id);
+    $day->save();
+
     $moment = $this->generator->moment($day);
-    $moment->setDescription('testAddMoment');
     $moment->save();
+    $moment_url = $this->_copyMomentPageToProxy($moment);
 
-    $day_path = '/pages/'.$day->getId().'/day';
-    $this->createProxyClient()->copyObjectPageToProxy($day_path);
+    $fb_id = $this->main_user->getFacebookUser()->shareMomentAdd($moment_url, $day_url);
+    $this->assertTrue($fb_id);
+  }
 
-    $this->main_user->getFacebookUser()
-      ->beginDay($this->proxy_host.$day_path);
-    $this->main_user->getFacebookUser()
-      ->addMoment($moment, $this->proxy_host.$day_path);
+  function testShareMomentLike()
+  {
+    $day = $this->generator->day();
+    $day->setTitle('testShareMomentLike - Day');
+    $day->save();
+    $day_url = $this->_copyDayPageToProxy($day);
+    $fb_id = $this->main_user->getFacebookUser()->shareDayBegin($day_url);
+    $day->setFbId($fb_id);
+    $day->save();
+
+    $moment = $this->generator->moment($day);
+    $moment->save();
+    $moment_url = $this->_copyMomentPageToProxy($moment);
+
+    $fb_id = $this->main_user->getFacebookUser()->shareMomentAdd($moment_url, $day_url);
+    $this->assertTrue($fb_id);
+
+    $this->main_user->getFacebookUser()->shareMomentLike($moment_url);
   }
 
 
@@ -58,25 +75,40 @@ class FacebookUserTest extends odUnitTestCase
     $day = $this->generator->day();
     $day->setTitle('testEndDay - Day');
     $day->save();
+    $day_url = $this->_copyDayPageToProxy($day);
 
-    $moment = $this->generator->moment($day);
-    $moment->setDescription('testEndDay');
-    $moment->save();
-
-    $day_path = '/pages/'.$day->getId().'/day';
-    $this->createProxyClient()->copyObjectPageToProxy($day_path);
-
-    $this->main_user->getFacebookUser()
-      ->beginDay($this->proxy_host.$day_path);
-
-    $this->main_user->getFacebookUser()
-      ->endDay($this->proxy_host.$day_path);
+    $this->main_user->getFacebookUser()->shareDayBegin($day_url);
+    $this->main_user->getFacebookUser()->shareDayEnd($day_url);
   }
 
+  function shareDay()
+  {
+    $day = $this->generator->day();
+    $day->setTitle('shareDay - Day');
+    $day->save();
+
+    $day_url = $this->_copyDayPageToProxy($day);
+
+    $this->main_user->getFacebookUser()->shareDay($day, $day_url);
+  }
+
+  protected function _copyDayPageToProxy(Day $day)
+  {
+    $path = '/pages/'.$day->getId().'/day';
+    $this->_createProxyClient()->copyObjectPageToProxy($path);
+    return $this->proxy_host.$path;
+  }
+
+  protected function _copyMomentPageToProxy(Moment $moment)
+  {
+    $path = '/pages/'.$moment->getId().'/moment';
+    $this->_createProxyClient()->copyObjectPageToProxy($path);
+    return $this->proxy_host.$path;
+  }
   /**
    * @return Client
    */
-  protected function createProxyClient()
+  protected function _createProxyClient()
   {
     return new Client($this->proxy_host.'/proxy.php', lmb_env_get('HOST_NAME'));
   }
