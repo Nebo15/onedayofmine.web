@@ -20,6 +20,16 @@ Data flow diagramm:
 
 ![Sequence diagramm](http://www.websequencediagrams.com/cgi-bin/cdraw?lz=dGl0bGUgQXV0aG9yaXphdGlvbiBmbG93CgpBcHAtPkZiOiBBY3F1aXJlIGFjY2VzcyB0b2tlbiAoQVQpCkZiLT5BcHA6IEFUACUKRXhjaGFuZ2UgQVQgZm9yIExvbmctVGVybSBBVAAoCgAJDQBmBQBEBVNldAAkDSBhcwAXClBJOiAvYXV0aC9sb2dpbiArAHMFUEkANAhFU1NJRApub3RlIG92ZXIgQXBwLAAwBVdhaXQAgQcFdXNlci1hYwCBYQV0aGF0IHNob3VsZCBiZSBzZW50IHRvIHNlcnZlcgBnC0FQSSBjYWxsAF8LSFRUUCAyMDAgKyBKU09OIGRhdGE&s=omegapple)
 
+## app:// scheme ##
+To send links we are using additional app URI scheme. Exmples of URIs:
+    app://users/:id
+    app://days/:id
+    app://moments/:id
+
+All commens can be accessed via URI fragment, for example
+    app://days/:id#:comment_id
+will open day with id=:id and scroll page to comment with id=:comment_id
+
 ## Known bugs ##
 ### API documentation bugs ###
 * In-URI params are shown as deprecated
