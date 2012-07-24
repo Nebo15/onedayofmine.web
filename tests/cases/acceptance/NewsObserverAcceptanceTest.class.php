@@ -8,7 +8,7 @@ class NewsObserverAcceptanceTest extends odAcceptanceTestCase
   function setUp()
   {
     parent::setUp();
-    odTestsTools::truncateTablesOf('News', 'Day', 'DayComment', 'Moment', 'MomentComment', 'User', 'UserFollowing');
+    odTestsTools::truncateTablesOf('News', 'Day', 'DayComment', 'Moment', 'MomentComment', 'UserFollowing', 'User');
     // Users should have fixed ids in each test
     $this->main_user->save();
     // Bar follow Foo
@@ -26,13 +26,11 @@ class NewsObserverAcceptanceTest extends odAcceptanceTestCase
     if($this->assertResponse(200)) {
       $this->_checkMessage($this->additional_user,
                            $this->main_user,
-                           $this->additional_user,
                            odNewsObserver::MSG_DAY_CREATED,
                            array(
                             $this->_getUsername($this->main_user),
                             $params->title,
-                           ),
-                           $news_count = 1);
+                           ));
     }
   }
 
@@ -72,18 +70,16 @@ class NewsObserverAcceptanceTest extends odAcceptanceTestCase
       // But users, that took place in conversation are notified
       $this->_checkMessage($user,
                            $this->main_user,
-                           $user,
                            odNewsObserver::MSG_DAY_COMMENT,
                            array(
                             $this->_getUsername($this->main_user),
                             $day->getTitle(),
-                           ),
-                           $news_count = 1);
+                           ));
     }
   }
 
-  // NOTICE: not needed
-  function testDeleteDayComment(){}
+  // NOTICE not needed
+  function _testDeleteDayComment(){}
 
   function testCreateMoment()
   {
@@ -101,13 +97,11 @@ class NewsObserverAcceptanceTest extends odAcceptanceTestCase
     {
       $this->_checkMessage($this->additional_user,
                            $this->main_user,
-                           $this->additional_user,
                            odNewsObserver::MSG_MOMENT_CREATED,
                            array(
                             $this->_getUsername($this->main_user),
                             $day->getTitle(),
-                           ),
-                           $news_count = 1);
+                           ));
     }
   }
 
@@ -148,18 +142,16 @@ class NewsObserverAcceptanceTest extends odAcceptanceTestCase
       // But users, that took place in conversation are notified
       $this->_checkMessage($user,
                            $this->main_user,
-                           $user,
                            odNewsObserver::MSG_MOMENT_COMMENT,
                            array(
                             $this->_getUsername($this->main_user),
                             $day->getTitle(),
-                           ),
-                           $news_count = 1);
+                           ));
     }
   }
 
-  // NOTICE: not needed
-  function testDeleteMomentComment(){}
+  // NOTICE not needed
+  function _testDeleteMomentComment(){}
 
   function testFollow()
   {
@@ -204,10 +196,29 @@ class NewsObserverAcceptanceTest extends odAcceptanceTestCase
     }
   }
 
-  // TODO
   function testRegister()
   {
+    // re-register users
+    lmbActiveRecord :: delete('User');
+    $users = User::find();
+    $this->assertEqual(0, count($users));
 
+    $this->_loginAndSetCookie($this->additional_user);
+    $this->_loginAndSetCookie($this->main_user);
+
+    $users = User::find();
+    $this->assertEqual(2, count($users));
+
+    $this->additional_user = $users->at(0);
+    $this->main_user = $users->at(1);
+
+    $this->_checkMessage($this->additional_user,
+                         $this->main_user,
+                         odNewsObserver::MSG_FBFRIEND_REGISTERED,
+                         array(
+                          $this->_getUsername((object) FacebookUser::getUserInfo($this->main_user->getFbAccessToken())),
+                          $this->_getUsername($this->main_user),
+                         ));
   }
 
   function testLikeDay()
@@ -221,44 +232,41 @@ class NewsObserverAcceptanceTest extends odAcceptanceTestCase
     {
       $this->_checkMessage($this->additional_user,
                            $this->main_user,
-                           $this->additional_user,
                            odNewsObserver::MSG_DAY_LIKED,
                            array(
                             $this->_getUsername($this->main_user),
                             $day->getTitle(),
-                           ),
-                           $news_count = 1);
+                           ));
     }
   }
 
-  // TODO not implemented
-  function estLikeMoment()
+  // NOTICE not implemented/not planned
+  function _testLikeMoment()
   {
     // ...
     if($this->assertResponse(200))
     {
       $this->_checkMessage($this->additional_user,
                            $this->main_user,
-                           $this->additional_user,
                            odNewsObserver::MSG_MOMENT_LIKED,
                            array(
                             $this->_getUsername($this->main_user),
                             $day->getTitle(),
-                           ),
-                           $news_count = 1);
+                           ));
     }
   }
 
-  protected function _checkMessage($recipient, $follower, $followed, $message, $params, $news_count = 1)
+  protected function _checkMessage($recipient, $creator, $message, $params, $news_count = 1, $news = null)
   {
     // Get news
-    $news = $recipient->getNews();
+    $news = $news ?: $recipient->getNews();
     // Enshure we created news
-    $this->assertEqual($news->count(), $news_count);
-    // Enshure that sender ID was set correctly
-    $this->assertEqual($news->at(0)->getUser()->getId(), $follower->getId());
-    // Check message
-    $this->assertEqual($news->at(0)->text, odNewsObserver::getMessage($message, $params));
+    if($this->assertEqual($news->count(), $news_count)) {
+      // Enshure that sender ID was set correctly
+      $this->assertEqual($news->at(0)->getUser()->getId(), $creator->getId());
+      // Check message
+      $this->assertEqual($news->at(0)->text, odNewsObserver::getMessage($message, $params));
+    }
   }
 
   protected function _checkFollowMessage($recipient, $follower, $followed, $message, $news_count = 1)
@@ -267,10 +275,10 @@ class NewsObserverAcceptanceTest extends odAcceptanceTestCase
     $this->assertTrue(UserFollowing::isFollowing($follower, $followed));
     // Check message
     $params = array($this->_getUsername($follower), $this->_getUsername($followed));
-    $this->_checkMessage($recipient, $follower, $followed, $message, $params, $news_count);
+    $this->_checkMessage($recipient, $follower, $message, $params, $news_count);
   }
 
-  protected function _getUsername(User $user) {
+  protected function _getUsername($user) {
     return "{$user->first_name} {$user->last_name}";
   }
 }

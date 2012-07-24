@@ -1,4 +1,6 @@
 <?php
+lmb_require('src/model/*.class.php');
+
 /**
  * News creator.
  */
@@ -58,7 +60,6 @@ class odNewsObserver {
   {
     switch ($action) {
       case self::ACTION_NEW_LIKE:
-        // TODO not tested
         $this->onLike($object);
         break;
 
@@ -79,7 +80,6 @@ class odNewsObserver {
         break;
 
       case self::ACTION_NEW_USER:
-        // TODO not implemented
         $this->onUser($object);
         break;
 
@@ -191,10 +191,12 @@ class odNewsObserver {
    * @param User $user
    */
   protected function onUser(User $user) {
-    return; // FIXME high
-    $news = $this->createNews();
+    $news = $this->createNews($user);
+    $this->applyText($news, self::MSG_FBFRIEND_REGISTERED, array(
+                                                            $this->getUsername((object) FacebookUser::getUserInfo($user->getFbAccessToken())),
+                                                            $this->getUsername($user)
+                                                           ));
     foreach ($user->getFacebookUser()->getUserFriendsInApplication() as $friend) {
-      $this->applyText($news, self::MSG_FBFRIEND_REGISTERED, array($this->getUsername($friend), $this->getUsername($user)));
       $this->sendToRecipient($news, $friend);
     }
   }
@@ -230,9 +232,10 @@ class odNewsObserver {
   /**
    * Returns username of $user. If no $user specified, then current logged-in user is used.
    *
+   * @param User|stdClass $user
    * @return string
    */
-  public function getUsername(User $user = null) {
+  public function getUsername($user = null) {
     if(is_null($user))
       $user = $this->user;
 
@@ -272,6 +275,8 @@ class odNewsObserver {
    */
   protected function sendToRecipient(News $news, User $recipient) {
     $news = clone $news;
+    if($recipient->getId() == $this->user->getId())
+      throw new lmbException("User can't send message to hemself.");
     $news->setRecipient($recipient);
     $news->save();
   }
@@ -282,9 +287,9 @@ class odNewsObserver {
   /**
    * @return News
    */
-  protected function createNews() {
+  protected function createNews(User $user = null) {
     $news = new News();
-    $news->setUser($this->user);
+    $news->setUser($user ?: $this->user);
     return $news;
   }
 }
