@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Obtain the home_timeline RSS feed using OAuth
+ * Tweets a message from the user whose user token and secret you use.
  *
  * Although this example uses your user token/secret, you can use
  * the user token/secret of any user who has authorised your application.
@@ -29,13 +29,14 @@ $tmhOAuth = new tmhOAuth(array(
   'user_secret'     => 'A_USER_SECRET',
 ));
 
-$code = $tmhOAuth->request('GET', $tmhOAuth->url('1/statuses/home_timeline', 'rss'));
+$code = $tmhOAuth->request('POST', $tmhOAuth->url('1/statuses/update'), array(
+  'status' => 'My Twitter Message'
+));
 
 if ($code == 200) {
-  header('Content-Type: application/rss+xml; charset=utf-8');
-  echo $tmhOAuth->response['response'];
+  tmhUtilities::pr(json_decode($tmhOAuth->response['response']));
 } else {
-  tmhUtilities::pr(htmlentities($tmhOAuth->response['response']));
+  tmhUtilities::pr($tmhOAuth->response['response']);
 }
 
 ?>
