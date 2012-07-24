@@ -33,7 +33,7 @@ abstract class odAcceptanceTestCase extends WebTestCase
     list($this->main_user, $this->additional_user) = $this->toolkit->getTestsUsers($quiet = false);
   }
 
-  function get($url, $params = array())
+  function get($url, $params = array(), $doc = true)
   {
     $raw_response = parent::get(lmb_env_get('HOST_NAME') . $url, $params);
     $result = $this->_decodeResponse($raw_response);
@@ -45,11 +45,12 @@ abstract class odAcceptanceTestCase extends WebTestCase
     )
 
     $this->fail('Wrong response structure:'.PHP_EOL.$raw_response);
-    $this->_addRecordsToWriters($url, $params, 'GET', $result->result);
+    if($doc)
+      $this->_addRecordsToWriters($url, $params, 'GET', $result->result);
     return $result;
   }
 
-  function post($url, $params = array(), $content_type = false)
+  function post($url, $params = array(), $content_type = false, $doc = true)
   {
     if(is_object($params))
       $params = (array) $params;
@@ -63,7 +64,8 @@ abstract class odAcceptanceTestCase extends WebTestCase
     )
 
     $this->fail('Wrong response structure:'.PHP_EOL.$raw_response);
-    $this->_addRecordsToWriters($url, $params, 'POST', $result->result);
+    if($doc)
+      $this->_addRecordsToWriters($url, $params, 'POST', $result->result);
     return $result;
   }
 

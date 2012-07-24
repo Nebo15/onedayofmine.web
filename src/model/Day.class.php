@@ -38,7 +38,7 @@ class Day extends BaseModel
   {
     $export = new stdClass();
     $export->id = $this->getId();
-    $export->user_id = $this->getUserId();
+    $export->user_id = $this->getUser()->getId();
     $export->user_name = $this->getUser()->getLastName();
     $export->title = $this->getTitle();
     $export->description = $this->getDescription();
@@ -48,7 +48,7 @@ class Day extends BaseModel
     $export->likes_count = $this->getLikesCount() ?: 0;
     $export->ctime = $this->getCreateTime();
     $export->utime = $this->getUpdateTime();
-    $export->is_ended = $this->getIsEnded();
+    $export->is_ended = $this->getIsEnded() ?: 0;
 
     $comments = $this->getComments();
     $export->comments_count = $comments->count();

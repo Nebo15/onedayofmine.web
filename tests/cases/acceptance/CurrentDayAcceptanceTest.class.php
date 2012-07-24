@@ -39,7 +39,7 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 	 * @api result int timezone UTC time zone
 	 * @api result string occupation
 	 * @api result string type One of pre-defined types: {working, day-off, holiday, trip, special_event}
-	 * @api result int|null likes_count
+	 * @api result int likes_count
 	 * @api result int ctime Creation time, unix timestamp
 	 * @api result int utime Last update time, unix timestamp
 	 * @api result boolean is_ended Always FALSE for new days
@@ -73,7 +73,7 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 	 * @api result string description
 	 * @api result int timezone UTC time zone offset
 	 * @api result string type One of pre-defined types: {working, day-off, holiday, trip, special_event}
-	 * @api result int|null likes_count
+	 * @api result int likes_count
 	 * @api result int ctime Creation time, unix timestamp
 	 * @api result int utime Last update time, unix timestamp
 	 * @api result boolean is_ended TRUE if day is ended, else - FALSE
@@ -117,7 +117,7 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 	 * @api result int day_id ID day that moment belongs to
 	 * @api result string description Moment description
 	 * @api result string img_url URL to file image
-	 * @api result int|null likes_count
+	 * @api result int likes_count
 	 * @api result int ctime Moment creation time, unix timestamp
 	 */
 	function testCreateMoment()
@@ -157,7 +157,7 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
    * @api result int timezone UTC time zone offset
    * @api result string occupation
    * @api result string type One of pre-defined types: {working, day-off, holiday, trip, special_event}
-   * @api result int|null likes_count
+   * @api result int likes_count
    * @api result int ctime Creation time, unix timestamp
    * @api result int utime Last update time, unix timestamp
    * @api result boolean is_ended TRUE if day is ended, else - FALSE
