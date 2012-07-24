@@ -16,8 +16,10 @@ class AuthController extends BaseJsonController
     if(!$this->toolkit->getFacebook($fb_access_token)->validateAccessToken($this->error_list))
       return $this->_answerWithError($this->error_list, null, 403);
 
+    $new_user = false;
     if(!$user = User::findByFbAccessToken($fb_access_token)) {
       $user = $this->_register($fb_access_token);
+      $new_user = true;
     }
 
     $this->toolkit->setUser($user);
@@ -25,6 +27,9 @@ class AuthController extends BaseJsonController
     $answer = new stdClass();
     $answer->sessid = session_id();
     $answer->user = $user->exportForApi();
+
+    if($new_user)
+      $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_USER, $user);
 
     return $this->_answerOk($answer);
   }
@@ -37,7 +42,7 @@ class AuthController extends BaseJsonController
     $user->save();
 
     // Notify friends that they'r friend registered
-    $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_USER, $user);
+    //$this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_USER, $user);
 
     return $user;
   }
