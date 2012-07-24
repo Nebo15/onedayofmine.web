@@ -7,6 +7,8 @@ lmb_require('src/model/BaseModel.class.php');
  * @method void setFbUid(string $fb_user_id)
  * @method string getFbAccessToken()
  * @method void setFbAccessToken(string $fb_access_token)
+ * @method string getTwitterUid()
+ * @method void
  */
 class User extends BaseModel
 {
@@ -89,10 +91,16 @@ class User extends BaseModel
   function exportForApi()
   {
     $result = $this->export();
-    // TODO remove twitter credentials
+    unset($result['twitter_access_token']);
+    unset($result['twitter_access_token_secret']);
     unset($result['fb_access_token']);
     unset($result['cip']);
     unset($result['user_settings_id']);
+    unset($result['ctime']);
+    unset($result['utime']);
+    // Additional export removals
+    unset($result['fb_profile_url']);
+    unset($result['fb_profile_utime']);
     ksort($result);
     return (object) $result;
   }

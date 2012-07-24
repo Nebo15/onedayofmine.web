@@ -9,6 +9,9 @@ class MomentCommentsAcceptanceTest extends odAcceptanceTestCase
 		odTestsTools::truncateTablesOf('Day', 'Moment', 'MomentComment');
 	}
 
+	/**
+	 * @api
+	 */
 	function testUpdate()
 	{
 		$this->main_user->save();
@@ -21,7 +24,7 @@ class MomentCommentsAcceptanceTest extends odAcceptanceTestCase
 		$this->assertResponse(200);
 
 		$loaded_comment = MomentComment::findById($comment->getId());
-		$this->assertEqual($new_comment_text, $loaded_comment->getText());
+		$this->assertEqual($new_comment_text, $loaded_comment->text);
 	}
 
 	function testUpdate_WrongUser()
@@ -36,6 +39,9 @@ class MomentCommentsAcceptanceTest extends odAcceptanceTestCase
 		$this->assertResponse(404);
 	}
 
+	/**
+	 * @api
+	 */
 	function testDelete()
 	{
 		$this->main_user->save();

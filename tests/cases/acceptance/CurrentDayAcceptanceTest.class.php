@@ -72,7 +72,6 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 	 * @api result string title
 	 * @api result string description
 	 * @api result int timezone UTC time zone offset
-	 * @api result string occupation
 	 * @api result string type One of pre-defined types: {working, day-off, holiday, trip, special_event}
 	 * @api result int|null likes_count
 	 * @api result int ctime Creation time, unix timestamp
@@ -104,7 +103,7 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 		$day->save();
 
 		$this->_loginAndSetCookie($this->main_user);
-    
+
 		$this->get('current_day');
 		$this->assertResponse(404);
 	}
@@ -151,17 +150,17 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
    * @api input param int timezone
    * @api input param string location
    * @api input param string type
-   * @api result result int id Day ID
-   * @api result result int user_id
-   * @api result result string title
-   * @api result result string description
-   * @api result result int timezone UTC time zone offset
-   * @api result result string occupation
-   * @api result result string type One of pre-defined types: {working, day-off, holiday, trip, special_event}
-   * @api result result int|null likes_count
-   * @api result result int ctime Creation time, unix timestamp
-   * @api result result int utime Last update time, unix timestamp
-   * @api result result boolean is_ended TRUE if day is ended, else - FALSE
+   * @api result int id Day ID
+   * @api result int user_id
+   * @api result string title
+   * @api result string description
+   * @api result int timezone UTC time zone offset
+   * @api result string occupation
+   * @api result string type One of pre-defined types: {working, day-off, holiday, trip, special_event}
+   * @api result int|null likes_count
+   * @api result int ctime Creation time, unix timestamp
+   * @api result int utime Last update time, unix timestamp
+   * @api result boolean is_ended TRUE if day is ended, else - FALSE
    */
   function testUpdate()
   {

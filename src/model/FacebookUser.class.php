@@ -72,7 +72,7 @@ class FacebookUser
       $user = User::findByFbUid($info['fb_uid']);
       if(!$user)
         continue;
-      $user->setUserInfo($info);
+      $user->setUserInfo($info); // TODO dont apply fb data to existing user
       $results[] = $user;
     }
     return $results;

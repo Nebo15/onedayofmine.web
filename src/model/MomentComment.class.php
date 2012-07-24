@@ -24,4 +24,11 @@ class MomentComment extends Comment
     $validator->addRequiredRule('text');
     return $validator;
   }
+
+  function exportForApi()
+  {
+    $export = parent::exportForApi();
+    $export->moment_id = $this->getMoment()->getId();
+    return $export;
+  }
 }

@@ -33,13 +33,9 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
       $this->assertTrue($res->user);
       $this->assertTrue(is_object($res->user));
       $this->assertTrue($res->user->id);
-      $this->assertTrue($res->user->ctime);
-      $this->assertTrue($res->user->utime);
       $this->assertTrue($res->user->fb_uid);
-      $this->assertTrue($res->user->fb_profile_utime);
       $this->assertTrue($res->user->first_name);
       $this->assertTrue($res->user->last_name);
-      $this->assertTrue($res->user->fb_profile_url);
       $this->assertEqual($this->main_user->timezone, $res->user->timezone);
       $this->assertTrue($res->user->sex);
       $this->assertTrue($res->user->fb_pic_small);
@@ -99,6 +95,9 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
     $this->assertEqual('Invalid OAuth access token.', $errors[0]);
   }
 
+  /**
+   * @api
+   */
   function testLogout()
   {
     $this->post('auth/logout/');

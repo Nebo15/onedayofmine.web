@@ -21,13 +21,13 @@ class MyAcceptanceTest extends odAcceptanceTestCase
 		if($this->assertResponse(200))
 		{
 			$this->assertEqual($this->main_user->id, $profile->id);
-			$this->assertEqual($this->main_user->ctime, $profile->ctime);
-			$this->assertEqual($this->main_user->utime, $profile->utime);
+			// $this->assertEqual($this->main_user->ctime, $profile->ctime);
+			// $this->assertEqual($this->main_user->utime, $profile->utime);
 			$this->assertEqual($this->main_user->fb_uid, $profile->fb_uid);
-			$this->assertEqual($this->main_user->fb_profile_utime, $profile->fb_profile_utime);
+			// $this->assertEqual($this->main_user->fb_profile_utime, $profile->fb_profile_utime);
 			$this->assertEqual($this->main_user->first_name, $profile->first_name);
 			$this->assertEqual($this->main_user->last_name, $profile->last_name);
-			$this->assertEqual($this->main_user->fb_profile_url, $profile->fb_profile_url);
+			// $this->assertEqual($this->main_user->fb_profile_url, $profile->fb_profile_url);
 			$this->assertEqual($this->main_user->timezone, $profile->timezone);
 			$this->assertEqual($this->main_user->sex, $profile->sex);
 			$this->assertEqual($this->main_user->fb_pic_small, $profile->fb_pic_small);

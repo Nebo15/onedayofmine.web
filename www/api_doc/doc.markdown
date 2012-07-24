@@ -28,11 +28,11 @@ To send links we are using additional app URI scheme. Exmples of URIs:
     app://moments/:id
 
 
-All commens can be accessed via URI fragment, for example
+All elements can be accessed via URI fragment with ID, for example
 
     app://days/:id#:comment_id
 
-should open day with `id=:id` and scroll page to comment with `id=:comment_id`.
+should open day with `id=:id` and scroll page to comment with `id=:comment_id`. Same can be applyed to moments and other elements.
 
 ## Known bugs ##
 ### API documentation bugs ###

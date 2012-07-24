@@ -24,4 +24,11 @@ class DayComment extends Comment
     $validator->addRequiredRule('text');
     return $validator;
   }
+
+  function exportForApi()
+  {
+    $export = parent::exportForApi();
+    $export->day_id = $this->getDay()->getId();
+    return $export;
+  }
 }

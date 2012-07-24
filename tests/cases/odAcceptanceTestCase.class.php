@@ -45,7 +45,7 @@ abstract class odAcceptanceTestCase extends WebTestCase
     )
 
     $this->fail('Wrong response structure:'.PHP_EOL.$raw_response);
-    $this->_addRecordsToWriters($url, $params, 'POST', $result->result);
+    $this->_addRecordsToWriters($url, $params, 'GET', $result->result);
     return $result;
   }
 

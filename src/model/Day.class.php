@@ -39,15 +39,25 @@ class Day extends BaseModel
     $export = new stdClass();
     $export->id = $this->getId();
     $export->user_id = $this->getUserId();
+    $export->user_name = $this->getUser()->getLastName();
     $export->title = $this->getTitle();
     $export->description = $this->getDescription();
     $export->timezone = $this->getTimezone();
     $export->location = $this->getLocation();
     $export->type = $this->getType();
-    $export->likes_count = $this->getLikesCount();
+    $export->likes_count = $this->getLikesCount() ?: 0;
     $export->ctime = $this->getCreateTime();
     $export->utime = $this->getUpdateTime();
     $export->is_ended = $this->getIsEnded();
+
+    $comments = $this->getComments();
+    $export->comments_count = $comments->count();
+    $export->comments = array();
+    $comments->paginate(0, lmbToolkit::instance()->getConf('common')->default_comments_count);
+    foreach ($comments as $comment) {
+      $export->comments[] = $comment->exportForApi();
+    }
+
     return $export;
   }
 
