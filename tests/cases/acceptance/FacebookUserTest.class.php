@@ -44,7 +44,12 @@ class FacebookUserTest extends odUnitTestCase
     $moment = $this->generator->moment($day);
     $moment->save();
     $moment_url = $this->_copyMomentPageToProxy($moment);
+    $fb_id = $this->main_user->getFacebookUser()->shareMomentAdd($moment_url, $day_url);
+    $this->assertTrue($fb_id);
 
+    $moment = $this->generator->moment($day);
+    $moment->save();
+    $moment_url = $this->_copyMomentPageToProxy($moment);
     $fb_id = $this->main_user->getFacebookUser()->shareMomentAdd($moment_url, $day_url);
     $this->assertTrue($fb_id);
   }
@@ -81,7 +86,7 @@ class FacebookUserTest extends odUnitTestCase
     $this->main_user->getFacebookUser()->shareDayEnd($day_url);
   }
 
-  function shareDay()
+  function testShareDay()
   {
     $day = $this->generator->day();
     $day->setTitle('shareDay - Day');
