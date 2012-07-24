@@ -20,7 +20,7 @@ class odNewsObserver {
    * @todo move this to lang file
    */
   ## Day ##
-  const MSG_DAY_CREATED         = "%s just created day %s";
+  const MSG_DAY_CREATED         = '<a href="app://users/:id">%s</a> just created day <a href="app://days/:id">%s</a>';
   const MSG_DAY_COMMENT         = "%s has responded you in day %s";
   const MSG_DAY_LIKED           = "%s liked day %s";
   const MSG_DAY_LIKED_DIRECT    = "%s liked your day %s";
