@@ -21,6 +21,8 @@ class NewsObserverAcceptanceTest extends odAcceptanceTestCase
   function testCreateDay()
   {
     $params = $this->generator->day($this->main_user)->exportForApi();
+    $params->timezone = 0;
+
     $day = $this->post('current_day/start', $params)->result;
 
     if($this->assertResponse(200)) {
