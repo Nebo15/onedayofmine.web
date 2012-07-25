@@ -101,9 +101,9 @@ class odNewsObserver {
   {
     $news = $this->createNews();
     if($liked_object instanceof Day) {
-      $this->applyText($news, self::MSG_DAY_LIKED, array($this->getUsername(), $liked_object->getTitle()));
+      $this->applyText($news, self::MSG_DAY_LIKED, array($this->getUserName(), $liked_object->getTitle()));
     } elseif($liked_object instanceof Moment) {
-      $this->applyText($news, self::MSG_MOMENT_LIKED, array($this->getUsername(), $liked_object->getDay()->getTitle()));
+      $this->applyText($news, self::MSG_MOMENT_LIKED, array($this->getUserName(), $liked_object->getDay()->getTitle()));
     } else {
       throw new lmbException("Can't create news, uknown model passed. Day or Moment expected.");
     }
@@ -139,7 +139,7 @@ class odNewsObserver {
         $recipients->add($comment_author);
     }
 
-    $this->applyText($news, $msg_type, array($this->getUsername(), $day->getTitle()));
+    $this->applyText($news, $msg_type, array($this->getUserName(), $day->getTitle()));
     $this->sendToRecipients($news, $recipients);
   }
 
@@ -151,11 +151,11 @@ class odNewsObserver {
     $news = $this->createNews();
 
     // Send message "{user} started to follow you"
-    $this->applyText($news, self::MSG_FOLLOW_DIRECT, array($this->getUsername()));
+    $this->applyText($news, self::MSG_FOLLOW_DIRECT, array($this->getUserName()));
     $this->sendToRecipient($news, $followed_user);
 
     // Send message "{user} started to follow {user}"
-    $this->applyText($news, self::MSG_FOLLOW,     array($this->getUsername(), $this->getUsername($followed_user)));
+    $this->applyText($news, self::MSG_FOLLOW,     array($this->getUserName(), $this->getUserName($followed_user)));
 
     foreach($this->user->getFollowers() as $recipient) {
       // Prevent sending 2 messages to same user
@@ -170,7 +170,7 @@ class odNewsObserver {
   protected function onDay(Day $day)
   {
     $news = $this->createNews();
-    $this->applyText($news, self::MSG_DAY_CREATED, array($this->getUsername(), $day->getTitle()));
+    $this->applyText($news, self::MSG_DAY_CREATED, array($this->getUserName(), $day->getTitle()));
     $news->setDay($day);
     $this->sendToFollowers($news);
   }
@@ -181,7 +181,7 @@ class odNewsObserver {
   protected function onMoment(Moment $moment)
   {
     $news = $this->createNews();
-    $this->applyText($news, self::MSG_MOMENT_CREATED, array($this->getUsername(), $moment->getDay()->getTitle()));
+    $this->applyText($news, self::MSG_MOMENT_CREATED, array($this->getUserName(), $moment->getDay()->getTitle()));
     $news->setDay($moment->getDay());
     $news->setMoment($moment);
     $this->sendToFollowers($news);
@@ -193,8 +193,8 @@ class odNewsObserver {
   protected function onUser(User $user) {
     $news = $this->createNews($user);
     $this->applyText($news, self::MSG_FBFRIEND_REGISTERED, array(
-                                                            $this->getUsername((object) FacebookUser::getUserInfo($user->getFbAccessToken())),
-                                                            $this->getUsername($user)
+                                                            $this->getUserName((object) FacebookUser::getUserInfo($user->getFbAccessToken())),
+                                                            $this->getUserName($user)
                                                            ));
     foreach ($user->getFacebookUser()->getUserFriendsInApplication() as $friend) {
       $this->sendToRecipient($news, $friend);
@@ -235,7 +235,7 @@ class odNewsObserver {
    * @param User|stdClass $user
    * @return string
    */
-  public function getUsername($user = null) {
+  public function getUserName($user = null) {
     if(is_null($user))
       $user = $this->user;
 
