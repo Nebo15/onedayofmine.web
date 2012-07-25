@@ -42,8 +42,7 @@ class FacebookUser
   {
   	return array(
   			'fb_uid'           => $fb['uid'],
-  			'first_name'       => $fb['first_name'],
-  			'last_name'        => $fb['last_name'],
+  			'name'             => $fb['first_name'] . ' ' . $fb['last_name'],
   			'sex'              => $fb['sex'],
   			'timezone'         => $fb['timezone'],
   			'fb_profile_url'   => $fb['profile_url'],

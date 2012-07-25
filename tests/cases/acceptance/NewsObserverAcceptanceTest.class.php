@@ -279,6 +279,6 @@ class NewsObserverAcceptanceTest extends odAcceptanceTestCase
   }
 
   protected function _getUsername($user) {
-    return "{$user->first_name} {$user->last_name}";
+    return $user->name;
   }
 }

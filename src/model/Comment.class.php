@@ -10,7 +10,7 @@ abstract class Comment extends BaseModel {
     $export = new stdClass();
     $export->id = $this->getId();
     $export->user_id = $this->getUserId();
-    $export->user_name = $this->getUser()->getLastName(); // FIXME only "name"
+    $export->user_name = $this->getUser()->getName();
     $export->text = $this->getText();
     $export->likes_count = $this->getLikesCount() ?: 0;
     $export->ctime = $this->getCreateTime();

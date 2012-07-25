@@ -20,6 +20,6 @@ class NewsTest extends odUnitTestCase
 
     $this->assertTrue(count(News::find()) == 1);
     $this->assertEqual(News::findOne()->text, $news->text);
-    $this->assertEqual(News::findOne()->text, $creator->first_name . ' likes ' . $recipient->first_name);
+    $this->assertEqual(News::findOne()->text, $creator->name . ' likes ' . $recipient->name);
   }
 }

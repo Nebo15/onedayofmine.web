@@ -239,7 +239,7 @@ class odNewsObserver {
     if(is_null($user))
       $user = $this->user;
 
-    return $user->first_name . ' ' . $user->last_name;
+    return $user->name;
   }
 
   ###########################################################

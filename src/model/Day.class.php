@@ -39,7 +39,7 @@ class Day extends BaseModel
     $export = new stdClass();
     $export->id = $this->getId();
     $export->user_id = $this->getUser()->getId();
-    $export->user_name = $this->getUser()->getLastName();
+    $export->user_name = $this->getUser()->getName();
     $export->title = $this->getTitle();
     $export->description = $this->getDescription();
     $export->timezone = $this->getTimezone();
