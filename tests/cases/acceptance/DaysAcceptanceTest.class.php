@@ -42,7 +42,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
       $this->assertEqual($day->getId(), $loaded_day->id);
       $this->assertEqual($day->getTitle(), $loaded_day->title);
       $this->assertEqual($day->getDescription(), $loaded_day->description);
-      // $this->assertEqual($day->getTimezone(), $loaded_day->timezone);
+      $this->assertEqual($day->getTimezone(), $loaded_day->timezone);
       $this->assertEqual($day->getLikesCount(), $loaded_day->likes_count);
       $this->assertEqual($day->getCreateTime(), $loaded_day->ctime);
       $this->assertEqual($day->getIsEnded(), $loaded_day->is_ended);
@@ -209,7 +209,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
       $loaded_day = Day::findById($day->getId());
       $this->assertEqual($loaded_day->getTitle(), $title);
       $this->assertEqual($loaded_day->getDescription(), $desc);
-      // $this->assertEqual($loaded_day->getTimezone(), $timezone);
+      $this->assertEqual($loaded_day->getTimezone(), $timezone);
       $this->assertEqual($loaded_day->getLocation(), $location);
       $this->assertEqual($loaded_day->getType(), $type);
     }

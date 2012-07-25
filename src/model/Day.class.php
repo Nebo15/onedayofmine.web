@@ -42,7 +42,7 @@ class Day extends BaseModel
     $export->user_name = $this->getUser()->getName();
     $export->title = $this->getTitle();
     $export->description = $this->getDescription();
-    // $export->timezone = $this->getTimezone();
+    $export->timezone = $this->getTimezone();
     $export->location = $this->getLocation();
     $export->type = $this->getType();
     $export->likes_count = $this->getLikesCount() ?: 0;
