@@ -45,7 +45,7 @@ class FacebookUser
   			'name'             => $fb['first_name'] . ' ' . $fb['last_name'],
   			'sex'              => $fb['sex'],
   			'timezone'         => $fb['timezone'],
-  			'fb_profile_url'   => $fb['profile_url'],
+  			// 'fb_profile_url'   => $fb['profile_url'],
   			'fb_profile_utime' => $fb['profile_update_time'],
   			'fb_pic_small'     => $fb['pic_small'],
   			'fb_pic_square'    => $fb['pic_square'],
