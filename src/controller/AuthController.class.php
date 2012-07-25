@@ -28,6 +28,7 @@ class AuthController extends BaseJsonController
     $answer->sessid = session_id();
     $answer->user = $user->exportForApi();
 
+    // Notify friends that they'r friend registered
     if($new_user)
       $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_USER, $user);
 
@@ -40,9 +41,6 @@ class AuthController extends BaseJsonController
     $user->setFbAccessToken($fb_access_token);
     $user->import(FacebookUser::getUserInfo($fb_access_token));
     $user->save();
-
-    // Notify friends that they'r friend registered
-    //$this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_USER, $user);
 
     return $user;
   }
