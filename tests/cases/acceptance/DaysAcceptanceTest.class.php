@@ -475,4 +475,14 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   	$this->assertEqual($day1->getId(), $days[0]->id);
   	$this->assertEqual($day2->getId(), $days[1]->id);
   }
+
+  /**
+   * @api
+   */
+  function testGetTypes()
+  {
+    $types = $this->get('days/type_names')->result;
+    $this->assertResponse(200);
+    $this->assertEqual($types, Day::getTypes());
+  }
 }

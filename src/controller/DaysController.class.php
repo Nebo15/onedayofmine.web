@@ -215,4 +215,8 @@ class DaysController extends BaseJsonController
 
   	return $this->_answerOk($this->_getUser()->getDays());
   }
+
+  function doTypeNames() {
+    return $this->_answerOk(Day::getTypes());
+  }
 }
