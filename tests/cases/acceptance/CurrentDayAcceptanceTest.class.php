@@ -30,7 +30,7 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 	 * @api input param string title Title name for this day
 	 * @api input param string description Description for this day
 	 * @api input param int timezone UTC time zone offset
-	 * @api input param string occupation Thing that user are planning to do during current day
+	 * @api input option string occupation Thing that user are planning to do during current day
 	 * @api input param string type One of pre-defined types: {working, day-off, holiday, trip, special_event}
 	 * @api result int id Day ID
 	 * @api result int user_id
@@ -57,13 +57,36 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 		if($this->assertResponse(200))
     {
       $this->assertEqual($params->title, $day->title);
-      $this->assertEqual($params->description, $day->description);
       $this->assertEqual($user->getId(), $day->user_id);
       $this->assertEqual($params->timezone, $day->timezone);
+      $this->assertEqual($params->occupation, $day->occupation);
       $this->assertTrue($day->ctime);
       $this->assertTrue($day->utime);
     }
 	}
+
+  function testStart_withNoOccupation() {
+    $this->main_user->setOccupation($this->generator->string(255));
+    $this->main_user->save();
+    $this->_loginAndSetCookie($this->main_user);
+
+    $user = User::findOne();
+
+    $params = $this->generator->day()->exportForApi();
+    $params->export_to_fb = false;
+    $params->occupation = null;
+
+    $day = $this->post('current_day/start', $params)->result;
+    if($this->assertResponse(200))
+    {
+      $this->assertEqual($params->title, $day->title);
+      $this->assertEqual($user->getId(), $day->user_id);
+      $this->assertEqual($params->timezone, $day->timezone);
+      $this->assertEqual($this->main_user->occupation, $day->occupation);
+      $this->assertTrue($day->ctime);
+      $this->assertTrue($day->utime);
+    }
+  }
 
 	/**
 	 * @api description Returns current day
@@ -89,7 +112,6 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 
 		$this->assertResponse(200);
 		$this->assertEqual($loaded_day->title, $day->title);
-		$this->assertEqual($loaded_day->description, $day->description);
 		$this->assertEqual($this->main_user->getId(), $day->user_id);
 		$this->assertEqual($loaded_day->timezone, $day->timezone);
 		$this->assertEqual($loaded_day->ctime, $day->ctime);
@@ -137,7 +159,6 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 		{
 			$this->assertEqual($day->getMoments()->at(0)->getId(), $res->id);
 			$this->assertEqual($day->getId(), $res->day_id);
-			$this->assertEqual($description, $res->description);
 			$this->assertProperty($res, 'img_url');
 			$this->assertEqual(0, $res->likes_count);
 			$this->assertProperty($res, 'ctime');
@@ -172,7 +193,7 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 
     $this->post('current_day/update', array(
         'title' => $title = $this->generator->string(),
-        'description' => $desc = $this->generator->string(),
+        'occupation' => $occupation = $this->generator->string(255),
         'timezone' => $timezone = $this->generator->integer(1),
         'location' => $location = $this->generator->string(),
         'type' => $type = 'working'
@@ -181,7 +202,7 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
     {
       $loaded_day = Day::findById($day->getId());
       $this->assertEqual($loaded_day->getTitle(), $title);
-      $this->assertEqual($loaded_day->getDescription(), $desc);
+      $this->assertEqual($loaded_day->getOccupation(), $occupation);
       $this->assertEqual($loaded_day->getTimezone(), $timezone);
       $this->assertEqual($loaded_day->getLocation(), $location);
       $this->assertEqual($loaded_day->getType(), $type);

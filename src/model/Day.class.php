@@ -7,8 +7,6 @@ lmb_require('src/model/BaseModel.class.php');
  */
 class Day extends BaseModel
 {
-  protected $_lazy_attributes = array('description');
-
   protected function _defineRelations()
   {
     $this->_many_belongs_to = array(
@@ -27,7 +25,7 @@ class Day extends BaseModel
     $validator->addRequiredRule('user');
     $validator->addRequiredObjectRule('user', 'User');
     $validator->addRequiredRule('title');
-    $validator->addRequiredRule('description');
+    $validator->addRequiredRule('occupation');
     $validator->addRequiredRule('timezone');
     $validator->addRequiredRule('location');
     $validator->addRequiredRule('type');
@@ -41,7 +39,7 @@ class Day extends BaseModel
     $export->user_id = $this->getUser()->getId();
     $export->user_name = $this->getUser()->getName();
     $export->title = $this->getTitle();
-    $export->description = $this->getDescription();
+    $export->occupation = $this->getOccupation();
     $export->timezone = $this->getTimezone();
     $export->location = $this->getLocation();
     $export->type = $this->getType();

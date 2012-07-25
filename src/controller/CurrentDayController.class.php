@@ -21,8 +21,9 @@ class CurrentDayController extends BaseJsonController
 			return $this->_answerWithError('Not a POST request', null, 405);
 
 		$day->setUser($this->_getUser());
+		$day->setOccupation($this->request->getPost('occupation') ?: $this->_getUser()->getOccupation());
 
-		$response = $this->_importSaveAndAnswer($day, array('title', 'description', 'timezone', 'location', 'type'));
+		$response = $this->_importSaveAndAnswer($day, array('title', 'timezone', 'location', 'type'));
 
     if(!count($this->error_list) && $this->request->getPost('export_to_fb'))
 		  $this->_getUser()->getFacebookUser()->beginDay($day, $this->request->getPost('force_url'));
@@ -41,7 +42,7 @@ class CurrentDayController extends BaseJsonController
     if(!$day = Day::findUnfinished($this->_getUser()))
       return $this->_answerNotFound('Unfinished day not found');
 
-    $response = $this->_importSaveAndAnswer($day, array('title', 'description', 'timezone', 'location', 'type'));
+    $response = $this->_importSaveAndAnswer($day, array('title', 'occupation', 'timezone', 'location', 'type'));
 
     return $response;
   }

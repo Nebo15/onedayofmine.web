@@ -13,7 +13,7 @@ class DayTest extends odUnitTestCase
     $this->assertFalse($day->validate());
 
     $day = $this->_createValidDay();
-    $day->setDescription(null);
+    $day->setOccupation(null);
     $this->assertFalse($day->validate());
 
     $day = $this->_createValidDay();

@@ -10,7 +10,6 @@ class odObjectMother
     $user = new User();
     $user->setFbUid($this->string(5));
     $user->setFbAccessToken($this->string(50));
-    $user->setFbProfileUrl($this->string(50));
     $user->setFbProfileUtime($this->integer(11));
     $user->setFbPicBig($this->string(50));
     $user->setFbPicSquare($this->string(50));
@@ -31,7 +30,7 @@ class odObjectMother
   {
     $day = new Day();
     $day->setTitle($this->string(25));
-    $day->setDescription($this->string(255));
+    $day->setOccupation($this->string(255));
     $day->setTimezone(0);
     $day->setLocation($this->string(25));
     $types = Day::getTypes();
