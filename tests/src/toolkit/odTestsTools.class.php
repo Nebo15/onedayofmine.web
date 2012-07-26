@@ -2,6 +2,7 @@
 lmb_require('tests/src/odPostmanWriter.class.php');
 lmb_require('tests/src/odApiToMarkdownWriter.class.php');
 lmb_require('tests/src/odModelToEntitiesWriter.class.php');
+lmb_require('facebook-proxy/src/Client.php');
 
 class odTestsTools extends lmbAbstractTools
 {
@@ -19,6 +20,8 @@ class odTestsTools extends lmbAbstractTools
 	 * @var odModelToEntitiesWriter
 	 */
 	protected $model_to_entities_writer;
+
+  protected $proxy_host = 'http://onedayofmine.com/';
 
 	/**
 	 * @return odPostmanWriter
@@ -92,6 +95,28 @@ class odTestsTools extends lmbAbstractTools
 			fclose($fp);
 		}
 	}
+
+  function copyDayPageToProxy(Day $day)
+  {
+    $path = '/pages/'.$day->getId().'/day';
+    $this->createProxyClient()->copyObjectPageToProxy($path);
+    return $this->proxy_host.$path;
+  }
+
+  function copyMomentPageToProxy(Moment $moment)
+  {
+    $path = '/pages/'.$moment->getId().'/moment';
+    $this->createProxyClient()->copyObjectPageToProxy($path);
+    return $this->proxy_host.$path;
+  }
+
+  /**
+   * @return Client
+   */
+  protected function createProxyClient()
+  {
+    return new Client($this->proxy_host.'/proxy.php', lmb_env_get('HOST_NAME'));
+  }
 }
 
 

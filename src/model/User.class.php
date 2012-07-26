@@ -27,6 +27,10 @@ class User extends BaseModel
         'class' => 'Day',
         'criteria' =>'`day`.`is_deleted` = 0'
       ),
+      'all_days' => array (
+        'field' => 'user_id',
+        'class' => 'Day',
+      ),
       'days_comments' => array ('field' => 'user_id', 'class' => 'DayComment'),
       'moments_comments' => array ('field' => 'user_id', 'class' => 'MomentComment'),
       'news' => array ('field' => 'recipient_id', 'class' => 'News'),
@@ -123,5 +127,26 @@ class User extends BaseModel
       $item = UserSettings::createDefault($this);
     }
     return $item;
+  }
+
+  function getDaysWithLimitations($from_id = null, $to_id = null, $show_deleted = false)
+  {
+    $criteria = new lmbSQLCriteria();
+    if($from_id)
+      $criteria->add(lmbSQLCriteria::greater('id', $from_id));
+    if($to_id)
+      $criteria->add(lmbSQLCriteria::less('id', $to_id));
+    $days = $show_deleted ? $this->getAllDays() : $this->getDays();
+    return $days->find(array('criteria' => $criteria))->paginate(0, 100);
+  }
+
+  function getFavouriteDaysWithLimitations($from_id = null, $to_id = null)
+  {
+    $criteria = new lmbSQLCriteria();
+    if($from_id)
+      $criteria->add(lmbSQLCriteria::greater('id', $from_id));
+    if($to_id)
+      $criteria->add(lmbSQLCriteria::less('id', $to_id));
+    return $this->getFavouriteDays()->find(array('criteria' => $criteria))->paginate(0, 100);
   }
 }

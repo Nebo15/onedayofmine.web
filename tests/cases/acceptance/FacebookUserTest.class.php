@@ -1,11 +1,8 @@
 <?php
 lmb_require('tests/cases/odUnitTestCase.class.php');
-lmb_require('facebook-proxy/src/Client.php');
 
 class FacebookUserTest extends odUnitTestCase
 {
-  protected $proxy_host = 'http://onedayofmine.com/';
-
   function testBeginDay()
   {
     $day = $this->generator->day();
@@ -99,22 +96,11 @@ class FacebookUserTest extends odUnitTestCase
 
   protected function _copyDayPageToProxy(Day $day)
   {
-    $path = '/pages/'.$day->getId().'/day';
-    $this->_createProxyClient()->copyObjectPageToProxy($path);
-    return $this->proxy_host.$path;
+    return lmbToolkit::instance()->copyDayPageToProxy($day);
   }
 
   protected function _copyMomentPageToProxy(Moment $moment)
   {
-    $path = '/pages/'.$moment->getId().'/moment';
-    $this->_createProxyClient()->copyObjectPageToProxy($path);
-    return $this->proxy_host.$path;
-  }
-  /**
-   * @return Client
-   */
-  protected function _createProxyClient()
-  {
-    return new Client($this->proxy_host.'/proxy.php', lmb_env_get('HOST_NAME'));
+    return lmbToolkit::instance()->copyMomentPageToProxy($moment);
   }
 }

@@ -149,13 +149,12 @@ class DayAcceptanceTest extends odAcceptanceTestCase
    * @api description Share a day
    * @api input param int day_id
    */
-  function estShareDay() // TODO why est?!
+  function testShareDay()
   {
     $day = $this->generator->day($this->additional_user);
     $day->save();
 
-    $moment = $this->generator->moment($day);
-    $moment->save();
+    $this->toolkit->copyDayPageToProxy($day);
 
     $this->_loginAndSetCookie($this->main_user);
     $res = $this->post('days/'.$day->getId().'/share')->result;
@@ -267,19 +266,41 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   function testGetFavouriteDays()
   {
   	$this->additional_user->save();
-  	$day = $this->generator->day($this->additional_user);
-  	$day->save();
 
-  	$this->main_user->getFavouriteDays()->add($day);
+  	$day1 = $this->generator->day($this->additional_user);
+  	$day1->save();
+    $day2 = $this->generator->day($this->additional_user);
+    $day2->save();
+    $day3 = $this->generator->day($this->additional_user);
+    $day3->save();
+
+  	$this->main_user->getFavouriteDays()->add($day1);
+    $this->main_user->getFavouriteDays()->add($day2);
+    $this->main_user->getFavouriteDays()->add($day3);
   	$this->main_user->save();
 
   	$this->_loginAndSetCookie($this->main_user);
-  	$days = $this->get('days/favourites')->result;
+
+  	$days = $this
+      ->get('days/favourites')
+      ->result;
   	if($this->assertResponse(200))
-  	{
-  		$this->assertEqual(1, count($days));
-  		$this->assertEqual($day->getId(), $days[0]->id);
-  	}
+  		$this->assertEqual(3, count($days));
+
+    $days = $this
+      ->get('days/favourites', array('from' => $day1->getId()))
+      ->result;
+    if($this->assertResponse(200))
+      $this->assertEqual(2, count($days));
+
+    $days = $this
+      ->get('days/favourites', array('from' => $day1->getId(), 'to' => $day3->getId()))
+      ->result;
+    if($this->assertResponse(200))
+    {
+      $this->assertEqual(1, count($days));
+      $this->assertEqual($day2->getId(), $days[0]->id);
+    }
   }
 
   /**
@@ -397,8 +418,8 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   	$this->assertEqual($day2->getId(), $result[0]->id);
 
   	$result = $this
-  	->get('days/new/', array('from' => $day1->getId(), 'to' => $day2->getId()))
-  	->result;
+  	  ->get('days/new/', array('from' => $day1->getId(), 'to' => $day2->getId()))
+  	  ->result;
   	$this->assertResponse(200);
   	$this->assertEqual(0, count($result));
   }
@@ -465,15 +486,34 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   	$day1 = $this->generator->day($this->main_user);
   	$day1->save();
   	$day2 = $this->generator->day($this->main_user);
+    $day2->setIsDeleted(1);
   	$day2->save();
+    $day3 = $this->generator->day($this->main_user);
+    $day3->save();
 
   	$this->_loginAndSetCookie($this->main_user);
 
-  	$days = $this->get('days/my')->result;
-  	$this->assertResponse(200);
-  	$this->assertEqual(2, count($days));
-  	$this->assertEqual($day1->getId(), $days[0]->id);
-  	$this->assertEqual($day2->getId(), $days[1]->id);
+  	$days = $this
+      ->get('days/my')
+      ->result;
+  	if($this->assertResponse(200))
+  	  $this->assertEqual(3, count($days));
+
+    $days = $this
+      ->get('days/my', array('from' => $day1->getId()))
+      ->result;
+    if($this->assertResponse(200))
+      $this->assertEqual(2, count($days));
+
+    $days = $this
+      ->get('days/my', array('from' => $day1->getId(), 'to' => $day3->getId()))
+      ->result;
+    if($this->assertResponse(200))
+    {
+      $this->assertEqual(1, count($days));
+      $this->assertEqual($day2->getId(), $days[0]->id);
+      $this->assertEqual(true, $days[0]->is_deleted);
+    }
   }
 
   /**
