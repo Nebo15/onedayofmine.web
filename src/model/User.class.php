@@ -100,6 +100,13 @@ class User extends BaseModel
     // Additional export removals
     unset($result['fb_profile_url']);
     unset($result['fb_profile_utime']);
+    $result['followers_count'] = $this->getFollowers()->count();
+    $result['following_count'] = $this->getFollowing()->count();
+    $result['days_count'] = $this->getDays()->count();
+    if(lmbToolkit::instance()->getUser() && $this->getId() != lmbToolkit::instance()->getUser()->getId()) {
+      $result['is_followed'] = UserFollowing::isFollowing(lmbToolkit::instance()->getUser(), $this);
+      $result['is_follower'] = UserFollowing::isFollowing($this, lmbToolkit::instance()->getUser());
+    }
     ksort($result);
     return (object) $result;
   }

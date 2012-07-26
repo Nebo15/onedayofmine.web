@@ -38,11 +38,16 @@ class UserAcceptanceTest extends odAcceptanceTestCase
 
     $this->_loginAndSetCookie($this->additional_user);
 
-    $res = $this->get('users/'.$this->main_user->getId().'/item/')->result;
+    $res = (array) $this->get('users/'.$this->main_user->getId().'/item/')->result;
 
     if($this->assertResponse(200))
     {
-      $this->assertEqual($res, User::findById($this->main_user->getId())->exportForApi());
+      $user = (array) User::findById($this->main_user->getId())->exportForApi();
+      $this->assertEqual($user['id'], $res['id']);
+      foreach ($res as $key => $value) {
+        if(array_key_exists($key, $user))
+          $this->assertEqual($user[$key], $value);
+      }
     }
   }
 
@@ -75,6 +80,7 @@ class UserAcceptanceTest extends odAcceptanceTestCase
     $this->assertResponse(200);
     $this->assertEqual(1, count($followers));
     $this->assertEqual($this->additional_user->getId(), $followers[0]->id);
+    $this->assertTrue($followers[0]->is_follower);
   }
 
   /**
@@ -123,6 +129,7 @@ class UserAcceptanceTest extends odAcceptanceTestCase
     $this->assertResponse(200);
     $this->assertEqual(1, count($following));
     $this->assertEqual($this->additional_user->getId(), $following[0]->id);
+    $this->assertTrue($following[0]->is_followed);
   }
 
   /**

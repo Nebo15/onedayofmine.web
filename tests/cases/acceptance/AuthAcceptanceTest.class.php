@@ -44,6 +44,32 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
     }
   }
 
+  function testLogin_followInformation∫()
+  {
+    $this->additional_user->save();
+    $this->main_user->save();
+
+    $following = $this->main_user->getFollowing();
+    $following->add($this->additional_user);
+    $following->save();
+
+    $followers = $this->main_user->getFollowers();
+    $followers->add($this->additional_user);
+    $followers->save();
+
+    $res = $res = $this->post('auth/login/', array(
+      'fb_access_token' => $this->main_user->getFbAccessToken()
+    ))->result;
+
+    if($this->assertResponse(200))
+    {
+      $this->assertEqual($res->user->following_count, $following->count());
+      $this->assertEqual($res->user->followers_count, $followers->count());
+      $this->assertEqual($res->user->following[0]->id, $this->additional_user->getId());
+      $this->assertEqual($res->user->followers[0]->id, $this->additional_user->getId());
+    }
+  }
+
   function testLogin_AndSetCookie()
   {
     $this->_loginAndSetCookie($this->main_user);

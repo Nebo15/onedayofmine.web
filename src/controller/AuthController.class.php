@@ -32,6 +32,16 @@ class AuthController extends BaseJsonController
     if($new_user)
       $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_USER, $user);
 
+    $answer->user->followers = array();
+    foreach ($user->getFollowers() as $follower) {
+      $answer->user->followers[] = $follower->exportForApi();
+    }
+
+    $answer->user->following = array();
+    foreach ($user->getFollowing() as $followed) {
+      $answer->user->following[] = $followed->exportForApi();
+    }
+
     return $this->_answerOk($answer);
   }
 
