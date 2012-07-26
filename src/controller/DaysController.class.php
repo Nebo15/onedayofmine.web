@@ -216,6 +216,17 @@ class DaysController extends BaseJsonController
   	return $this->_answerOk($this->_getUser()->getDays());
   }
 
+  function doCreateComplaint()
+  {
+    if(!$this->request->hasPost())
+      return $this->_answerNotPost();
+
+    if(!Day::findById($this->request->id))
+      return $this->_answerWithError("Day with id '".$this->request->get('day_id')."' not found");
+
+    return $this->_importSaveAndAnswer(new Complaint(), array('day_id', 'text'));
+  }
+
   function doTypeNames() {
     return $this->_answerOk(Day::getTypes());
   }
