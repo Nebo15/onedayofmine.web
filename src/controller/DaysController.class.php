@@ -131,6 +131,9 @@ class DaysController extends BaseJsonController
   	if(!$day = Day::findById($this->request->id))
   		return $this->_answerNotFound('Day not found');
 
+    if($day->getUserId() != $this->_getUser()->getId())
+      return $this->_answerNotFound('Day not found');
+
   	$day->setIsDeleted(1);
   	$day->save();
 
@@ -138,6 +141,26 @@ class DaysController extends BaseJsonController
     lmbActiveRecord :: delete('News', 'day_id='.$day->getId());
 
   	return $this->_answerOk();
+  }
+
+  function doRestore()
+  {
+    if(!$this->_isLoggedUser())
+      return $this->_answerUnauthorized();
+
+    if(!$this->request->hasPost())
+      return $this->_answerWithError('Not a POST request');
+
+    if(!$day = Day::findById($this->request->id))
+      return $this->_answerNotFound('Day not found');
+
+    if($day->getUserId() != $this->_getUser()->getId())
+      return $this->_answerNotFound('Day not found');
+
+    $day->setIsDeleted(0);
+    $day->save();
+
+    return $this->_answerOk();
   }
 
   function doFollowingUsers()

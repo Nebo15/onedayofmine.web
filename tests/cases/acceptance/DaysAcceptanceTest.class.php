@@ -240,24 +240,61 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   	$this->assertEqual(1, $loaded_day->getIsDeleted());
   }
 
-  //TODO
-  function testDelete_NotFound() {
+  function testDelete_NotFound()
+  {
+    $this->_loginAndSetCookie($this->main_user);
+    $this->post('days/100000/delete')->result;
+
+    $this->assertResponse(404);
   }
 
-  //TODO
-  function testDelete_WrongUser() {
+  function testDelete_WrongUser()
+  {
+    $day = $this->generator->day($this->main_user);
+    $day->save();
+
+    $this->_loginAndSetCookie($this->additional_user);
+    $this->post('days/'.$day->getId().'/delete')->result;
+
+    $this->assertResponse(404);
   }
 
-  //TODO
-  function testRestoreDay() {
+  /**
+   * @api description Restore a deleted day
+   * @api input param int day_id
+   */
+  function testRestoreDay()
+  {
+    $day = $this->generator->day($this->main_user);
+    $day->setIsDeleted(1);
+    $day->save();
+
+    $this->_loginAndSetCookie($this->main_user);
+    $this->post('days/'.$day->getId().'/restore')->result;
+
+    $this->assertResponse(200);
+
+    $loaded_day = Day::findById($day->getId());
+    $this->assertEqual(0, $loaded_day->getIsDeleted());
   }
 
-  //TODO
-  function testRestoreDay_NotFound() {
+  function testRestoreDay_NotFound()
+  {
+    $this->_loginAndSetCookie($this->main_user);
+    $this->post('days/100000/delete')->result;
+
+    $this->assertResponse(404);
   }
 
-  //TODO
-  function testRestoreDay_WrongUser() {
+  function testRestoreDay_WrongUser()
+  {
+    $day = $this->generator->day($this->main_user);
+    $day->save();
+
+    $this->_loginAndSetCookie($this->additional_user);
+    $this->post('days/'.$day->getId().'/restore')->result;
+
+    $this->assertResponse(404);
   }
 
   /**

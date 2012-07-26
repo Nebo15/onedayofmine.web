@@ -14,7 +14,7 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 		$this->post('current_day/start');
 		$this->assertResponse(400);
 
-    $this->main_user->save(); 
+    $this->main_user->save();
 		$this->_loginAndSetCookie($this->main_user);
 
 		$this->get('current_day/start');
