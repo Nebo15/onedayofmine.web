@@ -14,6 +14,7 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 		$this->post('current_day/start');
 		$this->assertResponse(400);
 
+    $this->main_user->save(); 
 		$this->_loginAndSetCookie($this->main_user);
 
 		$this->get('current_day/start');
@@ -46,18 +47,17 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 	 */
 	function testStart()
 	{
+    $this->main_user->save();
+
 		$this->_loginAndSetCookie($this->main_user);
 
-		$user = User::findOne();
-
 		$params = $this->generator->day()->exportForApi();
-    $params->export_to_fb = false;
 
 		$day = $this->post('current_day/start', $params)->result;
 		if($this->assertResponse(200))
     {
       $this->assertEqual($params->title, $day->title);
-      $this->assertEqual($user->getId(), $day->user_id);
+      $this->assertEqual($this->main_user->getId(), $day->user_id);
       $this->assertEqual($params->timezone, $day->timezone);
       $this->assertEqual($params->occupation, $day->occupation);
       $this->assertTrue($day->ctime);
@@ -66,21 +66,19 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 	}
 
   function testStart_withNoOccupation() {
-    $this->main_user->setOccupation($this->generator->string(255));
+
+    $this->main_user->setOccupation('testStart_withNoOccupation - user');
     $this->main_user->save();
     $this->_loginAndSetCookie($this->main_user);
 
-    $user = User::findOne();
-
     $params = $this->generator->day()->exportForApi();
-    $params->export_to_fb = false;
     $params->occupation = null;
 
     $day = $this->post('current_day/start', $params)->result;
     if($this->assertResponse(200))
     {
       $this->assertEqual($params->title, $day->title);
-      $this->assertEqual($user->getId(), $day->user_id);
+      $this->assertEqual($this->main_user->getId(), $day->user_id);
       $this->assertEqual($params->timezone, $day->timezone);
       $this->assertEqual($this->main_user->occupation, $day->occupation);
       $this->assertTrue($day->ctime);

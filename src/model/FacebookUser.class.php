@@ -84,6 +84,8 @@ class FacebookUser
    */
   function shareDayBegin($day_url)
   {
+    if(!$this->user->getSettings()->getSocialShareFacebook())
+      return null;
     return $this->getFacebook()->api("/me/one-day-of-mine:begin", "post", array(
       'day' => $day_url
     ))['id'];
@@ -91,10 +93,14 @@ class FacebookUser
 
   function shareDay(Day $day, $day_url)
   {
+    if(!$this->user->getSettings()->getSocialShareFacebook())
+      return null;
+
     if(count($day->getMoments()))
       $image_url = lmbToolkit::instance()->getSiteUrl($day->getMoments()->at(0)->getImageUrl());
     else
       $image_url = '';
+
     return $this->getFacebook()->api("/me/feed", "post", array(
       'name' => $day->getTitle(),
       'picture' => $image_url,
@@ -105,6 +111,9 @@ class FacebookUser
 
   function shareDayLike($day_url)
   {
+    if(!$this->user->getSettings()->getSocialShareFacebook())
+      return null;
+
     return $this->getFacebook()->api("/me/og.likes", "post", array(
       'object' => $day_url
     ));
@@ -112,6 +121,8 @@ class FacebookUser
 
   function shareMomentAdd($moment_url, $day_url)
   {
+    if(!$this->user->getSettings()->getSocialShareFacebook())
+      return null;
     return $this->getFacebook()->api("/me/one-day-of-mine:add_moment", "post", array(
       'moment' => $moment_url,
       'day' => $day_url
@@ -120,6 +131,8 @@ class FacebookUser
 
   function shareMomentLike($moment_url)
   {
+    if(!$this->user->getSettings()->getSocialShareFacebook())
+      return null;
     return $this->getFacebook()->api("/me/og.likes", "post", array(
       'object' => $moment_url
     ));
@@ -127,6 +140,8 @@ class FacebookUser
 
   function shareDayEnd($day_url)
   {
+    if(!$this->user->getSettings()->getSocialShareFacebook())
+      return null;
     return $this->getFacebook()->api("/me/one-day-of-mine:end", "post", array(
       'day' => $day_url
     ));

@@ -3,6 +3,18 @@ lmb_require('tests/cases/odUnitTestCase.class.php');
 
 class FacebookUserTest extends odUnitTestCase
 {
+  function setUp()
+  {
+    parent::setUp();
+    $settings = $this->main_user->getSettings();
+    $settings->setSocialShareFacebook(1);
+    $settings->save();
+
+    $settings = $this->additional_user->getSettings();
+    $settings->setSocialShareFacebook(1);
+    $settings->save();
+  }
+
   function testBeginDay()
   {
     $day = $this->generator->day();
