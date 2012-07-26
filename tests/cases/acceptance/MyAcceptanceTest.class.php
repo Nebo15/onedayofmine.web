@@ -26,6 +26,7 @@ class MyAcceptanceTest extends odAcceptanceTestCase
 			$this->assertEqual($this->main_user->fb_uid, $profile->fb_uid);
 			// $this->assertEqual($this->main_user->fb_profile_utime, $profile->fb_profile_utime);
 			$this->assertEqual($this->main_user->name, $profile->name);
+      $this->assertEqual($this->main_user->email, $profile->email);
 			// $this->assertEqual($this->main_user->fb_profile_url, $profile->fb_profile_url);
 			$this->assertEqual($this->main_user->timezone, $profile->timezone);
 			$this->assertEqual($this->main_user->sex, $profile->sex);
@@ -49,6 +50,7 @@ class MyAcceptanceTest extends odAcceptanceTestCase
 		$update->name = $this->generator->string(25);
 		$update->occupation = $this->generator->string(25);
     $update->location = $this->generator->string(25);
+    $update->email = $this->generator->email();
     $update->birthday = $this->generator->date_sql();
 
     $updated_profile = $this->post('/my/profile', (array) $update)->result;
@@ -59,6 +61,7 @@ class MyAcceptanceTest extends odAcceptanceTestCase
       $this->assertEqual($update->occupation, $updated_profile->occupation);
       $this->assertEqual($update->location, $updated_profile->location);
       $this->assertEqual($update->birthday, $updated_profile->birthday);
+      $this->assertEqual($update->email, $updated_profile->email);
 
       $loaded_user = User::findById($this->main_user->getId());
 
@@ -66,6 +69,7 @@ class MyAcceptanceTest extends odAcceptanceTestCase
       $this->assertEqual($loaded_user->occupation, $updated_profile->occupation);
       $this->assertEqual($loaded_user->location, $updated_profile->location);
       $this->assertEqual($loaded_user->birthday, $updated_profile->birthday);
+      $this->assertEqual($loaded_user->email, $updated_profile->email);
     }
 	}
 

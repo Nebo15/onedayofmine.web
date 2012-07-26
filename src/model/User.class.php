@@ -56,6 +56,7 @@ class User extends BaseModel
   {
   	$validator = new lmbValidator();
   	$validator->addRequiredRule('name');
+    $validator->addRequiredRule('email');
   	$validator->addRequiredRule('fb_uid');
   	$validator->addRequiredRule('fb_access_token');
   	// $validator->addRequiredRule('fb_profile_url');
@@ -100,6 +101,7 @@ class User extends BaseModel
     // Additional export removals
     unset($result['fb_profile_url']);
     unset($result['fb_profile_utime']);
+    unset($result['email']);
     $result['followers_count'] = $this->getFollowers()->count();
     $result['following_count'] = $this->getFollowing()->count();
     $result['days_count'] = $this->getDays()->count();

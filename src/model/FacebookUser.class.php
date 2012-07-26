@@ -33,7 +33,7 @@ class FacebookUser
 
   static protected function _getUserFbFieldsMap()
   {
-  	return array('uid', 'first_name', 'last_name', 'sex', 'timezone', 'profile_update_time',
+  	return array('uid', 'email', 'first_name', 'last_name', 'sex', 'timezone', 'profile_update_time',
   	  'pic_small', 'pic_square', 'pic_big', 'profile_url', 'work', 'current_location',
   		'birthday_date');
   }
@@ -42,6 +42,7 @@ class FacebookUser
   {
   	return array(
   			'fb_uid'           => $fb['uid'],
+        'email'            => $fb['email'],
   			'name'             => $fb['first_name'] . ' ' . $fb['last_name'],
   			'sex'              => $fb['sex'],
   			'timezone'         => $fb['timezone'],
