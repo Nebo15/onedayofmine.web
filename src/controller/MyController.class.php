@@ -5,19 +5,20 @@ class MyController extends BaseJsonController
 {
 	function doProfile()
 	{
-    if(!$this->request->hasPost())
-		  return $this->_answerOk($this->_getUser());
-    else
+    if($this->request->hasPost())
     {
-      $properties = array('name', 'location', 'occupation', 'birthday');
+      $properties = array('name', 'email', 'location', 'occupation', 'birthday');
       foreach($properties as $property)
       {
         if($this->request->has($property))
           $this->_getUser()->set($property, $this->request->getPost($property));
       }
       $this->_getUser()->save();
-      return $this->_answerOk($this->_getUser());
     }
+
+    $answer = $this->_getUser()->exportForApi();
+    $answer->email = $this->_getUser()->getEmail();
+    return $this->_answerOk($answer);
 	}
 
 	function doSettings()

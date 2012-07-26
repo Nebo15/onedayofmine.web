@@ -10,6 +10,7 @@ class odObjectMother
     $user = new User();
     $user->setFbUid($this->string(5));
     $user->setFbAccessToken($this->string(50));
+    $user->setEmail($this->email());
     $user->setFbProfileUtime($this->integer(11));
     $user->setFbPicBig($this->string(50));
     $user->setFbPicSquare($this->string(50));
@@ -134,6 +135,10 @@ class odObjectMother
   function image_name()
   {
     return $this->string().'.png';
+  }
+
+  function email() {
+    return $this->string(20).'@odm.com';
   }
 
   function date_sql()

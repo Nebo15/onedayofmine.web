@@ -42,6 +42,8 @@ class AuthController extends BaseJsonController
       $answer->user->following[] = $followed->exportForApi();
     }
 
+    $answer->user->email = $user->getEmail();
+
     return $this->_answerOk($answer);
   }
 
