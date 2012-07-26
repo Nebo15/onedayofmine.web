@@ -39,7 +39,7 @@ class MyAcceptanceTest extends odAcceptanceTestCase
 		}
 	}
 	/**
-	 * @api
+	 * @api description You can do partial updates, if needed.
 	 */
 	function testUpdateProfile()
 	{
@@ -73,9 +73,6 @@ class MyAcceptanceTest extends odAcceptanceTestCase
     }
 	}
 
-  /**
-   * @api
-   */
   function testUpdateProfile_Partial()
   {
     $this->main_user->save();
