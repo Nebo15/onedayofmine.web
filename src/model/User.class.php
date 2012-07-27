@@ -99,7 +99,6 @@ class User extends BaseModel
     unset($result['ctime']);
     unset($result['utime']);
     // Additional export removals
-    unset($result['fb_profile_url']);
     unset($result['fb_profile_utime']);
     unset($result['email']);
     $result['followers_count'] = $this->getFollowers()->count();
