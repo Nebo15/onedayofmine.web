@@ -22,6 +22,36 @@ class SocialController extends BaseJsonController
     return $this->_answerOk($friends);
   }
 
+  function doTwitterConnect()
+  {
+    if(!$this->request->hasPost())
+      return $this->_answerWithError('Not a POST request');
+
+    $this->_checkPropertiesInRequest(array('access_token', 'access_token_secret'));
+
+    if($this->error_list->isEmpty())
+    {
+      $access_token        = $this->request->getPost('access_token');
+      $access_token_secret = $this->request->getPost('access_token_secret');
+
+      $provider = $this->toolkit->getSocialServices()->getTwitter($access_token, $access_token_secret);
+
+      if(!$provider->validateAccessToken()) {
+        $this->error_list->addError("Access token seems to be unvalid.");
+        return $this->_answerWithError($this->error_list->export(), null, 403);
+      }
+
+      $this->toolkit->getUser()->setTwitterUid(json_decode($provider->response['response'])->id);
+      $this->toolkit->getUser()->setTwitterAccessToken($access_token);
+      $this->toolkit->getUser()->setTwitterAccessTokenSecret($access_token_secret);
+      $this->toolkit->getUser()->save();
+
+      return $this->_answerOk($this->toolkit->getUser());
+    }
+    else
+      return $this->_answerWithError($this->error_list->export());
+  }
+
   // TODO add related objects (day/moment) to response
   function doNews() {
     if($this->request->getRequestMethod() != 'GET')

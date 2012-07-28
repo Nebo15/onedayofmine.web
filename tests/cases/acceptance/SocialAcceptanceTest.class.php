@@ -27,10 +27,48 @@ class SocialAcceptanceTest extends odAcceptanceTestCase
   function testFacebookInvite() {}
 
   /**
-   * example
-   * TODO
+   * @api
    */
-  function testTwitterConnect() {}
+  function testTwitterConnect()
+  {
+    $this->main_user->save();
+    $this->_loginAndSetCookie($this->main_user);
+    $result = $this->post('social/twitter_connect', array(
+      'access_token'         => $this->generator->twitter_credentials()[0]['access_token'],
+      'access_token_secret'  => $this->generator->twitter_credentials()[0]['access_token_secret']
+    ));
+    $user = User::findOne();
+    if($this->assertResponse(200)) {
+      $this->assertTrue($user->getTwitterUid());
+      $this->assertEqual($result->result->twitter_uid, $user->getTwitterUid());
+      $this->assertEqual($user->getTwitterUid(), $this->generator->twitter_credentials()[0]['uid']);
+      $this->assertEqual($user->getTwitterAccessToken(), $this->generator->twitter_credentials()[0]['access_token']);
+      $this->assertEqual($user->getTwitterAccessTokenSecret(), $this->generator->twitter_credentials()[0]['access_token_secret']);
+    }
+  }
+
+  function testTwitterConnect_withUnvalidCredentials()
+  {
+    $this->main_user->save();
+    $this->_loginAndSetCookie($this->main_user);
+    $result = $this->post('social/twitter_connect', array(
+      'access_token'         => 'Wrong twitter access token',
+      'access_token_secret'  => 'Wrong twitter access token secret'
+    ));
+    if($this->assertResponse(403)) {
+      $this->assertEqual($result->errors[0]->message, 'Access token seems to be unvalid.');
+    }
+  }
+
+  function testTwitterConnect_withNoField()
+  {
+    $this->main_user->save();
+    $this->_loginAndSetCookie($this->main_user);
+    $result = $this->post('social/twitter_connect', array(
+      'access_token'         => $this->generator->twitter_credentials()[0]['access_token']
+    ));
+    $this->assertResponse(400);
+  }
 
   /**
    * example
