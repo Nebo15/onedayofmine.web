@@ -59,7 +59,6 @@ class User extends BaseModel
     $validator->addRequiredRule('email');
   	$validator->addRequiredRule('fb_uid');
   	$validator->addRequiredRule('fb_access_token');
-  	// $validator->addRequiredRule('fb_profile_url');
   	$validator->addRequiredRule('fb_profile_utime');
   	$validator->addRequiredRule('fb_pic_big');
   	$validator->addRequiredRule('fb_pic_square');
