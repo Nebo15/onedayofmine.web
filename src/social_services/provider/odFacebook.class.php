@@ -1,7 +1,7 @@
 <?php
 lmb_require('facebook/facebook.php');
 
-class odFacebook extends Facebook
+class odFacebook extends Facebook implements odSocialServicesProviderInterface
 {
 	function __construct($config)
 	{
