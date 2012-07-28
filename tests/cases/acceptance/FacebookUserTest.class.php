@@ -14,7 +14,7 @@ class FacebookUserTest extends odUnitTestCase
 
     $day_url = $this->_copyDayPageToProxy($day);
 
-    $fb_id = $this->main_user->getFacebookUser()->shareDayBegin($day_url);
+    $fb_id = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->shareDayBegin($day_url);
     $this->assertTrue($fb_id);
   }
 
@@ -26,8 +26,8 @@ class FacebookUserTest extends odUnitTestCase
 
     $day_url = $this->_copyDayPageToProxy($day);
 
-    $this->main_user->getFacebookUser()->shareDayBegin($day_url);
-    $this->additional_user->getFacebookUser()->shareDayLike($day_url);
+    $this->main_user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->shareDayBegin($day_url);
+    $this->additional_user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->shareDayLike($day_url);
   }
 
   function testAddMoment()
@@ -37,20 +37,20 @@ class FacebookUserTest extends odUnitTestCase
     $day->save();
 
     $day_url = $this->_copyDayPageToProxy($day);
-    $fb_id = $this->main_user->getFacebookUser()->shareDayBegin($day_url);
+    $fb_id = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->shareDayBegin($day_url);
     $day->setFbId($fb_id);
     $day->save();
 
     $moment = $this->generator->moment($day);
     $moment->save();
     $moment_url = $this->_copyMomentPageToProxy($moment);
-    $fb_id = $this->main_user->getFacebookUser()->shareMomentAdd($moment_url, $day_url);
+    $fb_id = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->shareMomentAdd($moment_url, $day_url);
     $this->assertTrue($fb_id);
 
     $moment = $this->generator->moment($day);
     $moment->save();
     $moment_url = $this->_copyMomentPageToProxy($moment);
-    $fb_id = $this->main_user->getFacebookUser()->shareMomentAdd($moment_url, $day_url);
+    $fb_id = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->shareMomentAdd($moment_url, $day_url);
     $this->assertTrue($fb_id);
   }
 
@@ -60,7 +60,7 @@ class FacebookUserTest extends odUnitTestCase
     $day->setTitle('testShareMomentLike - Day');
     $day->save();
     $day_url = $this->_copyDayPageToProxy($day);
-    $fb_id = $this->main_user->getFacebookUser()->shareDayBegin($day_url);
+    $fb_id = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->shareDayBegin($day_url);
     $day->setFbId($fb_id);
     $day->save();
 
@@ -68,10 +68,10 @@ class FacebookUserTest extends odUnitTestCase
     $moment->save();
     $moment_url = $this->_copyMomentPageToProxy($moment);
 
-    $fb_id = $this->main_user->getFacebookUser()->shareMomentAdd($moment_url, $day_url);
+    $fb_id = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->shareMomentAdd($moment_url, $day_url);
     $this->assertTrue($fb_id);
 
-    $this->main_user->getFacebookUser()->shareMomentLike($moment_url);
+    $this->main_user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->shareMomentLike($moment_url);
   }
 
 
@@ -82,8 +82,8 @@ class FacebookUserTest extends odUnitTestCase
     $day->save();
     $day_url = $this->_copyDayPageToProxy($day);
 
-    $this->main_user->getFacebookUser()->shareDayBegin($day_url);
-    $this->main_user->getFacebookUser()->shareDayEnd($day_url);
+    $this->main_user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->shareDayBegin($day_url);
+    $this->main_user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->shareDayEnd($day_url);
   }
 
   function testShareDay()
@@ -94,7 +94,7 @@ class FacebookUserTest extends odUnitTestCase
 
     $day_url = $this->_copyDayPageToProxy($day);
 
-    $this->main_user->getFacebookUser()->shareDay($day, $day_url);
+    $this->main_user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->shareDay($day, $day_url);
   }
 
   protected function _copyDayPageToProxy(Day $day)

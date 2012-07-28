@@ -193,10 +193,11 @@ class odNewsObserver {
   protected function onUser(User $user) {
     $news = $this->createNews($user);
     $this->applyText($news, self::MSG_FBFRIEND_REGISTERED, array(
-                                                            $this->getUserName((object) FacebookUser::getUserInfo($user->getFbAccessToken())),
+                                                            $this->getUserName((object) $user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->getInfo()),
                                                             $this->getUserName($user)
                                                            ));
-    foreach ($user->getFacebookUser()->getUserFriendsInApplication() as $friend) {
+    // TODO parse friends from twitter
+    foreach ($user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->getRegisteredFriends() as $friend) {
       $this->sendToRecipient($news, $friend);
     }
   }

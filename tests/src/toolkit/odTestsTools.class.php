@@ -65,7 +65,7 @@ class odTestsTools extends lmbAbstractTools
 			$user = new User();
 			$user->setFbUid($user_info->id);
 			$user->setFbAccessToken($user_info->access_token);
-			$user->import(FacebookUser::getUserInfo($user_info->access_token));
+			$user->import($user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->getInfo());
 			$users[] = $user;
 		}
 		return $users;

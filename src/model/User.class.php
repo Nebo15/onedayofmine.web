@@ -71,11 +71,11 @@ class User extends BaseModel
   }
 
   /**
-   * @return FacebookUser
+   * @return SocialServicesUserInterface
    */
-  function getFacebookUser()
+  function getSocialProfile($provider = odSocialServices::PROVIDER_MULTI)
   {
-    return new FacebookUser($this);
+    return lmbToolkit::instance()->getSocialServices()->getSocialProfile($this, $provider);
   }
 
   static function findByFbAccessToken($fb_access_token)

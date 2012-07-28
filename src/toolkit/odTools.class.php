@@ -1,32 +1,24 @@
 <?php
 lmb_require('limb/toolkit/src/lmbAbstractTools.class.php');
-lmb_require('src/odFacebook.class.php');
+lmb_require('src/social_services/provider/*.class.php');
+lmb_require('src/social_services/user/*.class.php');
+lmb_require('src/odSocialServices.class.php');
 lmb_require('tests/src/odCachedFacebook.class.php');
-lmb_require('src/odTwitter.class.php');
 lmb_require('src/odNewsObserver.class.php');
 
 class odTools extends lmbAbstractTools
 {
   /**
-   * @var User
+   * @var User Current logged in user.
    */
   protected $user;
-  /**
-   * @var array
-   */
-  protected $facebooks = array();
-  /**
-   * @var string
-   */
-  protected $fb_app_access_token;
-  /**
-   * @var odTwitter
-   */
-  protected $twitter;
-  /**
-   * @var odNewsObserver
-   */
-  protected $news_observer;
+
+  function setUser(User $user)
+  {
+    $this->user = $user;
+    lmbToolkit::instance()->getSession()->set('user_id', $user->getId());
+  }
+
   /**
    * @return User
    */
@@ -46,77 +38,31 @@ class odTools extends lmbAbstractTools
     lmbToolkit :: instance()->getSession()->destroy('user_id');
   }
 
-  function setUser($user)
-  {
-    $this->user = $user;
-    lmbToolkit::instance()->getSession()->set('user_id', $user->getId());
-  }
-
-  /**
-   * @return odFacebook
-   */
-  function getLoggedUserFacebook()
-  {
-    $user = $this->getUser();
-    lmb_assert_true($user);
-    return $this->getFacebook($user->getFbAccessToken());
-  }
-
-  function getAppFacebook()
-  {
-    return lmbToolkit::instance()->getFacebook();
-  }
-
-  /**
-   * @param string $access_token
-   * @return odFacebook
-   */
-  function getFacebook($access_token = null)
-  {
-    if(!isset($this->facebooks[$access_token]))
-    {
-    	$config = array(
-    			'appId'  => lmbToolkit::instance()->getConf('common')->get('fb_app_id'),
-    			'secret' => lmbToolkit::instance()->getConf('common')->get('fb_app_secret'),
-    			'cookie' => false
-     );
-      $this->facebooks[$access_token] =
-      	lmbToolkit::instance()->createFacebookConnection($access_token, $config);
-      if($access_token)
-      	$this->facebooks[$access_token]->setAccessToken($access_token);
-    }
-
-    return $this->facebooks[$access_token];
-  }
-
-  function createFacebookConnection($access_token, $config)
-  {
-  	if(!lmbToolkit::instance()->getConf('common')->fb_cache_enabled)
-  		return new odFacebook($config);
-  	else
-  		return new odCachedFacebook(
-  				$config,
-  				lmbToolkit::instance()
-  				->createCacheConnectionByDSN('file:///'.lmb_var_dir().'/facebook_cache/'.$access_token)
-  		);
-  }
-
-  /**
-   * @return odTwitter
-   */
-  function getTwitter() {
-    if(!$this->twitter)
-      $this->twitter = new odTwitter();
-    return $this->twitter;
-  }
 
   /**
    * @return odNewsObserver
    */
-  function getNewsObserver() {
-    if(!$this->news_observer)
-      $this->news_observer = new odNewsObserver();
-    return $this->news_observer;
+  function getNewsObserver()
+  {
+    static $news_observer;
+
+    if(!$news_observer)
+      $news_observer = new odNewsObserver();
+
+    return $news_observer;
+  }
+
+  /**
+   * @return odSocialServices
+   */
+  function getSocialServices()
+  {
+    static $social_services;
+
+    if(!$social_services)
+      $social_services = new odSocialServices();
+
+    return $social_services;
   }
 
   /**
@@ -142,16 +88,17 @@ class odTools extends lmbAbstractTools
 
   function loadTestsUsersInfo()
   {
-  	$fb = lmbToolkit::instance()->getFacebook();
+  	$fb = lmbToolkit::instance()->getSocialServices()->getFacebook();
   	$params = array(
   			'access_token' => $fb->getApplicationAccessToken()
   	);
   	$users = $fb->api("/".$fb->getAppId()."/accounts/test-users", "GET", $params);
 
-  	if(!$users['data'])
-  	{
-  		return array();
-  	}
+    if(!$users['data'])
+    {
+      return array();
+    }
+
   	return $users['data'];
   }
 }

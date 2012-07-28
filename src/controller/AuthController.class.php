@@ -13,7 +13,7 @@ class AuthController extends BaseJsonController
     if(!$fb_access_token = $this->request->get('fb_access_token'))
       return $this->_answerOk('fb_access_token not given', 412);
 
-    if(!$this->toolkit->getFacebook($fb_access_token)->validateAccessToken($this->error_list))
+    if(!$this->toolkit->getSocialServices()->getFacebook($fb_access_token)->validateAccessToken($this->error_list))
       return $this->_answerWithError($this->error_list, null, 403);
 
     $new_user = false;
@@ -51,7 +51,7 @@ class AuthController extends BaseJsonController
   {
     $user = new User();
     $user->setFbAccessToken($fb_access_token);
-    $user->import(FacebookUser::getUserInfo($fb_access_token));
+    $user->import($user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->getInfo());
     $user->save();
 
     return $user;

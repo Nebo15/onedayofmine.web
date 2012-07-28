@@ -216,7 +216,7 @@ class NewsObserverAcceptanceTest extends odAcceptanceTestCase
                          $this->main_user,
                          odNewsObserver::MSG_FBFRIEND_REGISTERED,
                          array(
-                          $this->_getUsername((object) FacebookUser::getUserInfo($this->main_user->getFbAccessToken())),
+                          $this->_getUsername((object) $this->main_user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->getInfo()),
                           $this->_getUsername($this->main_user),
                          ));
   }
