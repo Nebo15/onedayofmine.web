@@ -25,8 +25,9 @@ class CurrentDayController extends BaseJsonController
 
 		$response = $this->_importSaveAndAnswer($day, array('title', 'timezone', 'location', 'type'));
 
-    if(!count($this->error_list) && $this->request->getPost('export_to_fb'))
-		  $this->_getUser()->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->beginDay($day, $this->request->getPost('force_url'));
+    $this->_getUser()
+        ->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)
+        ->shareDayBegin($day, $this->toolkit->getSiteUrl('/pages/'.$day->getId().'/day'));
 
 		// Notify friends about new day
     $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_DAY, $day);

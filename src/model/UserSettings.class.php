@@ -8,6 +8,8 @@ lmb_require('src/model/BaseModel.class.php');
  * @method null setNotificationsShootingPhotos($int)
  * @method null setPhotosSaveOriginal($int)
  * @method null setPhotosSaveFiltered($int)
+ * @method null setSocialShareFacebook($int)
+ * @method null setSocialShareTwitter($int)
  */
 class UserSettings extends BaseModel
 {
@@ -20,6 +22,8 @@ class UserSettings extends BaseModel
     $item->setNotificationsShootingPhotos(1);
     $item->setPhotosSaveOriginal(1);
     $item->setPhotosSaveFiltered(1);
+    $item->setSocialShareFacebook(1);
+    $item->setSocialShareTwitter(1);
     return $item;
   }
 }

@@ -74,8 +74,8 @@ class DaysController extends BaseJsonController
     if(!$day = Day::findById($this->request->id))
       return $this->_answerWithError("Day not found by id");
 
-// TODO FIXME
-//    $response = $this->_getUser()->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->shareDay($day);
+    $day_url = $this->toolkit->getSiteUrl('/pages/'.$day->getId().'/day');
+    $response = $this->_getUser()->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->shareDay($day, $day_url);
 
     return $this->_answerOk($response);
   }
@@ -131,6 +131,9 @@ class DaysController extends BaseJsonController
   	if(!$day = Day::findById($this->request->id))
   		return $this->_answerNotFound('Day not found');
 
+    if($day->getUserId() != $this->_getUser()->getId())
+      return $this->_answerNotFound('Day not found');
+
   	$day->setIsDeleted(1);
   	$day->save();
 
@@ -140,28 +143,45 @@ class DaysController extends BaseJsonController
   	return $this->_answerOk();
   }
 
+  function doRestore()
+  {
+    if(!$this->_isLoggedUser())
+      return $this->_answerUnauthorized();
+
+    if(!$this->request->hasPost())
+      return $this->_answerWithError('Not a POST request');
+
+    if(!$day = Day::findById($this->request->id))
+      return $this->_answerNotFound('Day not found');
+
+    if($day->getUserId() != $this->_getUser()->getId())
+      return $this->_answerNotFound('Day not found');
+
+    $day->setIsDeleted(0);
+    $day->save();
+
+    return $this->_answerOk();
+  }
+
   function doFollowingUsers()
   {
     if(!$this->_isLoggedUser())
       return $this->_answerUnauthorized();
 
-  	$from = $this->request->getFiltered('from', FILTER_SANITIZE_NUMBER_INT);
-  	$to = $this->request->getFiltered('to', FILTER_SANITIZE_NUMBER_INT);
+    list($from, $to) = $this->_getFromToLimitations();
   	$users_ids = lmbArrayHelper::getColumnValues('id', $this->_getUser()->getFollowing());
 		return $this->_answerOk(Day::findByUsersIds($users_ids, $from, $to));
   }
 
   function doNew()
   {
-  	$from = $this->request->getFiltered('from', FILTER_SANITIZE_NUMBER_INT);
-  	$to = $this->request->getFiltered('to', FILTER_SANITIZE_NUMBER_INT);
+    list($from, $to) = $this->_getFromToLimitations();
   	return $this->_answerOk(Day::findNew($from, $to));
   }
 
   function doInteresting()
   {
-    $from = $this->request->getFiltered('from', FILTER_SANITIZE_NUMBER_INT);
-    $to = $this->request->getFiltered('to', FILTER_SANITIZE_NUMBER_INT);
+    list($from, $to) = $this->_getFromToLimitations();
     return $this->_answerOk(Day::findInteresting($from, $to));
   }
 
@@ -170,7 +190,8 @@ class DaysController extends BaseJsonController
     if(!$this->_isLoggedUser())
       return $this->_answerUnauthorized();
 
-		return $this->_answerOk($this->_getUser()->getFavouriteDays());
+    list($from, $to) = $this->_getFromToLimitations();
+		return $this->_answerOk($this->_getUser()->getFavouriteDaysWithLimitations($from, $to));
   }
 
   function doFavourite()
@@ -214,7 +235,9 @@ class DaysController extends BaseJsonController
     if(!$this->_isLoggedUser())
       return $this->_answerUnauthorized();
 
-  	return $this->_answerOk($this->_getUser()->getDays());
+    list($from, $to) = $this->_getFromToLimitations();
+
+  	return $this->_answerOk($this->_getUser()->getDaysWithLimitations($from, $to, true));
   }
 
   function doCreateComplaint()
@@ -230,5 +253,13 @@ class DaysController extends BaseJsonController
 
   function doTypeNames() {
     return $this->_answerOk(Day::getTypes());
+  }
+
+  protected function _getFromToLimitations()
+  {
+    return array(
+      $this->request->getFiltered('from', FILTER_SANITIZE_NUMBER_INT),
+      $this->request->getFiltered('to', FILTER_SANITIZE_NUMBER_INT)
+    );
   }
 }

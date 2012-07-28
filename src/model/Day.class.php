@@ -47,6 +47,8 @@ class Day extends BaseModel
     $export->ctime = $this->getCreateTime();
     $export->utime = $this->getUpdateTime();
     $export->is_ended = $this->getIsEnded() ?: 0;
+    if($this->getIsDeleted())
+      $export->is_deleted = true;
 
     $comments = $this->getComments();
     $export->comments_count = $comments->count();

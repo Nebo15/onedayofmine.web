@@ -20,6 +20,18 @@ class odObjectMother
     $user->setSex('female');
     $user->setOccupation($this->string(50));
     $user->setBirthday($this->date_sql());
+
+    $settings = new UserSettings();
+    $settings->setNotificationsNewDays(0);
+    $settings->setNotificationsNewComments(0);
+    $settings->setNotificationsRelatedActivity(0);
+    $settings->setNotificationsShootingPhotos(0);
+    $settings->setPhotosSaveOriginal(0);
+    $settings->setPhotosSaveFiltered(0);
+    $settings->setSocialShareFacebook(0);
+    $settings->setSocialShareTwitter(0);
+    $user->setSettings($settings);
+
     return $user;
   }
 
