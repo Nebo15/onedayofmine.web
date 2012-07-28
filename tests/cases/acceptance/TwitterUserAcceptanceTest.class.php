@@ -126,7 +126,9 @@ class TwitterUserTest extends odUnitTestCase
     }
 
     $tweet = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER)->shareMomentLike($moment_url);
-    $this->assertTrue($tweet);
+    if($this->assertTrue(is_object($tweet))) {
+      $this->assertTrue($tweet);
+    }
   }
 
   function testEndDay()

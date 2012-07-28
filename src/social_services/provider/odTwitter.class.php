@@ -33,8 +33,8 @@ class odTwitter extends tmhOAuth implements odSocialServicesProviderInterface
       $diff = time() - $reset;
 
       lmbToolkit::instance()
-      ->getLog()
-      ->error("Twitter rate limit exhausted. Reset time: '{$reset}' ('{$diff}').");
+        ->getLog()
+        ->error("Twitter rate limit exhausted. Reset time: '{$reset}' ('{$diff}').");
     }
   }
 }
