@@ -145,4 +145,20 @@ class odObjectMother
   {
 		return sprintf("%1d-%2$02d-%3$02d", rand(1900, 1990), rand(0, 1), rand(1, 29));
   }
+
+  function twitter_credentials()
+  {
+    return array(
+      array(
+        'uid'                 => '637083468',
+        'access_token'        => '637083468-nBzWGwpdfgTqrg2H3DZwnSgBWwMkbNmxVrwCVepx',
+        'access_token_secret' => '4jWX2ozuXHcY4yRwqjFBUfV08t7kFjfxBR1OCV7Y0'
+      ),
+      array(
+        'uid'                 => '718050210',
+        'access_token'        => '718050210-SVERCoH3Zrxiw1KiBqjN3khC6tb6Rfwzkpx4D2kt',
+        'access_token_secret' => 'KoZL6VY45Wfp0laFXhETkEdSKFdIY92YpRfCkzZu4'
+      )
+    );
+  }
 }
