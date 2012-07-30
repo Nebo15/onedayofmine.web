@@ -82,7 +82,7 @@ class odApiToMarkdownWriter_Element {
       }
       $requestDescriptionTable = <<<TBL
 ###### Params: ######
-<table width="100%" border="1">
+<table class="table">
 <tr>
   <th width="40">Type</th>
   <th width="150">Name</th>
@@ -111,7 +111,7 @@ TBL;
       }
       $responseDescriptionTable = <<<TBL
 ###### Fields: ######
-<table width="100%" border="1">
+<table class="table">
 <tr>
   <th width="40">Type</th>
   <th width="150">Name</th>
@@ -192,7 +192,7 @@ EOT;
   protected function _allocateDeprecatedRequestParams() {
     foreach ($this->requestDescription as $key => $value) {
       if(!array_key_exists($value['name'], $this->requestData)) {
-        $this->requestDescription[$key]['name'] = "<s>{$this->requestDescription[$key]['name']}</s>";
+        $this->requestDescription[$key]['name'] = "{$this->requestDescription[$key]['name']} <span class='label label-important'>Removed</span>";
       }
     }
   }
@@ -201,7 +201,7 @@ EOT;
     if(is_array($this->responseData)) {
       foreach ($this->responseDescription as $key => $value) {
         if(!array_key_exists($value['name'], $this->responseData)) {
-          $this->responseDescription[$key]['name'] = "<s>{$this->responseDescription[$key]['name']}</s>";
+          $this->responseDescription[$key]['name'] = "{$this->responseDescription[$key]['name']} <span class='label label-important'>Removed</span>";
         }
       }
     }
@@ -221,7 +221,7 @@ EOT;
         if(!$found) {
           $this->responseDescription[] = array(
             'type'        => '[type]',
-            'name'        => $key,
+            'name'        => $key . '<span class="label">Found in example!</span>',
             'description' => '[description]'
           );
         }

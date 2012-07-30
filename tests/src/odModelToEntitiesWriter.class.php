@@ -38,7 +38,7 @@ EOT;
 
     $fieldsTable = <<<TBL
 ###### Fields: ######
-<table width="100%" border="1">
+<table class="table">
 <tr>
   <th width="40">Type</th>
   <th width="150">Name</th>
