@@ -47,9 +47,13 @@ class Day extends BaseModel
     $export->ctime = $this->getCreateTime();
     $export->utime = $this->getUpdateTime();
     $export->is_ended = $this->getIsEnded() ?: 0;
+
     if($this->getIsDeleted())
       $export->is_deleted = true;
 
+    if(lmbToolkit::instance()->getUser()) {
+      $export->is_favorited = DayFavourite::isFavourited(lmbToolkit::instance()->getUser(), $this);
+    }
     $comments = $this->getComments();
     $export->comments_count = $comments->count();
     $export->comments = array();
