@@ -2,7 +2,7 @@
 lmb_require('tests/cases/odUnitTestCase.class.php');
 lmb_require('facebook-proxy/src/Client.php');
 
-class TwitterUserTest extends odUnitTestCase
+class TwitterProfileTest extends odUnitTestCase
 {
   protected $proxy_host = 'http://onedayofmine.com';
 
