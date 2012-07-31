@@ -12,11 +12,11 @@ class odFacebook extends Facebook implements odSocialServicesProviderInterface
     );
   }
 
-	function __construct($config)
+	function __construct(array $config = null)
 	{
 		if('cli' == php_sapi_name())
 			session_id('CLI');
-		parent::__construct($config);
+		parent::__construct($config ?: self::getConfig());
 	}
 
   function makeQuery($query)

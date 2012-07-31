@@ -12,13 +12,13 @@ class FacebookProfile implements SocialServicesProfileInterface
   protected $provider;
 
   /**
-   * @param User       $user
-   * @param odFacebook $provider
+   * @param User $user
    */
-  public function __construct(User $user, $provider)
+  public function __construct(User $user)
   {
+    $this->provider = new odFacebook(odFacebook::getConfig());
+    $this->provider->setAccessToken($user->getFbAccessToken());
     $this->user     = $user;
-    $this->provider = $provider;
   }
 
   /**

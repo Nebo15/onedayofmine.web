@@ -3,7 +3,7 @@ interface SocialServicesProfileInterface
 {
   //public static function getConnectedUser();
 
-  public function __construct(User $user, $provider);
+  public function __construct(User $user);
   public function getProvider();
   public function getInfo();
   // public function getFriends();

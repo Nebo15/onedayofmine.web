@@ -12,14 +12,17 @@ class TwitterProfile implements SocialServicesProfileInterface
   protected $provider;
 
   /**
-   * @param User      $user
-   * @param odTwitter $provider
+   * @param User $user
    */
-  public function __construct(User $user, $provider)
+  public function __construct(User $user)
   {
+    $config = [];
+    $config['user_token']  = $user->getTwitterAccessToken();
+    $config['user_secret'] = $user->getTwitterAccessTokenSecret();
+
+    $this->provider = new odTwitter($config);
     $this->user     = $user;
-    $this->provider = $provider;
-  }
+ }
 
   /**
    * @return odTwitter

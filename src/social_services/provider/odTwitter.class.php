@@ -11,6 +11,13 @@ class odTwitter extends tmhOAuth implements odSocialServicesProviderInterface
     );
   }
 
+  function __construct(array $config = null)
+  {
+    if('cli' == php_sapi_name())
+      session_id('CLI');
+    parent::__construct($config ?: self::getConfig());
+  }
+
   public function api($path, $method = self::METHOD_GET, $params = array())
   {
     $code = $this->request($method, $this->url($path), $params);

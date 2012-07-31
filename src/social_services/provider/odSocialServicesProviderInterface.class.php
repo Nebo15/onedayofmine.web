@@ -6,5 +6,5 @@ interface odSocialServicesProviderInterface {
   const METHOD_DELETE = 'DELETE';
 
   public static function getConfig();
-  public function __construct($config);
+  public function __construct(array $config = null);
 }

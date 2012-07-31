@@ -45,13 +45,7 @@ class odSocialServices
 
     if(!array_key_exists($access_token, $facebook_instances)) {
       // NOTICE: connection can be cached
-      if(!lmbToolkit::instance()->getConf('common')->fb_cache_enabled)
-        $facebook_instances[$access_token] = new odFacebook(odFacebook::getConfig());
-      else
-        $facebook_instances[$access_token] = new odCachedFacebook(
-          odFacebook::getConfig(),
-          lmbToolkit::instance()->createCacheConnectionByDSN('file:///'.lmb_var_dir().'/facebook_cache/'.$access_token)
-        );
+      $facebook_instances[$access_token] = new odFacebook(odFacebook::getConfig());
 
       if(!is_null($access_token))
         $facebook_instances[$access_token]->setAccessToken($access_token);
@@ -75,13 +69,13 @@ class odSocialServices
     switch ($provider) {
       case self::PROVIDER_FACEBOOK:
         lmb_assert_true($user->getFbAccessToken(), 'Facebook access token not specified.');
-        $profile = new FacebookProfile($user, $this->getFacebook($user->getFbAccessToken()));
+        $profile = new FacebookProfile($user);
         break;
 
       case self::PROVIDER_TWITTER:
         lmb_assert_true($user->getTwitterAccessToken(), 'Twitter access token not specified.');
         lmb_assert_true($user->getTwitterAccessTokenSecret(), 'Twitter access token secret not specified.');
-        $profile = new TwitterProfile($user, $this->getTwitter($user->getTwitterAccessToken(), $user->getTwitterAccessTokenSecret()));
+        $profile = new TwitterProfile($user);
         break;
 
       default:
