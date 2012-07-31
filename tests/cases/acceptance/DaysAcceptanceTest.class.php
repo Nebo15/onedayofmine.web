@@ -11,18 +11,23 @@ class DayAcceptanceTest extends odAcceptanceTestCase
 
   /**
    * @api description Returns basic Day entity by given Day ID.
-   * @api input param int id Day ID
+   * @api input param int day_id Day ID
+   * @api result int id Day ID
+   * @api result string user_name
    * @api result int user_id
    * @api result string title
-   * @api result string description
    * @api result int timezone UTC time zone offset
    * @api result string occupation
-   * @api result int type One of pre-defined types: {working, day-off, holiday, trip, special_event}
+   * @api result string location Text value of longitude and latitude separated by coma. See: Yahoo PlaceFinder API
+   * @api result int type One of pre-defined types, see: GET day/get_types request
    * @api result int likes_count
    * @api result int ctime Creation time
    * @api result int utime Last update time
    * @api result bool is_ended TRUE if day is ended, else - FALSE
-   * @api result Moment[] moments Array of day moments
+   * @api result Moment[3] moments Array of day moments
+   * @api result int comments_count Count of comments to this day
+   * @api result Comment[3] comments Array of day first comments
+   * @api result bool is_favorited True if this article is added to current user favourites. If user is not logged in then field is omited.
    */
   function testItem()
   {
@@ -116,13 +121,14 @@ class DayAcceptanceTest extends odAcceptanceTestCase
    * @api input param int day_id
    * @api input param string text Comment contents
    * @api result string text Same text as inputed to verifi successfull delivery
+   * @api result int id Comment ID
+   * @api result int day_id
    * @api result Day day
+   * @api result string user_name
+   * @api result int user_id
    * @api result User user
-   * @api result int user_id Same as user.id
-   * @api result int day_id Same as day.id
    * @api result int ctime Creation time
    * @api result int utime Update time
-   * @api result int id Comment ID
    */
   function testCommentCreate()
   {
@@ -424,7 +430,10 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @api
+   * @api description Returns array of news days. One of input params can be omited, but not both.
+   * @api input option int from
+   * @api input option int to
+   * @api result Day[] day
    */
   function testGetNewDays()
   {
@@ -462,7 +471,10 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @api
+   * @api description Returns array of days. Input params can be omited, but ignoring both params can give long array as result.
+   * @api input option int from
+   * @api input option int to
+   * @api result Day[] day
    */
   function testGetInterestingDays()
   {
