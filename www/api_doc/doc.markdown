@@ -36,8 +36,8 @@ should open day with `id=:id` and scroll page to comment with `id=:comment_id`. 
 
 ## Known bugs ##
 ### API documentation bugs ###
-* In-URI params are shown as deprecated
-* Array-type responses are shown as deprecated and appear in params list by array keys
+* In-URI params are shown as <span class='label label-important'>Removed</span>
+* Array-type responses are shown as <span class='label label-important'>Removed</span> and appear in params list by array keys
 
 ### API bugs ###
 * API methods are not fully implemented

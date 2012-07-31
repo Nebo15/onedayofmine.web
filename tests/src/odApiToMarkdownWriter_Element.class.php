@@ -221,7 +221,7 @@ EOT;
         if(!$found) {
           $this->responseDescription[] = array(
             'type'        => '[type]',
-            'name'        => $key . '<span class="label">Found in example!</span>',
+            'name'        => $key,
             'description' => '[description]'
           );
         }
