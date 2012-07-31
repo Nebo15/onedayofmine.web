@@ -91,6 +91,11 @@ class User extends BaseModel
     return User::findOne(array('fb_uid = ?', $fb_uid));
   }
 
+  static function findByTwitterUid($twitter_uid)
+  {
+    return User::findOne(array('twitter_uid = ?', $twitter_uid));
+  }
+
   function exportForApi()
   {
     $result = $this->export();
