@@ -41,6 +41,9 @@ class odTwitter extends tmhOAuth implements odSocialServicesProviderInterface
 
   protected function checkRateLimit()
   {
+    if(!array_key_exists('headers', $this->response))
+      return;
+
     $headers = $this->response['headers'];
     if(array_key_exists('x_ratelimit_remaining', $headers) && $headers['x_ratelimit_remaining'] == 0) {
       $reset = $headers['x_ratelimit_reset'];
