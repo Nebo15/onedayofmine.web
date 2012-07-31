@@ -59,7 +59,7 @@ class TwitterProfileTest extends odUnitTestCase
   function testTweet()
   {
     $text = $this->generator->string();
-    $social_profile= $this->main_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER);
+    $social_profile = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER);
     $tweet = $social_profile->tweet($text);
 
     if($this->assertTrue(is_object($tweet))) {
@@ -121,7 +121,6 @@ class TwitterProfileTest extends odUnitTestCase
 
     $day_url = $this->_copyDayPageToProxy($day);
     $tweet = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER)->shareDayBegin($day_url);
-    // $day->setFbId($tweet); TODO
     $day->save();
 
     $moment = $this->generator->moment($day);
@@ -148,7 +147,6 @@ class TwitterProfileTest extends odUnitTestCase
     $day->save();
     $day_url = $this->_copyDayPageToProxy($day);
     $tweet = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER)->shareDayBegin($day_url);
-    // $day->setFbId($tweet); TODO
     $day->save();
 
     $moment = $this->generator->moment($day);
