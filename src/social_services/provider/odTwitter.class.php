@@ -17,10 +17,16 @@ class odTwitter extends tmhOAuth implements odSocialServicesProviderInterface
 
     $this->checkRateLimit();
 
+    $response = json_decode($this->response['response']);
+
     if($this->response && $code == 200)
-      return json_decode($this->response['response']);
-    else
-      return false;
+      return $response;
+    elseif($response->error)
+      lmbToolkit::instance()
+        ->getLog()
+        ->error("Twitter returned error: '{$response->error}'.", array($path, $method, $params));
+
+    return false;
   }
 
   public function makeQuery($query)
