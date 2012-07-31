@@ -106,6 +106,7 @@ class User extends BaseModel
     unset($result['user_settings_id']);
     unset($result['ctime']);
     unset($result['utime']);
+    unset($result['email']);
     // Additional export removals
     unset($result['fb_profile_utime']);
     unset($result['email']);
