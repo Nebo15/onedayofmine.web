@@ -21,6 +21,41 @@ class TwitterProfileTest extends odUnitTestCase
     $this->additional_user->save();
   }
 
+  function testGetInfoRaw()
+  {
+    $info = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER)->getInfo_Raw();
+    $this->assertTrue($info);
+    $this->assertEqual($info->id, $this->main_user->getTwitterUid());
+  }
+
+  function testGetInfo()
+  {
+    $info = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER)->getInfo();
+    $this->assertTrue($info);
+    $this->assertEqual($info['twitter_uid'], $this->main_user->getTwitterUid());
+  }
+
+  function testGetFriendsIds()
+  {
+    $ids = $this->additional_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER)->getFriendsIds();
+    $this->assertEqual(count($ids), 1);
+    $this->assertEqual($ids[0], $this->main_user->getTwitterUid());
+  }
+
+  function testGetFriends()
+  {
+    $friends = $this->additional_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER)->getFriends();
+    $this->assertEqual(count($friends), 1);
+    $this->assertEqual($friends[0]->id, $this->main_user->getTwitterUid());
+  }
+
+  function testGetRegisteredFriends()
+  {
+    $friends = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER)->getRegisteredFriends();
+    $this->assertEqual(count($friends), 1);
+    $this->assertEqual($friends[0]->getId(), $this->additional_user->getId());
+  }
+
   function testTweet()
   {
     $text = $this->generator->string();
