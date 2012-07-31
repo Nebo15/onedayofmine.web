@@ -1,9 +1,10 @@
 <?php
-interface SocialServicesUserInterface
+interface SocialServicesProfileInterface
 {
   //public static function getConnectedUser();
 
   public function __construct(User $user, $provider);
+  public function getProvider();
   public function getInfo();
   // public function getFriends();
   public function getRegisteredFriends();
@@ -17,4 +18,7 @@ interface SocialServicesUserInterface
   function shareDayLike($day_url);
   function shareMomentAdd($moment_url, $day_url);
   function shareMomentLike($moment_url);
+
+  // TODO
+  // getUserPicture()
 }

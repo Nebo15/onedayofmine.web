@@ -1,7 +1,7 @@
 <?php
 lmb_require('tests/cases/odUnitTestCase.class.php');
 
-class FacebookUserTest extends odUnitTestCase
+class FacebookProfileTest //extends odUnitTestCase
 {
   function setUp()
   {

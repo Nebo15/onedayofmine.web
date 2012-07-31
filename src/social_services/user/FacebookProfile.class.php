@@ -1,6 +1,6 @@
 <?php
 
-class FacebookUser implements SocialServicesUserInterface
+class FacebookProfile implements SocialServicesProfileInterface
 {
   /**
    * @var User
@@ -19,6 +19,14 @@ class FacebookUser implements SocialServicesUserInterface
   {
     $this->user     = $user;
     $this->provider = $provider;
+  }
+
+  /**
+   * @return odFacebook
+   */
+  public function getProvider()
+  {
+    return $this->provider;
   }
 
   /**

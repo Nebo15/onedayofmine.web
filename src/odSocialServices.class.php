@@ -67,7 +67,7 @@ class odSocialServices
    * @param  string $provider See {@see odSocialServices::PROVIDER_*} constants.
    * @return odSocialServiceUserInterface
    */
-  public function getSocialProfile(User $user, $provider = self::PROVIDER_MULTI)
+  public function getSocialProfile(User $user, $provider = self::PROVIDER_MULTI) // add mocks
   {
     // Future idea
     // strpos(|, provider); foreach(explode('|', $provider) ...) $providers_pull = ...;
@@ -75,13 +75,13 @@ class odSocialServices
     switch ($provider) {
       case self::PROVIDER_FACEBOOK:
         lmb_assert_true($user->getFbAccessToken(), 'Facebook access token not specified.');
-        $profile = new FacebookUser($user, $this->getFacebook($user->getFbAccessToken()));
+        $profile = new FacebookProfile($user, $this->getFacebook($user->getFbAccessToken()));
         break;
 
       case self::PROVIDER_TWITTER:
         lmb_assert_true($user->getTwitterAccessToken(), 'Twitter access token not specified.');
         lmb_assert_true($user->getTwitterAccessTokenSecret(), 'Twitter access token secret not specified.');
-        $profile = new TwitterUser($user, $this->getTwitter($user->getTwitterAccessToken(), $user->getTwitterAccessTokenSecret()));
+        $profile = new TwitterProfile($user, $this->getTwitter($user->getTwitterAccessToken(), $user->getTwitterAccessTokenSecret()));
         break;
 
       default:

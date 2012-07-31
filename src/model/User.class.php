@@ -74,7 +74,7 @@ class User extends BaseModel
   }
 
   /**
-   * @return SocialServicesUserInterface
+   * @return SocialServicesProfileInterface
    */
   function getSocialProfile($provider = odSocialServices::PROVIDER_MULTI)
   {
