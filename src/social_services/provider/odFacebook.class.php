@@ -3,6 +3,15 @@ lmb_require('facebook/facebook.php');
 
 class odFacebook extends Facebook implements odSocialServicesProviderInterface
 {
+  public static function getConfig()
+  {
+    return array(
+      'appId'  => lmbToolkit::instance()->getConf('common')->get('fb_app_id'),
+      'secret' => lmbToolkit::instance()->getConf('common')->get('fb_app_secret'),
+      'cookie' => false
+    );
+  }
+
 	function __construct($config)
 	{
 		if('cli' == php_sapi_name())

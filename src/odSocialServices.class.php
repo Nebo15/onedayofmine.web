@@ -20,7 +20,7 @@ class odSocialServices
     static $twitter_instances = array();
 
     if(!array_key_exists($access_token, $twitter_instances)) {
-      $config = $this->getTwitterConfig();
+      $config = odTwitter::getConfig();
 
       if(!is_null($access_token) && !is_null($access_token_secret)) {
         $config['user_token']  = $access_token;
@@ -31,16 +31,6 @@ class odSocialServices
     }
 
     return $twitter_instances[$access_token];
-  }
-
-  protected function getTwitterConfig()
-  {
-    $config = array(
-      'consumer_key'    => lmbToolkit::instance()->getConf('twitter')->twitter_consumer_key,
-      'consumer_secret' => lmbToolkit::instance()->getConf('twitter')->twitter_consumer_secret,
-    );
-
-    return $config;
   }
 
   /**
@@ -56,10 +46,10 @@ class odSocialServices
     if(!array_key_exists($access_token, $facebook_instances)) {
       // NOTICE: connection can be cached
       if(!lmbToolkit::instance()->getConf('common')->fb_cache_enabled)
-        $facebook_instances[$access_token] = new odFacebook($this->getFacebookConfig());
+        $facebook_instances[$access_token] = new odFacebook(odFacebook::getConfig());
       else
         $facebook_instances[$access_token] = new odCachedFacebook(
-          $this->getFacebookConfig(),
+          odFacebook::getConfig(),
           lmbToolkit::instance()->createCacheConnectionByDSN('file:///'.lmb_var_dir().'/facebook_cache/'.$access_token)
         );
 
@@ -68,15 +58,6 @@ class odSocialServices
     }
 
     return $facebook_instances[$access_token];
-  }
-
-  protected function getFacebookConfig()
-  {
-    return array(
-      'appId'  => lmbToolkit::instance()->getConf('common')->get('fb_app_id'),
-      'secret' => lmbToolkit::instance()->getConf('common')->get('fb_app_secret'),
-      'cookie' => false
-    );
   }
 
   /**

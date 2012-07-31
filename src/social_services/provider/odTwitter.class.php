@@ -3,6 +3,14 @@ lmb_require('lib/tmhOAuth/*.php');
 
 class odTwitter extends tmhOAuth implements odSocialServicesProviderInterface
 {
+  public static function getConfig()
+  {
+    return array(
+      'consumer_key'    => lmbToolkit::instance()->getConf('twitter')->twitter_consumer_key,
+      'consumer_secret' => lmbToolkit::instance()->getConf('twitter')->twitter_consumer_secret,
+    );
+  }
+
   public function api($path, $method = self::METHOD_GET, $params = array())
   {
     $code = $this->request($method, $this->url($path), $params);

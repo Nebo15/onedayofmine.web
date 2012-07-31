@@ -5,5 +5,6 @@ interface odSocialServicesProviderInterface {
   const METHOD_GET    = 'GET';
   const METHOD_DELETE = 'DELETE';
 
+  public static function getConfig();
   public function __construct($config);
 }
