@@ -2,7 +2,7 @@
 ### Complaint ###
 <a name="Entity:Complaint"></a>
 ###### Fields: ######
-<table width="100%" border="1">
+<table class="table">
 <tr>
   <th width="40">Type</th>
   <th width="150">Name</th>
@@ -15,7 +15,7 @@
 ### Day ###
 <a name="Entity:Day"></a>
 ###### Fields: ######
-<table width="100%" border="1">
+<table class="table">
 <tr>
   <th width="40">Type</th>
   <th width="150">Name</th>
@@ -28,7 +28,7 @@
 ### DayComment ###
 <a name="Entity:DayComment"></a>
 ###### Fields: ######
-<table width="100%" border="1">
+<table class="table">
 <tr>
   <th width="40">Type</th>
   <th width="150">Name</th>
@@ -41,7 +41,7 @@
 ### Moment ###
 <a name="Entity:Moment"></a>
 ###### Fields: ######
-<table width="100%" border="1">
+<table class="table">
 <tr>
   <th width="40">Type</th>
   <th width="150">Name</th>
@@ -54,7 +54,7 @@
 ### MomentComment ###
 <a name="Entity:MomentComment"></a>
 ###### Fields: ######
-<table width="100%" border="1">
+<table class="table">
 <tr>
   <th width="40">Type</th>
   <th width="150">Name</th>
@@ -67,7 +67,7 @@
 ### News ###
 <a name="Entity:News"></a>
 ###### Fields: ######
-<table width="100%" border="1">
+<table class="table">
 <tr>
   <th width="40">Type</th>
   <th width="150">Name</th>
@@ -80,7 +80,7 @@
 ### User ###
 <a name="Entity:User"></a>
 ###### Fields: ######
-<table width="100%" border="1">
+<table class="table">
 <tr>
   <th width="40">Type</th>
   <th width="150">Name</th>
