@@ -262,9 +262,9 @@ function lmb_var_export($arg, $level = 1)
 
   	case 'string':
       $dump = 'STRING('.strlen($arg).') "';
-      $dump .= lmb_escape_string((string) $arg, 100);
+      $dump .= lmb_escape_string((string) $arg, 1024);
 
-      if(strlen($arg) > 100)
+      if(strlen($arg) > 1024)
         $dump .= '...';
 
       $dump .= '"';

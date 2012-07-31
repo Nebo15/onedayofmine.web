@@ -95,26 +95,22 @@ abstract class odAcceptanceTestCase extends WebTestCase
 
   protected function _loginAndSetCookie(User $user)
   {
-    $sessid = $this->_login($user)->result->sessid;
-    $this->assertTrue($sessid);
-    $this->setCookie(lmb_env_get('SESSION_NAME'), $sessid);
+    $this->_login($user)->result;
+    $this->setCookie('token', $user->getFbAccessToken());
   }
 
   protected function _login(User $user)
   {
-    $res = $this->post('auth/login/', array(
-      'fb_access_token' => $user->getFbAccessToken()
-    ));
-    $this->assertProperty($res->result, 'sessid');
-    $this->assertProperty($res->result, 'user');
+    $res = $this->post('auth/login/', array('token' => $user->getFbAccessToken()));
     $this->assertResponse(200);
+    $this->assertProperty($res->result, 'user');
     return $res;
   }
 
   protected function _decodeResponse($raw_response)
   {
     $decoded_body = json_decode($raw_response);
-    if ($decoded_body === null && strlen($raw_response) > 4) {
+    if ($decoded_body === null) {
       throw new lmbException("Can't parse response", array(
       		'url' => $this->getUrl(),
       		'raw' => $raw_response

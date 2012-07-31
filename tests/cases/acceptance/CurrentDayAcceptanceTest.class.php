@@ -12,7 +12,7 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 	function testStart_Negative()
 	{
 		$this->post('current_day/start');
-		$this->assertResponse(400);
+		$this->assertResponse(401);
 
     $this->main_user->save();
 		$this->_loginAndSetCookie($this->main_user);

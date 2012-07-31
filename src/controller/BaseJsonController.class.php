@@ -16,13 +16,6 @@ abstract class BaseJsonController extends lmbController
     if($this->is_forwarded)
       return false;
 
-    if($this->check_auth && !$this->toolkit->getSessidFromRequest())
-    {
-      $sessid_name = lmb_env_get('SESSION_NAME');
-      $this->response->write($this->_answerWithError("Where is may '$sessid_name', Lebowsky?"));
-      return null;
-    }
-
     if($this->check_auth && !$this->_isLoggedUser())
     {
       $this->response->write($this->_answerUnauthorized());

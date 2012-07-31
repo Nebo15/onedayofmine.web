@@ -19,17 +19,15 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
   /**
    * @api description User authorization.
    * @api input param string[118] fb_access_token Facebook access token
-   * @api result string[32] sessid Session ID for future requests
    * @api result User user Authorized user information
    */
   function testLogin()
   {
     $res = $res = $this->post('auth/login/', array(
-      'fb_access_token' => $this->main_user->getFbAccessToken()
+      'token' => $this->main_user->getFbAccessToken()
     ))->result;
     if($this->assertResponse(200))
     {
-      $this->assertTrue($res->sessid);
       $this->assertTrue($res->user);
       $this->assertTrue(is_object($res->user));
       $this->assertTrue($res->user->id);
@@ -45,7 +43,7 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
     }
   }
 
-  function testLogin_followInformation∫()
+  function testLogin_followInformation()
   {
     $this->additional_user->save();
     $this->main_user->save();
@@ -59,7 +57,7 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
     $followers->save();
 
     $res = $res = $this->post('auth/login/', array(
-      'fb_access_token' => $this->main_user->getFbAccessToken()
+      'token' => $this->main_user->getFbAccessToken()
     ))->result;
 
     if($this->assertResponse(200))
@@ -81,16 +79,16 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
 
   function testLogin_Session_ByGetParam()
   {
-    $sessid = $this->_login($this->main_user)->result->sessid;
-    $res = $this->get('auth/is_logged_in', array(lmb_env_get('SESSION_NAME') => $sessid));
+    $this->_login($this->main_user)->result;
+    $res = $this->get('auth/is_logged_in', array('token' => $this->main_user->getFbAccessToken()));
     $this->assertResponse(200);
     $this->assertTrue($res->result);
   }
 
   function testLogin_Session_ByPostParam()
   {
-    $sessid = $this->_login($this->main_user)->result->sessid;
-    $res = $this->post('auth/is_logged_in', array(lmb_env_get('SESSION_NAME') => $sessid));
+    $this->_login($this->main_user)->result;
+    $res = $this->post('auth/is_logged_in', array('token' => $this->main_user->getFbAccessToken()));
     $this->assertResponse(200);
     $this->assertTrue($res->result);
   }
@@ -113,9 +111,7 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
 
   function testLogin_WrongAccessToken()
   {
-    $errors = $res = $this->post('auth/login/', array(
-      'fb_access_token' => 'Wrong access token'
-    ))->errors;
+    $errors = $res = $this->post('auth/login/', array('token' => $this->generator->string(11)))->errors;
     $this->assertResponse(403);
     $this->assertEqual(1, count($errors));
     $this->assertEqual('Invalid OAuth access token.', $errors[0]);

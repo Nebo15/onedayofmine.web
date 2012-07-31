@@ -10,8 +10,8 @@ class AuthController extends BaseJsonController
   {
     if(!$this->request->hasPost())
       return $this->_answerOk(null, 405, 'Use POST, Luke');
-    if(!$fb_access_token = $this->request->get('fb_access_token'))
-      return $this->_answerOk('fb_access_token not given', 412);
+    if(!$fb_access_token = $this->request->get('token'))
+      return $this->_answerOk('token not given', 412);
 
     if(!$this->toolkit->getSocialServices()->getFacebook($fb_access_token)->validateAccessToken($this->error_list))
       return $this->_answerWithError($this->error_list, null, 403);
@@ -25,7 +25,6 @@ class AuthController extends BaseJsonController
     $this->toolkit->setUser($user);
 
     $answer = new stdClass();
-    $answer->sessid = session_id();
     $answer->user = $user->exportForApi();
 
     // Notify friends that they'r friend registered

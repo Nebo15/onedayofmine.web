@@ -18,9 +18,6 @@ class odApplication extends lmbWebApplication
     );
     $this->registerFilter(new lmbHandle('limb/web_app/src/filter/lmbResponseTransactionFilter'));
 
-    if(0 === strpos(lmbToolkit::instance()->getRequest()->getUriPath(), '/lmb_'))
-  	  $this->registerFilter(new lmbHandle('limb/cms/src/filter/lmbCmsAccessPolicyFilter'));
-
     $this->registerFilter(new lmbHandle('limb/web_app/src/filter/lmbActionPerformingFilter'));
 
     $this->registerFilter(new lmbHandle('limb/web_app/src/filter/lmbViewRenderingFilter'));
