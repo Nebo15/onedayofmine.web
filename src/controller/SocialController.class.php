@@ -36,8 +36,7 @@ class SocialController extends BaseJsonController
 
       $provider = $this->toolkit->getSocialServices()->getTwitter($access_token, $access_token_secret);
 
-      if(!$provider->validateAccessToken()) {
-        $this->error_list->addError("Access token seems to be unvalid.");
+      if(!$provider->validateAccessToken($this->error_list)) {
         return $this->_answerWithError($this->error_list->export(), null, 403);
       }
 

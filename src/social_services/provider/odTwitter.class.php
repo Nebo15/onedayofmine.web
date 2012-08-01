@@ -41,9 +41,14 @@ class odTwitter extends tmhOAuth implements odSocialServicesProviderInterface
     throw new lmbException("FQL is not available in Twitter API.");
   }
 
-  public function validateAccessToken()
+  public function validateAccessToken($error_list)
   {
-    return (bool) $this->api('1/account/verify_credentials');
+    if($this->api('1/account/verify_credentials')) {
+      return true;
+    } else {
+      $error_list->addError("Access token seems to be unvalid.");
+      return false;
+    }
   }
 
   protected function checkRateLimit()
