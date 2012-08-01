@@ -32,4 +32,7 @@ abstract class lmbAbstractImageContainer
 
   abstract function save($file_name = null);
 
+  abstract function getWidth();
+  abstract function getHeight();
+
 }

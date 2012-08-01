@@ -9,10 +9,17 @@
 
 /**
  * @package imagekit
- * @version $Id: lmbImageKit.class.php 8110 2010-01-28 14:20:12Z korchasa $
  */
 class lmbImageKit
 {
+  /**
+   * @static
+   * @param string $library
+   * @param string $dir
+   * @param array $params
+   * @return lmbAbstractImageConverter
+   * @throws lmbFileNotFoundException
+   */
   static function create($library = 'gd', $dir = '', $params = array())
   {
     $image_class_name = 'lmb' . ucfirst($library) . 'ImageConverter';
@@ -32,6 +39,15 @@ class lmbImageKit
     return $converter;
   }
 
+  /**
+   * @static
+   * @param $file_name
+   * @param string $type
+   * @param string $library
+   * @param string $dir
+   * @param array $params
+   * @return lmbAbstractImageConverter
+   */
   static function load($file_name, $type = '', $library = 'gd', $dir = '', $params = array())
   {
   	$converter = self::create($library, $dir, $params);

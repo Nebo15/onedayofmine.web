@@ -88,6 +88,11 @@ class odTools extends lmbAbstractTools
     return lmb_env_get('HOST_NAME').$path;
   }
 
+  function getAbsolutePath($www_path)
+  {
+    return lmb_env_get('APP_DIR')."/www/".$www_path;
+  }
+
   function loadTestsUsersInfo()
   {
   	$fb = lmbToolkit::instance()->getSocialServices()->getFacebook();

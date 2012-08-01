@@ -145,7 +145,7 @@ class FacebookProfile implements SocialServicesProfileInterface
   {
   	return array(
       'uid', 'email', 'first_name', 'last_name', 'sex', 'timezone', 'profile_update_time',
-      'pic_small', 'pic_square', 'pic_big', 'work', 'current_location', 'birthday_date'
+      'pic', 'work', 'current_location', 'birthday_date'
     );
   }
 
@@ -158,9 +158,7 @@ class FacebookProfile implements SocialServicesProfileInterface
   		'sex'              => $fb['sex'],
   		'timezone'         => $fb['timezone'],
   		'fb_profile_utime' => $fb['profile_update_time'],
-  		'fb_pic_small'     => $fb['pic_small'],
-  		'fb_pic_square'    => $fb['pic_square'],
-  		'fb_pic_big'       => $fb['pic_big'],
+  		'pic'              => $fb['pic'],
   		'occupation'       => isset($fb['work']['position']['name'])
   	 													? $fb['work']['position']['name']
   														: '',

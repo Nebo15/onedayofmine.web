@@ -49,7 +49,7 @@ class lmbFs
     if(!@rename($tmp, $file))
     {
       @unlink($tmp);
-      throw new lmbFsException('could not move file', array('src' => $tmp, 'file' => $file));
+      throw new lmbFsException('could not move file', array('src' => $tmp, 'dst' => $file));
     }
 
     @chmod($file, $perm);
@@ -57,28 +57,19 @@ class lmbFs
       @unlink($tmp);
   }
 
+  /**
+   * @static
+   * @deprecated
+   * @return bool|mixed|null|string
+   */
   static function getTmpDir()
   {
-    if(lmb_env_has('LIMB_VAR_DIR'))
-      return lmb_env_get('LIMB_VAR_DIR');
-
-    if($path = session_save_path())
-    {
-      if(($pos = strpos($path, ';')) !== false)
-        $path = substr($path, $pos+1);
-      return $path;
-    }
-
-    if($tmp = getenv('TMP') || $tmp = getenv('TEMP') || $tmp = getenv('TMPDIR'))
-      return $tmp;
-
-    //gracefull falback?
-    return '/tmp';
+    return lmb_var_dir();
   }
 
   static function generateTmpFile($prefix = 'p')
   {
-    return tempnam(self :: getTmpDir(), $prefix);
+    return tempnam(lmb_var_dir(), $prefix);
   }
 
   /**
@@ -148,6 +139,7 @@ class lmbFs
 
   protected static function _getFirstExistingPathIndex($path_elements, $separator)
   {
+    $path = '';
     for($i=count($path_elements); $i > 0; $i--)
     {
       $path = implode($separator, $path_elements);
@@ -278,7 +270,7 @@ class lmbFs
 
       if(@copy($src, $dest) === false)
         throw new lmbFsException('failed to copy file', array('src' => $src, 'dest' => $dest));
-      return;
+      return null;
     }
 
     self :: mkdir($dest);
@@ -361,6 +353,8 @@ class lmbFs
         return '/';
       case self :: DOS:
         return "\\";
+      default:
+        throw new lmbException("Unknown FS type $type");
     }
   }
 
@@ -421,7 +415,7 @@ class lmbFs
 
   static function isPathRelative($path, $fs_type = self :: LOCAL)
   {
-    return !self :: isPathAbsolute($path, $os_type);
+    return !self :: isPathAbsolute($path, $fs_type);
   }
 
   static function isPathAbsolute($path, $fs_type = self :: LOCAL)
@@ -434,6 +428,8 @@ class lmbFs
         return $path{0} == '/' ||
                $path{0} == "\\" ||
                preg_match('~^[a-zA-Z]+:~', $path);
+      default:
+        throw new lmbException("Unknown FS type $fs_type");
     }
   }
 

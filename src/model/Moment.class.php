@@ -67,7 +67,7 @@ class Moment extends lmbActiveRecord
     lmbFs::safeWrite(lmb_env_get('APP_DIR')."/www/".$path, $content);
   }
 
-  function getImagePath()
+  function getImagePath($size_variation = '300x300')
   {
     if(!$this->getImageExt())
       return '';
@@ -79,7 +79,8 @@ class Moment extends lmbActiveRecord
       throw new lmbException("Can't create image path, because moment have no user");
     $user_id = $this->getDay()->getUser()->getId();
     $day_id = $this->getDayId();
-    $filename = sha1('s0l7&p3pp$r'.$user_id.$day_id.$this->getId()).'.'.$this->getImageExt();
-    return "/media/$user_id/day/$day_id/$filename";
+    $hash = sha1('s0l7&p3pp$r'.$user_id.$day_id.$this->getId());
+    $ext = $this->getImageExt();
+    return "/users/$user_id/days/$day_id/{$hash}_$size_variation.$ext";
   }
 }
