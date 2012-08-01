@@ -2,6 +2,14 @@
 
 class odObjectMother
 {
+  protected $generate_random = false;
+
+  public function __construct()
+  {
+    // TODO when its better to have static values?
+    $this->generate_random = (lmb_env_get('LIMB_APP_MODE') != 'devel');
+  }
+
   /**
    * @return User
    */
@@ -47,7 +55,12 @@ class odObjectMother
     $day->setTimezone(0);
     $day->setLocation($this->string(25));
     $types = Day::getTypes();
-    $day->setType($types[array_rand($types)]);
+
+    if(!$this->generate_random)
+      $day->setType($types[0]);
+    else
+      $day->setType($types[array_rand($types)]);
+
     $day->setUser($user ?: $this->user());
     return $day;
   }
@@ -109,8 +122,22 @@ class odObjectMother
     return $complaint;
   }
 
+  function news(User $creator = null, User $recipient = null) {
+    $creator   = $creator   ?: $this->user();
+    $recipient = $recipient ?: $this->user();
+
+    $news = new News();
+    $news->setRecipient($recipient);
+    $news->setUser($creator);
+    $news->setText($creator->name . ' likes ' . $recipient->name);
+    return $news;
+  }
+
   function string($length = 6)
   {
+    if(!$this->generate_random)
+      return substr(str_repeat("foobar", ceil($length/6)+1), 0, $length);
+
     $conso = array("b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "r", "s", "t", "v", "w", "x", "y", "z");
     $vocal = array("a", "e", "i", "o", "u");
     $password = "";
@@ -123,19 +150,11 @@ class odObjectMother
     return $password;
   }
 
-  function news(User $creator = null, User $recipient = null) {
-    $creator   = $creator   ?: $this->user();
-    $recipient = $recipient ?: $this->user();
-
-    $news = new News();
-    $news->setRecipient($recipient);
-    $news->setUser($creator);
-    $news->setText($creator->name . ' likes ' . $recipient->name);
-    return $news;
-  }
-
   function integer($length = 4)
   {
+    if(!$this->generate_random)
+      return (int) substr(str_repeat("1337", ceil($length/4)+1), 0, $length);
+
     return rand(1, 10^($length+1) - 1);
   }
 
@@ -155,6 +174,9 @@ class odObjectMother
 
   function date_sql()
   {
+    if(!$this->generate_random)
+      return sprintf("%1d-%2$02d-%3$02d", 1990, 1, 2);
+
 		return sprintf("%1d-%2$02d-%3$02d", rand(1900, 1990), rand(0, 1), rand(1, 29));
   }
 
