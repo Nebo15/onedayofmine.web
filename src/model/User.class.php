@@ -63,6 +63,7 @@ class User extends BaseModel
     $validator->addRequiredRule('email');
   	$validator->addRequiredRule('fb_uid');
   	$validator->addRequiredRule('fb_access_token');
+  	// $validator->addRequiredRule('fb_profile_url');
   	$validator->addRequiredRule('fb_profile_utime');
   	$validator->addRequiredRule('fb_pic_big');
   	$validator->addRequiredRule('fb_pic_square');
@@ -98,27 +99,21 @@ class User extends BaseModel
 
   function exportForApi()
   {
-    $result = $this->export();
-    unset($result['twitter_access_token']);
-    unset($result['twitter_access_token_secret']);
-    unset($result['fb_access_token']);
-    unset($result['cip']);
-    unset($result['user_settings_id']);
-    unset($result['ctime']);
-    unset($result['utime']);
-    unset($result['email']);
-    // Additional export removals
-    unset($result['fb_profile_utime']);
-    unset($result['email']);
-    $result['followers_count'] = $this->getFollowers()->count();
-    $result['following_count'] = $this->getFollowing()->count();
-    $result['days_count'] = $this->getDays()->count();
+    $result = new stdClass();
+    $result->id = $this->id;
+    $result->name = $this->name;
+    $result->sex = $this->sex;
+    $result->pic_small = 'aaa';
+    $result->pic_big = 'bbb';
+    $result->birthday = $this->birthday;
+    $result->followers_count = $this->getFollowers()->count();
+    $result->following_count = $this->getFollowing()->count();
+    $result->days_count = $this->getDays()->count();
     if(lmbToolkit::instance()->getUser() && $this->getId() != lmbToolkit::instance()->getUser()->getId()) {
-      $result['is_followed'] = UserFollowing::isFollowing(lmbToolkit::instance()->getUser(), $this);
-      $result['is_follower'] = UserFollowing::isFollowing($this, lmbToolkit::instance()->getUser());
+      $result->is_followed = UserFollowing::isFollowing(lmbToolkit::instance()->getUser(), $this);
+      $result->is_follower = UserFollowing::isFollowing($this, lmbToolkit::instance()->getUser());
     }
-    ksort($result);
-    return (object) $result;
+    return $result;
   }
 
   function setSettings(UserSettings $settings)

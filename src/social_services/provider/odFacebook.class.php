@@ -39,4 +39,9 @@ class odFacebook extends Facebook implements odSocialServicesProviderInterface
       return false;
     }
   }
+
+  function downloadImage($url)
+  {
+    return file_get_contents($url);
+  }
 }
