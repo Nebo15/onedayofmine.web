@@ -21,7 +21,7 @@ class odTestsTools extends lmbAbstractTools
 	 */
 	protected $model_to_entities_writer;
 
-  protected $proxy_host = 'http://onedayofmine.com/';
+  protected $proxy_host = 'http://onedayofmine.com';
 
 	/**
 	 * @return odPostmanWriter
