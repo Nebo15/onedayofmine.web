@@ -63,11 +63,9 @@ class User extends BaseModel
     $validator->addRequiredRule('email');
   	$validator->addRequiredRule('fb_uid');
   	$validator->addRequiredRule('fb_access_token');
-  	// $validator->addRequiredRule('fb_profile_url');
   	$validator->addRequiredRule('fb_profile_utime');
-  	$validator->addRequiredRule('fb_pic_big');
-  	$validator->addRequiredRule('fb_pic_square');
-  	$validator->addRequiredRule('fb_pic_small');
+  	$validator->addRequiredRule('pic_big');
+  	$validator->addRequiredRule('pic_small');
   	$validator->addRequiredRule('timezone');
   	$validator->addRequiredRule('sex');
   	$validator->addRequiredRule('birthday');
@@ -82,30 +80,19 @@ class User extends BaseModel
     return lmbToolkit::instance()->getSocialServices()->getSocialProfile($this, $provider);
   }
 
-  static function findByFbAccessToken($fb_access_token)
-  {
-    return User::findOne(array('fb_access_token = ?', $fb_access_token));
-  }
-
-  static function findByFbUid($fb_uid)
-  {
-    return User::findOne(array('fb_uid = ?', $fb_uid));
-  }
-
-  static function findByTwitterUid($twitter_uid)
-  {
-    return User::findOne(array('twitter_uid = ?', $twitter_uid));
-  }
-
   function exportForApi()
   {
     $result = new stdClass();
     $result->id = $this->id;
+    $result->fb_uid = $this->fb_uid;
+    $result->twitter_uid = $this->twitter_uid;
     $result->name = $this->name;
     $result->sex = $this->sex;
-    $result->pic_small = 'aaa';
-    $result->pic_big = 'bbb';
+    $result->pic_small = $this->pic_small;
+    $result->pic_big = $this->pic_big;
     $result->birthday = $this->birthday;
+    $result->occupation = $this->occupation;
+    $result->location = $this->location;
     $result->followers_count = $this->getFollowers()->count();
     $result->following_count = $this->getFollowing()->count();
     $result->days_count = $this->getDays()->count();
@@ -149,5 +136,30 @@ class User extends BaseModel
     if($to_id)
       $criteria->add(lmbSQLCriteria::less('id', $to_id));
     return $this->getFavouriteDays()->find(array('criteria' => $criteria))->paginate(0, 100);
+  }
+
+  function getPicSmall()
+  {
+    return 'http://lorempixel.com/g/400/200/';
+  }
+
+  function getPicBig()
+  {
+    return 'http://lorempixel.com/g/400/200/';
+  }
+
+  static function findByFbAccessToken($fb_access_token)
+  {
+    return User::findOne(array('fb_access_token = ?', $fb_access_token));
+  }
+
+  static function findByFbUid($fb_uid)
+  {
+    return User::findOne(array('fb_uid = ?', $fb_uid));
+  }
+
+  static function findByTwitterUid($twitter_uid)
+  {
+    return User::findOne(array('twitter_uid = ?', $twitter_uid));
   }
 }

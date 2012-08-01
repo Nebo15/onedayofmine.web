@@ -38,6 +38,7 @@ class Day extends BaseModel
     $export->id = $this->getId();
     $export->user_id = $this->getUser()->getId();
     $export->user_name = $this->getUser()->getName();
+    $export->fb_uid = $this->getUser()->fb_uid;
     $export->title = $this->getTitle();
     $export->occupation = $this->getOccupation();
     $export->timezone = $this->getTimezone();
