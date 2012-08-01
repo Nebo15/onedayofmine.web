@@ -35,19 +35,22 @@ class lmbTestShellReporter extends TextReporter
     parent :: paintGroupEnd($test_name);
   }
 
+  protected $time;
   function paintCaseStart($test_name)
   {
     parent :: paintCaseStart($test_name);
 
     if(lmbTestOptions :: get('verbose'))
       print "======== $test_name ========\n";
+
+    $this->time = microtime(true);
   }
 
   function paintCaseEnd($test_name)
   {
     parent :: paintCaseEnd($test_name);
 
-    print $this->getTestCaseProgress() . " of " . $this->getTestCaseCount() . " done({$test_name})\n";
+    print $this->getTestCaseProgress() . "/" . $this->getTestCaseCount() . ". \e[1;30m{$test_name}\e[0m: done in ".(microtime(true)-$this->time).PHP_EOL;
   }
 
   function paintMethodStart($test_name)
