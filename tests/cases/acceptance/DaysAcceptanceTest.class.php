@@ -19,7 +19,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
    * @api result int timezone UTC time zone offset
    * @api result string occupation
    * @api result string location Text value of longitude and latitude separated by coma. See: Yahoo PlaceFinder API
-   * @api result int type One of pre-defined types, see: GET day/get_types request
+   * @api result int type One of pre-defined types, see: GET day/type_names request
    * @api result int likes_count
    * @api result int ctime Creation time
    * @api result int utime Last update time
@@ -568,7 +568,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   /**
    * @api
    */
-  function testGetTypes()
+  function testTypeNames()
   {
     $types = $this->get('days/type_names')->result;
     $this->assertResponse(200);
