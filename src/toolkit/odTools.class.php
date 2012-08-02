@@ -3,7 +3,6 @@ lmb_require('limb/toolkit/src/lmbAbstractTools.class.php');
 lmb_require('src/social_services/provider/*.class.php');
 lmb_require('src/social_services/user/*.class.php');
 lmb_require('src/odSocialServices.class.php');
-lmb_require('tests/src/odCachedFacebook.class.php');
 lmb_require('src/odNewsObserver.class.php');
 
 class odTools extends lmbAbstractTools
