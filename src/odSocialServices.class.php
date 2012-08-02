@@ -1,4 +1,6 @@
 <?php
+lmb_require('tests/src/service/odRemoteApiMock.class.php');
+
 /**
  * Implements same interface as users to allow batch pocessing.
  */
@@ -28,6 +30,13 @@ class odSocialServices
       }
 
       $twitter_instances[$access_token] = new odTwitter($config);
+
+      if(lmbToolkit::instance()->getConf('common')->remote_api_cache_enabled)
+        $twitter_instances[$access_token] = new odRemoteApiMock(
+          $twitter_instances[$access_token],
+          lmbToolkit::instance()->createCacheConnectionByDSN('file:///'.lmb_var_dir().'/twitter_cache/'.$access_token)
+        );
+
     }
 
     return $twitter_instances[$access_token];
@@ -45,10 +54,18 @@ class odSocialServices
 
     if(!array_key_exists($access_token, $facebook_instances)) {
       // NOTICE: connection can be cached
-      $facebook_instances[$access_token] = new odFacebook(odFacebook::getConfig());
+      $instance = new odFacebook(odFacebook::getConfig());
 
       if(!is_null($access_token))
-        $facebook_instances[$access_token]->setAccessToken($access_token);
+        $instance->setAccessToken($access_token);
+
+      if(lmbToolkit::instance()->getConf('common')->remote_api_cache_enabled)
+        $facebook_instances[$access_token] = new odRemoteApiMock(
+          $instance,
+          lmbToolkit::instance()->createCacheConnectionByDSN('file:///'.lmb_var_dir().'/facebook_cache/'.$access_token)
+        );
+      else
+        $facebook_instances[$access_token] = $instance;
     }
 
     return $facebook_instances[$access_token];

@@ -18,6 +18,13 @@ class FacebookProfile implements SocialServicesProfileInterface
   {
     $this->provider = new odFacebook(odFacebook::getConfig());
     $this->provider->setAccessToken($user->getFbAccessToken());
+
+    if(lmbToolkit::instance()->getConf('common')->remote_api_cache_enabled)
+      $this->provider = new odRemoteApiMock(
+        $this->provider,
+        lmbToolkit::instance()->createCacheConnectionByDSN('file:///'.lmb_var_dir().'/facebook_cache/'.$user->getFbAccessToken())
+      );
+
     $this->user     = $user;
   }
 
