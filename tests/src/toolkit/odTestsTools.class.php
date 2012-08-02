@@ -57,7 +57,9 @@ class odTestsTools extends lmbAbstractTools
 
 	function getTestsUsers()
 	{
-    $users_infos = lmbToolkit::instance()->loadTestsUsersInfo();
+    $fb_test_users = lmbToolkit::instance()->loadTestsUsersInfo();
+    $users_infos = array(array_pop($fb_test_users), array_pop($fb_test_users));
+
     if(!count($users_infos))
     {
       echo "Can't load users from fb";
