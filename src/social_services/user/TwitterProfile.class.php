@@ -70,8 +70,7 @@ class TwitterProfile implements SocialServicesProfileInterface
       ));
 
       if($response) {
-        $ids = array_merge($ids, $response->ids);
-        $cursor = $response->next_cursor_str;
+        $cursor = $response['next_cursor_str'];
       }
     }
     return $ids;
@@ -122,7 +121,7 @@ class TwitterProfile implements SocialServicesProfileInterface
     foreach($this->getFriends() as $friend)
     {
       $info = $this->_mapUserInfo($friend);
-      $user = User::findByTwitterUid($friend->id);
+      $user = User::findByTwitterUid($friend['id']);
       if(!$user)
         continue;
       $user->setUserInfo($info);
@@ -181,12 +180,12 @@ class TwitterProfile implements SocialServicesProfileInterface
   protected function _mapUserInfo($user_info)
   {
     return array(
-        'twitter_uid'      => $user_info->id,
-        'name'             => $user_info->screen_name,
-        'timezone'         => $user_info->utc_offset,
-        'picture'          => $user_info->profile_image_url,
-        'current_location' => isset($user_info->location)
-                                  ? $user_info->location
+        'twitter_uid'      => $user_info['id'],
+        'name'             => $user_info['screen_name'],
+        'timezone'         => $user_info['utc_offset'],
+        'picture'          => $user_info['profile_image_url'],
+        'current_location' => isset($user_info['location'])
+                                  ? $user_info['location']
                                   : ''
     );
   }

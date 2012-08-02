@@ -23,14 +23,14 @@ class TwitterProfileTest extends odUnitTestCase
   function testGetInfoRaw()
   {
     $info = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER)->getInfo_Raw();
-    $this->assertTrue($info);
-    $this->assertEqual($info->id, $this->main_user->getTwitterUid());
+    $this->assertTrue(count($info));
+    $this->assertEqual($info['id'], $this->main_user->getTwitterUid());
   }
 
   function testGetInfo()
   {
     $info = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER)->getInfo();
-    $this->assertTrue($info);
+    $this->assertTrue(count($info));
     $this->assertEqual($info['twitter_uid'], $this->main_user->getTwitterUid());
   }
 
@@ -45,7 +45,7 @@ class TwitterProfileTest extends odUnitTestCase
   {
     $friends = $this->additional_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER)->getFriends();
     $this->assertEqual(count($friends), 1);
-    $this->assertEqual($friends[0]->id, $this->main_user->getTwitterUid());
+    $this->assertEqual($friends[0]['id'], $this->main_user->getTwitterUid());
   }
 
   function testGetRegisteredFriends()
@@ -61,9 +61,11 @@ class TwitterProfileTest extends odUnitTestCase
     $social_profile = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER);
     $tweet = $social_profile->tweet($text);
 
-    if($this->assertTrue(is_object($tweet))) {
-      $this->assertTrue($tweet->id);
-      $this->assertEqual($text, $tweet->text);
+    // Notice: if you got error here, then log in twitter as ODMTestUser and remove "foobar" tweet.
+    // Twitter dont allow to send same tweet in shor periods of time.
+    if($this->assertTrue(count($tweet))) {
+      $this->assertTrue($tweet['id']);
+      $this->assertEqual($text, $tweet['text']);
     }
 
     $twitter = lmbToolkit::instance()->getSocialServices()->getTwitter(
@@ -73,9 +75,9 @@ class TwitterProfileTest extends odUnitTestCase
 
     // sleep(5);
     // $response = $twitter->api('1/statuses/user_timeline')[0];
-    // $this->assertEqual($response->id, $tweet->id);
-    // $this->assertEqual($response->text, $tweet->text);
-    // $this->assertEqual($response->user->id, $tweet->user->id);
+    // $this->assertEqual($response['id'], $tweet['id']);
+    // $this->assertEqual($response['text'], $tweet['text']);
+    // $this->assertEqual($response->user['id'], $tweet->user['id']);
   }
 
 
@@ -89,8 +91,8 @@ class TwitterProfileTest extends odUnitTestCase
 
     $provider = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER);
     $tweet = $provider->shareDayBegin($day_url);
-    if($this->assertTrue(is_object($tweet))) {
-      $this->assertTrue($tweet->id);
+    if($this->assertTrue(count($tweet))) {
+      $this->assertTrue($tweet['id']);
     }
   }
 
@@ -103,12 +105,12 @@ class TwitterProfileTest extends odUnitTestCase
     $day_url = $this->_copyDayPageToProxy($day);
 
     $tweet = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER)->shareDayBegin($day_url);
-    if($this->assertTrue(is_object($tweet))) {
-      $this->assertTrue($tweet->id);
+    if($this->assertTrue(count($tweet))) {
+      $this->assertTrue($tweet['id']);
     }
     $tweet = $this->additional_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER)->shareDayLike($day_url);
-    if($this->assertTrue(is_object($tweet))) {
-      $this->assertTrue($tweet->id);
+    if($this->assertTrue(count($tweet))) {
+      $this->assertTrue($tweet['id']);
     }
   }
 
@@ -126,16 +128,16 @@ class TwitterProfileTest extends odUnitTestCase
     $moment->save();
     $moment_url = $this->_copyMomentPageToProxy($moment);
     $tweet = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER)->shareMomentAdd($moment_url, $day_url);
-    if($this->assertTrue(is_object($tweet))) {
-      $this->assertTrue($tweet->id);
+    if($this->assertTrue(count($tweet))) {
+      $this->assertTrue($tweet['id']);
     }
 
     $moment = $this->generator->moment($day);
     $moment->save();
     $moment_url = $this->_copyMomentPageToProxy($moment);
     $tweet = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER)->shareMomentAdd($moment_url, $day_url);
-    if($this->assertTrue(is_object($tweet))) {
-      $this->assertTrue($tweet->id);
+    if($this->assertTrue(count($tweet))) {
+      $this->assertTrue($tweet['id']);
     }
   }
 
@@ -153,12 +155,12 @@ class TwitterProfileTest extends odUnitTestCase
     $moment_url = $this->_copyMomentPageToProxy($moment);
 
     $tweet = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER)->shareMomentAdd($moment_url, $day_url);
-    if($this->assertTrue(is_object($tweet))) {
-      $this->assertTrue($tweet->id);
+    if($this->assertTrue(count($tweet))) {
+      $this->assertTrue($tweet['id']);
     }
 
     $tweet = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER)->shareMomentLike($moment_url);
-    if($this->assertTrue(is_object($tweet))) {
+    if($this->assertTrue(count($tweet))) {
       $this->assertTrue($tweet);
     }
   }
@@ -171,12 +173,12 @@ class TwitterProfileTest extends odUnitTestCase
     $day_url = $this->_copyDayPageToProxy($day);
 
     $tweet = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER)->shareDayBegin($day_url);
-    if($this->assertTrue(is_object($tweet))) {
-      $this->assertTrue($tweet->id);
+    if($this->assertTrue(count($tweet))) {
+      $this->assertTrue($tweet['id']);
     }
     $tweet = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER)->shareDayEnd($day_url);
-    if($this->assertTrue(is_object($tweet))) {
-      $this->assertTrue($tweet->id);
+    if($this->assertTrue(count($tweet))) {
+      $this->assertTrue($tweet['id']);
     }
   }
 
@@ -189,8 +191,8 @@ class TwitterProfileTest extends odUnitTestCase
     $day_url = $this->_copyDayPageToProxy($day);
 
     $tweet = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER)->shareDay($day, $day_url);
-    if($this->assertTrue(is_object($tweet))) {
-      $this->assertTrue($tweet->id);
+    if($this->assertTrue(count($tweet))) {
+      $this->assertTrue($tweet['id']);
     }
   }
 

@@ -40,9 +40,13 @@ class SocialController extends BaseJsonController
         return $this->_answerWithError($this->error_list->export(), null, 403);
       }
 
-      $this->toolkit->getUser()->setTwitterUid(json_decode($provider->response['response'])->id);
       $this->toolkit->getUser()->setTwitterAccessToken($access_token);
       $this->toolkit->getUser()->setTwitterAccessTokenSecret($access_token_secret);
+
+      // 2 requests is not optimal solution
+      $twitter_uid = $this->toolkit->getUser()->getSocialProfile(odSocialServices::PROVIDER_TWITTER)->getInfo()['twitter_uid'];
+      $this->toolkit->getUser()->setTwitterUid($twitter_uid);
+
       $this->toolkit->getUser()->save();
 
       return $this->_answerOk($this->toolkit->getUser());
