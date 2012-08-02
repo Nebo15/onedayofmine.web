@@ -55,10 +55,13 @@ class odTestsTools extends lmbAbstractTools
 		return $this->model_to_entities_writer;
 	}
 
-	function getTestsUsers()
+	function getTestsUsers($all = false)
 	{
     $fb_test_users = lmbToolkit::instance()->loadTestsUsersInfo();
-    $users_infos = array(array_pop($fb_test_users), array_pop($fb_test_users));
+    if($all)
+      $users_infos = $fb_test_users;
+    else
+      $users_infos = array(array_pop($fb_test_users), array_pop($fb_test_users));
 
     if(!count($users_infos))
     {
