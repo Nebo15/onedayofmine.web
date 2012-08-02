@@ -50,7 +50,8 @@ class lmbTestShellReporter extends TextReporter
   {
     parent :: paintCaseEnd($test_name);
 
-    print $this->getTestCaseProgress() . "/" . $this->getTestCaseCount() . ". \e[1;30m{$test_name}\e[0m: done in ".(microtime(true)-$this->time).PHP_EOL;
+    $time = round((microtime(true)-$this->time), 2);
+    print $this->getTestCaseProgress() . "/" . $this->getTestCaseCount() . ". {$test_name}: done \e[1;30m{$time}\e[0m".PHP_EOL;
   }
 
   function paintMethodStart($test_name)
