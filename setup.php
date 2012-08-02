@@ -21,9 +21,9 @@ lmb_env_setor('APP_DIR', $app_dir);
 lmb_env_setor('LIBS_DIR', $libs_dir);
 lmb_env_setor('LIMB_VAR_DIR', $app_dir . '/var/');
 
-if(array_key_exists('HTTP_HOST', $_SERVER))
-  lmb_env_setor('HOST_NAME', $_SERVER['HTTP_HOST']);
-lmb_env_setor('FB_HOST_NAME', 'onedayofmine.com');
+if(array_key_exists('HTTP_NAME', $_SERVER))
+  lmb_env_setor('HOST_URL', 'http://'.$_SERVER['HTTP_HOST']);
+lmb_env_setor('FB_HOST_URL', 'http://onedayofmine.com');
 
 lmb_env_setor('LIMB_APP_MODE' , 'production');
 

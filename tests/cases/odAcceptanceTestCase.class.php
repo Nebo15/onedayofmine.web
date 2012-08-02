@@ -35,7 +35,7 @@ abstract class odAcceptanceTestCase extends WebTestCase
 
   function get($url, $params = array(), $doc = true)
   {
-    $raw_response = parent::get(lmb_env_get('HOST_NAME') . $url, $params);
+    $raw_response = parent::get(lmbToolkit::instance()->getSiteUrl($url), $params);
     $result = $this->_decodeResponse($raw_response);
     if(
       !property_exists($result, 'result') ||
@@ -54,7 +54,7 @@ abstract class odAcceptanceTestCase extends WebTestCase
   {
     if(is_object($params))
       $params = (array) $params;
-    $raw_response = parent::post(lmb_env_get('HOST_NAME') . $url, $params);
+    $raw_response = parent::post(lmbToolkit::instance()->getSiteUrl($url), $params);
     $result = $this->_decodeResponse($raw_response);
     if(
       !property_exists($result, 'result') ||

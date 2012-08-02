@@ -84,7 +84,7 @@ class odTools extends lmbAbstractTools
 
   function getSiteUrl($path = '')
   {
-    return lmb_env_get('HOST_NAME').$path;
+    return lmb_env_get('HOST_URL').$path;
   }
 
   function getAbsolutePath($www_path)

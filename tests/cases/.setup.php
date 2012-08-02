@@ -8,7 +8,7 @@ lmb_require('tests/src/odObjectMother.class.php');
 lmb_require('tests/src/toolkit/odTestsTools.class.php');
 lmbToolkit :: merge(new odTestsTools());
 
-lmbToolkit::instance()->checkServer(lmb_env_get('HOST_NAME'));
+lmbToolkit::instance()->checkServer(lmb_env_get('HOST_URL'));
 lmbToolkit::instance()->getPostmanWriter()->deleteFile();
 lmbToolkit::instance()->getApiToMarkdownWriter()->deleteFile();
 

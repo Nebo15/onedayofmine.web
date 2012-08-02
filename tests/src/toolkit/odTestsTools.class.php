@@ -137,7 +137,7 @@ class odTestsTools extends lmbAbstractTools
    */
   protected function createProxyClient()
   {
-    return new Client($this->proxy_host.'/proxy.php', lmb_env_get('HOST_NAME'));
+    return new Client($this->proxy_host.'/proxy.php', lmbToolkit::instance()->getSiteUrl(''));
   }
 }
 

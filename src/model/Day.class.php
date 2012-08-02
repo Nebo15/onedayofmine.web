@@ -59,6 +59,7 @@ class Day extends BaseModel
     if(lmbToolkit::instance()->getUser()) {
       $export->is_favorited = DayFavourite::isFavourited(lmbToolkit::instance()->getUser(), $this);
     }
+
     $comments = $this->getComments();
     $export->comments_count = $comments->count();
     $export->comments = array();
