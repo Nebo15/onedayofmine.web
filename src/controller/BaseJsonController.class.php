@@ -22,7 +22,7 @@ abstract class BaseJsonController extends lmbController
       return null;
     }
 
-    if(method_exists($this, $method = $this->_mapCurrentActionToMethod()))
+    if(method_exists($this, $method = lmb_camel_case('do_' . $this->current_action)))
     {
       if($template_path = $this->findTemplateForAction($this->current_action))
         $this->setTemplate($template_path);
