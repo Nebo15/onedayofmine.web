@@ -10,27 +10,29 @@ class AuthController extends BaseJsonController
   {
     if(!$this->request->hasPost())
       return $this->_answerOk(null, 405, 'Use POST, Luke');
-    if(!$fb_access_token = $this->request->get('fb_access_token'))
-      return $this->_answerOk('fb_access_token not given', 412);
+    if(!$fb_access_token = $this->request->get('token'))
+      return $this->_answerOk('token not given', 412);
 
     if(!$this->toolkit->getSocialServices()->getFacebook($fb_access_token)->validateAccessToken($this->error_list))
       return $this->_answerWithError($this->error_list, null, 403);
 
     $new_user = false;
+    $facebook_info = null;
     if(!$user = User::findByFbAccessToken($fb_access_token)) {
-      $user = $this->_register($fb_access_token);
+      $user = $this->_register($fb_access_token, $facebook_info);
       $new_user = true;
     }
 
     $this->toolkit->setUser($user);
 
     $answer = new stdClass();
-    $answer->sessid = session_id();
     $answer->user = $user->exportForApi();
 
     // Notify friends that they'r friend registered
     if($new_user)
+    {
       $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_USER, $user);
+    }
 
     $answer->user->followers = array();
     foreach ($user->getFollowers() as $follower) {
@@ -51,7 +53,12 @@ class AuthController extends BaseJsonController
   {
     $user = new User();
     $user->setFbAccessToken($fb_access_token);
-    $user->import($user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->getInfo());
+    $facebook_info = $user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->getInfo();
+    $user->import($facebook_info);
+    $user->save();
+
+    $userpic_url = $facebook_info['pic'];
+    $user->attachImage($userpic_url, file_get_contents($userpic_url));
     $user->save();
 
     return $user;

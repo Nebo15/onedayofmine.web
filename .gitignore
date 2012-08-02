@@ -1,6 +1,7 @@
 .idea
 *override.php
 *~*
+*.orig
 *conflicted*
 .buildpath
 .project
@@ -15,6 +16,7 @@ tests/var/*
 www/media
 www/proxy.php
 www/tests
+www/users
 
 nbproject
 .sublime*

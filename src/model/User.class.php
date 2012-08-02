@@ -1,5 +1,6 @@
 <?php
 lmb_require('src/model/BaseModel.class.php');
+lmb_require('limb/imagekit/src/lmbConvertImageHelper.class.php');
 
 /**
  * @api
@@ -12,6 +13,10 @@ lmb_require('src/model/BaseModel.class.php');
  */
 class User extends BaseModel
 {
+  const USERPIC_ORIG = 'orig';
+  const USERPIC_SMALL = '70x70';
+  const USERPIC_BIG = '140x140';
+
   protected function _defineRelations()
   {
     $this->_has_one = array (
@@ -64,9 +69,6 @@ class User extends BaseModel
   	$validator->addRequiredRule('fb_uid');
   	$validator->addRequiredRule('fb_access_token');
   	$validator->addRequiredRule('fb_profile_utime');
-  	$validator->addRequiredRule('fb_pic_big');
-  	$validator->addRequiredRule('fb_pic_square');
-  	$validator->addRequiredRule('fb_pic_small');
   	$validator->addRequiredRule('timezone');
   	$validator->addRequiredRule('sex');
   	$validator->addRequiredRule('birthday');
@@ -81,44 +83,27 @@ class User extends BaseModel
     return lmbToolkit::instance()->getSocialServices()->getSocialProfile($this, $provider);
   }
 
-  static function findByFbAccessToken($fb_access_token)
-  {
-    return User::findOne(array('fb_access_token = ?', $fb_access_token));
-  }
-
-  static function findByFbUid($fb_uid)
-  {
-    return User::findOne(array('fb_uid = ?', $fb_uid));
-  }
-
-  static function findByTwitterUid($twitter_uid)
-  {
-    return User::findOne(array('twitter_uid = ?', $twitter_uid));
-  }
-
   function exportForApi()
   {
-    $result = $this->export();
-    unset($result['twitter_access_token']);
-    unset($result['twitter_access_token_secret']);
-    unset($result['fb_access_token']);
-    unset($result['cip']);
-    unset($result['user_settings_id']);
-    unset($result['ctime']);
-    unset($result['utime']);
-    unset($result['email']);
-    // Additional export removals
-    unset($result['fb_profile_utime']);
-    unset($result['email']);
-    $result['followers_count'] = $this->getFollowers()->count();
-    $result['following_count'] = $this->getFollowing()->count();
-    $result['days_count'] = $this->getDays()->count();
+    $result = new stdClass();
+    $result->id = $this->id;
+    $result->fb_uid = $this->fb_uid;
+    $result->twitter_uid = $this->twitter_uid;
+    $result->name = $this->name;
+    $result->sex = $this->sex;
+    $result->pic_small = lmbToolkit::instance()->getSiteUrl($this->getPicSmall());
+    $result->pic_big = lmbToolkit::instance()->getSiteUrl($this->getPicBig());
+    $result->birthday = $this->birthday;
+    $result->occupation = $this->occupation;
+    $result->location = $this->location;
+    $result->followers_count = $this->getFollowers()->count();
+    $result->following_count = $this->getFollowing()->count();
+    $result->days_count = $this->getDays()->count();
     if(lmbToolkit::instance()->getUser() && $this->getId() != lmbToolkit::instance()->getUser()->getId()) {
-      $result['is_followed'] = UserFollowing::isFollowing(lmbToolkit::instance()->getUser(), $this);
-      $result['is_follower'] = UserFollowing::isFollowing($this, lmbToolkit::instance()->getUser());
+      $result->is_followed = UserFollowing::isFollowing(lmbToolkit::instance()->getUser(), $this);
+      $result->is_follower = UserFollowing::isFollowing($this, lmbToolkit::instance()->getUser());
     }
-    ksort($result);
-    return (object) $result;
+    return $result;
   }
 
   function setSettings(UserSettings $settings)
@@ -154,5 +139,67 @@ class User extends BaseModel
     if($to_id)
       $criteria->add(lmbSQLCriteria::less('id', $to_id));
     return $this->getFavouriteDays()->find(array('criteria' => $criteria))->paginate(0, 100);
+  }
+
+  function attachImage($filename_or_url, $content)
+  {
+    $extension = strtolower(substr($filename_or_url, strrpos($filename_or_url, '.')+1));
+    $this->setImageExt($extension);
+
+    $orig_file = lmbToolkit::instance()->getAbsolutePath($this->getPicOrig());
+    lmbFs::safeWrite($orig_file, $content);
+
+    $small_file = lmbToolkit::instance()->getAbsolutePath($this->getPicSmall());
+    $helper = new lmbConvertImageHelper($orig_file);
+    $helper->resizeAndCropFrame(array('width' => 70, 'height' => 70));
+    $helper->save($small_file);
+
+    $small_file = lmbToolkit::instance()->getAbsolutePath($this->getPicBig());
+    $helper = new lmbConvertImageHelper($orig_file);
+    $helper->resizeAndCropFrame(array('width' => 140, 'height' => 140));
+    $helper->save($small_file);
+  }
+
+  function getPicOrig()
+  {
+    return $this->getPicPath(User::USERPIC_ORIG);
+  }
+
+  function getPicSmall()
+  {
+    return $this->getPicPath(User::USERPIC_SMALL);
+  }
+
+  function getPicBig()
+  {
+    return $this->getPicPath(User::USERPIC_BIG);
+  }
+
+  function getPicPath($size_variation = User::USERPIC_ORIG)
+  {
+    $ext = $this->getImageExt();
+    if(!$ext)
+      return '';
+
+    if(!$this->getId())
+      throw new lmbException("Can't create image path, because user have no id");
+    $user_id = $this->getId();
+    $hash = sha1('s0l7&p3pp$r'.$user_id);
+    return "users/$user_id/{$hash}_$size_variation.$ext";
+  }
+
+  static function findByFbAccessToken($fb_access_token)
+  {
+    return User::findOne(array('fb_access_token = ?', $fb_access_token));
+  }
+
+  static function findByFbUid($fb_uid)
+  {
+    return User::findOne(array('fb_uid = ?', $fb_uid));
+  }
+
+  static function findByTwitterUid($twitter_uid)
+  {
+    return User::findOne(array('twitter_uid = ?', $twitter_uid));
   }
 }

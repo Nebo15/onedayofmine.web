@@ -262,9 +262,9 @@ function lmb_var_export($arg, $level = 1)
 
   	case 'string':
       $dump = 'STRING('.strlen($arg).') "';
-      $dump .= lmb_escape_string((string) $arg, 100);
+      $dump .= lmb_escape_string((string) $arg, 1024);
 
-      if(strlen($arg) > 100)
+      if(strlen($arg) > 1024)
         $dump .= '...';
 
       $dump .= '"';
@@ -304,8 +304,22 @@ function lmb_var_dir($new_value = null)
 {
   if($new_value)
     lmb_env_set('LIMB_VAR_DIR', $new_value);
-  else
+
+  if(lmb_env_get('LIMB_VAR_DIR'))
     return lmb_env_get('LIMB_VAR_DIR');
+
+  if($path = session_save_path())
+  {
+    if(($pos = strpos($path, ';')) !== false)
+      $path = substr($path, $pos+1);
+    return $path;
+  }
+
+  if($tmp = getenv('TMP') || $tmp = getenv('TEMP') || $tmp = getenv('TMPDIR'))
+    return $tmp;
+
+  //gracefull fallback?
+  return '/tmp';
 }
 
 function lmb_app_mode($new_value = null)

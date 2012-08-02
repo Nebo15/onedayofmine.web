@@ -63,6 +63,9 @@ abstract class lmbAbstractImageConverter
     return new lmbFileLocator(new lmbFileLocationsList($dirs));
   }
 
+  /**
+   * @return lmbAbstractImageContainer
+   */
   function getContainer()
   {
     return $this->container;

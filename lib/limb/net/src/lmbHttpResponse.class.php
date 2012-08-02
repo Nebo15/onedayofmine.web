@@ -197,7 +197,7 @@ class lmbHttpResponse
 
   function setContentType($type)
   {
-    $this->addHeader('content-type', $type);
+    $this->addHeader('content-type: '.$type);
   }
 
   function getContentType()

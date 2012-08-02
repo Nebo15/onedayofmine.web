@@ -26,6 +26,9 @@ class odTools extends lmbAbstractTools
     if(null != $this->user)
       return $this->user;
 
+    if(!lmbToolkit :: instance()->getSession()->get('user_id'))
+      return null;
+
     $this->user = User::findById(lmbToolkit :: instance()->getSession()->get('user_id'));
 
     return $this->user;
@@ -69,20 +72,24 @@ class odTools extends lmbAbstractTools
    */
   function getSessidFromRequest()
   {
-    $sessid_name = lmb_env_get('SESSION_NAME');
     $request = $this->toolkit->getRequest();
-    if($request->getPost($sessid_name))
-      return $request->getPost($sessid_name);
-    if($request->getGet($sessid_name))
-      return $request->getGet($sessid_name);
-    if($request->getCookie($sessid_name))
-      return $request->getCookie($sessid_name);
-    return '';
+    if($request->getPost('token'))
+      return $request->getPost('token');
+    if($request->getGet('token'))
+      return $request->getGet('token');
+    if($request->getCookie('token'))
+      return $request->getCookie('token');
+    return null;
   }
 
   function getSiteUrl($path = '')
   {
     return lmb_env_get('HOST_NAME').$path;
+  }
+
+  function getAbsolutePath($www_path)
+  {
+    return lmb_env_get('APP_DIR')."/www/".$www_path;
   }
 
   function loadTestsUsersInfo()

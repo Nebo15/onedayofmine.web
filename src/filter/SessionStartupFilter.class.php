@@ -8,11 +8,8 @@ class SessionStartupFilter implements lmbInterceptingFilter
   function run($filter_chain)
   {
     $sessid = lmbToolkit::instance()->getSessidFromRequest();
-    $session = lmbToolkit :: instance()->getSession();
     if($sessid)
-      $session->start(new lmbSessionNativeStorage(), $sessid);
-    else
-      $session->start(new lmbSessionNativeStorage());
+      lmbToolkit :: instance()->getSession()->start($sessid);
     $filter_chain->next();
   }
 }

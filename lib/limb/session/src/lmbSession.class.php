@@ -24,12 +24,10 @@ class lmbSession implements ArrayAccess,Iterator,Countable
 
   /**
    * Starts session and installs driver
-   * @param object Concrete session driver
+   * @param string Session id
    */
-  function start($storage = null, $session_id = null)
+  function start($session_id = null)
   {
-    if($storage)
-      $storage->install();
     if($session_id)
       session_id($session_id);
     return session_start();
@@ -215,17 +213,20 @@ class lmbSession implements ArrayAccess,Iterator,Countable
 
 	function current()
 	{
-		return current($_SESSION);
+    if(isset($_SESSION) && is_array($_SESSION))
+		  return current($_SESSION);
 	}
 
 	function next()
 	{
-		return next($_SESSION);
+    if(isset($_SESSION) && is_array($_SESSION))
+		  return next($_SESSION);
 	}
 
 	function key()
 	{
-		return key($_SESSION);
+    if(isset($_SESSION) && is_array($_SESSION))
+      return key($_SESSION);
 	}
 
 	function valid()
@@ -235,11 +236,13 @@ class lmbSession implements ArrayAccess,Iterator,Countable
 
 	function rewind()
 	{
-		return reset($_SESSION);
+    if(isset($_SESSION) && is_array($_SESSION))
+		  return reset($_SESSION);
 	}
 
 	function count()
 	{
-		return count($_SESSION);
+    if(isset($_SESSION) && is_array($_SESSION))
+		  return count($_SESSION);
 	}
 }

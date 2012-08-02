@@ -32,6 +32,3 @@ lmb_require('src/model/*.class.php');
 lmb_require('limb/toolkit/src/lmbToolkit.class.php');
 lmb_require('src/toolkit/odTools.class.php');
 lmbToolkit :: merge(new odTools());
-
-lmb_env_set('SESSION_NAME', 'SESSID');
-ini_set('session.name', lmb_env_get('SESSION_NAME'));

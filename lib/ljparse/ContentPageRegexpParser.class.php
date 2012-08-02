@@ -28,10 +28,10 @@ class ContentPageRegexpParser extends ContentPageParser {
     $content = $this->_getPostBody($content);
     $content = $this->_stripUserpicks($content);
 
-    if(preg_match('#(.*?)<a name="cutid1"></a>#isU', $content, $out)) {
-      return $out[1];
-    } else {
+    if(!preg_match('#(.*?)<a name="cutid1"></a>#isU', $content, $out)) {
       return null;
+    } else {
+      return $this->_sanitizeText($out[1]);
     }
   }
 
@@ -52,7 +52,7 @@ class ContentPageRegexpParser extends ContentPageParser {
       $moments = array();
       for($i = 0; $i < $moments_count; $i++) {
         $moments[] = array(
-          'description' => $out[1][$i],
+          'description' => $this->_sanitizeText($out[1][$i]),
           'img' => $out[2][$i]
         );
       }
@@ -70,5 +70,13 @@ class ContentPageRegexpParser extends ContentPageParser {
 
   private function _stripUserpicks($content) {
     return preg_replace('#<img[\s]+class="i-ljuser-userhead"[^>]*>#is', '', $content);
+  }
+
+  private function _sanitizeText($text)
+  {
+    $text = str_replace('</p>', PHP_EOL, $text);
+    $text = str_replace('<br />', PHP_EOL, $text);
+
+    return trim(html_entity_decode(strip_tags($text)));
   }
 }
