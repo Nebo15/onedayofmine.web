@@ -70,6 +70,7 @@ class TwitterProfile implements SocialServicesProfileInterface
       ));
 
       if($response) {
+        $ids = array_merge($ids, $response['ids']);
         $cursor = $response['next_cursor_str'];
       }
     }
