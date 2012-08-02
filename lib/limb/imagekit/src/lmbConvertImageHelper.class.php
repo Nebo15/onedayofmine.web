@@ -17,6 +17,7 @@ class lmbConvertImageHelper
       $source_file = $tmp_file;
     }
     $this->converter = lmbImageKit :: load($source_file, '', lmb_env_get('IMAGE_LIBRARY', 'gd'));
+    lmbFs::rm($source_file);
   }
 
   function save($dest_file, $quality = null)
