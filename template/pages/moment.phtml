@@ -2,7 +2,7 @@
 {{wrap with="layout.phtml"}}
 {{into slot="meta"}}
   <meta property="og:type"   content="{$#fb_app_namespace}:moment" />
-  <meta property="og:url"    content="{$#host_name}pages/{$#moment.id}/moment" />
+  <meta property="og:url"    content="{$#host_url}pages/{$#moment.id}/moment" />
   <meta property="og:title"  content="{$#moment.description}" />
   <meta property="og:description"  content="{$#moment.description}" />
   <meta property="og:image"  content="<?= lmbToolkit::instance()->getSiteUrl($this->moment->getImageSmall()); ?>" />
