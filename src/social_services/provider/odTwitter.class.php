@@ -28,14 +28,16 @@ class odTwitter extends tmhOAuth implements odSocialServicesProviderInterface
 
     if($this->response && $code == 200)
       return $response;
-    elseif(isset($response['error'])) // Rate limit errors
-      lmbToolkit::instance()
-        ->getLog()
-        ->error("Twitter returned error: '{$response['error']}'.", array($path, $method, $params));
-    elseif(isset($response['errors'])) // Basic errors
-      lmbToolkit::instance()
-        ->getLog()
-        ->error("Twitter returned with errors.", array($response['errors'], array($path, $method, $params)));
+    elseif(is_array($response)) {
+      if(array_key_exists('error', $response)) // Rate limit errors
+        lmbToolkit::instance()
+          ->getLog()
+          ->error("Twitter returned error: '{$response['error']}'.", array($path, $method, $params));
+      elseif(array_key_exists('errors', $response)) // Basic errors
+        lmbToolkit::instance()
+          ->getLog()
+          ->error("Twitter returned with errors.", array($response['errors'], array($path, $method, $params)));
+    }
 
     return false;
   }
