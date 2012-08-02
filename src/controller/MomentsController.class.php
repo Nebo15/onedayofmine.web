@@ -14,6 +14,12 @@ class MomentsController extends BaseJsonController
     if(!$moment = Moment::findById($this->request->id))
       return $this->_answerWithError("Moment not found by id");
 
+    if($this->request->has('img_name') && $this->request->has('img_content'))
+      $moment->attachImage(
+        $this->request->get('img_name'),
+        base64_decode($this->request->get('img_content'))
+      );
+
     return $this->_importSaveAndAnswer($moment, array('description'));
   }
 

@@ -22,11 +22,19 @@ class MomentsAcceptanceTest extends odAcceptanceTestCase
 
     $this->_loginAndSetCookie($this->main_user);
     $res = $this->post('moments/'.$moment->getId().'/update', array(
-      'description' => $desc = $this->generator->string(255))
-    )->result;
+      'description' => $desc = $this->generator->string(255),
+      'img_name' => $this->generator->image_name(),
+      'img_content' => base64_encode($this->generator->image()),
+      ))->result;
     $this->assertResponse(200);
 
     $this->assertEqual($res->description, $desc);
+    $this->assertProperty($res, 'img_small');
+    $content = @file_get_contents($res->img_small);
+    $this->assertTrue($content, "Image {$res->img_small} not found");
+    $this->assertProperty($res, 'img_big');
+    $content = @file_get_contents($res->img_big);
+    $this->assertTrue($content, "Image {$res->img_big} not found");
 
     $loaded_moment = Moment::findById($moment->getId());
     $this->assertEqual($loaded_moment->getDescription(), $desc);
