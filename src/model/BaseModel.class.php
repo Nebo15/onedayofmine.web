@@ -19,4 +19,9 @@ abstract class BaseModel extends lmbActiveRecord
   {
     $this->uip = lmbIp::encode(lmbIp::getRemoteIp());
   }
+
+  protected function getImageExt()
+  {
+    return 'jpeg';
+  }
 }
