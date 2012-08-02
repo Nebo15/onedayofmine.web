@@ -34,9 +34,11 @@ function task_od_fill_from_lj($argv)
 
 	define('LJ_COMMUNITY_NAME', 'odin-moy-den');
   // Returns ~6 posts on page
-  define('PAGES', '4');
+  define('PAGES', 3);
 
   $generator = new odObjectMother();
+
+  echo "== Started to search for links... ==".PHP_EOL;
 
   $mainPage = new MainPage(new MainPageRegexpParser());
   $links_list = array();
@@ -44,37 +46,41 @@ function task_od_fill_from_lj($argv)
   {
     $mainPage->getRemoteContent(LJ_COMMUNITY_NAME, $i);
     $links_list = array_merge($links_list, $mainPage->getLinksToContentPages());
-    echo "Processed page ".$i.". Total links count: ".count($links_list).".".PHP_EOL;
+    echo $i."/".PAGES.". Total links count: ".count($links_list).".".PHP_EOL;
   }
 
-  echo "Totally found ".count($links_list)." links on ".PAGES." pages. Proccessing them...".PHP_EOL;
+  echo "== Totally found ".count($links_list)." links on ".PAGES." pages. Proccessing them... ==".PHP_EOL;
 
 	$contentPageParser = new ContentPageRegexpParser();
 	$posts = array();
+  $i = 0;
   foreach($links_list as $post_id)
   {
+    $i++;
     $post = new ContentPage($contentPageParser);
     $post->getRemoteContent(LJ_COMMUNITY_NAME, $post_id);
     if(count($post->getMoments())) {
-      echo "Found new well-formated post {$post_id}.".PHP_EOL;
+      echo "{$i}/".count($links_list).". Found new well-formated post {$post_id}.".PHP_EOL;
       $posts[] = $post;
     }
     else
-      echo "Skipping bad-formated post {$post_id}.".PHP_EOL;
+      echo "{$i}/".count($links_list).". Skipping bad-formated post {$post_id}.".PHP_EOL;
   }
 
-  echo "Found ".count($posts)." well-formated posts on ".PAGES." pages. Proccessing them...".PHP_EOL;
+  echo "== Found ".count($posts)." well-formated posts on ".PAGES." pages. Proccessing them... ==".PHP_EOL;
 
   lmbToolkit :: merge(new odTestsTools());
   $tests_users = lmbToolkit::instance()->getTestsUsers(true);
   array_pop($tests_users); // Foo
   array_pop($tests_users); // Bar
 
-  echo "Loaded ".count($tests_users)." test users.".PHP_EOL;
+  echo "== Loaded ".count($tests_users)." test users. ==".PHP_EOL;
 
+  $i = 0;
 	foreach($posts as $id => $post)
   {
-    echo 'Creating day "'.$post->getTitle().'"...'.PHP_EOL;
+    $i++;
+    echo $i.'/'.count($posts).'. Creating day "'.$post->getTitle().'"...'.PHP_EOL;
 
     $day = new Day();
     $day->setTitle($post->getTitle());
