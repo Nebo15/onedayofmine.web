@@ -111,6 +111,7 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
     $this->assertEqual(1, count($users));
   }
 
+  // TODO cache dont work on invalid tokens
   function testLogin_WrongAccessToken()
   {
     $errors = $res = $this->post('auth/login/', array(

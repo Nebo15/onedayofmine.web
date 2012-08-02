@@ -72,12 +72,11 @@ class TwitterProfileTest extends odUnitTestCase
       $this->assertEqual($text, $tweet['text']);
     }
 
-    $twitter = lmbToolkit::instance()->getSocialServices()->getTwitter(
-      $this->main_user->getTwitterAccessToken(),
-      $this->main_user->getTwitterAccessTokenSecret()
-    );
-
     // sleep(5);
+    // $twitter = lmbToolkit::instance()->getSocialServices()->getTwitter(
+    //   $this->main_user->getTwitterAccessToken(),
+    //   $this->main_user->getTwitterAccessTokenSecret()
+    // );
     // $response = $twitter->api('1/statuses/user_timeline')[0];
     // $this->assertEqual($response['id'], $tweet['id']);
     // $this->assertEqual($response['text'], $tweet['text']);
