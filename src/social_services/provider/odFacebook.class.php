@@ -26,11 +26,12 @@ class odFacebook extends Facebook implements odSocialServicesProviderInterface
     );
   }
 
-  function validateAccessToken($error_list)
+  public function validateAccessToken($error_list, $provider = null)
   {
+    $provider = $provider ?: $this;
     try
     {
-      $this->api('/me');
+      $provider->api('/me');
       return true;
     }
     catch (Exception $e)
