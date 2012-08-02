@@ -16,6 +16,14 @@ class ContentPageRegexpParser extends ContentPageParser {
     }
   }
 
+  public function getUserpic($content) {
+    if(preg_match('#<td class="b-singlepost-author-userpic">[\s]*<img src="([^"]*)"#is', $content, $out)) {
+      return trim($out[1]);
+    } else {
+      new lmbException('Userpic not found.');
+    }
+  }
+
   public function getDate($content) {
     if(preg_match('#<span class="b-singlepost-author-date">(.*?)</span>#is', $content, $out)) {
       return trim(strip_tags($out[1]));
