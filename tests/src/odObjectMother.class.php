@@ -160,12 +160,12 @@ class odObjectMother
 
   function image()
   {
-    return base64_decode('iVBORw0KGgoAAAANSUhEUgAAATkAAAE5AQMAAADRL8WyAAAAAXNSR0IArs4c6QAAAAZQTFRFAAAA////pdmf3QAAANZJREFUeNrt2jEKg0AQheERi5QeIUfxaPFoHiVHsEwhvjAyOAsmgRHS/a/axc9yecyqnTNqMxukyXpptk5azAwIBJbhTU1eDj0OjwCBwItwjiUQCPwzjFbrfbUBgcAS9A0QCLwIMw7j4D2kfeYCAoEFWLrQ8ExAILAI9SNr03dAILAIs+Kescl5rD2FQCCwCCXls4RZcREgEFiCkbE9hZH2IzIQCKxDSVlk8V7WX05qQCBwh3kV/7G5IkAgsA4lBbxLhz9fxQOBwBr89v/g4nC1CBAILMM34TG2uvMH+igAAAAASUVORK5CYII=');
+    return file_get_contents(__DIR__.'/../init/image_1600x1600.jpg');
   }
 
   function image_name()
   {
-    return $this->string().'.png';
+    return $this->string().'.jpg';
   }
 
   function email() {

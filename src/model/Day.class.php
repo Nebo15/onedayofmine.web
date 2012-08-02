@@ -49,6 +49,10 @@ class Day extends BaseModel
     $export->utime = $this->getUpdateTime();
     $export->is_ended = $this->getIsEnded() ?: 0;
 
+    $export->cover_moment = null;
+    if(count($this->getMoments()))
+      $export->cover_moment = $this->getMoments()->at(0)->exportForApi();
+
     if($this->getIsDeleted())
       $export->is_deleted = true;
 

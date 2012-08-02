@@ -5,14 +5,19 @@
  * @method string getFbUid()
  * @method void setFbUid(string $fb_user_id)
  * @method string getFbAccessToken()
+ * @method string getDay()
+ * @method string getDayId()
+ * @method string getDescription()
  * @method void setFbAccessToken(string $fb_access_token)
  */
 class Moment extends lmbActiveRecord
 {
+  const IMAGE_ORIG = 'orig';
+  const IMAGE_SMALL = '200x200';
+  const IMAGE_BIG = '400x400';
+
   protected $_db_table_name = 'moment';
-
   protected $_default_sort_params = array('id'=>'asc');
-
   protected $_lazy_attributes = array('description');
 
   protected function _defineRelations()
@@ -32,18 +37,14 @@ class Moment extends lmbActiveRecord
     return $validator;
   }
 
-  function getImageUrl()
-  {
-    return $this->getImagePath();
-  }
-
   function exportForApi()
   {
     $moment = new stdClass();
     $moment->id = $this->getId();
     $moment->day_id = $this->getDayId();
     $moment->description = $this->getDescription();
-    $moment->img_url = $this->getImageUrl();
+    $moment->img_small = lmbToolkit::instance()->getSiteUrl($this->getImageSmall());
+    $moment->img_big = lmbToolkit::instance()->getSiteUrl($this->getImageBig());
     $moment->likes_count = $this->getLikesCount() ?: 0;
     $moment->ctime = $this->getCtime();
 
@@ -58,16 +59,41 @@ class Moment extends lmbActiveRecord
     return $moment;
   }
 
-  function attachImage($filename, $content)
+  function attachImage($filename_or_url, $content)
   {
-    $filename = strtolower($filename);
-    $extension = substr($filename, strrpos($filename, '.')+1);
+    $extension = strtolower(substr($filename_or_url, strrpos($filename_or_url, '.')+1));
     $this->setImageExt($extension);
-    $path = $this->getImagePath();
-    lmbFs::safeWrite(lmb_env_get('APP_DIR')."/www/".$path, $content);
+
+    $orig_file = lmbToolkit::instance()->getAbsolutePath($this->getImageOrig());
+    lmbFs::safeWrite($orig_file, $content);
+
+    $small_file = lmbToolkit::instance()->getAbsolutePath($this->getImageSmall());
+    $helper = new lmbConvertImageHelper($orig_file);
+    $helper->resizeAndCropFrame(array('width' => 200, 'height' => 200));
+    $helper->save($small_file);
+
+    $small_file = lmbToolkit::instance()->getAbsolutePath($this->getImageBig());
+    $helper = new lmbConvertImageHelper($orig_file);
+    $helper->resizeAndCropFrame(array('width' => 400, 'height' => 400));
+    $helper->save($small_file);
   }
 
-  function getImagePath($size_variation = '300x300')
+  function getImageOrig()
+  {
+    return $this->getImagePath(self::IMAGE_ORIG);
+  }
+
+  function getImageSmall()
+  {
+    return $this->getImagePath(self::IMAGE_SMALL);
+  }
+
+  function getImageBig()
+  {
+    return $this->getImagePath(self::IMAGE_BIG);
+  }
+
+  function getImagePath($size_variation)
   {
     if(!$this->getImageExt())
       return '';

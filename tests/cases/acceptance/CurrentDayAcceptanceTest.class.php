@@ -149,15 +149,16 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 		$this->_loginAndSetCookie($this->main_user);
 		$res = $this->post('current_day/moment_create', array(
 				'description' => $description = $this->generator->string(200),
-				'image_name' => $image_path = 'foo/bar/example.png',
-				'image_content' => 'iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAAXNSR0IArs4c6QAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9wGEg47HYlSsqsAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAOUlEQVQI13VOQQ4AIAiC1v+/TAcKZysOTkQUApCEDpI11YH7EQdJ103jsBA68MG8dutUPrdIFp5xF8lAKftzc/YPAAAAAElFTkSuQmCC'
+				'image_name' => $image_path = $this->generator->image_name(),
+				'image_content' => base64_encode($this->generator->image())
 		))->result;
 
 		if($this->assertResponse(200))
 		{
 			$this->assertEqual($day->getMoments()->at(0)->getId(), $res->id);
 			$this->assertEqual($day->getId(), $res->day_id);
-			$this->assertProperty($res, 'img_url');
+			$this->assertProperty($res, 'img_small');
+      $this->assertProperty($res, 'img_big');
 			$this->assertEqual(0, $res->likes_count);
 			$this->assertProperty($res, 'ctime');
 		}

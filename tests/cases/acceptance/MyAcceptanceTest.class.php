@@ -24,8 +24,8 @@ class MyAcceptanceTest extends odAcceptanceTestCase
 			$this->assertEqual($this->main_user->name, $profile->name);
       $this->assertEqual($this->main_user->email, $profile->email);
 			$this->assertEqual($this->main_user->sex, $profile->sex);
-			$this->assertEqual($this->main_user->pic_small, $profile->pic_small);
-			$this->assertEqual($this->main_user->pic_big, $profile->pic_big);
+			$this->assertProperty($profile, 'pic_small');
+      $this->assertProperty($profile, 'pic_big');
 			$this->assertEqual($this->main_user->occupation, $profile->occupation);
       $this->assertEqual($this->main_user->location, $profile->location);
       $this->assertEqual($this->main_user->birthday, $profile->birthday);
