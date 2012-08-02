@@ -23,7 +23,8 @@ class odRemoteApiMock
 
   function __get($name)
   {
-    return $this->provider->$name;
+    if(isset($this->provider->$name))
+      return $this->provider->$name;
   }
 
   function makeQuery($query)
