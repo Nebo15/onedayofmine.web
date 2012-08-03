@@ -15,6 +15,39 @@ class FacebookProfileTest extends odUnitTestCase
     $settings->save();
   }
 
+  function testGetInfoRaw()
+  {
+    $info = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->getInfo_Raw();
+    $this->assertTrue(count($info));
+    $this->assertEqual($info['uid'], $this->main_user->getFbUid());
+  }
+
+  function testGetInfo()
+  {
+    $info = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->getInfo();
+    $this->assertTrue(count($info));
+    $this->assertEqual($info['fb_uid'], $this->main_user->getFbUid());
+  }
+
+  function testGetFriends()
+  {
+    $friends = $this->additional_user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->getFriends();
+    $this->assertEqual(count($friends), 1);
+    $this->assertEqual($friends[0]['uid'], $this->main_user->getFbUid());
+  }
+
+  function testGetRegisteredFriends()
+  {
+    $friends = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->getRegisteredFriends();
+    $this->assertEqual(count($friends), 0);
+
+    $this->additional_user->save();
+
+    $friends = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->getRegisteredFriends();
+    $this->assertEqual(count($friends), 1);
+    $this->assertEqual($friends[0]->getId(), $this->additional_user->getId());
+  }
+
   function testGetPictures()
   {
     $pictures = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->getPictures();
@@ -88,7 +121,6 @@ class FacebookProfileTest extends odUnitTestCase
 
     $this->main_user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->shareMomentLike($moment_url);
   }
-
 
   function testEndDay()
   {
