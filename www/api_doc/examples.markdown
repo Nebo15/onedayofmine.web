@@ -1,5 +1,5 @@
 # API #
- Version: 02.08.12 21:51:41
+ Version: 03.08.12 04:46:29
 
 ## Table of contents: ##
 <a name='toc'></a>
@@ -17,32 +17,32 @@
 1. <a href='#edffd7a5f673999b16ade68463815ffe'>Finish</a>
 
 ### <a href='#Day'>Day</a> ###
-1. <a href='#8dace24a2eed5351f46d3bc3248e71c9'>Item</a>
-1. <a href='#75b3c4e3cb15cbfd12766916359df70e'>Item_Many</a>
-1. <a href='#429a1f081b366484ea74ff10a2bb5fc9'>CommentCreate</a>
-1. <a href='#87019a8103a0c7afd316e3fa5fe1a525'>ShareDay</a>
-1. <a href='#13464f4b747ed1230e858995bf174f8f'>Like</a>
-1. <a href='#ad3f119350019797436a1ff2c2826674'>Update</a>
-1. <a href='#a722b92bfbe87d78e83140ba1f0625ff'>DeleteDay</a>
-1. <a href='#355d6a262277f68b5d1319c9457ffc83'>RestoreDay</a>
+1. <a href='#0aabf5cb11a81a1f9af3b00008c99fac'>Item</a>
+1. <a href='#263eb61db8b24ac966a2983b64d58355'>Item_Many</a>
+1. <a href='#e6c401e616fd468b123f0d147169aeb7'>CommentCreate</a>
+1. <a href='#e29433a7cbca9374bca63137008fe55f'>ShareDay</a>
+1. <a href='#896b8570f2ec88c37f85d7cbd8143818'>Like</a>
+1. <a href='#2df01519f873025d89514219f1b8a4a7'>Update</a>
+1. <a href='#664c42a059b149208fd5a75bf61e6242'>DeleteDay</a>
+1. <a href='#1b797ad4356bc47940e025221127bfcd'>RestoreDay</a>
 1. <a href='#9a54a19098a30dcbd74124cbddb1ab6c'>GetFavouriteDays</a>
-1. <a href='#35ac0543a83287a9391f41f8f48b9c74'>AddToFavourites</a>
-1. <a href='#6adc828e38b8963d47ead26fab2ee6f6'>RemoveFromFavourites</a>
+1. <a href='#b3770bf8244477259ffbde9370e7a3b1'>AddToFavourites</a>
+1. <a href='#053a012a1d98bbfd8ab4b2a7c414a8d4'>RemoveFromFavourites</a>
 1. <a href='#1c5e784108f8a36beb283dc7a3e34030'>GetFollowingUsersDays</a>
 1. <a href='#ed1af553a9d8b9117548d9a3996ebab5'>GetNewDays</a>
 1. <a href='#58c74019b980810ae9e042bb65573a7a'>GetInterestingDays</a>
 1. <a href='#f2c5afe4a024dc21f1c43ff206afb8f1'>CurrentUserDays</a>
 1. <a href='#bdbebf26e7d0327181a566595a2fcd56'>TypeNames</a>
-1. <a href='#4d3a7a0e7526a4318fb8147cee871d93'>CreateComplaint</a>
+1. <a href='#f71d2fb366bc789680c652d85e8e690f'>CreateComplaint</a>
 
 ### <a href='#MomentComments'>MomentComments</a> ###
-1. <a href='#acd33a8be70322c7bb9d7a96649ae6f1'>Update</a>
-1. <a href='#cb9b7b1250cabfd6912db9fc79ed9840'>Delete</a>
+1. <a href='#eebd4b7ecdd35d5148d9b0a7c1eac54a'>Update</a>
+1. <a href='#0d0d8c17c7735f151ca8aec8b162cfaf'>Delete</a>
 
 ### <a href='#Moments'>Moments</a> ###
-1. <a href='#855f50b66397cf6fb19974c3b9e076cc'>Update</a>
-1. <a href='#c71494d3f1f035f619e32e657388607f'>Delete</a>
-1. <a href='#afaa93a1d881eb5c0521145f46a10636'>Comment</a>
+1. <a href='#243e82a4acec31cd56de5af8809fdad5'>Update</a>
+1. <a href='#79f20d0ee47041d81daf00ce92e3ba7f'>Delete</a>
+1. <a href='#61c72ca9601ca056bc71aa3bdef648cb'>Comment</a>
 
 ### <a href='#My'>My</a> ###
 1. <a href='#7c42c715a02e964a2889306b19fe292c'>Profile</a>
@@ -61,14 +61,14 @@
 1. <a href='#6dad9b463ea3565903496bc1edd56282'>TwitterConnect</a>
 
 ### <a href='#User'>User</a> ###
-1. <a href='#e3a094e14ba850018eee69d5b52df34e'>UserByIdDays</a>
-1. <a href='#8f4960570b175565bfc42d2c53a14e2e'>UserById</a>
+1. <a href='#9cafac2b77d2bd3a013b5c4628ab094a'>UserByIdDays</a>
+1. <a href='#90fd865dd107d6a86f17a7da8b73b2c7'>UserById</a>
 1. <a href='#0907aac9dba2a8f9700b9333f7e36795'>Followers</a>
-1. <a href='#71a0ac4610ab0f1c3174f41c5a39dec0'>FollowersByUserId</a>
+1. <a href='#7d0cd2148b6c6129fc4f1a17430a4275'>FollowersByUserId</a>
 1. <a href='#774c23c770724885bdc9325b3159b700'>Following</a>
-1. <a href='#37e63e93d4c38ee0af2bcd8d2a3f34c0'>FollowingByUserId</a>
-1. <a href='#40a09268bb397b2f5c6893e4adc471d0'>Follow</a>
-1. <a href='#7800ca3a91872fe96356ca2632f9c43d'>Unfollow</a>
+1. <a href='#b62212662e4bfdb13b872342f18f75c0'>FollowingByUserId</a>
+1. <a href='#4868bf7212750e39431c32444301ca37'>Follow</a>
+1. <a href='#238058a8f8b2fb0190167e2b131e4f6b'>Unfollow</a>
 
 
 ## API methods ##
@@ -125,7 +125,7 @@ User authorization.
 </table>
 ###### Example request: ######
     {
-      "token":"AAAFnVo0zuqkBAOrLNI6ZBfVNP6cTbMCpyKyQsdaOl8TO0CFIpkD4tJaYqomCgITiPPqZCUZArsdqmetYHuYCbhJ3h2HtQNFAmZCZCLTMw9sPkZAUbCcRTl"
+      "token":"AAAFnVo0zuqkBAG5dGsr0mMaVrcUUDB6KRZAZCZBJEnk8eDtMtBHiop46kCQLHM8SMZA7BqZC8xpjOFg1jhKBLwxA8LL1CkYzJIKmYzLMqWdHpoS30OZB4N"
     }
 
 
@@ -144,13 +144,13 @@ User authorization.
 ###### Example response: ######
     {
       "user":{
-        "id":3775,
+        "id":480,
         "fb_uid":"100004087981387",
         "twitter_uid":null,
         "name":"bar bar",
         "sex":"male",
-        "pic_small":"http:\/\/onedayofmine.dev\/users\/3775\/9ea43d7e7d75b62e07fb4095f317c10e5ccd27e7_70x70.jpeg",
-        "pic_big":"http:\/\/onedayofmine.dev\/users\/3775\/9ea43d7e7d75b62e07fb4095f317c10e5ccd27e7_140x140.jpeg",
+        "pic_small":"http:\/\/onedayofmine.dev\/users\/480\/34df7fb7935782d44961a89be9209ee2bddd4b7e_70x70.jpeg",
+        "pic_big":"http:\/\/onedayofmine.dev\/users\/480\/34df7fb7935782d44961a89be9209ee2bddd4b7e_140x140.jpeg",
         "birthday":"1980-08-08",
         "occupation":"",
         "location":null,
@@ -227,6 +227,8 @@ Starts a day
       "user_id":null,
       "user_name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
       "fb_uid":"fooba",
+      "cover_img_small":null,
+      "cover_img_big":null,
       "title":"foobarfoobarfoobarfoobarf",
       "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
       "timezone":0,
@@ -236,7 +238,6 @@ Starts a day
       "ctime":null,
       "utime":null,
       "is_ended":0,
-      "cover_moment":null,
       "comments_count":0,
       "comments":[
         
@@ -266,8 +267,9 @@ Starts a day
 <tr><td>boolean</td><td>is_ended</td><td>Always FALSE for new days</td></tr>
 <tr><td>[type]</td><td>user_name</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>fb_uid</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>cover_img_small</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>cover_img_big</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>location</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>cover_moment</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>is_favorited</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>comments_count</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>comments</td><td>[description]</td></tr>
@@ -275,20 +277,21 @@ Starts a day
 </table>
 ###### Example response: ######
     {
-      "id":132,
-      "user_id":3783,
+      "id":144,
+      "user_id":488,
       "user_name":"bar bar",
       "fb_uid":"100004087981387",
+      "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/488\/days\/2cdcdc985858d4612b0192a59ec5c84390f25350_200x200.jpeg",
+      "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/488\/days\/2cdcdc985858d4612b0192a59ec5c84390f25350_400x400.jpeg",
       "title":"foobarfoobarfoobarfoobarf",
       "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
       "timezone":"0",
       "location":"foobarfoobarfoobarfoobarf",
       "type":"working",
       "likes_count":0,
-      "ctime":1343933456,
-      "utime":1343933456,
+      "ctime":1343958350,
+      "utime":1343958350,
       "is_ended":0,
-      "cover_moment":null,
       "is_favorited":false,
       "comments_count":0,
       "comments":[
@@ -331,9 +334,10 @@ Returns current day
 <tr><td>boolean</td><td>is_ended</td><td>TRUE if day is ended, else - FALSE</td></tr>
 <tr><td>[type]</td><td>user_name</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>fb_uid</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>cover_img_small</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>cover_img_big</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>occupation</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>location</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>cover_moment</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>is_favorited</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>comments_count</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>comments</td><td>[description]</td></tr>
@@ -341,20 +345,21 @@ Returns current day
 </table>
 ###### Example response: ######
     {
-      "id":134,
-      "user_id":3785,
+      "id":146,
+      "user_id":490,
       "user_name":"bar bar",
       "fb_uid":"100004087981387",
+      "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/490\/days\/e1ab416256e11d557e4e2e1a591424ac295db6fd_200x200.jpeg",
+      "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/490\/days\/e1ab416256e11d557e4e2e1a591424ac295db6fd_400x400.jpeg",
       "title":"foobarfoobarfoobarfoobarf",
       "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
       "timezone":0,
       "location":"foobarfoobarfoobarfoobarf",
       "type":"working",
       "likes_count":0,
-      "ctime":1343933457,
-      "utime":1343933457,
+      "ctime":1343958350,
+      "utime":1343958350,
       "is_ended":0,
-      "cover_moment":null,
       "is_favorited":false,
       "comments_count":0,
       "comments":[
@@ -417,13 +422,13 @@ Creates moment
 </table>
 ###### Example response: ######
     {
-      "id":46,
-      "day_id":136,
+      "id":48,
+      "day_id":148,
       "description":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfo",
-      "img_small":"http:\/\/onedayofmine.dev\/\/users\/3787\/days\/136\/841ae9f45b1335360ec5ea4435cc28094fed369d_200x200.jpg",
-      "img_big":"http:\/\/onedayofmine.dev\/\/users\/3787\/days\/136\/841ae9f45b1335360ec5ea4435cc28094fed369d_400x400.jpg",
+      "img_small":"http:\/\/onedayofmine.dev\/\/users\/492\/days\/148\/ca00d84c61a23930b27b6bd54c431c38a66016ab_200x200.jpg",
+      "img_big":"http:\/\/onedayofmine.dev\/\/users\/492\/days\/148\/ca00d84c61a23930b27b6bd54c431c38a66016ab_400x400.jpg",
       "likes_count":0,
-      "ctime":1343933457,
+      "ctime":1343958351,
       "comments_count":0,
       "comments":[
         
@@ -489,8 +494,9 @@ Creates moment
 <tr><td>boolean</td><td>is_ended</td><td>TRUE if day is ended, else - FALSE</td></tr>
 <tr><td>[type]</td><td>user_name</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>fb_uid</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>cover_img_small</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>cover_img_big</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>location</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>cover_moment</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>is_favorited</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>comments_count</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>comments</td><td>[description]</td></tr>
@@ -498,20 +504,21 @@ Creates moment
 </table>
 ###### Example response: ######
     {
-      "id":137,
-      "user_id":3788,
+      "id":150,
+      "user_id":494,
       "user_name":"bar bar",
       "fb_uid":"100004087981387",
+      "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/494\/days\/3a1a7d289a3b3d8d32449ea5b3ce631ad8724da5_200x200.jpeg",
+      "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/494\/days\/3a1a7d289a3b3d8d32449ea5b3ce631ad8724da5_400x400.jpeg",
       "title":"foobar",
       "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
       "timezone":"1",
       "location":"foobar",
       "type":"working",
       "likes_count":0,
-      "ctime":1343933458,
-      "utime":1343933458,
+      "ctime":1343958352,
+      "utime":1343958352,
       "is_ended":0,
-      "cover_moment":null,
       "is_favorited":false,
       "comments_count":0,
       "comments":[
@@ -545,10 +552,10 @@ Finish current day.
 ### Day ###
 <a name='Day'></a>
 #### Item ####
-<a name="8dace24a2eed5351f46d3bc3248e71c9"></a>
+<a name="0aabf5cb11a81a1f9af3b00008c99fac"></a>
 Returns basic Day entity by given Day ID.
 
-`GET days/139/item`
+`GET days/152/item`
 
 ##### Request: #####
 ###### Params: ######
@@ -590,37 +597,27 @@ Returns basic Day entity by given Day ID.
 <tr><td><a href='#Entity:Comment[3]'>Comment[3]</a></td><td>comments</td><td>Array of day first comments</td></tr>
 <tr><td>bool</td><td>is_favorited</td><td>True if this article is added to current user favourites. If user is not logged in then field is omited.</td></tr>
 <tr><td>[type]</td><td>fb_uid</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>cover_moment</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>cover_img_small</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>cover_img_big</td><td>[description]</td></tr>
 
 </table>
 ###### Example response: ######
     {
-      "id":139,
-      "user_id":3790,
+      "id":152,
+      "user_id":496,
       "user_name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
       "fb_uid":"fooba",
+      "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/496\/days\/00910e394f7bb15e0f6bdc605312bc9882650209_200x200.jpeg",
+      "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/496\/days\/00910e394f7bb15e0f6bdc605312bc9882650209_400x400.jpeg",
       "title":"foobarfoobarfoobarfoobarf",
       "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
       "timezone":0,
       "location":"foobarfoobarfoobarfoobarf",
       "type":"working",
       "likes_count":0,
-      "ctime":1343933458,
-      "utime":1343933458,
+      "ctime":1343958352,
+      "utime":1343958352,
       "is_ended":0,
-      "cover_moment":{
-        "id":47,
-        "day_id":139,
-        "description":"description foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfooba",
-        "img_small":"http:\/\/onedayofmine.dev\/",
-        "img_big":"http:\/\/onedayofmine.dev\/",
-        "likes_count":0,
-        "ctime":1343933458,
-        "comments_count":0,
-        "comments":[
-          
-        ]
-      },
       "is_favorited":false,
       "comments_count":0,
       "comments":[
@@ -628,26 +625,26 @@ Returns basic Day entity by given Day ID.
       ],
       "moments":[
         {
-          "id":47,
-          "day_id":139,
+          "id":50,
+          "day_id":152,
           "description":"description foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfooba",
           "img_small":"http:\/\/onedayofmine.dev\/",
           "img_big":"http:\/\/onedayofmine.dev\/",
           "likes_count":0,
-          "ctime":1343933458,
+          "ctime":1343958352,
           "comments_count":0,
           "comments":[
             
           ]
         },
         {
-          "id":48,
-          "day_id":139,
+          "id":51,
+          "day_id":152,
           "description":"description foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfooba",
           "img_small":"http:\/\/onedayofmine.dev\/",
           "img_big":"http:\/\/onedayofmine.dev\/",
           "likes_count":0,
-          "ctime":1343933458,
+          "ctime":1343958352,
           "comments_count":0,
           "comments":[
             
@@ -661,10 +658,10 @@ Returns basic Day entity by given Day ID.
 
 * * *
 #### Item_Many ####
-<a name="75b3c4e3cb15cbfd12766916359df70e"></a>
+<a name="263eb61db8b24ac966a2983b64d58355"></a>
 Get few days in one request.
 
-`GET days/140;141;229/item`
+`GET days/153;154;701/item`
 
 ##### Request: #####
 ###### Params: ######
@@ -690,40 +687,29 @@ Get few days in one request.
   <th>Description</th>
 </tr>
 <tr><td><a href='#Entity:Day'>Day[]</a></td><td>days <span class='label label-important'>Removed</span></td><td>Associative array of (day_id => Day)</td></tr>
-<tr><td>[type]</td><td>140 <span class='label label-important'>Removed</span></td><td>[description]</td></tr>
-<tr><td>[type]</td><td>141 <span class='label label-important'>Removed</span></td><td>[description]</td></tr>
-<tr><td>[type]</td><td>229 <span class='label label-important'>Removed</span></td><td>[description]</td></tr>
+<tr><td>[type]</td><td>153 <span class='label label-important'>Removed</span></td><td>[description]</td></tr>
+<tr><td>[type]</td><td>154 <span class='label label-important'>Removed</span></td><td>[description]</td></tr>
+<tr><td>[type]</td><td>701 <span class='label label-important'>Removed</span></td><td>[description]</td></tr>
 
 </table>
 ###### Example response: ######
     {
-      "140":{
-        "id":140,
-        "user_id":3792,
+      "153":{
+        "id":153,
+        "user_id":498,
         "user_name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
         "fb_uid":"fooba",
+        "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/498\/days\/e3aa92a26e71590f7eabe5ada62479b871ad3d20_200x200.jpeg",
+        "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/498\/days\/e3aa92a26e71590f7eabe5ada62479b871ad3d20_400x400.jpeg",
         "title":"foobarfoobarfoobarfoobarf",
         "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
         "timezone":0,
         "location":"foobarfoobarfoobarfoobarf",
         "type":"working",
         "likes_count":0,
-        "ctime":1343933458,
-        "utime":1343933458,
+        "ctime":1343958352,
+        "utime":1343958352,
         "is_ended":0,
-        "cover_moment":{
-          "id":49,
-          "day_id":140,
-          "description":"description foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfooba",
-          "img_small":"http:\/\/onedayofmine.dev\/",
-          "img_big":"http:\/\/onedayofmine.dev\/",
-          "likes_count":0,
-          "ctime":1343933458,
-          "comments_count":0,
-          "comments":[
-            
-          ]
-        },
         "is_favorited":false,
         "comments_count":0,
         "comments":[
@@ -731,13 +717,13 @@ Get few days in one request.
         ],
         "moments":[
           {
-            "id":49,
-            "day_id":140,
+            "id":52,
+            "day_id":153,
             "description":"description foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfooba",
             "img_small":"http:\/\/onedayofmine.dev\/",
             "img_big":"http:\/\/onedayofmine.dev\/",
             "likes_count":0,
-            "ctime":1343933458,
+            "ctime":1343958352,
             "comments_count":0,
             "comments":[
               
@@ -745,33 +731,22 @@ Get few days in one request.
           }
         ]
       },
-      "141":{
-        "id":141,
-        "user_id":3793,
+      "154":{
+        "id":154,
+        "user_id":499,
         "user_name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
         "fb_uid":"fooba",
+        "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/499\/days\/2b84e8eecccb5114a7825c2f5238c9051d20ff82_200x200.jpeg",
+        "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/499\/days\/2b84e8eecccb5114a7825c2f5238c9051d20ff82_400x400.jpeg",
         "title":"foobarfoobarfoobarfoobarf",
         "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
         "timezone":0,
         "location":"foobarfoobarfoobarfoobarf",
         "type":"working",
         "likes_count":0,
-        "ctime":1343933458,
-        "utime":1343933458,
+        "ctime":1343958352,
+        "utime":1343958352,
         "is_ended":0,
-        "cover_moment":{
-          "id":50,
-          "day_id":141,
-          "description":"description foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfooba",
-          "img_small":"http:\/\/onedayofmine.dev\/",
-          "img_big":"http:\/\/onedayofmine.dev\/",
-          "likes_count":0,
-          "ctime":1343933458,
-          "comments_count":0,
-          "comments":[
-            
-          ]
-        },
         "is_favorited":false,
         "comments_count":0,
         "comments":[
@@ -779,13 +754,13 @@ Get few days in one request.
         ],
         "moments":[
           {
-            "id":50,
-            "day_id":141,
+            "id":53,
+            "day_id":154,
             "description":"description foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfooba",
             "img_small":"http:\/\/onedayofmine.dev\/",
             "img_big":"http:\/\/onedayofmine.dev\/",
             "likes_count":0,
-            "ctime":1343933458,
+            "ctime":1343958352,
             "comments_count":0,
             "comments":[
               
@@ -793,7 +768,7 @@ Get few days in one request.
           }
         ]
       },
-      "229":null
+      "701":null
     }
 
 
@@ -801,10 +776,10 @@ Get few days in one request.
 
 * * *
 #### CommentCreate ####
-<a name="429a1f081b366484ea74ff10a2bb5fc9"></a>
+<a name="e6c401e616fd468b123f0d147169aeb7"></a>
 Create moment in specified day
 
-`POST days/143/comment_create`
+`POST days/156/comment_create`
 
 ##### Request: #####
 ###### Params: ######
@@ -848,14 +823,14 @@ Create moment in specified day
 </table>
 ###### Example response: ######
     {
-      "id":4,
-      "user_id":3797,
+      "id":5,
+      "user_id":503,
       "user_name":"bar bar",
       "text":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
       "likes_count":0,
-      "ctime":1343933459,
-      "utime":1343933459,
-      "day_id":143
+      "ctime":1343958353,
+      "utime":1343958353,
+      "day_id":156
     }
 
 
@@ -863,10 +838,10 @@ Create moment in specified day
 
 * * *
 #### ShareDay ####
-<a name="87019a8103a0c7afd316e3fa5fe1a525"></a>
+<a name="e29433a7cbca9374bca63137008fe55f"></a>
 Share a day
 
-`POST days/144/share`
+`POST days/157/share`
 
 ##### Request: #####
 ###### Params: ######
@@ -896,7 +871,7 @@ Share a day
 </table>
 ###### Example response: ######
     {
-      "id":"100004087981387_487181807978276"
+      "id":"100004087981387_374654105938220"
     }
 
 
@@ -904,10 +879,10 @@ Share a day
 
 * * *
 #### Like ####
-<a name="13464f4b747ed1230e858995bf174f8f"></a>
+<a name="896b8570f2ec88c37f85d7cbd8143818"></a>
 
 
-`POST days/145/like`
+`POST days/158/like`
 
 ##### Request: #####
 
@@ -924,10 +899,10 @@ Share a day
 
 * * *
 #### Update ####
-<a name="ad3f119350019797436a1ff2c2826674"></a>
+<a name="2df01519f873025d89514219f1b8a4a7"></a>
 Updates a day
 
-`POST days/146/update`
+`POST days/159/update`
 
 ##### Request: #####
 ###### Params: ######
@@ -969,6 +944,8 @@ Updates a day
 <tr><td>[type]</td><td>user_id</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>user_name</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>fb_uid</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>cover_img_small</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>cover_img_big</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>title</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>occupation</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>timezone</td><td>[description]</td></tr>
@@ -978,7 +955,6 @@ Updates a day
 <tr><td>[type]</td><td>ctime</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>utime</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>is_ended</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>cover_moment</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>is_favorited</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>comments_count</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>comments</td><td>[description]</td></tr>
@@ -986,20 +962,21 @@ Updates a day
 </table>
 ###### Example response: ######
     {
-      "id":146,
-      "user_id":3802,
+      "id":159,
+      "user_id":508,
       "user_name":"bar bar",
       "fb_uid":"100004087981387",
+      "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/508\/days\/d1c51882eedd59eebc7e583311d3702d89308409_200x200.jpeg",
+      "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/508\/days\/d1c51882eedd59eebc7e583311d3702d89308409_400x400.jpeg",
       "title":"foobar",
       "occupation":"foobar",
       "timezone":"1",
       "location":"foobar",
       "type":"working",
       "likes_count":0,
-      "ctime":1343933461,
-      "utime":1343933461,
+      "ctime":1343958354,
+      "utime":1343958355,
       "is_ended":0,
-      "cover_moment":null,
       "is_favorited":false,
       "comments_count":0,
       "comments":[
@@ -1012,10 +989,10 @@ Updates a day
 
 * * *
 #### DeleteDay ####
-<a name="a722b92bfbe87d78e83140ba1f0625ff"></a>
+<a name="664c42a059b149208fd5a75bf61e6242"></a>
 Deletes a day
 
-`POST days/147/delete`
+`POST days/160/delete`
 
 ##### Request: #####
 ###### Params: ######
@@ -1040,10 +1017,10 @@ Deletes a day
 
 * * *
 #### RestoreDay ####
-<a name="355d6a262277f68b5d1319c9457ffc83"></a>
+<a name="1b797ad4356bc47940e025221127bfcd"></a>
 Restore a deleted day
 
-`POST days/149/restore`
+`POST days/162/restore`
 
 ##### Request: #####
 ###### Params: ######
@@ -1088,8 +1065,8 @@ Restore a deleted day
 </table>
 ###### Example request: ######
     {
-      "from":151,
-      "to":153
+      "from":164,
+      "to":166
     }
 
 
@@ -1108,20 +1085,21 @@ Restore a deleted day
 ###### Example response: ######
     [
       {
-        "id":152,
-        "user_id":3811,
+        "id":165,
+        "user_id":517,
         "user_name":"foo foo",
         "fb_uid":"100004093051334",
+        "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/517\/days\/aa13b8f89878c78814f6240823c9186168159a19_200x200.jpeg",
+        "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/517\/days\/aa13b8f89878c78814f6240823c9186168159a19_400x400.jpeg",
         "title":"foobarfoobarfoobarfoobarf",
         "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
         "timezone":0,
         "location":"foobarfoobarfoobarfoobarf",
         "type":"working",
         "likes_count":0,
-        "ctime":1343933463,
-        "utime":1343933463,
+        "ctime":1343958356,
+        "utime":1343958356,
         "is_ended":0,
-        "cover_moment":null,
         "is_favorited":true,
         "comments_count":0,
         "comments":[
@@ -1135,10 +1113,10 @@ Restore a deleted day
 
 * * *
 #### AddToFavourites ####
-<a name="35ac0543a83287a9391f41f8f48b9c74"></a>
+<a name="b3770bf8244477259ffbde9370e7a3b1"></a>
 
 
-`POST /days/154/favourite`
+`POST /days/167/favourite`
 
 ##### Request: #####
 
@@ -1153,10 +1131,10 @@ Restore a deleted day
 
 * * *
 #### RemoveFromFavourites ####
-<a name="6adc828e38b8963d47ead26fab2ee6f6"></a>
+<a name="053a012a1d98bbfd8ab4b2a7c414a8d4"></a>
 
 
-`POST /days/155/unfavourite`
+`POST /days/168/unfavourite`
 
 ##### Request: #####
 
@@ -1191,8 +1169,8 @@ Restore a deleted day
 </table>
 ###### Example request: ######
     {
-      "from":156,
-      "to":157
+      "from":169,
+      "to":170
     }
 
 
@@ -1225,8 +1203,8 @@ Returns array of news days. One of input params can be omited, but not both.
 </table>
 ###### Example request: ######
     {
-      "from":159,
-      "to":160
+      "from":172,
+      "to":173
     }
 
 
@@ -1268,8 +1246,8 @@ Returns array of days. Input params can be omited, but ignoring both params can 
 </table>
 ###### Example request: ######
     {
-      "from":162,
-      "to":164
+      "from":175,
+      "to":177
     }
 
 
@@ -1288,20 +1266,21 @@ Returns array of days. Input params can be omited, but ignoring both params can 
 ###### Example response: ######
     [
       {
-        "id":163,
-        "user_id":3821,
+        "id":176,
+        "user_id":527,
         "user_name":"bar bar",
         "fb_uid":"100004087981387",
+        "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/527\/days\/f8e75291b70e62ee80e7fba585aa2b504fbc888a_200x200.jpeg",
+        "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/527\/days\/f8e75291b70e62ee80e7fba585aa2b504fbc888a_400x400.jpeg",
         "title":"foobarfoobarfoobarfoobarf",
         "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
         "timezone":0,
         "location":"foobarfoobarfoobarfoobarf",
         "type":"working",
         "likes_count":2,
-        "ctime":1343847065,
-        "utime":1343933465,
+        "ctime":1343871958,
+        "utime":1343958358,
         "is_ended":0,
-        "cover_moment":null,
         "is_favorited":false,
         "comments_count":0,
         "comments":[
@@ -1335,8 +1314,8 @@ Returns array of days. Input params can be omited, but ignoring both params can 
 </table>
 ###### Example request: ######
     {
-      "from":166,
-      "to":168
+      "from":179,
+      "to":181
     }
 
 
@@ -1355,20 +1334,21 @@ Returns array of days. Input params can be omited, but ignoring both params can 
 ###### Example response: ######
     [
       {
-        "id":167,
-        "user_id":3823,
+        "id":180,
+        "user_id":529,
         "user_name":"bar bar",
         "fb_uid":"100004087981387",
+        "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/529\/days\/83ad95189a0796523f928568cb02d2d98665cbf9_200x200.jpeg",
+        "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/529\/days\/83ad95189a0796523f928568cb02d2d98665cbf9_400x400.jpeg",
         "title":"foobarfoobarfoobarfoobarf",
         "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
         "timezone":0,
         "location":"foobarfoobarfoobarfoobarf",
         "type":"working",
         "likes_count":0,
-        "ctime":1343933465,
-        "utime":1343933465,
+        "ctime":1343958359,
+        "utime":1343958359,
         "is_ended":0,
-        "cover_moment":null,
         "is_deleted":true,
         "is_favorited":false,
         "comments_count":0,
@@ -1422,10 +1402,10 @@ Returns array of days. Input params can be omited, but ignoring both params can 
 
 * * *
 #### CreateComplaint ####
-<a name="4d3a7a0e7526a4318fb8147cee871d93"></a>
+<a name="f71d2fb366bc789680c652d85e8e690f"></a>
 
 
-`POST /days/169/create_complaint`
+`POST /days/182/create_complaint`
 
 ##### Request: #####
 ###### Params: ######
@@ -1465,8 +1445,8 @@ Returns array of days. Input params can be omited, but ignoring both params can 
     {
       "day_id":null,
       "text":"foobar",
-      "ctime":1343933466,
-      "id":17
+      "ctime":1343958359,
+      "id":20
     }
 
 
@@ -1477,10 +1457,10 @@ Returns array of days. Input params can be omited, but ignoring both params can 
 ### MomentComments ###
 <a name='MomentComments'></a>
 #### Update ####
-<a name="acd33a8be70322c7bb9d7a96649ae6f1"></a>
+<a name="eebd4b7ecdd35d5148d9b0a7c1eac54a"></a>
 
 
-`POST /moment_comments/12/update`
+`POST /moment_comments/9/update`
 
 ##### Request: #####
 ###### Params: ######
@@ -1521,14 +1501,14 @@ Returns array of days. Input params can be omited, but ignoring both params can 
 </table>
 ###### Example response: ######
     {
-      "id":12,
-      "user_id":3832,
+      "id":9,
+      "user_id":538,
       "user_name":"bar bar",
       "text":"foobarfo",
       "likes_count":0,
-      "ctime":1343933474,
-      "utime":1343933474,
-      "moment_id":54
+      "ctime":1343958363,
+      "utime":1343958363,
+      "moment_id":57
     }
 
 
@@ -1536,10 +1516,10 @@ Returns array of days. Input params can be omited, but ignoring both params can 
 
 * * *
 #### Delete ####
-<a name="cb9b7b1250cabfd6912db9fc79ed9840"></a>
+<a name="0d0d8c17c7735f151ca8aec8b162cfaf"></a>
 
 
-`POST /moment_comments/14/delete`
+`POST /moment_comments/11/delete`
 
 ##### Request: #####
 ###### Params: ######
@@ -1571,10 +1551,10 @@ Returns array of days. Input params can be omited, but ignoring both params can 
 ### Moments ###
 <a name='Moments'></a>
 #### Update ####
-<a name="855f50b66397cf6fb19974c3b9e076cc"></a>
+<a name="243e82a4acec31cd56de5af8809fdad5"></a>
 
 
-`POST moments/58/update`
+`POST moments/61/update`
 
 ##### Request: #####
 ###### Params: ######
@@ -1620,13 +1600,13 @@ Returns array of days. Input params can be omited, but ignoring both params can 
 </table>
 ###### Example response: ######
     {
-      "id":58,
-      "day_id":180,
+      "id":61,
+      "day_id":193,
       "description":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
-      "img_small":"http:\/\/onedayofmine.dev\/\/users\/3842\/days\/180\/ba4b9097f22f6d35b52a81c29892012fff58c520_200x200.jpg",
-      "img_big":"http:\/\/onedayofmine.dev\/\/users\/3842\/days\/180\/ba4b9097f22f6d35b52a81c29892012fff58c520_400x400.jpg",
+      "img_small":"http:\/\/onedayofmine.dev\/\/users\/548\/days\/193\/1bb82c622468919950b564945e8fc2fa9c517797_200x200.jpg",
+      "img_big":"http:\/\/onedayofmine.dev\/\/users\/548\/days\/193\/1bb82c622468919950b564945e8fc2fa9c517797_400x400.jpg",
       "likes_count":0,
-      "ctime":1343933475,
+      "ctime":1343958364,
       "comments_count":0,
       "comments":[
         
@@ -1638,10 +1618,10 @@ Returns array of days. Input params can be omited, but ignoring both params can 
 
 * * *
 #### Delete ####
-<a name="c71494d3f1f035f619e32e657388607f"></a>
+<a name="79f20d0ee47041d81daf00ce92e3ba7f"></a>
 
 
-`POST moments/59/delete`
+`POST moments/62/delete`
 
 ##### Request: #####
 
@@ -1656,10 +1636,10 @@ Returns array of days. Input params can be omited, but ignoring both params can 
 
 * * *
 #### Comment ####
-<a name="afaa93a1d881eb5c0521145f46a10636"></a>
+<a name="61c72ca9601ca056bc71aa3bdef648cb"></a>
 
 
-`POST moments/60/comment`
+`POST moments/63/comment`
 
 ##### Request: #####
 ###### Params: ######
@@ -1700,14 +1680,14 @@ Returns array of days. Input params can be omited, but ignoring both params can 
 </table>
 ###### Example response: ######
     {
-      "id":16,
-      "user_id":3844,
+      "id":13,
+      "user_id":550,
       "user_name":"bar bar",
       "text":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
       "likes_count":0,
-      "ctime":1343933476,
-      "utime":1343933476,
-      "moment_id":60
+      "ctime":1343958365,
+      "utime":1343958365,
+      "moment_id":63
     }
 
 
@@ -1754,13 +1734,13 @@ Returns array of days. Input params can be omited, but ignoring both params can 
 </table>
 ###### Example response: ######
     {
-      "id":3845,
+      "id":551,
       "fb_uid":"100004087981387",
       "twitter_uid":0,
       "name":"bar bar",
       "sex":"male",
-      "pic_small":"http:\/\/onedayofmine.dev\/users\/3845\/a8decb9da31eadb5eb96db0e383933acc6c96ee4_70x70.jpeg",
-      "pic_big":"http:\/\/onedayofmine.dev\/users\/3845\/a8decb9da31eadb5eb96db0e383933acc6c96ee4_140x140.jpeg",
+      "pic_small":"http:\/\/onedayofmine.dev\/users\/551\/1dd7416b24d691b90581ab50ea9238f8e22d78bb_70x70.jpeg",
+      "pic_big":"http:\/\/onedayofmine.dev\/users\/551\/1dd7416b24d691b90581ab50ea9238f8e22d78bb_140x140.jpeg",
       "birthday":"1980-08-08",
       "occupation":"",
       "location":"",
@@ -1837,13 +1817,13 @@ You can do partial updates, if needed.
 </table>
 ###### Example response: ######
     {
-      "id":3846,
+      "id":552,
       "fb_uid":"100004087981387",
       "twitter_uid":0,
       "name":"foobarfoobarfoobarfoobarf",
       "sex":"male",
-      "pic_small":"http:\/\/onedayofmine.dev\/users\/3846\/0db1821a9847456f5a56de00202a7d5e3031ee69_70x70.jpeg",
-      "pic_big":"http:\/\/onedayofmine.dev\/users\/3846\/0db1821a9847456f5a56de00202a7d5e3031ee69_140x140.jpeg",
+      "pic_small":"http:\/\/onedayofmine.dev\/users\/552\/c11f4653ecb33301d5e2dff2edf54a2997568005_70x70.jpeg",
+      "pic_big":"http:\/\/onedayofmine.dev\/users\/552\/c11f4653ecb33301d5e2dff2edf54a2997568005_140x140.jpeg",
       "birthday":"1990-01-02",
       "occupation":"foobarfoobarfoobarfoobarf",
       "location":"foobarfoobarfoobarfoobarf",
@@ -1889,7 +1869,7 @@ You can do partial updates, if needed.
 </table>
 ###### Example response: ######
     {
-      "id":3762,
+      "id":4695,
       "notifications_new_days":1,
       "notifications_new_comments":0,
       "notifications_related_activity":1,
@@ -1961,7 +1941,7 @@ You can do partial updates, if needed.
 </table>
 ###### Example response: ######
     {
-      "id":3764,
+      "id":4697,
       "notifications_new_days":1,
       "notifications_new_comments":1,
       "notifications_related_activity":1,
@@ -2000,7 +1980,7 @@ Get list of news that was created after specified news. SQL logic representation
 </table>
 ###### Example request: ######
     {
-      "last":20
+      "last":246
     }
 
 
@@ -2019,13 +1999,13 @@ Get list of news that was created after specified news. SQL logic representation
 ###### Example response: ######
     [
       {
-        "id":21,
-        "recipient_id":3850,
-        "user_id":3852,
+        "id":247,
+        "recipient_id":556,
+        "user_id":558,
         "text":"bar loves foo",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933477
+        "ctime":1343958367
       }
     ]
 
@@ -2054,7 +2034,7 @@ Get list of news that was created before specified news. SQL logic representatio
 </table>
 ###### Example request: ######
     {
-      "first":25
+      "first":251
     }
 
 
@@ -2075,31 +2055,31 @@ Get list of news that was created before specified news. SQL logic representatio
 ###### Example response: ######
     [
       {
-        "id":24,
-        "recipient_id":3853,
-        "user_id":3856,
+        "id":250,
+        "recipient_id":559,
+        "user_id":562,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933478
+        "ctime":1343958367
       },
       {
-        "id":23,
-        "recipient_id":3853,
-        "user_id":3855,
+        "id":249,
+        "recipient_id":559,
+        "user_id":561,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933478
+        "ctime":1343958367
       },
       {
-        "id":22,
-        "recipient_id":3853,
-        "user_id":3854,
+        "id":248,
+        "recipient_id":559,
+        "user_id":560,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933478
+        "ctime":1343958367
       }
     ]
 
@@ -2128,8 +2108,8 @@ Get specified range of news. SQL logic representation: SELECT ... FROM ... WHERE
 </table>
 ###### Example request: ######
     {
-      "first":29,
-      "last":32
+      "first":255,
+      "last":258
     }
 
 
@@ -2149,22 +2129,22 @@ Get specified range of news. SQL logic representation: SELECT ... FROM ... WHERE
 ###### Example response: ######
     [
       {
-        "id":31,
-        "recipient_id":3860,
-        "user_id":3864,
+        "id":257,
+        "recipient_id":566,
+        "user_id":570,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933478
+        "ctime":1343958367
       },
       {
-        "id":30,
-        "recipient_id":3860,
-        "user_id":3863,
+        "id":256,
+        "recipient_id":566,
+        "user_id":569,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933478
+        "ctime":1343958367
       }
     ]
 
@@ -2296,904 +2276,904 @@ Get list of latest news. SQL logic representation: SELECT ... FROM ... ORDER BY 
 ###### Example response: ######
     [
       {
-        "id":233,
-        "recipient_id":3867,
-        "user_id":4067,
+        "id":459,
+        "recipient_id":573,
+        "user_id":773,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958370
       },
       {
-        "id":232,
-        "recipient_id":3867,
-        "user_id":4066,
+        "id":458,
+        "recipient_id":573,
+        "user_id":772,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":231,
-        "recipient_id":3867,
-        "user_id":4065,
+        "id":457,
+        "recipient_id":573,
+        "user_id":771,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":230,
-        "recipient_id":3867,
-        "user_id":4064,
+        "id":456,
+        "recipient_id":573,
+        "user_id":770,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":229,
-        "recipient_id":3867,
-        "user_id":4063,
+        "id":455,
+        "recipient_id":573,
+        "user_id":769,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":228,
-        "recipient_id":3867,
-        "user_id":4062,
+        "id":454,
+        "recipient_id":573,
+        "user_id":768,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":227,
-        "recipient_id":3867,
-        "user_id":4061,
+        "id":453,
+        "recipient_id":573,
+        "user_id":767,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":226,
-        "recipient_id":3867,
-        "user_id":4060,
+        "id":452,
+        "recipient_id":573,
+        "user_id":766,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":225,
-        "recipient_id":3867,
-        "user_id":4059,
+        "id":451,
+        "recipient_id":573,
+        "user_id":765,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":224,
-        "recipient_id":3867,
-        "user_id":4058,
+        "id":450,
+        "recipient_id":573,
+        "user_id":764,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":223,
-        "recipient_id":3867,
-        "user_id":4057,
+        "id":449,
+        "recipient_id":573,
+        "user_id":763,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":222,
-        "recipient_id":3867,
-        "user_id":4056,
+        "id":448,
+        "recipient_id":573,
+        "user_id":762,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":221,
-        "recipient_id":3867,
-        "user_id":4055,
+        "id":447,
+        "recipient_id":573,
+        "user_id":761,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":220,
-        "recipient_id":3867,
-        "user_id":4054,
+        "id":446,
+        "recipient_id":573,
+        "user_id":760,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":219,
-        "recipient_id":3867,
-        "user_id":4053,
+        "id":445,
+        "recipient_id":573,
+        "user_id":759,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":218,
-        "recipient_id":3867,
-        "user_id":4052,
+        "id":444,
+        "recipient_id":573,
+        "user_id":758,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":217,
-        "recipient_id":3867,
-        "user_id":4051,
+        "id":443,
+        "recipient_id":573,
+        "user_id":757,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":216,
-        "recipient_id":3867,
-        "user_id":4050,
+        "id":442,
+        "recipient_id":573,
+        "user_id":756,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":215,
-        "recipient_id":3867,
-        "user_id":4049,
+        "id":441,
+        "recipient_id":573,
+        "user_id":755,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":214,
-        "recipient_id":3867,
-        "user_id":4048,
+        "id":440,
+        "recipient_id":573,
+        "user_id":754,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":213,
-        "recipient_id":3867,
-        "user_id":4047,
+        "id":439,
+        "recipient_id":573,
+        "user_id":753,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":212,
-        "recipient_id":3867,
-        "user_id":4046,
+        "id":438,
+        "recipient_id":573,
+        "user_id":752,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":211,
-        "recipient_id":3867,
-        "user_id":4045,
+        "id":437,
+        "recipient_id":573,
+        "user_id":751,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":210,
-        "recipient_id":3867,
-        "user_id":4044,
+        "id":436,
+        "recipient_id":573,
+        "user_id":750,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":209,
-        "recipient_id":3867,
-        "user_id":4043,
+        "id":435,
+        "recipient_id":573,
+        "user_id":749,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":208,
-        "recipient_id":3867,
-        "user_id":4042,
+        "id":434,
+        "recipient_id":573,
+        "user_id":748,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":207,
-        "recipient_id":3867,
-        "user_id":4041,
+        "id":433,
+        "recipient_id":573,
+        "user_id":747,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":206,
-        "recipient_id":3867,
-        "user_id":4040,
+        "id":432,
+        "recipient_id":573,
+        "user_id":746,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":205,
-        "recipient_id":3867,
-        "user_id":4039,
+        "id":431,
+        "recipient_id":573,
+        "user_id":745,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":204,
-        "recipient_id":3867,
-        "user_id":4038,
+        "id":430,
+        "recipient_id":573,
+        "user_id":744,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":203,
-        "recipient_id":3867,
-        "user_id":4037,
+        "id":429,
+        "recipient_id":573,
+        "user_id":743,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":202,
-        "recipient_id":3867,
-        "user_id":4036,
+        "id":428,
+        "recipient_id":573,
+        "user_id":742,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":201,
-        "recipient_id":3867,
-        "user_id":4035,
+        "id":427,
+        "recipient_id":573,
+        "user_id":741,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":200,
-        "recipient_id":3867,
-        "user_id":4034,
+        "id":426,
+        "recipient_id":573,
+        "user_id":740,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":199,
-        "recipient_id":3867,
-        "user_id":4033,
+        "id":425,
+        "recipient_id":573,
+        "user_id":739,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":198,
-        "recipient_id":3867,
-        "user_id":4032,
+        "id":424,
+        "recipient_id":573,
+        "user_id":738,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":197,
-        "recipient_id":3867,
-        "user_id":4031,
+        "id":423,
+        "recipient_id":573,
+        "user_id":737,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":196,
-        "recipient_id":3867,
-        "user_id":4030,
+        "id":422,
+        "recipient_id":573,
+        "user_id":736,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":195,
-        "recipient_id":3867,
-        "user_id":4029,
+        "id":421,
+        "recipient_id":573,
+        "user_id":735,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":194,
-        "recipient_id":3867,
-        "user_id":4028,
+        "id":420,
+        "recipient_id":573,
+        "user_id":734,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":193,
-        "recipient_id":3867,
-        "user_id":4027,
+        "id":419,
+        "recipient_id":573,
+        "user_id":733,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":192,
-        "recipient_id":3867,
-        "user_id":4026,
+        "id":418,
+        "recipient_id":573,
+        "user_id":732,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":191,
-        "recipient_id":3867,
-        "user_id":4025,
+        "id":417,
+        "recipient_id":573,
+        "user_id":731,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":190,
-        "recipient_id":3867,
-        "user_id":4024,
+        "id":416,
+        "recipient_id":573,
+        "user_id":730,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":189,
-        "recipient_id":3867,
-        "user_id":4023,
+        "id":415,
+        "recipient_id":573,
+        "user_id":729,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":188,
-        "recipient_id":3867,
-        "user_id":4022,
+        "id":414,
+        "recipient_id":573,
+        "user_id":728,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":187,
-        "recipient_id":3867,
-        "user_id":4021,
+        "id":413,
+        "recipient_id":573,
+        "user_id":727,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":186,
-        "recipient_id":3867,
-        "user_id":4020,
+        "id":412,
+        "recipient_id":573,
+        "user_id":726,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":185,
-        "recipient_id":3867,
-        "user_id":4019,
+        "id":411,
+        "recipient_id":573,
+        "user_id":725,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":184,
-        "recipient_id":3867,
-        "user_id":4018,
+        "id":410,
+        "recipient_id":573,
+        "user_id":724,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":183,
-        "recipient_id":3867,
-        "user_id":4017,
+        "id":409,
+        "recipient_id":573,
+        "user_id":723,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":182,
-        "recipient_id":3867,
-        "user_id":4016,
+        "id":408,
+        "recipient_id":573,
+        "user_id":722,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":181,
-        "recipient_id":3867,
-        "user_id":4015,
+        "id":407,
+        "recipient_id":573,
+        "user_id":721,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":180,
-        "recipient_id":3867,
-        "user_id":4014,
+        "id":406,
+        "recipient_id":573,
+        "user_id":720,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":179,
-        "recipient_id":3867,
-        "user_id":4013,
+        "id":405,
+        "recipient_id":573,
+        "user_id":719,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":178,
-        "recipient_id":3867,
-        "user_id":4012,
+        "id":404,
+        "recipient_id":573,
+        "user_id":718,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":177,
-        "recipient_id":3867,
-        "user_id":4011,
+        "id":403,
+        "recipient_id":573,
+        "user_id":717,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":176,
-        "recipient_id":3867,
-        "user_id":4010,
+        "id":402,
+        "recipient_id":573,
+        "user_id":716,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":175,
-        "recipient_id":3867,
-        "user_id":4009,
+        "id":401,
+        "recipient_id":573,
+        "user_id":715,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":174,
-        "recipient_id":3867,
-        "user_id":4008,
+        "id":400,
+        "recipient_id":573,
+        "user_id":714,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":173,
-        "recipient_id":3867,
-        "user_id":4007,
+        "id":399,
+        "recipient_id":573,
+        "user_id":713,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":172,
-        "recipient_id":3867,
-        "user_id":4006,
+        "id":398,
+        "recipient_id":573,
+        "user_id":712,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":171,
-        "recipient_id":3867,
-        "user_id":4005,
+        "id":397,
+        "recipient_id":573,
+        "user_id":711,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":170,
-        "recipient_id":3867,
-        "user_id":4004,
+        "id":396,
+        "recipient_id":573,
+        "user_id":710,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":169,
-        "recipient_id":3867,
-        "user_id":4003,
+        "id":395,
+        "recipient_id":573,
+        "user_id":709,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":168,
-        "recipient_id":3867,
-        "user_id":4002,
+        "id":394,
+        "recipient_id":573,
+        "user_id":708,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":167,
-        "recipient_id":3867,
-        "user_id":4001,
+        "id":393,
+        "recipient_id":573,
+        "user_id":707,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":166,
-        "recipient_id":3867,
-        "user_id":4000,
+        "id":392,
+        "recipient_id":573,
+        "user_id":706,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":165,
-        "recipient_id":3867,
-        "user_id":3999,
+        "id":391,
+        "recipient_id":573,
+        "user_id":705,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":164,
-        "recipient_id":3867,
-        "user_id":3998,
+        "id":390,
+        "recipient_id":573,
+        "user_id":704,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":163,
-        "recipient_id":3867,
-        "user_id":3997,
+        "id":389,
+        "recipient_id":573,
+        "user_id":703,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":162,
-        "recipient_id":3867,
-        "user_id":3996,
+        "id":388,
+        "recipient_id":573,
+        "user_id":702,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":161,
-        "recipient_id":3867,
-        "user_id":3995,
+        "id":387,
+        "recipient_id":573,
+        "user_id":701,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":160,
-        "recipient_id":3867,
-        "user_id":3994,
+        "id":386,
+        "recipient_id":573,
+        "user_id":700,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":159,
-        "recipient_id":3867,
-        "user_id":3993,
+        "id":385,
+        "recipient_id":573,
+        "user_id":699,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":158,
-        "recipient_id":3867,
-        "user_id":3992,
+        "id":384,
+        "recipient_id":573,
+        "user_id":698,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":157,
-        "recipient_id":3867,
-        "user_id":3991,
+        "id":383,
+        "recipient_id":573,
+        "user_id":697,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":156,
-        "recipient_id":3867,
-        "user_id":3990,
+        "id":382,
+        "recipient_id":573,
+        "user_id":696,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":155,
-        "recipient_id":3867,
-        "user_id":3989,
+        "id":381,
+        "recipient_id":573,
+        "user_id":695,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":154,
-        "recipient_id":3867,
-        "user_id":3988,
+        "id":380,
+        "recipient_id":573,
+        "user_id":694,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":153,
-        "recipient_id":3867,
-        "user_id":3987,
+        "id":379,
+        "recipient_id":573,
+        "user_id":693,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":152,
-        "recipient_id":3867,
-        "user_id":3986,
+        "id":378,
+        "recipient_id":573,
+        "user_id":692,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":151,
-        "recipient_id":3867,
-        "user_id":3985,
+        "id":377,
+        "recipient_id":573,
+        "user_id":691,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":150,
-        "recipient_id":3867,
-        "user_id":3984,
+        "id":376,
+        "recipient_id":573,
+        "user_id":690,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":149,
-        "recipient_id":3867,
-        "user_id":3983,
+        "id":375,
+        "recipient_id":573,
+        "user_id":689,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":148,
-        "recipient_id":3867,
-        "user_id":3982,
+        "id":374,
+        "recipient_id":573,
+        "user_id":688,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":147,
-        "recipient_id":3867,
-        "user_id":3981,
+        "id":373,
+        "recipient_id":573,
+        "user_id":687,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":146,
-        "recipient_id":3867,
-        "user_id":3980,
+        "id":372,
+        "recipient_id":573,
+        "user_id":686,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":145,
-        "recipient_id":3867,
-        "user_id":3979,
+        "id":371,
+        "recipient_id":573,
+        "user_id":685,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":144,
-        "recipient_id":3867,
-        "user_id":3978,
+        "id":370,
+        "recipient_id":573,
+        "user_id":684,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":143,
-        "recipient_id":3867,
-        "user_id":3977,
+        "id":369,
+        "recipient_id":573,
+        "user_id":683,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933480
+        "ctime":1343958369
       },
       {
-        "id":142,
-        "recipient_id":3867,
-        "user_id":3976,
+        "id":368,
+        "recipient_id":573,
+        "user_id":682,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933479
+        "ctime":1343958369
       },
       {
-        "id":141,
-        "recipient_id":3867,
-        "user_id":3975,
+        "id":367,
+        "recipient_id":573,
+        "user_id":681,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933479
+        "ctime":1343958369
       },
       {
-        "id":140,
-        "recipient_id":3867,
-        "user_id":3974,
+        "id":366,
+        "recipient_id":573,
+        "user_id":680,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933479
+        "ctime":1343958369
       },
       {
-        "id":139,
-        "recipient_id":3867,
-        "user_id":3973,
+        "id":365,
+        "recipient_id":573,
+        "user_id":679,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933479
+        "ctime":1343958369
       },
       {
-        "id":138,
-        "recipient_id":3867,
-        "user_id":3972,
+        "id":364,
+        "recipient_id":573,
+        "user_id":678,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933479
+        "ctime":1343958369
       },
       {
-        "id":137,
-        "recipient_id":3867,
-        "user_id":3971,
+        "id":363,
+        "recipient_id":573,
+        "user_id":677,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933479
+        "ctime":1343958369
       },
       {
-        "id":136,
-        "recipient_id":3867,
-        "user_id":3970,
+        "id":362,
+        "recipient_id":573,
+        "user_id":676,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933479
+        "ctime":1343958369
       },
       {
-        "id":135,
-        "recipient_id":3867,
-        "user_id":3969,
+        "id":361,
+        "recipient_id":573,
+        "user_id":675,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933479
+        "ctime":1343958369
       },
       {
-        "id":134,
-        "recipient_id":3867,
-        "user_id":3968,
+        "id":360,
+        "recipient_id":573,
+        "user_id":674,
         "text":"foo loves bar",
         "day_id":0,
         "moment_id":0,
-        "ctime":1343933479
+        "ctime":1343958369
       }
     ]
 
@@ -3229,13 +3209,13 @@ Get list of latest news. SQL logic representation: SELECT ... FROM ... ORDER BY 
 ###### Example response: ######
     [
       {
-        "id":4092,
+        "id":798,
         "fb_uid":"100004093051334",
         "twitter_uid":0,
         "name":"foo foo",
         "sex":"male",
-        "pic_small":"http:\/\/onedayofmine.dev\/users\/4092\/7f79e5e5d1f596ec478839c6cb969872c63c9f5c_70x70.jpeg",
-        "pic_big":"http:\/\/onedayofmine.dev\/users\/4092\/7f79e5e5d1f596ec478839c6cb969872c63c9f5c_140x140.jpeg",
+        "pic_small":"http:\/\/onedayofmine.dev\/users\/798\/9237027c824e2acd5d03e420d5bca01b6b13c0b0_70x70.jpeg",
+        "pic_big":"http:\/\/onedayofmine.dev\/users\/798\/9237027c824e2acd5d03e420d5bca01b6b13c0b0_140x140.jpeg",
         "birthday":"1982-08-08",
         "occupation":"",
         "location":"",
@@ -3304,13 +3284,13 @@ Get list of latest news. SQL logic representation: SELECT ... FROM ... ORDER BY 
 </table>
 ###### Example response: ######
     {
-      "id":4093,
+      "id":799,
       "fb_uid":"100004087981387",
       "twitter_uid":637083468,
       "name":"bar bar",
       "sex":"male",
-      "pic_small":"http:\/\/onedayofmine.dev\/users\/4093\/9c4164fd48fac3331d74caae0f39f133dfd775d4_70x70.jpeg",
-      "pic_big":"http:\/\/onedayofmine.dev\/users\/4093\/9c4164fd48fac3331d74caae0f39f133dfd775d4_140x140.jpeg",
+      "pic_small":"http:\/\/onedayofmine.dev\/users\/799\/fea7536b35e1b43d8d96b68a55d2c234ab1f0a4c_70x70.jpeg",
+      "pic_big":"http:\/\/onedayofmine.dev\/users\/799\/fea7536b35e1b43d8d96b68a55d2c234ab1f0a4c_140x140.jpeg",
       "birthday":"1980-08-08",
       "occupation":"",
       "location":"",
@@ -3327,10 +3307,10 @@ Get list of latest news. SQL logic representation: SELECT ... FROM ... ORDER BY 
 ### User ###
 <a name='User'></a>
 #### UserByIdDays ####
-<a name="e3a094e14ba850018eee69d5b52df34e"></a>
+<a name="9cafac2b77d2bd3a013b5c4628ab094a"></a>
 
 
-`GET users/4124/days/`
+`GET users/830/days/`
 
 ##### Request: #####
 
@@ -3352,20 +3332,21 @@ Get list of latest news. SQL logic representation: SELECT ... FROM ... ORDER BY 
 ###### Example response: ######
     [
       {
-        "id":196,
-        "user_id":4124,
+        "id":209,
+        "user_id":830,
         "user_name":"bar bar",
         "fb_uid":"100004087981387",
+        "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/830\/days\/bbb588e5bab339b9dc1e1f6fea2b5a24987a299c_200x200.jpeg",
+        "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/830\/days\/bbb588e5bab339b9dc1e1f6fea2b5a24987a299c_400x400.jpeg",
         "title":"foobarfoobarfoobarfoobarf",
         "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
         "timezone":0,
         "location":"foobarfoobarfoobarfoobarf",
         "type":"working",
         "likes_count":0,
-        "ctime":1343933497,
-        "utime":1343933497,
+        "ctime":1343958384,
+        "utime":1343958384,
         "is_ended":0,
-        "cover_moment":null,
         "is_favorited":false,
         "comments_count":0,
         "comments":[
@@ -3373,20 +3354,21 @@ Get list of latest news. SQL logic representation: SELECT ... FROM ... ORDER BY 
         ]
       },
       {
-        "id":197,
-        "user_id":4124,
+        "id":210,
+        "user_id":830,
         "user_name":"bar bar",
         "fb_uid":"100004087981387",
+        "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/830\/days\/a4577c48cee4f8904ec079b453148b24e1cde10d_200x200.jpeg",
+        "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/830\/days\/a4577c48cee4f8904ec079b453148b24e1cde10d_400x400.jpeg",
         "title":"foobarfoobarfoobarfoobarf",
         "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
         "timezone":0,
         "location":"foobarfoobarfoobarfoobarf",
         "type":"working",
         "likes_count":0,
-        "ctime":1343933497,
-        "utime":1343933497,
+        "ctime":1343958384,
+        "utime":1343958384,
         "is_ended":0,
-        "cover_moment":null,
         "is_favorited":false,
         "comments_count":0,
         "comments":[
@@ -3400,10 +3382,10 @@ Get list of latest news. SQL logic representation: SELECT ... FROM ... ORDER BY 
 
 * * *
 #### UserById ####
-<a name="8f4960570b175565bfc42d2c53a14e2e"></a>
+<a name="90fd865dd107d6a86f17a7da8b73b2c7"></a>
 
 
-`GET users/4126/item/`
+`GET users/832/item/`
 
 ##### Request: #####
 
@@ -3437,13 +3419,13 @@ Get list of latest news. SQL logic representation: SELECT ... FROM ... ORDER BY 
 </table>
 ###### Example response: ######
     {
-      "id":4126,
+      "id":832,
       "fb_uid":"100004087981387",
       "twitter_uid":0,
       "name":"bar bar",
       "sex":"male",
-      "pic_small":"http:\/\/onedayofmine.dev\/users\/4126\/72294ed0eb9fb689f0e3202f2165795390c6e52e_70x70.jpeg",
-      "pic_big":"http:\/\/onedayofmine.dev\/users\/4126\/72294ed0eb9fb689f0e3202f2165795390c6e52e_140x140.jpeg",
+      "pic_small":"http:\/\/onedayofmine.dev\/users\/832\/f796849eb904c8c9a7d899a19341c5d0b20f8003_70x70.jpeg",
+      "pic_big":"http:\/\/onedayofmine.dev\/users\/832\/f796849eb904c8c9a7d899a19341c5d0b20f8003_140x140.jpeg",
       "birthday":"1980-08-08",
       "occupation":"",
       "location":"",
@@ -3483,13 +3465,13 @@ Get list of latest news. SQL logic representation: SELECT ... FROM ... ORDER BY 
 ###### Example response: ######
     [
       {
-        "id":4131,
+        "id":837,
         "fb_uid":"100004093051334",
         "twitter_uid":0,
         "name":"foo foo",
         "sex":"male",
-        "pic_small":"http:\/\/onedayofmine.dev\/users\/4131\/ff35346d7ba131630e12e2e415d9b7c8d1e2cd63_70x70.jpeg",
-        "pic_big":"http:\/\/onedayofmine.dev\/users\/4131\/ff35346d7ba131630e12e2e415d9b7c8d1e2cd63_140x140.jpeg",
+        "pic_small":"http:\/\/onedayofmine.dev\/users\/837\/d63f70030ebdcfcefd1ef2e79ab8974f5f8709af_70x70.jpeg",
+        "pic_big":"http:\/\/onedayofmine.dev\/users\/837\/d63f70030ebdcfcefd1ef2e79ab8974f5f8709af_140x140.jpeg",
         "birthday":"1982-08-08",
         "occupation":"",
         "location":"",
@@ -3506,10 +3488,10 @@ Get list of latest news. SQL logic representation: SELECT ... FROM ... ORDER BY 
 
 * * *
 #### FollowersByUserId ####
-<a name="71a0ac4610ab0f1c3174f41c5a39dec0"></a>
+<a name="7d0cd2148b6c6129fc4f1a17430a4275"></a>
 
 
-`GET users/4132/followers`
+`GET users/838/followers`
 
 ##### Request: #####
 
@@ -3530,13 +3512,13 @@ Get list of latest news. SQL logic representation: SELECT ... FROM ... ORDER BY 
 ###### Example response: ######
     [
       {
-        "id":4133,
+        "id":839,
         "fb_uid":"100004093051334",
         "twitter_uid":0,
         "name":"foo foo",
         "sex":"male",
-        "pic_small":"http:\/\/onedayofmine.dev\/users\/4133\/2fdf81aa34bff11ee8e91fa6efc85206d66f60d4_70x70.jpeg",
-        "pic_big":"http:\/\/onedayofmine.dev\/users\/4133\/2fdf81aa34bff11ee8e91fa6efc85206d66f60d4_140x140.jpeg",
+        "pic_small":"http:\/\/onedayofmine.dev\/users\/839\/595c4fc66aff71535ae9fa20d3289f9c45afd931_70x70.jpeg",
+        "pic_big":"http:\/\/onedayofmine.dev\/users\/839\/595c4fc66aff71535ae9fa20d3289f9c45afd931_140x140.jpeg",
         "birthday":"1982-08-08",
         "occupation":"",
         "location":"",
@@ -3575,13 +3557,13 @@ Get list of latest news. SQL logic representation: SELECT ... FROM ... ORDER BY 
 ###### Example response: ######
     [
       {
-        "id":4135,
+        "id":841,
         "fb_uid":"100004093051334",
         "twitter_uid":0,
         "name":"foo foo",
         "sex":"male",
-        "pic_small":"http:\/\/onedayofmine.dev\/users\/4135\/d7a53b388b97e2f8f37c394c0b82a99317a0f4d4_70x70.jpeg",
-        "pic_big":"http:\/\/onedayofmine.dev\/users\/4135\/d7a53b388b97e2f8f37c394c0b82a99317a0f4d4_140x140.jpeg",
+        "pic_small":"http:\/\/onedayofmine.dev\/users\/841\/a31de7182b1fadc1eb7c4cced6d634e9cc6fe712_70x70.jpeg",
+        "pic_big":"http:\/\/onedayofmine.dev\/users\/841\/a31de7182b1fadc1eb7c4cced6d634e9cc6fe712_140x140.jpeg",
         "birthday":"1982-08-08",
         "occupation":"",
         "location":"",
@@ -3598,10 +3580,10 @@ Get list of latest news. SQL logic representation: SELECT ... FROM ... ORDER BY 
 
 * * *
 #### FollowingByUserId ####
-<a name="37e63e93d4c38ee0af2bcd8d2a3f34c0"></a>
+<a name="b62212662e4bfdb13b872342f18f75c0"></a>
 
 
-`GET users/4136/following`
+`GET users/842/following`
 
 ##### Request: #####
 
@@ -3622,13 +3604,13 @@ Get list of latest news. SQL logic representation: SELECT ... FROM ... ORDER BY 
 ###### Example response: ######
     [
       {
-        "id":4137,
+        "id":843,
         "fb_uid":"100004093051334",
         "twitter_uid":0,
         "name":"foo foo",
         "sex":"male",
-        "pic_small":"http:\/\/onedayofmine.dev\/users\/4137\/b308922eaca28f4c91940fd303c209336fa4e099_70x70.jpeg",
-        "pic_big":"http:\/\/onedayofmine.dev\/users\/4137\/b308922eaca28f4c91940fd303c209336fa4e099_140x140.jpeg",
+        "pic_small":"http:\/\/onedayofmine.dev\/users\/843\/cd5f0749a0d7e3cc48eefe31a64c644928f3ab3b_70x70.jpeg",
+        "pic_big":"http:\/\/onedayofmine.dev\/users\/843\/cd5f0749a0d7e3cc48eefe31a64c644928f3ab3b_140x140.jpeg",
         "birthday":"1982-08-08",
         "occupation":"",
         "location":"",
@@ -3643,10 +3625,10 @@ Get list of latest news. SQL logic representation: SELECT ... FROM ... ORDER BY 
 
 * * *
 #### Follow ####
-<a name="40a09268bb397b2f5c6893e4adc471d0"></a>
+<a name="4868bf7212750e39431c32444301ca37"></a>
 
 
-`POST users/4139/follow`
+`POST users/845/follow`
 
 ##### Request: #####
 
@@ -3661,10 +3643,10 @@ Get list of latest news. SQL logic representation: SELECT ... FROM ... ORDER BY 
 
 * * *
 #### Unfollow ####
-<a name="7800ca3a91872fe96356ca2632f9c43d"></a>
+<a name="238058a8f8b2fb0190167e2b131e4f6b"></a>
 
 
-`POST users/4141/unfollow`
+`POST users/847/unfollow`
 
 ##### Request: #####
 

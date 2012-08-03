@@ -7,6 +7,10 @@ lmb_require('src/model/BaseModel.class.php');
  */
 class Day extends BaseModel
 {
+  const IMAGE_ORIG = 'orig';
+  const IMAGE_SMALL = '200x200';
+  const IMAGE_BIG = '400x400';
+
   protected function _defineRelations()
   {
     $this->_many_belongs_to = array(
@@ -39,6 +43,8 @@ class Day extends BaseModel
     $export->user_id = $this->getUser()->getId();
     $export->user_name = $this->getUser()->getName();
     $export->fb_uid = $this->getUser()->fb_uid;
+    $export->cover_img_small = lmbToolkit::instance()->getSiteUrl($this->getImageSmall());
+    $export->cover_img_big = lmbToolkit::instance()->getSiteUrl($this->getImageBig());
     $export->title = $this->getTitle();
     $export->occupation = $this->getOccupation();
     $export->timezone = $this->getTimezone();
@@ -49,16 +55,11 @@ class Day extends BaseModel
     $export->utime = $this->getUpdateTime();
     $export->is_ended = $this->getIsEnded() ?: 0;
 
-    $export->cover_moment = null;
-    if(count($this->getMoments()))
-      $export->cover_moment = $this->getMoments()->at(0)->exportForApi();
-
     if($this->getIsDeleted())
       $export->is_deleted = true;
 
-    if(lmbToolkit::instance()->getUser()) {
+    if(lmbToolkit::instance()->getUser())
       $export->is_favorited = DayFavourite::isFavourited(lmbToolkit::instance()->getUser(), $this);
-    }
 
     $comments = $this->getComments();
     $export->comments_count = $comments->count();
@@ -69,6 +70,54 @@ class Day extends BaseModel
     }
 
     return $export;
+  }
+
+  function attachImage($filename_or_url, $content)
+  {
+    $extension = strtolower(substr($filename_or_url, strrpos($filename_or_url, '.')+1));
+    $this->setImageExt($extension);
+
+    $orig_file = lmbToolkit::instance()->getAbsolutePath($this->getImageOrig());
+    lmbFs::safeWrite($orig_file, $content);
+
+    $small_file = lmbToolkit::instance()->getAbsolutePath($this->getImageSmall());
+    $helper = new lmbConvertImageHelper($orig_file);
+    $helper->resizeAndCropFrame(array('width' => 200, 'height' => 200));
+    $helper->save($small_file);
+
+    $small_file = lmbToolkit::instance()->getAbsolutePath($this->getImageBig());
+    $helper = new lmbConvertImageHelper($orig_file);
+    $helper->resizeAndCropFrame(array('width' => 400, 'height' => 400));
+    $helper->save($small_file);
+  }
+
+  function getImageOrig()
+  {
+    return $this->getImagePath(self::IMAGE_ORIG);
+  }
+
+  function getImageSmall()
+  {
+    return $this->getImagePath(self::IMAGE_SMALL);
+  }
+
+  function getImageBig()
+  {
+    return $this->getImagePath(self::IMAGE_BIG);
+  }
+
+  function getImagePath($size_variation)
+  {
+    if(!$this->getImageExt())
+      return null;
+    if(!$this->getId())
+      return null;
+    if(!$this->getUser() || !$this->getUser()->getId())
+      return null;
+    $user_id = $this->getUser()->getId();
+    $hash = sha1('s0l7&p3pp$r'.$user_id.$this->getId());
+    $ext = $this->getImageExt();
+    return "/users/$user_id/days/{$hash}_$size_variation.$ext";
   }
 
   static function getTypes()
