@@ -164,6 +164,24 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 		}
 	}
 
+  function testCreateMoment_CoverOnFirstMoment()
+  {
+    $day = $this->generator->day($this->main_user);
+    $day->setIsEnded(0);
+    $day->save();
+
+    $this->_loginAndSetCookie($this->main_user);
+    $this->post('current_day/moment_create', array(
+      'description' => $description = $this->generator->string(200),
+      'image_name' => $image_path = $this->generator->image_name(),
+      'image_content' => base64_encode($this->generator->image())
+    ))->result;
+
+    $loaded_day = Day::findById($day->getId())->exportForApi();
+    $img = @file_get_contents($loaded_day->cover_img_small);
+    $this->assertTrue($img, "Cover image {$loaded_day->cover_img_small} not found");
+  }
+
   /**
    * @api input param string title
    * @api input param string description

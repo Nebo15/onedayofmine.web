@@ -31,6 +31,7 @@ class MyAcceptanceTest extends odAcceptanceTestCase
       $this->assertEqual($this->main_user->birthday, $profile->birthday);
 		}
 	}
+
 	/**
 	 * @api description You can do partial updates, if needed.
 	 */
@@ -45,6 +46,8 @@ class MyAcceptanceTest extends odAcceptanceTestCase
     $update->location = $this->generator->string(25);
     $update->email = $this->generator->email();
     $update->birthday = $this->generator->date_sql();
+    $update->pic_name = $this->generator->image_name();
+    $update->pic_content = base64_encode($this->generator->image());
 
     $updated_profile = $this->post('/my/profile', (array) $update)->result;
 
@@ -55,6 +58,10 @@ class MyAcceptanceTest extends odAcceptanceTestCase
       $this->assertEqual($update->location, $updated_profile->location);
       $this->assertEqual($update->birthday, $updated_profile->birthday);
       $this->assertEqual($update->email, $updated_profile->email);
+      $this->assertProperty($updated_profile, 'pic_small');
+      $content = @file_get_contents($updated_profile->pic_small);
+      $this->assertTrue($content, "Image {$updated_profile->pic_small} not found");
+      $this->assertProperty($updated_profile, 'pic_big');
 
       $loaded_user = User::findById($this->main_user->getId());
 

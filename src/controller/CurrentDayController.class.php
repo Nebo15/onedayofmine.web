@@ -74,6 +74,14 @@ class CurrentDayController extends BaseJsonController
 		if(!$day = Day::findUnfinished($this->_getUser()))
 			return $this->_answerNotFound('Unfinished day not found');
 
+    if(!count($day->getMoments()) || $this->request->get('is_cover'))
+    {
+      $day->attachImage(
+        $this->request->get('image_name'),
+        base64_decode($this->request->get('image_content'))
+      );
+    }
+
 		$moment = new Moment();
 		$moment->setDay($day);
 		$moment->setDescription($this->request->get('description'));
@@ -83,7 +91,6 @@ class CurrentDayController extends BaseJsonController
 				base64_decode($this->request->get('image_content'))
 		);
 		$moment->save();
-
 
 		if($this->error_list->isEmpty()) {
 			// Notify friends about new moment
