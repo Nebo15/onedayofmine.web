@@ -138,6 +138,18 @@ class TwitterProfile implements SocialServicesProfileInterface
   }
 
   /**
+   * Returns user avatars.
+   */
+  public function getPictures()
+  {
+    $uid = $this->user->getTwitterUid();
+    return [
+      '73x73' => 'http://api.twitter.com/1/users/profile_image?user_id='.$uid.'&size=bigger',
+      '?x?'   => 'http://api.twitter.com/1/users/profile_image?user_id='.$uid.'&size=original'
+    ];
+  }
+
+  /**
    * Update twitter status.
    *
    * @param  string $string

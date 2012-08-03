@@ -55,10 +55,12 @@ class TwitterProfileTest extends odUnitTestCase
     $this->assertEqual($friends[0]->getId(), $this->additional_user->getId());
   }
 
-  // TODO duplicate tweeting workaround must be fixed
-  function estTweet()
+  function testGetPictures()
   {
-    $text = $this->generator->string();
+    $pictures = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER)->getPictures();
+    $this->assertTrue(count($pictures));
+  }
+
   function testTweet()
   {
     $tmp = $this->generator->string();

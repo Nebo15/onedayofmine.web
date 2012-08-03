@@ -8,6 +8,7 @@ interface SocialServicesProfileInterface
   public function getInfo();
   // public function getFriends();
   public function getRegisteredFriends();
+  public function getPictures();
 
   ###########################################################
   ###################### Share methods ######################
@@ -18,7 +19,4 @@ interface SocialServicesProfileInterface
   function shareDayLike($day_url);
   function shareMomentAdd($moment_url, $day_url);
   function shareMomentLike($moment_url);
-
-  // TODO
-  // getUserPicture()
 }

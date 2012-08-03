@@ -75,6 +75,15 @@ class FacebookProfile implements SocialServicesProfileInterface
     return $results;
   }
 
+  public function getPictures()
+  {
+    $info = $this->getInfo_Raw();
+    return array(
+      '100x300' => $info['pic'],
+      '200x600' => $info['pic_big']
+    );
+  }
+
   /**
    * @param $day_url
    * @return string fb_id
@@ -152,7 +161,7 @@ class FacebookProfile implements SocialServicesProfileInterface
   {
   	return array(
       'uid', 'email', 'first_name', 'last_name', 'sex', 'timezone', 'profile_update_time',
-      'pic', 'work', 'current_location', 'birthday_date'
+      'pic', 'pic_big', 'work', 'current_location', 'birthday_date'
     );
   }
 
