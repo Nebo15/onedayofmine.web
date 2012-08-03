@@ -34,9 +34,8 @@ function task_od_fill_from_lj($argv)
 
 	define('LJ_COMMUNITY_NAME', 'odin-moy-den');
   // Returns ~6 posts on page
-  define('PAGES', 3);
-
-  $generator = new odObjectMother();
+  define('PAGES', 2);
+  define('POSTS_COUNT', 50);
 
   echo "== Started to search for links... ==".PHP_EOL;
 
@@ -76,32 +75,50 @@ function task_od_fill_from_lj($argv)
 
   echo "== Loaded ".count($tests_users)." test users. ==".PHP_EOL;
 
-  $i = 0;
-	foreach($posts as $id => $post)
+  $posts_remain = POSTS_COUNT;
+  while($posts_remain--)
   {
-    $i++;
-    echo $i.'/'.count($posts).'. Creating day "'.$post->getTitle().'"...'.PHP_EOL;
+    $post = $posts[array_rand($posts)];
+
+    echo $posts_remain.'. Creating day "'.$post->getTitle().'"...'.PHP_EOL;
 
     $day = new Day();
-    $day->setTitle($post->getTitle());
+    $day->setTitle($post->getTitle().' '.$posts_remain);
     $day->setUser($tests_users[array_rand($tests_users)]);
     $day->setOccupation($occupations[array_rand($occupations)]);
     $day->setTimezone(0);
     $day->setLocation($locations[array_rand($locations)]);
     $day->setType($types[array_rand($types)]);
+    $day->setLikesCount(rand(1, 100));
     $day->save();
 
+    $first = true;
     foreach($post->getMoments() as $moment_data)
     {
+      if($first)
+      {
+        $day->attachImage('foo.jpg', od_download_file($moment_data['img']));
+        $day->save();
+        $first = false;
+      }
       $moment = new Moment();
       $moment->setDescription($moment_data['description']);
       $moment->setDay($day);
       $moment->save();
-      $moment->attachImage('foo.jpg', file_get_contents($moment_data['img']));
+      $moment->attachImage('foo.jpg', od_download_file($moment_data['img']));
       $moment->save();
       echo ".";
     }
     echo PHP_EOL;
     echo 'Added '. count($day->getMoments()) .' moments.'.PHP_EOL;
 	}
+}
+
+function od_download_file($url)
+{
+  $dir = lmb_var_dir().'/parser/';
+  $file_path = $dir.md5($url);
+  if(!file_exists($file_path))
+    lmbFs::safeWrite($file_path, file_get_contents($url));
+  return file_get_contents($file_path);
 }

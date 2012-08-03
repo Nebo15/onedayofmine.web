@@ -168,21 +168,21 @@ class DaysController extends BaseJsonController
     if(!$this->_isLoggedUser())
       return $this->_answerUnauthorized();
 
-    list($from, $to) = $this->_getFromToLimitations();
+    list($from, $to, $limit) = $this->_getFromToLimitations();
   	$users_ids = lmbArrayHelper::getColumnValues('id', $this->_getUser()->getFollowing());
-		return $this->_answerOk(Day::findByUsersIds($users_ids, $from, $to));
+		return $this->_answerOk(Day::findByUsersIds($users_ids, $from, $to, $limit));
   }
 
   function doNew()
   {
-    list($from, $to) = $this->_getFromToLimitations();
-  	return $this->_answerOk(Day::findNew($from, $to));
+    list($from, $to, $limit) = $this->_getFromToLimitations();
+  	return $this->_answerOk(Day::findNew($from, $to, $limit));
   }
 
   function doInteresting()
   {
-    list($from, $to) = $this->_getFromToLimitations();
-    return $this->_answerOk(Day::findInteresting($from, $to));
+    list($from, $to, $limit) = $this->_getFromToLimitations();
+    return $this->_answerOk(Day::findInteresting($from, $to, $limit));
   }
 
   function doFavourites()
@@ -190,8 +190,8 @@ class DaysController extends BaseJsonController
     if(!$this->_isLoggedUser())
       return $this->_answerUnauthorized();
 
-    list($from, $to) = $this->_getFromToLimitations();
-		return $this->_answerOk($this->_getUser()->getFavouriteDaysWithLimitations($from, $to));
+    list($from, $to, $limit) = $this->_getFromToLimitations();
+		return $this->_answerOk($this->_getUser()->getFavouriteDaysWithLimitations($from, $to, $limit));
   }
 
   function doFavourite()
@@ -235,9 +235,8 @@ class DaysController extends BaseJsonController
     if(!$this->_isLoggedUser())
       return $this->_answerUnauthorized();
 
-    list($from, $to) = $this->_getFromToLimitations();
-
-  	return $this->_answerOk($this->_getUser()->getDaysWithLimitations($from, $to, true));
+    list($from, $to, $limit) = $this->_getFromToLimitations();
+  	return $this->_answerOk($this->_getUser()->getDaysWithLimitations($from, $to, $limit, true));
   }
 
   function doCreateComplaint()
@@ -253,13 +252,5 @@ class DaysController extends BaseJsonController
 
   function doTypeNames() {
     return $this->_answerOk(Day::getTypes());
-  }
-
-  protected function _getFromToLimitations()
-  {
-    return array(
-      $this->request->getFiltered('from', FILTER_SANITIZE_NUMBER_INT),
-      $this->request->getFiltered('to', FILTER_SANITIZE_NUMBER_INT)
-    );
   }
 }

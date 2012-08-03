@@ -33,19 +33,19 @@ class News extends BaseModel
   /**
    * @return lmbCollectionInterface
    */
-  static function findNewForUser(User $user, $from_id = null, $to_id = null, $limit = null)
+  static function findNewsForUser(User $user, $from_id = null, $to_id = null, $limit = null)
   {
-    $params = array();
-
     $criteria = lmbSQLCriteria::equal('recipient_id', $user->getId());
-    if(!is_null($from_id))
-      $criteria->add(lmbSQLCriteria::greater('id', $from_id));
-    if(!is_null($to_id))
-      $criteria->add(lmbSQLCriteria::less('id', $to_id));
-    $params['criteria'] = $criteria;
+    if($from_id)
+      $criteria->add(lmbSQLCriteria::less('id', $from_id));
+    if($to_id)
+      $criteria->add(lmbSQLCriteria::greater('id', $to_id));
 
-    if(!is_null($limit))
-      $params['limit'] = $limit;
+    $params = array(
+      'sort' => array('id' => 'DESC'),
+      'criteria' => $criteria,
+      'limit' => (!$limit || $limit > 100) ? 100 : $limit,
+    );
 
     return News::find($params);
   }

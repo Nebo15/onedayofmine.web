@@ -63,6 +63,15 @@ abstract class BaseJsonController extends lmbController
     return (null != $this->toolkit->getUser()) ? true : false;
   }
 
+  protected function _getFromToLimitations()
+  {
+    return array(
+      $this->request->getFiltered('from', FILTER_SANITIZE_NUMBER_INT),
+      $this->request->getFiltered('to', FILTER_SANITIZE_NUMBER_INT),
+      $this->request->getFiltered('limit', FILTER_SANITIZE_NUMBER_INT),
+    );
+  }
+
   protected function _checkPropertiesInRequest(array $properties)
   {
     foreach($properties as $property)
