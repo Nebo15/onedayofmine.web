@@ -44,7 +44,7 @@ class NewsObserverAcceptanceTest extends odAcceptanceTestCase
     $this->post('days/'.$this->additional_user->getNews()->at(0)->day_id.'/delete')->result;
 
     if($this->assertResponse(200)) {
-      $news = News::findNewForUser($this->additional_user);
+      $news = News::findNewsForUser($this->additional_user);
       $this->assertEqual($news->count(), 0);
     }
   }

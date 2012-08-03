@@ -124,25 +124,31 @@ class User extends BaseModel
   {
     $criteria = new lmbSQLCriteria();
     if($from_id)
-      $criteria->add(lmbSQLCriteria::greater('id', $from_id));
+      $criteria->add(lmbSQLCriteria::less('id', $from_id));
     if($to_id)
-      $criteria->add(lmbSQLCriteria::less('id', $to_id));
+      $criteria->add(lmbSQLCriteria::greater('id', $to_id));
     if(!$limit || $limit > 100)
       $limit = 100;
     $days = $show_deleted ? $this->getAllDays() : $this->getDays();
-    return $days->find(array('criteria' => $criteria))->paginate(0, $limit);
+    return $days->find(array(
+      'criteria' => $criteria,
+      'sort' => array('id' => 'DESC')
+    ))->paginate(0, $limit);
   }
 
   function getFavouriteDaysWithLimitations($from_id = null, $to_id = null, $limit = null)
   {
     $criteria = new lmbSQLCriteria();
     if($from_id)
-      $criteria->add(lmbSQLCriteria::greater('id', $from_id));
+      $criteria->add(lmbSQLCriteria::less('id', $from_id));
     if($to_id)
-      $criteria->add(lmbSQLCriteria::less('id', $to_id));
+      $criteria->add(lmbSQLCriteria::greater('id', $to_id));
     if(!$limit || $limit > 100)
       $limit = 100;
-    return $this->getFavouriteDays()->find(array('criteria' => $criteria))->paginate(0, $limit);
+    return $this->getFavouriteDays()->find(array(
+      'criteria' => $criteria,
+      'sort' => array('id' => 'DESC'),
+    ))->paginate(0, $limit);
   }
 
   function attachImage($filename_or_url, $content)

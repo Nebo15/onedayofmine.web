@@ -139,12 +139,14 @@ class Day extends BaseModel
 		$criteria = lmbSQLCriteria::in('user_id', $ids);
 		$criteria->add('is_deleted = 0');
 		if($from_id)
-			$criteria->add(lmbSQLCriteria::greater('id', $from_id));
+			$criteria->add(lmbSQLCriteria::less('id', $from_id));
 		if($to_id)
-			$criteria->add(lmbSQLCriteria::less('id', $to_id));
-    if(!$limit || $limit > 100)
-      $limit = 100;
-		return Day::find(array('criteria' => $criteria, 'limit' => $limit));
+			$criteria->add(lmbSQLCriteria::greater('id', $to_id));
+		return Day::find(array(
+      'criteria' => $criteria,
+      'limit' => (!$limit || $limit > 100) ? 100 : $limit,
+      'sort' => array('id' => 'DESC'),
+    ));
   }
 
   /**
@@ -154,12 +156,14 @@ class Day extends BaseModel
   {
 		$criteria = lmbSQLCriteria::equal('is_deleted', 0);
 		if($from_id)
-			$criteria->add(lmbSQLCriteria::greater('id', $from_id));
+			$criteria->add(lmbSQLCriteria::less('id', $from_id));
 		if($to_id)
-			$criteria->add(lmbSQLCriteria::less('id', $to_id));
-    if(!$limit || $limit > 100)
-      $limit = 100;
-		return Day::find(array('criteria' => $criteria, 'limit' => $limit));
+			$criteria->add(lmbSQLCriteria::greater('id', $to_id));
+		return Day::find(array(
+      'criteria' => $criteria,
+      'limit' => (!$limit || $limit > 100) ? 100 : $limit,
+      'sort' => array('id' => 'DESC')
+    ));
   }
 
   static function findUnfinished(User $user)
@@ -179,13 +183,16 @@ class Day extends BaseModel
       $criteria->add(lmbSQLCriteria::greater('id', $from_id));
     if($to_id)
       $criteria->add(lmbSQLCriteria::less('id', $to_id));
-    if(!$limit || $limit > 100)
-      $limit = 100;
-    $query = lmbARQuery::create('Day');
-    $query->addCriteria($criteria);
-    $seconds_in_day = 86400;
-    $current_time = time();
-    $query->addRawOrder("(($current_time-`ctime`)/$seconds_in_day)/`likes_count` ASC");
-    return $query->fetch()->paginate(0, $limit);
+    return Day::find(array(
+      'criteria' => $criteria,
+      'limit' => (!$limit || $limit > 100) ? 100 : $limit,
+      'sort' => array('id' => 'DESC')
+    ));
+//    $query = lmbARQuery::create('Day');
+//    $query->addCriteria($criteria);
+//    $seconds_in_day = 86400;
+//    $current_time = time();
+//    $query->addRawOrder("(($current_time-`ctime`)/$seconds_in_day)/`likes_count` ASC");
+//    return $query->fetch()->paginate(0, $limit);
   }
 }

@@ -24,7 +24,7 @@ class odTestsTools extends lmbAbstractTools
   /**
    * @var string
    */
-  protected $proxy_host = 'http://onedayofmine.com';
+  protected $proxy_host = 'http://stage.onedayofmine.com';
 
 	/**
 	 * @return odPostmanWriter
