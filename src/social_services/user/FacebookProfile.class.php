@@ -58,12 +58,16 @@ class FacebookProfile implements SocialServicesProfileInterface
     return self::_mapFbInfo($this->getInfo_Raw());
   }
 
-  public function getRegisteredFriends()
+  public function getFriends()
   {
     $fields = implode(',', self::_getUserFbFieldsMap());
-    $raw_infos = $this->provider->makeQuery("SELECT {$fields} FROM user WHERE is_app_user AND uid IN (SELECT uid2 FROM friend WHERE uid1 = me())");
+    return $this->provider->makeQuery("SELECT {$fields} FROM user WHERE is_app_user AND uid IN (SELECT uid2 FROM friend WHERE uid1 = me())");
+  }
+
+  public function getRegisteredFriends()
+  {
     $results = array();
-    foreach($raw_infos as $raw_info)
+    foreach($this->getFriends() as $raw_info)
     {
       $info = $this->_mapFbInfo($raw_info);
       $user = User::findByFbUid($info['fb_uid']);
@@ -73,6 +77,15 @@ class FacebookProfile implements SocialServicesProfileInterface
       $results[] = $user;
     }
     return $results;
+  }
+
+  public function getPictures()
+  {
+    $info = $this->getInfo_Raw();
+    return array(
+      '100x300' => $info['pic'],
+      '200x600' => $info['pic_big']
+    );
   }
 
   /**
@@ -152,7 +165,7 @@ class FacebookProfile implements SocialServicesProfileInterface
   {
   	return array(
       'uid', 'email', 'first_name', 'last_name', 'sex', 'timezone', 'profile_update_time',
-      'pic', 'work', 'current_location', 'birthday_date'
+      'pic', 'pic_big', 'work', 'current_location', 'birthday_date'
     );
   }
 

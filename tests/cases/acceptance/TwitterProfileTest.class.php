@@ -55,22 +55,23 @@ class TwitterProfileTest extends odUnitTestCase
     $this->assertEqual($friends[0]->getId(), $this->additional_user->getId());
   }
 
-  // TODO duplicate tweeting workaround must be fixed
-  function estTweet()
+  function testGetPictures()
   {
-    $text = $this->generator->string();
+    $pictures = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER)->getPictures();
+    $this->assertTrue(count($pictures));
+  }
+
+  function testTweet()
+  {
+    $tmp = $this->generator->string();
+    $text = $tmp . '/'.time().'/'; // time will be cut in cache hash
     $social_profile = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER);
     $tweet = $social_profile->tweet($text);
-
-    $response = json_decode($social_profile->getProvider()->response['response'], true);
-    // Workaround for duplicate tweets
-    if(array_key_exists('error', $response) && $response['error'] == 'Status is a duplicate.')
-      return;
 
     $this->assertTrue(is_array($tweet));
     if($this->assertTrue(count($tweet))) {
       $this->assertTrue($tweet['id']);
-      $this->assertEqual($text, $tweet['text']);
+      $this->assertPattern("#^{$tmp}#is", $tweet['text']);
     }
 
     // sleep(5);
