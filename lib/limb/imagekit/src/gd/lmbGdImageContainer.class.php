@@ -12,6 +12,9 @@ lmb_require('limb/imagekit/src/exception/lmbImageCreateFailedException.class.php
 lmb_require('limb/imagekit/src/exception/lmbImageSaveFailedException.class.php');
 lmb_require('limb/fs/src/exception/lmbFileNotFoundException.class.php');
 
+// Known bug with pictures, edited in Mac OS
+ini_set('gd.jpeg_ignore_warning', 1);
+
 /**
  * GD image container
  *
