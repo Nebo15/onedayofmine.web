@@ -1,12 +1,11 @@
 <?php
 interface SocialServicesProfileInterface
 {
-  //public static function getConnectedUser();
-
   public function __construct(User $user);
   public function getProvider();
+  public function getInfo_Raw();
   public function getInfo();
-  // public function getFriends();
+  public function getFriends();
   public function getRegisteredFriends();
   public function getPictures();
 
