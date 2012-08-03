@@ -83,7 +83,7 @@ function task_od_fill_from_lj($argv)
     echo $posts_remain.'. Creating day "'.$post->getTitle().'"...'.PHP_EOL;
 
     $day = new Day();
-    $day->setTitle($post->getTitle());
+    $day->setTitle($post->getTitle().' '.$posts_remain);
     $day->setUser($tests_users[array_rand($tests_users)]);
     $day->setOccupation($occupations[array_rand($occupations)]);
     $day->setTimezone(0);
