@@ -7,6 +7,10 @@ abstract class odUnitTestCase extends UnitTestCase
    */
   protected $generator;
   /**
+   * @var odTestsTools
+   */
+  protected $toolkit;
+  /**
    * @var User
    */
   protected $main_user;
