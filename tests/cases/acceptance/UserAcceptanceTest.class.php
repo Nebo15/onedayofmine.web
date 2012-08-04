@@ -10,7 +10,9 @@ class UserAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @api
+   * @api description Returns days of specified user
+   * @api input param int id ID of user
+   * @api result Day[] days
    */
   function testUserByIdDays()
   {
@@ -30,11 +32,36 @@ class UserAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @api
+   * @api description Returns days of specified user
+   * @api input param int id ID of user
+   * @api result int id User ID
+   * @api result string fb_uid Facebook user ID
+   * @api result string twitter_uid Twitter user ID
+   * @api result string name Displayed name of the user
+   * @api result string sex Gender {male,female}.
+   * @api result string pic_small URL to small variant of user avatar
+   * @api result string pic_big URL to big variant of user avatar
+   * @api result string birthday Date of user birthday in format "YYYY-MM-DD"
+   * @api result string occupation User occupation
+   * @api result string location User location. Usually, but not always, in format "[city], [country]".
+   * @api result int followers_count Count of users, that follow selected user
+   * @api result int following_count Count of users, that is followed by selected user
+   * @api result int days_count Count of days, that was created by selected user
+   * @api result bool is_follower TRUE if current logged in user if followed by selected user. Can be ommited if selected user is same as current logged in.
+   * @api result bool is_followed TRUE if selected user is followed by current logged in user. Can be ommited if selected user is same as current logged in.
    */
   function testUserById()
   {
     $this->main_user->save();
+    $this->additional_user->save();
+
+    $following = $this->additional_user->getFollowing();
+    $following->add($this->main_user);
+    $following->save();
+
+    $followers = $this->additional_user->getFollowers();
+    $followers->add($this->main_user);
+    $followers->save();
 
     $this->_loginAndSetCookie($this->additional_user);
 
@@ -48,6 +75,8 @@ class UserAcceptanceTest extends odAcceptanceTestCase
         if(array_key_exists($key, $user))
           $this->assertEqual($user[$key], $value);
       }
+      $this->assertTrue($res['is_followed']);
+      $this->assertTrue($res['is_follower']);
     }
   }
 
@@ -63,7 +92,8 @@ class UserAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @api
+   * @api description Returns list of users that follow current logged in user.
+   * @api result User[] followers
    */
   function testFollowers()
   {
@@ -80,11 +110,12 @@ class UserAcceptanceTest extends odAcceptanceTestCase
     $this->assertResponse(200);
     $this->assertEqual(1, count($followers));
     $this->assertEqual($this->additional_user->getId(), $followers[0]->id);
-    $this->assertTrue($followers[0]->is_follower);
   }
 
   /**
-   * @api
+   * @api description Returns list of users that follow selected user.
+   * @api input param int id ID of user
+   * @api result User[] followers
    */
   function testFollowersByUserId()
   {
@@ -108,7 +139,8 @@ class UserAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @api
+   * @api description Returns list of users that is followed by current logged in user.
+   * @api result User[] followed
    */
   function testFollowing()
   {
@@ -129,11 +161,12 @@ class UserAcceptanceTest extends odAcceptanceTestCase
     $this->assertResponse(200);
     $this->assertEqual(1, count($following));
     $this->assertEqual($this->additional_user->getId(), $following[0]->id);
-    $this->assertTrue($following[0]->is_followed);
   }
 
   /**
-   * @api
+   * @api description Returns list of users that is followed by selected user.
+   * @api input param int id ID of user
+   * @api result User[] followed
    */
   function testFollowingByUserId()
   {
@@ -158,7 +191,8 @@ class UserAcceptanceTest extends odAcceptanceTestCase
 
 
   /**
-	 * @api
+	 * @api description Start following selected user.
+   * @api input param int id ID of user that you want to follow
 	 */
   function testFollow()
   {
@@ -174,7 +208,8 @@ class UserAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @api
+   * @api description Stop following selected user.
+   * @api input param int id ID of user that should be unfollowed
    */
   function testUnfollow()
   {
@@ -192,13 +227,9 @@ class UserAcceptanceTest extends odAcceptanceTestCase
   	$this->assertEqual(0, $this->main_user->getFollowing()->count());
   }
 
-  /**
-	 * @api
-	 */
+  // TODO
   function testActivity() {}
 
-  /**
-	 * @api
-	 */
+  // TODO
   function testSearch() {}
 }

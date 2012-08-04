@@ -10,8 +10,15 @@ class UsersController extends BaseJsonController
   {
     if(!$user = User::findById($this->request->id))
       return $this->_answerNotFound("User with id {$this->request->id} not found");
-    else
-      return $this->_answerOk($user);
+    else {
+      $export = $user->exportForApi();
+      if($user->getId() != lmbToolkit::instance()->getUser()->getId()) {
+        $export->is_followed = UserFollowing::isFollowing(lmbToolkit::instance()->getUser(), $user);
+        $export->is_follower = UserFollowing::isFollowing($user, lmbToolkit::instance()->getUser());
+      }
+
+      return $this->_answerOk($export);
+    }
   }
 
   function doDays()
@@ -34,8 +41,11 @@ class UsersController extends BaseJsonController
       return $user_or_answer;
 
     $response = array();
-    foreach($user_or_answer->getFollowers() as $follower)
-      $response[] = $follower->exportForApi();
+    foreach($user_or_answer->getFollowers() as $follower) {
+      $export = $follower->exportForApi();
+      $export->is_followed = UserFollowing::isFollowing(lmbToolkit::instance()->getUser(), $follower);
+      $response[] = $export;
+    }
     return $this->_answerOk($response);
   }
 
@@ -46,8 +56,11 @@ class UsersController extends BaseJsonController
       return $user_or_answer;
 
     $response = array();
-    foreach($user_or_answer->getFollowing() as $follower)
-      $response[] = $follower->exportForApi();
+    foreach($user_or_answer->getFollowing() as $followed) {
+      $export = $followed->exportForApi();
+      $export->is_follower = UserFollowing::isFollowing($followed, lmbToolkit::instance()->getUser());
+      $response[] = $export;
+    }
     return $this->_answerOk($response);
   }
 
