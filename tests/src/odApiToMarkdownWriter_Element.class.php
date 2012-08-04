@@ -147,6 +147,12 @@ EOT;
   }
 
   protected function _dataToNiceJson($data) {
+    if(is_array($data) && count($data))
+      foreach ($data as $key => $value) {
+        if(is_string($value) && strlen($value) > 100)
+          $data[$key] = substr($value, 0, 20) . '...' . substr($value, -20);
+      }
+
     return '    '.str_replace(PHP_EOL, PHP_EOL.'    ', Json::indent(json_encode($data))).PHP_EOL.PHP_EOL;
   }
 
