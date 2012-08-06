@@ -144,6 +144,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $this->toolkit->copyDayPageToProxy($day);
 
     $this->_loginAndSetCookie($this->main_user);
+    
     $res = $this->post('days/'.$day->getId().'/share')->result;
     if($this->assertResponse(200))
     {
