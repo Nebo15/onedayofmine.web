@@ -181,7 +181,22 @@ class DaysController extends BaseJsonController
 
     list($from, $to, $limit) = $this->_getFromToLimitations();
   	$users_ids = lmbArrayHelper::getColumnValues('id', $this->_getUser()->getFollowing());
-		return $this->_answerOk(Day::findByUsersIds($users_ids, $from, $to, $limit));
+
+    $days = Day::findByUsersIds($users_ids, $from, $to, $limit);
+
+    $answer = array();
+    foreach ($days as $day) {
+      $export = $day->exportForApi();
+
+      // User data
+      $this->addDayUser($export, $day);
+
+      // Favorites data
+      $this->addDayIsFavorited($export, $day);
+
+      $answer[] = $export;
+    }
+		return $this->_answerOk($days);
   }
 
   function doNew()
@@ -350,9 +365,9 @@ class DaysController extends BaseJsonController
       return;
 
     $comments->paginate(0, lmbToolkit::instance()->getConf('common')->default_comments_count);
-    $export->comments_first = array();
+    $export->comments = array();
     foreach ($comments as $comment) {
-      $export->comments_first[] = $comment->exportForApi();
+      $export->comments[] = $comment->exportForApi();
     }
   }
 

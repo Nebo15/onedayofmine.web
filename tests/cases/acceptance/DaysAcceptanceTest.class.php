@@ -15,7 +15,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
    * @api input param int day_id Day ID
    * @api result User user
    * @api result int comments_count
-   * @api result DayComment[0-3] comments_first Few first comments
+   * @api result DayComment[0-3] comments Few first comments
    * @api result Moment[] moments All day moments
    * @api result bool is_favorited
    */
