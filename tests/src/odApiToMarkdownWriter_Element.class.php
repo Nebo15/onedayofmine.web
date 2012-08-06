@@ -124,8 +124,28 @@ TBL;
       $responseDescriptionTable = '';
     }
 
-    $exampleRequestString  = count($this->requestData)  ? $this->_dataToNiceJson($this->requestData)  : '    empty';
-    $exampleResponseString = count($this->responseData) ? $this->_dataToNiceJson($this->responseData) : '    empty';
+    $exampleRequestString  = count($this->requestData)  ? '###### Example request: ######' . PHP_EOL . $this->_dataToNiceJson($this->requestData)  : '';
+
+    if(count($this->requestData) || $requestDescriptionTable != '')
+      $request_block = <<<EOT
+##### Request: #####
+{$requestDescriptionTable}
+{$exampleRequestString}
+EOT;
+    else
+      $request_block = '';
+
+    $exampleResponseString = count($this->responseData) ? '###### Example response: ######'.PHP_EOL.$this->_dataToNiceJson($this->responseData) : '';
+
+    if(count($this->responseData) || $responseDescriptionTable != '')
+      $response_block = <<<EOT
+##### Response: #####
+{$responseDescriptionTable}
+{$exampleResponseString}
+EOT;
+    else
+      $response_block = '';
+
 
     return <<<EOT
 #### {$this->name} ####
@@ -134,15 +154,9 @@ TBL;
 
 `{$this->method} {$this->uri}`
 
-##### Request: #####
-{$requestDescriptionTable}
-###### Example request: ######
-{$exampleRequestString}
+{$request_block}
 
-##### Response: #####
-{$responseDescriptionTable}
-###### Example response: ######
-{$exampleResponseString}
+{$response_block}
 EOT;
   }
 
