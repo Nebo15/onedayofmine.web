@@ -48,14 +48,6 @@ class Moment extends lmbActiveRecord
     $moment->likes_count = $this->getLikesCount() ?: 0;
     $moment->ctime = $this->getCtime();
 
-    // TODO add abstraction layer to day and moment and move this code there
-    $comments = $this->getComments();
-    $moment->comments_count = $comments->count();
-    $moment->comments = array();
-    $comments->paginate(0, lmbToolkit::instance()->getConf('common')->default_comments_count);
-    foreach ($comments as $comment) {
-      $moment->comments[] = $comment->exportForApi();
-    }
     return $moment;
   }
 
