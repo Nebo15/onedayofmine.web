@@ -29,7 +29,7 @@ abstract class odAcceptanceTestCase extends WebTestCase
     $this->generator = new odObjectMother();
     $this->toolkit = lmbToolkit::instance();
     parent::setUp();
-    $this->toolkit->truncateTablesOf('User');
+    $this->toolkit->truncateTablesOf('User', 'UserSettings');
     list($this->main_user, $this->additional_user) = $this->toolkit->getTestsUsers($quiet = false);
   }
 
