@@ -1,6 +1,7 @@
 <?php
 lmb_require('src/controller/BaseJsonController.class.php');
 lmb_require('src/model/DayTest.class.php');
+lmb_require('src/service/InterestCalculator.class.php');
 
 class DaysController extends BaseJsonController
 {
@@ -222,7 +223,7 @@ class DaysController extends BaseJsonController
   function doInteresting()
   {
     list($from, $to, $limit) = $this->_getFromToLimitations();
-    $days = Day::findInteresting($from, $to, $limit);
+    $days = (new InterestCalculator())->getDays($from, $to, $limit);
 
     $answer = array();
     foreach ($days as $day) {

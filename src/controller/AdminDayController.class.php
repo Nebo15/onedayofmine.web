@@ -6,8 +6,8 @@ class AdminDayController extends lmbAdminObjectController
 {
   protected $_object_class_name = 'Day';
 
-  protected function _onBeforeValidate()
+  function doInterest()
   {
-    parent :: _onBeforeValidate();$this->_validateAndSetDateFormatted($this->item, 'start_time');
+    return $this->doDisplay();
   }
 }

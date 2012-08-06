@@ -44,10 +44,11 @@ class lmbCmsTools extends lmbAbstractTools
     $session = lmbToolkit :: instance()->getSession();
     if(!is_object($session_user = $session->get('lmbCmsSessionUser')))
     {
+      if(!$session->isStarted())
+        $session->start();
       $session_user = new lmbCmsSessionUser();
       $session->set('lmbCmsSessionUser', $session_user);
     }
-
     $this->user = $session_user->getUser();
 
     return $this->user;
@@ -64,11 +65,11 @@ class lmbCmsTools extends lmbAbstractTools
   {
     $this->user = $user;
   }
-  
+
   function isWysiwygFileUploaderEnabled()
-  { 
+  {
     lmbToolkit :: instance()->getSession()->start();
-    return lmbToolkit::instance()->getCmsUser()->isLoggedIn();    
+    return lmbToolkit::instance()->getCmsUser()->isLoggedIn();
   }
 }
 

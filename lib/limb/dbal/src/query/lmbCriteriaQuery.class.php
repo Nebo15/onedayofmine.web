@@ -37,6 +37,9 @@ class lmbCriteriaQuery extends lmbTemplateQuery
     return $this->_stmt_values;
   }
 
+  /**
+   * @return lmbDbStatement
+   */
   function getStatement()
   {
     $stmt = parent :: getStatement();

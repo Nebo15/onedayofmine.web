@@ -27,7 +27,7 @@ class lmbTemplateQuery
       $conn = lmbToolkit :: instance()->getDefaultDbConnection();
     $this->_conn = $conn;
   }
-  
+
   function _registerHint($hint)
   {
     $this->_hints[$hint] = $hint;
@@ -68,12 +68,12 @@ class lmbTemplateQuery
         throw new lmbException('Hint ' . $wrapped_hint . ' is not found in template sql "' . $this->_template_sql . '"');
       $result[$wrapped_hint] = $this->$method();
     }
-    
+
     $hints_in_template_sql = $this->_findAndWrapHintsFromTemplateSql();
     foreach($hints_in_template_sql as $hint)
       if(!isset($result[$hint]))
         $result[$hint] = "";
-    
+
     return $result;
   }
 
@@ -83,6 +83,9 @@ class lmbTemplateQuery
     return trim(strtr($this->_template_sql, $hints));
   }
 
+  /**
+   * @return lmbDbStatement
+   */
   function getStatement()
   {
     $sql = $this->toString();

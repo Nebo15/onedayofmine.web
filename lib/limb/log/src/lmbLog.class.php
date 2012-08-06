@@ -25,11 +25,11 @@ class lmbLog
   protected $level = PHP_INT_MAX;
 
   protected $backtrace_depth = array(
-    LOG_ERR     => 5,
-    LOG_WARNING => 3,
-    LOG_NOTICE  => 3,
-    LOG_INFO    => 3,
-    LOG_DEBUG   => 3,
+    LOG_ERR     => 50,
+    LOG_WARNING => 5,
+    LOG_NOTICE  => 5,
+    LOG_INFO    => 5,
+    LOG_DEBUG   => 5,
   );
 
   function __construct(array $writers = array())
