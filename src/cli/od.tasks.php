@@ -11,7 +11,7 @@ function task_od_remove_cache($argv)
 
 /**
  * @desc Fill db from lj community
- * @deps migrate_load_all,migrate_run
+ * @deps migrate_load_all,migrate_run,od_register_tests_users
  */
 function task_od_fill_from_lj($argv)
 {
@@ -19,7 +19,6 @@ function task_od_fill_from_lj($argv)
 
   lmb_require($app_dir.'setup.php');
 	lmb_require('ljparse/*.class.php');
-  lmb_require('tests/src/toolkit/odTestsTools.class.php');
   lmb_require($app_dir.'tests/src/odObjectMother.class.php');
 
   $occupations = array("Bus and Truck Mechanics", "Bus Boy / Bus Girl", "Bus Driver (School)", "Bus Driver (Transit)", "Business Professor", "Business Service Specialist", "Cabinet Maker", "Camp Director", "Caption Writer", "Cardiologist (MD)", "Cardiopulmonary Technologist", "Career Counselor", "Cargo and Freight Agents", "Carpenter's Assistant", "Carpet Installer", "Cartographer (Map Scientist)", "Cartographic Technician", "Cartoonist (Publications)", "Casino Cage Worker", "Casino Cashier", "Casino Dealer", "Casino Floor Person", "Casino Manager", "Casino Pit Boss", "Casino Slot Machine Mechanic", "Casino Surveillance Officer", "Casting Director", "Catering Administrator", "Ceiling Tile Installer", "Cement Mason", "Ceramic Engineer", "Certified Public Accountant (CPA)", "Chaplain (Prison, Military, Hospital)", "Chemical Engineer", "Chemical Equipment Operator", "Chemical Plant Operator", "Chemical Technicians", "Chemistry Professor", "Chief Financial Officer", "Child Care Center Administrator", "Child Care Worker", "Child Life Specialist", "Child Support Investigator", "Child Support Services Worker", "City Planning Aide", "Civil Drafter", "Civil Engineer", "Civil Engineering Technician", "Clergy Member (Religious Leader)", "Clinical Dietitian", "Clinical Psychologist", "Clinical Sociologist", "Coatroom and Dressing Room Attendants", "College/University Professor", "Commercial Designer", "Commercial Diver", "Commercial Fisherman", "Communication Equipment Mechanic", "Communications Professor", "Community Health Nurse", "Community Organization Worker", "Community Welfare Worker", "Compensation Administrator", "Compensation Specialist", "Compliance Officer", "Computer Aided Design (CAD) Technician", "Computer and Information Scientists, Research", "Computer and Information Systems Managers", "Computer Applications Engineer", "Computer Controlled Machine Tool Operators", "Computer Customer Support Specialist", "Computer Hardware Technician", "Computer Operators", "Computer Programmer", "Computer Science Professor");
@@ -34,7 +33,7 @@ function task_od_fill_from_lj($argv)
 
 	define('LJ_COMMUNITY_NAME', 'odin-moy-den');
   // Returns ~6 posts on page
-  define('PAGES', 2);
+  define('PAGES', 1);
   define('POSTS_COUNT', 50);
 
   echo "== Started to search for links... ==".PHP_EOL;
@@ -68,14 +67,9 @@ function task_od_fill_from_lj($argv)
 
   echo "== Found ".count($posts)." well-formated posts on ".PAGES." pages. Proccessing them... ==".PHP_EOL;
 
-  lmbToolkit :: merge(new odTestsTools());
-  $tests_users = lmbToolkit::instance()->getTestsUsers(true);
-  array_pop($tests_users); // Foo
-  array_pop($tests_users); // Bar
-
-  echo "== Loaded ".count($tests_users)." test users. ==".PHP_EOL;
-
   $posts_remain = POSTS_COUNT;
+  $tests_users = array();
+  lmbArrayHelper::toFlatArray(User::find(), $tests_users);
   while($posts_remain--)
   {
     $post = $posts[array_rand($posts)];
@@ -114,11 +108,30 @@ function task_od_fill_from_lj($argv)
 	}
 }
 
+function task_od_register_tests_users($argv)
+{
+  lmb_require(taskman_prop('PROJECT_DIR').'setup.php');
+  lmb_require('tests/src/toolkit/odTestsTools.class.php');
+
+  lmbToolkit :: merge(new odTestsTools());
+  $tests_users = lmbToolkit::instance()->getTestsUsers(true);
+  array_pop($tests_users); // Foo
+  array_pop($tests_users); // Bar
+  foreach($tests_users as $test_user)
+  {
+    $request = new HttpRequest(lmb_env_get('HOST_URL').'/auth/login');
+    $request->setMethod(HTTP_METH_POST);
+    $request->setPostFields(array('token' => $test_user->getFbAccessToken()));
+    $request->send();
+    echo $test_user->getName().' registered'.PHP_EOL;
+  }
+
+  echo "== Loaded ".count($tests_users)." test users. ==".PHP_EOL;
+}
+
 function task_od_calc_interest()
 {
-  $app_dir = taskman_prop('PROJECT_DIR');
-
-  lmb_require($app_dir.'setup.php');
+  lmb_require(taskman_prop('PROJECT_DIR').'setup.php');
   lmb_require('src/service/InterestCalculator.class.php');
 
   $calc = new InterestCalculator();
