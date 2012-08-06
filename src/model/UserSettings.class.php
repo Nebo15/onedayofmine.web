@@ -2,6 +2,7 @@
 lmb_require('src/model/BaseModel.class.php');
 
 /**
+ * @api
  * @method null setNotificationsNewDays($int)
  * @method null setNotificationsNewComments($int)
  * @method null setNotificationsRelatedActivity($int)
