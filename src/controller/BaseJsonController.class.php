@@ -82,7 +82,7 @@ abstract class BaseJsonController extends lmbController
     return $this->error_list->export();
   }
 
-  protected function _importSaveAndAnswer($item, array $properties)
+  protected function _importSaveAndAnswer($item, array $properties, array $raw_properties = array())
   {
     foreach($properties as $property)
       $item->set($property, $this->request->get($property));
@@ -92,9 +92,13 @@ abstract class BaseJsonController extends lmbController
     {
       $item->saveSkipValidation();
       $res = $item->exportForApi();
+
       foreach($res as $key => $property)
         if(is_object($property))
           unset($res[$key]);
+
+      foreach($raw_properties as $key => $property)
+        $res->$key = $property;
       return $this->_answerOk($res);
     }
     else
