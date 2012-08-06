@@ -497,8 +497,6 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $day5 = $this->generator->day($this->main_user);
     $day5->save();
 
-  	$this->_loginAndSetCookie($this->additional_user);
-
   	$result = $this->get('days/new/')->result;
   	$this->assertResponse(200);
   	$this->assertEqual(4, count($result));
@@ -574,8 +572,6 @@ class DayAcceptanceTest extends odAcceptanceTestCase
 
     (new InterestCalculator())->reset();
     (new InterestCalculator())->fillRating();
-
-    $this->_loginAndSetCookie($this->additional_user);
 
     $result = $this->get('days/interesting/')->result;
     $this->assertResponse(200);
