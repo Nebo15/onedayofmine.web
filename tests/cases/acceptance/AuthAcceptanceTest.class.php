@@ -6,7 +6,7 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
 {
   /**
    * @api description Returns user authentication status.
-   * @api result boolean - TRUE user is logged id, else - FALSE
+   * @api result bool - TRUE if user is logged id, else - FALSE
    */
   function testIsLoggedIn()
   {
@@ -18,7 +18,7 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
 
   /**
    * @api description User authorization.
-   * @api input param string[118] fb_access_token Facebook access token
+   * @api input param string[118] token Facebook access token
    * @api result User user Authorized user information
    */
   function testLogin()
@@ -116,7 +116,7 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @api
+   * @deprecated
    */
   function testLogout() {
     $this->post('auth/logout/');
