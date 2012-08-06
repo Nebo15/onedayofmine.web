@@ -29,13 +29,8 @@ class lmbSessionStartupFilter implements lmbInterceptingFilter
    */
   function run($filter_chain, $session_in_db = false, $session_in_db_lifetime = null)
   {
-    if($session_in_db)
-      $storage =  $this->_createDBSessionStorage($session_in_db_lifetime);
-    else
-      $storage =  $this->_createNativeSessionStorage();
-
     $session = lmbToolkit :: instance()->getSession();
-    $session->start($storage);
+    $session->start();
 
     $filter_chain->next();
   }

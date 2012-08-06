@@ -33,6 +33,11 @@ class lmbSession implements ArrayAccess,Iterator,Countable
     return session_start();
   }
 
+  function isStarted()
+  {
+    return isset($_SESSION);
+  }
+
   /**
    * Register a variable in session and returns a reference to it.
    * @param string variable name

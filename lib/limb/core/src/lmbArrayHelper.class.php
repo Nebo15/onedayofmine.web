@@ -133,6 +133,21 @@ class lmbArrayHelper
     }
   }
 
+  static function convertToFlatArray($array, $prefix='')
+  {
+    $result = array();
+    foreach($array as $key => $value)
+    {
+      $string_key = ($prefix) ? '[' . $key . ']' : $key;
+
+      if(is_array($value))
+        $result[$prefix . $string_key] = lmbArrayHelper :: convertToFlatArray($value, $result, $prefix . $string_key);
+      else
+        $result[$prefix . $string_key] = $value;
+    }
+    return $result;
+  }
+
   static function arrayMapRecursive($in_func, &$in_array)
   {
     foreach(array_keys($in_array) as $key)

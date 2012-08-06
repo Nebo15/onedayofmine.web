@@ -15,7 +15,7 @@ function task_od_remove_cache($argv)
  */
 function task_od_fill_from_lj($argv)
 {
-	$app_dir = taskman_prop('PROJECT_DIR');
+  $app_dir = taskman_prop('PROJECT_DIR');
 
   lmb_require($app_dir.'setup.php');
 	lmb_require('ljparse/*.class.php');
@@ -112,6 +112,18 @@ function task_od_fill_from_lj($argv)
     echo PHP_EOL;
     echo 'Added '. count($day->getMoments()) .' moments.'.PHP_EOL;
 	}
+}
+
+function task_od_calc_interest()
+{
+  $app_dir = taskman_prop('PROJECT_DIR');
+
+  lmb_require($app_dir.'setup.php');
+  lmb_require('src/service/InterestCalculator.class.php');
+
+  $calc = new InterestCalculator();
+  $calc->deleteUnpinnedDays();
+  $calc->fillRating();
 }
 
 function od_download_file($url)

@@ -11,6 +11,7 @@ class lmbCmsAdminNavigationFetcher extends lmbFetcher
     $conf = $toolkit->getConf('navigation');
 
     $role = $toolkit->getCmsUser()->getRoleType();
+    lmb_assert_true($role, "CMS user not found in session");
     lmb_assert_true($conf->has($role), "Navigation section for current user role not found");
     $data = $conf->get($role);
 

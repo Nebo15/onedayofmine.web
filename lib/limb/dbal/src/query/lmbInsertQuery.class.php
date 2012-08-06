@@ -20,7 +20,7 @@ class lmbInsertQuery extends lmbTemplateQuery
   protected $_fields = array();
   protected $_set_values = array();
 
-  function __construct($table, $conn)
+  function __construct($table, $conn = null)
   {
     $this->_table = $table;
     parent :: __construct("INSERT INTO %table% (%fields%) VALUES (%values%)", $conn);

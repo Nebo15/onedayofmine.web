@@ -1,6 +1,7 @@
 <?php
 lmb_require('src/controller/BaseJsonController.class.php');
 lmb_require('src/model/DayTest.class.php');
+lmb_require('src/service/InterestCalculator.class.php');
 
 class DaysController extends BaseJsonController
 {
@@ -182,7 +183,7 @@ class DaysController extends BaseJsonController
   function doInteresting()
   {
     list($from, $to, $limit) = $this->_getFromToLimitations();
-    return $this->_answerOk(Day::findInteresting($from, $to, $limit));
+    return $this->_answerOk((new InterestCalculator())->getDays($from, $to, $limit));
   }
 
   function doFavourites()
