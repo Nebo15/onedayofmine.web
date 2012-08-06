@@ -10,24 +10,13 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @api description Returns basic Day entity by given Day ID.
+   * @api description Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields listed below.
    * @api input param int day_id Day ID
-   * @api result int id Day ID
-   * @api result string user_name
-   * @api result int user_id
-   * @api result string title
-   * @api result int timezone UTC time zone offset
-   * @api result string occupation
-   * @api result string location Text value of longitude and latitude separated by coma. See: Yahoo PlaceFinder API
-   * @api result int type One of pre-defined types, see: GET day/type_names request
-   * @api result int likes_count
-   * @api result int ctime Creation time
-   * @api result int utime Last update time
-   * @api result bool is_ended TRUE if day is ended, else - FALSE
-   * @api result Moment[3] moments Array of day moments
-   * @api result int comments_count Count of comments to this day
-   * @api result Comment[3] comments Array of day first comments
-   * @api result bool is_favorited True if this article is added to current user favourites. If user is not logged in then field is omited.
+   * @api result User user
+   * @api result int comments_count
+   * @api result DayComment[0-3] comments_first Few first comments
+   * @api result Moment[] moments All day moments
+   * @api result bool is_favorited
    */
   function testItem()
   {
@@ -59,7 +48,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   /**
    * @api description Get few days in one request.
    * @api input param string ids List of ID's, that was separated by ";".
-   * @api result Day[] days Associative array of (day_id => Day)
+   * @api result Day[] days See GET days/:id/item
    */
   function testItem_Many()
   {
@@ -90,10 +79,10 @@ class DayAcceptanceTest extends odAcceptanceTestCase
       array_keys(get_object_vars($loaded_days))
     );
     $this->assertEqual($day1->getId(), $loaded_days->$day1_id->id);
-    $this->assertEqual($day1->getUserId(), $loaded_days->$day1_id->user_id);
+    $this->assertEqual($day1->getUserId(), $loaded_days->$day1_id->user->id);
     $this->assertEqual($day1->getMoments()->at(0)->getId(), $loaded_days->$day1_id->moments[0]->id);
     $this->assertEqual($day2->getId(), $loaded_days->$day2_id->id);
-    $this->assertEqual($day2->getUserId(), $loaded_days->$day2_id->user_id);
+    $this->assertEqual($day2->getUserId(), $loaded_days->$day2_id->user->id);
     $this->assertEqual($day2->getMoments()->at(0)->getId(), $loaded_days->$day2_id->moments[0]->id);
     $this->assertEqual(null, $loaded_days->$not_exist_day_id);
   }
@@ -117,18 +106,9 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @api description Create moment in specified day
+   * @api description Creates comment for <a href="#Entity:Day">day</a> and returns it.
    * @api input param int day_id
    * @api input param string text Comment contents
-   * @api result string text Same text as inputed to verifi successfull delivery
-   * @api result int id Comment ID
-   * @api result int day_id
-   * @api result Day day
-   * @api result string user_name
-   * @api result int user_id
-   * @api result User user
-   * @api result int ctime Creation time
-   * @api result int utime Update time
    */
   function testCommentCreate()
   {
@@ -304,7 +284,11 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @api
+   * @api description Returns favourite based on <a href="#range-request">range-request</a>.
+   * @api input option int from
+   * @api input option int to
+   * @api input option int limit
+   * @api result Day[] day
    */
   function testGetFavouriteDays()
   {
@@ -422,7 +406,11 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @api
+   * @api description Returns following users days based on <a href="#range-request">range-request</a>.
+   * @api input option int from
+   * @api input option int to
+   * @api input option int limit
+   * @api result Day[] day
    */
   function testGetFollowingUsersDays()
   {
@@ -485,9 +473,10 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @api description Returns array of news days. One of input params can be omited, but not both.
+   * @api description Returns new days based on <a href="#range-request">range-request</a>.
    * @api input option int from
    * @api input option int to
+   * @api input option int limit
    * @api result Day[] day
    */
   function testGetNewDays()
@@ -546,9 +535,10 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @api description Returns array of days. Input params can be omited, but ignoring both params can give long array as result.
+   * @api description Returns interesting days based on <a href="#range-request">range-request</a>.
    * @api input option int from
    * @api input option int to
+   * @api input option int limit
    * @api result Day[] day
    */
   function testGetInterestingDays()
@@ -675,7 +665,11 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @api
+   * @api description Returns current user days based on <a href="#range-request">range-request</a>.
+   * @api input option int from
+   * @api input option int to
+   * @api input option int limit
+   * @api result Day[] day
    */
   function testCurrentUserDays()
   {
@@ -736,7 +730,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @api
+   * @api description Returns list of acceptable types.
    */
   function testTypeNames()
   {

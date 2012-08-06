@@ -31,7 +31,7 @@ class Day extends BaseModel
     $validator->addRequiredRule('title');
     $validator->addRequiredRule('occupation');
     $validator->addRequiredRule('timezone');
-    $validator->addRequiredRule('location');
+    // $validator->addRequiredRule('location');
     $validator->addRequiredRule('type');
     return $validator;
   }
@@ -41,7 +41,6 @@ class Day extends BaseModel
     $export = new stdClass();
     $export->id = $this->getId();
     $export->user_id = $this->getUser()->getId();
-    $export->user_name = $this->getUser()->getName();
     $export->fb_uid = $this->getUser()->fb_uid;
     $export->cover_img_small = lmbToolkit::instance()->getSiteUrl($this->getImageSmall());
     $export->cover_img_big = lmbToolkit::instance()->getSiteUrl($this->getImageBig());
@@ -57,17 +56,6 @@ class Day extends BaseModel
 
     if($this->getIsDeleted())
       $export->is_deleted = true;
-
-    if(lmbToolkit::instance()->getUser())
-      $export->is_favorited = DayFavourite::isFavourited(lmbToolkit::instance()->getUser(), $this);
-
-    $comments = $this->getComments();
-    $export->comments_count = $comments->count();
-    $export->comments = array();
-    $comments->paginate(0, lmbToolkit::instance()->getConf('common')->default_comments_count);
-    foreach ($comments as $comment) {
-      $export->comments[] = $comment->exportForApi();
-    }
 
     return $export;
   }
