@@ -1,5 +1,5 @@
 # API #
- Version: 04.08.12 18:40:58
+ Version: 06.08.12 16:39:17
 
 ## Table of contents: ##
 <a name='toc'></a>
@@ -7,7 +7,6 @@
 ### <a href='#Auth'>Auth</a> ###
 1. <a href='#f3fe153a8e0372904ddc25f133cecd23'>IsLoggedIn</a>
 1. <a href='#bbc87c2030342e7f8609accf937e12ee'>Login</a>
-1. <a href='#f92bc398f2154bb5863abb5673eaeb3b'>Logout</a>
 
 ### <a href='#CurrentDay'>CurrentDay</a> ###
 1. <a href='#aef4d0c381bfa1dccfdd2216f8f188ef'>Start</a>
@@ -17,32 +16,32 @@
 1. <a href='#edffd7a5f673999b16ade68463815ffe'>Finish</a>
 
 ### <a href='#Day'>Day</a> ###
-1. <a href='#8e74f7a6ec3a55011aa159eb4349a0d0'>Item</a>
-1. <a href='#1a5947088d5623aaf0543f0410ef32b8'>Item_Many</a>
-1. <a href='#e7eedb80d1ce720dc1870d528e3f4467'>CommentCreate</a>
-1. <a href='#2b3f5b868ae17e594157b4a0c871ca6e'>ShareDay</a>
-1. <a href='#9ba5ff1cc640d9e04c0e9e15a9c39047'>Like</a>
-1. <a href='#1392192a96e4f703823c5d7efbe60fa3'>Update</a>
-1. <a href='#26a945427492c33d66858df1abe01bdb'>DeleteDay</a>
-1. <a href='#c311c6c80c54598189d9be87020fc459'>RestoreDay</a>
+1. <a href='#b0432d7b5a8093ce21b052583814571d'>Item</a>
+1. <a href='#07f9d6a9a9bdce4a12344ffdafcba1ee'>Item_Many</a>
+1. <a href='#b61a3c9d77efc9b116f1b6b4f32ce0e5'>CommentCreate</a>
+1. <a href='#8a9402e1795e65ed6ae37b156696db55'>ShareDay</a>
+1. <a href='#16d7dd516c903cd7e42effc9c94213d9'>Like</a>
+1. <a href='#772775d8a20b254b2a3d9210b0c90ff8'>Update</a>
+1. <a href='#0d3ce23f71854008a331dd150ddfcb34'>DeleteDay</a>
+1. <a href='#512074dc2d0993f969fc5f8a77413b21'>RestoreDay</a>
 1. <a href='#9a54a19098a30dcbd74124cbddb1ab6c'>GetFavouriteDays</a>
-1. <a href='#daffd3da7353eeed22046bef787d14be'>AddToFavourites</a>
-1. <a href='#bc17ac60b5d63fb7c97c3ebfc9ea5d82'>RemoveFromFavourites</a>
+1. <a href='#f68165aa9f514bc16fc9ba53e28f2766'>AddToFavourites</a>
+1. <a href='#bb5be1cab9706b9a4b84b431be62863a'>RemoveFromFavourites</a>
 1. <a href='#1c5e784108f8a36beb283dc7a3e34030'>GetFollowingUsersDays</a>
 1. <a href='#ed1af553a9d8b9117548d9a3996ebab5'>GetNewDays</a>
 1. <a href='#1fd27ac16cb5dd55499bbaf0ba61c06d'>GetInterestingDays</a>
 1. <a href='#f2c5afe4a024dc21f1c43ff206afb8f1'>CurrentUserDays</a>
 1. <a href='#bdbebf26e7d0327181a566595a2fcd56'>TypeNames</a>
-1. <a href='#55f007d8937490ee10926ede25f6558b'>CreateComplaint</a>
+1. <a href='#789e5b6104e3b884b757ab170d93bcb1'>CreateComplaint</a>
 
 ### <a href='#MomentComments'>MomentComments</a> ###
-1. <a href='#e02f5df7b4f592e3638eaf7cb5cb66a2'>Update</a>
-1. <a href='#ca978dc251797b8ef14c0236e0977274'>Delete</a>
+1. <a href='#eebd4b7ecdd35d5148d9b0a7c1eac54a'>Update</a>
+1. <a href='#0d0d8c17c7735f151ca8aec8b162cfaf'>Delete</a>
 
 ### <a href='#Moments'>Moments</a> ###
-1. <a href='#621e39309be74d09010f525bb46b9af5'>Update</a>
-1. <a href='#90b81e4ae4b2f0c217387e52b56552a1'>Delete</a>
-1. <a href='#2088efc581191c5d5c6ebbc246ec6eaa'>Comment</a>
+1. <a href='#5d50133b993b6c85346891c1ef13897c'>Update</a>
+1. <a href='#126a10039f6038d01d25d5179965a42a'>Delete</a>
+1. <a href='#5d99835576e100a1c163fb168596e02c'>Comment</a>
 
 ### <a href='#My'>My</a> ###
 1. <a href='#7c42c715a02e964a2889306b19fe292c'>Profile</a>
@@ -50,22 +49,20 @@
 1. <a href='#85578e28a8c20f5cd81c7ca1e4de3b08'>Settings</a>
 1. <a href='#93fdb34170033523c95e7443bb659e3d'>UpdateSettings</a>
 
-### <a href='#News'>News</a> ###
-1. <a href='#3292f47a05d97e9f9f13470ea62f442c'>GetNewNews</a>
-
 ### <a href='#Social'>Social</a> ###
 1. <a href='#71917347c17968e3b4669c7949094d34'>FacebookFiends</a>
 1. <a href='#6dad9b463ea3565903496bc1edd56282'>TwitterConnect</a>
+1. <a href='#3292f47a05d97e9f9f13470ea62f442c'>GetNewNews</a>
 
 ### <a href='#User'>User</a> ###
-1. <a href='#97c806f89d990ec1022735546a42ee34'>UserByIdDays</a>
-1. <a href='#6a5fe07bba69c2f929b0e08d0f7c261d'>UserById</a>
+1. <a href='#8e8d801bae9ef8aca2817095af5e30af'>UserByIdDays</a>
+1. <a href='#33091ae8bb3470b3ea9d2774eb14d3de'>UserById</a>
 1. <a href='#0907aac9dba2a8f9700b9333f7e36795'>Followers</a>
-1. <a href='#8f248d619cf48c00db4724657e64822c'>FollowersByUserId</a>
+1. <a href='#3c956b9307aa9cd5b6f31468203a2d12'>FollowersByUserId</a>
 1. <a href='#774c23c770724885bdc9325b3159b700'>Following</a>
-1. <a href='#b937a5a972519cde7f13f9d10061c4c0'>FollowingByUserId</a>
-1. <a href='#c63db52bffda9b90a58efbbf9f7ccf14'>Follow</a>
-1. <a href='#2a461910d88dafa1a935df4945aba717'>Unfollow</a>
+1. <a href='#18830e40109991f94468e9101f8cf3c5'>FollowingByUserId</a>
+1. <a href='#e87fa18693c7a91f2828945fe6b52384'>Follow</a>
+1. <a href='#e741782b6f98dbce15186a37cdb7e7f6'>Unfollow</a>
 
 
 ## API methods ##
@@ -78,10 +75,7 @@ Returns user authentication status.
 
 `GET auth/is_logged_in`
 
-##### Request: #####
 
-###### Example request: ######
-    empty
 
 ##### Response: #####
 ###### Fields: ######
@@ -91,7 +85,7 @@ Returns user authentication status.
   <th width="150">Name</th>
   <th>Description</th>
 </tr>
-<tr><td>boolean</td><td>-</td><td>TRUE user is logged id, else - FALSE</td></tr>
+<tr><td>bool</td><td>-</td><td>TRUE if user is logged id, else - FALSE</td></tr>
 
 </table>
 ###### Example response: ######
@@ -116,13 +110,12 @@ User authorization.
   <th width="40">Required</th>
   <th>Description</th>
 </tr>
-<tr><td>string[118]</td><td>fb_access_token <span class='label label-important'>Removed</span></td><td>1</td><td>Facebook access token</td></tr>
-<tr><td>[type]</td><td>token</td><td></td><td>[description]</td></tr>
+<tr><td>string[118]</td><td>token</td><td>Y</td><td>Facebook access token</td></tr>
 
 </table>
 ###### Example request: ######
     {
-      "token":"AAAFnVo0zuqkBABzT635...yCvqEdSAmPBBR9909do1"
+      "token":"AAAFnVo0zuqkBAHC8RLU...2aS1bSUWJt6SpMX8nSvN"
     }
 
 
@@ -141,13 +134,13 @@ User authorization.
 ###### Example response: ######
     {
       "user":{
-        "id":1497,
+        "id":794,
         "fb_uid":"100004087981387",
         "twitter_uid":null,
         "name":"bar bar",
         "sex":"male",
-        "pic_small":"http:\/\/onedayofmine.dev\/users\/1497\/54f5b68854f58100a6d04e0b49f34afba05b7732_70x70.jpeg",
-        "pic_big":"http:\/\/onedayofmine.dev\/users\/1497\/54f5b68854f58100a6d04e0b49f34afba05b7732_140x140.jpeg",
+        "pic_small":"http:\/\/onedayofmine.dev\/users\/794\/be5e375803e00794c686803f6883132b1ed837be_70x70.jpeg",
+        "pic_big":"http:\/\/onedayofmine.dev\/users\/794\/be5e375803e00794c686803f6883132b1ed837be_140x140.jpeg",
         "birthday":"1980-08-08",
         "occupation":"",
         "location":null,
@@ -168,30 +161,12 @@ User authorization.
 <a href="#toc">^ back to Table of conetens</a>
 
 * * *
-#### Logout ####
-<a name="f92bc398f2154bb5863abb5673eaeb3b"></a>
-
-
-`POST auth/logout/`
-
-##### Request: #####
-
-###### Example request: ######
-    empty
-
-##### Response: #####
-
-###### Example response: ######
-    empty
-<a href="#toc">^ back to Table of conetens</a>
-
-* * *
 
 ### CurrentDay ###
 <a name='CurrentDay'></a>
 #### Start ####
 <a name="aef4d0c381bfa1dccfdd2216f8f188ef"></a>
-Starts a day
+Starts a day, returns created <a href="#Entity:Day">day</a>.
 
 `POST current_day/start`
 
@@ -204,41 +179,19 @@ Starts a day
   <th width="40">Required</th>
   <th>Description</th>
 </tr>
-<tr><td>string</td><td>title</td><td>1</td><td>Title name for this day</td></tr>
-<tr><td>string</td><td>description <span class='label label-important'>Removed</span></td><td>1</td><td>Description for this day</td></tr>
-<tr><td>int</td><td>timezone</td><td>1</td><td>UTC time zone offset</td></tr>
-<tr><td>string</td><td>occupation</td><td></td><td>Thing that user are planning to do during current day</td></tr>
-<tr><td>string</td><td>type</td><td>1</td><td>One of pre-defined types: {working, day-off, holiday, trip, special_event}</td></tr>
-<tr><td>[type]</td><td>user_name</td><td></td><td>[description]</td></tr>
-<tr><td>[type]</td><td>fb_uid</td><td></td><td>[description]</td></tr>
-<tr><td>[type]</td><td>location</td><td></td><td>[description]</td></tr>
-<tr><td>[type]</td><td>likes_count</td><td></td><td>[description]</td></tr>
-<tr><td>[type]</td><td>is_ended</td><td></td><td>[description]</td></tr>
-<tr><td>[type]</td><td>comments_count</td><td></td><td>[description]</td></tr>
-<tr><td>[type]</td><td>comments</td><td></td><td>[description]</td></tr>
+<tr><td>string</td><td>title</td><td>Y</td><td></td></tr>
+<tr><td>int</td><td>timezone</td><td>Y</td><td>UTC time zone offset</td></tr>
+<tr><td>string</td><td>occupation</td><td>N</td><td>If omited, then user profile occupation will be used</td></tr>
+<tr><td>string</td><td>latlong <span class='label label-important'>Removed</span></td><td>N</td><td>"[Latitude],[Longitude]" of place, where day was created</td></tr>
+<tr><td>string</td><td>type</td><td>Y</td><td>One of pre-defined types, see: GET day/type_names request</td></tr>
 
 </table>
 ###### Example request: ######
     {
-      "id":null,
-      "user_id":null,
-      "user_name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
-      "fb_uid":"fooba",
-      "cover_img_small":null,
-      "cover_img_big":null,
       "title":"foobarfoobarfoobarfoobarf",
-      "occupation":"foobarfoobarfoobarfo...oobarfoobarfoobarfoo",
       "timezone":0,
-      "location":"foobarfoobarfoobarfoobarf",
-      "type":"working",
-      "likes_count":0,
-      "ctime":null,
-      "utime":null,
-      "is_ended":0,
-      "comments_count":0,
-      "comments":[
-        
-      ]
+      "occupation":"foobarfoobarfoobarfo...oobarfoobarfoobarfoo",
+      "type":"working"
     }
 
 
@@ -251,49 +204,38 @@ Starts a day
   <th width="150">Name</th>
   <th>Description</th>
 </tr>
-<tr><td>int</td><td>id</td><td>Day ID</td></tr>
-<tr><td>int</td><td>user_id</td><td></td></tr>
-<tr><td>string</td><td>title</td><td></td></tr>
-<tr><td>string</td><td>description <span class='label label-important'>Removed</span></td><td></td></tr>
-<tr><td>int</td><td>timezone</td><td>UTC time zone</td></tr>
-<tr><td>string</td><td>occupation</td><td></td></tr>
-<tr><td>string</td><td>type</td><td>One of pre-defined types: {working, day-off, holiday, trip, special_event}</td></tr>
-<tr><td>int</td><td>likes_count</td><td></td></tr>
-<tr><td>int</td><td>ctime</td><td>Creation time, unix timestamp</td></tr>
-<tr><td>int</td><td>utime</td><td>Last update time, unix timestamp</td></tr>
-<tr><td>boolean</td><td>is_ended</td><td>Always FALSE for new days</td></tr>
-<tr><td>[type]</td><td>user_name</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>id</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>user_id</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>fb_uid</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>cover_img_small</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>cover_img_big</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>title</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>occupation</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>timezone</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>location</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>is_favorited</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>comments_count</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>comments</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>type</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>likes_count</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>ctime</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>utime</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>is_ended</td><td>[description]</td></tr>
 
 </table>
 ###### Example response: ######
     {
-      "id":681,
-      "user_id":1505,
-      "user_name":"bar bar",
+      "id":729,
+      "user_id":802,
       "fb_uid":"100004087981387",
-      "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/1505\/days\/1b6354ad6ca3c92b5ce71f1b7921da3462cc8444_200x200.jpeg",
-      "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/1505\/days\/1b6354ad6ca3c92b5ce71f1b7921da3462cc8444_400x400.jpeg",
+      "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/802\/days\/20af1b1252659120c42a39562ba0147f61fffa4f_200x200.jpeg",
+      "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/802\/days\/20af1b1252659120c42a39562ba0147f61fffa4f_400x400.jpeg",
       "title":"foobarfoobarfoobarfoobarf",
       "occupation":"foobarfoobarfoobarfo...oobarfoobarfoobarfoo",
       "timezone":"0",
-      "location":"foobarfoobarfoobarfoobarf",
+      "location":null,
       "type":"working",
       "likes_count":0,
-      "ctime":1344094829,
-      "utime":1344094829,
-      "is_ended":0,
-      "is_favorited":false,
-      "comments_count":0,
-      "comments":[
-        
-      ]
+      "ctime":1344260328,
+      "utime":1344260328,
+      "is_ended":0
     }
 
 
@@ -302,14 +244,11 @@ Starts a day
 * * *
 #### GetCurrentDay ####
 <a name="cbad16697e3ffed4670242666474b25b"></a>
-Returns current day
+Returns current <a href="#Entity:Day">day</a>. Additional fields are listed below.
 
 `GET current_day`
 
-##### Request: #####
 
-###### Example request: ######
-    empty
 
 ##### Response: #####
 ###### Fields: ######
@@ -319,49 +258,42 @@ Returns current day
   <th width="150">Name</th>
   <th>Description</th>
 </tr>
-<tr><td>int</td><td>id</td><td>Day ID</td></tr>
-<tr><td>int</td><td>user_id</td><td></td></tr>
-<tr><td>string</td><td>title</td><td></td></tr>
-<tr><td>string</td><td>description <span class='label label-important'>Removed</span></td><td></td></tr>
-<tr><td>int</td><td>timezone</td><td>UTC time zone offset</td></tr>
-<tr><td>string</td><td>type</td><td>One of pre-defined types: {working, day-off, holiday, trip, special_event}</td></tr>
-<tr><td>int</td><td>likes_count</td><td></td></tr>
-<tr><td>int</td><td>ctime</td><td>Creation time, unix timestamp</td></tr>
-<tr><td>int</td><td>utime</td><td>Last update time, unix timestamp</td></tr>
-<tr><td>boolean</td><td>is_ended</td><td>TRUE if day is ended, else - FALSE</td></tr>
-<tr><td>[type]</td><td>user_name</td><td>[description]</td></tr>
+<tr><td><a href='#Entity:Moment[3]'>Moment[3]</a></td><td>moments <span class='label label-important'>Removed</span></td><td>Array of day moments</td></tr>
+<tr><td>int</td><td>comments_count <span class='label label-important'>Removed</span></td><td>Count of comments to this day</td></tr>
+<tr><td><a href='#Entity:Comment[3]'>Comment[3]</a></td><td>comments <span class='label label-important'>Removed</span></td><td>Array of day first comments</td></tr>
+<tr><td>bool</td><td>is_favorited <span class='label label-important'>Removed</span></td><td>True if this article is added to current user favourites. If user is not logged in then field is omited.</td></tr>
+<tr><td>[type]</td><td>id</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>user_id</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>fb_uid</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>cover_img_small</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>cover_img_big</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>title</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>occupation</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>timezone</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>location</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>is_favorited</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>comments_count</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>comments</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>type</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>likes_count</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>ctime</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>utime</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>is_ended</td><td>[description]</td></tr>
 
 </table>
 ###### Example response: ######
     {
-      "id":683,
-      "user_id":1507,
-      "user_name":"bar bar",
+      "id":731,
+      "user_id":804,
       "fb_uid":"100004087981387",
-      "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/1507\/days\/f515307a52615bbc3859d6c656c9f0ed4c950dbd_200x200.jpeg",
-      "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/1507\/days\/f515307a52615bbc3859d6c656c9f0ed4c950dbd_400x400.jpeg",
+      "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/804\/days\/61a7a037cead6b72af2686b35f6cba1f4770d7d7_200x200.jpeg",
+      "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/804\/days\/61a7a037cead6b72af2686b35f6cba1f4770d7d7_400x400.jpeg",
       "title":"foobarfoobarfoobarfoobarf",
       "occupation":"foobarfoobarfoobarfo...oobarfoobarfoobarfoo",
       "timezone":0,
       "location":"foobarfoobarfoobarfoobarf",
       "type":"working",
       "likes_count":0,
-      "ctime":1344094829,
-      "utime":1344094829,
-      "is_ended":0,
-      "is_favorited":false,
-      "comments_count":0,
-      "comments":[
-        
-      ]
+      "ctime":1344260328,
+      "utime":1344260328,
+      "is_ended":0
     }
 
 
@@ -370,7 +302,7 @@ Returns current day
 * * *
 #### CreateMoment ####
 <a name="69e8f640ca26b9cc716ecf64942b8619"></a>
-Creates moment
+Creates <a href="#Entity:Moment">moment</a> in current active day and returns it.
 
 `POST current_day/moment_create`
 
@@ -383,9 +315,9 @@ Creates moment
   <th width="40">Required</th>
   <th>Description</th>
 </tr>
-<tr><td>string</td><td>description</td><td>1</td><td></td></tr>
-<tr><td>string</td><td>image_name</td><td>1</td><td></td></tr>
-<tr><td>string</td><td>image_content</td><td>1</td><td>File contents, that was previously encoded by base64</td></tr>
+<tr><td>string</td><td>description</td><td>N</td><td></td></tr>
+<tr><td>string</td><td>image_name</td><td>N</td><td>Requires image_content field.</td></tr>
+<tr><td>string</td><td>image_content</td><td>N</td><td>File contents, that was previously encoded by base64</td></tr>
 
 </table>
 ###### Example request: ######
@@ -405,31 +337,24 @@ Creates moment
   <th width="150">Name</th>
   <th>Description</th>
 </tr>
-<tr><td>int</td><td>id</td><td>Moment ID</td></tr>
-<tr><td>int</td><td>day_id</td><td>ID day that moment belongs to</td></tr>
-<tr><td>string</td><td>description</td><td>Moment description</td></tr>
-<tr><td>string</td><td>img_url <span class='label label-important'>Removed</span></td><td>URL to file image</td></tr>
-<tr><td>int</td><td>likes_count</td><td></td></tr>
-<tr><td>int</td><td>ctime</td><td>Moment creation time, unix timestamp</td></tr>
+<tr><td>[type]</td><td>id</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>day_id</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>description</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>img_small</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>img_big</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>comments_count</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>comments</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>likes_count</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>ctime</td><td>[description]</td></tr>
 
 </table>
 ###### Example response: ######
     {
-      "id":216,
-      "day_id":685,
+      "id":101,
+      "day_id":733,
       "description":"foobarfoobarfoobarfo...foobarfoobarfoobarfo",
-      "img_small":"http:\/\/onedayofmine.dev\/\/users\/1509\/days\/685\/2ca53c692dd022a7c9b4f458fb1d7d6c0a3c065d_200x200.jpg",
-      "img_big":"http:\/\/onedayofmine.dev\/\/users\/1509\/days\/685\/2ca53c692dd022a7c9b4f458fb1d7d6c0a3c065d_400x400.jpg",
+      "img_small":"http:\/\/onedayofmine.dev\/\/users\/806\/days\/733\/cd721488d9ccf1b5dbe38bd34dd883d8fc9e5d76_200x200.jpg",
+      "img_big":"http:\/\/onedayofmine.dev\/\/users\/806\/days\/733\/cd721488d9ccf1b5dbe38bd34dd883d8fc9e5d76_400x400.jpg",
       "likes_count":0,
-      "ctime":1344094830,
-      "comments_count":0,
-      "comments":[
-        
-      ]
+      "ctime":1344260328
     }
 
 
@@ -438,7 +363,7 @@ Creates moment
 * * *
 #### Update ####
 <a name="9e59ff5a39376390cb691df3c733dffc"></a>
-
+Updates information about current <a href="#Entity:Day">day</a> and returns it.
 
 `POST current_day/update`
 
@@ -451,12 +376,12 @@ Creates moment
   <th width="40">Required</th>
   <th>Description</th>
 </tr>
-<tr><td>string</td><td>title</td><td>1</td><td></td></tr>
-<tr><td>string</td><td>description <span class='label label-important'>Removed</span></td><td>1</td><td></td></tr>
-<tr><td>int</td><td>timezone</td><td>1</td><td></td></tr>
-<tr><td>string</td><td>location</td><td>1</td><td></td></tr>
-<tr><td>string</td><td>type</td><td>1</td><td></td></tr>
-<tr><td>[type]</td><td>occupation</td><td></td><td>[description]</td></tr>
+<tr><td>string</td><td>title</td><td>Y</td><td></td></tr>
+<tr><td>int</td><td>timezone</td><td>Y</td><td>UTC time zone offset</td></tr>
+<tr><td>string</td><td>occupation</td><td>N</td><td>Can be omited, then user profile occupation will be used</td></tr>
+<tr><td>string</td><td>latlong <span class='label label-important'>Removed</span></td><td>N</td><td>"[Latitude],[Longitude]" of place, where day was created</td></tr>
+<tr><td>string</td><td>type</td><td>Y</td><td>One of pre-defined types, see: GET day/type_names request</td></tr>
+<tr><td>[type]</td><td>location</td><td></td><td>[description]</td></tr>
 
 </table>
 ###### Example request: ######
@@ -478,49 +403,38 @@ Creates moment
   <th width="150">Name</th>
   <th>Description</th>
 </tr>
-<tr><td>int</td><td>id</td><td>Day ID</td></tr>
-<tr><td>int</td><td>user_id</td><td></td></tr>
-<tr><td>string</td><td>title</td><td></td></tr>
-<tr><td>string</td><td>description <span class='label label-important'>Removed</span></td><td></td></tr>
-<tr><td>int</td><td>timezone</td><td>UTC time zone offset</td></tr>
-<tr><td>string</td><td>occupation</td><td></td></tr>
-<tr><td>string</td><td>type</td><td>One of pre-defined types: {working, day-off, holiday, trip, special_event}</td></tr>
-<tr><td>int</td><td>likes_count</td><td></td></tr>
-<tr><td>int</td><td>ctime</td><td>Creation time, unix timestamp</td></tr>
-<tr><td>int</td><td>utime</td><td>Last update time, unix timestamp</td></tr>
-<tr><td>boolean</td><td>is_ended</td><td>TRUE if day is ended, else - FALSE</td></tr>
-<tr><td>[type]</td><td>user_name</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>id</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>user_id</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>fb_uid</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>cover_img_small</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>cover_img_big</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>title</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>occupation</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>timezone</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>location</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>is_favorited</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>comments_count</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>comments</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>type</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>likes_count</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>ctime</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>utime</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>is_ended</td><td>[description]</td></tr>
 
 </table>
 ###### Example response: ######
     {
-      "id":687,
-      "user_id":1511,
-      "user_name":"bar bar",
+      "id":735,
+      "user_id":808,
       "fb_uid":"100004087981387",
-      "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/1511\/days\/b618537a51a480e4a77e17e961818ad7e7e0ea91_200x200.jpeg",
-      "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/1511\/days\/b618537a51a480e4a77e17e961818ad7e7e0ea91_400x400.jpeg",
+      "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/808\/days\/5272ac33ea93d5a5acf70c9c573abae0dbd885b6_200x200.jpeg",
+      "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/808\/days\/5272ac33ea93d5a5acf70c9c573abae0dbd885b6_400x400.jpeg",
       "title":"foobar",
       "occupation":"foobarfoobarfoobarfo...oobarfoobarfoobarfoo",
       "timezone":"1",
       "location":"foobar",
       "type":"working",
       "likes_count":0,
-      "ctime":1344094831,
-      "utime":1344094831,
-      "is_ended":0,
-      "is_favorited":false,
-      "comments_count":0,
-      "comments":[
-        
-      ]
+      "ctime":1344260329,
+      "utime":1344260329,
+      "is_ended":0
     }
 
 
@@ -533,15 +447,9 @@ Finish current day.
 
 `POST current_day/finish`
 
-##### Request: #####
 
-###### Example request: ######
-    empty
 
-##### Response: #####
 
-###### Example response: ######
-    empty
 <a href="#toc">^ back to Table of conetens</a>
 
 * * *
@@ -549,10 +457,10 @@ Finish current day.
 ### Day ###
 <a name='Day'></a>
 #### Item ####
-<a name="8e74f7a6ec3a55011aa159eb4349a0d0"></a>
-Returns basic Day entity by given Day ID.
+<a name="b0432d7b5a8093ce21b052583814571d"></a>
+Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields listed below.
 
-`GET days/689/item`
+`GET days/737/item`
 
 ##### Request: #####
 ###### Params: ######
@@ -563,11 +471,10 @@ Returns basic Day entity by given Day ID.
   <th width="40">Required</th>
   <th>Description</th>
 </tr>
-<tr><td>int</td><td>day_id <span class='label label-important'>Removed</span></td><td>1</td><td>Day ID</td></tr>
+<tr><td>int</td><td>day_id <span class='label label-important'>Removed</span></td><td>Y</td><td>Day ID</td></tr>
 
 </table>
-###### Example request: ######
-    empty
+
 
 ##### Response: #####
 ###### Fields: ######
@@ -577,73 +484,85 @@ Returns basic Day entity by given Day ID.
   <th width="150">Name</th>
   <th>Description</th>
 </tr>
-<tr><td>int</td><td>id</td><td>Day ID</td></tr>
-<tr><td>string</td><td>user_name</td><td></td></tr>
-<tr><td>int</td><td>user_id</td><td></td></tr>
-<tr><td>string</td><td>title</td><td></td></tr>
-<tr><td>int</td><td>timezone</td><td>UTC time zone offset</td></tr>
-<tr><td>string</td><td>occupation</td><td></td></tr>
-<tr><td>string</td><td>location</td><td>Text value of longitude and latitude separated by coma. See: Yahoo PlaceFinder API</td></tr>
-<tr><td>int</td><td>type</td><td>One of pre-defined types, see: GET day/type_names request</td></tr>
-<tr><td>int</td><td>likes_count</td><td></td></tr>
-<tr><td>int</td><td>ctime</td><td>Creation time</td></tr>
-<tr><td>int</td><td>utime</td><td>Last update time</td></tr>
-<tr><td>bool</td><td>is_ended</td><td>TRUE if day is ended, else - FALSE</td></tr>
-<tr><td><a href='#Entity:Moment[3]'>Moment[3]</a></td><td>moments</td><td>Array of day moments</td></tr>
-<tr><td>int</td><td>comments_count</td><td>Count of comments to this day</td></tr>
-<tr><td><a href='#Entity:Comment[3]'>Comment[3]</a></td><td>comments</td><td>Array of day first comments</td></tr>
-<tr><td>bool</td><td>is_favorited</td><td>True if this article is added to current user favourites. If user is not logged in then field is omited.</td></tr>
+<tr><td><a href='#Entity:User'>User</a></td><td>user</td><td></td></tr>
+<tr><td>int</td><td>comments_count</td><td></td></tr>
+<tr><td><a href='#Entity:DayComment[0-3]'>DayComment[0-3]</a></td><td>comments_first</td><td>Few first comments</td></tr>
+<tr><td><a href='#Entity:Moment'>Moment[]</a></td><td>moments</td><td>All day moments</td></tr>
+<tr><td>bool</td><td>is_favorited</td><td></td></tr>
+<tr><td>[type]</td><td>id</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>fb_uid</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>cover_img_small</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>cover_img_big</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>title</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>occupation</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>timezone</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>location</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>type</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>likes_count</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>ctime</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>utime</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>is_ended</td><td>[description]</td></tr>
 
 </table>
 ###### Example response: ######
     {
-      "id":689,
-      "user_id":1513,
-      "user_name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
+      "id":737,
       "fb_uid":"fooba",
-      "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/1513\/days\/df5e53c97417c448b9ae3a398b43256facc46626_200x200.jpeg",
-      "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/1513\/days\/df5e53c97417c448b9ae3a398b43256facc46626_400x400.jpeg",
+      "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/810\/days\/130a86e4cd134013323176d5ea529095b77aa254_200x200.jpeg",
+      "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/810\/days\/130a86e4cd134013323176d5ea529095b77aa254_400x400.jpeg",
       "title":"foobarfoobarfoobarfoobarf",
       "occupation":"foobarfoobarfoobarfo...oobarfoobarfoobarfoo",
       "timezone":0,
       "location":"foobarfoobarfoobarfoobarf",
       "type":"working",
       "likes_count":0,
-      "ctime":1344094831,
-      "utime":1344094831,
+      "ctime":1344260330,
+      "utime":1344260330,
       "is_ended":0,
+      "user":{
+        "id":810,
+        "fb_uid":"fooba",
+        "twitter_uid":0,
+        "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
+        "sex":"female",
+        "pic_small":"http:\/\/onedayofmine.dev\/users\/810\/d6389a21c960ab52564da250dd498e6a18cb3a1a_70x70.jpeg",
+        "pic_big":"http:\/\/onedayofmine.dev\/users\/810\/d6389a21c960ab52564da250dd498e6a18cb3a1a_140x140.jpeg",
+        "birthday":"1990-01-02",
+        "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfo",
+        "location":"",
+        "followers_count":0,
+        "following_count":0,
+        "days_count":1,
+        "is_followed":false,
+        "is_follower":false
+      },
       "is_favorited":false,
       "comments_count":0,
-      "comments":[
+      "comments_first":[
         
       ],
       "moments":[
         {
-          "id":218,
-          "day_id":689,
+          "id":103,
           "description":"description foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfooba",
           "img_small":"http:\/\/onedayofmine.dev\/",
           "img_big":"http:\/\/onedayofmine.dev\/",
           "likes_count":0,
-          "ctime":1344094831,
+          "ctime":1344260330,
           "comments_count":0,
-          "comments":[
+          "comments_first":[
             
           ]
         },
         {
-          "id":219,
-          "day_id":689,
+          "id":104,
           "description":"description foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfooba",
           "img_small":"http:\/\/onedayofmine.dev\/",
           "img_big":"http:\/\/onedayofmine.dev\/",
           "likes_count":0,
-          "ctime":1344094831,
+          "ctime":1344260330,
           "comments_count":0,
-          "comments":[
+          "comments_first":[
             
           ]
         }
@@ -655,10 +574,10 @@ Returns basic Day entity by given Day ID.
 
 * * *
 #### Item_Many ####
-<a name="1a5947088d5623aaf0543f0410ef32b8"></a>
+<a name="07f9d6a9a9bdce4a12344ffdafcba1ee"></a>
 Get few days in one request.
 
-`GET days/690;691;188/item`
+`GET days/738;739;652/item`
 
 ##### Request: #####
 ###### Params: ######
@@ -669,11 +588,10 @@ Get few days in one request.
   <th width="40">Required</th>
   <th>Description</th>
 </tr>
-<tr><td>string</td><td>ids <span class='label label-important'>Removed</span></td><td>1</td><td>List of ID's, that was separated by ";".</td></tr>
+<tr><td>string</td><td>ids <span class='label label-important'>Removed</span></td><td>Y</td><td>List of ID's, that was separated by ";".</td></tr>
 
 </table>
-###### Example request: ######
-    empty
+
 
 ##### Response: #####
 ###### Fields: ######
@@ -683,89 +601,117 @@ Get few days in one request.
   <th width="150">Name</th>
   <th>Description</th>
 </tr>
-<tr><td><a href='#Entity:Day'>Day[]</a></td><td>days <span class='label label-important'>Removed</span></td><td>Associative array of (day_id => Day)</td></tr>
-<tr><td>[type]</td><td>690 <span class='label label-important'>Removed</span></td><td>[description]</td></tr>
-<tr><td>[type]</td><td>691 <span class='label label-important'>Removed</span></td><td>[description]</td></tr>
-<tr><td>[type]</td><td>188 <span class='label label-important'>Removed</span></td><td>[description]</td></tr>
+<tr><td><a href='#Entity:Day'>Day[]</a></td><td>days <span class='label label-important'>Removed</span></td><td>See GET days/:id/item</td></tr>
+<tr><td>[type]</td><td>738 <span class='label label-important'>Removed</span></td><td>[description]</td></tr>
+<tr><td>[type]</td><td>739 <span class='label label-important'>Removed</span></td><td>[description]</td></tr>
+<tr><td>[type]</td><td>652 <span class='label label-important'>Removed</span></td><td>[description]</td></tr>
 
 </table>
 ###### Example response: ######
     {
-      "690":{
-        "id":690,
-        "user_id":1515,
-        "user_name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
+      "738":{
+        "id":738,
         "fb_uid":"fooba",
-        "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/1515\/days\/2399f6d0dc3335a02960eb7f905ea80d13e3454e_200x200.jpeg",
-        "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/1515\/days\/2399f6d0dc3335a02960eb7f905ea80d13e3454e_400x400.jpeg",
+        "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/812\/days\/290bde8f60193d4dc498ded3dbc3bad21081ea0a_200x200.jpeg",
+        "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/812\/days\/290bde8f60193d4dc498ded3dbc3bad21081ea0a_400x400.jpeg",
         "title":"foobarfoobarfoobarfoobarf",
         "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
         "timezone":0,
         "location":"foobarfoobarfoobarfoobarf",
         "type":"working",
         "likes_count":0,
-        "ctime":1344094832,
-        "utime":1344094832,
+        "ctime":1344260330,
+        "utime":1344260330,
         "is_ended":0,
+        "user":{
+          "id":812,
+          "fb_uid":"fooba",
+          "twitter_uid":0,
+          "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
+          "sex":"female",
+          "pic_small":"http:\/\/onedayofmine.dev\/users\/812\/1ff7b9153734e96d7a1194cf69c3fd7ccf87bdd7_70x70.jpeg",
+          "pic_big":"http:\/\/onedayofmine.dev\/users\/812\/1ff7b9153734e96d7a1194cf69c3fd7ccf87bdd7_140x140.jpeg",
+          "birthday":"1990-01-02",
+          "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfo",
+          "location":"",
+          "followers_count":0,
+          "following_count":0,
+          "days_count":1,
+          "is_followed":false,
+          "is_follower":false
+        },
         "is_favorited":false,
         "comments_count":0,
-        "comments":[
+        "comments_first":[
           
         ],
         "moments":[
           {
-            "id":220,
-            "day_id":690,
+            "id":105,
             "description":"description foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfooba",
             "img_small":"http:\/\/onedayofmine.dev\/",
             "img_big":"http:\/\/onedayofmine.dev\/",
             "likes_count":0,
-            "ctime":1344094832,
+            "ctime":1344260330,
             "comments_count":0,
-            "comments":[
+            "comments_first":[
               
             ]
           }
         ]
       },
-      "691":{
-        "id":691,
-        "user_id":1516,
-        "user_name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
+      "739":{
+        "id":739,
         "fb_uid":"fooba",
-        "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/1516\/days\/c0560517a74529747fa80115cb6868363fa73341_200x200.jpeg",
-        "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/1516\/days\/c0560517a74529747fa80115cb6868363fa73341_400x400.jpeg",
+        "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/813\/days\/042a1b5fc610ed48128ffe197b4afd0dd9ce5add_200x200.jpeg",
+        "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/813\/days\/042a1b5fc610ed48128ffe197b4afd0dd9ce5add_400x400.jpeg",
         "title":"foobarfoobarfoobarfoobarf",
         "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
         "timezone":0,
         "location":"foobarfoobarfoobarfoobarf",
         "type":"working",
         "likes_count":0,
-        "ctime":1344094832,
-        "utime":1344094832,
+        "ctime":1344260330,
+        "utime":1344260330,
         "is_ended":0,
+        "user":{
+          "id":813,
+          "fb_uid":"fooba",
+          "twitter_uid":0,
+          "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
+          "sex":"female",
+          "pic_small":"http:\/\/onedayofmine.dev\/users\/813\/eb72e482b11204d747a09cdd7667f0dad32734f5_70x70.jpeg",
+          "pic_big":"http:\/\/onedayofmine.dev\/users\/813\/eb72e482b11204d747a09cdd7667f0dad32734f5_140x140.jpeg",
+          "birthday":"1990-01-02",
+          "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfo",
+          "location":"",
+          "followers_count":0,
+          "following_count":0,
+          "days_count":1,
+          "is_followed":false,
+          "is_follower":false
+        },
         "is_favorited":false,
         "comments_count":0,
-        "comments":[
+        "comments_first":[
           
         ],
         "moments":[
           {
-            "id":221,
-            "day_id":691,
+            "id":106,
             "description":"description foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfooba",
             "img_small":"http:\/\/onedayofmine.dev\/",
             "img_big":"http:\/\/onedayofmine.dev\/",
             "likes_count":0,
-            "ctime":1344094832,
+            "ctime":1344260330,
             "comments_count":0,
-            "comments":[
+            "comments_first":[
               
             ]
           }
         ]
       },
-      "188":null
+      "652":null
     }
 
 
@@ -773,10 +719,10 @@ Get few days in one request.
 
 * * *
 #### CommentCreate ####
-<a name="e7eedb80d1ce720dc1870d528e3f4467"></a>
-Create moment in specified day
+<a name="b61a3c9d77efc9b116f1b6b4f32ce0e5"></a>
+Creates comment for <a href="#Entity:Day">day</a> and returns it.
 
-`POST days/693/comment_create`
+`POST days/741/comment_create`
 
 ##### Request: #####
 ###### Params: ######
@@ -787,8 +733,8 @@ Create moment in specified day
   <th width="40">Required</th>
   <th>Description</th>
 </tr>
-<tr><td>int</td><td>day_id <span class='label label-important'>Removed</span></td><td>1</td><td></td></tr>
-<tr><td>string</td><td>text</td><td>1</td><td>Comment contents</td></tr>
+<tr><td>int</td><td>day_id <span class='label label-important'>Removed</span></td><td>Y</td><td></td></tr>
+<tr><td>string</td><td>text</td><td>Y</td><td>Comment contents</td></tr>
 
 </table>
 ###### Example request: ######
@@ -806,28 +752,26 @@ Create moment in specified day
   <th width="150">Name</th>
   <th>Description</th>
 </tr>
-<tr><td>string</td><td>text</td><td>Same text as inputed to verifi successfull delivery</td></tr>
-<tr><td>int</td><td>id</td><td>Comment ID</td></tr>
-<tr><td>int</td><td>day_id</td><td></td></tr>
-<tr><td><a href='#Entity:Day'>Day</a></td><td>day <span class='label label-important'>Removed</span></td><td></td></tr>
-<tr><td>string</td><td>user_name</td><td></td></tr>
-<tr><td>int</td><td>user_id</td><td></td></tr>
-<tr><td><a href='#Entity:User'>User</a></td><td>user <span class='label label-important'>Removed</span></td><td></td></tr>
-<tr><td>int</td><td>ctime</td><td>Creation time</td></tr>
-<tr><td>int</td><td>utime</td><td>Update time</td></tr>
+<tr><td>[type]</td><td>id</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>user_id</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>user_name</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>text</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>likes_count</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>ctime</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>utime</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>day_id</td><td>[description]</td></tr>
 
 </table>
 ###### Example response: ######
     {
-      "id":33,
-      "user_id":1520,
+      "id":23,
+      "user_id":817,
       "user_name":"bar bar",
       "text":"foobarfoobarfoobarfo...oobarfoobarfoobarfoo",
       "likes_count":0,
-      "ctime":1344094833,
-      "utime":1344094833,
-      "day_id":693
+      "ctime":1344260331,
+      "utime":1344260331,
+      "day_id":741
     }
 
 
@@ -835,10 +779,10 @@ Create moment in specified day
 
 * * *
 #### ShareDay ####
-<a name="2b3f5b868ae17e594157b4a0c871ca6e"></a>
+<a name="8a9402e1795e65ed6ae37b156696db55"></a>
 Share a day
 
-`POST days/694/share`
+`POST days/742/share`
 
 ##### Request: #####
 ###### Params: ######
@@ -849,11 +793,10 @@ Share a day
   <th width="40">Required</th>
   <th>Description</th>
 </tr>
-<tr><td>int</td><td>day_id <span class='label label-important'>Removed</span></td><td>1</td><td></td></tr>
+<tr><td>int</td><td>day_id <span class='label label-important'>Removed</span></td><td>Y</td><td></td></tr>
 
 </table>
-###### Example request: ######
-    empty
+
 
 ##### Response: #####
 ###### Fields: ######
@@ -868,7 +811,7 @@ Share a day
 </table>
 ###### Example response: ######
     {
-      "id":"100004087981387_511562798870154"
+      "id":"100004087981387_269729319796000"
     }
 
 
@@ -876,15 +819,12 @@ Share a day
 
 * * *
 #### Like ####
-<a name="9ba5ff1cc640d9e04c0e9e15a9c39047"></a>
+<a name="16d7dd516c903cd7e42effc9c94213d9"></a>
 
 
-`POST days/695/like`
+`POST days/743/like`
 
-##### Request: #####
 
-###### Example request: ######
-    empty
 
 ##### Response: #####
 
@@ -896,10 +836,10 @@ Share a day
 
 * * *
 #### Update ####
-<a name="1392192a96e4f703823c5d7efbe60fa3"></a>
+<a name="772775d8a20b254b2a3d9210b0c90ff8"></a>
 Updates a day
 
-`POST days/696/update`
+`POST days/744/update`
 
 ##### Request: #####
 ###### Params: ######
@@ -910,7 +850,7 @@ Updates a day
   <th width="40">Required</th>
   <th>Description</th>
 </tr>
-<tr><td>int</td><td>day_id <span class='label label-important'>Removed</span></td><td>1</td><td></td></tr>
+<tr><td>int</td><td>day_id <span class='label label-important'>Removed</span></td><td>Y</td><td></td></tr>
 <tr><td>[type]</td><td>title</td><td></td><td>[description]</td></tr>
 <tr><td>[type]</td><td>occupation</td><td></td><td>[description]</td></tr>
 <tr><td>[type]</td><td>timezone</td><td></td><td>[description]</td></tr>
@@ -939,7 +879,6 @@ Updates a day
 </tr>
 <tr><td>[type]</td><td>id</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>user_id</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>user_name</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>fb_uid</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>cover_img_small</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>cover_img_big</td><td>[description]</td></tr>
@@ -952,33 +891,24 @@ Updates a day
 <tr><td>[type]</td><td>ctime</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>utime</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>is_ended</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>is_favorited</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>comments_count</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>comments</td><td>[description]</td></tr>
 
 </table>
 ###### Example response: ######
     {
-      "id":696,
-      "user_id":1525,
-      "user_name":"bar bar",
+      "id":744,
+      "user_id":822,
       "fb_uid":"100004087981387",
-      "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/1525\/days\/25fb402e934a0255b3273b75ea78b7c5442a0df0_200x200.jpeg",
-      "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/1525\/days\/25fb402e934a0255b3273b75ea78b7c5442a0df0_400x400.jpeg",
+      "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/822\/days\/da211ccb095f2b3777dfda6ae1f6b9048e1ce86e_200x200.jpeg",
+      "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/822\/days\/da211ccb095f2b3777dfda6ae1f6b9048e1ce86e_400x400.jpeg",
       "title":"foobar",
       "occupation":"foobar",
       "timezone":"1",
       "location":"foobar",
       "type":"working",
       "likes_count":0,
-      "ctime":1344094834,
-      "utime":1344094834,
-      "is_ended":0,
-      "is_favorited":false,
-      "comments_count":0,
-      "comments":[
-        
-      ]
+      "ctime":1344260332,
+      "utime":1344260332,
+      "is_ended":0
     }
 
 
@@ -986,10 +916,10 @@ Updates a day
 
 * * *
 #### DeleteDay ####
-<a name="26a945427492c33d66858df1abe01bdb"></a>
+<a name="0d3ce23f71854008a331dd150ddfcb34"></a>
 Deletes a day
 
-`POST days/697/delete`
+`POST days/745/delete`
 
 ##### Request: #####
 ###### Params: ######
@@ -1000,24 +930,20 @@ Deletes a day
   <th width="40">Required</th>
   <th>Description</th>
 </tr>
-<tr><td>int</td><td>day_id <span class='label label-important'>Removed</span></td><td>1</td><td></td></tr>
+<tr><td>int</td><td>day_id <span class='label label-important'>Removed</span></td><td>Y</td><td></td></tr>
 
 </table>
-###### Example request: ######
-    empty
 
-##### Response: #####
 
-###### Example response: ######
-    empty
+
 <a href="#toc">^ back to Table of conetens</a>
 
 * * *
 #### RestoreDay ####
-<a name="c311c6c80c54598189d9be87020fc459"></a>
+<a name="512074dc2d0993f969fc5f8a77413b21"></a>
 Restore a deleted day
 
-`POST days/699/restore`
+`POST days/747/restore`
 
 ##### Request: #####
 ###### Params: ######
@@ -1028,22 +954,18 @@ Restore a deleted day
   <th width="40">Required</th>
   <th>Description</th>
 </tr>
-<tr><td>int</td><td>day_id <span class='label label-important'>Removed</span></td><td>1</td><td></td></tr>
+<tr><td>int</td><td>day_id <span class='label label-important'>Removed</span></td><td>Y</td><td></td></tr>
 
 </table>
-###### Example request: ######
-    empty
 
-##### Response: #####
 
-###### Example response: ######
-    empty
+
 <a href="#toc">^ back to Table of conetens</a>
 
 * * *
 #### GetFavouriteDays ####
 <a name="9a54a19098a30dcbd74124cbddb1ab6c"></a>
-
+Returns favourite based on <a href="#range-request">range-request</a>.
 
 `GET days/favourites`
 
@@ -1056,15 +978,15 @@ Restore a deleted day
   <th width="40">Required</th>
   <th>Description</th>
 </tr>
-<tr><td>[type]</td><td>from</td><td></td><td>[description]</td></tr>
-<tr><td>[type]</td><td>to</td><td></td><td>[description]</td></tr>
-<tr><td>[type]</td><td>limit</td><td></td><td>[description]</td></tr>
+<tr><td>int</td><td>from</td><td>N</td><td></td></tr>
+<tr><td>int</td><td>to</td><td>N</td><td></td></tr>
+<tr><td>int</td><td>limit</td><td>N</td><td></td></tr>
 
 </table>
 ###### Example request: ######
     {
-      "from":704,
-      "to":701,
+      "from":752,
+      "to":749,
       "limit":1
     }
 
@@ -1078,32 +1000,43 @@ Restore a deleted day
   <th width="150">Name</th>
   <th>Description</th>
 </tr>
-<tr><td>[type]</td><td>0</td><td>[description]</td></tr>
+<tr><td><a href='#Entity:Day'>Day[]</a></td><td>day <span class='label label-important'>Removed</span></td><td></td></tr>
 
 </table>
 ###### Example response: ######
     [
       {
-        "id":703,
-        "user_id":1534,
-        "user_name":"foo foo",
+        "id":751,
         "fb_uid":"100004093051334",
-        "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/1534\/days\/a07e5c3d3d1eeb225fdcad9d102137ae92d61dd3_200x200.jpeg",
-        "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/1534\/days\/a07e5c3d3d1eeb225fdcad9d102137ae92d61dd3_400x400.jpeg",
+        "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/831\/days\/3994a4d0193bcf70ee51ee54e631b1186b44d245_200x200.jpeg",
+        "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/831\/days\/3994a4d0193bcf70ee51ee54e631b1186b44d245_400x400.jpeg",
         "title":"foobarfoobarfoobarfoobarf",
         "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
         "timezone":0,
         "location":"foobarfoobarfoobarfoobarf",
         "type":"working",
         "likes_count":0,
-        "ctime":1344094836,
-        "utime":1344094836,
+        "ctime":1344260334,
+        "utime":1344260334,
         "is_ended":0,
-        "is_favorited":true,
-        "comments_count":0,
-        "comments":[
-          
-        ]
+        "user":{
+          "id":831,
+          "fb_uid":"100004093051334",
+          "twitter_uid":0,
+          "name":"foo foo",
+          "sex":"male",
+          "pic_small":"http:\/\/onedayofmine.dev\/users\/831\/09529ec292e49adca0e3effe2f5ff56fadfe452f_70x70.jpeg",
+          "pic_big":"http:\/\/onedayofmine.dev\/users\/831\/09529ec292e49adca0e3effe2f5ff56fadfe452f_140x140.jpeg",
+          "birthday":"1982-08-08",
+          "occupation":"",
+          "location":"",
+          "followers_count":0,
+          "following_count":0,
+          "days_count":4,
+          "is_followed":false,
+          "is_follower":false
+        },
+        "is_favorited":true
       }
     ]
 
@@ -1112,44 +1045,32 @@ Restore a deleted day
 
 * * *
 #### AddToFavourites ####
-<a name="daffd3da7353eeed22046bef787d14be"></a>
+<a name="f68165aa9f514bc16fc9ba53e28f2766"></a>
 
 
-`POST /days/706/favourite`
+`POST /days/754/favourite`
 
-##### Request: #####
 
-###### Example request: ######
-    empty
 
-##### Response: #####
 
-###### Example response: ######
-    empty
 <a href="#toc">^ back to Table of conetens</a>
 
 * * *
 #### RemoveFromFavourites ####
-<a name="bc17ac60b5d63fb7c97c3ebfc9ea5d82"></a>
+<a name="bb5be1cab9706b9a4b84b431be62863a"></a>
 
 
-`POST /days/707/unfavourite`
+`POST /days/755/unfavourite`
 
-##### Request: #####
 
-###### Example request: ######
-    empty
 
-##### Response: #####
 
-###### Example response: ######
-    empty
 <a href="#toc">^ back to Table of conetens</a>
 
 * * *
 #### GetFollowingUsersDays ####
 <a name="1c5e784108f8a36beb283dc7a3e34030"></a>
-
+Returns following users days based on <a href="#range-request">range-request</a>.
 
 `GET days/following_users/`
 
@@ -1162,15 +1083,15 @@ Restore a deleted day
   <th width="40">Required</th>
   <th>Description</th>
 </tr>
-<tr><td>[type]</td><td>from</td><td></td><td>[description]</td></tr>
-<tr><td>[type]</td><td>to</td><td></td><td>[description]</td></tr>
-<tr><td>[type]</td><td>limit</td><td></td><td>[description]</td></tr>
+<tr><td>int</td><td>from</td><td>N</td><td></td></tr>
+<tr><td>int</td><td>to</td><td>N</td><td></td></tr>
+<tr><td>int</td><td>limit</td><td>N</td><td></td></tr>
 
 </table>
 ###### Example request: ######
     {
-      "from":711,
-      "to":708,
+      "from":759,
+      "to":756,
       "limit":1
     }
 
@@ -1184,32 +1105,26 @@ Restore a deleted day
   <th width="150">Name</th>
   <th>Description</th>
 </tr>
-<tr><td>[type]</td><td>0</td><td>[description]</td></tr>
+<tr><td><a href='#Entity:Day'>Day[]</a></td><td>day <span class='label label-important'>Removed</span></td><td></td></tr>
 
 </table>
 ###### Example response: ######
     [
       {
-        "id":710,
-        "user_id":1541,
-        "user_name":"foo foo",
+        "id":758,
+        "user_id":838,
         "fb_uid":"100004093051334",
-        "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/1541\/days\/7d04ec8b32b9fa69cd5d4961f0e21ee0f88496b2_200x200.jpeg",
-        "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/1541\/days\/7d04ec8b32b9fa69cd5d4961f0e21ee0f88496b2_400x400.jpeg",
+        "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/838\/days\/ee29f6597731efeb246459c57755c4b26e0a6115_200x200.jpeg",
+        "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/838\/days\/ee29f6597731efeb246459c57755c4b26e0a6115_400x400.jpeg",
         "title":"foobarfoobarfoobarfoobarf",
         "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
         "timezone":0,
         "location":"foobarfoobarfoobarfoobarf",
         "type":"working",
         "likes_count":0,
-        "ctime":1344094837,
-        "utime":1344094837,
-        "is_ended":0,
-        "is_favorited":false,
-        "comments_count":0,
-        "comments":[
-          
-        ]
+        "ctime":1344260335,
+        "utime":1344260335,
+        "is_ended":0
       }
     ]
 
@@ -1219,7 +1134,7 @@ Restore a deleted day
 * * *
 #### GetNewDays ####
 <a name="ed1af553a9d8b9117548d9a3996ebab5"></a>
-Returns array of news days. One of input params can be omited, but not both.
+Returns new days based on <a href="#range-request">range-request</a>.
 
 `GET days/new/`
 
@@ -1232,15 +1147,15 @@ Returns array of news days. One of input params can be omited, but not both.
   <th width="40">Required</th>
   <th>Description</th>
 </tr>
-<tr><td>int</td><td>from</td><td></td><td></td></tr>
-<tr><td>int</td><td>to</td><td></td><td></td></tr>
-<tr><td>[type]</td><td>limit</td><td></td><td>[description]</td></tr>
+<tr><td>int</td><td>from</td><td>N</td><td></td></tr>
+<tr><td>int</td><td>to</td><td>N</td><td></td></tr>
+<tr><td>int</td><td>limit</td><td>N</td><td></td></tr>
 
 </table>
 ###### Example request: ######
     {
-      "from":717,
-      "to":713,
+      "from":765,
+      "to":761,
       "limit":1
     }
 
@@ -1260,26 +1175,37 @@ Returns array of news days. One of input params can be omited, but not both.
 ###### Example response: ######
     [
       {
-        "id":716,
-        "user_id":1542,
-        "user_name":"bar bar",
+        "id":764,
         "fb_uid":"100004087981387",
-        "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/1542\/days\/df2fde4eec54b8e1737f66fdbd11d6fcfb714534_200x200.jpeg",
-        "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/1542\/days\/df2fde4eec54b8e1737f66fdbd11d6fcfb714534_400x400.jpeg",
+        "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/839\/days\/fa659e8893cdcded29ed3c78a91622e910394f18_200x200.jpeg",
+        "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/839\/days\/fa659e8893cdcded29ed3c78a91622e910394f18_400x400.jpeg",
         "title":"foobarfoobarfoobarfoobarf",
         "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
         "timezone":0,
         "location":"foobarfoobarfoobarfoobarf",
         "type":"working",
         "likes_count":0,
-        "ctime":1344094837,
-        "utime":1344094837,
+        "ctime":1344260335,
+        "utime":1344260335,
         "is_ended":0,
-        "is_favorited":false,
-        "comments_count":0,
-        "comments":[
-          
-        ]
+        "user":{
+          "id":839,
+          "fb_uid":"100004087981387",
+          "twitter_uid":0,
+          "name":"bar bar",
+          "sex":"male",
+          "pic_small":"http:\/\/onedayofmine.dev\/users\/839\/595c4fc66aff71535ae9fa20d3289f9c45afd931_70x70.jpeg",
+          "pic_big":"http:\/\/onedayofmine.dev\/users\/839\/595c4fc66aff71535ae9fa20d3289f9c45afd931_140x140.jpeg",
+          "birthday":"1980-08-08",
+          "occupation":"",
+          "location":"",
+          "followers_count":0,
+          "following_count":0,
+          "days_count":3,
+          "is_followed":false,
+          "is_follower":false
+        },
+        "is_favorited":false
       }
     ]
 
@@ -1289,7 +1215,7 @@ Returns array of news days. One of input params can be omited, but not both.
 * * *
 #### GetInterestingDays ####
 <a name="1fd27ac16cb5dd55499bbaf0ba61c06d"></a>
-Returns array of days. Input params can be omited, but ignoring both params can give long array as result.
+Returns interesting days based on <a href="#range-request">range-request</a>.
 
 `GET days/new/`
 
@@ -1302,15 +1228,15 @@ Returns array of days. Input params can be omited, but ignoring both params can 
   <th width="40">Required</th>
   <th>Description</th>
 </tr>
-<tr><td>int</td><td>from</td><td></td><td></td></tr>
-<tr><td>int</td><td>to</td><td></td><td></td></tr>
-<tr><td>[type]</td><td>limit</td><td></td><td>[description]</td></tr>
+<tr><td>int</td><td>from</td><td>N</td><td></td></tr>
+<tr><td>int</td><td>to</td><td>N</td><td></td></tr>
+<tr><td>int</td><td>limit</td><td>N</td><td></td></tr>
 
 </table>
 ###### Example request: ######
     {
-      "from":722,
-      "to":718,
+      "from":770,
+      "to":766,
       "limit":1
     }
 
@@ -1330,26 +1256,37 @@ Returns array of days. Input params can be omited, but ignoring both params can 
 ###### Example response: ######
     [
       {
-        "id":721,
-        "user_id":1544,
-        "user_name":"bar bar",
+        "id":769,
         "fb_uid":"100004087981387",
-        "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/1544\/days\/0d42ffda6b6045b56c55a349d312ceb0986fb400_200x200.jpeg",
-        "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/1544\/days\/0d42ffda6b6045b56c55a349d312ceb0986fb400_400x400.jpeg",
+        "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/841\/days\/ceeb9b22a3c859f0bec1d52e93db7a972d7059d4_200x200.jpeg",
+        "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/841\/days\/ceeb9b22a3c859f0bec1d52e93db7a972d7059d4_400x400.jpeg",
         "title":"foobarfoobarfoobarfoobarf",
         "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
         "timezone":0,
         "location":"foobarfoobarfoobarfoobarf",
         "type":"working",
         "likes_count":0,
-        "ctime":1344094837,
-        "utime":1344094837,
+        "ctime":1344260335,
+        "utime":1344260335,
         "is_ended":0,
-        "is_favorited":false,
-        "comments_count":0,
-        "comments":[
-          
-        ]
+        "user":{
+          "id":841,
+          "fb_uid":"100004087981387",
+          "twitter_uid":0,
+          "name":"bar bar",
+          "sex":"male",
+          "pic_small":"http:\/\/onedayofmine.dev\/users\/841\/a31de7182b1fadc1eb7c4cced6d634e9cc6fe712_70x70.jpeg",
+          "pic_big":"http:\/\/onedayofmine.dev\/users\/841\/a31de7182b1fadc1eb7c4cced6d634e9cc6fe712_140x140.jpeg",
+          "birthday":"1980-08-08",
+          "occupation":"",
+          "location":"",
+          "followers_count":0,
+          "following_count":0,
+          "days_count":3,
+          "is_followed":false,
+          "is_follower":false
+        },
+        "is_favorited":false
       }
     ]
 
@@ -1359,7 +1296,7 @@ Returns array of days. Input params can be omited, but ignoring both params can 
 * * *
 #### CurrentUserDays ####
 <a name="f2c5afe4a024dc21f1c43ff206afb8f1"></a>
-
+Returns current user days based on <a href="#range-request">range-request</a>.
 
 `GET days/my`
 
@@ -1372,15 +1309,15 @@ Returns array of days. Input params can be omited, but ignoring both params can 
   <th width="40">Required</th>
   <th>Description</th>
 </tr>
-<tr><td>[type]</td><td>from</td><td></td><td>[description]</td></tr>
-<tr><td>[type]</td><td>to</td><td></td><td>[description]</td></tr>
-<tr><td>[type]</td><td>limit</td><td></td><td>[description]</td></tr>
+<tr><td>int</td><td>from</td><td>N</td><td></td></tr>
+<tr><td>int</td><td>to</td><td>N</td><td></td></tr>
+<tr><td>int</td><td>limit</td><td>N</td><td></td></tr>
 
 </table>
 ###### Example request: ######
     {
-      "from":726,
-      "to":723,
+      "from":774,
+      "to":771,
       "limit":1
     }
 
@@ -1394,32 +1331,41 @@ Returns array of days. Input params can be omited, but ignoring both params can 
   <th width="150">Name</th>
   <th>Description</th>
 </tr>
-<tr><td>[type]</td><td>0</td><td>[description]</td></tr>
+<tr><td><a href='#Entity:Day'>Day[]</a></td><td>day <span class='label label-important'>Removed</span></td><td></td></tr>
 
 </table>
 ###### Example response: ######
     [
       {
-        "id":725,
-        "user_id":1546,
-        "user_name":"bar bar",
+        "id":773,
         "fb_uid":"100004087981387",
-        "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/1546\/days\/778209a7fe27610f216de3208e0439ff045d5399_200x200.jpeg",
-        "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/1546\/days\/778209a7fe27610f216de3208e0439ff045d5399_400x400.jpeg",
+        "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/843\/days\/35ff18bfcabb1c40de440a0219eeed7dccbc4c4c_200x200.jpeg",
+        "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/843\/days\/35ff18bfcabb1c40de440a0219eeed7dccbc4c4c_400x400.jpeg",
         "title":"foobarfoobarfoobarfoobarf",
         "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
         "timezone":0,
         "location":"foobarfoobarfoobarfoobarf",
         "type":"working",
         "likes_count":0,
-        "ctime":1344094838,
-        "utime":1344094838,
+        "ctime":1344260336,
+        "utime":1344260336,
         "is_ended":0,
-        "is_favorited":false,
-        "comments_count":0,
-        "comments":[
-          
-        ]
+        "user":{
+          "id":843,
+          "fb_uid":"100004087981387",
+          "twitter_uid":0,
+          "name":"bar bar",
+          "sex":"male",
+          "pic_small":"http:\/\/onedayofmine.dev\/users\/843\/cd5f0749a0d7e3cc48eefe31a64c644928f3ab3b_70x70.jpeg",
+          "pic_big":"http:\/\/onedayofmine.dev\/users\/843\/cd5f0749a0d7e3cc48eefe31a64c644928f3ab3b_140x140.jpeg",
+          "birthday":"1980-08-08",
+          "occupation":"",
+          "location":"",
+          "followers_count":0,
+          "following_count":0,
+          "days_count":3
+        },
+        "is_favorited":false
       }
     ]
 
@@ -1429,14 +1375,11 @@ Returns array of days. Input params can be omited, but ignoring both params can 
 * * *
 #### TypeNames ####
 <a name="bdbebf26e7d0327181a566595a2fcd56"></a>
-
+Returns list of acceptable types.
 
 `GET days/type_names`
 
-##### Request: #####
 
-###### Example request: ######
-    empty
 
 ##### Response: #####
 ###### Fields: ######
@@ -1467,10 +1410,10 @@ Returns array of days. Input params can be omited, but ignoring both params can 
 
 * * *
 #### CreateComplaint ####
-<a name="55f007d8937490ee10926ede25f6558b"></a>
+<a name="789e5b6104e3b884b757ab170d93bcb1"></a>
 
 
-`POST /days/727/create_complaint`
+`POST /days/775/create_complaint`
 
 ##### Request: #####
 ###### Params: ######
@@ -1481,8 +1424,8 @@ Returns array of days. Input params can be omited, but ignoring both params can 
   <th width="40">Required</th>
   <th>Description</th>
 </tr>
-<tr><td>int</td><td>id <span class='label label-important'>Removed</span></td><td>1</td><td>ID of abused comment</td></tr>
-<tr><td>string</td><td>text</td><td>1</td><td>Abuse description message</td></tr>
+<tr><td>int</td><td>id <span class='label label-important'>Removed</span></td><td>Y</td><td>ID of abused comment</td></tr>
+<tr><td>string</td><td>text</td><td>Y</td><td>Abuse description message</td></tr>
 
 </table>
 ###### Example request: ######
@@ -1510,8 +1453,8 @@ Returns array of days. Input params can be omited, but ignoring both params can 
     {
       "day_id":null,
       "text":"foobar",
-      "ctime":1344094839,
-      "id":9
+      "ctime":1344260337,
+      "id":18
     }
 
 
@@ -1522,10 +1465,10 @@ Returns array of days. Input params can be omited, but ignoring both params can 
 ### MomentComments ###
 <a name='MomentComments'></a>
 #### Update ####
-<a name="e02f5df7b4f592e3638eaf7cb5cb66a2"></a>
+<a name="eebd4b7ecdd35d5148d9b0a7c1eac54a"></a>
 
 
-`POST /moment_comments/65/update`
+`POST /moment_comments/9/update`
 
 ##### Request: #####
 ###### Params: ######
@@ -1566,14 +1509,14 @@ Returns array of days. Input params can be omited, but ignoring both params can 
 </table>
 ###### Example response: ######
     {
-      "id":65,
-      "user_id":1556,
+      "id":9,
+      "user_id":853,
       "user_name":"bar bar",
       "text":"foobarfo",
       "likes_count":0,
-      "ctime":1344094842,
-      "utime":1344094842,
-      "moment_id":225
+      "ctime":1344260342,
+      "utime":1344260342,
+      "moment_id":110
     }
 
 
@@ -1581,10 +1524,10 @@ Returns array of days. Input params can be omited, but ignoring both params can 
 
 * * *
 #### Delete ####
-<a name="ca978dc251797b8ef14c0236e0977274"></a>
+<a name="0d0d8c17c7735f151ca8aec8b162cfaf"></a>
 
 
-`POST /moment_comments/67/delete`
+`POST /moment_comments/11/delete`
 
 ##### Request: #####
 ###### Params: ######
@@ -1605,10 +1548,7 @@ Returns array of days. Input params can be omited, but ignoring both params can 
 
 
 
-##### Response: #####
 
-###### Example response: ######
-    empty
 <a href="#toc">^ back to Table of conetens</a>
 
 * * *
@@ -1616,10 +1556,10 @@ Returns array of days. Input params can be omited, but ignoring both params can 
 ### Moments ###
 <a name='Moments'></a>
 #### Update ####
-<a name="621e39309be74d09010f525bb46b9af5"></a>
+<a name="5d50133b993b6c85346891c1ef13897c"></a>
+Updates information about specified <a href="#Entity:Moment">moment</a> and returns it.
 
-
-`POST moments/229/update`
+`POST moments/114/update`
 
 ##### Request: #####
 ###### Params: ######
@@ -1630,9 +1570,9 @@ Returns array of days. Input params can be omited, but ignoring both params can 
   <th width="40">Required</th>
   <th>Description</th>
 </tr>
-<tr><td>[type]</td><td>description</td><td></td><td>[description]</td></tr>
-<tr><td>[type]</td><td>img_name</td><td></td><td>[description]</td></tr>
-<tr><td>[type]</td><td>img_content</td><td></td><td>[description]</td></tr>
+<tr><td>string</td><td>description</td><td>N</td><td></td></tr>
+<tr><td>string</td><td>img_name</td><td>N</td><td>Requires image_content field.</td></tr>
+<tr><td>string</td><td>img_content</td><td>N</td><td>File contents, that was previously encoded by base64</td></tr>
 
 </table>
 ###### Example request: ######
@@ -1659,23 +1599,17 @@ Returns array of days. Input params can be omited, but ignoring both params can 
 <tr><td>[type]</td><td>img_big</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>likes_count</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>ctime</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>comments_count</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>comments</td><td>[description]</td></tr>
 
 </table>
 ###### Example response: ######
     {
-      "id":229,
-      "day_id":738,
+      "id":114,
+      "day_id":786,
       "description":"foobarfoobarfoobarfo...oobarfoobarfoobarfoo",
-      "img_small":"http:\/\/onedayofmine.dev\/\/users\/1566\/days\/738\/ac927956537add6ad6cd31987e9eda5d2a46208a_200x200.jpg",
-      "img_big":"http:\/\/onedayofmine.dev\/\/users\/1566\/days\/738\/ac927956537add6ad6cd31987e9eda5d2a46208a_400x400.jpg",
+      "img_small":"http:\/\/onedayofmine.dev\/\/users\/863\/days\/786\/3a162bcef963dbf611aee6cfe9331af6be2c36d9_200x200.jpg",
+      "img_big":"http:\/\/onedayofmine.dev\/\/users\/863\/days\/786\/3a162bcef963dbf611aee6cfe9331af6be2c36d9_400x400.jpg",
       "likes_count":0,
-      "ctime":1344094844,
-      "comments_count":0,
-      "comments":[
-        
-      ]
+      "ctime":1344260343
     }
 
 
@@ -1683,28 +1617,22 @@ Returns array of days. Input params can be omited, but ignoring both params can 
 
 * * *
 #### Delete ####
-<a name="90b81e4ae4b2f0c217387e52b56552a1"></a>
+<a name="126a10039f6038d01d25d5179965a42a"></a>
+Delete a moment.
+
+`POST moments/115/delete`
 
 
-`POST moments/230/delete`
 
-##### Request: #####
 
-###### Example request: ######
-    empty
-
-##### Response: #####
-
-###### Example response: ######
-    empty
 <a href="#toc">^ back to Table of conetens</a>
 
 * * *
 #### Comment ####
-<a name="2088efc581191c5d5c6ebbc246ec6eaa"></a>
+<a name="5d99835576e100a1c163fb168596e02c"></a>
+Creates <a href="#Entity:MomentComment">moment comment</a> and returns it.
 
-
-`POST moments/231/comment`
+`POST moments/116/comment`
 
 ##### Request: #####
 ###### Params: ######
@@ -1715,7 +1643,7 @@ Returns array of days. Input params can be omited, but ignoring both params can 
   <th width="40">Required</th>
   <th>Description</th>
 </tr>
-<tr><td>[type]</td><td>text</td><td></td><td>[description]</td></tr>
+<tr><td>string</td><td>text</td><td>Y</td><td></td></tr>
 
 </table>
 ###### Example request: ######
@@ -1745,14 +1673,14 @@ Returns array of days. Input params can be omited, but ignoring both params can 
 </table>
 ###### Example response: ######
     {
-      "id":69,
-      "user_id":1568,
+      "id":13,
+      "user_id":865,
       "user_name":"bar bar",
       "text":"foobarfoobarfoobarfo...oobarfoobarfoobarfoo",
       "likes_count":0,
-      "ctime":1344094845,
-      "utime":1344094845,
-      "moment_id":231
+      "ctime":1344260343,
+      "utime":1344260343,
+      "moment_id":116
     }
 
 
@@ -1764,14 +1692,11 @@ Returns array of days. Input params can be omited, but ignoring both params can 
 <a name='My'></a>
 #### Profile ####
 <a name="7c42c715a02e964a2889306b19fe292c"></a>
-
+Returns <a href="#Entity:User">profile</a> of current logged in user.
 
 `GET /my/profile`
 
-##### Request: #####
 
-###### Example request: ######
-    empty
 
 ##### Response: #####
 ###### Fields: ######
@@ -1799,13 +1724,13 @@ Returns array of days. Input params can be omited, but ignoring both params can 
 </table>
 ###### Example response: ######
     {
-      "id":1569,
+      "id":866,
       "fb_uid":"100004087981387",
       "twitter_uid":0,
       "name":"bar bar",
       "sex":"male",
-      "pic_small":"http:\/\/onedayofmine.dev\/users\/1569\/0838426f704183b5ea20f2c6a7ce206b240f516d_70x70.jpeg",
-      "pic_big":"http:\/\/onedayofmine.dev\/users\/1569\/0838426f704183b5ea20f2c6a7ce206b240f516d_140x140.jpeg",
+      "pic_small":"http:\/\/onedayofmine.dev\/users\/866\/108eec14b76b5780b60e314e5d42f0198b59824b_70x70.jpeg",
+      "pic_big":"http:\/\/onedayofmine.dev\/users\/866\/108eec14b76b5780b60e314e5d42f0198b59824b_140x140.jpeg",
       "birthday":"1980-08-08",
       "occupation":"",
       "location":"",
@@ -1821,7 +1746,7 @@ Returns array of days. Input params can be omited, but ignoring both params can 
 * * *
 #### UpdateProfile ####
 <a name="469f2a8ab70c10e7b8a6c9890ba465ef"></a>
-You can do partial updates, if needed.
+Changes fields of current user <a href="#Entity:User">profile</a> and returns them (with new values). You are free to make selective changes.
 
 `POST /my/profile`
 
@@ -1882,13 +1807,13 @@ You can do partial updates, if needed.
 </table>
 ###### Example response: ######
     {
-      "id":1570,
+      "id":867,
       "fb_uid":"100004087981387",
       "twitter_uid":0,
       "name":"foobarfoobarfoobarfoobarf",
       "sex":"male",
-      "pic_small":"http:\/\/onedayofmine.dev\/users\/1570\/345d52bde2c4af0b16e2b8e2fcd4cfa94f4fb58e_70x70.jpeg",
-      "pic_big":"http:\/\/onedayofmine.dev\/users\/1570\/345d52bde2c4af0b16e2b8e2fcd4cfa94f4fb58e_140x140.jpeg",
+      "pic_small":"http:\/\/onedayofmine.dev\/users\/867\/a27fa26512263ff7a935c6c749da5b917364619c_70x70.jpeg",
+      "pic_big":"http:\/\/onedayofmine.dev\/users\/867\/a27fa26512263ff7a935c6c749da5b917364619c_140x140.jpeg",
       "birthday":"1990-01-02",
       "occupation":"foobarfoobarfoobarfoobarf",
       "location":"foobarfoobarfoobarfoobarf",
@@ -1908,10 +1833,7 @@ You can do partial updates, if needed.
 
 `GET /my/settings/`
 
-##### Request: #####
 
-###### Example request: ######
-    empty
 
 ##### Response: #####
 ###### Fields: ######
@@ -1934,7 +1856,7 @@ You can do partial updates, if needed.
 </table>
 ###### Example response: ######
     {
-      "id":8184,
+      "id":706,
       "notifications_new_days":1,
       "notifications_new_comments":0,
       "notifications_related_activity":1,
@@ -2006,7 +1928,7 @@ You can do partial updates, if needed.
 </table>
 ###### Example response: ######
     {
-      "id":8186,
+      "id":708,
       "notifications_new_days":1,
       "notifications_new_comments":1,
       "notifications_related_activity":1,
@@ -2023,66 +1945,6 @@ You can do partial updates, if needed.
 
 * * *
 
-### News ###
-<a name='News'></a>
-#### GetNewNews ####
-<a name="3292f47a05d97e9f9f13470ea62f442c"></a>
-Get list of news that was created after specified news.
-
-`GET social/news`
-
-##### Request: #####
-###### Params: ######
-<table class="table">
-<tr>
-  <th width="40">Type</th>
-  <th width="150">Name</th>
-  <th width="40">Required</th>
-  <th>Description</th>
-</tr>
-<tr><td>int</td><td>from</td><td>1</td><td>ID of latest present in application news</td></tr>
-<tr><td>int</td><td>to</td><td>1</td><td>ID of first present in application news</td></tr>
-<tr><td>int</td><td>limit</td><td>1</td><td>news count</td></tr>
-
-</table>
-###### Example request: ######
-    {
-      "from":234,
-      "to":231,
-      "limit":1
-    }
-
-
-
-##### Response: #####
-###### Fields: ######
-<table class="table">
-<tr>
-  <th width="40">Type</th>
-  <th width="150">Name</th>
-  <th>Description</th>
-</tr>
-<tr><td><a href='#Entity:News[limit]'>News[limit]</a></td><td>- <span class='label label-important'>Removed</span></td><td>List of news that was created after $last (if list is empty adittionally outputs HTTP code 304)</td></tr>
-
-</table>
-###### Example response: ######
-    [
-      {
-        "id":233,
-        "recipient_id":1574,
-        "user_id":1577,
-        "text":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob likes bar bar",
-        "day_id":0,
-        "moment_id":0,
-        "ctime":1344094846
-      }
-    ]
-
-
-<a href="#toc">^ back to Table of conetens</a>
-
-* * *
-
 ### Social ###
 <a name='Social'></a>
 #### FacebookFiends ####
@@ -2091,10 +1953,7 @@ Get list of news that was created after specified news.
 
 `GET social/facebook_friends`
 
-##### Request: #####
 
-###### Example request: ######
-    empty
 
 ##### Response: #####
 ###### Fields: ######
@@ -2110,13 +1969,13 @@ Get list of news that was created after specified news.
 ###### Example response: ######
     [
       {
-        "id":1603,
+        "id":895,
         "fb_uid":"100004093051334",
         "twitter_uid":0,
         "name":"foo foo",
         "sex":"male",
-        "pic_small":"http:\/\/onedayofmine.dev\/users\/1603\/c4989025c6ca88d4396d40d4b6d8193a3b75a6c9_70x70.jpeg",
-        "pic_big":"http:\/\/onedayofmine.dev\/users\/1603\/c4989025c6ca88d4396d40d4b6d8193a3b75a6c9_140x140.jpeg",
+        "pic_small":"http:\/\/onedayofmine.dev\/users\/895\/88ca8aaee6442b2b244ad3b8f1d94ec587d3c21c_70x70.jpeg",
+        "pic_big":"http:\/\/onedayofmine.dev\/users\/895\/88ca8aaee6442b2b244ad3b8f1d94ec587d3c21c_140x140.jpeg",
         "birthday":"1982-08-08",
         "occupation":"",
         "location":"",
@@ -2183,13 +2042,13 @@ Get list of news that was created after specified news.
 </table>
 ###### Example response: ######
     {
-      "id":1604,
+      "id":896,
       "fb_uid":"100004087981387",
       "twitter_uid":637083468,
       "name":"bar bar",
       "sex":"male",
-      "pic_small":"http:\/\/onedayofmine.dev\/users\/1604\/0d6c3506c800f8fc6e6020ee9d9dc200061f8036_70x70.jpeg",
-      "pic_big":"http:\/\/onedayofmine.dev\/users\/1604\/0d6c3506c800f8fc6e6020ee9d9dc200061f8036_140x140.jpeg",
+      "pic_small":"http:\/\/onedayofmine.dev\/users\/896\/f15a16778087aa4bd1e679d1bd0064ef3685299d_70x70.jpeg",
+      "pic_big":"http:\/\/onedayofmine.dev\/users\/896\/f15a16778087aa4bd1e679d1bd0064ef3685299d_140x140.jpeg",
       "birthday":"1980-08-08",
       "occupation":"",
       "location":"",
@@ -2202,14 +2061,11 @@ Get list of news that was created after specified news.
 <a href="#toc">^ back to Table of conetens</a>
 
 * * *
+#### GetNewNews ####
+<a name="3292f47a05d97e9f9f13470ea62f442c"></a>
+Returns news for current logged in user.
 
-### User ###
-<a name='User'></a>
-#### UserByIdDays ####
-<a name="97c806f89d990ec1022735546a42ee34"></a>
-Returns days of specified user
-
-`GET users/1639/days/`
+`GET social/news`
 
 ##### Request: #####
 ###### Params: ######
@@ -2220,11 +2076,106 @@ Returns days of specified user
   <th width="40">Required</th>
   <th>Description</th>
 </tr>
-<tr><td>int</td><td>id <span class='label label-important'>Removed</span></td><td>1</td><td>ID of user</td></tr>
+<tr><td>int</td><td>from</td><td>Y</td><td></td></tr>
+<tr><td>int</td><td>to</td><td>Y</td><td></td></tr>
+<tr><td>int</td><td>limit</td><td>Y</td><td></td></tr>
 
 </table>
 ###### Example request: ######
-    empty
+    {
+      "from":117,
+      "to":114,
+      "limit":1
+    }
+
+
+
+##### Response: #####
+###### Fields: ######
+<table class="table">
+<tr>
+  <th width="40">Type</th>
+  <th width="150">Name</th>
+  <th>Description</th>
+</tr>
+<tr><td><a href='#Entity:News'>News[]</a></td><td>- <span class='label label-important'>Removed</span></td><td>List of news. If you use the "from" option (wthout "to") and returned list is empty, than additionally HTTP 304 status code can be returned.</td></tr>
+
+</table>
+###### Example response: ######
+    [
+      {
+        "id":116,
+        "recipient_id":899,
+        "text":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob likes bar bar",
+        "ctime":1344260349,
+        "user":{
+          "id":903,
+          "fb_uid":"fooba",
+          "twitter_uid":0,
+          "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
+          "sex":"female",
+          "pic_small":"http:\/\/onedayofmine.dev\/users\/903\/4d4ba15eec7b494febac42b2e980eb1072fa6b7c_70x70.jpeg",
+          "pic_big":"http:\/\/onedayofmine.dev\/users\/903\/4d4ba15eec7b494febac42b2e980eb1072fa6b7c_140x140.jpeg",
+          "birthday":"1990-01-02",
+          "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfo",
+          "location":"",
+          "followers_count":0,
+          "following_count":0,
+          "days_count":0
+        },
+        "day":{
+          "id":796,
+          "user_id":902,
+          "fb_uid":"fooba",
+          "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/902\/days\/3460224c83a10fc0eb448826b7797f2c50516991_200x200.jpeg",
+          "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/902\/days\/3460224c83a10fc0eb448826b7797f2c50516991_400x400.jpeg",
+          "title":"foobarfoobarfoobarfoobarf",
+          "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
+          "timezone":0,
+          "location":"foobarfoobarfoobarfoobarf",
+          "type":"working",
+          "likes_count":0,
+          "ctime":1344260349,
+          "utime":1344260349,
+          "is_ended":0
+        },
+        "moment":{
+          "id":120,
+          "description":"description foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfooba",
+          "img_small":"http:\/\/onedayofmine.dev\/",
+          "img_big":"http:\/\/onedayofmine.dev\/",
+          "likes_count":0,
+          "ctime":1344260349
+        }
+      }
+    ]
+
+
+<a href="#toc">^ back to Table of conetens</a>
+
+* * *
+
+### User ###
+<a name='User'></a>
+#### UserByIdDays ####
+<a name="8e8d801bae9ef8aca2817095af5e30af"></a>
+Returns days of specified user
+
+`GET users/937/days/`
+
+##### Request: #####
+###### Params: ######
+<table class="table">
+<tr>
+  <th width="40">Type</th>
+  <th width="150">Name</th>
+  <th width="40">Required</th>
+  <th>Description</th>
+</tr>
+<tr><td>int</td><td>id <span class='label label-important'>Removed</span></td><td>Y</td><td>ID of user</td></tr>
+
+</table>
+
 
 ##### Response: #####
 ###### Fields: ######
@@ -2241,48 +2192,36 @@ Returns days of specified user
 ###### Example response: ######
     [
       {
-        "id":754,
-        "user_id":1639,
-        "user_name":"bar bar",
+        "id":803,
+        "user_id":937,
         "fb_uid":"100004087981387",
-        "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/1639\/days\/9184933bbe2dac4e9ca37b415eba3840d46eb8ae_200x200.jpeg",
-        "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/1639\/days\/9184933bbe2dac4e9ca37b415eba3840d46eb8ae_400x400.jpeg",
+        "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/937\/days\/e1ab5067a788a011d6d5409f74c66db17b0f31d9_200x200.jpeg",
+        "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/937\/days\/e1ab5067a788a011d6d5409f74c66db17b0f31d9_400x400.jpeg",
         "title":"foobarfoobarfoobarfoobarf",
         "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
         "timezone":0,
         "location":"foobarfoobarfoobarfoobarf",
         "type":"working",
         "likes_count":0,
-        "ctime":1344094855,
-        "utime":1344094855,
-        "is_ended":0,
-        "is_favorited":false,
-        "comments_count":0,
-        "comments":[
-          
-        ]
+        "ctime":1344260354,
+        "utime":1344260354,
+        "is_ended":0
       },
       {
-        "id":755,
-        "user_id":1639,
-        "user_name":"bar bar",
+        "id":804,
+        "user_id":937,
         "fb_uid":"100004087981387",
-        "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/1639\/days\/410de1aecfced3d201e3126c4c5314ad91f74a45_200x200.jpeg",
-        "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/1639\/days\/410de1aecfced3d201e3126c4c5314ad91f74a45_400x400.jpeg",
+        "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/937\/days\/d7a7f7309ffc6545ab209a449fcd2e948976bdcd_200x200.jpeg",
+        "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/937\/days\/d7a7f7309ffc6545ab209a449fcd2e948976bdcd_400x400.jpeg",
         "title":"foobarfoobarfoobarfoobarf",
         "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
         "timezone":0,
         "location":"foobarfoobarfoobarfoobarf",
         "type":"working",
         "likes_count":0,
-        "ctime":1344094855,
-        "utime":1344094855,
-        "is_ended":0,
-        "is_favorited":false,
-        "comments_count":0,
-        "comments":[
-          
-        ]
+        "ctime":1344260354,
+        "utime":1344260354,
+        "is_ended":0
       }
     ]
 
@@ -2291,10 +2230,10 @@ Returns days of specified user
 
 * * *
 #### UserById ####
-<a name="6a5fe07bba69c2f929b0e08d0f7c261d"></a>
+<a name="33091ae8bb3470b3ea9d2774eb14d3de"></a>
 Returns days of specified user
 
-`GET users/1641/item/`
+`GET users/939/item/`
 
 ##### Request: #####
 ###### Params: ######
@@ -2305,11 +2244,10 @@ Returns days of specified user
   <th width="40">Required</th>
   <th>Description</th>
 </tr>
-<tr><td>int</td><td>id <span class='label label-important'>Removed</span></td><td>1</td><td>ID of user</td></tr>
+<tr><td>int</td><td>id <span class='label label-important'>Removed</span></td><td>Y</td><td>ID of user</td></tr>
 
 </table>
-###### Example request: ######
-    empty
+
 
 ##### Response: #####
 ###### Fields: ######
@@ -2338,13 +2276,13 @@ Returns days of specified user
 </table>
 ###### Example response: ######
     {
-      "id":1641,
+      "id":939,
       "fb_uid":"100004087981387",
       "twitter_uid":0,
       "name":"bar bar",
       "sex":"male",
-      "pic_small":"http:\/\/onedayofmine.dev\/users\/1641\/ed299191a54122014b6abce8aaff2ba3a52a77eb_70x70.jpeg",
-      "pic_big":"http:\/\/onedayofmine.dev\/users\/1641\/ed299191a54122014b6abce8aaff2ba3a52a77eb_140x140.jpeg",
+      "pic_small":"http:\/\/onedayofmine.dev\/users\/939\/46359c268149ff6266cae9ea66e1727948715e18_70x70.jpeg",
+      "pic_big":"http:\/\/onedayofmine.dev\/users\/939\/46359c268149ff6266cae9ea66e1727948715e18_140x140.jpeg",
       "birthday":"1980-08-08",
       "occupation":"",
       "location":"",
@@ -2365,10 +2303,7 @@ Returns list of users that follow current logged in user.
 
 `GET users/followers`
 
-##### Request: #####
 
-###### Example request: ######
-    empty
 
 ##### Response: #####
 ###### Fields: ######
@@ -2384,13 +2319,13 @@ Returns list of users that follow current logged in user.
 ###### Example response: ######
     [
       {
-        "id":1646,
+        "id":944,
         "fb_uid":"100004093051334",
         "twitter_uid":0,
         "name":"foo foo",
         "sex":"male",
-        "pic_small":"http:\/\/onedayofmine.dev\/users\/1646\/44fb6f472be2f7c823010c94854b1d97c5d6162e_70x70.jpeg",
-        "pic_big":"http:\/\/onedayofmine.dev\/users\/1646\/44fb6f472be2f7c823010c94854b1d97c5d6162e_140x140.jpeg",
+        "pic_small":"http:\/\/onedayofmine.dev\/users\/944\/36f3201a8eab8cf7bec384ab0520eb6ea75a913e_70x70.jpeg",
+        "pic_big":"http:\/\/onedayofmine.dev\/users\/944\/36f3201a8eab8cf7bec384ab0520eb6ea75a913e_140x140.jpeg",
         "birthday":"1982-08-08",
         "occupation":"",
         "location":"",
@@ -2406,10 +2341,10 @@ Returns list of users that follow current logged in user.
 
 * * *
 #### FollowersByUserId ####
-<a name="8f248d619cf48c00db4724657e64822c"></a>
+<a name="3c956b9307aa9cd5b6f31468203a2d12"></a>
 Returns list of users that follow selected user.
 
-`GET users/1647/followers`
+`GET users/945/followers`
 
 ##### Request: #####
 ###### Params: ######
@@ -2420,11 +2355,10 @@ Returns list of users that follow selected user.
   <th width="40">Required</th>
   <th>Description</th>
 </tr>
-<tr><td>int</td><td>id <span class='label label-important'>Removed</span></td><td>1</td><td>ID of user</td></tr>
+<tr><td>int</td><td>id <span class='label label-important'>Removed</span></td><td>Y</td><td>ID of user</td></tr>
 
 </table>
-###### Example request: ######
-    empty
+
 
 ##### Response: #####
 ###### Fields: ######
@@ -2440,13 +2374,13 @@ Returns list of users that follow selected user.
 ###### Example response: ######
     [
       {
-        "id":1648,
+        "id":946,
         "fb_uid":"100004093051334",
         "twitter_uid":0,
         "name":"foo foo",
         "sex":"male",
-        "pic_small":"http:\/\/onedayofmine.dev\/users\/1648\/02fd0d2208cf779815e68d01947164fc72845131_70x70.jpeg",
-        "pic_big":"http:\/\/onedayofmine.dev\/users\/1648\/02fd0d2208cf779815e68d01947164fc72845131_140x140.jpeg",
+        "pic_small":"http:\/\/onedayofmine.dev\/users\/946\/6335fa9f55158a6bb13b7ee533c56e7b2a965f25_70x70.jpeg",
+        "pic_big":"http:\/\/onedayofmine.dev\/users\/946\/6335fa9f55158a6bb13b7ee533c56e7b2a965f25_140x140.jpeg",
         "birthday":"1982-08-08",
         "occupation":"",
         "location":"",
@@ -2467,10 +2401,7 @@ Returns list of users that is followed by current logged in user.
 
 `GET users/following`
 
-##### Request: #####
 
-###### Example request: ######
-    empty
 
 ##### Response: #####
 ###### Fields: ######
@@ -2486,13 +2417,13 @@ Returns list of users that is followed by current logged in user.
 ###### Example response: ######
     [
       {
-        "id":1650,
+        "id":948,
         "fb_uid":"100004093051334",
         "twitter_uid":0,
         "name":"foo foo",
         "sex":"male",
-        "pic_small":"http:\/\/onedayofmine.dev\/users\/1650\/9c960dd7f57acbd6ada0aa7b0e430e7673ed5da2_70x70.jpeg",
-        "pic_big":"http:\/\/onedayofmine.dev\/users\/1650\/9c960dd7f57acbd6ada0aa7b0e430e7673ed5da2_140x140.jpeg",
+        "pic_small":"http:\/\/onedayofmine.dev\/users\/948\/1af50d96bad8b471fb6c9a6fcca06d9d438fb2fe_70x70.jpeg",
+        "pic_big":"http:\/\/onedayofmine.dev\/users\/948\/1af50d96bad8b471fb6c9a6fcca06d9d438fb2fe_140x140.jpeg",
         "birthday":"1982-08-08",
         "occupation":"",
         "location":"",
@@ -2508,10 +2439,10 @@ Returns list of users that is followed by current logged in user.
 
 * * *
 #### FollowingByUserId ####
-<a name="b937a5a972519cde7f13f9d10061c4c0"></a>
+<a name="18830e40109991f94468e9101f8cf3c5"></a>
 Returns list of users that is followed by selected user.
 
-`GET users/1651/following`
+`GET users/949/following`
 
 ##### Request: #####
 ###### Params: ######
@@ -2522,11 +2453,10 @@ Returns list of users that is followed by selected user.
   <th width="40">Required</th>
   <th>Description</th>
 </tr>
-<tr><td>int</td><td>id <span class='label label-important'>Removed</span></td><td>1</td><td>ID of user</td></tr>
+<tr><td>int</td><td>id <span class='label label-important'>Removed</span></td><td>Y</td><td>ID of user</td></tr>
 
 </table>
-###### Example request: ######
-    empty
+
 
 ##### Response: #####
 ###### Fields: ######
@@ -2542,13 +2472,13 @@ Returns list of users that is followed by selected user.
 ###### Example response: ######
     [
       {
-        "id":1652,
+        "id":950,
         "fb_uid":"100004093051334",
         "twitter_uid":0,
         "name":"foo foo",
         "sex":"male",
-        "pic_small":"http:\/\/onedayofmine.dev\/users\/1652\/b4e5f56416fc00c193fa501bfc5fb1ae37739e06_70x70.jpeg",
-        "pic_big":"http:\/\/onedayofmine.dev\/users\/1652\/b4e5f56416fc00c193fa501bfc5fb1ae37739e06_140x140.jpeg",
+        "pic_small":"http:\/\/onedayofmine.dev\/users\/950\/5e0eab5dcd205f24b7c5b9eed9bf870f4349eb9d_70x70.jpeg",
+        "pic_big":"http:\/\/onedayofmine.dev\/users\/950\/5e0eab5dcd205f24b7c5b9eed9bf870f4349eb9d_140x140.jpeg",
         "birthday":"1982-08-08",
         "occupation":"",
         "location":"",
@@ -2564,10 +2494,10 @@ Returns list of users that is followed by selected user.
 
 * * *
 #### Follow ####
-<a name="c63db52bffda9b90a58efbbf9f7ccf14"></a>
+<a name="e87fa18693c7a91f2828945fe6b52384"></a>
 Start following selected user.
 
-`POST users/1654/follow`
+`POST users/952/follow`
 
 ##### Request: #####
 ###### Params: ######
@@ -2578,24 +2508,20 @@ Start following selected user.
   <th width="40">Required</th>
   <th>Description</th>
 </tr>
-<tr><td>int</td><td>id <span class='label label-important'>Removed</span></td><td>1</td><td>ID of user that you want to follow</td></tr>
+<tr><td>int</td><td>id <span class='label label-important'>Removed</span></td><td>Y</td><td>ID of user that you want to follow</td></tr>
 
 </table>
-###### Example request: ######
-    empty
 
-##### Response: #####
 
-###### Example response: ######
-    empty
+
 <a href="#toc">^ back to Table of conetens</a>
 
 * * *
 #### Unfollow ####
-<a name="2a461910d88dafa1a935df4945aba717"></a>
+<a name="e741782b6f98dbce15186a37cdb7e7f6"></a>
 Stop following selected user.
 
-`POST users/1656/unfollow`
+`POST users/954/unfollow`
 
 ##### Request: #####
 ###### Params: ######
@@ -2606,16 +2532,12 @@ Stop following selected user.
   <th width="40">Required</th>
   <th>Description</th>
 </tr>
-<tr><td>int</td><td>id <span class='label label-important'>Removed</span></td><td>1</td><td>ID of user that should be unfollowed</td></tr>
+<tr><td>int</td><td>id <span class='label label-important'>Removed</span></td><td>Y</td><td>ID of user that should be unfollowed</td></tr>
 
 </table>
-###### Example request: ######
-    empty
 
-##### Response: #####
 
-###### Example response: ######
-    empty
+
 <a href="#toc">^ back to Table of conetens</a>
 
 * * *
