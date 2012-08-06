@@ -33,7 +33,7 @@ function task_od_fill_from_lj($argv)
 
 	define('LJ_COMMUNITY_NAME', 'odin-moy-den');
   // Returns ~6 posts on page
-  define('PAGES', 1);
+  define('PAGES', 2);
   define('POSTS_COUNT', 50);
 
   echo "== Started to search for links... ==".PHP_EOL;
