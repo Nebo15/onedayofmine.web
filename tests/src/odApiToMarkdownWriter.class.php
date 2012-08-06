@@ -41,7 +41,7 @@ class odApiToMarkdownWriter
       $requestDescription[] = array(
         'type' => $comment->type,
         'name' => $comment->name,
-        'required' => $comment->required,
+        'required' => $comment->required ? 'Y' : 'N',
         'description' => $comment->description
       );
     }
