@@ -34,6 +34,11 @@ All elements can be accessed via URI fragment with ID, for example
 
 should open day with `id=:id` and scroll page to comment with `id=:comment_id`. Same can be applyed to moments and other elements.
 
+## Range-requests ##
+All range requests have same simple rules, that can be described by math inequality: `from < [selected range] < to`.
+Additionally you can omit one of params or even both of them, to select all items that is newer than present in application: `from < [selected range]`,
+older: `[selected range] < to`. Ommiting both params will return all items in selected limit (maximum of 100), order depens on concrete method and usually the newest items will be returned.
+
 ## Known bugs ##
 ### API documentation bugs ###
 * In-URI params are shown as <span class='label label-important'>Removed</span>
