@@ -25,7 +25,7 @@ class lmbLog
   protected $level = PHP_INT_MAX;
 
   protected $backtrace_depth = array(
-    LOG_ERR     => 7,
+    LOG_ERR     => 50,
     LOG_WARNING => 5,
     LOG_NOTICE  => 5,
     LOG_INFO    => 5,
