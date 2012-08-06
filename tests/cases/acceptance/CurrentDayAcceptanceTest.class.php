@@ -27,23 +27,12 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 	}
 
 	/**
-	 * @api description Starts a day
-	 * @api input param string title Title name for this day
-	 * @api input param string description Description for this day
+	 * @api description Starts a day, returns created <a href="#Entity:Day">day</a>.
+	 * @api input param string title
 	 * @api input param int timezone UTC time zone offset
-	 * @api input option string occupation Thing that user are planning to do during current day
-	 * @api input param string type One of pre-defined types: {working, day-off, holiday, trip, special_event}
-	 * @api result int id Day ID
-	 * @api result int user_id
-	 * @api result string title
-	 * @api result string description
-	 * @api result int timezone UTC time zone
-	 * @api result string occupation
-	 * @api result string type One of pre-defined types: {working, day-off, holiday, trip, special_event}
-	 * @api result int likes_count
-	 * @api result int ctime Creation time, unix timestamp
-	 * @api result int utime Last update time, unix timestamp
-	 * @api result boolean is_ended Always FALSE for new days
+   * @api input option string occupation If omited, then user profile occupation will be used
+	 * @api input option string latlong "[Latitude],[Longitude]" of place, where day was created
+	 * @api input param string type One of pre-defined types, see: GET day/type_names request
 	 */
 	function testStart()
 	{
@@ -53,13 +42,21 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 
 		$params = $this->generator->day()->exportForApi();
 
-		$day = $this->post('current_day/start', $params)->result;
+		$day = $this->post('current_day/start', array(
+      'title' => $params->title,
+      'timezone' => $params->timezone,
+      // 'latlong' => $params->latlong,
+      'occupation' => $params->occupation,
+      'type' => $params->type,
+    ))->result;
 		if($this->assertResponse(200))
     {
       $this->assertEqual($params->title, $day->title);
-      $this->assertEqual($this->main_user->getId(), $day->user_id);
       $this->assertEqual($params->timezone, $day->timezone);
       $this->assertEqual($params->occupation, $day->occupation);
+      // $this->assertEqual($params->latlong, $day->latlong);
+      $this->assertEqual($params->type, $day->type);
+      $this->assertEqual($this->main_user->getId(), $day->user_id);
       $this->assertTrue($day->ctime);
       $this->assertTrue($day->utime);
     }
@@ -86,18 +83,18 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
     }
   }
 
+  // TODO
+  function testStart_withAlreadyStartedDay()
+  {
+
+  }
+
 	/**
-	 * @api description Returns current day
-	 * @api result int id Day ID
-	 * @api result int user_id
-	 * @api result string title
-	 * @api result string description
-	 * @api result int timezone UTC time zone offset
-	 * @api result string type One of pre-defined types: {working, day-off, holiday, trip, special_event}
-	 * @api result int likes_count
-	 * @api result int ctime Creation time, unix timestamp
-	 * @api result int utime Last update time, unix timestamp
-	 * @api result boolean is_ended TRUE if day is ended, else - FALSE
+	 * @api description Returns current <a href="#Entity:Day">day</a>. Additional fields are listed below.
+   * @api result Moment[3] moments Array of day moments
+   * @api result int comments_count Count of comments to this day
+   * @api result Comment[3] comments Array of day first comments
+   * @api result bool is_favorited True if this article is added to current user favourites. If user is not logged in then field is omited.
 	 */
 	function testGetCurrentDay()
 	{
@@ -129,16 +126,10 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 	}
 
 	/**
-	 * @api description Creates moment
-	 * @api input param string description
-	 * @api input param string image_name
-	 * @api input param string image_content File contents, that was previously encoded by base64
-	 * @api result int id Moment ID
-	 * @api result int day_id ID day that moment belongs to
-	 * @api result string description Moment description
-	 * @api result string img_url URL to file image
-	 * @api result int likes_count
-	 * @api result int ctime Moment creation time, unix timestamp
+	 * @api description Creates <a href="#Entity:Moment">moment</a> in current active day and returns it.
+	 * @api input option string description
+	 * @api input option string image_name Requires image_content field.
+	 * @api input option string image_content File contents, that was previously encoded by base64
 	 */
 	function testCreateMoment()
 	{
@@ -183,22 +174,12 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
+   * @api description Updates information about current <a href="#Entity:Day">day</a> and returns it.
    * @api input param string title
-   * @api input param string description
-   * @api input param int timezone
-   * @api input param string location
-   * @api input param string type
-   * @api result int id Day ID
-   * @api result int user_id
-   * @api result string title
-   * @api result string description
-   * @api result int timezone UTC time zone offset
-   * @api result string occupation
-   * @api result string type One of pre-defined types: {working, day-off, holiday, trip, special_event}
-   * @api result int likes_count
-   * @api result int ctime Creation time, unix timestamp
-   * @api result int utime Last update time, unix timestamp
-   * @api result boolean is_ended TRUE if day is ended, else - FALSE
+   * @api input param int timezone UTC time zone offset
+   * @api input option string occupation Can be omited, then user profile occupation will be used
+   * @api input option string latlong "[Latitude],[Longitude]" of place, where day was created
+   * @api input param string type One of pre-defined types, see: GET day/type_names request
    */
   function testUpdate()
   {
@@ -242,7 +223,4 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 
 	//TODO
 	function testEnd_NotFound() {}
-
-
-	/* GET /my/current_day - запрашивается при старте приложения, возвращает текущий наполняемый день пользователя */
 }

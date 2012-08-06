@@ -33,9 +33,19 @@ class DaysController extends BaseJsonController
     if($day && !$day->getIsDeleted())
     {
       $answer = $day->exportForApi();
-      $answer->moments = array();
-      foreach($day->getMoments() as $moment)
-        $answer->moments[] = $moment->exportForApi();
+
+      // User data
+      $this->addDayUser($answer, $day);
+
+      // Favorites data
+      $this->addDayIsFavorited($answer, $day);
+
+      // Comments data
+      $this->addComments($answer, $day);
+
+      // Moments data
+      $this->addDayMoments($answer, $day);
+
       return $answer;
     }
   }
@@ -177,13 +187,43 @@ class DaysController extends BaseJsonController
   function doNew()
   {
     list($from, $to, $limit) = $this->_getFromToLimitations();
-  	return $this->_answerOk(Day::findNew($from, $to, $limit));
+    $days = Day::findNew($from, $to, $limit);
+
+    $answer = array();
+    foreach ($days as $day) {
+      $export = $day->exportForApi();
+
+      // User data
+      $this->addDayUser($export, $day);
+
+      // Favorites data
+      $this->addDayIsFavorited($export, $day);
+
+      $answer[] = $export;
+    }
+
+  	return $this->_answerOk($answer);
   }
 
   function doInteresting()
   {
     list($from, $to, $limit) = $this->_getFromToLimitations();
-    return $this->_answerOk((new InterestCalculator())->getDays($from, $to, $limit));
+    $days = (new InterestCalculator())->getDays($from, $to, $limit);
+
+    $answer = array();
+    foreach ($days as $day) {
+      $export = $day->exportForApi();
+
+      // User data
+      $this->addDayUser($export, $day);
+
+      // Favorites data
+      $this->addDayIsFavorited($export, $day);
+
+      $answer[] = $export;
+    }
+
+    return $this->_answerOk($answer);
   }
 
   function doFavourites()
@@ -192,7 +232,22 @@ class DaysController extends BaseJsonController
       return $this->_answerUnauthorized();
 
     list($from, $to, $limit) = $this->_getFromToLimitations();
-		return $this->_answerOk($this->_getUser()->getFavouriteDaysWithLimitations($from, $to, $limit));
+    $days = $this->_getUser()->getFavouriteDaysWithLimitations($from, $to, $limit);
+
+    $answer = array();
+    foreach ($days as $day) {
+      $export = $day->exportForApi();
+
+      // User data
+      $this->addDayUser($export, $day);
+
+      // Favorites data
+      $this->addDayIsFavorited($export, $day);
+
+      $answer[] = $export;
+    }
+
+    return $this->_answerOk($answer);
   }
 
   function doFavourite()
@@ -237,7 +292,22 @@ class DaysController extends BaseJsonController
       return $this->_answerUnauthorized();
 
     list($from, $to, $limit) = $this->_getFromToLimitations();
-  	return $this->_answerOk($this->_getUser()->getDaysWithLimitations($from, $to, $limit, true));
+    $days = $this->_getUser()->getDaysWithLimitations($from, $to, $limit, true);
+
+    $answer = array();
+    foreach ($days as $day) {
+      $export = $day->exportForApi();
+
+      // User data
+      $this->addDayUser($export, $day);
+
+      // Favorites data
+      $this->addDayIsFavorited($export, $day);
+
+      $answer[] = $export;
+    }
+
+    return $this->_answerOk($answer);
   }
 
   function doCreateComplaint()
@@ -253,5 +323,52 @@ class DaysController extends BaseJsonController
 
   function doTypeNames() {
     return $this->_answerOk(Day::getTypes());
+  }
+
+  protected function addDayUser(stdClass $day_export, $day)
+  {
+    $day_export->user = $day->getUser()->exportForApi();
+    unset($day_export->user_id);
+
+    if($day->getUser()->getId() != lmbToolkit::instance()->getUser()->getId()) {
+      $day_export->user->is_followed = UserFollowing::isFollowing(lmbToolkit::instance()->getUser(), $day->getUser());
+      $day_export->user->is_follower = UserFollowing::isFollowing($day->getUser(), lmbToolkit::instance()->getUser());
+    }
+  }
+
+  protected function addDayIsFavorited(stdClass $day_export, $day)
+  {
+    $day_export->is_favorited = DayFavourite::isFavourited(lmbToolkit::instance()->getUser(), $day);
+  }
+
+  protected function addComments(stdClass $export, $obj, $only_count = false)
+  {
+    $comments = $obj->getComments();
+    $export->comments_count = $comments->count();
+
+    if($only_count)
+      return;
+
+    $comments->paginate(0, lmbToolkit::instance()->getConf('common')->default_comments_count);
+    $export->comments_first = array();
+    foreach ($comments as $comment) {
+      $export->comments_first[] = $comment->exportForApi();
+    }
+  }
+
+  protected function addDayMoments(stdClass $day_export, $day)
+  {
+    $day_export->moments = array();
+    foreach($day->getMoments() as $moment) {
+      $moment_export = $moment->exportForApi();
+
+      // Moment day data
+      unset($moment_export->day_id);
+
+      // Moment comments data
+      $this->addComments($moment_export, $moment);
+
+      $day_export->moments[] = $moment_export;
+    }
   }
 }

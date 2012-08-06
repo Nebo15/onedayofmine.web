@@ -90,4 +90,17 @@
 </table>
 
 * * *
+### UserSettings ###
+<a name="Entity:UserSettings"></a>
+###### Fields: ######
+<table class="table">
+<tr>
+  <th width="40">Type</th>
+  <th width="150">Name</th>
+  <th>Description</th>
+</tr>
+<tr><td>[type]</td><td>id</td><td>[description]</td></tr><tr><td>[type]</td><td>notifications_new_days</td><td>[description]</td></tr><tr><td>[type]</td><td>notifications_new_comments</td><td>[description]</td></tr><tr><td>[type]</td><td>notifications_related_activity</td><td>[description]</td></tr><tr><td>[type]</td><td>notifications_shooting_photos</td><td>[description]</td></tr><tr><td>[type]</td><td>photos_save_original</td><td>[description]</td></tr><tr><td>[type]</td><td>photos_save_filtered</td><td>[description]</td></tr><tr><td>[type]</td><td>social_share_facebook</td><td>[description]</td></tr><tr><td>[type]</td><td>social_share_twitter</td><td>[description]</td></tr>
+</table>
+
+* * *
 

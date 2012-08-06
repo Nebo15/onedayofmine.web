@@ -10,7 +10,7 @@ class MyAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @api
+   * @api description Returns <a href="#Entity:User">profile</a> of current logged in user.
    */
 	function testProfile()
 	{
@@ -33,7 +33,7 @@ class MyAcceptanceTest extends odAcceptanceTestCase
 	}
 
 	/**
-	 * @api description You can do partial updates, if needed.
+	 * @api description Changes fields of current user <a href="#Entity:User">profile</a> and returns them (with new values). You are free to make selective changes.
 	 */
 	function testUpdateProfile()
 	{
@@ -96,7 +96,7 @@ class MyAcceptanceTest extends odAcceptanceTestCase
     }
   }
 	/**
-	 * @api
+	 * @api Returns setting of current user.
 	 */
 	function testSettings()
 	{
@@ -125,7 +125,7 @@ class MyAcceptanceTest extends odAcceptanceTestCase
     $this->assertEqual(0, $settings->photos_save_filtered);
 	}
 	/**
-	 * @api
+	 * @api Changes fields of current <a href="#Entity:UserSettings">user settings</a> and returns them (with new values). You are free to make selective changes.
 	 */
 	function testUpdateSettings()
 	{

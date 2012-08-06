@@ -21,9 +21,10 @@ class CurrentDayController extends BaseJsonController
 			return $this->_answerWithError('Not a POST request', null, 405);
 
 		$day->setUser($this->_getUser());
-		$day->setOccupation($this->request->getPost('occupation') ?: $this->_getUser()->getOccupation());
+    $occupation = $this->request->getPost('occupation') ?: $this->_getUser()->getOccupation();
+		$day->setOccupation($occupation);
 
-		$response = $this->_importSaveAndAnswer($day, array('title', 'timezone', 'location', 'type'));
+		$response = $this->_importSaveAndAnswer($day, array('title', 'timezone', 'latlong', 'type'), array('occupation' => $occupation));
 
     $this->_getUser()
         ->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)

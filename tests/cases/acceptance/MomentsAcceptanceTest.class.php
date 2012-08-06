@@ -10,7 +10,10 @@ class MomentsAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
-   * @api
+   * @api description Updates information about specified <a href="#Entity:Moment">moment</a> and returns it.
+   * @api input option string description
+   * @api input option string img_name Requires image_content field.
+   * @api input option string img_content File contents, that was previously encoded by base64
    */
   function testUpdate()
   {
@@ -40,11 +43,11 @@ class MomentsAcceptanceTest extends odAcceptanceTestCase
     $this->assertEqual($loaded_moment->getDescription(), $desc);
   }
 
-  //TODO
+  // TODO
   function testUpdate_MomentNotFound() {}
 
   /**
-   * @api
+   * @api description Delete a moment.
    */
   function testDelete()
   {
@@ -61,14 +64,15 @@ class MomentsAcceptanceTest extends odAcceptanceTestCase
     $this->assertFalse(Moment::findById($moment->getId()));
   }
 
-  //todo
+  // TODO
   function testDelete_WrongUser() {}
 
-  //todo
+  // TODO
   function testDelete_MomentNotFound() {}
 
   /**
-   * @api
+   * @api description Creates <a href="#Entity:MomentComment">moment comment</a> and returns it.
+   * @api input param string text
    */
   function testComment()
   {
@@ -89,9 +93,9 @@ class MomentsAcceptanceTest extends odAcceptanceTestCase
     $this->assertEqual($text, $res->text);
   }
 
-  //todo
+  // TODO
   function testComment_MomentNotFound() {}
 
-  //todo-high
+  // TODO-high
   function testLike() {}
 }
