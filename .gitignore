@@ -17,6 +17,7 @@ www/media
 www/proxy.php
 www/tests
 www/users
+www/shared
 
 nbproject
 .sublime*
