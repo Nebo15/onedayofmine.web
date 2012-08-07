@@ -119,7 +119,7 @@ class FacebookProfile implements SocialServicesProfileInterface
       return null;
 
     if(count($day->getMoments()))
-      $image_url = lmbToolkit::instance()->getSiteUrl($day->getMoments()->at(0)->getImageUrl());
+      $image_url = lmbToolkit::instance()->getStaticUrl($day->getMoments()->at(0)->getImageUrl());
     else
       $image_url = '';
 

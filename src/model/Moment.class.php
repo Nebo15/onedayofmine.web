@@ -43,8 +43,8 @@ class Moment extends lmbActiveRecord
     $moment->id = $this->getId();
     $moment->day_id = $this->getDayId();
     $moment->description = $this->getDescription();
-    $moment->image_small = lmbToolkit::instance()->getSiteUrl($this->getImageSmall());
-    $moment->image_big = lmbToolkit::instance()->getSiteUrl($this->getImageBig());
+    $moment->image_small = lmbToolkit::instance()->getStaticUrl($this->getImageSmall());
+    $moment->image_big = lmbToolkit::instance()->getStaticUrl($this->getImageBig());
     $moment->image_shoot_time = $this->getImageShootTime();
     $moment->likes_count = $this->getLikesCount() ?: 0;
     $moment->ctime = $this->getCtime();

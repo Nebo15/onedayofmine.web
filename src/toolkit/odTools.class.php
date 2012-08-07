@@ -89,6 +89,11 @@ class odTools extends lmbAbstractTools
     return lmb_env_get('HOST_URL').$path;
   }
 
+  function getStaticUrl($path = '')
+  {
+    return $this->getSiteUrl($path);
+  }
+
   function getAbsolutePath($www_path)
   {
     return lmb_env_get('APP_DIR')."/www/".$www_path;
