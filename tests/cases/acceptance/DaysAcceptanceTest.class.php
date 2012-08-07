@@ -173,7 +173,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $this->toolkit->copyDayPageToProxy($day);
 
     $this->_loginAndSetCookie($this->main_user);
-    
+
     $res = $this->post('days/'.$day->getId().'/share')->result;
     if($this->assertResponse(200))
     {
@@ -191,14 +191,96 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $day->save();
 
     $this->_loginAndSetCookie($this->main_user);
-    $response = $this->post('days/'.$day->getId().'/like');
+    $this->post('days/'.$day->getId().'/like');
 
     $this->assertResponse(200);
     $this->assertEqual(Day::findOne()->getLikesCount(), 1);
   }
 
-  //TODO
-  function testSearch() {}
+  /**
+   * @api
+   */
+  function testSearch()
+  {
+    $this->additional_user->save();
+
+    $day1 = $this->generator->day($this->additional_user);
+    $day1->setTitle('fooA');
+    $day1->save();
+    $day2 = $this->generator->day($this->additional_user);
+    $day2->setTitle('Afoo');
+    $day2->save();
+    $day3 = $this->generator->day($this->additional_user);
+    $day3->setTitle('AfooA');
+    $day3->save();
+    $day4 = $this->generator->day($this->additional_user);
+    $day4->setTitle('foo');
+    $day4->save();
+    $day5 = $this->generator->day($this->additional_user);
+    $day5->setTitle('bar');
+    $day5->save();
+    $day6 = $this->generator->day($this->additional_user);
+    $day6->setTitle('foo');
+    $day6->setIsDeleted(1);
+    $day6->save();
+
+    $this->main_user->getFavouriteDays()->add($day1);
+    $this->main_user->getFavouriteDays()->add($day2);
+    $this->main_user->getFavouriteDays()->add($day3);
+    $this->main_user->getFavouriteDays()->add($day4);
+    $this->main_user->getFavouriteDays()->add($day5);
+    $this->main_user->getFavouriteDays()->add($day6);
+    $this->main_user->save();
+
+    $days = $this
+      ->get('days/search', array('query' => 'foo'))
+      ->result;
+    if($this->assertResponse(200))
+    {
+      $this->assertEqual(4, count($days));
+      $this->assertEqual($day4->getId(), $days[0]->id);
+      $this->assertEqual($day3->getId(), $days[1]->id);
+      $this->assertEqual($day2->getId(), $days[2]->id);
+      $this->assertEqual($day1->getId(), $days[3]->id);
+    }
+
+    $days = $this
+      ->get('days/search', array('query' => 'foo', 'from' => $day4->getId()))
+      ->result;
+    if($this->assertResponse(200))
+    {
+      $this->assertEqual(3, count($days));
+      $this->assertEqual($day3->getId(), $days[0]->id);
+      $this->assertEqual($day2->getId(), $days[1]->id);
+      $this->assertEqual($day1->getId(), $days[2]->id);
+    }
+
+    $days = $this
+      ->get('days/search', array(
+      'query' => 'foo',
+      'from' => $day4->getId(),
+      'to' => $day1->getId()))
+      ->result;
+    if($this->assertResponse(200))
+    {
+      $this->assertEqual(2, count($days));
+      $this->assertEqual($day3->getId(), $days[0]->id);
+      $this->assertEqual($day2->getId(), $days[1]->id);
+    }
+
+    $days = $this
+      ->get('days/search', array(
+      'query' => 'foo',
+      'from' => $day4->getId(),
+      'to' => $day1->getId(),
+      'limit' => 1))
+      ->result;
+    if($this->assertResponse(200))
+    {
+      $this->assertEqual(1, count($days));
+      $this->assertEqual($day3->getId(), $days[0]->id);
+    }
+  }
 
   /**
    * @api description Updates a day

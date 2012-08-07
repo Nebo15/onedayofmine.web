@@ -4,7 +4,7 @@ lmb_require('src/model/User.class.php');
 
 class UsersController extends BaseJsonController
 {
-  protected $check_auth = true;
+  protected $check_auth = false;
 
   function doItem()
   {
@@ -36,6 +36,9 @@ class UsersController extends BaseJsonController
 
   function doFollowers()
   {
+    if(!$this->_isLoggedUser())
+      return $this->_answerUnauthorized();
+
     $user_or_answer = $this->_loadUserFromRequest();
     if(!is_object($user_or_answer))
       return $user_or_answer;
@@ -51,6 +54,9 @@ class UsersController extends BaseJsonController
 
   function doFollowing()
   {
+    if(!$this->_isLoggedUser())
+      return $this->_answerUnauthorized();
+
     $user_or_answer = $this->_loadUserFromRequest();
     if(!is_object($user_or_answer))
       return $user_or_answer;
@@ -66,6 +72,9 @@ class UsersController extends BaseJsonController
 
   function doFollow()
   {
+    if(!$this->_isLoggedUser())
+      return $this->_answerUnauthorized();
+
     if($this->_getUser()->getId() == $this->request->id)
       return $this->_answerWithError("You can't follow youself.");
 
@@ -84,6 +93,9 @@ class UsersController extends BaseJsonController
 
   function doUnfollow()
   {
+    if(!$this->_isLoggedUser())
+      return $this->_answerUnauthorized();
+
   	if(!$user = User::findById($this->request->id))
   		return $this->_answerNotFound("User not found by id '{$this->request->id}'");
 
@@ -92,6 +104,22 @@ class UsersController extends BaseJsonController
   	$following->save();
 
   	return $this->_answerOk();
+  }
+
+  function doSearch()
+  {
+    list($from, $to, $limit) = $this->_getFromToLimitations();
+    $query = $this->request->getFiltered('query', FILTER_SANITIZE_STRING);
+    $users = User::findByString($query, $from, $to, $limit);
+
+    $response = array();
+    foreach($users as $user) {
+      $export = $user->exportForApi();
+      if($this->_getUser())
+        $export->is_follower = UserFollowing::isFollowing($user, $this->_getUser());
+      $response[] = $export;
+    }
+    return $this->_answerOk($response);
   }
 
   protected function _loadUserFromRequest()

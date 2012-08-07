@@ -164,8 +164,19 @@ class Day extends BaseModel
   	return $days->at(0);
   }
 
-  static function calcInteresting($number)
+  static function findByString($query, $from_id = null, $to_id = null, $limit = null)
   {
+    $criteria = lmbSQLCriteria::equal('is_deleted', 0);
+    if($from_id)
+      $criteria->add(lmbSQLCriteria::less('id', $from_id));
+    if($to_id)
+      $criteria->add(lmbSQLCriteria::greater('id', $to_id));
+    $criteria->add(lmbSQLCriteria::like('title', '%'.$query.'%'));
 
+    return Day::find(array(
+      'criteria' => $criteria,
+      'limit' => (!$limit || $limit > 100) ? 100 : $limit,
+      'sort' => array('id' => 'DESC')
+    ));
   }
 }

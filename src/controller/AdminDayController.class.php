@@ -66,6 +66,6 @@ class AdminDayController extends lmbAdminObjectController
     $calc = new InterestCalculator();
     $calc->deleteUnpinnedDays();
     $calc->fillRating();
-    return $this->redirect('/admin_day/interesting/');
+    return $this->_endDialog();
   }
 }
