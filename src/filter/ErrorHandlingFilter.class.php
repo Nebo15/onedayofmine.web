@@ -10,6 +10,8 @@ class ErrorHandlingFilter extends lmbErrorHandlingFilter
       'code' => 500,
       'status' => 'Internal error',
       'errors' => $error,
+      'file' => $file,
+      'line' => $line
     ));
   }
 

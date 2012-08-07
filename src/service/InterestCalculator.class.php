@@ -86,7 +86,6 @@ class InterestCalculator
     $days = Day::findByIds($ids);
     foreach($days as $position => $day)
     {
-      if($from_id)
       if(1 === $day->getIsDeleted())
         unset($days[$position]);
     }

@@ -85,6 +85,9 @@ class DaysController extends BaseJsonController
     if(!$day = Day::findById($this->request->id))
       return $this->_answerWithError("Day not found by id");
 
+    if(!$this->_isLoggedUser())
+      return $this->_answerUnauthorized();
+
     $day_url = $this->toolkit->getSiteUrl('/pages/'.$day->getId().'/day');
     $response = $this->_getUser()->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->shareDay($day, $day_url);
 
@@ -345,7 +348,7 @@ class DaysController extends BaseJsonController
     $day_export->user = $day->getUser()->exportForApi();
     unset($day_export->user_id);
 
-    if($day->getUser()->getId() != lmbToolkit::instance()->getUser()->getId()) {
+    if(lmbToolkit::instance()->getUser() && $day->getUser()->getId() != lmbToolkit::instance()->getUser()->getId()) {
       $day_export->user->is_followed = UserFollowing::isFollowing(lmbToolkit::instance()->getUser(), $day->getUser());
       $day_export->user->is_follower = UserFollowing::isFollowing($day->getUser(), lmbToolkit::instance()->getUser());
     }
@@ -353,6 +356,8 @@ class DaysController extends BaseJsonController
 
   protected function addDayIsFavorited(stdClass $day_export, $day)
   {
+    if(!lmbToolkit::instance()->getUser())
+      return null;
     $day_export->is_favorited = DayFavourite::isFavourited(lmbToolkit::instance()->getUser(), $day);
   }
 
