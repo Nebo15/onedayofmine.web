@@ -51,8 +51,8 @@ class odRemoteApiMock
     if($cached_value = $this->cache->get($hash))
     {
       // lmbToolkit::instance()
-      //   ->getLog()
-      //   ->error(get_class($this->provider).' fake request: ', array('arguments' => $arguments, 'result' => $cached_value));
+      //   ->getLog('test_request')
+      //   ->debug(get_class($this->provider).' fake request: ', array('arguments' => $arguments, 'result' => $cached_value));
       return $cached_value;
     }
 
@@ -61,8 +61,8 @@ class odRemoteApiMock
     $delta = microtime(true) - $start_time;
 
     lmbToolkit::instance()
-      ->getLog()
-      ->error(get_class($this->provider).' real request: ', array('arguments' => $arguments, 'time' => $delta, 'result' => $result));
+      ->getLog('test_request')
+      ->debug(get_class($this->provider).' real request: ', array('arguments' => $arguments, 'time' => $delta, 'result' => $result));
 
     $this->cache->set($hash, $result);
     return $result;
