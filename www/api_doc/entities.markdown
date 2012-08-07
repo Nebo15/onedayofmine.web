@@ -47,7 +47,7 @@
   <th width="150">Name</th>
   <th>Description</th>
 </tr>
-<tr><td>[type]</td><td>id</td><td>[description]</td></tr><tr><td>[type]</td><td>day_id</td><td>[description]</td></tr><tr><td>[type]</td><td>description</td><td>[description]</td></tr><tr><td>[type]</td><td>image_ext</td><td>[description]</td></tr><tr><td>[type]</td><td>image_shoot_time</td><td>[description]</td></tr><tr><td>[type]</td><td>fb_id</td><td>[description]</td></tr><tr><td>[type]</td><td>likes_count</td><td>[description]</td></tr><tr><td>[type]</td><td>ctime</td><td>[description]</td></tr><tr><td>[type]</td><td>utime</td><td>[description]</td></tr><tr><td>[type]</td><td>cip</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>id</td><td>[description]</td></tr><tr><td>[type]</td><td>day_id</td><td>[description]</td></tr><tr><td>[type]</td><td>description</td><td>[description]</td></tr><tr><td>[type]</td><td>image_ext</td><td>[description]</td></tr><tr><td>[type]</td><td>fb_id</td><td>[description]</td></tr><tr><td>[type]</td><td>likes_count</td><td>[description]</td></tr><tr><td>[type]</td><td>ctime</td><td>[description]</td></tr><tr><td>[type]</td><td>utime</td><td>[description]</td></tr><tr><td>[type]</td><td>cip</td><td>[description]</td></tr>
 </table>
 
 * * *
