@@ -1,5 +1,5 @@
 # API #
- Version: 06.08.12 17:13:57
+ Version: 07.08.12 17:15:45
 
 ## Table of contents: ##
 <a name='toc'></a>
@@ -16,32 +16,32 @@
 1. <a href='#edffd7a5f673999b16ade68463815ffe'>Finish</a>
 
 ### <a href='#Day'>Day</a> ###
-1. <a href='#9c0e8d0092da36cafcbcf03078ae829c'>Item</a>
-1. <a href='#7c9dcb149e3d710c6337c248855a9e86'>Item_Many</a>
-1. <a href='#3718e37ef78c4b96c439fb5ddb0f499f'>CommentCreate</a>
-1. <a href='#bf3fee7cb1a051ef9f1fbdccf7d7277b'>ShareDay</a>
-1. <a href='#e26aab921dbba017b2a7b6a68191e30a'>Like</a>
-1. <a href='#0632f1a0b5a49c074ec8499494a1cfb3'>Update</a>
-1. <a href='#2a259036d185de82d59272320812bef0'>DeleteDay</a>
-1. <a href='#11e6284542cfb7889e361c0e98b6c38b'>RestoreDay</a>
+1. <a href='#282b03eea36a71a0e5e0da000ff0a6f6'>Item</a>
+1. <a href='#0c63bdf07ebc4377a1e2961f4c3fd991'>Item_Many</a>
+1. <a href='#4a3e452de6f5d0feb8c12bc85f55331d'>CommentCreate</a>
+1. <a href='#10b08c4b6b5149b89d477dc36ea45fe8'>ShareDay</a>
+1. <a href='#2b192bd9aa66fb46e648b1ef4b0a64b3'>Like</a>
+1. <a href='#0a2d3c834b0d6b9f4f78bf415bf21169'>Update</a>
+1. <a href='#3a5ba63baa06375eeeef703c931ceaf8'>DeleteDay</a>
+1. <a href='#a9b62d545a30689eabd69aaa78bf5bab'>RestoreDay</a>
 1. <a href='#9a54a19098a30dcbd74124cbddb1ab6c'>GetFavouriteDays</a>
-1. <a href='#3678375fd14d4ce865903e99be004d39'>AddToFavourites</a>
-1. <a href='#fe8565575826f1521b0a4ee1a4de004b'>RemoveFromFavourites</a>
+1. <a href='#2820d8d89c63b7ec586752d6c7b8860f'>AddToFavourites</a>
+1. <a href='#4b2757993afe032a4d9ad06195db98b0'>RemoveFromFavourites</a>
 1. <a href='#1c5e784108f8a36beb283dc7a3e34030'>GetFollowingUsersDays</a>
 1. <a href='#ed1af553a9d8b9117548d9a3996ebab5'>GetNewDays</a>
 1. <a href='#58c74019b980810ae9e042bb65573a7a'>GetInterestingDays</a>
 1. <a href='#f2c5afe4a024dc21f1c43ff206afb8f1'>CurrentUserDays</a>
 1. <a href='#bdbebf26e7d0327181a566595a2fcd56'>TypeNames</a>
-1. <a href='#9302bb657ccc00536a6b1cd6580d9c6b'>CreateComplaint</a>
+1. <a href='#b447ac73c4543ecd2b0ba82f95b1a2b2'>CreateComplaint</a>
 
 ### <a href='#MomentComments'>MomentComments</a> ###
-1. <a href='#415983b816c67562cdd66d9434e58244'>Update</a>
-1. <a href='#f8f9eafc15ece57c0558c3dec8693115'>Delete</a>
+1. <a href='#e1aa86c4b86345e7ffcbf4afde7cbc62'>Update</a>
+1. <a href='#95b3dd7dff2e6b6b47d3fb21b582e489'>Delete</a>
 
 ### <a href='#Moments'>Moments</a> ###
-1. <a href='#bf8d95c3b726bb4eca0d70857f31f65a'>Update</a>
-1. <a href='#102dc82ea6a181e3a7dbd5b9d2d39230'>Delete</a>
-1. <a href='#001627b341bc8ee4b6fb7c495e808e44'>Comment</a>
+1. <a href='#7bd294cfcf5ff9dc0f857bfe90e618ed'>Update</a>
+1. <a href='#3c077d6cabca7625675314aa59d10c5f'>Delete</a>
+1. <a href='#be92ed7d7841f5b9b465155bcfa67236'>Comment</a>
 
 ### <a href='#My'>My</a> ###
 1. <a href='#7c42c715a02e964a2889306b19fe292c'>Profile</a>
@@ -55,14 +55,14 @@
 1. <a href='#3292f47a05d97e9f9f13470ea62f442c'>GetNewNews</a>
 
 ### <a href='#User'>User</a> ###
-1. <a href='#29245eb9e38f94b3000061b2a8c70846'>UserByIdDays</a>
-1. <a href='#98c2ee4f236f5c62d935da30d18d6e8a'>UserById</a>
+1. <a href='#bbefad144cb329514d811611f1083433'>UserByIdDays</a>
+1. <a href='#7d075bd8fb11de2fb161fcc6c88e2743'>UserById</a>
 1. <a href='#0907aac9dba2a8f9700b9333f7e36795'>Followers</a>
-1. <a href='#dd2e7683f9e500195ce12ca6fe877e76'>FollowersByUserId</a>
+1. <a href='#d226571959f6c9341d3962ff6d6ab6eb'>FollowersByUserId</a>
 1. <a href='#774c23c770724885bdc9325b3159b700'>Following</a>
-1. <a href='#3a6953b02bd7247ff71fce8f0bdff9bb'>FollowingByUserId</a>
-1. <a href='#173eca64f94a2ca13a74759c8c569fc6'>Follow</a>
-1. <a href='#45f9839959dbf30e588e2a2461585990'>Unfollow</a>
+1. <a href='#946109da3bd5ad9629954591f9598335'>FollowingByUserId</a>
+1. <a href='#524f59a8e25acd83d4b16bed006d7913'>Follow</a>
+1. <a href='#d9aec5ff178fc26519cb8235c3051ef2'>Unfollow</a>
 
 
 ## API methods ##
@@ -115,7 +115,7 @@ User authorization.
 </table>
 ###### Example request: ######
     {
-      "token":"AAAFnVo0zuqkBAHC8RLU...2aS1bSUWJt6SpMX8nSvN"
+      "token":"AAAFnVo0zuqkBAGFUNwN...RHJ1ZAkITxejstTmEwPr"
     }
 
 
@@ -134,13 +134,13 @@ User authorization.
 ###### Example response: ######
     {
       "user":{
-        "id":1734,
+        "id":5082,
         "fb_uid":"100004087981387",
         "twitter_uid":null,
         "name":"bar bar",
         "sex":"male",
-        "pic_small":"http:\/\/onedayofmine.dev\/users\/1734\/b935301bd3773c986882e8d48477977c5854be4f_70x70.jpeg",
-        "pic_big":"http:\/\/onedayofmine.dev\/users\/1734\/b935301bd3773c986882e8d48477977c5854be4f_140x140.jpeg",
+        "pic_small":"http:\/\/onedayofmine.dev\/users\/5082\/277e75423ea65c73e7fa36497014c835a935a42b_70x70.jpeg",
+        "pic_big":"http:\/\/onedayofmine.dev\/users\/5082\/277e75423ea65c73e7fa36497014c835a935a42b_140x140.jpeg",
         "birthday":"1980-08-08",
         "occupation":"",
         "location":null,
@@ -207,8 +207,8 @@ Starts a day, returns created <a href="#Entity:Day">day</a>.
 <tr><td>[type]</td><td>id</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>user_id</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>fb_uid</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>cover_img_small</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>cover_img_big</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>cover_image_small</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>cover_image_big</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>title</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>occupation</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>timezone</td><td>[description]</td></tr>
@@ -222,19 +222,19 @@ Starts a day, returns created <a href="#Entity:Day">day</a>.
 </table>
 ###### Example response: ######
     {
-      "id":1159,
-      "user_id":1742,
+      "id":3258,
+      "user_id":5090,
       "fb_uid":"100004087981387",
-      "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/1742\/days\/4977f5a59b88bdb369434825100e34573711e827_200x200.jpeg",
-      "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/1742\/days\/4977f5a59b88bdb369434825100e34573711e827_400x400.jpeg",
+      "cover_image_small":"http:\/\/onedayofmine.dev\/\/users\/5090\/days\/95a6d008531245ace0f10cdd92ac9ff1f352ce90_200x200.jpeg",
+      "cover_image_big":"http:\/\/onedayofmine.dev\/\/users\/5090\/days\/95a6d008531245ace0f10cdd92ac9ff1f352ce90_400x400.jpeg",
       "title":"foobarfoobarfoobarfoobarf",
       "occupation":"foobarfoobarfoobarfo...oobarfoobarfoobarfoo",
       "timezone":"0",
       "location":null,
       "type":"working",
       "likes_count":0,
-      "ctime":1344262405,
-      "utime":1344262405,
+      "ctime":1344348885,
+      "utime":1344348885,
       "is_ended":0
     }
 
@@ -265,8 +265,8 @@ Returns current <a href="#Entity:Day">day</a>. Additional fields are listed belo
 <tr><td>[type]</td><td>id</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>user_id</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>fb_uid</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>cover_img_small</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>cover_img_big</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>cover_image_small</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>cover_image_big</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>title</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>occupation</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>timezone</td><td>[description]</td></tr>
@@ -280,19 +280,19 @@ Returns current <a href="#Entity:Day">day</a>. Additional fields are listed belo
 </table>
 ###### Example response: ######
     {
-      "id":1161,
-      "user_id":1744,
+      "id":3260,
+      "user_id":5092,
       "fb_uid":"100004087981387",
-      "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/1744\/days\/307b41b064e1aeaae752f61c5685299df86adac0_200x200.jpeg",
-      "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/1744\/days\/307b41b064e1aeaae752f61c5685299df86adac0_400x400.jpeg",
+      "cover_image_small":"http:\/\/onedayofmine.dev\/\/users\/5092\/days\/4676da95b06942a49f20ed10e49cadc5996c55dd_200x200.jpeg",
+      "cover_image_big":"http:\/\/onedayofmine.dev\/\/users\/5092\/days\/4676da95b06942a49f20ed10e49cadc5996c55dd_400x400.jpeg",
       "title":"foobarfoobarfoobarfoobarf",
       "occupation":"foobarfoobarfoobarfo...oobarfoobarfoobarfoo",
       "timezone":0,
       "location":"foobarfoobarfoobarfoobarf",
       "type":"working",
       "likes_count":0,
-      "ctime":1344262406,
-      "utime":1344262406,
+      "ctime":1344348885,
+      "utime":1344348885,
       "is_ended":0
     }
 
@@ -315,16 +315,18 @@ Creates <a href="#Entity:Moment">moment</a> in current active day and returns it
   <th width="40">Required</th>
   <th>Description</th>
 </tr>
-<tr><td>string</td><td>description</td><td>N</td><td></td></tr>
-<tr><td>string</td><td>image_name</td><td>N</td><td>Requires image_content field.</td></tr>
-<tr><td>string</td><td>image_content</td><td>N</td><td>File contents, that was previously encoded by base64</td></tr>
+<tr><td>string</td><td>description</td><td>Y</td><td></td></tr>
+<tr><td>string</td><td>image_name</td><td>Y</td><td>Requires image_content field.</td></tr>
+<tr><td>string</td><td>image_content</td><td>Y</td><td>File contents, that was previously encoded by base64</td></tr>
+<tr><td>int</td><td>image_shoot_time</td><td>N</td><td>Unix timestamp of time, when picture was created. If omited, current timestamp will be used.</td></tr>
 
 </table>
 ###### Example request: ######
     {
       "description":"foobarfoobarfoobarfo...foobarfoobarfoobarfo",
       "image_name":"foobar.jpg",
-      "image_content":"\/9j\/4AAQSkZJRgABAQAA...Bpbk4c\/SoY34PFWiGf\/Z"
+      "image_content":"\/9j\/4AAQSkZJRgABAQAA...Bpbk4c\/SoY34PFWiGf\/Z",
+      "image_shoot_time":133713
     }
 
 
@@ -340,21 +342,23 @@ Creates <a href="#Entity:Moment">moment</a> in current active day and returns it
 <tr><td>[type]</td><td>id</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>day_id</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>description</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>img_small</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>img_big</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>image_small</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>image_big</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>image_shoot_time</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>likes_count</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>ctime</td><td>[description]</td></tr>
 
 </table>
 ###### Example response: ######
     {
-      "id":241,
-      "day_id":1163,
+      "id":646,
+      "day_id":3262,
       "description":"foobarfoobarfoobarfo...foobarfoobarfoobarfo",
-      "img_small":"http:\/\/onedayofmine.dev\/\/users\/1746\/days\/1163\/070d61982ca61a7cf33a6bcade92dc995208df42_200x200.jpg",
-      "img_big":"http:\/\/onedayofmine.dev\/\/users\/1746\/days\/1163\/070d61982ca61a7cf33a6bcade92dc995208df42_400x400.jpg",
+      "image_small":"http:\/\/onedayofmine.dev\/\/users\/5094\/days\/3262\/f2fa58a42fc6019a2198a252f2b3c4efde90d88f_200x200.jpg",
+      "image_big":"http:\/\/onedayofmine.dev\/\/users\/5094\/days\/3262\/f2fa58a42fc6019a2198a252f2b3c4efde90d88f_400x400.jpg",
+      "image_shoot_time":"133713",
       "likes_count":0,
-      "ctime":1344262406
+      "ctime":1344348886
     }
 
 
@@ -363,7 +367,7 @@ Creates <a href="#Entity:Moment">moment</a> in current active day and returns it
 * * *
 #### Update ####
 <a name="9e59ff5a39376390cb691df3c733dffc"></a>
-Updates information about current <a href="#Entity:Day">day</a> and returns it.
+Updates information about current <a href="#Entity:Day">day</a> and returns it. You are free to make selective changes.
 
 `POST current_day/update`
 
@@ -376,11 +380,11 @@ Updates information about current <a href="#Entity:Day">day</a> and returns it.
   <th width="40">Required</th>
   <th>Description</th>
 </tr>
-<tr><td>string</td><td>title</td><td>Y</td><td></td></tr>
-<tr><td>int</td><td>timezone</td><td>Y</td><td>UTC time zone offset</td></tr>
+<tr><td>string</td><td>title</td><td>N</td><td></td></tr>
+<tr><td>int</td><td>timezone</td><td>N</td><td>UTC time zone offset</td></tr>
 <tr><td>string</td><td>occupation</td><td>N</td><td>Can be omited, then user profile occupation will be used</td></tr>
 <tr><td>string</td><td>latlong <span class='label label-important'>Removed</span></td><td>N</td><td>"[Latitude],[Longitude]" of place, where day was created</td></tr>
-<tr><td>string</td><td>type</td><td>Y</td><td>One of pre-defined types, see: GET day/type_names request</td></tr>
+<tr><td>string</td><td>type</td><td>N</td><td>One of pre-defined types, see: GET day/type_names request</td></tr>
 <tr><td>[type]</td><td>location</td><td></td><td>[description]</td></tr>
 
 </table>
@@ -406,8 +410,8 @@ Updates information about current <a href="#Entity:Day">day</a> and returns it.
 <tr><td>[type]</td><td>id</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>user_id</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>fb_uid</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>cover_img_small</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>cover_img_big</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>cover_image_small</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>cover_image_big</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>title</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>occupation</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>timezone</td><td>[description]</td></tr>
@@ -421,19 +425,19 @@ Updates information about current <a href="#Entity:Day">day</a> and returns it.
 </table>
 ###### Example response: ######
     {
-      "id":1165,
-      "user_id":1748,
+      "id":3264,
+      "user_id":5096,
       "fb_uid":"100004087981387",
-      "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/1748\/days\/670ef9d7cb2c00042b69dd98b672733352a6e91d_200x200.jpeg",
-      "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/1748\/days\/670ef9d7cb2c00042b69dd98b672733352a6e91d_400x400.jpeg",
+      "cover_image_small":"http:\/\/onedayofmine.dev\/\/users\/5096\/days\/01f57a3424fc739f32e6937572885d7e2f1b25eb_200x200.jpeg",
+      "cover_image_big":"http:\/\/onedayofmine.dev\/\/users\/5096\/days\/01f57a3424fc739f32e6937572885d7e2f1b25eb_400x400.jpeg",
       "title":"foobar",
       "occupation":"foobarfoobarfoobarfo...oobarfoobarfoobarfoo",
       "timezone":"1",
       "location":"foobar",
       "type":"working",
       "likes_count":0,
-      "ctime":1344262407,
-      "utime":1344262408,
+      "ctime":1344348887,
+      "utime":1344348887,
       "is_ended":0
     }
 
@@ -457,10 +461,10 @@ Finish current day.
 ### Day ###
 <a name='Day'></a>
 #### Item ####
-<a name="9c0e8d0092da36cafcbcf03078ae829c"></a>
+<a name="282b03eea36a71a0e5e0da000ff0a6f6"></a>
 Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields listed below.
 
-`GET days/1167/item`
+`GET days/3266/item`
 
 ##### Request: #####
 ###### Params: ######
@@ -491,8 +495,8 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
 <tr><td>bool</td><td>is_favorited</td><td></td></tr>
 <tr><td>[type]</td><td>id</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>fb_uid</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>cover_img_small</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>cover_img_big</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>cover_image_small</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>cover_image_big</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>title</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>occupation</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>timezone</td><td>[description]</td></tr>
@@ -506,27 +510,27 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
 </table>
 ###### Example response: ######
     {
-      "id":1167,
+      "id":3266,
       "fb_uid":"fooba",
-      "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/1750\/days\/ae83101fa738a4e120a5eb67c4bd0ba05e88a570_200x200.jpeg",
-      "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/1750\/days\/ae83101fa738a4e120a5eb67c4bd0ba05e88a570_400x400.jpeg",
+      "cover_image_small":"http:\/\/onedayofmine.dev\/\/users\/5099\/days\/4491967286969f7664451cc0b089cd89da0b3aa5_200x200.jpeg",
+      "cover_image_big":"http:\/\/onedayofmine.dev\/\/users\/5099\/days\/4491967286969f7664451cc0b089cd89da0b3aa5_400x400.jpeg",
       "title":"foobarfoobarfoobarfoobarf",
       "occupation":"foobarfoobarfoobarfo...oobarfoobarfoobarfoo",
       "timezone":0,
       "location":"foobarfoobarfoobarfoobarf",
       "type":"working",
       "likes_count":0,
-      "ctime":1344262408,
-      "utime":1344262408,
+      "ctime":1344348887,
+      "utime":1344348887,
       "is_ended":0,
       "user":{
-        "id":1750,
+        "id":5099,
         "fb_uid":"fooba",
         "twitter_uid":0,
         "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
         "sex":"female",
-        "pic_small":"http:\/\/onedayofmine.dev\/users\/1750\/7f6d076e91c1392951ac56a75ed29b0e2b9f920f_70x70.jpeg",
-        "pic_big":"http:\/\/onedayofmine.dev\/users\/1750\/7f6d076e91c1392951ac56a75ed29b0e2b9f920f_140x140.jpeg",
+        "pic_small":"http:\/\/onedayofmine.dev\/users\/5099\/1d99b3c83f84800eb3682e7ced01db0ba5d54975_70x70.jpeg",
+        "pic_big":"http:\/\/onedayofmine.dev\/users\/5099\/1d99b3c83f84800eb3682e7ced01db0ba5d54975_140x140.jpeg",
         "birthday":"1990-01-02",
         "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfo",
         "location":"",
@@ -536,31 +540,124 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
         "is_followed":false,
         "is_follower":false
       },
-      "is_favorited":false,
-      "comments_count":0,
+      "is_favorited":true,
+      "comments_count":4,
       "comments":[
-        
+        {
+          "id":205,
+          "user_name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
+          "text":"foobar",
+          "likes_count":0,
+          "ctime":1344348887,
+          "utime":1344348887,
+          "user":{
+            "id":5099,
+            "fb_uid":"fooba",
+            "twitter_uid":0,
+            "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
+            "sex":"female",
+            "pic_small":"http:\/\/onedayofmine.dev\/users\/5099\/1d99b3c83f84800eb3682e7ced01db0ba5d54975_70x70.jpeg",
+            "pic_big":"http:\/\/onedayofmine.dev\/users\/5099\/1d99b3c83f84800eb3682e7ced01db0ba5d54975_140x140.jpeg",
+            "birthday":"1990-01-02",
+            "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfo",
+            "location":"",
+            "followers_count":0,
+            "following_count":0,
+            "days_count":1
+          }
+        },
+        {
+          "id":206,
+          "user_name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
+          "text":"foobar",
+          "likes_count":0,
+          "ctime":1344348887,
+          "utime":1344348887,
+          "user":{
+            "id":5099,
+            "fb_uid":"fooba",
+            "twitter_uid":0,
+            "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
+            "sex":"female",
+            "pic_small":"http:\/\/onedayofmine.dev\/users\/5099\/1d99b3c83f84800eb3682e7ced01db0ba5d54975_70x70.jpeg",
+            "pic_big":"http:\/\/onedayofmine.dev\/users\/5099\/1d99b3c83f84800eb3682e7ced01db0ba5d54975_140x140.jpeg",
+            "birthday":"1990-01-02",
+            "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfo",
+            "location":"",
+            "followers_count":0,
+            "following_count":0,
+            "days_count":1
+          }
+        },
+        {
+          "id":207,
+          "user_name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
+          "text":"foobar",
+          "likes_count":0,
+          "ctime":1344348887,
+          "utime":1344348887,
+          "user":{
+            "id":5099,
+            "fb_uid":"fooba",
+            "twitter_uid":0,
+            "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
+            "sex":"female",
+            "pic_small":"http:\/\/onedayofmine.dev\/users\/5099\/1d99b3c83f84800eb3682e7ced01db0ba5d54975_70x70.jpeg",
+            "pic_big":"http:\/\/onedayofmine.dev\/users\/5099\/1d99b3c83f84800eb3682e7ced01db0ba5d54975_140x140.jpeg",
+            "birthday":"1990-01-02",
+            "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfo",
+            "location":"",
+            "followers_count":0,
+            "following_count":0,
+            "days_count":1
+          }
+        }
       ],
       "moments":[
         {
-          "id":243,
+          "id":648,
           "description":"description foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfooba",
-          "img_small":"http:\/\/onedayofmine.dev\/",
-          "img_big":"http:\/\/onedayofmine.dev\/",
+          "image_small":"http:\/\/onedayofmine.dev\/",
+          "image_big":"http:\/\/onedayofmine.dev\/",
+          "image_shoot_time":0,
           "likes_count":0,
-          "ctime":1344262408,
-          "comments_count":0,
+          "ctime":1344348887,
+          "comments_count":1,
           "comments":[
-            
+            {
+              "id":152,
+              "user_name":"foo foo",
+              "text":"foobar",
+              "likes_count":0,
+              "ctime":1344348887,
+              "utime":1344348887,
+              "moment_id":648,
+              "user":{
+                "id":5100,
+                "fb_uid":"100004093051334",
+                "twitter_uid":0,
+                "name":"foo foo",
+                "sex":"male",
+                "pic_small":"http:\/\/onedayofmine.dev\/users\/5100\/e0aeb9165f852f1193ac0aa75e6b8c96ffd3b0be_70x70.jpeg",
+                "pic_big":"http:\/\/onedayofmine.dev\/users\/5100\/e0aeb9165f852f1193ac0aa75e6b8c96ffd3b0be_140x140.jpeg",
+                "birthday":"1982-08-08",
+                "occupation":"",
+                "location":"",
+                "followers_count":0,
+                "following_count":0,
+                "days_count":0
+              }
+            }
           ]
         },
         {
-          "id":244,
+          "id":649,
           "description":"description foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfooba",
-          "img_small":"http:\/\/onedayofmine.dev\/",
-          "img_big":"http:\/\/onedayofmine.dev\/",
+          "image_small":"http:\/\/onedayofmine.dev\/",
+          "image_big":"http:\/\/onedayofmine.dev\/",
+          "image_shoot_time":0,
           "likes_count":0,
-          "ctime":1344262408,
+          "ctime":1344348887,
           "comments_count":0,
           "comments":[
             
@@ -574,10 +671,10 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
 
 * * *
 #### Item_Many ####
-<a name="7c9dcb149e3d710c6337c248855a9e86"></a>
+<a name="0c63bdf07ebc4377a1e2961f4c3fd991"></a>
 Get few days in one request.
 
-`GET days/1168;1169;508/item`
+`GET days/3267;3268;194/item`
 
 ##### Request: #####
 ###### Params: ######
@@ -602,35 +699,35 @@ Get few days in one request.
   <th>Description</th>
 </tr>
 <tr><td><a href='#Entity:Day'>Day[]</a></td><td>days <span class='label label-important'>Removed</span></td><td>See GET days/:id/item</td></tr>
-<tr><td>[type]</td><td>1168 <span class='label label-important'>Removed</span></td><td>[description]</td></tr>
-<tr><td>[type]</td><td>1169 <span class='label label-important'>Removed</span></td><td>[description]</td></tr>
-<tr><td>[type]</td><td>508 <span class='label label-important'>Removed</span></td><td>[description]</td></tr>
+<tr><td>[type]</td><td>3267 <span class='label label-important'>Removed</span></td><td>[description]</td></tr>
+<tr><td>[type]</td><td>3268 <span class='label label-important'>Removed</span></td><td>[description]</td></tr>
+<tr><td>[type]</td><td>194 <span class='label label-important'>Removed</span></td><td>[description]</td></tr>
 
 </table>
 ###### Example response: ######
     {
-      "1168":{
-        "id":1168,
+      "3267":{
+        "id":3267,
         "fb_uid":"fooba",
-        "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/1752\/days\/45143f634c910bed2516f2523adaa9378f7b07ef_200x200.jpeg",
-        "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/1752\/days\/45143f634c910bed2516f2523adaa9378f7b07ef_400x400.jpeg",
+        "cover_image_small":"http:\/\/onedayofmine.dev\/\/users\/5101\/days\/084efb7fee036259c9ab6f57018cbd9230a9f092_200x200.jpeg",
+        "cover_image_big":"http:\/\/onedayofmine.dev\/\/users\/5101\/days\/084efb7fee036259c9ab6f57018cbd9230a9f092_400x400.jpeg",
         "title":"foobarfoobarfoobarfoobarf",
         "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
         "timezone":0,
         "location":"foobarfoobarfoobarfoobarf",
         "type":"working",
         "likes_count":0,
-        "ctime":1344262408,
-        "utime":1344262408,
+        "ctime":1344348887,
+        "utime":1344348887,
         "is_ended":0,
         "user":{
-          "id":1752,
+          "id":5101,
           "fb_uid":"fooba",
           "twitter_uid":0,
           "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
           "sex":"female",
-          "pic_small":"http:\/\/onedayofmine.dev\/users\/1752\/27478ebf5f7d97fab4d1d4290f4275092bfe589e_70x70.jpeg",
-          "pic_big":"http:\/\/onedayofmine.dev\/users\/1752\/27478ebf5f7d97fab4d1d4290f4275092bfe589e_140x140.jpeg",
+          "pic_small":"http:\/\/onedayofmine.dev\/users\/5101\/022cc1e1e3059eea2527e7374f7840156f9d9307_70x70.jpeg",
+          "pic_big":"http:\/\/onedayofmine.dev\/users\/5101\/022cc1e1e3059eea2527e7374f7840156f9d9307_140x140.jpeg",
           "birthday":"1990-01-02",
           "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfo",
           "location":"",
@@ -647,12 +744,13 @@ Get few days in one request.
         ],
         "moments":[
           {
-            "id":245,
+            "id":650,
             "description":"description foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfooba",
-            "img_small":"http:\/\/onedayofmine.dev\/",
-            "img_big":"http:\/\/onedayofmine.dev\/",
+            "image_small":"http:\/\/onedayofmine.dev\/",
+            "image_big":"http:\/\/onedayofmine.dev\/",
+            "image_shoot_time":0,
             "likes_count":0,
-            "ctime":1344262408,
+            "ctime":1344348887,
             "comments_count":0,
             "comments":[
               
@@ -660,28 +758,28 @@ Get few days in one request.
           }
         ]
       },
-      "1169":{
-        "id":1169,
+      "3268":{
+        "id":3268,
         "fb_uid":"fooba",
-        "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/1753\/days\/3de5e3d68b56c8f5e93a09cc215c650c5c82dea6_200x200.jpeg",
-        "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/1753\/days\/3de5e3d68b56c8f5e93a09cc215c650c5c82dea6_400x400.jpeg",
+        "cover_image_small":"http:\/\/onedayofmine.dev\/\/users\/5102\/days\/c79d75b7b05e7efae702bdc033074a96261437f8_200x200.jpeg",
+        "cover_image_big":"http:\/\/onedayofmine.dev\/\/users\/5102\/days\/c79d75b7b05e7efae702bdc033074a96261437f8_400x400.jpeg",
         "title":"foobarfoobarfoobarfoobarf",
         "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
         "timezone":0,
         "location":"foobarfoobarfoobarfoobarf",
         "type":"working",
         "likes_count":0,
-        "ctime":1344262408,
-        "utime":1344262408,
+        "ctime":1344348887,
+        "utime":1344348887,
         "is_ended":0,
         "user":{
-          "id":1753,
+          "id":5102,
           "fb_uid":"fooba",
           "twitter_uid":0,
           "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
           "sex":"female",
-          "pic_small":"http:\/\/onedayofmine.dev\/users\/1753\/9051e67d503d69d111e77ec2b2355f12de422c3d_70x70.jpeg",
-          "pic_big":"http:\/\/onedayofmine.dev\/users\/1753\/9051e67d503d69d111e77ec2b2355f12de422c3d_140x140.jpeg",
+          "pic_small":"http:\/\/onedayofmine.dev\/users\/5102\/5aa54252af5de7b9d07f67df5c84db505085618b_70x70.jpeg",
+          "pic_big":"http:\/\/onedayofmine.dev\/users\/5102\/5aa54252af5de7b9d07f67df5c84db505085618b_140x140.jpeg",
           "birthday":"1990-01-02",
           "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfo",
           "location":"",
@@ -698,12 +796,13 @@ Get few days in one request.
         ],
         "moments":[
           {
-            "id":246,
+            "id":651,
             "description":"description foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfooba",
-            "img_small":"http:\/\/onedayofmine.dev\/",
-            "img_big":"http:\/\/onedayofmine.dev\/",
+            "image_small":"http:\/\/onedayofmine.dev\/",
+            "image_big":"http:\/\/onedayofmine.dev\/",
+            "image_shoot_time":0,
             "likes_count":0,
-            "ctime":1344262408,
+            "ctime":1344348887,
             "comments_count":0,
             "comments":[
               
@@ -711,7 +810,7 @@ Get few days in one request.
           }
         ]
       },
-      "508":null
+      "194":null
     }
 
 
@@ -719,10 +818,10 @@ Get few days in one request.
 
 * * *
 #### CommentCreate ####
-<a name="3718e37ef78c4b96c439fb5ddb0f499f"></a>
+<a name="4a3e452de6f5d0feb8c12bc85f55331d"></a>
 Creates comment for <a href="#Entity:Day">day</a> and returns it.
 
-`POST days/1171/comment_create`
+`POST days/3270/comment_create`
 
 ##### Request: #####
 ###### Params: ######
@@ -764,14 +863,14 @@ Creates comment for <a href="#Entity:Day">day</a> and returns it.
 </table>
 ###### Example response: ######
     {
-      "id":43,
-      "user_id":1757,
+      "id":209,
+      "user_id":5106,
       "user_name":"bar bar",
       "text":"foobarfoobarfoobarfo...oobarfoobarfoobarfoo",
       "likes_count":0,
-      "ctime":1344262409,
-      "utime":1344262409,
-      "day_id":1171
+      "ctime":1344348888,
+      "utime":1344348888,
+      "day_id":3270
     }
 
 
@@ -779,10 +878,10 @@ Creates comment for <a href="#Entity:Day">day</a> and returns it.
 
 * * *
 #### ShareDay ####
-<a name="bf3fee7cb1a051ef9f1fbdccf7d7277b"></a>
+<a name="10b08c4b6b5149b89d477dc36ea45fe8"></a>
 Share a day
 
-`POST days/1172/share`
+`POST days/3271/share`
 
 ##### Request: #####
 ###### Params: ######
@@ -811,7 +910,7 @@ Share a day
 </table>
 ###### Example response: ######
     {
-      "id":"100004087981387_269729319796000"
+      "id":"100004087981387_186331814832457"
     }
 
 
@@ -819,10 +918,10 @@ Share a day
 
 * * *
 #### Like ####
-<a name="e26aab921dbba017b2a7b6a68191e30a"></a>
+<a name="2b192bd9aa66fb46e648b1ef4b0a64b3"></a>
 
 
-`POST days/1173/like`
+`POST days/3272/like`
 
 
 
@@ -836,10 +935,10 @@ Share a day
 
 * * *
 #### Update ####
-<a name="0632f1a0b5a49c074ec8499494a1cfb3"></a>
+<a name="0a2d3c834b0d6b9f4f78bf415bf21169"></a>
 Updates a day
 
-`POST days/1174/update`
+`POST days/3273/update`
 
 ##### Request: #####
 ###### Params: ######
@@ -880,8 +979,8 @@ Updates a day
 <tr><td>[type]</td><td>id</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>user_id</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>fb_uid</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>cover_img_small</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>cover_img_big</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>cover_image_small</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>cover_image_big</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>title</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>occupation</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>timezone</td><td>[description]</td></tr>
@@ -895,19 +994,19 @@ Updates a day
 </table>
 ###### Example response: ######
     {
-      "id":1174,
-      "user_id":1762,
+      "id":3273,
+      "user_id":5111,
       "fb_uid":"100004087981387",
-      "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/1762\/days\/a199cc77bd6a7d1c62a17bc46be3b16e5ba61302_200x200.jpeg",
-      "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/1762\/days\/a199cc77bd6a7d1c62a17bc46be3b16e5ba61302_400x400.jpeg",
+      "cover_image_small":"http:\/\/onedayofmine.dev\/\/users\/5111\/days\/9f595a4459bd1848975c593ecb76545a0c068a21_200x200.jpeg",
+      "cover_image_big":"http:\/\/onedayofmine.dev\/\/users\/5111\/days\/9f595a4459bd1848975c593ecb76545a0c068a21_400x400.jpeg",
       "title":"foobar",
       "occupation":"foobar",
       "timezone":"1",
       "location":"foobar",
       "type":"working",
       "likes_count":0,
-      "ctime":1344262410,
-      "utime":1344262411,
+      "ctime":1344348891,
+      "utime":1344348891,
       "is_ended":0
     }
 
@@ -916,10 +1015,10 @@ Updates a day
 
 * * *
 #### DeleteDay ####
-<a name="2a259036d185de82d59272320812bef0"></a>
+<a name="3a5ba63baa06375eeeef703c931ceaf8"></a>
 Deletes a day
 
-`POST days/1175/delete`
+`POST days/3274/delete`
 
 ##### Request: #####
 ###### Params: ######
@@ -940,10 +1039,10 @@ Deletes a day
 
 * * *
 #### RestoreDay ####
-<a name="11e6284542cfb7889e361c0e98b6c38b"></a>
+<a name="a9b62d545a30689eabd69aaa78bf5bab"></a>
 Restore a deleted day
 
-`POST days/1177/restore`
+`POST days/3276/restore`
 
 ##### Request: #####
 ###### Params: ######
@@ -985,8 +1084,8 @@ Returns favourite based on <a href="#range-request">range-request</a>.
 </table>
 ###### Example request: ######
     {
-      "from":1182,
-      "to":1179,
+      "from":3281,
+      "to":3278,
       "limit":1
     }
 
@@ -1006,27 +1105,27 @@ Returns favourite based on <a href="#range-request">range-request</a>.
 ###### Example response: ######
     [
       {
-        "id":1181,
+        "id":3280,
         "fb_uid":"100004093051334",
-        "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/1771\/days\/cd98e8da7f35068b9456e6a13abf522c793ff535_200x200.jpeg",
-        "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/1771\/days\/cd98e8da7f35068b9456e6a13abf522c793ff535_400x400.jpeg",
+        "cover_image_small":"http:\/\/onedayofmine.dev\/\/users\/5120\/days\/57e8dc96ecaf61d667b242f428b27b399f3604af_200x200.jpeg",
+        "cover_image_big":"http:\/\/onedayofmine.dev\/\/users\/5120\/days\/57e8dc96ecaf61d667b242f428b27b399f3604af_400x400.jpeg",
         "title":"foobarfoobarfoobarfoobarf",
         "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
         "timezone":0,
         "location":"foobarfoobarfoobarfoobarf",
         "type":"working",
         "likes_count":0,
-        "ctime":1344262413,
-        "utime":1344262413,
+        "ctime":1344348896,
+        "utime":1344348896,
         "is_ended":0,
         "user":{
-          "id":1771,
+          "id":5120,
           "fb_uid":"100004093051334",
           "twitter_uid":0,
           "name":"foo foo",
           "sex":"male",
-          "pic_small":"http:\/\/onedayofmine.dev\/users\/1771\/f94b96998d96d38e1a487ec558939a8f37b4ad39_70x70.jpeg",
-          "pic_big":"http:\/\/onedayofmine.dev\/users\/1771\/f94b96998d96d38e1a487ec558939a8f37b4ad39_140x140.jpeg",
+          "pic_small":"http:\/\/onedayofmine.dev\/users\/5120\/562a320086f57c3f6c452c851a68543471f77f18_70x70.jpeg",
+          "pic_big":"http:\/\/onedayofmine.dev\/users\/5120\/562a320086f57c3f6c452c851a68543471f77f18_140x140.jpeg",
           "birthday":"1982-08-08",
           "occupation":"",
           "location":"",
@@ -1045,10 +1144,10 @@ Returns favourite based on <a href="#range-request">range-request</a>.
 
 * * *
 #### AddToFavourites ####
-<a name="3678375fd14d4ce865903e99be004d39"></a>
+<a name="2820d8d89c63b7ec586752d6c7b8860f"></a>
 
 
-`POST /days/1184/favourite`
+`POST /days/3283/favourite`
 
 
 
@@ -1057,10 +1156,10 @@ Returns favourite based on <a href="#range-request">range-request</a>.
 
 * * *
 #### RemoveFromFavourites ####
-<a name="fe8565575826f1521b0a4ee1a4de004b"></a>
+<a name="4b2757993afe032a4d9ad06195db98b0"></a>
 
 
-`POST /days/1185/unfavourite`
+`POST /days/3284/unfavourite`
 
 
 
@@ -1090,8 +1189,8 @@ Returns following users days based on <a href="#range-request">range-request</a>
 </table>
 ###### Example request: ######
     {
-      "from":1189,
-      "to":1186,
+      "from":3288,
+      "to":3285,
       "limit":1
     }
 
@@ -1111,19 +1210,19 @@ Returns following users days based on <a href="#range-request">range-request</a>
 ###### Example response: ######
     [
       {
-        "id":1188,
-        "user_id":1778,
+        "id":3287,
+        "user_id":5127,
         "fb_uid":"100004093051334",
-        "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/1778\/days\/2ff4852604c14f14cd50b2ec04e7eabf77089ba3_200x200.jpeg",
-        "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/1778\/days\/2ff4852604c14f14cd50b2ec04e7eabf77089ba3_400x400.jpeg",
+        "cover_image_small":"http:\/\/onedayofmine.dev\/\/users\/5127\/days\/8ae47d7f824388ced8756df1b04c1a00dc065b3a_200x200.jpeg",
+        "cover_image_big":"http:\/\/onedayofmine.dev\/\/users\/5127\/days\/8ae47d7f824388ced8756df1b04c1a00dc065b3a_400x400.jpeg",
         "title":"foobarfoobarfoobarfoobarf",
         "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
         "timezone":0,
         "location":"foobarfoobarfoobarfoobarf",
         "type":"working",
         "likes_count":0,
-        "ctime":1344262413,
-        "utime":1344262413,
+        "ctime":1344348897,
+        "utime":1344348897,
         "is_ended":0
       }
     ]
@@ -1154,8 +1253,8 @@ Returns new days based on <a href="#range-request">range-request</a>.
 </table>
 ###### Example request: ######
     {
-      "from":1195,
-      "to":1191,
+      "from":3294,
+      "to":3290,
       "limit":1
     }
 
@@ -1175,37 +1274,34 @@ Returns new days based on <a href="#range-request">range-request</a>.
 ###### Example response: ######
     [
       {
-        "id":1194,
+        "id":3293,
         "fb_uid":"100004087981387",
-        "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/1779\/days\/b648a18bdee0e11b34f12f19f40ae26dd870043f_200x200.jpeg",
-        "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/1779\/days\/b648a18bdee0e11b34f12f19f40ae26dd870043f_400x400.jpeg",
+        "cover_image_small":"http:\/\/onedayofmine.dev\/\/users\/5128\/days\/3121b6e7968f8e2c25a3fe0c55d1f6834de7f856_200x200.jpeg",
+        "cover_image_big":"http:\/\/onedayofmine.dev\/\/users\/5128\/days\/3121b6e7968f8e2c25a3fe0c55d1f6834de7f856_400x400.jpeg",
         "title":"foobarfoobarfoobarfoobarf",
         "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
         "timezone":0,
         "location":"foobarfoobarfoobarfoobarf",
         "type":"working",
         "likes_count":0,
-        "ctime":1344262414,
-        "utime":1344262414,
+        "ctime":1344348897,
+        "utime":1344348897,
         "is_ended":0,
         "user":{
-          "id":1779,
+          "id":5128,
           "fb_uid":"100004087981387",
           "twitter_uid":0,
           "name":"bar bar",
           "sex":"male",
-          "pic_small":"http:\/\/onedayofmine.dev\/users\/1779\/88f58adeccaded5c31cf16abb244a0280535bbc2_70x70.jpeg",
-          "pic_big":"http:\/\/onedayofmine.dev\/users\/1779\/88f58adeccaded5c31cf16abb244a0280535bbc2_140x140.jpeg",
+          "pic_small":"http:\/\/onedayofmine.dev\/users\/5128\/3c2adbe97791e8bb93b37278326326dfa609b8a9_70x70.jpeg",
+          "pic_big":"http:\/\/onedayofmine.dev\/users\/5128\/3c2adbe97791e8bb93b37278326326dfa609b8a9_140x140.jpeg",
           "birthday":"1980-08-08",
           "occupation":"",
           "location":"",
           "followers_count":0,
           "following_count":0,
-          "days_count":3,
-          "is_followed":false,
-          "is_follower":false
-        },
-        "is_favorited":false
+          "days_count":3
+        }
       }
     ]
 
@@ -1235,8 +1331,8 @@ Returns interesting days based on <a href="#range-request">range-request</a>.
 </table>
 ###### Example request: ######
     {
-      "from":1196,
-      "to":1199,
+      "from":3295,
+      "to":3298,
       "limit":1
     }
 
@@ -1256,37 +1352,34 @@ Returns interesting days based on <a href="#range-request">range-request</a>.
 ###### Example response: ######
     [
       {
-        "id":1197,
+        "id":3296,
         "fb_uid":"100004087981387",
-        "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/1781\/days\/b6e923951e56dd590cac8db0d0e653f4a0aa36b5_200x200.jpeg",
-        "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/1781\/days\/b6e923951e56dd590cac8db0d0e653f4a0aa36b5_400x400.jpeg",
+        "cover_image_small":"http:\/\/onedayofmine.dev\/\/users\/5130\/days\/7e381ac79de21736451afea3b3a28a00c8afb3a0_200x200.jpeg",
+        "cover_image_big":"http:\/\/onedayofmine.dev\/\/users\/5130\/days\/7e381ac79de21736451afea3b3a28a00c8afb3a0_400x400.jpeg",
         "title":"foobarfoobarfoobarfoobarf",
         "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
         "timezone":0,
         "location":"foobarfoobarfoobarfoobarf",
         "type":"working",
         "likes_count":3,
-        "ctime":1344176015,
-        "utime":1344262415,
+        "ctime":1344262497,
+        "utime":1344348897,
         "is_ended":0,
         "user":{
-          "id":1781,
+          "id":5130,
           "fb_uid":"100004087981387",
           "twitter_uid":0,
           "name":"bar bar",
           "sex":"male",
-          "pic_small":"http:\/\/onedayofmine.dev\/users\/1781\/807bcd10d6217358e9fe8c53db0a9930d5901353_70x70.jpeg",
-          "pic_big":"http:\/\/onedayofmine.dev\/users\/1781\/807bcd10d6217358e9fe8c53db0a9930d5901353_140x140.jpeg",
+          "pic_small":"http:\/\/onedayofmine.dev\/users\/5130\/fd84119117bdc5dd395aaf10fd21c265a3963769_70x70.jpeg",
+          "pic_big":"http:\/\/onedayofmine.dev\/users\/5130\/fd84119117bdc5dd395aaf10fd21c265a3963769_140x140.jpeg",
           "birthday":"1980-08-08",
           "occupation":"",
           "location":"",
           "followers_count":0,
           "following_count":0,
-          "days_count":2,
-          "is_followed":false,
-          "is_follower":false
-        },
-        "is_favorited":false
+          "days_count":2
+        }
       }
     ]
 
@@ -1316,8 +1409,8 @@ Returns current user days based on <a href="#range-request">range-request</a>.
 </table>
 ###### Example request: ######
     {
-      "from":1204,
-      "to":1201,
+      "from":3303,
+      "to":3300,
       "limit":1
     }
 
@@ -1337,27 +1430,27 @@ Returns current user days based on <a href="#range-request">range-request</a>.
 ###### Example response: ######
     [
       {
-        "id":1203,
+        "id":3302,
         "fb_uid":"100004087981387",
-        "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/1783\/days\/1661c779e42c79cff23b833c83c6477916a4784b_200x200.jpeg",
-        "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/1783\/days\/1661c779e42c79cff23b833c83c6477916a4784b_400x400.jpeg",
+        "cover_image_small":"http:\/\/onedayofmine.dev\/\/users\/5132\/days\/7fd8ae015ecba05e916e67cb6c0e5face92f4b34_200x200.jpeg",
+        "cover_image_big":"http:\/\/onedayofmine.dev\/\/users\/5132\/days\/7fd8ae015ecba05e916e67cb6c0e5face92f4b34_400x400.jpeg",
         "title":"foobarfoobarfoobarfoobarf",
         "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
         "timezone":0,
         "location":"foobarfoobarfoobarfoobarf",
         "type":"working",
         "likes_count":0,
-        "ctime":1344262415,
-        "utime":1344262415,
+        "ctime":1344348898,
+        "utime":1344348898,
         "is_ended":0,
         "user":{
-          "id":1783,
+          "id":5132,
           "fb_uid":"100004087981387",
           "twitter_uid":0,
           "name":"bar bar",
           "sex":"male",
-          "pic_small":"http:\/\/onedayofmine.dev\/users\/1783\/7db593bde9626e62945465ff88e768faf959b8e8_70x70.jpeg",
-          "pic_big":"http:\/\/onedayofmine.dev\/users\/1783\/7db593bde9626e62945465ff88e768faf959b8e8_140x140.jpeg",
+          "pic_small":"http:\/\/onedayofmine.dev\/users\/5132\/aecd6aa9e842efc4eb252f41a2c71203762ec015_70x70.jpeg",
+          "pic_big":"http:\/\/onedayofmine.dev\/users\/5132\/aecd6aa9e842efc4eb252f41a2c71203762ec015_140x140.jpeg",
           "birthday":"1980-08-08",
           "occupation":"",
           "location":"",
@@ -1410,10 +1503,10 @@ Returns list of acceptable types.
 
 * * *
 #### CreateComplaint ####
-<a name="9302bb657ccc00536a6b1cd6580d9c6b"></a>
+<a name="b447ac73c4543ecd2b0ba82f95b1a2b2"></a>
 
 
-`POST /days/1205/create_complaint`
+`POST /days/3304/create_complaint`
 
 ##### Request: #####
 ###### Params: ######
@@ -1453,8 +1546,8 @@ Returns list of acceptable types.
     {
       "day_id":null,
       "text":"foobar",
-      "ctime":1344262417,
-      "id":23
+      "ctime":1344348899,
+      "id":58
     }
 
 
@@ -1465,10 +1558,10 @@ Returns list of acceptable types.
 ### MomentComments ###
 <a name='MomentComments'></a>
 #### Update ####
-<a name="415983b816c67562cdd66d9434e58244"></a>
+<a name="e1aa86c4b86345e7ffcbf4afde7cbc62"></a>
 
 
-`POST /moment_comments/49/update`
+`POST /moment_comments/153/update`
 
 ##### Request: #####
 ###### Params: ######
@@ -1509,14 +1602,14 @@ Returns list of acceptable types.
 </table>
 ###### Example response: ######
     {
-      "id":49,
-      "user_id":1793,
+      "id":153,
+      "user_id":5142,
       "user_name":"bar bar",
       "text":"foobarfo",
       "likes_count":0,
-      "ctime":1344262421,
-      "utime":1344262421,
-      "moment_id":250
+      "ctime":1344348915,
+      "utime":1344348915,
+      "moment_id":655
     }
 
 
@@ -1524,10 +1617,10 @@ Returns list of acceptable types.
 
 * * *
 #### Delete ####
-<a name="f8f9eafc15ece57c0558c3dec8693115"></a>
+<a name="95b3dd7dff2e6b6b47d3fb21b582e489"></a>
 
 
-`POST /moment_comments/51/delete`
+`POST /moment_comments/155/delete`
 
 ##### Request: #####
 ###### Params: ######
@@ -1556,10 +1649,10 @@ Returns list of acceptable types.
 ### Moments ###
 <a name='Moments'></a>
 #### Update ####
-<a name="bf8d95c3b726bb4eca0d70857f31f65a"></a>
+<a name="7bd294cfcf5ff9dc0f857bfe90e618ed"></a>
 Updates information about specified <a href="#Entity:Moment">moment</a> and returns it.
 
-`POST moments/254/update`
+`POST moments/659/update`
 
 ##### Request: #####
 ###### Params: ######
@@ -1571,15 +1664,15 @@ Updates information about specified <a href="#Entity:Moment">moment</a> and retu
   <th>Description</th>
 </tr>
 <tr><td>string</td><td>description</td><td>N</td><td></td></tr>
-<tr><td>string</td><td>img_name</td><td>N</td><td>Requires image_content field.</td></tr>
-<tr><td>string</td><td>img_content</td><td>N</td><td>File contents, that was previously encoded by base64</td></tr>
+<tr><td>string</td><td>image_name</td><td>N</td><td>Requires image_content field.</td></tr>
+<tr><td>string</td><td>image_content</td><td>N</td><td>File contents, that was previously encoded by base64</td></tr>
 
 </table>
 ###### Example request: ######
     {
       "description":"foobarfoobarfoobarfo...oobarfoobarfoobarfoo",
-      "img_name":"foobar.jpg",
-      "img_content":"\/9j\/4AAQSkZJRgABAQAA...Bpbk4c\/SoY34PFWiGf\/Z"
+      "image_name":"foobar.jpg",
+      "image_content":"\/9j\/4AAQSkZJRgABAQAA...Bpbk4c\/SoY34PFWiGf\/Z"
     }
 
 
@@ -1595,21 +1688,23 @@ Updates information about specified <a href="#Entity:Moment">moment</a> and retu
 <tr><td>[type]</td><td>id</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>day_id</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>description</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>img_small</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>img_big</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>image_small</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>image_big</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>image_shoot_time</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>likes_count</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>ctime</td><td>[description]</td></tr>
 
 </table>
 ###### Example response: ######
     {
-      "id":254,
-      "day_id":1216,
+      "id":659,
+      "day_id":3315,
       "description":"foobarfoobarfoobarfo...oobarfoobarfoobarfoo",
-      "img_small":"http:\/\/onedayofmine.dev\/\/users\/1803\/days\/1216\/25e98d831cfca701274e896f9f1ee3da02c8e517_200x200.jpg",
-      "img_big":"http:\/\/onedayofmine.dev\/\/users\/1803\/days\/1216\/25e98d831cfca701274e896f9f1ee3da02c8e517_400x400.jpg",
+      "image_small":"http:\/\/onedayofmine.dev\/\/users\/5152\/days\/3315\/2587fad08eca7b7958092c1eae3e7ea4ee025df6_200x200.jpg",
+      "image_big":"http:\/\/onedayofmine.dev\/\/users\/5152\/days\/3315\/2587fad08eca7b7958092c1eae3e7ea4ee025df6_400x400.jpg",
+      "image_shoot_time":0,
       "likes_count":0,
-      "ctime":1344262422
+      "ctime":1344348916
     }
 
 
@@ -1617,10 +1712,10 @@ Updates information about specified <a href="#Entity:Moment">moment</a> and retu
 
 * * *
 #### Delete ####
-<a name="102dc82ea6a181e3a7dbd5b9d2d39230"></a>
+<a name="3c077d6cabca7625675314aa59d10c5f"></a>
 Delete a moment.
 
-`POST moments/255/delete`
+`POST moments/660/delete`
 
 
 
@@ -1629,10 +1724,10 @@ Delete a moment.
 
 * * *
 #### Comment ####
-<a name="001627b341bc8ee4b6fb7c495e808e44"></a>
+<a name="be92ed7d7841f5b9b465155bcfa67236"></a>
 Creates <a href="#Entity:MomentComment">moment comment</a> and returns it.
 
-`POST moments/256/comment`
+`POST moments/661/comment`
 
 ##### Request: #####
 ###### Params: ######
@@ -1673,14 +1768,14 @@ Creates <a href="#Entity:MomentComment">moment comment</a> and returns it.
 </table>
 ###### Example response: ######
     {
-      "id":53,
-      "user_id":1805,
+      "id":157,
+      "user_id":5154,
       "user_name":"bar bar",
       "text":"foobarfoobarfoobarfo...oobarfoobarfoobarfoo",
       "likes_count":0,
-      "ctime":1344262423,
-      "utime":1344262423,
-      "moment_id":256
+      "ctime":1344348917,
+      "utime":1344348917,
+      "moment_id":661
     }
 
 
@@ -1724,13 +1819,13 @@ Returns <a href="#Entity:User">profile</a> of current logged in user.
 </table>
 ###### Example response: ######
     {
-      "id":1806,
+      "id":5155,
       "fb_uid":"100004087981387",
       "twitter_uid":0,
       "name":"bar bar",
       "sex":"male",
-      "pic_small":"http:\/\/onedayofmine.dev\/users\/1806\/7bfebb49414ec5b197a027410a0023c709ebb621_70x70.jpeg",
-      "pic_big":"http:\/\/onedayofmine.dev\/users\/1806\/7bfebb49414ec5b197a027410a0023c709ebb621_140x140.jpeg",
+      "pic_small":"http:\/\/onedayofmine.dev\/users\/5155\/34e20242dd28b1f8dd38102d9ea8a43465160ae2_70x70.jpeg",
+      "pic_big":"http:\/\/onedayofmine.dev\/users\/5155\/34e20242dd28b1f8dd38102d9ea8a43465160ae2_140x140.jpeg",
       "birthday":"1980-08-08",
       "occupation":"",
       "location":"",
@@ -1807,13 +1902,13 @@ Changes fields of current user <a href="#Entity:User">profile</a> and returns th
 </table>
 ###### Example response: ######
     {
-      "id":1807,
+      "id":5156,
       "fb_uid":"100004087981387",
       "twitter_uid":0,
       "name":"foobarfoobarfoobarfoobarf",
       "sex":"male",
-      "pic_small":"http:\/\/onedayofmine.dev\/users\/1807\/661502c83a546822b492b495a9d20c9f2bcfc679_70x70.jpeg",
-      "pic_big":"http:\/\/onedayofmine.dev\/users\/1807\/661502c83a546822b492b495a9d20c9f2bcfc679_140x140.jpeg",
+      "pic_small":"http:\/\/onedayofmine.dev\/users\/5156\/5ac7cb5c2fdc11eece55eff1ae03caec384c1c90_70x70.jpeg",
+      "pic_big":"http:\/\/onedayofmine.dev\/users\/5156\/5ac7cb5c2fdc11eece55eff1ae03caec384c1c90_140x140.jpeg",
       "birthday":"1990-01-02",
       "occupation":"foobarfoobarfoobarfoobarf",
       "location":"foobarfoobarfoobarfoobarf",
@@ -1856,7 +1951,7 @@ Changes fields of current user <a href="#Entity:User">profile</a> and returns th
 </table>
 ###### Example response: ######
     {
-      "id":1661,
+      "id":4944,
       "notifications_new_days":1,
       "notifications_new_comments":0,
       "notifications_related_activity":1,
@@ -1928,7 +2023,7 @@ Changes fields of current user <a href="#Entity:User">profile</a> and returns th
 </table>
 ###### Example response: ######
     {
-      "id":1663,
+      "id":4946,
       "notifications_new_days":1,
       "notifications_new_comments":1,
       "notifications_related_activity":1,
@@ -1969,13 +2064,13 @@ Changes fields of current user <a href="#Entity:User">profile</a> and returns th
 ###### Example response: ######
     [
       {
-        "id":1835,
+        "id":5184,
         "fb_uid":"100004093051334",
         "twitter_uid":0,
         "name":"foo foo",
         "sex":"male",
-        "pic_small":"http:\/\/onedayofmine.dev\/users\/1835\/07d755c015c5c113ea795634e7d31c114f81ad19_70x70.jpeg",
-        "pic_big":"http:\/\/onedayofmine.dev\/users\/1835\/07d755c015c5c113ea795634e7d31c114f81ad19_140x140.jpeg",
+        "pic_small":"http:\/\/onedayofmine.dev\/users\/5184\/488c453281dad9ebd79f8d03e17ca0c5c3eda273_70x70.jpeg",
+        "pic_big":"http:\/\/onedayofmine.dev\/users\/5184\/488c453281dad9ebd79f8d03e17ca0c5c3eda273_140x140.jpeg",
         "birthday":"1982-08-08",
         "occupation":"",
         "location":"",
@@ -2042,13 +2137,13 @@ Changes fields of current user <a href="#Entity:User">profile</a> and returns th
 </table>
 ###### Example response: ######
     {
-      "id":1836,
+      "id":5185,
       "fb_uid":"100004087981387",
       "twitter_uid":637083468,
       "name":"bar bar",
       "sex":"male",
-      "pic_small":"http:\/\/onedayofmine.dev\/users\/1836\/847eff4e9d498b74357c1d2ca8f15bbf384a430e_70x70.jpeg",
-      "pic_big":"http:\/\/onedayofmine.dev\/users\/1836\/847eff4e9d498b74357c1d2ca8f15bbf384a430e_140x140.jpeg",
+      "pic_small":"http:\/\/onedayofmine.dev\/users\/5185\/cdef072d9b5519beac932752a48ea245bc81ae83_70x70.jpeg",
+      "pic_big":"http:\/\/onedayofmine.dev\/users\/5185\/cdef072d9b5519beac932752a48ea245bc81ae83_140x140.jpeg",
       "birthday":"1980-08-08",
       "occupation":"",
       "location":"",
@@ -2083,8 +2178,8 @@ Returns news for current logged in user.
 </table>
 ###### Example request: ######
     {
-      "from":257,
-      "to":254,
+      "from":675,
+      "to":672,
       "limit":1
     }
 
@@ -2104,18 +2199,18 @@ Returns news for current logged in user.
 ###### Example response: ######
     [
       {
-        "id":256,
-        "recipient_id":1839,
+        "id":674,
+        "recipient_id":5188,
         "text":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob likes bar bar",
-        "ctime":1344262429,
+        "ctime":1344348925,
         "user":{
-          "id":1843,
+          "id":5192,
           "fb_uid":"fooba",
           "twitter_uid":0,
           "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
           "sex":"female",
-          "pic_small":"http:\/\/onedayofmine.dev\/users\/1843\/f9596e52627a6798ca2f85cd529434e57331c58c_70x70.jpeg",
-          "pic_big":"http:\/\/onedayofmine.dev\/users\/1843\/f9596e52627a6798ca2f85cd529434e57331c58c_140x140.jpeg",
+          "pic_small":"http:\/\/onedayofmine.dev\/users\/5192\/b5587d11016b7d49c9df05ede6b1a9d4e93474bc_70x70.jpeg",
+          "pic_big":"http:\/\/onedayofmine.dev\/users\/5192\/b5587d11016b7d49c9df05ede6b1a9d4e93474bc_140x140.jpeg",
           "birthday":"1990-01-02",
           "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfo",
           "location":"",
@@ -2124,28 +2219,29 @@ Returns news for current logged in user.
           "days_count":0
         },
         "day":{
-          "id":1226,
-          "user_id":1842,
+          "id":3325,
+          "user_id":5191,
           "fb_uid":"fooba",
-          "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/1842\/days\/8c618be8ad86a5946324f419d136485a4f08c429_200x200.jpeg",
-          "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/1842\/days\/8c618be8ad86a5946324f419d136485a4f08c429_400x400.jpeg",
+          "cover_image_small":"http:\/\/onedayofmine.dev\/\/users\/5191\/days\/1ff4ad651f265e2a4fe6da8a0d6480ed40026512_200x200.jpeg",
+          "cover_image_big":"http:\/\/onedayofmine.dev\/\/users\/5191\/days\/1ff4ad651f265e2a4fe6da8a0d6480ed40026512_400x400.jpeg",
           "title":"foobarfoobarfoobarfoobarf",
           "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
           "timezone":0,
           "location":"foobarfoobarfoobarfoobarf",
           "type":"working",
           "likes_count":0,
-          "ctime":1344262429,
-          "utime":1344262429,
+          "ctime":1344348925,
+          "utime":1344348925,
           "is_ended":0
         },
         "moment":{
-          "id":260,
+          "id":665,
           "description":"description foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfooba",
-          "img_small":"http:\/\/onedayofmine.dev\/",
-          "img_big":"http:\/\/onedayofmine.dev\/",
+          "image_small":"http:\/\/onedayofmine.dev\/",
+          "image_big":"http:\/\/onedayofmine.dev\/",
+          "image_shoot_time":0,
           "likes_count":0,
-          "ctime":1344262429
+          "ctime":1344348925
         }
       }
     ]
@@ -2158,10 +2254,10 @@ Returns news for current logged in user.
 ### User ###
 <a name='User'></a>
 #### UserByIdDays ####
-<a name="29245eb9e38f94b3000061b2a8c70846"></a>
+<a name="bbefad144cb329514d811611f1083433"></a>
 Returns days of specified user
 
-`GET users/1877/days/`
+`GET users/5228/days/`
 
 ##### Request: #####
 ###### Params: ######
@@ -2192,35 +2288,35 @@ Returns days of specified user
 ###### Example response: ######
     [
       {
-        "id":1233,
-        "user_id":1877,
+        "id":3332,
+        "user_id":5228,
         "fb_uid":"100004087981387",
-        "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/1877\/days\/369340054e62c8047364162a1a5b534ea9cc86d4_200x200.jpeg",
-        "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/1877\/days\/369340054e62c8047364162a1a5b534ea9cc86d4_400x400.jpeg",
+        "cover_image_small":"http:\/\/onedayofmine.dev\/\/users\/5228\/days\/edeacccdff3634f29f8df0a3187b4d78d9706e47_200x200.jpeg",
+        "cover_image_big":"http:\/\/onedayofmine.dev\/\/users\/5228\/days\/edeacccdff3634f29f8df0a3187b4d78d9706e47_400x400.jpeg",
         "title":"foobarfoobarfoobarfoobarf",
         "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
         "timezone":0,
         "location":"foobarfoobarfoobarfoobarf",
         "type":"working",
         "likes_count":0,
-        "ctime":1344262433,
-        "utime":1344262433,
+        "ctime":1344348940,
+        "utime":1344348940,
         "is_ended":0
       },
       {
-        "id":1234,
-        "user_id":1877,
+        "id":3333,
+        "user_id":5228,
         "fb_uid":"100004087981387",
-        "cover_img_small":"http:\/\/onedayofmine.dev\/\/users\/1877\/days\/d63613890fd3d807c779ef71e03270a0d492a181_200x200.jpeg",
-        "cover_img_big":"http:\/\/onedayofmine.dev\/\/users\/1877\/days\/d63613890fd3d807c779ef71e03270a0d492a181_400x400.jpeg",
+        "cover_image_small":"http:\/\/onedayofmine.dev\/\/users\/5228\/days\/d5c6dceb10b4d234ec5373f38bb201f8763fa7d6_200x200.jpeg",
+        "cover_image_big":"http:\/\/onedayofmine.dev\/\/users\/5228\/days\/d5c6dceb10b4d234ec5373f38bb201f8763fa7d6_400x400.jpeg",
         "title":"foobarfoobarfoobarfoobarf",
         "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
         "timezone":0,
         "location":"foobarfoobarfoobarfoobarf",
         "type":"working",
         "likes_count":0,
-        "ctime":1344262433,
-        "utime":1344262433,
+        "ctime":1344348940,
+        "utime":1344348940,
         "is_ended":0
       }
     ]
@@ -2230,10 +2326,10 @@ Returns days of specified user
 
 * * *
 #### UserById ####
-<a name="98c2ee4f236f5c62d935da30d18d6e8a"></a>
+<a name="7d075bd8fb11de2fb161fcc6c88e2743"></a>
 Returns days of specified user
 
-`GET users/1879/item/`
+`GET users/5230/item/`
 
 ##### Request: #####
 ###### Params: ######
@@ -2276,13 +2372,13 @@ Returns days of specified user
 </table>
 ###### Example response: ######
     {
-      "id":1879,
+      "id":5230,
       "fb_uid":"100004087981387",
       "twitter_uid":0,
       "name":"bar bar",
       "sex":"male",
-      "pic_small":"http:\/\/onedayofmine.dev\/users\/1879\/888e4835bb4c620e8c751f4f406a41e57569f91e_70x70.jpeg",
-      "pic_big":"http:\/\/onedayofmine.dev\/users\/1879\/888e4835bb4c620e8c751f4f406a41e57569f91e_140x140.jpeg",
+      "pic_small":"http:\/\/onedayofmine.dev\/users\/5230\/70b235b54b94cf199212fbcc2298ef1ab3adbf90_70x70.jpeg",
+      "pic_big":"http:\/\/onedayofmine.dev\/users\/5230\/70b235b54b94cf199212fbcc2298ef1ab3adbf90_140x140.jpeg",
       "birthday":"1980-08-08",
       "occupation":"",
       "location":"",
@@ -2319,13 +2415,13 @@ Returns list of users that follow current logged in user.
 ###### Example response: ######
     [
       {
-        "id":1884,
+        "id":5235,
         "fb_uid":"100004093051334",
         "twitter_uid":0,
         "name":"foo foo",
         "sex":"male",
-        "pic_small":"http:\/\/onedayofmine.dev\/users\/1884\/3f8199051b1df5ecd5b159a7ffd138e18062e032_70x70.jpeg",
-        "pic_big":"http:\/\/onedayofmine.dev\/users\/1884\/3f8199051b1df5ecd5b159a7ffd138e18062e032_140x140.jpeg",
+        "pic_small":"http:\/\/onedayofmine.dev\/users\/5235\/09f2a0686798af7e80f8d92d51772e9b954f962e_70x70.jpeg",
+        "pic_big":"http:\/\/onedayofmine.dev\/users\/5235\/09f2a0686798af7e80f8d92d51772e9b954f962e_140x140.jpeg",
         "birthday":"1982-08-08",
         "occupation":"",
         "location":"",
@@ -2341,10 +2437,10 @@ Returns list of users that follow current logged in user.
 
 * * *
 #### FollowersByUserId ####
-<a name="dd2e7683f9e500195ce12ca6fe877e76"></a>
+<a name="d226571959f6c9341d3962ff6d6ab6eb"></a>
 Returns list of users that follow selected user.
 
-`GET users/1885/followers`
+`GET users/5236/followers`
 
 ##### Request: #####
 ###### Params: ######
@@ -2374,13 +2470,13 @@ Returns list of users that follow selected user.
 ###### Example response: ######
     [
       {
-        "id":1886,
+        "id":5237,
         "fb_uid":"100004093051334",
         "twitter_uid":0,
         "name":"foo foo",
         "sex":"male",
-        "pic_small":"http:\/\/onedayofmine.dev\/users\/1886\/c6fcdbe23d6e132247a81fd39ddaa73e75fdc2c3_70x70.jpeg",
-        "pic_big":"http:\/\/onedayofmine.dev\/users\/1886\/c6fcdbe23d6e132247a81fd39ddaa73e75fdc2c3_140x140.jpeg",
+        "pic_small":"http:\/\/onedayofmine.dev\/users\/5237\/b0024ecbfa6fececa78793d97033dc1e1dc63d8a_70x70.jpeg",
+        "pic_big":"http:\/\/onedayofmine.dev\/users\/5237\/b0024ecbfa6fececa78793d97033dc1e1dc63d8a_140x140.jpeg",
         "birthday":"1982-08-08",
         "occupation":"",
         "location":"",
@@ -2417,13 +2513,13 @@ Returns list of users that is followed by current logged in user.
 ###### Example response: ######
     [
       {
-        "id":1888,
+        "id":5239,
         "fb_uid":"100004093051334",
         "twitter_uid":0,
         "name":"foo foo",
         "sex":"male",
-        "pic_small":"http:\/\/onedayofmine.dev\/users\/1888\/3861817d3c79cce8ccee73d7d5bbd7ced5d37242_70x70.jpeg",
-        "pic_big":"http:\/\/onedayofmine.dev\/users\/1888\/3861817d3c79cce8ccee73d7d5bbd7ced5d37242_140x140.jpeg",
+        "pic_small":"http:\/\/onedayofmine.dev\/users\/5239\/917cbf7190d73f715918b76d5f353db90bfc52b4_70x70.jpeg",
+        "pic_big":"http:\/\/onedayofmine.dev\/users\/5239\/917cbf7190d73f715918b76d5f353db90bfc52b4_140x140.jpeg",
         "birthday":"1982-08-08",
         "occupation":"",
         "location":"",
@@ -2439,10 +2535,10 @@ Returns list of users that is followed by current logged in user.
 
 * * *
 #### FollowingByUserId ####
-<a name="3a6953b02bd7247ff71fce8f0bdff9bb"></a>
+<a name="946109da3bd5ad9629954591f9598335"></a>
 Returns list of users that is followed by selected user.
 
-`GET users/1889/following`
+`GET users/5240/following`
 
 ##### Request: #####
 ###### Params: ######
@@ -2472,13 +2568,13 @@ Returns list of users that is followed by selected user.
 ###### Example response: ######
     [
       {
-        "id":1890,
+        "id":5241,
         "fb_uid":"100004093051334",
         "twitter_uid":0,
         "name":"foo foo",
         "sex":"male",
-        "pic_small":"http:\/\/onedayofmine.dev\/users\/1890\/ec2f90ffdf804cd651e8cdbe5f9d8017f35eaa66_70x70.jpeg",
-        "pic_big":"http:\/\/onedayofmine.dev\/users\/1890\/ec2f90ffdf804cd651e8cdbe5f9d8017f35eaa66_140x140.jpeg",
+        "pic_small":"http:\/\/onedayofmine.dev\/users\/5241\/7261cfe688afe7c90bcb1c73e357fb10bbee1fd4_70x70.jpeg",
+        "pic_big":"http:\/\/onedayofmine.dev\/users\/5241\/7261cfe688afe7c90bcb1c73e357fb10bbee1fd4_140x140.jpeg",
         "birthday":"1982-08-08",
         "occupation":"",
         "location":"",
@@ -2494,10 +2590,10 @@ Returns list of users that is followed by selected user.
 
 * * *
 #### Follow ####
-<a name="173eca64f94a2ca13a74759c8c569fc6"></a>
+<a name="524f59a8e25acd83d4b16bed006d7913"></a>
 Start following selected user.
 
-`POST users/1892/follow`
+`POST users/5243/follow`
 
 ##### Request: #####
 ###### Params: ######
@@ -2518,10 +2614,10 @@ Start following selected user.
 
 * * *
 #### Unfollow ####
-<a name="45f9839959dbf30e588e2a2461585990"></a>
+<a name="d9aec5ff178fc26519cb8235c3051ef2"></a>
 Stop following selected user.
 
-`POST users/1894/unfollow`
+`POST users/5245/unfollow`
 
 ##### Request: #####
 ###### Params: ######
