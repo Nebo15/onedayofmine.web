@@ -292,7 +292,7 @@ class lmbHttpRequest extends lmbSet
     return $server . $url;
   }
 
-  function toString()
+  function getDataString()
   {
     $flat = array();
     $query = '';
@@ -305,6 +305,13 @@ class lmbHttpRequest extends lmbSet
         continue;
       $query .= $key . '=' . urlencode($value) . '&';
     }
+
+    return $query;
+  }
+
+  function toString()
+  {
+    $query = $this->getDataString();
 
     //TODO: this is quite ugly but it works...
     $uri = clone($this->__uri);
