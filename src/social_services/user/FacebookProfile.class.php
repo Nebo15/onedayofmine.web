@@ -89,6 +89,17 @@ class FacebookProfile implements SocialServicesProfileInterface
   }
 
   /**
+   * Returns contents of picture.
+   *
+   * @param  string $url
+   * @return string Binary string contents
+   */
+  public function getPictureContents($url)
+  {
+    return $this->getProvider()->downloadImage($url);
+  }
+
+  /**
    * @param $day_url
    * @return string fb_id
    */

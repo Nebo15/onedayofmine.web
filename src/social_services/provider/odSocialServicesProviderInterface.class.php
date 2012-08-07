@@ -8,4 +8,5 @@ interface odSocialServicesProviderInterface {
   public static function getConfig();
   public function __construct(array $config = null);
   public function validateAccessToken($error_list);
+  public function downloadImage($url);
 }

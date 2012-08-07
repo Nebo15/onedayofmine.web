@@ -76,4 +76,9 @@ class odRemoteApiMock
   {
     return $this->provider->validateAccessToken($error_list, $this);
   }
+
+  function downloadImage($url)
+  {
+    return (new odObjectMother())->image();
+  }
 }

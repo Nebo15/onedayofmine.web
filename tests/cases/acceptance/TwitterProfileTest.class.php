@@ -61,6 +61,15 @@ class TwitterProfileTest extends odUnitTestCase
     $this->assertTrue(count($pictures));
   }
 
+  function testGetPictureContents()
+  {
+    $profile = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER);
+    $pictures = $profile->getPictures();
+    $biggest = array_pop($pictures);
+    $contents = $profile->getPictureContents($biggest);
+    $this->assertTrue($contents);
+  }
+
   function testTweet()
   {
     $tmp = $this->generator->string();
@@ -84,7 +93,6 @@ class TwitterProfileTest extends odUnitTestCase
     // $this->assertEqual($response['text'], $tweet['text']);
     // $this->assertEqual($response->user['id'], $tweet->user['id']);
   }
-
 
   function testBeginDay()
   {
