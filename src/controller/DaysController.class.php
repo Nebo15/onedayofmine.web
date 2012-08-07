@@ -367,7 +367,11 @@ class DaysController extends BaseJsonController
     $comments->paginate(0, lmbToolkit::instance()->getConf('common')->default_comments_count);
     $export->comments = array();
     foreach ($comments as $comment) {
-      $export->comments[] = $comment->exportForApi();
+      $tmp = $comment->exportForApi();
+      $tmp->user = $comment->getUser()->exportForApi();
+      unset($tmp->day_id);
+      unset($tmp->user_id);
+      $export->comments[] = $tmp;
     }
   }
 
