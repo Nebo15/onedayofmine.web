@@ -230,6 +230,75 @@ class UserAcceptanceTest extends odAcceptanceTestCase
   // TODO
   function testActivity() {}
 
-  // TODO
-  function testSearch() {}
+  /**
+   * @api
+   */
+  function testSearch()
+  {
+    $user1 = $this->generator->user();
+    $user1->setName('foo');
+    $user1->save();
+    $user2 = $this->generator->user();
+    $user2->setName('fooA');
+    $user2->save();
+    $user3 = $this->generator->user();
+    $user3->setName('AfooA');
+    $user3->save();
+    $user4 = $this->generator->user();
+    $user4->setName('foofoo');
+    $user4->save();
+    $user5 = $this->generator->user();
+    $user5->setName('bar');
+    $user5->save();
+
+    $users = $this
+      ->get('users/search', array('query' => 'foo'))
+      ->result;
+    if($this->assertResponse(200))
+    {
+      $this->assertEqual(4, count($users));
+      $this->assertEqual($user1->getId(), $users[0]->id);
+      $this->assertEqual($user2->getId(), $users[1]->id);
+      $this->assertEqual($user3->getId(), $users[2]->id);
+      $this->assertEqual($user4->getId(), $users[3]->id);
+    }
+
+    $users = $this
+      ->get('users/search', array('query' => 'foo', 'from' => $user1->getId()))
+      ->result;
+    if($this->assertResponse(200))
+    {
+      $this->assertEqual(3, count($users));
+      $this->assertEqual($user2->getId(), $users[0]->id);
+      $this->assertEqual($user3->getId(), $users[1]->id);
+      $this->assertEqual($user4->getId(), $users[2]->id);
+    }
+
+    $users = $this
+      ->get('users/search', array(
+        'query' => 'foo',
+        'from'  => $user1->getId(),
+        'to'    => $user4->getId()))
+      ->result;
+    if($this->assertResponse(200))
+    {
+      $this->assertEqual(2, count($users));
+      $this->assertEqual($user2->getId(), $users[0]->id);
+      $this->assertEqual($user3->getId(), $users[1]->id);
+    }
+
+    $users = $this
+      ->get('users/search', array(
+      'query' => 'foo',
+      'from'  => $user1->getId(),
+      'to'    => $user4->getId(),
+      'limit' => 1))
+
+      ->result;
+    if($this->assertResponse(200))
+    {
+      $this->assertEqual(1, count($users));
+      $this->assertEqual($user2->getId(), $users[0]->id);
+    }
+  }
 }

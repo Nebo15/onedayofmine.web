@@ -339,8 +339,31 @@ class DaysController extends BaseJsonController
     return $this->_importSaveAndAnswer(new Complaint(), array('day_id', 'text'));
   }
 
-  function doTypeNames() {
+  function doTypeNames()
+  {
     return $this->_answerOk(Day::getTypes());
+  }
+
+  function doSearch()
+  {
+    list($from, $to, $limit) = $this->_getFromToLimitations();
+    $query = $this->request->getFiltered('query', FILTER_SANITIZE_STRING);
+    $days = Day::findByString($query, $from, $to, $limit);
+
+    $answer = array();
+    foreach ($days as $day) {
+      $export = $day->exportForApi();
+
+      // User data
+      $this->addDayUser($export, $day);
+
+      // Favorites data
+      $this->addDayIsFavorited($export, $day);
+
+      $answer[] = $export;
+    }
+
+    return $this->_answerOk($answer);
   }
 
   protected function addDayUser(stdClass $day_export, $day)
