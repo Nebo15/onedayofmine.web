@@ -73,6 +73,8 @@ class lmbUri extends lmbSet
 
     if('file' == substr($str, 0, 4))
       $str = $this->_fixFileProtocol($str);
+    else
+      $str = $this->_fixURLProtocol($str);
 
     if(!$urlinfo = @parse_url($str))
       throw new lmbException("URI '$str' is not valid");
@@ -130,6 +132,11 @@ class lmbUri extends lmbSet
     if(preg_match('!^file://([a-z]?:[\\\/].*)!i', $url, $matches))
       $url = 'file:///' . $matches[1];
     return $url;
+  }
+
+  protected function _fixURLProtocol($url)
+  {
+    return str_replace(':///', '://', $url);
   }
 
   function getProtocol()
