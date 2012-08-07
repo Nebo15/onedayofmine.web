@@ -53,25 +53,26 @@ class InterestCalculator
 
   }
 
-  function getDays($from_id = null, $to_id = null, $limit = null)
+  function getDaysRatings($from_day_id = null, $to_day_id = null, $limit = null)
   {
     $query = new lmbSelectQuery('day_interest');
-    $query->addField('day_id');
+    $query->addField('*');
     $query->addRawOrder("rating DESC");
+    $info = $query->fetch();
 
-    $ids = lmbArrayHelper::getColumnValues('day_id', $query->fetch());
+    $ids = lmbArrayHelper::getColumnValues('day_id', $info);
 
-    if($from_id)
+    if($from_day_id)
     {
-      $founded_pos = array_search((string) $from_id, $ids);
+      $founded_pos = array_search((string) $from_day_id, $ids);
       $from_key =  false !== $founded_pos ? $founded_pos + 1 : 0;
     }
     else
       $from_key = 0;
 
-    if($to_id)
+    if($to_day_id)
     {
-      $founded_pos = array_search((string) $to_id, $ids);
+      $founded_pos = array_search((string) $to_day_id, $ids);
       $to_key =  false !== $founded_pos ? $founded_pos - 1: 0;
     }
     else
@@ -83,12 +84,21 @@ class InterestCalculator
     $ids = array_slice($ids, $from_key, $to_key);
     $ids = array_slice($ids, 0, $limit);
 
-    $days = Day::findByIds($ids);
-    foreach($days as $position => $day)
+    $days_with_rating = array();
+    foreach(Day::findByIds($ids) as $day)
     {
       if(1 === $day->getIsDeleted())
-        unset($days[$position]);
+        continue;
+      foreach($info as $record)
+      {
+        if($record['day_id'] != $day->getId())
+          continue;
+
+        $recordObj = new DayInterestRecord($record);
+        $recordObj->setDay($day);
+        $days_with_rating[] = $recordObj;
+      }
     }
-    return $days;
+    return $days_with_rating;
   }
 }

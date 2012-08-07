@@ -1,0 +1,77 @@
+{{wrap with="admin_page_layout.phtml" in="content_zone"}}
+
+  {{include file="_admin/selectors.phtml"/}}
+  {{include file="_admin_object/actions.phtml"/}}
+
+  <div id="header">
+    <h1>Interesting days</h1>
+    <div class="header_actions">
+      {{apply template="object_action" action="interesting_recalc" is_link="true" title="Recalc"/}}
+      {{apply template="object_action" action="interesting_add" is_link="false" title="Add day"/}}
+    </div>
+  </div>
+
+  <div id="body">
+
+    {{list using="{$#items}" as="$item" counter="$counter" parity='$parity'}}
+
+      <div class='list'>
+        <div class='list_actions'>
+          {{apply template="selectors_button" action="delete" title="Удалить" /}}
+        </div>
+        <table>
+          <tr>
+            <th>{{apply template="selectors_toggler"/}}</th>
+            <th>Id</th>
+            <th>Day</th>
+            <th>User</th>
+            <th>Title</th>
+            <th>start_time</th>
+            <th>likes_count</th>
+            <th>Create time</th>
+            <th>Update time</th>
+            <th>Rating</th>
+            <th>Actiioins</th>
+          </tr>
+
+          {{list:item}}
+            <tr class="{$parity}">
+              <td>{{apply template="selector" value="{$item.id}"/}}</td>
+              <td>{$item.id}</td>
+              <td>{$item.day.id}</td>
+              <td>{$item.day.user_id}</td>
+              <td>{$item.day.title}</td>
+              <td>{$item.day.start_time}</td>
+              <td>{$item.day.likes_count}</td>
+              <td>{$item.day.ctime|date:"d.m.Y"}</td>
+              <td>{$item.day.utime|date:"d.m.Y"}</td>
+              <td>{$item.rating}</td>
+              <td class='actions'>
+                <?php if($item['is_pinned']) { ?>
+                  {{apply template="object_action" action="interesting_unpin" title="unpin" icon="link_break" item="{$item}"/}}
+                <?php } else { ?>
+                  {{apply template="object_action" action="interesting_pin" title="pin" icon="link" item="{$item}"/}}
+                <?php } ?>
+
+                {{apply template="object_action" action="interesting_edit" title="edit" icon="pencil" item="{$item}"/}}
+
+                <a href='#' onclick="if(confirm('{{i18n text="Remove day from interesting" domain="cms"/}}?')) {jQuery.post('{{route_url params='action:interesting_delete'/}}', {ids:{$item.id}}, function(){document.location.reload()})}" title="Delete">
+                  <img src='/shared/cms/images/icons/cancel.png'/>
+                </a>
+              </td>
+            </tr>
+          {{/list:item}}
+          {{list:empty}}
+            <div class="empty_list">Day отсутствуют</div>
+          {{/list:empty}}
+        </table>
+        <div class='list_actions'>
+          {{apply template="selectors_button" action="delete" title="Удалить" /}}
+        </div>
+      </div>
+
+    {{/list}}
+
+  </div>
+
+{{/wrap}}
