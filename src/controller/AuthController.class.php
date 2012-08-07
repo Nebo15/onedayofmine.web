@@ -11,7 +11,7 @@ class AuthController extends BaseJsonController
     if(!$this->request->hasPost())
       return $this->_answerOk(null, 405, 'Use POST, Luke');
     if(!$fb_access_token = $this->request->get('token'))
-      return $this->_answerOk('token not given', 412);
+      return $this->_answerOk('Token not given', 412);
 
     if(!$this->toolkit->getSocialServices()->getFacebook($fb_access_token)->validateAccessToken($this->error_list))
       return $this->_answerWithError($this->error_list, null, 403);
