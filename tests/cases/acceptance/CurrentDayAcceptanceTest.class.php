@@ -127,9 +127,10 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 
 	/**
 	 * @api description Creates <a href="#Entity:Moment">moment</a> in current active day and returns it.
-	 * @api input option string description
-	 * @api input option string image_name Requires image_content field.
-	 * @api input option string image_content File contents, that was previously encoded by base64
+	 * @api input param string description
+	 * @api input param string image_name Requires image_content field.
+	 * @api input param string image_content File contents, that was previously encoded by base64
+   * @api input option int image_shoot_time Unix timestamp of time, when picture was created. If omited, current timestamp will be used.
 	 */
 	function testCreateMoment()
 	{
@@ -141,17 +142,19 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 		$res = $this->post('current_day/moment_create', array(
 				'description' => $description = $this->generator->string(200),
 				'image_name' => $image_path = $this->generator->image_name(),
-				'image_content' => base64_encode($this->generator->image())
+				'image_content' => base64_encode($this->generator->image()),
+        'image_shoot_time' => $image_shoot_time = $this->generator->integer(6)
 		))->result;
 
 		if($this->assertResponse(200))
 		{
 			$this->assertEqual($day->getMoments()->at(0)->getId(), $res->id);
 			$this->assertEqual($day->getId(), $res->day_id);
-			$this->assertProperty($res, 'img_small');
-      $this->assertProperty($res, 'img_big');
+			$this->assertProperty($res, 'image_small');
+      $this->assertProperty($res, 'image_big');
 			$this->assertEqual(0, $res->likes_count);
 			$this->assertProperty($res, 'ctime');
+      $this->assertEqual($res->image_shoot_time, $image_shoot_time);
 		}
 	}
 
@@ -169,17 +172,17 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
     ))->result;
 
     $loaded_day = Day::findById($day->getId())->exportForApi();
-    $img = @file_get_contents($loaded_day->cover_img_small);
-    $this->assertTrue($img, "Cover image {$loaded_day->cover_img_small} not found");
+    $img = @file_get_contents($loaded_day->cover_image_small);
+    $this->assertTrue($img, "Cover image {$loaded_day->cover_image_small} not found");
   }
 
   /**
-   * @api description Updates information about current <a href="#Entity:Day">day</a> and returns it.
-   * @api input param string title
-   * @api input param int timezone UTC time zone offset
+   * @api description Updates information about current <a href="#Entity:Day">day</a> and returns it. You are free to make selective changes.
+   * @api input option string title
+   * @api input option int timezone UTC time zone offset
    * @api input option string occupation Can be omited, then user profile occupation will be used
    * @api input option string latlong "[Latitude],[Longitude]" of place, where day was created
-   * @api input param string type One of pre-defined types, see: GET day/type_names request
+   * @api input option string type One of pre-defined types, see: GET day/type_names request
    */
   function testUpdate()
   {

@@ -86,6 +86,12 @@ class CurrentDayController extends BaseJsonController
 		$moment = new Moment();
 		$moment->setDay($day);
 		$moment->setDescription($this->request->get('description'));
+
+    if($this->request->get('image_shoot_time'))
+      $moment->setImageShootTime($this->request->get('image_shoot_time'));
+    else
+      $moment->setImageShootTime(time());
+
 		$moment->save();
 		$moment->attachImage(
 				$this->request->get('image_name'),

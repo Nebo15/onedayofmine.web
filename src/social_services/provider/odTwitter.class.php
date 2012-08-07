@@ -73,4 +73,9 @@ class odTwitter extends tmhOAuth implements odSocialServicesProviderInterface
         ->error("Twitter rate limit exhausted. Reset time: '{$reset}' ('{$diff}').");
     }
   }
+
+  function downloadImage($url)
+  {
+    return file_get_contents($url);
+  }
 }

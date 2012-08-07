@@ -139,6 +139,8 @@ class TwitterProfile implements SocialServicesProfileInterface
 
   /**
    * Returns user avatars.
+   *
+   * @return array
    */
   public function getPictures()
   {
@@ -147,6 +149,17 @@ class TwitterProfile implements SocialServicesProfileInterface
       '73x73' => 'http://api.twitter.com/1/users/profile_image?user_id='.$uid.'&size=bigger',
       '?x?'   => 'http://api.twitter.com/1/users/profile_image?user_id='.$uid.'&size=original'
     ];
+  }
+
+  /**
+   * Returns contents of picture.
+   *
+   * @param  string $url
+   * @return string Binary string contents
+   */
+  public function getPictureContents($url)
+  {
+    return $this->getProvider()->downloadImage($url);
   }
 
   /**

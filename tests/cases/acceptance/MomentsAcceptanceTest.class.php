@@ -12,8 +12,8 @@ class MomentsAcceptanceTest extends odAcceptanceTestCase
   /**
    * @api description Updates information about specified <a href="#Entity:Moment">moment</a> and returns it.
    * @api input option string description
-   * @api input option string img_name Requires image_content field.
-   * @api input option string img_content File contents, that was previously encoded by base64
+   * @api input option string image_name Requires image_content field.
+   * @api input option string image_content File contents, that was previously encoded by base64
    */
   function testUpdate()
   {
@@ -26,18 +26,18 @@ class MomentsAcceptanceTest extends odAcceptanceTestCase
     $this->_loginAndSetCookie($this->main_user);
     $res = $this->post('moments/'.$moment->getId().'/update', array(
       'description' => $desc = $this->generator->string(255),
-      'img_name' => $this->generator->image_name(),
-      'img_content' => base64_encode($this->generator->image()),
+      'image_name' => $this->generator->image_name(),
+      'image_content' => base64_encode($this->generator->image()),
       ))->result;
     $this->assertResponse(200);
 
     $this->assertEqual($res->description, $desc);
-    $this->assertProperty($res, 'img_small');
-    $content = @file_get_contents($res->img_small);
-    $this->assertTrue($content, "Image {$res->img_small} not found");
-    $this->assertProperty($res, 'img_big');
-    $content = @file_get_contents($res->img_big);
-    $this->assertTrue($content, "Image {$res->img_big} not found");
+    $this->assertProperty($res, 'image_small');
+    $content = @file_get_contents($res->image_small);
+    $this->assertTrue($content, "Image {$res->image_small} not found");
+    $this->assertProperty($res, 'image_big');
+    $content = @file_get_contents($res->image_big);
+    $this->assertTrue($content, "Image {$res->image_big} not found");
 
     $loaded_moment = Moment::findById($moment->getId());
     $this->assertEqual($loaded_moment->getDescription(), $desc);

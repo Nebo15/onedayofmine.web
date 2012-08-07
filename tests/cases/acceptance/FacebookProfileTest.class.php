@@ -54,6 +54,15 @@ class FacebookProfileTest extends odUnitTestCase
     $this->assertTrue(count($pictures));
   }
 
+  function testGetPictureContents()
+  {
+    $profile = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK);
+    $pictures = $profile->getPictures();
+    $biggest = array_pop($pictures);
+    $contents = $profile->getPictureContents($biggest);
+    $this->assertTrue($contents);
+  }
+
   function testBeginDay()
   {
     $day = $this->generator->day();
