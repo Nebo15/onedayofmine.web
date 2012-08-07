@@ -96,7 +96,7 @@ CREATE TABLE `lmb_cms_user` (
   `ctime` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `login` (`login`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --

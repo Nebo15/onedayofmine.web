@@ -8,8 +8,8 @@ $editor = array(array('title' => 'Контент', 'icon' => '/shared/cms/images
     'icon' => '/shared/cms/images/icons/layout.png',
   ),
   array(
-    'title' => 'Interest days',
-    'url' => '/admin_day/interest/',
+    'title' => 'Interesting',
+    'url' => '/admin_day/interesting/',
     'icon' => '/shared/cms/images/icons/layout.png',
   ),
   array(

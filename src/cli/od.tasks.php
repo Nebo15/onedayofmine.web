@@ -11,7 +11,7 @@ function task_od_remove_cache($argv)
 
 /**
  * @desc Fill db from lj community
- * @deps migrate_load_all,migrate_run,od_register_tests_users
+ * @deps od_register_tests_users
  */
 function task_od_fill_from_lj($argv)
 {
@@ -34,7 +34,7 @@ function task_od_fill_from_lj($argv)
 	define('LJ_COMMUNITY_NAME', 'odin-moy-den');
   // Returns ~6 posts on page
   define('PAGES', 2);
-  define('POSTS_COUNT', 50);
+  define('POSTS_COUNT', 10);
 
   echo "== Started to search for links... ==".PHP_EOL;
 
@@ -108,6 +108,10 @@ function task_od_fill_from_lj($argv)
 	}
 }
 
+/**
+ * @desc Register tests users
+ * @deps od_remove_cache
+ */
 function task_od_register_tests_users($argv)
 {
   lmb_require(taskman_prop('PROJECT_DIR').'setup.php');
@@ -119,11 +123,20 @@ function task_od_register_tests_users($argv)
   array_pop($tests_users); // Bar
   foreach($tests_users as $test_user)
   {
+    echo "Register '{$test_user->getName()}'...";
     $request = new HttpRequest(lmb_env_get('HOST_URL').'/auth/login');
     $request->setMethod(HTTP_METH_POST);
     $request->setPostFields(array('token' => $test_user->getFbAccessToken()));
-    $request->send();
-    echo $test_user->getName().' registered'.PHP_EOL;
+    $response = $request->send();
+    if(200 != $response->getResponseCode())
+    {
+      var_dump($response);
+      exit(1);
+    }
+    else
+    {
+      echo 'DONE'.PHP_EOL;
+    }
   }
 
   echo "== Loaded ".count($tests_users)." test users. ==".PHP_EOL;
