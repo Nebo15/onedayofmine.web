@@ -226,17 +226,17 @@ class DaysController extends BaseJsonController
   function doInteresting()
   {
     list($from, $to, $limit) = $this->_getFromToLimitations();
-    $days = (new InterestCalculator())->getDays($from, $to, $limit);
+    $days_ratings = (new InterestCalculator())->getDaysRatings($from, $to, $limit);
 
     $answer = array();
-    foreach ($days as $day) {
-      $export = $day->exportForApi();
+    foreach ($days_ratings as $day_rating) {
+      $export = $day_rating->getDay()->exportForApi();
 
       // User data
-      $this->addDayUser($export, $day);
+      $this->addDayUser($export, $day_rating->getDay());
 
       // Favorites data
-      $this->addDayIsFavorited($export, $day);
+      $this->addDayIsFavorited($export, $day_rating->getDay());
 
       $answer[] = $export;
     }
