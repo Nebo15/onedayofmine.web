@@ -34,16 +34,16 @@ class DaysController extends BaseJsonController
       $answer = $day->exportForApi();
 
       // User data
-      $this->addDayUser($answer, $day);
+      $this->_attachDayUser($answer, $day);
 
       // Favorites data
-      $this->addDayIsFavorited($answer, $day);
+      $this->_attachDayIsFavorited($answer, $day);
 
       // Comments data
-      $this->addComments($answer, $day);
+      $this->_attachComments($answer, $day);
 
       // Moments data
-      $this->addDayMoments($answer, $day);
+      $this->_attachDayMoments($answer, $day);
 
       return $answer;
     }
@@ -61,7 +61,7 @@ class DaysController extends BaseJsonController
     $occupation = $this->request->getPost('occupation') ?: $this->_getUser()->getOccupation();
     $day->setOccupation($occupation);
 
-    $response = $this->_importSaveAndAnswer($day, array('title', 'timezone', 'latlong', 'type'), array('occupation' => $occupation));
+    $response = $this->_importSaveAndAnswer($day, array('title', 'timezone', 'location', 'type'), array('occupation' => $occupation));
 
     $this->_getUser()
       ->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)
@@ -253,10 +253,10 @@ class DaysController extends BaseJsonController
       $export = $day->exportForApi();
 
       // User data
-      $this->addDayUser($export, $day);
+      $this->_attachDayUser($export, $day);
 
       // Favorites data
-      $this->addDayIsFavorited($export, $day);
+      $this->_attachDayIsFavorited($export, $day);
 
       $answer[] = $export;
     }
@@ -273,10 +273,10 @@ class DaysController extends BaseJsonController
       $export = $day->exportForApi();
 
       // User data
-      $this->addDayUser($export, $day);
+      $this->_attachDayUser($export, $day);
 
       // Favorites data
-      $this->addDayIsFavorited($export, $day);
+      $this->_attachDayIsFavorited($export, $day);
 
       $answer[] = $export;
     }
@@ -294,10 +294,10 @@ class DaysController extends BaseJsonController
       $export = $day_rating->getDay()->exportForApi();
 
       // User data
-      $this->addDayUser($export, $day_rating->getDay());
+      $this->_attachDayUser($export, $day_rating->getDay());
 
       // Favorites data
-      $this->addDayIsFavorited($export, $day_rating->getDay());
+      $this->_attachDayIsFavorited($export, $day_rating->getDay());
 
       $answer[] = $export;
     }
@@ -318,10 +318,10 @@ class DaysController extends BaseJsonController
       $export = $day->exportForApi();
 
       // User data
-      $this->addDayUser($export, $day);
+      $this->_attachDayUser($export, $day);
 
       // Favorites data
-      $this->addDayIsFavorited($export, $day);
+      $this->_attachDayIsFavorited($export, $day);
 
       $answer[] = $export;
     }
@@ -367,13 +367,9 @@ class DaysController extends BaseJsonController
     $answer = array();
     foreach ($days as $day) {
       $export = $day->exportForApi();
-
-      // User data
-      $this->addDayUser($export, $day);
-
-      // Favorites data
-      $this->addDayIsFavorited($export, $day);
-
+      $this->_attachDayUser($export, $day);
+      $this->_attachDayIsFavorited($export, $day);
+      $this->_attachDayIsDeleted($export, $day);
       $answer[] = $export;
     }
 
@@ -407,10 +403,10 @@ class DaysController extends BaseJsonController
       $export = $day->exportForApi();
 
       // User data
-      $this->addDayUser($export, $day);
+      $this->_attachDayUser($export, $day);
 
       // Favorites data
-      $this->addDayIsFavorited($export, $day);
+      $this->_attachDayIsFavorited($export, $day);
 
       $answer[] = $export;
     }
@@ -418,7 +414,7 @@ class DaysController extends BaseJsonController
     return $this->_answerOk($answer);
   }
 
-  protected function addDayUser(stdClass $day_export, $day)
+  protected function _attachDayUser(stdClass $day_export, $day)
   {
     $day_export->user = $day->getUser()->exportForApi();
     unset($day_export->user_id);
@@ -429,14 +425,23 @@ class DaysController extends BaseJsonController
     }
   }
 
-  protected function addDayIsFavorited(stdClass $day_export, $day)
+  protected function _attachDayIsFavorited(stdClass $day_export, $day)
   {
     if(!lmbToolkit::instance()->getUser())
       return null;
     $day_export->is_favorited = DayFavourite::isFavourited(lmbToolkit::instance()->getUser(), $day);
   }
 
-  protected function addComments(stdClass $export, $obj, $only_count = false)
+  protected function _attachDayIsDeleted(stdClass $day_export, $day)
+  {
+    if(!lmbToolkit::instance()->getUser())
+      return null;
+    if(lmbToolkit::instance()->getUser()->getId() != $day->getUserId())
+      return null;
+    $day_export->is_deleted = $day->getIsDeleted();
+  }
+
+  protected function _attachComments(stdClass $export, $obj, $only_count = false)
   {
     $comments = $obj->getComments();
     $export->comments_count = $comments->count();
@@ -455,7 +460,7 @@ class DaysController extends BaseJsonController
     }
   }
 
-  protected function addDayMoments(stdClass $day_export, $day)
+  protected function _attachDayMoments(stdClass $day_export, $day)
   {
     $day_export->moments = array();
     foreach($day->getMoments() as $moment) {
@@ -465,7 +470,7 @@ class DaysController extends BaseJsonController
       unset($moment_export->day_id);
 
       // Moment comments data
-      //$this->addComments($moment_export, $moment);
+      //$this->_attachComments($moment_export, $moment);
 
       $day_export->moments[] = $moment_export;
     }

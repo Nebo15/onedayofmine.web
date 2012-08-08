@@ -41,8 +41,8 @@ class Day extends BaseModel
     $export->id = $this->getId();
     $export->user_id = $this->getUser()->getId();
     $export->fb_uid = $this->getUser()->fb_uid;
-    $export->cover_image_266 = lmbToolkit::instance()->getStaticUrl($this->getImageSmall());
-    $export->cover_image_532 = lmbToolkit::instance()->getStaticUrl($this->getImageBig());
+    $export->image_266 = lmbToolkit::instance()->getStaticUrl($this->getImageSmall());
+    $export->image_532 = lmbToolkit::instance()->getStaticUrl($this->getImageBig());
     $export->title = $this->getTitle();
     $export->occupation = $this->getOccupation();
     $export->location = $this->getLocation();

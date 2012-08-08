@@ -44,7 +44,7 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
 
 		$day = $this->post('days/start', array(
       'title' => $params->title,
-      // 'latlong' => $params->latlong,
+      'location' => $params->location,
       'occupation' => $params->occupation,
       'type' => $params->type,
     ))->result;
@@ -52,7 +52,7 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
     {
       $this->assertEqual($params->title, $day->title);
       $this->assertEqual($params->occupation, $day->occupation);
-      // $this->assertEqual($params->latlong, $day->latlong);
+      $this->assertEqual($params->location, $day->location);
       $this->assertEqual($params->type, $day->type);
       $this->assertEqual($this->main_user->getId(), $day->user_id);
       $this->assertTrue($day->ctime);
