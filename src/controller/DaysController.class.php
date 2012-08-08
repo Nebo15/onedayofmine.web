@@ -353,7 +353,7 @@ class DaysController extends BaseJsonController
   {
     if(!lmbToolkit::instance()->getUser())
       return null;
-    $day_export->is_favorited = DayFavourite::isFavourited(lmbToolkit::instance()->getUser(), $day);
+    $day_export->is_favorite = DayFavourite::isFavourited(lmbToolkit::instance()->getUser(), $day);
   }
 
   protected function addComments(stdClass $export, $obj, $only_count = false)

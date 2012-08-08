@@ -94,7 +94,7 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
    * @api result Moment[3] moments Array of day moments
    * @api result int comments_count Count of comments to this day
    * @api result Comment[3] comments Array of day first comments
-   * @api result bool is_favorited True if this article is added to current user favourites. If user is not logged in then field is omited.
+   * @api result bool is_favorite True if this article is added to current user favourites. If user is not logged in then field is omited.
 	 */
 	function testGetCurrentDay()
 	{

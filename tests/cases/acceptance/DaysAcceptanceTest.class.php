@@ -17,7 +17,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
    * @api result int comments_count
    * @api result DayComment[0-3] comments Few first comments
    * @api result Moment[] moments All day moments
-   * @api result bool is_favorited
+   * @api result bool is_favorite
    */
   function testItem()
   {
@@ -50,7 +50,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
       $this->assertEqual($moment2->getId(), $loaded_day->moments[1]->id);
 
       $this->assertEqual($day->getUser()->getId(), $loaded_day->user->id);
-      $this->assertTrue($loaded_day->is_favorited);
+      $this->assertTrue($loaded_day->is_favorite);
       $this->assertEqual($day->getComments()->count(), $loaded_day->comments_count);
       $this->assertEqual(lmbToolkit::instance()->getConf('common')->default_comments_count, count($loaded_day->comments));
       $this->assertEqual($day->getComments()->at(0)->getId(), $loaded_day->comments[0]->id);
