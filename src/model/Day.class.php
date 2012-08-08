@@ -110,13 +110,14 @@ class Day extends BaseModel
 
   static function getTypes()
   {
-    return array(
-      'Working',
-      'Day-off',
-      'Holiday',
-      'Trip',
-      'Special event'
-    );
+    $sql = "SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'day' AND COLUMN_NAME = 'type'";
+    $stmt = (new Day())->getDefaultConnection()->newStatement($sql); // connection recieving is ugly
+    $stmt->execute(); // выполнит запрос.
+    if(preg_match('/^enum\((.*)\)$/', $stmt->getOneRecord()->get('COLUMN_TYPE'), $matches) === 1) {
+      return str_getcsv($matches[1], ',', "'");
+    } else {
+      throw new lmbException("Can't allocate day types.", array('query_result' => $stmt->getOneRecord()->get('COLUMN_TYPE'), 'preg_matches' => $matches));
+    }
   }
 
   /**
