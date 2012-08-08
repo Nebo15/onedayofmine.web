@@ -4,9 +4,7 @@ lmb_require('src/model/DayTest.class.php');
 
 class AuthController extends BaseJsonController
 {
-  protected $check_auth = false;
-
-  function doLogin()
+  function doGuestLogin()
   {
     if(!$this->request->hasPost())
       return $this->_answerOk(null, 405, 'Use POST, Luke');
@@ -64,12 +62,12 @@ class AuthController extends BaseJsonController
     return $user;
   }
 
-  function doIsLoggedIn()
+  function doGuestIsLoggedIn()
   {
     return $this->_answerOk($this->_isLoggedUser());
   }
 
-  function doLogout()
+  function doGuestLogout()
   {
     if($this->session->valid()) $this->session->reset();
     return $this->_answerOk();

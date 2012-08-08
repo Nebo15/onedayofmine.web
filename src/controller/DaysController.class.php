@@ -6,9 +6,8 @@ lmb_require('src/service/InterestCalculator.class.php');
 class DaysController extends BaseJsonController
 {
   protected $_object_class_name = 'User';
-  protected $check_auth = false;
 
-  function doItem()
+  function doGuestItem()
   {
     $id = $this->request->get('id');
     if(false !== strpos($id, ';'))
@@ -52,9 +51,6 @@ class DaysController extends BaseJsonController
 
   function doCommentCreate()
   {
-    if(!$this->_isLoggedUser())
-      return $this->_answerUnauthorized();
-
     if(!$this->request->hasPost())
       return $this->_answerWithError('Not a POST request');
 
@@ -85,9 +81,6 @@ class DaysController extends BaseJsonController
     if(!$day = Day::findById($this->request->id))
       return $this->_answerWithError("Day not found by id");
 
-    if(!$this->_isLoggedUser())
-      return $this->_answerUnauthorized();
-
     $day_url = $this->toolkit->getSiteUrl('/pages/'.$day->getId().'/day');
     $response = $this->_getUser()->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->shareDay($day, $day_url);
 
@@ -96,9 +89,6 @@ class DaysController extends BaseJsonController
 
   function doLike()
   {
-    if(!$this->_isLoggedUser())
-      return $this->_answerUnauthorized();
-
     if(!$this->request->hasPost())
       return $this->_answerWithError('Not a POST request');
 
@@ -121,9 +111,6 @@ class DaysController extends BaseJsonController
 
   function doUpdate()
   {
-    if(!$this->_isLoggedUser())
-      return $this->_answerUnauthorized();
-
   	if(!$this->request->hasPost())
   		return $this->_answerWithError('Not a POST request');
 
@@ -136,9 +123,6 @@ class DaysController extends BaseJsonController
 
   function doDelete()
   {
-    if(!$this->_isLoggedUser())
-      return $this->_answerUnauthorized();
-
   	if(!$this->request->hasPost())
   		return $this->_answerWithError('Not a POST request');
 
@@ -159,9 +143,6 @@ class DaysController extends BaseJsonController
 
   function doRestore()
   {
-    if(!$this->_isLoggedUser())
-      return $this->_answerUnauthorized();
-
     if(!$this->request->hasPost())
       return $this->_answerWithError('Not a POST request');
 
@@ -179,9 +160,6 @@ class DaysController extends BaseJsonController
 
   function doFollowingUsers()
   {
-    if(!$this->_isLoggedUser())
-      return $this->_answerUnauthorized();
-
     list($from, $to, $limit) = $this->_getFromToLimitations();
   	$users_ids = lmbArrayHelper::getColumnValues('id', $this->_getUser()->getFollowing());
 
@@ -202,7 +180,7 @@ class DaysController extends BaseJsonController
 		return $this->_answerOk($days);
   }
 
-  function doNew()
+  function doGuestNew()
   {
     list($from, $to, $limit) = $this->_getFromToLimitations();
     $days = Day::findNew($from, $to, $limit);
@@ -223,7 +201,7 @@ class DaysController extends BaseJsonController
   	return $this->_answerOk($answer);
   }
 
-  function doInteresting()
+  function doGuestInteresting()
   {
     list($from, $to, $limit) = $this->_getFromToLimitations();
     $days_ratings = (new InterestCalculator())->getDaysRatings($from, $to, $limit);
@@ -270,9 +248,6 @@ class DaysController extends BaseJsonController
 
   function doFavourite()
   {
-    if(!$this->_isLoggedUser())
-      return $this->_answerUnauthorized();
-
   	if(!$this->request->hasPost())
   		return $this->_answerWithError('Not a POST request');
 
@@ -288,9 +263,6 @@ class DaysController extends BaseJsonController
 
   function doUnfavourite()
   {
-    if(!$this->_isLoggedUser())
-      return $this->_answerUnauthorized();
-
   	if(!$this->request->hasPost())
   		return $this->_answerWithError('Not a POST request');
 
@@ -306,9 +278,6 @@ class DaysController extends BaseJsonController
 
   function doMy()
   {
-    if(!$this->_isLoggedUser())
-      return $this->_answerUnauthorized();
-
     list($from, $to, $limit) = $this->_getFromToLimitations();
     $days = $this->_getUser()->getDaysWithLimitations($from, $to, $limit, true);
 
@@ -339,12 +308,12 @@ class DaysController extends BaseJsonController
     return $this->_importSaveAndAnswer(new Complaint(), array('day_id', 'text'));
   }
 
-  function doTypeNames()
+  function doGuestTypeNames()
   {
     return $this->_answerOk(Day::getTypes());
   }
 
-  function doSearch()
+  function doGuestSearch()
   {
     list($from, $to, $limit) = $this->_getFromToLimitations();
     $query = $this->request->getFiltered('query', FILTER_SANITIZE_STRING);

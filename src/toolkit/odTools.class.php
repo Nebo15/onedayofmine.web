@@ -12,7 +12,7 @@ class odTools extends lmbAbstractTools
    */
   protected $user;
 
-  function setUser(User $user)
+  function setUser($user)
   {
     $this->user = $user;
     lmbToolkit::instance()->getSession()->set('user_id', $user->getId());

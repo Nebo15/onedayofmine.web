@@ -9,45 +9,83 @@ abstract class BaseJsonController extends lmbController
    * @var odTools
    */
   protected $toolkit;
-  protected $check_auth = true;
+
+  function actionExists($action)
+  {
+    return (bool) $this->_tryFindGuestMethod($action) || (bool) $this->_tryFindUserMethod($action);
+  }
 
   function performAction()
   {
     if($this->is_forwarded)
       return false;
 
-    if($this->check_auth && !$this->_isLoggedUser())
+    $guest_method = $this->_tryFindGuestMethod($this->current_action);
+    $user_method = $this->_tryFindUserMethod($this->current_action);
+    $is_logged = $this->_isLoggedUser();
+
+    if(!$guest_method && !$user_method)
     {
-      $this->response->write($this->_answerUnauthorized());
-      return null;
+      throw new lmbException('No method defined in controller "' .
+        $this->getName(). '" for action "' . $this->current_action . '" ' .
+        'and no appropriate template found');
+    }
+    elseif($guest_method && $user_method)
+    {
+      $method = $is_logged ? $user_method : $guest_method;
+    }
+    elseif($guest_method && !$user_method)
+    {
+      $method = $guest_method;
+    }
+    elseif(!$guest_method && $user_method)
+    {
+      $method = $user_method;
+      if(!$is_logged)
+      {
+        $this->response->write($this->_answerUnauthorized());
+        return null;
+      }
     }
 
-    if(method_exists($this, $method = lmb_camel_case('do_' . $this->current_action)))
-    {
-      if($template_path = $this->findTemplateForAction($this->current_action))
-        $this->setTemplate($template_path);
+    return $this->_runMethod($method);
+  }
 
-      $method_response = $this->$method();
-
-      $this->_passLocalAttributesToView();
-
-      if(is_string($method_response))
-        $this->response->write($method_response);
-      else
-        throw new lmbException("Method '$method' must return a string");
-
-      return $method_response;
-    }
-    elseif($template_path = $this->findTemplateForAction($this->current_action))
-    {
+  protected function _runMethod($method)
+  {
+    if($template_path = $this->findTemplateForAction($this->current_action))
       $this->setTemplate($template_path);
-      $this->_passLocalAttributesToView();
-      return null;
-    }
 
-    throw new lmbException('No method defined in controller "' .
-      $this->getName(). '" for action "' . $this->current_action . '" ' .
-      'and no appropriate template found');
+    $method_response = $this->$method();
+
+    $this->_passLocalAttributesToView();
+
+    if(is_string($method_response))
+      $this->response->write($method_response);
+    else
+      throw new lmbException("Method '$method' must return a string");
+
+    return $method_response;
+  }
+
+
+
+  protected function _tryFindGuestMethod($action)
+  {
+    $method = lmb_camel_case('do_guest_' . $action);
+    if(method_exists($this, $method))
+      return $method;
+  }
+
+  protected function _tryFindUserMethod($action)
+  {
+    $method = lmb_camel_case('do_' . $action);
+    if(method_exists($this, $method))
+      return $method;
+
+    $method = lmb_camel_case('do_user_' . $action);
+    if(method_exists($this, $method))
+      return $method;
   }
 
   /**

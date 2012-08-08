@@ -1,29 +1,114 @@
 <?php
 lmb_require('tests/cases/odUnitTestCase.class.php');
+lmb_require('src/controller/BaseJsonController.class.php');
 
 class BaseJsonControllerTest extends odUnitTestCase
 {
-  function testPerformAction()
+  function testPerformAction_GuestMethod()
   {
-//    $controller = new BaseJsonControllerForTest();
+    lmbToolkit::instance()->resetUser();
+    $controller = new BaseJsonControllerForTest();
+    $controller->setCurrentAction('foo');
+    $controller->performAction();
+    $this->assertResponseCode(200);
+    $this->assertResponse('foo');
+  }
+
+  function testPerformAction_GuestMethodByUser()
+  {
+    lmbToolkit::instance()->setUser(new User());
+    $controller = new BaseJsonControllerForTest();
+    $controller->setCurrentAction('foo');
+    $controller->performAction();
+    $this->assertResponseCode(200);
+    $this->assertResponse('foo');
+  }
+
+  function testPerformAction_UserMethod_Unauthorized()
+  {
+    lmbToolkit::instance()->resetUser();
+    $controller = new BaseJsonControllerForTest();
+    $controller->setCurrentAction('baz');
+    $controller->performAction();
+    $this->assertResponseCode(401);
+  }
+
+  function testPerformAction_UserMethod()
+  {
+    lmbToolkit::instance()->setUser(new User());
+    $controller = new BaseJsonControllerForTest();
+    $controller->setCurrentAction('baz');
+    $controller->performAction();
+    $this->assertResponseCode(200);
+    $this->assertResponse('baz');
+  }
+
+  function testPerformAction_UserAsDefault()
+  {
+    lmbToolkit::instance()->resetUser();
+    $controller = new BaseJsonControllerForTest();
+    $controller->setCurrentAction('bar');
+    $controller->performAction();
+    $this->assertResponseCode(401);
+  }
+
+  function testPerformAction_BothMethods()
+  {
+    lmbToolkit::instance()->resetUser();
+    $controller = new BaseJsonControllerForTest();
+    $controller->setCurrentAction('zoo');
+    $controller->performAction();
+    $this->assertResponseCode(200);
+    $this->assertResponse('guest_zoo');
+
+    lmbToolkit::instance()->setUser(new User());
+    $controller = new BaseJsonControllerForTest();
+    $controller->setCurrentAction('zoo');
+    $controller->performAction();
+    $this->assertResponseCode(200);
+    $this->assertResponse('user_zoo');
+  }
+
+  function assertResponseCode($code)
+  {
+    $response_json = lmbToolkit::instance()->getResponse()->getResponseString();
+    $response = json_decode($response_json);
+    $this->assertEqual($code, $response->code);
+  }
+
+  function assertResponse($text)
+  {
+    $response_json = lmbToolkit::instance()->getResponse()->getResponseString();
+    $response = json_decode($response_json);
+    $this->assertEqual($text, $response->result);
   }
 }
 
-//class BaseJsonControllerForTest extends BaseJsonController
-//{
-//  function doFoo()
-//  {
-//    return 'foo';
-//  }
-//
-//  function doGuestBar()
-//  {
-//    return 'bar';
-//  }
-//
-//  function doUserBaz()
-//  {
-//    return 'baz';
-//  }
-//}
+class BaseJsonControllerForTest extends BaseJsonController
+{
+  function doGuestFoo()
+  {
+    return $this->_answerOk('foo');
+  }
+
+  function doBar()
+  {
+    return $this->_answerOk('bar');
+  }
+
+  function doUserBaz()
+  {
+    return $this->_answerOk('baz');
+  }
+
+  function doUserZoo()
+  {
+    return $this->_answerOk('user_zoo');
+  }
+
+  function doGuestZoo()
+  {
+    return $this->_answerOk('guest_zoo');
+  }
+}
 
