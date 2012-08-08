@@ -103,7 +103,7 @@ abstract class odAcceptanceTestCase extends WebTestCase
   {
     $res = $this->post('auth/login/', array('token' => $user->getFbAccessToken()));
     $this->assertResponse(200);
-    $this->assertProperty($res->result, 'user');
+    $this->assertProperty($res->result, 'name');
     return $res;
   }
 
