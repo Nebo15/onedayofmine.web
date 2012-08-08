@@ -300,7 +300,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
       'occupation' => $occupation = $this->generator->string(),
       'timezone' => $timezone = $this->generator->integer(1),
       'location' => $location = $this->generator->string(),
-      'type' => $type = 'working'
+      'type' => $type = 'Working'
   	));
     if($this->assertResponse(200))
     {
