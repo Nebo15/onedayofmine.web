@@ -136,9 +136,10 @@ abstract class odAcceptanceTestCase extends WebTestCase
   function assertValidDayJson(Day $valid_day, stdClass $day_from_response)
   {
     $this->assertEqual($valid_day->getId(), $day_from_response->id);
-    if($this->assertProperty($valid_day, 'user'))
+    if($this->assertProperty($day_from_response, 'user'))
     {
-      $this->assertEqual($valid_day->user->id, $day_from_response->user->id);
+      $this->assertEqual($valid_day->user->id,
+        $day_from_response->user->id);
       $this->assertEqual($valid_day->user->name, $day_from_response->user->name);
       $this->assertValidImageUrl($day_from_response->user->image_36);
       $this->assertValidImageUrl($day_from_response->user->image_72);

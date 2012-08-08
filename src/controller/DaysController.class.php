@@ -252,15 +252,12 @@ class DaysController extends BaseJsonController
     foreach ($days as $day) {
       $export = $day->exportForApi();
 
-      // User data
       $this->_attachDayUser($export, $day);
-
-      // Favorites data
       $this->_attachDayIsFavorited($export, $day);
 
       $answer[] = $export;
     }
-		return $this->_answerOk($days);
+		return $this->_answerOk($answer);
   }
 
   function doGuestNew()

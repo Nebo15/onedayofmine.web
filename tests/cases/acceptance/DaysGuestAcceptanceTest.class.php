@@ -216,6 +216,8 @@ class DaysGuestAcceptanceTest extends odAcceptanceTestCase
     $day3->save();
     $day4 = $this->generator->day($this->main_user);
     $day4->save();
+    $day4->attachImage($this->generator->image());
+    $day4->save();
     $day5 = $this->generator->day($this->main_user);
     $day5->save();
 
@@ -250,9 +252,11 @@ class DaysGuestAcceptanceTest extends odAcceptanceTestCase
       'to' => $day1->getId(),
       'limit' => 1))
       ->result;
-    $this->assertResponse(200);
-    $this->assertEqual(1, count($result));
-    $this->assertEqual($day4->getId(), $result[0]->id);
+    if($this->assertResponse(200))
+    {
+      $this->assertEqual(1, count($result));
+      $this->assertValidDayJson($day4, $result[0]);
+    }
   }
 
   /**
@@ -277,6 +281,8 @@ class DaysGuestAcceptanceTest extends odAcceptanceTestCase
     $day2 = $this->generator->day($this->main_user);
     $day2->setLikesCount(3);
     $day2->setCtime($time - $day);
+    $day2->save();
+    $day2->attachImage($this->generator->image());
     $day2->save();
     $day3 = $this->generator->day($this->additional_user);
     $day3->setLikesCount(2);
@@ -328,9 +334,12 @@ class DaysGuestAcceptanceTest extends odAcceptanceTestCase
       'to'    => $day4->getId(),
       'limit' => 1))
       ->result;
-    $this->assertResponse(200);
-    $this->assertEqual(1, count($result));
-    $this->assertEqual($day2->getId(), $result[0]->id);
+    if($this->assertResponse(200))
+    {
+      $this->assertEqual(1, count($result));
+      $this->assertValidDayJson($day2, $result[0]);
+    }
+
   }
 
   /**
