@@ -382,7 +382,7 @@ class DaysController extends BaseJsonController
       unset($moment_export->day_id);
 
       // Moment comments data
-      $this->addComments($moment_export, $moment);
+      //$this->addComments($moment_export, $moment);
 
       $day_export->moments[] = $moment_export;
     }
