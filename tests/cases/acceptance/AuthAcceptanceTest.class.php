@@ -34,8 +34,8 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
       $this->assertTrue($res->user->name);
       $this->assertTrue($res->user->email);
       $this->assertTrue($res->user->sex);
-      $this->assertTrue($res->user->pic_small);
-      $this->assertTrue($res->user->pic_big);
+      $this->assertTrue($res->user->image_36);
+      $this->assertTrue($res->user->image_72);
       $this->assertTrue($res->user->birthday);
     }
   }

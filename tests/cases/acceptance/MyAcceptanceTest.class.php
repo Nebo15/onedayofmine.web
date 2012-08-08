@@ -24,8 +24,8 @@ class MyAcceptanceTest extends odAcceptanceTestCase
 			$this->assertEqual($this->main_user->name, $profile->name);
       $this->assertEqual($this->main_user->email, $profile->email);
 			$this->assertEqual($this->main_user->sex, $profile->sex);
-			$this->assertProperty($profile, 'pic_small');
-      $this->assertProperty($profile, 'pic_big');
+			$this->assertProperty($profile, 'image_36');
+      $this->assertProperty($profile, 'image_72');
 			$this->assertEqual($this->main_user->occupation, $profile->occupation);
       $this->assertEqual($this->main_user->location, $profile->location);
       $this->assertEqual($this->main_user->birthday, $profile->birthday);
@@ -46,8 +46,8 @@ class MyAcceptanceTest extends odAcceptanceTestCase
     $update->location = $this->generator->string(25);
     $update->email = $this->generator->email();
     $update->birthday = $this->generator->date_sql();
-    $update->pic_name = $this->generator->image_name();
-    $update->pic_content = base64_encode($this->generator->image());
+    $update->image_name = $this->generator->image_name();
+    $update->image_conetent = base64_encode($this->generator->image());
 
     $updated_profile = $this->post('/my/profile', (array) $update)->result;
 
@@ -58,10 +58,10 @@ class MyAcceptanceTest extends odAcceptanceTestCase
       $this->assertEqual($update->location, $updated_profile->location);
       $this->assertEqual($update->birthday, $updated_profile->birthday);
       $this->assertEqual($update->email, $updated_profile->email);
-      $this->assertProperty($updated_profile, 'pic_small');
-      $content = @file_get_contents($updated_profile->pic_small);
-      $this->assertTrue($content, "Image {$updated_profile->pic_small} not found");
-      $this->assertProperty($updated_profile, 'pic_big');
+      $this->assertProperty($updated_profile, 'image_36');
+      $content = @file_get_contents($updated_profile->image_36);
+      $this->assertTrue($content, "Image {$updated_profile->image_36} not found");
+      $this->assertProperty($updated_profile, 'image_72');
 
       $loaded_user = User::findById($this->main_user->getId());
 

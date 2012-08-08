@@ -13,9 +13,9 @@ lmb_require('limb/imagekit/src/lmbConvertImageHelper.class.php');
  */
 class User extends BaseModel
 {
-  const USERPIC_ORIG = 'orig';
-  const USERPIC_SMALL = '70x70';
-  const USERPIC_BIG = '140x140';
+  const IMAGE_ORIG = 'orig';
+  const IMAGE_SMALL = '36x36';
+  const IMAGE_BIG = '72x72';
 
   protected function _defineRelations()
   {
@@ -92,8 +92,8 @@ class User extends BaseModel
     $result->twitter_uid = $this->twitter_uid;
     $result->name = $this->name;
     $result->sex = $this->sex;
-    $result->pic_small = lmbToolkit::instance()->getSiteUrl($this->getPicSmall());
-    $result->pic_big = lmbToolkit::instance()->getSiteUrl($this->getPicBig());
+    $result->image_36 = lmbToolkit::instance()->getSiteUrl($this->getPicSmall());
+    $result->image_72 = lmbToolkit::instance()->getSiteUrl($this->getPicBig());
     $result->birthday = $this->birthday;
     $result->occupation = $this->occupation;
     $result->location = $this->location;
@@ -158,31 +158,31 @@ class User extends BaseModel
 
     $small_file = lmbToolkit::instance()->getAbsolutePath($this->getPicSmall());
     $helper = new lmbConvertImageHelper($orig_file);
-    $helper->resizeAndCropFrame(array('width' => 70, 'height' => 70));
+    $helper->resizeAndCropFrame(array('width' => 36, 'height' => 36));
     $helper->save($small_file);
 
     $small_file = lmbToolkit::instance()->getAbsolutePath($this->getPicBig());
     $helper = new lmbConvertImageHelper($orig_file);
-    $helper->resizeAndCropFrame(array('width' => 140, 'height' => 140));
+    $helper->resizeAndCropFrame(array('width' => 72, 'height' => 72));
     $helper->save($small_file);
   }
 
   function getPicOrig()
   {
-    return $this->getPicPath(User::USERPIC_ORIG);
+    return $this->getPicPath(User::IMAGE_ORIG);
   }
 
   function getPicSmall()
   {
-    return $this->getPicPath(User::USERPIC_SMALL);
+    return $this->getPicPath(User::IMAGE_SMALL);
   }
 
   function getPicBig()
   {
-    return $this->getPicPath(User::USERPIC_BIG);
+    return $this->getPicPath(User::IMAGE_BIG);
   }
 
-  function getPicPath($size_variation = User::USERPIC_ORIG)
+  function getPicPath($size_variation = User::IMAGE_ORIG)
   {
     $ext = $this->getImageExt();
     if(!$ext)

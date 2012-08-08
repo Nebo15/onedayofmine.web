@@ -39,8 +39,8 @@ class UserAcceptanceTest extends odAcceptanceTestCase
    * @api result string twitter_uid Twitter user ID
    * @api result string name Displayed name of the user
    * @api result string sex Gender {male,female}.
-   * @api result string pic_small URL to small variant of user avatar
-   * @api result string pic_big URL to big variant of user avatar
+   * @api result string image_36 URL to small variant of user avatar
+   * @api result string image_72 URL to big variant of user avatar
    * @api result string birthday Date of user birthday in format "YYYY-MM-DD"
    * @api result string occupation User occupation
    * @api result string location User location. Usually, but not always, in format "[city], [country]".
