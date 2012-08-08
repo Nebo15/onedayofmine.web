@@ -59,6 +59,7 @@ class lmbUri extends lmbSet
 
   function reset($str = null)
   {
+    $this->protocol    = '';
     $this->user        = '';
     $this->password    = '';
     $this->host        = '';
@@ -71,51 +72,50 @@ class lmbUri extends lmbSet
     if(!$str)
       return;
 
-    if('file' == substr($str, 0, 4))
-      $str = $this->_fixFileProtocol($str);
-    else
-      $str = $this->_fixURLProtocol($str);
-
-    if(!$urlinfo = @parse_url($str))
-      throw new lmbException("URI '$str' is not valid");
-
-    foreach($urlinfo as $key => $value)
+    if(!$this->_isUrlProtocol($str))
     {
-      switch($key)
+      $del_pos = strpos($str, '://');
+      if(false !== $del_pos)
       {
-        case 'scheme':
-          $this->setProtocol($value);
-        break;
-
-        case 'user':
-          $this->setUser($value);
-        break;
-
-        case 'host':
-          $this->setHost($value);
-        break;
-
-        case 'port':
-          $this->setPort($value);
-        break;
-
-        case 'pass':
-          $this->setPassword($value);
-        break;
-
-        case 'path':
-          $this->setPath($value);
-        break;
-
-        case 'query':
-          $this->setQueryString($value);
-        break;
-
-        case 'fragment':
-          $this->setAnchor($value);
-        break;
+        $original_protocol = substr($str, 0, $del_pos);
+        $str = 'file'.substr($str, $del_pos);
       }
+      $str = $this->_fixFileProtocol($str);
+      if(!$urlinfo = @parse_url($str))
+        throw new lmbException("File-based URI '$str' is not valid");
+      if(false !== $del_pos)
+        $urlinfo['scheme'] = $original_protocol;
     }
+    else
+    {
+      $str = $this->_fixURLProtocol($str);
+      if(!$urlinfo = @parse_url($str))
+        throw new lmbException("URI '$str' is not valid");
+    }
+
+    if(isset($urlinfo['scheme']))
+      $this->setProtocol($urlinfo['scheme']);
+
+    if(isset($urlinfo['user']))
+      $this->setUser($urlinfo['user']);
+
+    if(isset($urlinfo['host']))
+      $this->setHost($urlinfo['host']);
+
+    if(isset($urlinfo['port']))
+      $this->setPort($urlinfo['port']);
+
+    if(isset($urlinfo['pass']))
+      $this->setPassword($urlinfo['pass']);
+
+    if(isset($urlinfo['path']))
+      $this->setPath($urlinfo['path']);
+
+    if(isset($urlinfo['query']))
+      $this->setQueryString($urlinfo['query']);
+
+    if(isset($urlinfo['fragment']))
+      $this->setAnchor($urlinfo['fragment']);
   }
 
   /**
@@ -124,6 +124,17 @@ class lmbUri extends lmbSet
   function parse($uri)
   {
     $this->reset($uri);
+  }
+
+  protected function _isUrlProtocol($url)
+  {
+    $protocols = array('rss', 'http', 'https', 'mailto');
+    foreach($protocols as $protocol)
+    {
+      if($protocol.'://' == substr($url, 0, strlen($protocol) + 3))
+        return true;
+    }
+    return false;
   }
 
   protected function _fixFileProtocol($url)
