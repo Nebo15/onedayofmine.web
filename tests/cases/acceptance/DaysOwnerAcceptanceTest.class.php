@@ -134,9 +134,8 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
     if($this->assertResponse(200))
     {
       $loaded_day = Day::findById($day->getId())->exportForApi();
-      var_dump($loaded_day);
-      $img = @file_get_contents($loaded_day->image_266);
-      $this->assertTrue($img, "Cover image {$loaded_day->image_266} not found");
+      $this->assertValidImageUrl($loaded_day->image_266);
+      $this->assertValidImageUrl($loaded_day->image_532);
     }
   }
 
@@ -154,13 +153,13 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
 
     $this->_loginAndSetCookie($this->main_user);
 
-    $this->post('days/'.$day->getId().'/update', array(
+    $res = $this->post('days/'.$day->getId().'/update', array(
         'title' => $title = $this->generator->string(),
         'occupation' => $occupation = $this->generator->string(255),
         'location' => $location = $this->generator->string(),
         'type' => $type = 'Working',
         'cover_content' => base64_encode($this->generator->image()),
-    ));
+    ))->result;
     if($this->assertResponse(200))
     {
       $loaded_day = Day::findById($day->getId());
@@ -168,6 +167,8 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
       $this->assertEqual($loaded_day->getOccupation(), $occupation);
       $this->assertEqual($loaded_day->getLocation(), $location);
       $this->assertEqual($loaded_day->getType(), $type);
+      $this->assertValidImageUrl($res->image_266);
+      $this->assertValidImageUrl($res->image_532);
     }
   }
 

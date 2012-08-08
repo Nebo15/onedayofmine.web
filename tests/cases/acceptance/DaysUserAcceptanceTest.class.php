@@ -242,6 +242,8 @@ class DayUserAcceptanceTest extends odAcceptanceTestCase
   	$day2->save();
     $day3 = $this->generator->day($this->additional_user);
     $day3->save();
+    $day3->attachImage($this->generator->image());
+    $day3->save();
     $day4 = $this->generator->day($this->additional_user);
     $day4->save();
   	$day5 = $this->generator->day($this->additional_user);
@@ -288,6 +290,7 @@ class DayUserAcceptanceTest extends odAcceptanceTestCase
     $this->assertResponse(200);
     $this->assertEqual(1, count($days));
     $this->assertEqual($day3->getId(), $days[0]->id);
+    $this->assertValidDayJson($day3, $days[0]);
   }
 
   /**

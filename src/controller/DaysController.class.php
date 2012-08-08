@@ -102,6 +102,7 @@ class DaysController extends BaseJsonController
     if(!count($day->getMoments()))
     {
       $day->attachImage(base64_decode($this->request->get('image_content')));
+      $day->save();
     }
 
     $moment = new Moment();
@@ -252,15 +253,12 @@ class DaysController extends BaseJsonController
     foreach ($days as $day) {
       $export = $day->exportForApi();
 
-      // User data
       $this->_attachDayUser($export, $day);
-
-      // Favorites data
       $this->_attachDayIsFavorited($export, $day);
 
       $answer[] = $export;
     }
-		return $this->_answerOk($days);
+		return $this->_answerOk($answer);
   }
 
   function doGuestNew()
