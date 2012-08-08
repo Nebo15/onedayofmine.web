@@ -89,7 +89,6 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
 	/**
 	 * @api description Creates <a href="#Entity:Moment">moment</a> in current active day and returns it.
 	 * @api input param string description
-	 * @api input param string image_name Requires image_content field.
 	 * @api input param string image_content File contents, that was previously encoded by base64
    * @api input option int image_shoot_time Unix timestamp of time, when picture was created. If omited, current timestamp will be used.
 	 */

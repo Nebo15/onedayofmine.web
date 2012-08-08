@@ -12,7 +12,6 @@ class MomentsAcceptanceTest extends odAcceptanceTestCase
   /**
    * @api description Updates information about specified <a href="#Entity:Moment">moment</a> and returns it.
    * @api input option string description
-   * @api input option string image_name Requires image_content field.
    * @api input option string image_content File contents, that was previously encoded by base64
    */
   function testUpdate()

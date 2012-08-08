@@ -14,8 +14,8 @@ class MyController extends BaseJsonController
           $this->_getUser()->set($property, $this->request->getPost($property));
       }
 
-      if($this->request->has('pic_content'))
-        $this->_getUser()->attachImage(base64_decode($this->request->get('pic_content')));
+      if($this->request->has('image_content'))
+        $this->_getUser()->attachImage(base64_decode($this->request->get('image_content')));
 
       $this->_getUser()->save();
     }
