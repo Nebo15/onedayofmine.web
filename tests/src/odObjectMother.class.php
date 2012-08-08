@@ -177,7 +177,7 @@ class odObjectMother
 
   function image()
   {
-    return file_get_contents(__DIR__.'/../init/image_1600x1600.jpg');
+    return file_get_contents(__DIR__.'/../init/image_800x800.jpg');
   }
 
   function image_name()
