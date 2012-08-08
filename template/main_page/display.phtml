@@ -83,7 +83,9 @@
               <li>Email: {$item.email}</li>
               <li>Password: secret</li>
               <li>Access_token: {$item.access_token}</li>
+              <?php if(lmb_env_get('LIMB_APP_MODE') != 'devel') { ?>
               <li><a href="{$item.login_url}">login by user</a> (only for logged in facebook-app developers)</li>
+              <?php } ?>
             </ul>
           </li>
           {{/list:item}}
