@@ -10,7 +10,7 @@
  * @method string getDescription()
  * @method void setFbAccessToken(string $fb_access_token)
  */
-class Moment extends lmbActiveRecord
+class Moment extends BaseModel
 {
   const IMAGE_ORIG = 'orig';
   const IMAGE_SMALL = '266x200';
@@ -45,16 +45,16 @@ class Moment extends lmbActiveRecord
     $moment->description = $this->getDescription();
     $moment->image_266 = lmbToolkit::instance()->getStaticUrl($this->getImageSmall());
     $moment->image_532 = lmbToolkit::instance()->getStaticUrl($this->getImageBig());
-    $moment->image_shoot_time = $this->getImageShootTime();
+    $moment->time = self::stampToIso($this->getTime(), $this->getTimezone());
     $moment->likes_count = $this->getLikesCount() ?: 0;
     $moment->ctime = $this->getCtime();
 
     return $moment;
   }
 
-  function attachImage($filename_or_url, $content)
+  function attachImage($content)
   {
-    $extension = $this->_getImageExtensionByMimeType((new finfo())->buffer($content));
+    $extension = $this->_getImageExtensionByMimeType((new finfo())->buffer($content, FILEINFO_MIME_TYPE));
     $this->setImageExt($extension);
 
     $orig_file = lmbToolkit::instance()->getAbsolutePath($this->getImageOrig());

@@ -21,7 +21,7 @@ class NewsObserverAcceptanceTest extends odAcceptanceTestCase
   function testCreateDay()
   {
     $params = $this->generator->day($this->main_user)->exportForApi();
-    $day = $this->post('current_day/start', $params)->result;
+    $this->post('days/start', $params)->result;
 
     if($this->assertResponse(200)) {
       $this->_checkMessage($this->additional_user,
@@ -59,7 +59,7 @@ class NewsObserverAcceptanceTest extends odAcceptanceTestCase
 
     $this->generator->dayComment($day, $user)->save();
 
-    $response = $this->post('days/'.$day->getId().'/comment_create', array(
+    $this->post('days/'.$day->getId().'/comment_create', array(
       'text' => $text = $this->generator->string(255)
     ));
 
@@ -87,10 +87,10 @@ class NewsObserverAcceptanceTest extends odAcceptanceTestCase
     $day->setIsEnded(0);
     $day->save();
 
-    $res = $this->post('current_day/moment_create', array(
+    $this->post('days/'.$day->getId().'/moment_create', array(
         'description' => $description = $this->generator->string(200),
-        'image_name' => $image_path = 'foo/bar/example.png',
-        'image_content' => 'iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAAXNSR0IArs4c6QAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9wGEg47HYlSsqsAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAOUlEQVQI13VOQQ4AIAiC1v+/TAcKZysOTkQUApCEDpI11YH7EQdJ103jsBA68MG8dutUPrdIFp5xF8lAKftzc/YPAAAAAElFTkSuQmCC'
+        'img_content' => 'iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAAXNSR0IArs4c6QAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9wGEg47HYlSsqsAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAOUlEQVQI13VOQQ4AIAiC1v+/TAcKZysOTkQUApCEDpI11YH7EQdJ103jsBA68MG8dutUPrdIFp5xF8lAKftzc/YPAAAAAElFTkSuQmCC',
+        'time' => '2005-08-09T18:31:42+03:00'
     ))->result;
 
     if($this->assertResponse(200))

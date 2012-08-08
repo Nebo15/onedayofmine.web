@@ -17,10 +17,6 @@ class DayTest extends odUnitTestCase
     $this->assertFalse($day->validate());
 
     $day = $this->_createValidDay();
-    $day->setTimezone(null);
-    $this->assertFalse($day->validate());
-
-    $day = $this->_createValidDay();
     $day->setUser(null);
     $this->assertFalse($day->validate());
 
