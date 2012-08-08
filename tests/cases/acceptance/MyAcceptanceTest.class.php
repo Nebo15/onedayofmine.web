@@ -46,8 +46,7 @@ class MyAcceptanceTest extends odAcceptanceTestCase
     $update->location = $this->generator->string(25);
     $update->email = $this->generator->email();
     $update->birthday = $this->generator->date_sql();
-    $update->image_name = $this->generator->image_name();
-    $update->image_conetent = base64_encode($this->generator->image());
+    $update->pic_content = base64_encode($this->generator->image());
 
     $updated_profile = $this->post('/my/profile', (array) $update)->result;
 

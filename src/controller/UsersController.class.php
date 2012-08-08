@@ -4,6 +4,11 @@ lmb_require('src/model/User.class.php');
 
 class UsersController extends BaseJsonController
 {
+  function doGuestDisplay()
+  {
+    return $this->_answerNotFound();
+  }
+
   function doGuestItem()
   {
     if(!$user = User::findById($this->request->id))

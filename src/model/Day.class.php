@@ -30,7 +30,6 @@ class Day extends BaseModel
     $validator->addRequiredObjectRule('user', 'User');
     $validator->addRequiredRule('title');
     $validator->addRequiredRule('occupation');
-    $validator->addRequiredRule('timezone');
     // $validator->addRequiredRule('location');
     $validator->addRequiredRule('type');
     return $validator;
@@ -46,7 +45,6 @@ class Day extends BaseModel
     $export->cover_image_532 = lmbToolkit::instance()->getStaticUrl($this->getImageBig());
     $export->title = $this->getTitle();
     $export->occupation = $this->getOccupation();
-    $export->timezone = $this->getTimezone();
     $export->location = $this->getLocation();
     $export->type = $this->getType();
     $export->likes_count = $this->getLikesCount() ?: 0;
@@ -62,7 +60,7 @@ class Day extends BaseModel
 
   function attachImage($content)
   {
-    $extension = $this->_getImageExtensionByMimeType((new finfo())->buffer($content));
+    $extension = $this->_getImageExtensionByMimeType((new finfo())->buffer($content, FILEINFO_MIME_TYPE));
     $this->setImageExt($extension);
 
     $orig_file = lmbToolkit::instance()->getAbsolutePath($this->getImageOrig());
@@ -70,12 +68,12 @@ class Day extends BaseModel
 
     $small_file = lmbToolkit::instance()->getAbsolutePath($this->getImageSmall());
     $helper = new lmbConvertImageHelper($orig_file);
-    $helper->resizeAndCropFrame(array('width' => 266, 'height' => 200));
+    $helper->resizeAndCropFrame(array('width' => 266, 'height' => 266));
     $helper->save($small_file);
 
     $small_file = lmbToolkit::instance()->getAbsolutePath($this->getImageBig());
     $helper = new lmbConvertImageHelper($orig_file);
-    $helper->resizeAndCropFrame(array('width' => 532, 'height' => 400));
+    $helper->resizeAndCropFrame(array('width' => 532, 'height' => 532));
     $helper->save($small_file);
   }
 

@@ -1,7 +1,7 @@
 <?php
 lmb_require('tests/cases/odAcceptanceTestCase.class.php');
 
-class CurrentDayAcceptanceTest extends odAcceptanceTestCase
+class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
 {
 	function setUp()
 	{
@@ -11,16 +11,16 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 
 	function testStart_Negative()
 	{
-		$this->post('current_day/start');
+		$this->post('days/start');
 		$this->assertResponse(401);
 
     $this->main_user->save();
 		$this->_loginAndSetCookie($this->main_user);
 
-		$this->get('current_day/start');
+		$this->get('days/start');
 		$this->assertResponse(405);
 
-		$errors = $this->post('current_day/start')->errors;
+		$errors = $this->post('days/start')->errors;
 		$this->assertResponse(400);
 		$this->assertEqual('array', gettype($errors));
 		$this->assertTrue(0 < count($errors));
@@ -42,9 +42,8 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 
 		$params = $this->generator->day()->exportForApi();
 
-		$day = $this->post('current_day/start', array(
+		$day = $this->post('days/start', array(
       'title' => $params->title,
-      'timezone' => $params->timezone,
       // 'latlong' => $params->latlong,
       'occupation' => $params->occupation,
       'type' => $params->type,
@@ -52,7 +51,6 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 		if($this->assertResponse(200))
     {
       $this->assertEqual($params->title, $day->title);
-      $this->assertEqual($params->timezone, $day->timezone);
       $this->assertEqual($params->occupation, $day->occupation);
       // $this->assertEqual($params->latlong, $day->latlong);
       $this->assertEqual($params->type, $day->type);
@@ -71,12 +69,11 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
     $params = $this->generator->day()->exportForApi();
     $params->occupation = null;
 
-    $day = $this->post('current_day/start', $params)->result;
+    $day = $this->post('days/start', $params)->result;
     if($this->assertResponse(200))
     {
       $this->assertEqual($params->title, $day->title);
       $this->assertEqual($this->main_user->getId(), $day->user_id);
-      $this->assertEqual($params->timezone, $day->timezone);
       $this->assertEqual($this->main_user->occupation, $day->occupation);
       $this->assertTrue($day->ctime);
       $this->assertTrue($day->utime);
@@ -88,42 +85,6 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
   {
 
   }
-
-	/**
-	 * @api description Returns current <a href="#Entity:Day">day</a>. Additional fields are listed below.
-   * @api result Moment[3] moments Array of day moments
-   * @api result int comments_count Count of comments to this day
-   * @api result Comment[3] comments Array of day first comments
-   * @api result bool is_favorite True if this article is added to current user favourites. If user is not logged in then field is omited.
-	 */
-	function testGetCurrentDay()
-	{
-		$day = $this->generator->day($this->main_user);
-		$day->setIsEnded(0);
-		$day->save();
-
-		$this->_loginAndSetCookie($this->main_user);
-		$loaded_day = $this->get('current_day')->result;
-
-		$this->assertResponse(200);
-		$this->assertEqual($loaded_day->title, $day->title);
-		$this->assertEqual($this->main_user->getId(), $day->user_id);
-		$this->assertEqual($loaded_day->timezone, $day->timezone);
-		$this->assertEqual($loaded_day->ctime, $day->ctime);
-		$this->assertEqual($loaded_day->utime, $day->utime);
-	}
-
-	function testGetCurrentDay_WithoutUnfinishedDay()
-	{
-		$day = $this->generator->day($this->main_user);
-		$day->setIsEnded(1);
-		$day->save();
-
-		$this->_loginAndSetCookie($this->main_user);
-
-		$this->get('current_day');
-		$this->assertResponse(404);
-	}
 
 	/**
 	 * @api description Creates <a href="#Entity:Moment">moment</a> in current active day and returns it.
@@ -139,11 +100,10 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 		$day->save();
 
 		$this->_loginAndSetCookie($this->main_user);
-		$res = $this->post('current_day/moment_create', array(
+		$res = $this->post('days/'.$day->getId().'/moment_create', array(
 				'description' => $description = $this->generator->string(200),
-				'image_name' => $image_path = $this->generator->image_name(),
-				'image_content' => base64_encode($this->generator->image()),
-        'image_shoot_time' => $image_shoot_time = $this->generator->integer(6)
+				'img_content' => base64_encode($this->generator->image()),
+        'time' => $time = '2005-08-09T18:31:42+03:00'
 		))->result;
 
 		if($this->assertResponse(200))
@@ -154,7 +114,7 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
       $this->assertProperty($res, 'image_532');
 			$this->assertEqual(0, $res->likes_count);
 			$this->assertProperty($res, 'ctime');
-      $this->assertEqual($res->image_shoot_time, $image_shoot_time);
+      $this->assertEqual($res->time, $time);
 		}
 	}
 
@@ -165,23 +125,24 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
     $day->save();
 
     $this->_loginAndSetCookie($this->main_user);
-    $this->post('current_day/moment_create', array(
+    $this->post('days/'.$day->getId().'/moment_create', array(
       'description' => $description = $this->generator->string(200),
-      'image_name' => $image_path = $this->generator->image_name(),
-      'image_content' => base64_encode($this->generator->image())
+      'img_content' => base64_encode($this->generator->image()),
+      'time' => $time = '2005-08-09T18:31:42+03:00'
     ))->result;
 
-    $loaded_day = Day::findById($day->getId())->exportForApi();
-    $img = @file_get_contents($loaded_day->cover_image_266);
-    $this->assertTrue($img, "Cover image {$loaded_day->cover_image_266} not found");
+    if($this->assertResponse(200))
+    {
+      $loaded_day = Day::findById($day->getId())->exportForApi();
+      $img = @file_get_contents($loaded_day->cover_image_266);
+      $this->assertTrue($img, "Cover image {$loaded_day->cover_image_266} not found");
+    }
   }
 
   /**
    * @api description Updates information about current <a href="#Entity:Day">day</a> and returns it. You are free to make selective changes.
    * @api input option string title
-   * @api input option int timezone UTC time zone offset
    * @api input option string occupation Can be omited, then user profile occupation will be used
-   * @api input option string latlong "[Latitude],[Longitude]" of place, where day was created
    * @api input option string type One of pre-defined types, see: GET day/type_names request
    */
   function testUpdate()
@@ -192,19 +153,18 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 
     $this->_loginAndSetCookie($this->main_user);
 
-    $this->post('current_day/update', array(
+    $this->post('days/'.$day->getId().'/update', array(
         'title' => $title = $this->generator->string(),
         'occupation' => $occupation = $this->generator->string(255),
-        'timezone' => $timezone = $this->generator->integer(1),
         'location' => $location = $this->generator->string(),
-        'type' => $type = 'Working'
+        'type' => $type = 'Working',
+        'cover_content' => base64_encode($this->generator->image()),
     ));
     if($this->assertResponse(200))
     {
       $loaded_day = Day::findById($day->getId());
       $this->assertEqual($loaded_day->getTitle(), $title);
       $this->assertEqual($loaded_day->getOccupation(), $occupation);
-      $this->assertEqual($loaded_day->getTimezone(), $timezone);
       $this->assertEqual($loaded_day->getLocation(), $location);
       $this->assertEqual($loaded_day->getType(), $type);
     }
@@ -219,11 +179,118 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 		$day->save();
 
 		$this->_loginAndSetCookie($this->main_user);
-		$this->post('current_day/finish')->result;
+		$this->post('days/'.$day->getId().'/finish')->result;
 
 		$this->assertResponse(200);
 	}
 
 	//TODO
-	function testEnd_NotFound() {}
+	function testFinish_NotFound() {}
+
+  function testUpdate_NotFound()
+  {
+    $this->_loginAndSetCookie($this->main_user);
+
+    $this->post('days/100500/update', array(
+      'title' => $title = $this->generator->string(),
+      'occupation' => $occupation = $this->generator->string(),
+      'location' => $location = $this->generator->string(),
+      'type' => $type = 'Working',
+      'cover' => $this->generator->image(),
+    ));
+    $this->assertResponse(404);
+  }
+
+  function testUpdate_WrongUser()
+  {
+    $day = $this->generator->day($this->main_user);
+    $day->setIsEnded(0);
+    $day->save();
+
+    $this->_loginAndSetCookie($this->additional_user);
+
+    $this->post('days/'.$day->getId().'/update', array(
+      'title' => $title = $this->generator->string(),
+      'occupation' => $occupation = $this->generator->string(),
+      'location' => $location = $this->generator->string(),
+      'type' => $type = 'Working',
+      'cover' => $this->generator->image(),
+    ));
+    $this->assertResponse(404);
+  }
+
+  /**
+   * @api description Deletes a day
+   * @api input param int day_id
+   */
+  function testDeleteDay()
+  {
+    $day = $this->generator->day($this->main_user);
+    $day->save();
+
+    $this->_loginAndSetCookie($this->main_user);
+    $this->post('days/'.$day->getId().'/delete')->result;
+
+    $this->assertResponse(200);
+
+    $loaded_day = Day::findById($day->getId());
+    $this->assertEqual(1, $loaded_day->getIsDeleted());
+  }
+
+  function testDelete_NotFound()
+  {
+    $this->_loginAndSetCookie($this->main_user);
+    $this->post('days/100000/delete')->result;
+
+    $this->assertResponse(404);
+  }
+
+  function testDelete_WrongUser()
+  {
+    $day = $this->generator->day($this->main_user);
+    $day->save();
+
+    $this->_loginAndSetCookie($this->additional_user);
+    $this->post('days/'.$day->getId().'/delete')->result;
+
+    $this->assertResponse(404);
+  }
+
+  /**
+   * @api description Restore a deleted day
+   * @api input param int day_id
+   */
+  function testRestoreDay()
+  {
+    $day = $this->generator->day($this->main_user);
+    $day->setIsDeleted(1);
+    $day->save();
+
+    $this->_loginAndSetCookie($this->main_user);
+    $this->post('days/'.$day->getId().'/restore')->result;
+
+    $this->assertResponse(200);
+
+    $loaded_day = Day::findById($day->getId());
+    $this->assertEqual(0, $loaded_day->getIsDeleted());
+  }
+
+  function testRestoreDay_NotFound()
+  {
+    $this->_loginAndSetCookie($this->main_user);
+    $this->post('days/100000/delete')->result;
+
+    $this->assertResponse(404);
+  }
+
+  function testRestoreDay_WrongUser()
+  {
+    $day = $this->generator->day($this->main_user);
+    $day->save();
+
+    $this->_loginAndSetCookie($this->additional_user);
+    $this->post('days/'.$day->getId().'/restore')->result;
+
+    $this->assertResponse(404);
+  }
 }
