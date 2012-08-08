@@ -343,10 +343,10 @@ class DaysController extends BaseJsonController
     $day_export->user = $day->getUser()->exportForApi();
     unset($day_export->user_id);
 
-    if(lmbToolkit::instance()->getUser() && $day->getUser()->getId() != lmbToolkit::instance()->getUser()->getId()) {
-      $day_export->user->is_followed = UserFollowing::isFollowing(lmbToolkit::instance()->getUser(), $day->getUser());
-      $day_export->user->is_follower = UserFollowing::isFollowing($day->getUser(), lmbToolkit::instance()->getUser());
-    }
+    // if(lmbToolkit::instance()->getUser() && $day->getUser()->getId() != lmbToolkit::instance()->getUser()->getId()) {
+    //   $day_export->user->is_followed = UserFollowing::isFollowing(lmbToolkit::instance()->getUser(), $day->getUser());
+    //   $day_export->user->is_follower = UserFollowing::isFollowing($day->getUser(), lmbToolkit::instance()->getUser());
+    // }
   }
 
   protected function addDayIsFavorited(stdClass $day_export, $day)
