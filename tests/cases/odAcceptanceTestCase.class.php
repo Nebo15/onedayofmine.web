@@ -83,13 +83,13 @@ abstract class odAcceptanceTestCase extends WebTestCase
     if(!$doc_comment->hasGroup('api'))
       return;
 
-    lmbToolkit::instance()
-      ->getPostmanWriter()
-      ->addRequest($call_name, $url_path, $method, $params);
-
-    lmbToolkit::instance()
-      ->getApiToMarkdownWriter()
-      ->addRequest($call_name, $method, $url_path, $params, $response, $doc_comment);
+//    lmbToolkit::instance()
+//      ->getPostmanWriter()
+//      ->addRequest($call_name, $url_path, $method, $params);
+//
+//    lmbToolkit::instance()
+//      ->getApiToMarkdownWriter()
+//      ->addRequest($call_name, $method, $url_path, $params, $response, $doc_comment);
 
   }
 

@@ -148,9 +148,9 @@ class User extends BaseModel
     ))->paginate(0, $limit);
   }
 
-  function attachImage($filename_or_url, $content)
+  function attachImage($content)
   {
-    $extension = strtolower(substr($filename_or_url, strrpos($filename_or_url, '.')+1));
+    $extension = $this->_getImageExtensionByMimeType((new finfo())->buffer($content));
     $this->setImageExt($extension);
 
     $orig_file = lmbToolkit::instance()->getAbsolutePath($this->getPicOrig());

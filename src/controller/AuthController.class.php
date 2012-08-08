@@ -55,8 +55,7 @@ class AuthController extends BaseJsonController
     $user->import($facebook_info);
     $user->save();
 
-    $userpic_url = $facebook_info['pic'];
-    $user->attachImage($userpic_url, file_get_contents($userpic_url));
+    $user->attachImage(file_get_contents($facebook_info['pic']));
     $user->save();
 
     return $user;

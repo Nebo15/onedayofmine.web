@@ -54,7 +54,7 @@ class Moment extends lmbActiveRecord
 
   function attachImage($filename_or_url, $content)
   {
-    $extension = strtolower(substr($filename_or_url, strrpos($filename_or_url, '.')+1));
+    $extension = $this->_getImageExtensionByMimeType((new finfo())->buffer($content));
     $this->setImageExt($extension);
 
     $orig_file = lmbToolkit::instance()->getAbsolutePath($this->getImageOrig());
