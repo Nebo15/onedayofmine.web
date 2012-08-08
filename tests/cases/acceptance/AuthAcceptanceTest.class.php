@@ -104,6 +104,9 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
 
     $users = User::find();
     $this->assertEqual(1, count($users));
+    $user = $users->at(0)->exportForApi();
+    $this->assertTrue($user->image_36);
+    $this->assertTrue($user->image_72);
   }
 
   // TODO cache dont work on invalid tokens

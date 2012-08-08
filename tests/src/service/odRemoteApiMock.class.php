@@ -1,4 +1,6 @@
 <?php
+lmb_require('tests/src/odObjectMother.class.php');
+
 class odRemoteApiMock
 {
   /**
