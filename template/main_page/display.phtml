@@ -39,7 +39,6 @@
           </div>
         </div>
       </div>
-      <br />
       <div class="tab-pane active" id="tab-examples">
         <div id="examples-content">
           <div class="alert alert-info">
@@ -47,7 +46,6 @@
           </div>
         </div>
       </div>
-      <br />
       <div class="tab-pane active" id="tab-entities">
         <div id="entities-content">
           <div class="alert alert-info">
@@ -55,9 +53,7 @@
           </div>
         </div>
       </div>
-      <br />
       <div class="tab-pane" id="tab-testing">
-
         <h3>Установка:</h3>
         <ul>
           <li>
@@ -65,10 +61,7 @@
             для хрома
           </li>
           <li>сохраняем и импортируем в него <a href="/api_doc/postman.json">файлик</a></li>
-          <li>в окружении(в центре шапки, справа от глазика) задаем переменную host = 'http://api.onedayofmine.com/'
-            именно со
-            слешем в конце
-          </li>
+          <li>в окружении(в центре шапки, справа от глазика) задаем переменную host = 'http://api.onedayofmine.com/' именно со слешем в конце</li>
         </ul>
 
         <h3>Аутентификация:</h3>
@@ -87,15 +80,16 @@
           <li>
             ID: {$item.id}
             <ul>
-              <li>access_token: {$item.access_token}</li>
-              <li><a href="{$item.login_url}">login by user</a></li>
+              <li>Email: {$item.email}</li>
+              <li>Password: secret</li>
+              <li>Access_token: {$item.access_token}</li>
+              <li><a href="{$item.login_url}">login by user</a> (only for logged in facebook-app developers)</li>
             </ul>
           </li>
           {{/list:item}}
           {{list:empty}}
             <p>Facebook не захотел показывать тестовых пользователей. Try to F5 later.</p>
-          	<img
-            	src="http://gifsforum.com/images/gif/F5/grand/rafresh-refresh-F5-eccbc87e4b5ce2fe28308fd9f2a7baf3-185.gif"/>
+          	<img src="http://gifsforum.com/images/gif/F5/grand/rafresh-refresh-F5-eccbc87e4b5ce2fe28308fd9f2a7baf3-185.gif"/>
           {{/list:empty}}
         </ul>
         {{/list}}

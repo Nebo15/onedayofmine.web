@@ -112,6 +112,15 @@ class odTools extends lmbAbstractTools
       return array();
     }
 
+    foreach ($users['data'] as $key => $value) {
+      $user = new User();
+      // var_dump($value);
+      $user->setFbUid($value['id']);
+      $user->setFbAccessToken($value['access_token']);
+      $user->import($user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->getInfo());
+      $users['data'][$key]['email'] = $user->getEmail();
+    }
+
   	return $users['data'];
   }
 }
