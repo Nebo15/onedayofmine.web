@@ -13,8 +13,8 @@
 class Moment extends lmbActiveRecord
 {
   const IMAGE_ORIG = 'orig';
-  const IMAGE_SMALL = '200x200';
-  const IMAGE_BIG = '400x400';
+  const IMAGE_SMALL = '266x200';
+  const IMAGE_BIG = '532x400';
 
   protected $_db_table_name = 'moment';
   protected $_default_sort_params = array('id'=>'asc');
@@ -43,8 +43,8 @@ class Moment extends lmbActiveRecord
     $moment->id = $this->getId();
     $moment->day_id = $this->getDayId();
     $moment->description = $this->getDescription();
-    $moment->image_small = lmbToolkit::instance()->getStaticUrl($this->getImageSmall());
-    $moment->image_big = lmbToolkit::instance()->getStaticUrl($this->getImageBig());
+    $moment->image_266 = lmbToolkit::instance()->getStaticUrl($this->getImageSmall());
+    $moment->image_532 = lmbToolkit::instance()->getStaticUrl($this->getImageBig());
     $moment->image_shoot_time = $this->getImageShootTime();
     $moment->likes_count = $this->getLikesCount() ?: 0;
     $moment->ctime = $this->getCtime();
@@ -62,12 +62,12 @@ class Moment extends lmbActiveRecord
 
     $small_file = lmbToolkit::instance()->getAbsolutePath($this->getImageSmall());
     $helper = new lmbConvertImageHelper($orig_file);
-    $helper->resizeAndCropFrame(array('width' => 200, 'height' => 200));
+    $helper->resizeAndCropFrame(array('width' => 266, 'height' => 200));
     $helper->save($small_file);
 
     $small_file = lmbToolkit::instance()->getAbsolutePath($this->getImageBig());
     $helper = new lmbConvertImageHelper($orig_file);
-    $helper->resizeAndCropFrame(array('width' => 400, 'height' => 400));
+    $helper->resizeAndCropFrame(array('width' => 532, 'height' => 400));
     $helper->save($small_file);
   }
 

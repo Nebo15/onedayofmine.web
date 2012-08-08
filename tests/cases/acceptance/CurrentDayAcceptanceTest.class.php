@@ -150,8 +150,8 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
 		{
 			$this->assertEqual($day->getMoments()->at(0)->getId(), $res->id);
 			$this->assertEqual($day->getId(), $res->day_id);
-			$this->assertProperty($res, 'image_small');
-      $this->assertProperty($res, 'image_big');
+			$this->assertProperty($res, 'image_266');
+      $this->assertProperty($res, 'image_532');
 			$this->assertEqual(0, $res->likes_count);
 			$this->assertProperty($res, 'ctime');
       $this->assertEqual($res->image_shoot_time, $image_shoot_time);

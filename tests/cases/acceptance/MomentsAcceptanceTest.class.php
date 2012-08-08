@@ -32,12 +32,12 @@ class MomentsAcceptanceTest extends odAcceptanceTestCase
     $this->assertResponse(200);
 
     $this->assertEqual($res->description, $desc);
-    $this->assertProperty($res, 'image_small');
-    $content = @file_get_contents($res->image_small);
-    $this->assertTrue($content, "Image {$res->image_small} not found");
-    $this->assertProperty($res, 'image_big');
-    $content = @file_get_contents($res->image_big);
-    $this->assertTrue($content, "Image {$res->image_big} not found");
+    $this->assertProperty($res, 'image_266');
+    $content = @file_get_contents($res->image_266);
+    $this->assertTrue($content, "Image {$res->image_266} not found");
+    $this->assertProperty($res, 'image_532');
+    $content = @file_get_contents($res->image_532);
+    $this->assertTrue($content, "Image {$res->image_532} not found");
 
     $loaded_moment = Moment::findById($moment->getId());
     $this->assertEqual($loaded_moment->getDescription(), $desc);
