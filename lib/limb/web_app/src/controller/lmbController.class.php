@@ -341,17 +341,6 @@ class lmbController
   function __destruct()
   {
     // Log only JSON API requests
-    if($this->response->getContentType() == 'application/json') // lmb_env_get(LIMB_APP_MODE) != 'devel'
-      $this->toolkit->getLog('request')
-                    ->info('Request', array(
-                            'method' => $this->request->getRequestMethod(),
-                            'uri'    => $this->request->getUri()->toString(),
-                            'data'   => $this->request->getDataString(),
-                            'code'   => $this->response->getStatus(),
-                            'response' => $this->response->getResponseString()
-                          )
-                        );
-
     $this->_saveCache();
   }
 
