@@ -24,4 +24,21 @@ abstract class BaseModel extends lmbActiveRecord
   {
     return 'jpeg';
   }
+
+  protected function _getImageExtensionByMimeType($mime_type)
+  {
+    lmb_assert_true($mime_type);
+
+    $exts = array(
+      'image/jpeg' => 'jpg',
+      'image/png'  => 'png',
+      'image/gif'  => 'gif',
+      'JPEG image data, JFIF standard 1.02, comment: "*"' => 'jpg',
+    );
+
+    if(!isset($exts[$mime_type]))
+      throw new lmbException("Unknown mime-type '{$mime_type}'");
+
+    return $exts[$mime_type];
+  }
 }

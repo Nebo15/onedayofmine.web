@@ -36,19 +36,6 @@ class CurrentDayController extends BaseJsonController
 		return $response;
 	}
 
-  function doUpdate()
-  {
-    if(!$this->request->hasPost())
-      return $this->_answerWithError('Not a POST request');
-
-    if(!$day = Day::findUnfinished($this->_getUser()))
-      return $this->_answerNotFound('Unfinished day not found');
-
-    $response = $this->_importSaveAndAnswer($day, array('title', 'occupation', 'timezone', 'location', 'type'));
-
-    return $response;
-  }
-
 	function doFinish()
 	{
 		if(!$this->request->hasPost())

@@ -282,27 +282,51 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   	$this->post('days/'.$day->getId().'/update', array(
       'title' => $title = $this->generator->string(),
       'occupation' => $occupation = $this->generator->string(),
-      'timezone' => $timezone = $this->generator->integer(1),
       'location' => $location = $this->generator->string(),
-      'type' => $type = 'Working'
+      'type' => $type = 'Working',
+      'cover' => $this->generator->image(),
   	));
     if($this->assertResponse(200))
     {
       $loaded_day = Day::findById($day->getId());
       $this->assertEqual($loaded_day->getTitle(), $title);
       $this->assertEqual($loaded_day->getOccupation(), $occupation);
-      $this->assertEqual($loaded_day->getTimezone(), $timezone);
       $this->assertEqual($loaded_day->getLocation(), $location);
       $this->assertEqual($loaded_day->getType(), $type);
+      $this->assertTrue($loaded_day->getImageOrig());
     }
   }
 
-  //TODO
-  function testUpdate_NotFound() {
+  function testUpdate_NotFound()
+  {
+    $this->_loginAndSetCookie($this->main_user);
+
+    $this->post('days/100500/update', array(
+      'title' => $title = $this->generator->string(),
+      'occupation' => $occupation = $this->generator->string(),
+      'location' => $location = $this->generator->string(),
+      'type' => $type = 'Working',
+      'cover' => $this->generator->image(),
+    ));
+    $this->assertResponse(404);
   }
 
-  //TODO
-  function testUpdate_WrongUser() {
+  function testUpdate_WrongUser()
+  {
+    $day = $this->generator->day($this->main_user);
+    $day->setIsEnded(0);
+    $day->save();
+
+    $this->_loginAndSetCookie($this->additional_user);
+
+    $this->post('days/'.$day->getId().'/update', array(
+      'title' => $title = $this->generator->string(),
+      'occupation' => $occupation = $this->generator->string(),
+      'location' => $location = $this->generator->string(),
+      'type' => $type = 'Working',
+      'cover' => $this->generator->image(),
+    ));
+    $this->assertResponse(404);
   }
 
   /**
