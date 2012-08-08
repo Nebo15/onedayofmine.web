@@ -172,8 +172,8 @@ class CurrentDayAcceptanceTest extends odAcceptanceTestCase
     ))->result;
 
     $loaded_day = Day::findById($day->getId())->exportForApi();
-    $img = @file_get_contents($loaded_day->cover_image_small);
-    $this->assertTrue($img, "Cover image {$loaded_day->cover_image_small} not found");
+    $img = @file_get_contents($loaded_day->cover_image_266);
+    $this->assertTrue($img, "Cover image {$loaded_day->cover_image_266} not found");
   }
 
   /**

@@ -8,8 +8,8 @@ lmb_require('src/model/BaseModel.class.php');
 class Day extends BaseModel
 {
   const IMAGE_ORIG = 'orig';
-  const IMAGE_SMALL = '200x200';
-  const IMAGE_BIG = '400x400';
+  const IMAGE_SMALL = '266x200';
+  const IMAGE_BIG = '532x400';
 
   protected function _defineRelations()
   {
@@ -42,8 +42,8 @@ class Day extends BaseModel
     $export->id = $this->getId();
     $export->user_id = $this->getUser()->getId();
     $export->fb_uid = $this->getUser()->fb_uid;
-    $export->cover_image_small = lmbToolkit::instance()->getStaticUrl($this->getImageSmall());
-    $export->cover_image_big = lmbToolkit::instance()->getStaticUrl($this->getImageBig());
+    $export->cover_image_266 = lmbToolkit::instance()->getStaticUrl($this->getImageSmall());
+    $export->cover_image_532 = lmbToolkit::instance()->getStaticUrl($this->getImageBig());
     $export->title = $this->getTitle();
     $export->occupation = $this->getOccupation();
     $export->timezone = $this->getTimezone();
@@ -70,12 +70,12 @@ class Day extends BaseModel
 
     $small_file = lmbToolkit::instance()->getAbsolutePath($this->getImageSmall());
     $helper = new lmbConvertImageHelper($orig_file);
-    $helper->resizeAndCropFrame(array('width' => 200, 'height' => 200));
+    $helper->resizeAndCropFrame(array('width' => 266, 'height' => 200));
     $helper->save($small_file);
 
     $small_file = lmbToolkit::instance()->getAbsolutePath($this->getImageBig());
     $helper = new lmbConvertImageHelper($orig_file);
-    $helper->resizeAndCropFrame(array('width' => 400, 'height' => 400));
+    $helper->resizeAndCropFrame(array('width' => 532, 'height' => 400));
     $helper->save($small_file);
   }
 
