@@ -23,8 +23,7 @@ class AuthController extends BaseJsonController
 
     $this->toolkit->setUser($user);
 
-    $answer = new stdClass();
-    $answer->user = $user->exportForApi();
+    $answer = $user->exportForApi();
 
     // Notify friends that they'r friend registered
     if($new_user)
@@ -32,17 +31,17 @@ class AuthController extends BaseJsonController
       $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_USER, $user);
     }
 
-    $answer->user->followers = array();
+    $answer->followers = array();
     foreach ($user->getFollowers() as $follower) {
-      $answer->user->followers[] = $follower->exportForApi();
+      $answer->followers[] = $follower->exportForApi();
     }
 
-    $answer->user->following = array();
+    $answer->following = array();
     foreach ($user->getFollowing() as $followed) {
-      $answer->user->following[] = $followed->exportForApi();
+      $answer->following[] = $followed->exportForApi();
     }
 
-    $answer->user->email = $user->getEmail();
+    $answer->email = $user->getEmail();
 
     return $this->_answerOk($answer);
   }

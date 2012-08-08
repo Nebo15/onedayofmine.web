@@ -28,15 +28,15 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
     ))->result;
     if($this->assertResponse(200))
     {
-      $this->assertTrue($res->user);
-      $this->assertTrue(is_object($res->user));
-      $this->assertTrue($res->user->id);
-      $this->assertTrue($res->user->name);
-      $this->assertTrue($res->user->email);
-      $this->assertTrue($res->user->sex);
-      $this->assertTrue($res->user->image_36);
-      $this->assertTrue($res->user->image_72);
-      $this->assertTrue($res->user->birthday);
+      $this->assertTrue($res);
+      $this->assertTrue(is_object($res));
+      $this->assertTrue($res->id);
+      $this->assertTrue($res->name);
+      $this->assertTrue($res->email);
+      $this->assertTrue($res->sex);
+      $this->assertTrue($res->image_36);
+      $this->assertTrue($res->image_72);
+      $this->assertTrue($res->birthday);
     }
   }
 
@@ -59,10 +59,10 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
 
     if($this->assertResponse(200))
     {
-      $this->assertEqual($res->user->following_count, $following->count());
-      $this->assertEqual($res->user->followers_count, $followers->count());
-      $this->assertEqual($res->user->following[0]->id, $this->additional_user->getId());
-      $this->assertEqual($res->user->followers[0]->id, $this->additional_user->getId());
+      $this->assertEqual($res->following_count, $following->count());
+      $this->assertEqual($res->followers_count, $followers->count());
+      $this->assertEqual($res->following[0]->id, $this->additional_user->getId());
+      $this->assertEqual($res->followers[0]->id, $this->additional_user->getId());
     }
   }
 
