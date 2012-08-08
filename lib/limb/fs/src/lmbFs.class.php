@@ -420,6 +420,8 @@ class lmbFs
 
   static function isPathAbsolute($path, $fs_type = self :: LOCAL)
   {
+    if(!$path)
+      throw new lmbException('Path is empty');
     switch(self :: _concreteSeparatorType($fs_type))
     {
       case self :: UNIX:

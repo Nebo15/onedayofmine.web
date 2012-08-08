@@ -36,11 +36,11 @@ class lmbUriTest extends UnitTestCase
 
   function testCreate_FileProtocolWithoutHost_OnUnix()
   {
-    $str = 'file:///dir';
+    $str = 'foo:///dir';
 
     $uri = new lmbUri($str);
 
-    $this->assertEqual($uri->getProtocol(), 'file');
+    $this->assertEqual($uri->getProtocol(), 'foo');
     $this->assertEqual($uri->getHost(), '');
 
     $this->assertEqual($uri->getPath(), '/dir');
@@ -135,18 +135,19 @@ class lmbUriTest extends UnitTestCase
     //plain
     $uri = new lmbUri('http://localhost/test.php?key=alfa&key=bravo&key=charle');
     $this->assertEqual($uri->getQueryItem('key'), $expected_key);
-    
+
     //mixed
     $uri = new lmbUri('http://localhost/action?key[]=alfa&key=bravo&key=charle');
     $this->assertEqual($uri->getQueryItem('key'), $expected_key);
-    
+
     //mixed with index
     $uri = new lmbUri('http://localhost/test.php?key=alfa&key[]=bravo&key[3]=charle');
     //because of index 3
     $this->assertNotEqual($uri->getQueryItem('key'), $expected_key);
-    $result = sort($uri->getQueryItem('key'));
+    $result = $uri->getQueryItem('key');
+    sort($result);
     $this->assertEqual($result, $expected_key);
-    
+
     //mixed with index
     $uri = new lmbUri('http://localhost/test.php?key=alfa&key[]=bravo&key[2]=charle');
     $this->assertEqual($uri->getQueryItem('key'), $expected_key);
@@ -158,7 +159,7 @@ class lmbUriTest extends UnitTestCase
     //single element array
     $uri = new lmbUri('http://localhost/action?key[]=zetta');
     $this->assertEqual($uri->getQueryItem('key'), array('zetta'));
-    
+
     //one value
     $uri = new lmbUri('http://localhost/action?key=string');
     $this->assertEqual($uri->getQueryItem('key'), 'string');

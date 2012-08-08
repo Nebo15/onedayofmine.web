@@ -47,7 +47,7 @@ class odObjectMother
    * @param null|User $user
    * @return Day
    */
-  function day(User $user = null)
+  function day(User $user = null, $with_comments = false)
   {
     $day = new Day();
     $day->setTitle($this->string(25));
@@ -60,6 +60,14 @@ class odObjectMother
       $day->setType($types[0]);
     else
       $day->setType($types[array_rand($types)]);
+
+    if($with_comments)
+    {
+      for($i = 0; $i < lmbToolkit::instance()->getConf('common')->default_comments_count+1; $i++)
+      {
+        $day->addToComments($this->dayComment($day, $day->getUser()));
+      }
+    }
 
     $day->setUser($user ?: $this->user());
     return $day;
@@ -83,11 +91,20 @@ class odObjectMother
    * @param Day|null $day
    * @return Moment
    */
-  function moment(Day $day = null)
+  function moment(Day $day = null, $with_comments = false)
   {
     $moment = new Moment();
     $moment->setDescription('description '.$this->string(125));
     $moment->setDay($day ?: $this->day());
+
+    if($with_comments)
+    {
+      for($i = 0; $i < lmbToolkit::instance()->getConf('common')->default_comments_count+1; $i++)
+      {
+        $moment->addToComments($this->momentComment($moment, $moment->getDay()->getUser()));
+      }
+    }
+
     return $moment;
   }
 

@@ -23,9 +23,9 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   {
     $this->main_user->save();
 
-    $day = $this->generator->day();
-    $moment1 = $this->generator->moment($day);
-    $moment2 = $this->generator->moment($day);
+    $day = $this->generator->day(null, true);
+    $moment1 = $this->generator->moment($day, true);
+    $moment2 = $this->generator->moment($day, true);
     $day->addToMoments($moment1);
     $day->addToMoments($moment2);
     $day->save();
@@ -33,22 +33,6 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $fav = $this->main_user->getFavouriteDays();
     $fav->add($day);
     $fav->save();
-
-    $day_comments = [];
-    for($i = 0; $i < lmbToolkit::instance()->getConf('common')->default_comments_count+1; $i++)
-    {
-      $day_comment[$i] = new DayComment();
-      $day_comment[$i]->setText($this->generator->string());
-      $day_comment[$i]->setDay($day);
-      $day_comment[$i]->setUser($day->getUser());
-      $day_comment[$i]->save();
-    }
-
-    $moment_comment = new MomentComment();
-    $moment_comment->setText($this->generator->string());
-    $moment_comment->setMoment($moment1);
-    $moment_comment->setUser($this->additional_user);
-    $moment_comment->save();
 
     $this->_loginAndSetCookie($this->main_user);
     $response = $this->get('days/'.$day->getId().'/item');
@@ -69,9 +53,9 @@ class DayAcceptanceTest extends odAcceptanceTestCase
       $this->assertTrue($loaded_day->is_favorited);
       $this->assertEqual($day->getComments()->count(), $loaded_day->comments_count);
       $this->assertEqual(lmbToolkit::instance()->getConf('common')->default_comments_count, count($loaded_day->comments));
-      $this->assertEqual($day_comment[0]->getId(), $loaded_day->comments[0]->id);
+      $this->assertEqual($day->getComments()->at(0)->getId(), $loaded_day->comments[0]->id);
       $this->assertEqual($day->getMoments()->count(), count($loaded_day->moments));
-      $this->assertEqual($day->getMoments()->at(0)->getComments()->count(), count($loaded_day->moments[0]->comments));
+//      $this->assertEqual($day->getMoments()->at(0)->getComments()->count(), count($loaded_day->moments[0]->comments));
     }
   }
 

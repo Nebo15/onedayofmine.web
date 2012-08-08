@@ -4,9 +4,7 @@ lmb_require('src/model/User.class.php');
 
 class UsersController extends BaseJsonController
 {
-  protected $check_auth = false;
-
-  function doItem()
+  function doGuestItem()
   {
     if(!$user = User::findById($this->request->id))
       return $this->_answerNotFound("User with id {$this->request->id} not found");
@@ -21,7 +19,7 @@ class UsersController extends BaseJsonController
     }
   }
 
-  function doDays()
+  function doGuestDays()
   {
     $user_or_answer = $this->_loadUserFromRequest();
     if(!is_object($user_or_answer))
@@ -36,9 +34,6 @@ class UsersController extends BaseJsonController
 
   function doFollowers()
   {
-    if(!$this->_isLoggedUser())
-      return $this->_answerUnauthorized();
-
     $user_or_answer = $this->_loadUserFromRequest();
     if(!is_object($user_or_answer))
       return $user_or_answer;
@@ -54,9 +49,6 @@ class UsersController extends BaseJsonController
 
   function doFollowing()
   {
-    if(!$this->_isLoggedUser())
-      return $this->_answerUnauthorized();
-
     $user_or_answer = $this->_loadUserFromRequest();
     if(!is_object($user_or_answer))
       return $user_or_answer;
@@ -72,9 +64,6 @@ class UsersController extends BaseJsonController
 
   function doFollow()
   {
-    if(!$this->_isLoggedUser())
-      return $this->_answerUnauthorized();
-
     if($this->_getUser()->getId() == $this->request->id)
       return $this->_answerWithError("You can't follow youself.");
 
@@ -93,9 +82,6 @@ class UsersController extends BaseJsonController
 
   function doUnfollow()
   {
-    if(!$this->_isLoggedUser())
-      return $this->_answerUnauthorized();
-
   	if(!$user = User::findById($this->request->id))
   		return $this->_answerNotFound("User not found by id '{$this->request->id}'");
 
@@ -106,7 +92,7 @@ class UsersController extends BaseJsonController
   	return $this->_answerOk();
   }
 
-  function doSearch()
+  function doGuestSearch()
   {
     list($from, $to, $limit) = $this->_getFromToLimitations();
     $query = $this->request->getFiltered('query', FILTER_SANITIZE_STRING);

@@ -23,7 +23,8 @@ class User extends BaseModel
       'user_settings' => array (
         'field' => 'user_settings_id',
         'class' => 'UserSettings',
-        'can_be_null' => true
+        'can_be_null' => true,
+        'cascade_delete' => false
       )
     );
     $this->_has_many = array (
