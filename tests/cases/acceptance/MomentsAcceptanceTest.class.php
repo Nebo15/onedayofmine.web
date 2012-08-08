@@ -26,7 +26,7 @@ class MomentsAcceptanceTest extends odAcceptanceTestCase
     $this->_loginAndSetCookie($this->main_user);
     $res = $this->post('moments/'.$moment->getId().'/update', array(
       'description' => $desc = $this->generator->string(255),
-      'img_content' => base64_encode($this->generator->image()),
+      'image_content' => base64_encode($this->generator->image()),
       ))->result;
     $this->assertResponse(200);
 

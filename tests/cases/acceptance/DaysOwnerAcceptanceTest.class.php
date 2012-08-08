@@ -102,7 +102,7 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
 		$this->_loginAndSetCookie($this->main_user);
 		$res = $this->post('days/'.$day->getId().'/moment_create', array(
 				'description' => $description = $this->generator->string(200),
-				'img_content' => base64_encode($this->generator->image()),
+				'image_content' => base64_encode($this->generator->image()),
         'time' => $time = '2005-08-09T18:31:42+03:00'
 		))->result;
 
@@ -127,15 +127,16 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
     $this->_loginAndSetCookie($this->main_user);
     $this->post('days/'.$day->getId().'/moment_create', array(
       'description' => $description = $this->generator->string(200),
-      'img_content' => base64_encode($this->generator->image()),
+      'image_content' => base64_encode($this->generator->image()),
       'time' => $time = '2005-08-09T18:31:42+03:00'
     ))->result;
 
     if($this->assertResponse(200))
     {
       $loaded_day = Day::findById($day->getId())->exportForApi();
-      $img = @file_get_contents($loaded_day->cover_image_266);
-      $this->assertTrue($img, "Cover image {$loaded_day->cover_image_266} not found");
+      var_dump($loaded_day);
+      $img = @file_get_contents($loaded_day->image_266);
+      $this->assertTrue($img, "Cover image {$loaded_day->image_266} not found");
     }
   }
 

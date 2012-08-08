@@ -35,7 +35,7 @@ class DayUserAcceptanceTest extends odAcceptanceTestCase
     if($this->assertResponse(200))
     {
       $loaded_day = $response->result;
-      $this->assertTrue($loaded_day->is_favorited);
+      $this->assertTrue($loaded_day->is_favorite);
     }
   }
 

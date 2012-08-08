@@ -92,7 +92,7 @@ class DaysController extends BaseJsonController
     if(!$this->request->hasPost())
       return $this->_answerWithError('Not a POST request');
 
-    $errors = $this->_checkPropertiesInRequest(array('description', 'time', 'img_content'));
+    $errors = $this->_checkPropertiesInRequest(array('description', 'time', 'image_content'));
     if(count($errors))
       return $this->_answerWithError($errors);
 
@@ -101,7 +101,7 @@ class DaysController extends BaseJsonController
 
     if(!count($day->getMoments()))
     {
-      $day->attachImage(base64_decode($this->request->get('img_content')));
+      $day->attachImage(base64_decode($this->request->get('image_content')));
     }
 
     $moment = new Moment();
@@ -113,7 +113,7 @@ class DaysController extends BaseJsonController
     $moment->setTimezone($timezone);
 
     $moment->save();
-    $moment->attachImage(base64_decode($this->request->get('img_content')));
+    $moment->attachImage(base64_decode($this->request->get('image_content')));
     $moment->save();
 
     if($this->error_list->isEmpty()) {
