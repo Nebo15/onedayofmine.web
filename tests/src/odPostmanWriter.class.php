@@ -29,7 +29,7 @@ class odPostmanWriter
     $request->url = '{{host}}'.$url_path;
     $request->method = $method;
     $request->headers = '';
-    $request->data = $data ? http_build_query($data) : '';
+    $request->data = $data ? preg_replace('#(image_content|pic_content)=[^&]*#is', '$1=[img]', http_build_query($data)): '';
     $request->dataMode = 'params';
     $request->timestamp = 0;
     $request->time = time();

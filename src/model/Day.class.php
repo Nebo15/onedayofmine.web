@@ -111,11 +111,11 @@ class Day extends BaseModel
   static function getTypes()
   {
     return array(
-      'working',
-      'day-off',
-      'holiday',
-      'trip',
-      'special_event'
+      'Working',
+      'Day-off',
+      'Holiday',
+      'Trip',
+      'Special event'
     );
   }
 
