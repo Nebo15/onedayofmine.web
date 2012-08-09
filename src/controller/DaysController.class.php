@@ -328,7 +328,7 @@ class DaysController extends BaseJsonController
     return $this->_answerOk($answer);
   }
 
-  function doFavourite()
+  function doMarkFavourite()
   {
   	if(!$this->request->hasPost())
   		return $this->_answerWithError('Not a POST request');
@@ -343,7 +343,7 @@ class DaysController extends BaseJsonController
   	return $this->_answerOk();
   }
 
-  function doUnfavourite()
+  function doUnmarkFavourite()
   {
   	if(!$this->request->hasPost())
   		return $this->_answerWithError('Not a POST request');
