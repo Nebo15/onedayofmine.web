@@ -662,7 +662,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
    */
   function testTypeNames()
   {
-    $types = $this->get('days/type_names')->result;
+    $types = $this->get('days/types')->result;
     $this->assertResponse(200);
     $this->assertEqual($types, Day::getTypes());
   }

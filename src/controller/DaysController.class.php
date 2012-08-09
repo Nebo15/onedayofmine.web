@@ -385,7 +385,7 @@ class DaysController extends BaseJsonController
     return $this->_importSaveAndAnswer(new Complaint(), array('day_id', 'text'));
   }
 
-  function doGuestTypeNames()
+  function doGuestTypes()
   {
     return $this->_answerOk(Day::getTypes());
   }

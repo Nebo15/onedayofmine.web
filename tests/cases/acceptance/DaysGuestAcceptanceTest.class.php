@@ -345,9 +345,9 @@ class DaysGuestAcceptanceTest extends odAcceptanceTestCase
   /**
    * @api description Returns list of acceptable types.
    */
-  function testTypeNames()
+  function testTypes()
   {
-    $types = $this->get('days/type_names')->result;
+    $types = $this->get('days/types')->result;
     $this->assertResponse(200);
     $this->assertEqual($types, Day::getTypes());
   }
