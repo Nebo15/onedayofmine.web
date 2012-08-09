@@ -35,7 +35,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $fav->save();
 
     $this->_loginAndSetCookie($this->main_user);
-    $response = $this->get('days/'.$day->getId().'/item');
+    $response = $this->get('days/'.$day->getId());
     if($this->assertResponse(200))
     {
       $loaded_day = $response->result;

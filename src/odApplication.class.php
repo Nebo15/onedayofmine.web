@@ -15,7 +15,7 @@ class odApplication extends lmbWebApplication
     $this->registerFilter(new lmbHandle('src/filter/SessionStartupFilter'));
 
     $this->registerFilter(
-      new lmbHandle('limb/web_app/src/filter/lmbRequestDispatchingFilter',
+      new lmbHandle('src/filter/RequestDispatchingFilter',
         array(new lmbHandle('limb/web_app/src/request/lmbRoutesRequestDispatcher')))
     );
     $this->registerFilter(new lmbHandle('limb/web_app/src/filter/lmbResponseTransactionFilter'));

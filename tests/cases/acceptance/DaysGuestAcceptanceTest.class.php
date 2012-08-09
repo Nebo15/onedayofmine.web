@@ -30,7 +30,7 @@ class DaysGuestAcceptanceTest extends odAcceptanceTestCase
     $day->addToMoments($moment2);
     $day->save();
 
-    $response = $this->get('days/'.$day->getId().'/item');
+    $response = $this->get('days/'.$day->getId());
     if($this->assertResponse(200))
     {
       $loaded_day = $response->result;
