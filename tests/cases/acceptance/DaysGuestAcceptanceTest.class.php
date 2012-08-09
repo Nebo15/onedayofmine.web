@@ -24,19 +24,21 @@ class DaysGuestAcceptanceTest extends odAcceptanceTestCase
     $this->main_user->save();
 
     $day = $this->generator->day(null, true);
+    // $day->attachImage($this->generator->image());
     $moment1 = $this->generator->moment($day, true);
     $moment2 = $this->generator->moment($day, true);
     $day->addToMoments($moment1);
     $day->addToMoments($moment2);
+    $day->save();
+    $day->attachImage($this->generator->image());
     $day->save();
 
     $response = $this->get('days/'.$day->getId());
     if($this->assertResponse(200))
     {
       $loaded_day = $response->result;
-      $this->assertValidDayJson($loaded_day);
+      $this->assertValidDayJson($day, $loaded_day);
 
-      $this->assertEqual($day->getUser()->getId(), $loaded_day->user->id);
       $this->assertEqual($day->getComments()->count(), $loaded_day->comments_count);
       $this->assertEqual(lmbToolkit::instance()->getConf('common')->default_comments_count, count($loaded_day->comments));
       $this->assertEqual($day->getComments()->at(0)->getId(), $loaded_day->comments[0]->id);

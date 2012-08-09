@@ -154,6 +154,8 @@ abstract class odAcceptanceTestCase extends WebTestCase
     $this->assertEqual($valid_day->getId(), $day_from_response->id);
     if($this->assertProperty($day_from_response, 'user'))
       $this->assertValidUserJson($valid_day->getUser(), $day_from_response->user);
+    $this->assertTrue($day_from_response->image_266);
+    $this->assertTrue($day_from_response->image_532);
     $this->assertValidImageUrl($day_from_response->image_266);
     $this->assertValidImageUrl($day_from_response->image_532);
     $this->assertEqual($valid_day->title, $day_from_response->title);
@@ -185,7 +187,7 @@ abstract class odAcceptanceTestCase extends WebTestCase
 
   protected function assertValidImageUrl($url)
   {
-    $content = @file_get_contents($url);
+    $content = file_get_contents($url);
     return $this->assertTrue(
       strlen($content),
       "Invalid image url '{$url}'"
