@@ -34,14 +34,7 @@ class DaysGuestAcceptanceTest extends odAcceptanceTestCase
     if($this->assertResponse(200))
     {
       $loaded_day = $response->result;
-      $this->assertEqual($day->getId(), $loaded_day->id);
-      $this->assertEqual($day->getTitle(), $loaded_day->title);
-      $this->assertEqual($day->getOccupation(), $loaded_day->occupation);
-      $this->assertEqual($day->getLikesCount(), $loaded_day->likes_count);
-      $this->assertEqual($day->getCreateTime(), $loaded_day->ctime);
-      $this->assertEqual($day->getIsEnded(), $loaded_day->is_ended);
-      $this->assertEqual($moment1->getId(), $loaded_day->moments[0]->id);
-      $this->assertEqual($moment2->getId(), $loaded_day->moments[1]->id);
+      $this->assertValidDayJson($loaded_day);
 
       $this->assertEqual($day->getUser()->getId(), $loaded_day->user->id);
       $this->assertEqual($day->getComments()->count(), $loaded_day->comments_count);
