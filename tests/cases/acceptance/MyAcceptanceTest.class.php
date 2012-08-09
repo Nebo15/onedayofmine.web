@@ -29,6 +29,10 @@ class MyAcceptanceTest extends odAcceptanceTestCase
 			$this->assertEqual($this->main_user->occupation, $profile->occupation);
       $this->assertEqual($this->main_user->location, $profile->location);
       $this->assertEqual($this->main_user->birthday, $profile->birthday);
+      $this->assertEqual($this->main_user->getFollowers()->count(), $profile->followers_count);
+      $this->assertEqual($this->main_user->getFollowing()->count(), $profile->following_count);
+      $this->assertEqual($this->main_user->getFavouriteDays()->count(), $profile->favourites_count);
+      $this->assertEqual($this->main_user->getDays()->count(), $profile->days_count);
 		}
 	}
 

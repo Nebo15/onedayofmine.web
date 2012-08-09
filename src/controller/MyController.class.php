@@ -21,6 +21,8 @@ class MyController extends BaseJsonController
     }
 
     $answer = $this->_getUser()->exportForApi();
+    $answer->favourites_count = $this->_getUser()->getFavouriteDays()->count();
+    $answer->days_count = $this->_getUser()->getDays()->count();
     $answer->email = $this->_getUser()->getEmail();
     return $this->_answerOk($answer);
 	}
