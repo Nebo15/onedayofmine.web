@@ -7,6 +7,7 @@ class DaysController extends BaseJsonController
 {
   protected $_object_class_name = 'User';
 
+
   function doGuestItem()
   {
     $id = $this->request->get('id');
@@ -22,7 +23,7 @@ class DaysController extends BaseJsonController
       if($answer = $this->_item($id))
         return $this->_answerOk($answer);
       else
-        return $this->_answerNotFound("Day with id='$id' not found");
+        return $this->_answerNotFound("Day with id='{$id}' not found");
     }
   }
 

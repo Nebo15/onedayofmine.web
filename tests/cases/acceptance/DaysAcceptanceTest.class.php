@@ -660,7 +660,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   /**
    * @api description Returns list of acceptable types.
    */
-  function testTypeNames()
+  function testTypes()
   {
     $types = $this->get('days/types')->result;
     $this->assertResponse(200);
