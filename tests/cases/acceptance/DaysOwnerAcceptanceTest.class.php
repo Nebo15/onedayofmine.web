@@ -156,7 +156,7 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
         'title' => $title = $this->generator->string(),
         'occupation' => $occupation = $this->generator->string(255),
         'location' => $location = $this->generator->string(),
-        'type' => $type = 'Working',
+        'type' => $type = 'Working day',
         'cover_content' => base64_encode($this->generator->image()),
     ))->result;
     if($this->assertResponse(200))
