@@ -58,10 +58,11 @@ class DaysController extends BaseJsonController
       return $this->_answerWithError('Not a POST request', null, 405);
 
     $day->setUser($this->_getUser());
-    $occupation = $this->request->getPost('occupation') ?: $this->_getUser()->getOccupation();
-    $day->setOccupation($occupation);
 
-    $response = $this->_importSaveAndAnswer($day, array('title', 'timezone', 'location', 'type'), array('occupation' => $occupation));
+    $response = $this->_importSaveAndAnswer($day, array('title', 'timezone', 'type'), array(
+      'occupation' => $this->request->getPost('occupation') ?: $this->_getUser()->getOccupation(),
+      'location' => $this->request->getPost('location') ?: $this->_getUser()->getLocation()
+    ));
 
     $this->_getUser()
       ->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)

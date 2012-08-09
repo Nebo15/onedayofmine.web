@@ -31,7 +31,7 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
 	 * @api input param string title
 	 * @api input param int timezone UTC time zone offset
    * @api input option string occupation If omited, then user profile occupation will be used
-	 * @api input option string latlong "[Latitude],[Longitude]" of place, where day was created
+   * @api input option string location If omited, then user profile occupation will be used
 	 * @api input param string type One of pre-defined types, see: GET day/type_names request
 	 */
 	function testStart()
@@ -60,7 +60,7 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
     }
 	}
 
-  function testStart_withNoOccupation() {
+  function testStart_withNoLocation() {
 
     $this->main_user->setOccupation('testStart_withNoOccupation - user');
     $this->main_user->save();
@@ -75,6 +75,26 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
       $this->assertEqual($params->title, $day->title);
       $this->assertEqual($this->main_user->getId(), $day->user_id);
       $this->assertEqual($this->main_user->occupation, $day->occupation);
+      $this->assertTrue($day->ctime);
+      $this->assertTrue($day->utime);
+    }
+  }
+
+  function testStart_withNoOccupation() {
+
+    $this->main_user->setLocation('testStart_withNoOccupation - user');
+    $this->main_user->save();
+    $this->_loginAndSetCookie($this->main_user);
+
+    $params = $this->generator->day()->exportForApi();
+    $params->location = null;
+
+    $day = $this->post('days/start', $params)->result;
+    if($this->assertResponse(200))
+    {
+      $this->assertEqual($params->title, $day->title);
+      $this->assertEqual($this->main_user->getId(), $day->user_id);
+      $this->assertEqual($this->main_user->location, $day->location);
       $this->assertTrue($day->ctime);
       $this->assertTrue($day->utime);
     }
