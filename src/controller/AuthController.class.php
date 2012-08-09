@@ -7,9 +7,9 @@ class AuthController extends BaseJsonController
   function doGuestLogin()
   {
     if(!$this->request->hasPost())
-      return $this->_answerOk(null, 405, 'Use POST, Luke');
+      return $this->_answerWithError('Use POST, Luke', null, 405);
     if(!$fb_access_token = $this->request->get('token'))
-      return $this->_answerOk('Token not given', 412);
+      return $this->_answerWithError('Token not given', null, 412);
 
     if(!$this->toolkit->getSocialServices()->getFacebook($fb_access_token)->validateAccessToken($this->error_list))
       return $this->_answerWithError($this->error_list, null, 403);
@@ -40,6 +40,8 @@ class AuthController extends BaseJsonController
     foreach ($user->getFollowing() as $followed) {
       $answer->following[] = $followed->exportForApi();
     }
+
+    $answer->favourites_count = $user->getFavouriteDays()->count();
 
     $answer->email = $user->getEmail();
 

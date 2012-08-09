@@ -133,24 +133,27 @@ abstract class odAcceptanceTestCase extends WebTestCase
     }
   }
 
+  function assertValidUserJson(User $valid_user, stdClass $user_from_response)
+  {
+    $this->assertEqual($valid_user->id,
+      $user_from_response->id);
+    $this->assertEqual($valid_user->name, $user_from_response->name);
+    $this->assertValidImageUrl($user_from_response->image_36);
+    $this->assertValidImageUrl($user_from_response->image_72);
+    $this->assertEqual($valid_user->sex, $user_from_response->sex);
+    $this->assertEqual($valid_user->birthday, $user_from_response->birthday);
+    $this->assertEqual($valid_user->occupation, $user_from_response->occupation);
+    $this->assertEqual($valid_user->location, $user_from_response->location);
+    $this->assertEqual($valid_user->getFollowers()->count(), $user_from_response->followers_count);
+    $this->assertEqual($valid_user->getFollowing()->count(), $user_from_response->following_count);
+    $this->assertEqual($valid_user->getDays()->count(), $user_from_response->days_count);
+  }
+
   function assertValidDayJson(Day $valid_day, stdClass $day_from_response)
   {
     $this->assertEqual($valid_day->getId(), $day_from_response->id);
     if($this->assertProperty($day_from_response, 'user'))
-    {
-      $this->assertEqual($valid_day->user->id,
-        $day_from_response->user->id);
-      $this->assertEqual($valid_day->user->name, $day_from_response->user->name);
-      $this->assertValidImageUrl($day_from_response->user->image_36);
-      $this->assertValidImageUrl($day_from_response->user->image_72);
-      $this->assertEqual($valid_day->user->sex, $day_from_response->user->sex);
-      $this->assertEqual($valid_day->user->birthday, $day_from_response->user->birthday);
-      $this->assertEqual($valid_day->user->occupation, $day_from_response->user->occupation);
-      $this->assertEqual($valid_day->user->location, $day_from_response->user->location);
-      $this->assertEqual($valid_day->user->getFollowers()->count(), $day_from_response->user->followers_count);
-      $this->assertEqual($valid_day->user->getFollowing()->count(), $day_from_response->user->following_count);
-      $this->assertEqual($valid_day->user->getDays()->count(), $day_from_response->user->days_count);
-    }
+      $this->assertValidUserJson($valid_day->getUser(), $day_from_response->user);
     $this->assertValidImageUrl($day_from_response->image_266);
     $this->assertValidImageUrl($day_from_response->image_532);
     $this->assertEqual($valid_day->title, $day_from_response->title);

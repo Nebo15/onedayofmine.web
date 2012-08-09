@@ -23,25 +23,6 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
    */
   function testLogin()
   {
-    $res = $res = $this->post('auth/login/', array(
-      'token' => $this->main_user->getFbAccessToken()
-    ))->result;
-    if($this->assertResponse(200))
-    {
-      $this->assertTrue($res);
-      $this->assertTrue(is_object($res));
-      $this->assertTrue($res->id);
-      $this->assertTrue($res->name);
-      $this->assertTrue($res->email);
-      $this->assertTrue($res->sex);
-      $this->assertTrue($res->image_36);
-      $this->assertTrue($res->image_72);
-      $this->assertTrue($res->birthday);
-    }
-  }
-
-  function testLogin_followInformation()
-  {
     $this->additional_user->save();
     $this->main_user->save();
 
@@ -56,13 +37,12 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
     $res = $res = $this->post('auth/login/', array(
       'token' => $this->main_user->getFbAccessToken()
     ))->result;
-
     if($this->assertResponse(200))
     {
-      $this->assertEqual($res->following_count, $following->count());
-      $this->assertEqual($res->followers_count, $followers->count());
-      $this->assertEqual($res->following[0]->id, $this->additional_user->getId());
-      $this->assertEqual($res->followers[0]->id, $this->additional_user->getId());
+      $loaded_user = User::findById($res->id);
+      $this->assertValidUserJson($loaded_user, $res);
+      $this->assertEqual($loaded_user->getFavouriteDays()->count(), $res->favourites_count);
+      $this->assertEqual($loaded_user->getEmail(), $res->email);
     }
   }
 
@@ -109,13 +89,23 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
     $this->assertTrue($user->image_72);
   }
 
-  // TODO cache dont work on invalid tokens
+  /**
+   * @api
+   */
   function testLogin_WrongAccessToken()
   {
     $errors = $res = $this->post('auth/login/', array('token' => $this->generator->string(11)))->errors;
     $this->assertResponse(403);
     $this->assertEqual(1, count($errors));
     $this->assertEqual('Invalid OAuth access token.', $errors[0]);
+  }
+
+  function testLogin_AccessTokenNotGiven()
+  {
+    $errors = $res = $this->post('auth/login/', array())->errors;
+    $this->assertResponse(412);
+    $this->assertEqual(1, count($errors));
+    $this->assertEqual('Token not given', $errors[0]);
   }
 
   /**
