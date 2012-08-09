@@ -17,7 +17,7 @@ class DayUserAcceptanceTest extends odAcceptanceTestCase
    * @api result int comments_count
    * @api result DayComment[0-3] comments Few first comments
    * @api result Moment[] moments All day moments
-   * @api result bool is_favorited
+   * @api result bool is_favourite
    */
   function testItem()
   {
@@ -194,7 +194,7 @@ class DayUserAcceptanceTest extends odAcceptanceTestCase
   	$this->assertEqual(0, $this->main_user->getFavouriteDays()->count());
 
   	$this->_loginAndSetCookie($this->main_user);
-  	$this->post('/days/'.$day->getId().'/favourite');
+  	$this->post('/days/'.$day->getId().'/mark_favourite');
 
   	if($this->assertResponse(200))
   	{
@@ -217,7 +217,7 @@ class DayUserAcceptanceTest extends odAcceptanceTestCase
   	$this->main_user->save();
 
   	$this->_loginAndSetCookie($this->main_user);
-  	$this->post('/days/'.$day->getId().'/unfavourite');
+  	$this->post('/days/'.$day->getId().'/unmark_favourite');
 
   	if($this->assertResponse(200))
   		$this->assertEqual(0, $this->main_user->getFavouriteDays()->count());

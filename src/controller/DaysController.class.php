@@ -22,7 +22,7 @@ class DaysController extends BaseJsonController
       if($answer = $this->_item($id))
         return $this->_answerOk($answer);
       else
-        return $this->_answerNotFound("Day with id='$id' not found");
+        return $this->_answerNotFound("Day with id='{$id}' not found");
     }
   }
 
@@ -327,7 +327,7 @@ class DaysController extends BaseJsonController
     return $this->_answerOk($answer);
   }
 
-  function doFavourite()
+  function doMarkFavourite()
   {
   	if(!$this->request->hasPost())
   		return $this->_answerWithError('Not a POST request');
@@ -342,7 +342,7 @@ class DaysController extends BaseJsonController
   	return $this->_answerOk();
   }
 
-  function doUnfavourite()
+  function doUnmarkFavourite()
   {
   	if(!$this->request->hasPost())
   		return $this->_answerWithError('Not a POST request');
@@ -469,6 +469,8 @@ class DaysController extends BaseJsonController
 
       // Moment comments data
       //$this->_attachComments($moment_export, $moment);
+      // Comments count
+      $moment_export->comments_count = $moment->getComments()->count();
 
       $day_export->moments[] = $moment_export;
     }
