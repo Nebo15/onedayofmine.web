@@ -17,7 +17,7 @@ class DayUserAcceptanceTest extends odAcceptanceTestCase
    * @api result int comments_count
    * @api result DayComment[0-3] comments Few first comments
    * @api result Moment[] moments All day moments
-   * @api result bool is_favorited
+   * @api result bool is_favourite
    */
   function testItem()
   {
@@ -35,7 +35,7 @@ class DayUserAcceptanceTest extends odAcceptanceTestCase
     if($this->assertResponse(200))
     {
       $loaded_day = $response->result;
-      $this->assertTrue($loaded_day->is_favorite);
+      $this->assertTrue($loaded_day->is_favourite);
     }
   }
 

@@ -428,7 +428,7 @@ class DaysController extends BaseJsonController
   {
     if(!lmbToolkit::instance()->getUser())
       return null;
-    $day_export->is_favorite = DayFavourite::isFavourited(lmbToolkit::instance()->getUser(), $day);
+    $day_export->is_favourite = DayFavourite::isFavourited(lmbToolkit::instance()->getUser(), $day);
   }
 
   protected function _attachDayIsDeleted(stdClass $day_export, $day)
