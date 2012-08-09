@@ -1,6 +1,6 @@
 <?php
 lmb_require('limb/web_app/src/controller/lmbController.class.php');
-lmb_require('src/odMock.class.php');
+//lmb_require('src/odMock.class.php');
 lmb_require('src/Json.class.php');
 
 class PagesController extends lmbController

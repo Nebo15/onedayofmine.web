@@ -1,4 +1,5 @@
 <?php
+// TODO remove
 class odMock
 {
   static function user()
