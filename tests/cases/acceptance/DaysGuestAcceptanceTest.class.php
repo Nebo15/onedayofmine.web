@@ -17,7 +17,7 @@ class DaysGuestAcceptanceTest extends odAcceptanceTestCase
    * @api result int comments_count
    * @api result DayComment[0-3] comments Few first comments
    * @api result Moment[] moments All day moments
-   * @api result bool is_favorited
+   * @api result bool is_favourite
    */
   function testItem()
   {
