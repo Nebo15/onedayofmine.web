@@ -7,7 +7,6 @@ class DaysController extends BaseJsonController
 {
   protected $_object_class_name = 'User';
 
-
   function doGuestItem()
   {
     $id = $this->request->get('id');
@@ -470,6 +469,8 @@ class DaysController extends BaseJsonController
 
       // Moment comments data
       //$this->_attachComments($moment_export, $moment);
+      // Comments count
+      $moment_export->comments_count = $moment->getComments()->count();
 
       $day_export->moments[] = $moment_export;
     }

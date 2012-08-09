@@ -47,8 +47,9 @@ class DaysGuestAcceptanceTest extends odAcceptanceTestCase
       $this->assertEqual($day->getComments()->count(), $loaded_day->comments_count);
       $this->assertEqual(lmbToolkit::instance()->getConf('common')->default_comments_count, count($loaded_day->comments));
       $this->assertEqual($day->getComments()->at(0)->getId(), $loaded_day->comments[0]->id);
+      $this->assertEqual($day->getMoments()->at(0)->getComments()->count(), $loaded_day->moments[0]->comments_count);
       $this->assertEqual($day->getMoments()->count(), count($loaded_day->moments));
-//      $this->assertEqual($day->getMoments()->at(0)->getComments()->count(), count($loaded_day->moments[0]->comments));
+      // $this->assertEqual($day->getMoments()->at(0)->getComments()->count(), count($loaded_day->moments[0]->comments));
     }
   }
 
