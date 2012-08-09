@@ -31,15 +31,15 @@ class AuthController extends BaseJsonController
       $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_USER, $user);
     }
 
-    $answer->followers = array();
-    foreach ($user->getFollowers() as $follower) {
-      $answer->followers[] = $follower->exportForApi();
-    }
+    // $answer->followers = array();
+    // foreach ($user->getFollowers() as $follower) {
+    //   $answer->followers[] = $follower->exportForApi();
+    // }
 
-    $answer->following = array();
-    foreach ($user->getFollowing() as $followed) {
-      $answer->following[] = $followed->exportForApi();
-    }
+    // $answer->following = array();
+    // foreach ($user->getFollowing() as $followed) {
+    //   $answer->following[] = $followed->exportForApi();
+    // }
 
     $answer->favourites_count = $this->_getUser()->getFavouriteDays()->count();
     $answer->days_count = $this->_getUser()->getDays()->count();
