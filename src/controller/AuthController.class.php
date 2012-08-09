@@ -41,9 +41,9 @@ class AuthController extends BaseJsonController
       $answer->following[] = $followed->exportForApi();
     }
 
-    $answer->favourites_count = $user->getFavouriteDays()->count();
-
-    $answer->email = $user->getEmail();
+    $answer->favourites_count = $this->_getUser()->getFavouriteDays()->count();
+    $answer->days_count = $this->_getUser()->getDays()->count();
+    $answer->email = $this->_getUser()->getEmail();
 
     return $this->_answerOk($answer);
   }
