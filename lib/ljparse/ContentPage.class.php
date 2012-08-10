@@ -24,6 +24,11 @@ class ContentPage {
     $this->content = $content;
   }
 
+  public function getContent()
+  {
+    return $this->content;
+  }
+
   public function getTitle() {
     return $this->title = $this->concreteParser->getTitle($this->content);
   }
