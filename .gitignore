@@ -21,3 +21,5 @@ www/shared
 
 nbproject
 .sublime*
+
+cli/update.sh
