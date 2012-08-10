@@ -83,7 +83,7 @@ class odTools extends lmbAbstractTools
   {
     if(null === $path)
       return null;
-    return lmb_env_get('STATIC_HOST_URL').'/'.$path;
+    return lmb_env_get('STATIC_HOST_URL').$path;
   }
 
   function getAbsolutePath($www_path)
