@@ -30,39 +30,30 @@ class DaysController extends BaseJsonController
   {
     $day = Day::findById($id);
     if($day && !$day->getIsDeleted())
-    {
-      $answer = $day->exportForApi();
-
-      // User data
-      $this->_attachDayUser($answer, $day);
-
-      // Favorites data
-      $this->_attachDayIsFavorited($answer, $day);
-
-      // Comments data
-      $this->_attachComments($answer, $day);
-
-      // Moments data
-      $this->_attachDayMoments($answer, $day);
-
-      return $answer;
-    }
+      return $this->_exportDayWithSubentities($day);
   }
 
   function doStart()
   {
-    $day = new Day();
-    $day->setIsEnded(0);
-
     if(!$this->request->hasPost())
       return $this->_answerWithError('Not a POST request', null, 405);
 
-    $day->setUser($this->_getUser());
+    $errors = $this->_checkPropertiesInRequest(array('title', 'type'));
+    if(count($errors))
+      return $this->_answerWithError($errors);
 
-    $response = $this->_importSaveAndAnswer($day, array('title', 'timezone', 'type'), array(
-      'occupation' => $this->request->getPost('occupation') ?: $this->_getUser()->getOccupation(),
-      'location' => $this->request->getPost('location') ?: $this->_getUser()->getLocation()
-    ));
+    $day = new Day();
+    $day->setIsEnded(0);
+    $day->setUser($this->_getUser());
+    // Required
+    $day->setTitle($this->request->getPost('title'));
+    $day->setType($this->request->getPost('type'));
+    // Optional
+    $day->setLocation($this->request->getPost('location') ?: $this->_getUser()->getLocation());
+    $day->setOccupation($this->request->getPost('occupation') ?: $this->_getUser()->getOccupation());
+    $day->save();
+
+    $answer = $this->_exportDayWithSubentities($day);
 
     $this->toolkit->getFacebookProfile($this->_getUser())
       ->shareDayBegin($day, $this->toolkit->getSiteUrl('/pages/'.$day->getId().'/day'));
@@ -73,7 +64,7 @@ class DaysController extends BaseJsonController
     // Notify friends about new day
     $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_DAY, $day);
 
-    return $response;
+    return $this->_answerOk($answer);
   }
 
   function doFinish()
@@ -476,5 +467,24 @@ class DaysController extends BaseJsonController
 
       $day_export->moments[] = $moment_export;
     }
+  }
+
+  protected function _exportDayWithSubentities($day)
+  {
+    $answer = $day->exportForApi();
+
+    // User data
+    $this->_attachDayUser($answer, $day);
+
+    // Favorites data
+    $this->_attachDayIsFavorited($answer, $day);
+
+    // Comments data
+    $this->_attachComments($answer, $day);
+
+    // Moments data
+    $this->_attachDayMoments($answer, $day);
+
+    return $answer;
   }
 }

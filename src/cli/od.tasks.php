@@ -76,7 +76,7 @@ function task_od_parse_lj($argv)
       }
 
       if(count($post->getMoments())) {
-        echo "* {$j}/{$links_count}/ Found new well-formated post {$post_id}.".PHP_EOL;
+        echo "* {$j}/{$links_count} Found new well-formated post {$post_id}.".PHP_EOL;
         $posts[] = $post;
 
         if(count($posts) == POSTS_COUNT) {
@@ -85,7 +85,7 @@ function task_od_parse_lj($argv)
         }
       }
       else
-        echo "* {$j}/{$links_count}/. Skipping bad-formated post {$post_id}.".PHP_EOL;
+        echo "* {$j}/{$links_count}. Skipping bad-formated post {$post_id}.".PHP_EOL;
     }
   }
 
@@ -98,7 +98,7 @@ function task_od_parse_lj($argv)
   {
     $post = $posts[array_rand($posts)];
 
-    echo $posts_remain.'. Creating day "'.$post->getTitle().'"...'.PHP_EOL;
+    echo $posts_remain.'. Creating day "'.$post->getTitle().'":'.PHP_EOL;
 
     $day = new Day();
     $day->setTitle($post->getTitle().' '.$posts_remain);

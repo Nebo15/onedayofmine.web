@@ -29,7 +29,7 @@ class Day extends BaseModel
     $validator->addRequiredRule('user');
     $validator->addRequiredObjectRule('user', 'User');
     $validator->addRequiredRule('title');
-    $validator->addRequiredRule('occupation');
+    // $validator->addRequiredRule('occupation');
     // $validator->addRequiredRule('location');
     $validator->addRequiredRule('type');
     return $validator;
@@ -41,8 +41,8 @@ class Day extends BaseModel
     $export->id = $this->getId();
     $export->user_id = $this->getUser()->getId();
     $export->fb_uid = $this->getUser()->fb_uid;
-    $export->image_266 = lmbToolkit::instance()->getStaticUrl($this->getImageSmall());
-    $export->image_532 = lmbToolkit::instance()->getStaticUrl($this->getImageBig());
+    $export->image_266 = lmbToolkit::instance()->getStaticUrl($this->getImageSmall(true));
+    $export->image_532 = lmbToolkit::instance()->getStaticUrl($this->getImageBig(true));
     $export->title = $this->getTitle();
     $export->occupation = $this->getOccupation();
     $export->location = $this->getLocation();
@@ -77,33 +77,41 @@ class Day extends BaseModel
     $helper->save($small_file);
   }
 
-  function getImageOrig()
+  function getImageOrig($static = false)
   {
-    return $this->getImagePath(self::IMAGE_ORIG);
+    return $this->getImagePath(self::IMAGE_ORIG, $static);
   }
 
-  function getImageSmall()
+  function getImageSmall($static = false)
   {
-    return $this->getImagePath(self::IMAGE_SMALL);
+    return $this->getImagePath(self::IMAGE_SMALL, $static);
   }
 
-  function getImageBig()
+  function getImageBig($static = false)
   {
-    return $this->getImagePath(self::IMAGE_BIG);
+    return $this->getImagePath(self::IMAGE_BIG, $static);
   }
 
-  function getImagePath($size_variation)
+  function getImagePath($size_variation, $static = false)
   {
     if(!$this->getImageExt())
       return null;
+
     if(!$this->getId())
       return null;
+
     if(!$this->getUser() || !$this->getUser()->getId())
       return null;
+
     $user_id = $this->getUser()->getId();
     $hash = sha1('s0l7&p3pp$r'.$user_id.$this->getId());
     $ext = $this->getImageExt();
-    return "users/$user_id/days/{$hash}_$size_variation.$ext";
+    $path = "{$user_id}/days/{$hash}_{$size_variation}.{$ext}";
+
+    if(!$static)
+      $path = "users/{$path}";
+
+    return $path;
   }
 
   static function getTypes()

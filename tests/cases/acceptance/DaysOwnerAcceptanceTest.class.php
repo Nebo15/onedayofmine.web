@@ -29,7 +29,6 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
 	/**
 	 * @api description Starts a day, returns created <a href="#Entity:Day">day</a>.
 	 * @api input param string title
-	 * @api input param int timezone UTC time zone offset
    * @api input option string occupation If omited, then user profile occupation will be used
    * @api input option string location If omited, then user profile occupation will be used
 	 * @api input param string type One of pre-defined types, see: GET day/type_names request
@@ -40,63 +39,82 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
 
 		$this->_loginAndSetCookie($this->main_user);
 
-		$params = $this->generator->day()->exportForApi();
+    $day = $this->generator->day($this->main_user);
+    $params = $day->exportForApi();
 
-		$day = $this->post('days/start', array(
+		$response = $this->post('days/start', array(
       'title' => $params->title,
       'location' => $params->location,
       'occupation' => $params->occupation,
       'type' => $params->type,
-    ))->result;
+    ));
 		if($this->assertResponse(200))
     {
-      $this->assertEqual($params->title, $day->title);
-      $this->assertEqual($params->occupation, $day->occupation);
-      $this->assertEqual($params->location, $day->location);
-      $this->assertEqual($params->type, $day->type);
-      $this->assertEqual($this->main_user->getId(), $day->user_id);
-      $this->assertTrue($day->ctime);
-      $this->assertTrue($day->utime);
+      if($this->assertProperty($response->result, 'user'))
+        $this->assertValidUserJson($day->getUser(), $response->result->user);
+      $this->assertEqual($day->title, $response->result->title);
+      $this->assertEqual($day->occupation, $response->result->occupation);
+      $this->assertEqual($day->location, $response->result->location);
+      $this->assertEqual($day->type, $response->result->type);
+      $this->assertEqual(0, $response->result->likes_count);
+      $this->assertEqual(0, $response->result->is_ended);
     }
 	}
 
-  function testStart_withNoLocation() {
+  function testStart_withNoOccupation() {
 
     $this->main_user->setOccupation('testStart_withNoOccupation - user');
     $this->main_user->save();
     $this->_loginAndSetCookie($this->main_user);
 
-    $params = $this->generator->day()->exportForApi();
+    $day = $this->generator->day($this->main_user);
+    $params = $day->exportForApi();
     $params->occupation = null;
 
-    $day = $this->post('days/start', $params)->result;
+    $response = $this->post('days/start', array(
+      'title' => $params->title,
+      'location' => $params->location,
+      'occupation' => $params->occupation,
+      'type' => $params->type,
+    ));
     if($this->assertResponse(200))
     {
-      $this->assertEqual($params->title, $day->title);
-      $this->assertEqual($this->main_user->getId(), $day->user_id);
-      $this->assertEqual($this->main_user->occupation, $day->occupation);
-      $this->assertTrue($day->ctime);
-      $this->assertTrue($day->utime);
+      if($this->assertProperty($response->result, 'user'))
+        $this->assertValidUserJson($day->getUser(), $response->result->user);
+      $this->assertEqual($day->title, $response->result->title);
+      $this->assertEqual($this->main_user->occupation, $response->result->occupation);
+      $this->assertEqual($day->location, $response->result->location);
+      $this->assertEqual($day->type, $response->result->type);
+      $this->assertEqual(0, $response->result->likes_count);
+      $this->assertEqual(0, $response->result->is_ended);
     }
   }
 
-  function testStart_withNoOccupation() {
+  function testStart_withNoLocation() {
 
-    $this->main_user->setLocation('testStart_withNoOccupation - user');
+    $this->main_user->setLocation('testStart_withNoLocation - user');
     $this->main_user->save();
     $this->_loginAndSetCookie($this->main_user);
 
-    $params = $this->generator->day()->exportForApi();
+    $day = $this->generator->day($this->main_user);
+    $params = $day->exportForApi();
     $params->location = null;
 
-    $day = $this->post('days/start', $params)->result;
+    $response = $this->post('days/start', array(
+      'title' => $params->title,
+      'occupation' => $params->occupation,
+      'type' => $params->type,
+    ));
     if($this->assertResponse(200))
     {
-      $this->assertEqual($params->title, $day->title);
-      $this->assertEqual($this->main_user->getId(), $day->user_id);
-      $this->assertEqual($this->main_user->location, $day->location);
-      $this->assertTrue($day->ctime);
-      $this->assertTrue($day->utime);
+      if($this->assertProperty($response->result, 'user'))
+        $this->assertValidUserJson($day->getUser(), $response->result->user);
+      $this->assertEqual($day->title, $response->result->title);
+      $this->assertEqual($day->occupation, $response->result->occupation);
+      $this->assertEqual($this->main_user->location, $response->result->location);
+      $this->assertEqual($day->type, $response->result->type);
+      $this->assertEqual(0, $response->result->likes_count);
+      $this->assertEqual(0, $response->result->is_ended);
     }
   }
 
