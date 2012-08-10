@@ -6,11 +6,11 @@ class SocialController extends BaseJsonController
 {
   function doFacebookFriends()
   {
-    if(!$this->toolkit->getUser())
+    if(!$this->_getUser())
       $this->_answerUnauthorized();
 
     $friends = array();
-    foreach($this->toolkit->getUser()->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->getRegisteredFriends() as $friend) {
+    foreach($this->toolkit->getFacebookProfile($this->_getUser())->getRegisteredFriends() as $friend) {
       $friend = $friend->exportForApi();
       unset($friend->user_info['email']);
       unset($friend->user_info['timezone']);
@@ -34,7 +34,7 @@ class SocialController extends BaseJsonController
       $access_token        = $this->request->getPost('access_token');
       $access_token_secret = $this->request->getPost('access_token_secret');
 
-      $provider = $this->toolkit->getSocialServices()->getTwitter($access_token, $access_token_secret);
+      $provider = $this->toolkit->getTwitter($access_token, $access_token_secret);
 
       if(!$provider->validateAccessToken($this->error_list)) {
         return $this->_answerWithError($this->error_list->export(), null, 403);
@@ -44,7 +44,7 @@ class SocialController extends BaseJsonController
       $this->toolkit->getUser()->setTwitterAccessTokenSecret($access_token_secret);
 
       // 2 requests is not optimal solution
-      $twitter_uid = $this->toolkit->getUser()->getSocialProfile(odSocialServices::PROVIDER_TWITTER)->getInfo()['twitter_uid'];
+      $twitter_uid = lmbToolkit::instance()->getTwitterProfile($this->_getUser())->getInfo()['twitter_uid'];
       $this->toolkit->getUser()->setTwitterUid($twitter_uid);
 
       $this->toolkit->getUser()->save();

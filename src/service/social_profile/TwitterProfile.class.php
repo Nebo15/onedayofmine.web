@@ -1,7 +1,10 @@
 <?php
+lmb_require('src/service/social_profile/SocialServicesProfileInterface.class.php');
 
 class TwitterProfile implements SocialServicesProfileInterface
 {
+  const ID = 'Twitter';
+
   /**
    * @var User
    */
@@ -39,7 +42,7 @@ class TwitterProfile implements SocialServicesProfileInterface
   }
 
   /**
-   * Returns user profile information that provider allow to recieve.
+   * Returns user profile information that social_provider allow to recieve.
    *
    * @return array
    */
@@ -53,7 +56,7 @@ class TwitterProfile implements SocialServicesProfileInterface
    *
    * @return array
    */
-  public function getInfo()
+  function getInfo()
   {
     return self::_mapUserInfo($this->getInfo_Raw());
   }
@@ -63,7 +66,7 @@ class TwitterProfile implements SocialServicesProfileInterface
    *
    * @return array
    */
-  public function getFriendsIds()
+  function getFriendsIds()
   {
     $cursor = '-1';
     $ids = array();
@@ -163,50 +166,50 @@ class TwitterProfile implements SocialServicesProfileInterface
   }
 
   /**
+   * @param $day_url
+   * @return string fb_id
+   */
+  public function shareDayBegin(Day $day, $day_url)
+  {
+    return $this->_tweet("Stay in touch with new day of my life. {$day_url}");
+  }
+
+  public function shareDay(Day $day, $day_url)
+  {
+    return $this->_tweet("Look how awesome is this day. {$day_url}");
+  }
+
+  public function shareDayLike(Day $day, $day_url)
+  {
+    return $this->_tweet("I really like this day. {$day_url}");
+  }
+
+  public function shareMomentAdd(Day $day, $day_url, Moment $moment, $moment_url)
+  {
+    return $this->_tweet("Look how awesome is this moment {$moment_url} in day {$day_url}.");
+  }
+
+  public function shareMomentLike(Moment $moment, $moment_url)
+  {
+    return $this->_tweet("I really like this moment. {$moment_url}");
+  }
+
+  public function shareDayEnd(Day $day, $day_url)
+  {
+    return $this->_tweet("This day is ended, review it here: {$day_url}.");
+  }
+
+  /**
    * Update twitter status.
    *
    * @param  string $string
    * @return mixed
    */
-  public function tweet($string)
+  protected function _tweet($string)
   {
     return $this->provider->api('1/statuses/update', odTwitter::METHOD_POST, array(
       'status' => $string
     ));
-  }
-
-  /**
-   * @param $day_url
-   * @return string fb_id
-   */
-  public function shareDayBegin($day_url)
-  {
-    return $this->tweet("Stay in touch with new day of my life. {$day_url}");
-  }
-
-  public function shareDay(Day $day, $day_url)
-  {
-    return $this->tweet("Look how awesome is this day. {$day_url}");
-  }
-
-  public function shareDayLike($day_url)
-  {
-    return $this->tweet("I really like this day. {$day_url}");
-  }
-
-  public function shareMomentAdd($moment_url, $day_url)
-  {
-    return $this->tweet("Look how awesome is this moment {$moment_url} in day {$day_url}.");
-  }
-
-  public function shareMomentLike($moment_url)
-  {
-    return $this->tweet("I really like this moment. {$moment_url}");
-  }
-
-  public function shareDayEnd($day_url)
-  {
-    return $this->tweet("This day is ended, review it here: {$day_url}.");
   }
 
   protected function _mapUserInfo($user_info)

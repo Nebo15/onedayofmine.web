@@ -1,5 +1,5 @@
 <?php
-lmb_require('tests/cases/odUnitTestCase.class.php');
+lmb_require('tests/cases/unit/odUnitTestCase.class.php');
 lmb_require('facebook-proxy/src/Client.php');
 
 class TwitterProfileTest extends odUnitTestCase
@@ -12,86 +12,64 @@ class TwitterProfileTest extends odUnitTestCase
     $this->main_user->setTwitterUid($this->generator->twitter_credentials()[0]['uid']);
     $this->main_user->setTwitterAccessToken($this->generator->twitter_credentials()[0]['access_token']);
     $this->main_user->setTwitterAccessTokenSecret($this->generator->twitter_credentials()[0]['access_token_secret']);
+    $this->main_user->getSettings()->setSocialShareTwitter(1);
     $this->main_user->save();
 
     $this->additional_user->setTwitterUid($this->generator->twitter_credentials()[1]['uid']);
     $this->additional_user->setTwitterAccessToken($this->generator->twitter_credentials()[1]['access_token']);
     $this->additional_user->setTwitterAccessTokenSecret($this->generator->twitter_credentials()[1]['access_token_secret']);
+    $this->additional_user->getSettings()->setSocialShareTwitter(1);
     $this->additional_user->save();
   }
 
   function testGetInfoRaw()
   {
-    $info = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER)->getInfo_Raw();
+    $info = lmbToolkit::instance()->getTwitterProfile($this->main_user)->getInfo_Raw();
     $this->assertTrue(count($info));
     $this->assertEqual($info['id'], $this->main_user->getTwitterUid());
   }
 
   function testGetInfo()
   {
-    $info = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER)->getInfo();
+    $info = lmbToolkit::instance()->getTwitterProfile($this->main_user)->getInfo();
     $this->assertTrue(count($info));
     $this->assertEqual($info['twitter_uid'], $this->main_user->getTwitterUid());
   }
 
   function testGetFriendsIds()
   {
-    $ids = $this->additional_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER)->getFriendsIds();
+    $ids = lmbToolkit::instance()->getTwitterProfile($this->additional_user)->getFriendsIds();
     $this->assertEqual(count($ids), 1);
     $this->assertEqual($ids[0], $this->main_user->getTwitterUid());
   }
 
   function testGetFriends()
   {
-    $friends = $this->additional_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER)->getFriends();
+    $friends = lmbToolkit::instance()->getTwitterProfile($this->additional_user)->getFriends();
     $this->assertEqual(count($friends), 1);
     $this->assertEqual($friends[0]['id'], $this->main_user->getTwitterUid());
   }
 
   function testGetRegisteredFriends()
   {
-    $friends = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER)->getRegisteredFriends();
-    $this->assertEqual(count($friends), 1);
-    $this->assertEqual($friends[0]->getId(), $this->additional_user->getId());
+    $friends = lmbToolkit::instance()->getTwitterProfile($this->main_user)->getRegisteredFriends();
+    if($this->assertEqual(count($friends), 1))
+      $this->assertEqual($friends[0]->getId(), $this->additional_user->getId());
   }
 
   function testGetPictures()
   {
-    $pictures = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER)->getPictures();
+    $pictures = lmbToolkit::instance()->getTwitterProfile($this->main_user)->getPictures();
     $this->assertTrue(count($pictures));
   }
 
   function testGetPictureContents()
   {
-    $profile = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER);
+    $profile = lmbToolkit::instance()->getTwitterProfile($this->main_user);
     $pictures = $profile->getPictures();
     $biggest = array_pop($pictures);
     $contents = $profile->getPictureContents($biggest);
     $this->assertTrue($contents);
-  }
-
-  function testTweet()
-  {
-    $tmp = $this->generator->string();
-    $text = $tmp . '/'.time().'/'; // time will be cut in cache hash
-    $social_profile = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER);
-    $tweet = $social_profile->tweet($text);
-
-    $this->assertTrue(is_array($tweet));
-    if($this->assertTrue(count($tweet))) {
-      $this->assertTrue($tweet['id']);
-      $this->assertPattern("#^{$tmp}#is", $tweet['text']);
-    }
-
-    // sleep(5);
-    // $twitter = lmbToolkit::instance()->getSocialServices()->getTwitter(
-    //   $this->main_user->getTwitterAccessToken(),
-    //   $this->main_user->getTwitterAccessTokenSecret()
-    // );
-    // $response = $twitter->api('1/statuses/user_timeline')[0];
-    // $this->assertEqual($response['id'], $tweet['id']);
-    // $this->assertEqual($response['text'], $tweet['text']);
-    // $this->assertEqual($response->user['id'], $tweet->user['id']);
   }
 
   function testBeginDay()
@@ -102,8 +80,8 @@ class TwitterProfileTest extends odUnitTestCase
 
     $day_url = $this->_copyDayPageToProxy($day);
 
-    $provider = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER);
-    $tweet = $provider->shareDayBegin($day_url);
+    $provider = lmbToolkit::instance()->getTwitterProfile($this->main_user);
+    $tweet = $provider->shareDayBegin($day, $day_url);
     if($this->assertTrue(count($tweet))) {
       $this->assertTrue($tweet['id']);
     }
@@ -117,11 +95,11 @@ class TwitterProfileTest extends odUnitTestCase
 
     $day_url = $this->_copyDayPageToProxy($day);
 
-    $tweet = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER)->shareDayBegin($day_url);
+    $tweet = lmbToolkit::instance()->getTwitterProfile($this->main_user)->shareDayBegin($day, $day_url);
     if($this->assertTrue(count($tweet))) {
       $this->assertTrue($tweet['id']);
     }
-    $tweet = $this->additional_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER)->shareDayLike($day_url);
+    $tweet = lmbToolkit::instance()->getTwitterProfile($this->additional_user)->shareDayLike($day, $day_url);
     if($this->assertTrue(count($tweet))) {
       $this->assertTrue($tweet['id']);
     }
@@ -134,13 +112,13 @@ class TwitterProfileTest extends odUnitTestCase
     $day->save();
 
     $day_url = $this->_copyDayPageToProxy($day);
-    $tweet = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER)->shareDayBegin($day_url);
+    lmbToolkit::instance()->getTwitterProfile($this->main_user)->shareDayBegin($day, $day_url);
     $day->save();
 
     $moment = $this->generator->moment($day);
     $moment->save();
     $moment_url = $this->_copyMomentPageToProxy($moment);
-    $tweet = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER)->shareMomentAdd($moment_url, $day_url);
+    $tweet = lmbToolkit::instance()->getTwitterProfile($this->main_user)->shareMomentAdd($day, $day_url, $moment, $moment_url);
     if($this->assertTrue(count($tweet))) {
       $this->assertTrue($tweet['id']);
     }
@@ -148,7 +126,7 @@ class TwitterProfileTest extends odUnitTestCase
     $moment = $this->generator->moment($day);
     $moment->save();
     $moment_url = $this->_copyMomentPageToProxy($moment);
-    $tweet = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER)->shareMomentAdd($moment_url, $day_url);
+    $tweet = lmbToolkit::instance()->getTwitterProfile($this->main_user)->shareMomentAdd($day, $day_url, $moment, $moment_url);
     if($this->assertTrue(count($tweet))) {
       $this->assertTrue($tweet['id']);
     }
@@ -160,19 +138,19 @@ class TwitterProfileTest extends odUnitTestCase
     $day->setTitle('testShareMomentLike - Day');
     $day->save();
     $day_url = $this->_copyDayPageToProxy($day);
-    $tweet = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER)->shareDayBegin($day_url);
+    $tweet = lmbToolkit::instance()->getTwitterProfile($this->main_user)->shareDayBegin($day, $day_url);
     $day->save();
 
     $moment = $this->generator->moment($day);
     $moment->save();
     $moment_url = $this->_copyMomentPageToProxy($moment);
 
-    $tweet = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER)->shareMomentAdd($moment_url, $day_url);
+    $tweet = lmbToolkit::instance()->getTwitterProfile($this->main_user)->shareMomentAdd($day, $day_url, $moment, $moment_url);
     if($this->assertTrue(count($tweet))) {
       $this->assertTrue($tweet['id']);
     }
 
-    $tweet = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER)->shareMomentLike($moment_url);
+    $tweet = lmbToolkit::instance()->getTwitterProfile($this->main_user)->shareMomentLike($moment, $moment_url);
     if($this->assertTrue(count($tweet))) {
       $this->assertTrue($tweet);
     }
@@ -185,11 +163,11 @@ class TwitterProfileTest extends odUnitTestCase
     $day->save();
     $day_url = $this->_copyDayPageToProxy($day);
 
-    $tweet = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER)->shareDayBegin($day_url);
+    $tweet = lmbToolkit::instance()->getTwitterProfile($this->main_user)->shareDayBegin($day, $day_url);
     if($this->assertTrue(count($tweet))) {
       $this->assertTrue($tweet['id']);
     }
-    $tweet = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER)->shareDayEnd($day_url);
+    $tweet = lmbToolkit::instance()->getTwitterProfile($this->main_user)->shareDayEnd($day, $day_url);
     if($this->assertTrue(count($tweet))) {
       $this->assertTrue($tweet['id']);
     }
@@ -203,7 +181,7 @@ class TwitterProfileTest extends odUnitTestCase
 
     $day_url = $this->_copyDayPageToProxy($day);
 
-    $tweet = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_TWITTER)->shareDay($day, $day_url);
+    $tweet = lmbToolkit::instance()->getTwitterProfile($this->main_user)->shareDay($day, $day_url);
     if($this->assertTrue(count($tweet))) {
       $this->assertTrue($tweet['id']);
     }

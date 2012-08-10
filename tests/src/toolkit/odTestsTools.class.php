@@ -76,15 +76,9 @@ class odTestsTools extends lmbAbstractTools
 			$user = new User();
 			$user->setFbUid($user_info->id);
 			$user->setFbAccessToken($user_info->access_token);
-			$user->import($user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->getInfo());
+			$user->import(lmbToolkit::instance()->getFacebookProfile($user)->getInfo());
 
-      $settings = new UserSettings();
-      $settings->setNotificationsNewDays(0);
-      $settings->setNotificationsNewComments(0);
-      $settings->setNotificationsRelatedActivity(0);
-      $settings->setNotificationsShootingPhotos(0);
-      $settings->setPhotosSaveOriginal(0);
-      $settings->setPhotosSaveFiltered(0);
+      $settings = $user->getSettings();
       $settings->setSocialShareFacebook(0);
       $settings->setSocialShareTwitter(0);
       $user->setSettings($settings);

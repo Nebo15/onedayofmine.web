@@ -1,8 +1,14 @@
 <?php
-lmb_require('tests/cases/odAcceptanceTestCase.class.php');
+lmb_require('tests/unit/odAcceptanceTestCase.class.php');
 
 class SocialAcceptanceTest extends odAcceptanceTestCase
 {
+  function setUp()
+  {
+    parent::setUp();
+    $this->main_user->getSettings()->setSocialShareFacebook(1);
+    $this->additional_user->getSettings()->setSocialShareFacebook(1);
+  }
   /**
    * @api
    */
@@ -32,14 +38,15 @@ class SocialAcceptanceTest extends odAcceptanceTestCase
   function testTwitterConnect()
   {
     $this->main_user->save();
+    $this->main_user->getSettings()->setSocialShareTwitter(1);
+    $this->main_user->save();
     $this->_loginAndSetCookie($this->main_user);
     $result = $this->post('social/twitter_connect', array(
       'access_token'         => $this->generator->twitter_credentials()[0]['access_token'],
       'access_token_secret'  => $this->generator->twitter_credentials()[0]['access_token_secret']
     ));
-    $user = User::findOne();
+    $user = User::findById($this->main_user->id);
     if($this->assertResponse(200)) {
-      $this->assertTrue($user->getTwitterUid());
       $this->assertEqual($result->result->twitter_uid, $user->getTwitterUid());
       $this->assertEqual($user->getTwitterUid(), $this->generator->twitter_credentials()[0]['uid']);
       $this->assertEqual($user->getTwitterAccessToken(), $this->generator->twitter_credentials()[0]['access_token']);

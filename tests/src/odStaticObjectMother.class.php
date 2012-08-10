@@ -1,6 +1,5 @@
 <?php
-// TODO remove
-class odMock
+class odStaticObjectMother
 {
   static function user()
   {

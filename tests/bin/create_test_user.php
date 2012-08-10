@@ -9,7 +9,6 @@ $remote_api_cache_enabled = lmbToolkit::instance()->getConf('common')->remote_ap
 lmbToolkit::instance()->getConf('common')->remote_api_cache_enabled = false;
 
 $response = lmbToolkit::instance()
-            ->getSocialServices()
             ->getFacebook()
             ->api("/$app_id/accounts/test-users?installed=true&permissions=publish_actions,user_location,user_birthday,email", 'POST');
 

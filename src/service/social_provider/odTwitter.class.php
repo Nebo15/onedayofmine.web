@@ -1,5 +1,6 @@
 <?php
 lmb_require('lib/tmhOAuth/*.php');
+lmb_require('src/service/social_provider/odSocialServicesProviderInterface.class.php');
 
 class odTwitter extends tmhOAuth implements odSocialServicesProviderInterface
 {

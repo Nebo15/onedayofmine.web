@@ -1,5 +1,5 @@
 <?php
-lmb_require('tests/cases/odAcceptanceTestCase.class.php');
+lmb_require('tests/cases/acceptance/odAcceptanceTestCase.class.php');
 lmb_require('src/service/InterestCalculator.class.php');
 
 class DayAcceptanceTest extends odAcceptanceTestCase

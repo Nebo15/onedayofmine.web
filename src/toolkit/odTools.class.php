@@ -1,9 +1,12 @@
 <?php
 lmb_require('limb/toolkit/src/lmbAbstractTools.class.php');
-lmb_require('src/social_services/provider/*.class.php');
-lmb_require('src/social_services/user/*.class.php');
-lmb_require('src/odSocialServices.class.php');
-lmb_require('src/odNewsObserver.class.php');
+lmb_require('src/service/social_provider/odFacebook.class.php');
+lmb_require('src/service/social_provider/odTwitter.class.php');
+lmb_require('src/service/social_profile/FacebookProfile.class.php');
+lmb_require('src/service/social_profile/TwitterProfile.class.php');
+lmb_require('src/service/social_profile/FakeProfile.class.php');
+lmb_require('src/service/odNewsObserver.class.php');
+lmb_require('src/service/odRemoteApiMock.class.php');
 
 class odTools extends lmbAbstractTools
 {
@@ -55,19 +58,6 @@ class odTools extends lmbAbstractTools
   }
 
   /**
-   * @return odSocialServices
-   */
-  function getSocialServices()
-  {
-    static $social_services;
-
-    if(!$social_services)
-      $social_services = new odSocialServices();
-
-    return $social_services;
-  }
-
-  /**
    * @return string
    */
   function getSessidFromRequest()
@@ -101,7 +91,7 @@ class odTools extends lmbAbstractTools
 
   function loadTestsUsersInfo()
   {
-  	$fb = lmbToolkit::instance()->getSocialServices()->getFacebook();
+  	$fb = $this->toolkit->getFacebook();
   	$params = array(
   			'access_token' => $fb->getApplicationAccessToken()
   	);
@@ -117,11 +107,98 @@ class odTools extends lmbAbstractTools
       // var_dump($value);
       $user->setFbUid($value['id']);
       $user->setFbAccessToken($value['access_token']);
-      $user->import($user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->getInfo());
+      $user->import($this->getFacebookProfile($user)->getInfo());
       $users['data'][$key]['email'] = $user->getEmail();
     }
-
   	return $users['data'];
+  }
+
+  /**
+   * @param User $user
+   * @return FacebookProfile
+   */
+  function getFacebookProfile(User $user)
+  {
+    lmb_assert_true($user);
+    if(0 == $user->getSettings()->getSocialShareFacebook())
+      return new FakeProfile($user);
+     lmb_assert_true($user->getFbAccessToken(), 'Facebook access token not specified.');
+     return new FacebookProfile($user);
+  }
+
+  /**
+   * @param User $user
+   * @return TwitterProfile
+   */
+  function getTwitterProfile(User $user)
+  {
+    lmb_assert_true($user);
+    if(0 == $user->getSettings()->getSocialShareTwitter())
+      return new FakeProfile($user);
+    lmb_assert_true($user->getTwitterAccessToken(), 'Twitter access token not specified.');
+    lmb_assert_true($user->getTwitterAccessTokenSecret(), 'Twitter access token secret not specified.');
+    return new TwitterProfile($user);
+  }
+
+  /**
+   * Create odTwitter instance with or without auth.
+   *
+   * @param  string $access_token
+   * @param  string $access_token_secret
+   * @return odTwitter
+   */
+  public function getTwitter($access_token = null, $access_token_secret = null)
+  {
+    static $twitter_instances = array();
+
+    if(!array_key_exists($access_token, $twitter_instances)) {
+      $config = odTwitter::getConfig();
+
+      if(!is_null($access_token) && !is_null($access_token_secret)) {
+        $config['user_token']  = $access_token;
+        $config['user_secret'] = $access_token_secret;
+      }
+
+      $twitter_instances[$access_token] = new odTwitter($config);
+
+      if(lmbToolkit::instance()->getConf('common')->remote_api_cache_enabled)
+        $twitter_instances[$access_token] = new odRemoteApiMock(
+          $twitter_instances[$access_token],
+          lmbToolkit::instance()->createCacheConnectionByDSN('file:///'.lmb_var_dir().'/twitter_cache/'.$access_token)
+        );
+
+    }
+
+    return $twitter_instances[$access_token];
+  }
+
+  /**
+   * Create odFacebook instance with or without auth.
+   *
+   * @param  string $access_token
+   * @return odFacebook
+   */
+  public function getFacebook($access_token = null)
+  {
+    static $facebook_instances = array();
+
+    if(!array_key_exists($access_token, $facebook_instances)) {
+      // NOTICE: connection can be cached
+      $instance = new odFacebook(odFacebook::getConfig());
+
+      if(!is_null($access_token))
+        $instance->setAccessToken($access_token);
+
+      if(lmbToolkit::instance()->getConf('common')->remote_api_cache_enabled)
+        $facebook_instances[$access_token] = new odRemoteApiMock(
+          $instance,
+          lmbToolkit::instance()->createCacheConnectionByDSN('file:///'.lmb_var_dir().'/facebook_cache/'.$access_token)
+        );
+      else
+        $facebook_instances[$access_token] = $instance;
+    }
+
+    return $facebook_instances[$access_token];
   }
 }
 

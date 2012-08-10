@@ -1,7 +1,9 @@
 <?php
+lmb_require('src/service/social_profile/SocialServicesProfileInterface.class.php');
 
 class FacebookProfile implements SocialServicesProfileInterface
 {
+  const ID = 'Facebook';
   /**
    * @var User
    */
@@ -37,7 +39,7 @@ class FacebookProfile implements SocialServicesProfileInterface
   }
 
   /**
-   * Returns user profile information that provider allow to recieve.
+   * Returns user profile information that social_provider allow to recieve.
    *
    * @return array
    */
@@ -103,7 +105,7 @@ class FacebookProfile implements SocialServicesProfileInterface
    * @param $day_url
    * @return string fb_id
    */
-  public function shareDayBegin($day_url)
+  public function shareDayBegin(Day $day, $day_url)
   {
     if(!$this->user->getSettings()->getSocialShareFacebook())
       return null;
@@ -131,7 +133,7 @@ class FacebookProfile implements SocialServicesProfileInterface
     ));
   }
 
-  public function shareDayLike($day_url)
+  public function shareDayLike(Day $day, $day_url)
   {
     if(!$this->user->getSettings()->getSocialShareFacebook())
       return null;
@@ -141,7 +143,7 @@ class FacebookProfile implements SocialServicesProfileInterface
     ));
   }
 
-  public function shareMomentAdd($moment_url, $day_url)
+  public function shareMomentAdd(Day $day, $day_url, Moment $moment, $moment_url)
   {
     if(!$this->user->getSettings()->getSocialShareFacebook())
       return null;
@@ -152,7 +154,7 @@ class FacebookProfile implements SocialServicesProfileInterface
     ))['id'];
   }
 
-  public function shareMomentLike($moment_url)
+  public function shareMomentLike(Moment $moment, $moment_url)
   {
     if(!$this->user->getSettings()->getSocialShareFacebook())
       return null;
@@ -162,7 +164,7 @@ class FacebookProfile implements SocialServicesProfileInterface
     ));
   }
 
-  public function shareDayEnd($day_url)
+  public function shareDayEnd(Day $day, $day_url)
   {
     if(!$this->user->getSettings()->getSocialShareFacebook())
       return null;

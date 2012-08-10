@@ -1,5 +1,5 @@
 <?php
-lmb_require('tests/cases/odAcceptanceTestCase.class.php');
+lmb_require('tests/unit/odAcceptanceTestCase.class.php');
 
 class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
 {

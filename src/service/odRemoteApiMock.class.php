@@ -54,7 +54,7 @@ class odRemoteApiMock
     {
       // lmbToolkit::instance()
       //   ->getLog('test_request')
-      //   ->debug(get_class($this->provider).' fake request: ', array('arguments' => $arguments, 'result' => $cached_value));
+      //   ->debug(get_class($this->social_provider).' fake request: ', array('arguments' => $arguments, 'result' => $cached_value));
       return $cached_value;
     }
 

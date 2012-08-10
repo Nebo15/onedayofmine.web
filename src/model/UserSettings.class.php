@@ -27,4 +27,18 @@ class UserSettings extends BaseModel
     $item->setSocialShareTwitter(1);
     return $item;
   }
+
+  static function createQuiet()
+  {
+    $item = new UserSettings();
+    $item->setNotificationsNewDays(0);
+    $item->setNotificationsNewComments(0);
+    $item->setNotificationsRelatedActivity(0);
+    $item->setNotificationsShootingPhotos(0);
+    $item->setPhotosSaveOriginal(0);
+    $item->setPhotosSaveFiltered(0);
+    $item->setSocialShareFacebook(0);
+    $item->setSocialShareTwitter(0);
+    return $item;
+  }
 }

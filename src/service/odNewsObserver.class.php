@@ -36,7 +36,7 @@ class odNewsObserver {
   const MSG_FOLLOW_DIRECT       = "%s started to follow you";
 
   ## User ##
-  const MSG_FBFRIEND_REGISTERED = "You'r facebook friend '%s' just started to use this appliaction as '%s', follow hem?";
+  const MSG_FBFRIEND_REGISTERED = "You'r facebook friend '%s' just started to use this application, follow hem?";
 
   /**
    * @var User
@@ -89,9 +89,6 @@ class odNewsObserver {
     }
   }
 
-  ###########################################################
-  ################# Actions implementations #################
-  ###########################################################
   /**
    * @todo moment like not implemented
    * @todo add {Day, Moment} interface
@@ -101,11 +98,11 @@ class odNewsObserver {
   {
     $news = $this->createNews();
     if($liked_object instanceof Day) {
-      $this->applyText($news, self::MSG_DAY_LIKED, array($this->getUserName(), $liked_object->getTitle()));
+      $this->applyText($news, self::MSG_DAY_LIKED, array($this->user->getName(), $liked_object->getTitle()));
     } elseif($liked_object instanceof Moment) {
-      $this->applyText($news, self::MSG_MOMENT_LIKED, array($this->getUserName(), $liked_object->getDay()->getTitle()));
+      $this->applyText($news, self::MSG_MOMENT_LIKED, array($this->user->getName(), $liked_object->getDay()->getTitle()));
     } else {
-      throw new lmbException("Can't create news, uknown model passed. Day or Moment expected.");
+      throw new lmbException("Can't create news, unknown model passed. Day or Moment expected.");
     }
     $this->sendToFollowers($news);
   }
@@ -117,10 +114,6 @@ class odNewsObserver {
   {
     $news = $this->createNews();
     $recipients = new lmbCollection();
-    // We dont spam news with comments
-    // foreach ($this->user->getFollowers() as $follower) {
-    //   $recipients->add($follower);
-    // }
 
     if($comment instanceof DayComment) {
       $day = $commented_object = $comment->getDay();
@@ -139,7 +132,7 @@ class odNewsObserver {
         $recipients->add($comment_author);
     }
 
-    $this->applyText($news, $msg_type, array($this->getUserName(), $day->getTitle()));
+    $this->applyText($news, $msg_type, array($this->user->getName(), $day->getTitle()));
     $this->sendToRecipients($news, $recipients);
   }
 
@@ -151,11 +144,11 @@ class odNewsObserver {
     $news = $this->createNews();
 
     // Send message "{user} started to follow you"
-    $this->applyText($news, self::MSG_FOLLOW_DIRECT, array($this->getUserName()));
+    $this->applyText($news, self::MSG_FOLLOW_DIRECT, array($this->user->getName()));
     $this->sendToRecipient($news, $followed_user);
 
     // Send message "{user} started to follow {user}"
-    $this->applyText($news, self::MSG_FOLLOW,     array($this->getUserName(), $this->getUserName($followed_user)));
+    $this->applyText($news, self::MSG_FOLLOW, array($this->user->getName(), $followed_user->getName()));
 
     foreach($this->user->getFollowers() as $recipient) {
       // Prevent sending 2 messages to same user
@@ -170,7 +163,7 @@ class odNewsObserver {
   protected function onDay(Day $day)
   {
     $news = $this->createNews();
-    $this->applyText($news, self::MSG_DAY_CREATED, array($this->getUserName(), $day->getTitle()));
+    $this->applyText($news, self::MSG_DAY_CREATED, array($this->user->getName(), $day->getTitle()));
     $news->setDay($day);
     $this->sendToFollowers($news);
   }
@@ -181,7 +174,7 @@ class odNewsObserver {
   protected function onMoment(Moment $moment)
   {
     $news = $this->createNews();
-    $this->applyText($news, self::MSG_MOMENT_CREATED, array($this->getUserName(), $moment->getDay()->getTitle()));
+    $this->applyText($news, self::MSG_MOMENT_CREATED, array($this->user->getName(), $moment->getDay()->getTitle()));
     $news->setDay($moment->getDay());
     $news->setMoment($moment);
     $this->sendToFollowers($news);
@@ -190,21 +183,16 @@ class odNewsObserver {
   /**
    * @param User $user
    */
-  protected function onUser(User $user) {
+  protected function onUser(User $user)
+  {
     $news = $this->createNews($user);
-    $this->applyText($news, self::MSG_FBFRIEND_REGISTERED, array(
-                                                            $this->getUserName((object) $user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->getInfo()),
-                                                            $this->getUserName($user)
-                                                           ));
-    // TODO parse friends from twitter
-    foreach ($user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->getRegisteredFriends() as $friend) {
+    $this->applyText($news, self::MSG_FBFRIEND_REGISTERED, array($user->getName()));
+
+    foreach (lmbToolkit::instance()->getFacebookProfile($user)->getRegisteredFriends() as $friend) {
       $this->sendToRecipient($news, $friend);
     }
   }
 
-  ###########################################################
-  ################## Internationalization ################### // TODO i18n on lang files
-  ###########################################################
   /**
    * Apply message with text $text to news $news. You can specify additional text $params.
    *
@@ -215,17 +203,21 @@ class odNewsObserver {
    */
   public function applyText(News $news, $type, array $params = array())
   {
+    lmb_assert_type($type, 'string');
     $news->setText(self::getMessage($type, $params));
+//    $all_params = func_get_args();
+//    $news->setText(self::getMessage($type, array_slice($all_params, 0)));
   }
 
   /**
    * Returns message based on it's $type and $params.
    *
-   * @param  int $type      One of {@see odNewsObserver::MSG_*} constants. Notice: type is text-string right now.
+   * @param  string $type      One of {@see odNewsObserver::MSG_*} constants. Notice: type is text-string right now.
    * @param  array  $params
    * @return string
    */
   public static function getMessage($type, array $params = array()) {
+    lmb_assert_type($type, 'string');
     array_unshift($params, $type);
     return call_user_func_array('sprintf', $params);
   }
@@ -236,16 +228,14 @@ class odNewsObserver {
    * @param User|stdClass $user
    * @return string
    */
-  public function getUserName($user = null) {
+  public function getUserName($user = null)
+  {
     if(is_null($user))
       $user = $this->user;
 
     return $user->name;
   }
 
-  ###########################################################
-  ################## News-sending functions #################
-  ###########################################################
   /**
    * Send $news to all current user followers.
    *

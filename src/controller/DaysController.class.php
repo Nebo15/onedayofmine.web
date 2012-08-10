@@ -64,8 +64,10 @@ class DaysController extends BaseJsonController
       'location' => $this->request->getPost('location') ?: $this->_getUser()->getLocation()
     ));
 
-    $this->_getUser()
-      ->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)
+    $this->toolkit->getFacebookProfile($this->_getUser())
+      ->shareDayBegin($day, $this->toolkit->getSiteUrl('/pages/'.$day->getId().'/day'));
+
+    $this->toolkit->getTwitterProfile($this->_getUser())
       ->shareDayBegin($day, $this->toolkit->getSiteUrl('/pages/'.$day->getId().'/day'));
 
     // Notify friends about new day
@@ -161,7 +163,7 @@ class DaysController extends BaseJsonController
       return $this->_answerWithError("Day not found by id");
 
     $day_url = $this->toolkit->getSiteUrl('/pages/'.$day->getId().'/day');
-    $response = $this->_getUser()->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->shareDay($day, $day_url);
+    $response = $this->toolkit->getFacebookProfile($this->_getUser())->shareDay($day, $day_url);
 
     return $this->_answerOk($response);
   }
@@ -175,8 +177,7 @@ class DaysController extends BaseJsonController
       return $this->_answerWithError("Day not found by id");
 
     // TODO FIXME
-    // $response = $this->_getUser()
-    //               ->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)
+    // $response = lmbToolkit::instance()->getFacebookProfile($user)
     //               ->likeDay($day);
 
     // Notify friends about day like

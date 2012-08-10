@@ -1,5 +1,5 @@
 <?php
-lmb_require('tests/cases/odUnitTestCase.class.php');
+lmb_require('tests/cases/unit/odUnitTestCase.class.php');
 lmb_require('src/controller/BaseJsonController.class.php');
 
 class BaseJsonControllerTest extends odUnitTestCase

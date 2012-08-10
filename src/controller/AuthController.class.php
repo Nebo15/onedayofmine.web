@@ -11,13 +11,21 @@ class AuthController extends BaseJsonController
     if(!$fb_access_token = $this->request->get('token'))
       return $this->_answerWithError('Token not given', null, 412);
 
-    if(!$this->toolkit->getSocialServices()->getFacebook($fb_access_token)->validateAccessToken($this->error_list))
+    if(!$this->toolkit->getFacebook($fb_access_token)->validateAccessToken($this->error_list))
       return $this->_answerWithError($this->error_list, null, 403);
 
     $new_user = false;
     $facebook_info = null;
     if(!$user = User::findByFbAccessToken($fb_access_token)) {
       $user = $this->_register($fb_access_token, $facebook_info);
+      if($this->request->get('disable_sharing'))
+      {
+        $settings = $user->getSettings();
+        $settings->setSocialShareTwitter(0);
+        $settings->setSocialShareFacebook(0);
+        $settings->save();
+        $user->setSettings($settings);
+      }
       $new_user = true;
     }
 
@@ -25,7 +33,6 @@ class AuthController extends BaseJsonController
 
     $answer = $user->exportForApi();
 
-    // Notify friends that they'r friend registered
     if($new_user)
     {
       $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_USER, $user);
@@ -52,7 +59,7 @@ class AuthController extends BaseJsonController
   {
     $user = new User();
     $user->setFbAccessToken($fb_access_token);
-    $profile = $user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK);
+    $profile = $this->toolkit->getFacebookProfile($user);
     $facebook_info = $profile->getInfo();
     $user->import($facebook_info);
     $user->save();

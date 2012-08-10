@@ -1,6 +1,6 @@
 <?php
-lmb_require('tests/cases/odAcceptanceTestCase.class.php');
-lmb_require('src/odNewsObserver.class.php');
+lmb_require('tests/unit/odAcceptanceTestCase.class.php');
+lmb_require('src/service/odNewsObserver.class.php');
 
 
 class NewsObserverAcceptanceTest extends odAcceptanceTestCase
@@ -8,7 +8,7 @@ class NewsObserverAcceptanceTest extends odAcceptanceTestCase
   function setUp()
   {
     parent::setUp();
-    odTestsTools::truncateTablesOf('News', 'Day', 'DayComment', 'Moment', 'MomentComment', 'UserFollowing', 'User');
+    odTestsTools::truncateTablesOf('News', 'Day', 'DayComment', 'Moment', 'MomentComment', 'UserFollowing');
     // Users should have fixed ids in each test
     $this->main_user->save();
     // Bar follow Foo
@@ -77,9 +77,6 @@ class NewsObserverAcceptanceTest extends odAcceptanceTestCase
                            ));
     }
   }
-
-  // NOTICE not needed
-  function _testDeleteDayComment(){}
 
   function testCreateMoment()
   {
@@ -150,9 +147,6 @@ class NewsObserverAcceptanceTest extends odAcceptanceTestCase
     }
   }
 
-  // NOTICE not needed
-  function _testDeleteMomentComment(){}
-
   function testFollow()
   {
     // Remove default following
@@ -198,27 +192,14 @@ class NewsObserverAcceptanceTest extends odAcceptanceTestCase
 
   function testRegister()
   {
-    // re-register users
-    lmbActiveRecord :: delete('User');
-    $users = User::find();
-    $this->assertEqual(0, count($users));
+    odTestsTools::truncateTablesOf('User', 'UserSettings');
+    $user1 = $this->_loginAndSetCookie($this->additional_user, false)->result;
+    $user2 = $this->_loginAndSetCookie($this->main_user, false)->result;
 
-    $this->_loginAndSetCookie($this->additional_user);
-    $this->_loginAndSetCookie($this->main_user);
-
-    $users = User::find();
-    $this->assertEqual(2, count($users));
-
-    $this->additional_user = $users->at(0);
-    $this->main_user = $users->at(1);
-
-    $this->_checkMessage($this->additional_user,
-                         $this->main_user,
+    $this->_checkMessage(User::findById($user1->id),
+                         User::findById($user2->id),
                          odNewsObserver::MSG_FBFRIEND_REGISTERED,
-                         array(
-                          $this->_getUsername((object) $this->main_user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->getInfo()),
-                          $this->_getUsername($this->main_user),
-                         ));
+                         array($this->main_user->getName()));
   }
 
   function testLikeDay()
@@ -234,23 +215,7 @@ class NewsObserverAcceptanceTest extends odAcceptanceTestCase
                            $this->main_user,
                            odNewsObserver::MSG_DAY_LIKED,
                            array(
-                            $this->_getUsername($this->main_user),
-                            $day->getTitle(),
-                           ));
-    }
-  }
-
-  // NOTICE not implemented/not planned
-  function _testLikeMoment()
-  {
-    // ...
-    if($this->assertResponse(200))
-    {
-      $this->_checkMessage($this->additional_user,
-                           $this->main_user,
-                           odNewsObserver::MSG_MOMENT_LIKED,
-                           array(
-                            $this->_getUsername($this->main_user),
+                            $this->main_user->getName(),
                             $day->getTitle(),
                            ));
     }

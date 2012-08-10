@@ -1,5 +1,5 @@
 <?php
-lmb_require('tests/cases/odAcceptanceTestCase.class.php');
+lmb_require('tests/cases/acceptance/odAcceptanceTestCase.class.php');
 
 
 class AuthAcceptanceTest extends odAcceptanceTestCase
@@ -88,6 +88,25 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
     $this->assertTrue($user->image_36);
     $this->assertTrue($user->image_72);
   }
+
+//  function testLogin_firstCallCreateNewUserWithSharing()
+//  {
+//    $users = User::find();
+//    $this->assertEqual(0, count($users));
+//
+//    $this->_loginAndSetCookie($this->main_user, false);
+//
+//    $users = User::find();
+//    $this->assertEqual(1, count($users));
+//
+//    $this->_loginAndSetCookie($this->main_user, false);
+//
+//    $users = User::find();
+//    $this->assertEqual(1, count($users));
+//    $user = $users->at(0)->exportForApi();
+//    $this->assertTrue($user->image_36);
+//    $this->assertTrue($user->image_72);
+//  }
 
   /**
    * @api

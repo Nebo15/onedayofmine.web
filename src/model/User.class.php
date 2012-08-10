@@ -9,6 +9,7 @@ lmb_require('limb/imagekit/src/lmbConvertImageHelper.class.php');
  * @method string getFbAccessToken()
  * @method void setFbAccessToken(string $fb_access_token)
  * @method string getTwitterUid()
+ * @method UserSettings getSettings()
  * @method void
  */
 class User extends BaseModel
@@ -74,14 +75,6 @@ class User extends BaseModel
   	$validator->addRequiredRule('sex');
   	$validator->addRequiredRule('birthday');
   	return $validator;
-  }
-
-  /**
-   * @return SocialServicesProfileInterface
-   */
-  function getSocialProfile($provider = odSocialServices::PROVIDER_MULTI)
-  {
-    return lmbToolkit::instance()->getSocialServices()->getSocialProfile($this, $provider);
   }
 
   function exportForApi()

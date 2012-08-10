@@ -1,5 +1,5 @@
 <?php
-lmb_require('tests/cases/odUnitTestCase.class.php');
+lmb_require('tests/cases/unit/odUnitTestCase.class.php');
 
 class FacebookProfileTest extends odUnitTestCase
 {
@@ -17,46 +17,46 @@ class FacebookProfileTest extends odUnitTestCase
 
   function testGetInfoRaw()
   {
-    $info = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->getInfo_Raw();
+    $info = lmbToolkit::instance()->getFacebookProfile($this->main_user)->getInfo_Raw();
     $this->assertTrue(count($info));
     $this->assertEqual($info['uid'], $this->main_user->getFbUid());
   }
 
   function testGetInfo()
   {
-    $info = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->getInfo();
+    $info = lmbToolkit::instance()->getFacebookProfile($this->main_user)->getInfo();
     $this->assertTrue(count($info));
     $this->assertEqual($info['fb_uid'], $this->main_user->getFbUid());
   }
 
   function testGetFriends()
   {
-    $friends = $this->additional_user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->getFriends();
+    $friends = lmbToolkit::instance()->getFacebookProfile($this->additional_user)->getFriends();
     $this->assertEqual(count($friends), 1);
     $this->assertEqual($friends[0]['uid'], $this->main_user->getFbUid());
   }
 
   function testGetRegisteredFriends()
   {
-    $friends = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->getRegisteredFriends();
+    $friends = lmbToolkit::instance()->getFacebookProfile($this->main_user)->getRegisteredFriends();
     $this->assertEqual(count($friends), 0);
 
     $this->additional_user->save();
 
-    $friends = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->getRegisteredFriends();
+    $friends = lmbToolkit::instance()->getFacebookProfile($this->main_user)->getRegisteredFriends();
     $this->assertEqual(count($friends), 1);
     $this->assertEqual($friends[0]->getId(), $this->additional_user->getId());
   }
 
   function testGetPictures()
   {
-    $pictures = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->getPictures();
+    $pictures = lmbToolkit::instance()->getFacebookProfile($this->main_user)->getPictures();
     $this->assertTrue(count($pictures));
   }
 
   function testGetPictureContents()
   {
-    $profile = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK);
+    $profile = lmbToolkit::instance()->getFacebookProfile($this->main_user);
     $pictures = $profile->getPictures();
     $biggest = array_pop($pictures);
     $contents = $profile->getPictureContents($biggest);
@@ -71,7 +71,7 @@ class FacebookProfileTest extends odUnitTestCase
 
     $day_url = $this->_copyDayPageToProxy($day);
 
-    $fb_id = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->shareDayBegin($day_url);
+    $fb_id = lmbToolkit::instance()->getFacebookProfile($this->main_user)->shareDayBegin($day, $day_url);
     $this->assertTrue($fb_id);
   }
 
@@ -83,8 +83,8 @@ class FacebookProfileTest extends odUnitTestCase
 
     $day_url = $this->_copyDayPageToProxy($day);
 
-    $this->main_user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->shareDayBegin($day_url);
-    $this->additional_user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->shareDayLike($day_url);
+    lmbToolkit::instance()->getFacebookProfile($this->main_user)->shareDayBegin($day, $day_url);
+    lmbToolkit::instance()->getFacebookProfile($this->additional_user)->shareDayLike($day, $day_url);
   }
 
   function testAddMoment()
@@ -94,20 +94,20 @@ class FacebookProfileTest extends odUnitTestCase
     $day->save();
 
     $day_url = $this->_copyDayPageToProxy($day);
-    $fb_id = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->shareDayBegin($day_url);
+    $fb_id = lmbToolkit::instance()->getFacebookProfile($this->main_user)->shareDayBegin($day, $day_url);
     $day->setFbId($fb_id);
     $day->save();
 
     $moment = $this->generator->moment($day);
     $moment->save();
     $moment_url = $this->_copyMomentPageToProxy($moment);
-    $fb_id = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->shareMomentAdd($moment_url, $day_url);
+    $fb_id = lmbToolkit::instance()->getFacebookProfile($this->main_user)->shareMomentAdd($day, $day_url, $moment, $moment_url);
     $this->assertTrue($fb_id);
 
     $moment = $this->generator->moment($day);
     $moment->save();
     $moment_url = $this->_copyMomentPageToProxy($moment);
-    $fb_id = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->shareMomentAdd($moment_url, $day_url);
+    $fb_id = lmbToolkit::instance()->getFacebookProfile($this->main_user)->shareMomentAdd($day, $day_url, $moment, $moment_url);
     $this->assertTrue($fb_id);
   }
 
@@ -117,7 +117,7 @@ class FacebookProfileTest extends odUnitTestCase
     $day->setTitle('testShareMomentLike - Day');
     $day->save();
     $day_url = $this->_copyDayPageToProxy($day);
-    $fb_id = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->shareDayBegin($day_url);
+    $fb_id = lmbToolkit::instance()->getFacebookProfile($this->main_user)->shareDayBegin($day, $day_url);
     $day->setFbId($fb_id);
     $day->save();
 
@@ -125,10 +125,10 @@ class FacebookProfileTest extends odUnitTestCase
     $moment->save();
     $moment_url = $this->_copyMomentPageToProxy($moment);
 
-    $fb_id = $this->main_user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->shareMomentAdd($moment_url, $day_url);
+    $fb_id = lmbToolkit::instance()->getFacebookProfile($this->main_user)->shareMomentAdd($day, $day_url, $moment, $moment_url);
     $this->assertTrue($fb_id);
 
-    $this->main_user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->shareMomentLike($moment_url);
+    lmbToolkit::instance()->getFacebookProfile($this->main_user)->shareMomentLike($moment, $moment_url);
   }
 
   function testEndDay()
@@ -138,8 +138,8 @@ class FacebookProfileTest extends odUnitTestCase
     $day->save();
     $day_url = $this->_copyDayPageToProxy($day);
 
-    $this->main_user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->shareDayBegin($day_url);
-    $this->main_user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->shareDayEnd($day_url);
+    lmbToolkit::instance()->getFacebookProfile($this->main_user)->shareDayBegin($day, $day_url);
+    lmbToolkit::instance()->getFacebookProfile($this->main_user)->shareDayEnd($day, $day_url);
   }
 
   function testShareDay()
@@ -150,7 +150,7 @@ class FacebookProfileTest extends odUnitTestCase
 
     $day_url = $this->_copyDayPageToProxy($day);
 
-    $this->main_user->getSocialProfile(odSocialServices::PROVIDER_FACEBOOK)->shareDay($day, $day_url);
+    lmbToolkit::instance()->getFacebookProfile($this->main_user)->shareDay($day, $day_url);
   }
 
   protected function _copyDayPageToProxy(Day $day)

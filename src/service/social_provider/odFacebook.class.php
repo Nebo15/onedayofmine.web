@@ -1,5 +1,6 @@
 <?php
 lmb_require('facebook/facebook.php');
+lmb_require('src/service/social_provider/odSocialServicesProviderInterface.class.php');
 
 class odFacebook extends Facebook implements odSocialServicesProviderInterface
 {
