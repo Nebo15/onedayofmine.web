@@ -11,9 +11,10 @@ function task_od_remove_cache($argv)
 
 /**
  * @desc Fill db from lj community
- * @deps od_register_tests_users
+ * @deps od_tests_users
+ * @alias od_fill_from_lj
  */
-function task_od_fill_from_lj($argv)
+function task_od_parse_lj($argv)
 {
   $app_dir = taskman_prop('PROJECT_DIR');
 
@@ -42,7 +43,7 @@ function task_od_fill_from_lj($argv)
   echo "Searching for ".POSTS_COUNT." posts...".PHP_EOL;
   echo "== Started to search for links... ==".PHP_EOL;
 
-  $cache = lmbToolkit::instance()->createCacheConnectionByDSN('file:///'.lmb_var_dir().'/livejournal_cache/');
+  $cache = lmbToolkit::instance()->createCacheConnectionByDSN("file:///$app_dir/init/lj_data/");
 
   $mainPage = new MainPage(new MainPageRegexpParser());
 	$contentPageParser = new ContentPageRegexpParser();
@@ -114,7 +115,10 @@ function task_od_fill_from_lj($argv)
     {
       if($first)
       {
-        $day->attachImage(od_download_file($moment_data['img']));
+        $img_url = $moment_data['img'];
+        if(!$cache->get(md5($img_url)))
+          $cache->add(md5($img_url), file_get_contents($img_url));
+        $day->attachImage($cache->get(md5($img_url)));
         $day->save();
         $first = false;
       }
@@ -122,7 +126,10 @@ function task_od_fill_from_lj($argv)
       $moment->setDescription($moment_data['description']);
       $moment->setDay($day);
       $moment->save();
-      $moment->attachImage(od_download_file($moment_data['img']));
+      $img_url = $moment_data['img'];
+      if(!$cache->get(md5($img_url)))
+        $cache->add(md5($img_url), file_get_contents($img_url));
+      $moment->attachImage($cache->get(md5($img_url)));
       $moment->save();
       echo ".";
     }
@@ -135,7 +142,7 @@ function task_od_fill_from_lj($argv)
  * @desc Register tests users
  * @deps od_remove_cache
  */
-function task_od_register_tests_users($argv)
+function task_od_tests_users($argv)
 {
   lmb_require(taskman_prop('PROJECT_DIR').'setup.php');
   lmb_require('tests/src/toolkit/odTestsTools.class.php');
@@ -175,11 +182,28 @@ function task_od_calc_interest()
   $calc->fillRating();
 }
 
-function od_download_file($url)
+function task_od_amazon_watch()
 {
-  $dir = lmb_var_dir().'/parser/';
-  $file_path = $dir.md5($url);
-  if(!file_exists($file_path))
-    lmbFs::safeWrite($file_path, file_get_contents($url));
-  return file_get_contents($file_path);
+  lmb_require(taskman_prop('PROJECT_DIR').'setup.php');
+  require(taskman_prop('PROJECT_DIR').'/lib/amazon-sdk/sdk.class.php');
+
+  CFCredentials::set(array('@default' => lmbToolkit::instance()->getConf('amazon')));
+
+  $acw = new AmazonCloudWatch();
+  echo "Sending...";
+
+  foreach(lmb_glob(taskman_prop('PROJECT_DIR').'/../*onedayofmine*.access_log') as $log_file)
+  {
+
+    $value = exec("grep ' 500 ' $log_file | wc -l");
+    var_dump(basename($log_file), $value);
+  }
+//
+//  $res  =  $acw->put_metric_data ('Sys/APP' ,
+//    array(array('MetricName'  => 'ErrorsCount' ,
+//      'Dimensions'  => array(array('Name'   => 'HOST',
+//        'Value'  =>  lmb_env_get('HOST_URL'))),
+//      'Value'       => rand(1, 100),
+//      'Unit'        => 'Count')));
+//  echo $res->isOK() ? 'OK' : 'ERROR'.PHP_EOL.PHP_EOL;
 }

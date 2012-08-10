@@ -12,6 +12,7 @@
 .tags_sorted_by_file
 
 var/*
+init/lj_data
 tests/var/*
 www/media
 www/proxy.php
