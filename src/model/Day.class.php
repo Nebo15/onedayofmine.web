@@ -29,7 +29,7 @@ class Day extends BaseModel
     $validator->addRequiredRule('user');
     $validator->addRequiredObjectRule('user', 'User');
     $validator->addRequiredRule('title');
-    $validator->addRequiredRule('occupation');
+    // $validator->addRequiredRule('occupation');
     // $validator->addRequiredRule('location');
     $validator->addRequiredRule('type');
     return $validator;
