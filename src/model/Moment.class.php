@@ -43,8 +43,8 @@ class Moment extends BaseModel
     $moment->id = $this->getId();
     $moment->day_id = $this->getDayId();
     $moment->description = $this->getDescription();
-    $moment->image_266 = lmbToolkit::instance()->getStaticUrl($this->getImageSmall());
-    $moment->image_532 = lmbToolkit::instance()->getStaticUrl($this->getImageBig());
+    $moment->image_266 = lmbToolkit::instance()->getStaticUrl($this->getImageSmall(true));
+    $moment->image_532 = lmbToolkit::instance()->getStaticUrl($this->getImageBig(true));
     $moment->time = self::stampToIso($this->getTime(), $this->getTimezone());
     $moment->likes_count = $this->getLikesCount() ?: 0;
     $moment->ctime = $this->getCtime();
@@ -71,22 +71,22 @@ class Moment extends BaseModel
     $helper->save($small_file);
   }
 
-  function getImageOrig()
+  function getImageOrig($static = false)
   {
-    return $this->getImagePath(self::IMAGE_ORIG);
+    return $this->getImagePath(self::IMAGE_ORIG, $static);
   }
 
-  function getImageSmall()
+  function getImageSmall($static = false)
   {
-    return $this->getImagePath(self::IMAGE_SMALL);
+    return $this->getImagePath(self::IMAGE_SMALL, $static);
   }
 
-  function getImageBig()
+  function getImageBig($static = false)
   {
-    return $this->getImagePath(self::IMAGE_BIG);
+    return $this->getImagePath(self::IMAGE_BIG, $static);
   }
 
-  function getImagePath($size_variation)
+  function getImagePath($size_variation, $static = false)
   {
     if(!$this->getImageExt())
       return '';
@@ -100,6 +100,12 @@ class Moment extends BaseModel
     $day_id = $this->getDayId();
     $hash = sha1('s0l7&p3pp$r'.$user_id.$day_id.$this->getId());
     $ext = $this->getImageExt();
-    return "{$user_id}/days/{$day_id}/{$hash}_{$size_variation}.{$ext}";
+
+    $path = "{$user_id}/days/{$day_id}/{$hash}_{$size_variation}.{$ext}";
+
+    if(!$static)
+      $path = "users/{$path}";
+
+    return $path;
   }
 }
