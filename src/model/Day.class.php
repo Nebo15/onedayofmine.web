@@ -8,8 +8,8 @@ lmb_require('src/model/BaseModel.class.php');
 class Day extends BaseModel
 {
   const IMAGE_ORIG = 'orig';
-  const IMAGE_SMALL = '266x200';
-  const IMAGE_BIG = '532x400';
+  const IMAGE_SMALL = '266x266';
+  const IMAGE_BIG = '532x532';
 
   protected function _defineRelations()
   {

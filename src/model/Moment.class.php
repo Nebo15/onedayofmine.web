@@ -13,8 +13,8 @@
 class Moment extends BaseModel
 {
   const IMAGE_ORIG = 'orig';
-  const IMAGE_SMALL = '266x200';
-  const IMAGE_BIG = '532x400';
+  const IMAGE_SMALL = '266x266';
+  const IMAGE_BIG = '532x532';
 
   protected $_db_table_name = 'moment';
   protected $_default_sort_params = array('id'=>'asc');
@@ -62,12 +62,12 @@ class Moment extends BaseModel
 
     $small_file = lmbToolkit::instance()->getAbsolutePath($this->getImageSmall());
     $helper = new lmbConvertImageHelper($orig_file);
-    $helper->resizeAndCropFrame(array('width' => 266, 'height' => 200));
+    $helper->resizeAndCropFrame(array('width' => 266, 'height' => 266));
     $helper->save($small_file);
 
     $small_file = lmbToolkit::instance()->getAbsolutePath($this->getImageBig());
     $helper = new lmbConvertImageHelper($orig_file);
-    $helper->resizeAndCropFrame(array('width' => 532, 'height' => 400));
+    $helper->resizeAndCropFrame(array('width' => 532, 'height' => 532));
     $helper->save($small_file);
   }
 
