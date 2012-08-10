@@ -85,8 +85,8 @@ class User extends BaseModel
     $result->twitter_uid = $this->twitter_uid;
     $result->name = $this->name;
     $result->sex = $this->sex;
-    $result->image_36 = lmbToolkit::instance()->getSiteUrl($this->getPicSmall());
-    $result->image_72 = lmbToolkit::instance()->getSiteUrl($this->getPicBig());
+    $result->image_36 = lmbToolkit::instance()->getStaticUrl($this->getPicSmall());
+    $result->image_72 = lmbToolkit::instance()->getStaticUrl($this->getPicBig());
     $result->birthday = $this->birthday;
     $result->occupation = $this->occupation;
     $result->location = $this->location;
@@ -185,7 +185,7 @@ class User extends BaseModel
       throw new lmbException("Can't create image path, because user have no id");
     $user_id = $this->getId();
     $hash = sha1('s0l7&p3pp$r'.$user_id);
-    return "users/$user_id/{$hash}_$size_variation.$ext";
+    return "{$user_id}/{$hash}_{$size_variation}.{$ext}";
   }
 
   static function findByFbAccessToken($fb_access_token)

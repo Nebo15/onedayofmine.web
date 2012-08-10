@@ -100,6 +100,6 @@ class Moment extends BaseModel
     $day_id = $this->getDayId();
     $hash = sha1('s0l7&p3pp$r'.$user_id.$day_id.$this->getId());
     $ext = $this->getImageExt();
-    return "/users/$user_id/days/$day_id/{$hash}_$size_variation.$ext";
+    return "{$user_id}/days/{$day_id}/{$hash}_{$size_variation}.{$ext}";
   }
 }

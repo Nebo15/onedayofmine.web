@@ -103,7 +103,7 @@ class Day extends BaseModel
     $user_id = $this->getUser()->getId();
     $hash = sha1('s0l7&p3pp$r'.$user_id.$this->getId());
     $ext = $this->getImageExt();
-    return "users/$user_id/days/{$hash}_$size_variation.$ext";
+    return "{$user_id}/days/{$hash}_{$size_variation}.{$ext}";
   }
 
   static function getTypes()
