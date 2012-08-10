@@ -21,6 +21,11 @@ class MainPage {
     $this->content = $content;
   }
 
+  public function getContent()
+  {
+    return $this->content;
+  }
+
   public function getLinksToContentPages() {
     return $this->concreteParser->getLinksToContentPages($this->content);
   }

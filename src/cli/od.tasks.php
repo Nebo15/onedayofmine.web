@@ -34,38 +34,61 @@ function task_od_fill_from_lj($argv)
 	define('LJ_COMMUNITY_NAME', 'odin-moy-den');
   // Returns ~6 posts on page
   define('PAGES', 2);
-  define('POSTS_COUNT', 10);
+  if(is_array($argv) && count($argv))
+    define('POSTS_COUNT', $argv[0]);
+  else
+    define('POSTS_COUNT', 10);
 
+  echo "Searching for ".POSTS_COUNT." posts...".PHP_EOL;
   echo "== Started to search for links... ==".PHP_EOL;
 
+  $cache = lmbToolkit::instance()->createCacheConnectionByDSN('file:///'.lmb_var_dir().'/livejournal_cache/');
+
   $mainPage = new MainPage(new MainPageRegexpParser());
-  $links_list = array();
-  for($i = 1; $i < PAGES+1; $i++)
-  {
-    $mainPage->getRemoteContent(LJ_COMMUNITY_NAME, $i);
-    $links_list = array_merge($links_list, $mainPage->getLinksToContentPages());
-    echo $i."/".PAGES.". Total links count: ".count($links_list).".".PHP_EOL;
-  }
-
-  echo "== Totally found ".count($links_list)." links on ".PAGES." pages. Proccessing them... ==".PHP_EOL;
-
 	$contentPageParser = new ContentPageRegexpParser();
 	$posts = array();
-  $i = 0;
-  foreach($links_list as $post_id)
+  for($i = 1; count($posts) < POSTS_COUNT; $i++)
   {
-    $i++;
-    $post = new ContentPage($contentPageParser);
-    $post->getRemoteContent(LJ_COMMUNITY_NAME, $post_id);
-    if(count($post->getMoments())) {
-      echo "{$i}/".count($links_list).". Found new well-formated post {$post_id}.".PHP_EOL;
-      $posts[] = $post;
+    echo "{$i}. Parsing posts list...".PHP_EOL;
+
+    if($cached_value = $cache->get(LJ_COMMUNITY_NAME."_page_{$i}"))
+      $mainPage->setContent($cached_value);
+    else {
+      $mainPage->getRemoteContent(LJ_COMMUNITY_NAME, $i);
+      $cache->set(LJ_COMMUNITY_NAME."_page_{$i}", $mainPage->getContent());
     }
-    else
-      echo "{$i}/".count($links_list).". Skipping bad-formated post {$post_id}.".PHP_EOL;
+
+    $links = $mainPage->getLinksToContentPages();
+    $links_count = count($links);
+    echo "{$i}. Found {$links_count} posts, parsing them: ".PHP_EOL;
+    $j = 0;
+    foreach($links as $post_id)
+    {
+      $j++;
+      $post = new ContentPage($contentPageParser);
+
+      if($cached_value = $cache->get(LJ_COMMUNITY_NAME."_post_{$post_id}"))
+        $post->setContent($cached_value);
+      else {
+        $post->getRemoteContent(LJ_COMMUNITY_NAME, $post_id);
+        $cache->set(LJ_COMMUNITY_NAME."_post_{$post_id}", $post->getContent());
+      }
+
+      if(count($post->getMoments())) {
+        echo "* {$j}/{$links_count}/ Found new well-formated post {$post_id}.".PHP_EOL;
+        $posts[] = $post;
+
+        if(count($posts) == POSTS_COUNT) {
+          echo "Posts limit reached, breaking parsing... ".PHP_EOL;
+          break 2;
+        }
+      }
+      else
+        echo "* {$j}/{$links_count}/. Skipping bad-formated post {$post_id}.".PHP_EOL;
+    }
   }
 
-  echo "== Found ".count($posts)." well-formated posts on ".PAGES." pages. Proccessing them... ==".PHP_EOL;
+  echo "== Found ".count($posts)." well-formated posts out of {$links_count} possible on {$i} pages. Proccessing them... ==".PHP_EOL;
 
   $posts_remain = POSTS_COUNT;
   $tests_users = array();
@@ -91,7 +114,7 @@ function task_od_fill_from_lj($argv)
     {
       if($first)
       {
-        $day->attachImage('foo.jpg', od_download_file($moment_data['img']));
+        $day->attachImage(od_download_file($moment_data['img']));
         $day->save();
         $first = false;
       }
@@ -99,7 +122,7 @@ function task_od_fill_from_lj($argv)
       $moment->setDescription($moment_data['description']);
       $moment->setDay($day);
       $moment->save();
-      $moment->attachImage('foo.jpg', od_download_file($moment_data['img']));
+      $moment->attachImage(od_download_file($moment_data['img']));
       $moment->save();
       echo ".";
     }
