@@ -28,6 +28,7 @@ lmb_env_setor('STATIC_HOST_URL', 'http://static.onedayofmine.com/');
 lmb_env_setor('FB_HOST_URL', 'http://onedayofmine.com/');
 
 lmb_env_setor('LIMB_APP_MODE' , 'production');
+lmb_env_setor('OFFLINE_MODE', false);
 
 lmb_require('src/model/*.class.php');
 

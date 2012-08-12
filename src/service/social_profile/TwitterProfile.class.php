@@ -26,7 +26,7 @@ class TwitterProfile implements SocialServicesProfileInterface
     $this->provider = new odTwitter($config);
     $this->user     = $user;
 
-    if(lmbToolkit::instance()->getConf('common')->remote_api_cache_enabled)
+    if(lmb_env_get('OFFLINE_MODE'))
       $this->provider = new odRemoteApiMock(
         $this->provider,
         lmbToolkit::instance()->createCacheConnectionByDSN('file:///'.lmb_var_dir().'/twitter_cache/'.$user->getTwitterAccessToken())

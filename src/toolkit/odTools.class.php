@@ -163,7 +163,7 @@ class odTools extends lmbAbstractTools
 
       $twitter_instances[$access_token] = new odTwitter($config);
 
-      if(lmbToolkit::instance()->getConf('common')->remote_api_cache_enabled)
+      if(lmb_env_get('OFFLINE_MODE'))
         $twitter_instances[$access_token] = new odRemoteApiMock(
           $twitter_instances[$access_token],
           lmbToolkit::instance()->createCacheConnectionByDSN('file:///'.lmb_var_dir().'/twitter_cache/'.$access_token)
@@ -191,7 +191,7 @@ class odTools extends lmbAbstractTools
       if(!is_null($access_token))
         $instance->setAccessToken($access_token);
 
-      if(lmbToolkit::instance()->getConf('common')->remote_api_cache_enabled)
+      if(lmb_env_get('OFFLINE_MODE'))
         $facebook_instances[$access_token] = new odRemoteApiMock(
           $instance,
           lmbToolkit::instance()->createCacheConnectionByDSN('file:///'.lmb_var_dir().'/facebook_cache/'.$access_token)

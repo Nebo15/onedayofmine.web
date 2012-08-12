@@ -113,6 +113,9 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
    */
   function testLogin_WrongAccessToken()
   {
+    if(lmb_env_get('OFFLINE_MODE'))
+      return;
+
     $errors = $res = $this->post('auth/login/', array('token' => $this->generator->string(11)))->errors;
     $this->assertResponse(403);
     $this->assertEqual(1, count($errors));
