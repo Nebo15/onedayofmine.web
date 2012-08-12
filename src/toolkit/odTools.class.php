@@ -124,8 +124,9 @@ class odTools extends lmbAbstractTools
     lmb_assert_true($user);
     if(0 == $user->getSettings()->getSocialShareFacebook())
       return new FakeProfile($user);
-     lmb_assert_true($user->getFbAccessToken(), 'Facebook access token not specified.');
-     return new FacebookProfile($user);
+
+    lmb_assert_true($user->getFbAccessToken(), 'Facebook access token not specified.');
+    return new FacebookProfile($user);
   }
 
   /**
@@ -137,6 +138,7 @@ class odTools extends lmbAbstractTools
     lmb_assert_true($user);
     if(0 == $user->getSettings()->getSocialShareTwitter())
       return new FakeProfile($user);
+
     lmb_assert_true($user->getTwitterAccessToken(), 'Twitter access token not specified.');
     lmb_assert_true($user->getTwitterAccessTokenSecret(), 'Twitter access token secret not specified.');
     return new TwitterProfile($user);
