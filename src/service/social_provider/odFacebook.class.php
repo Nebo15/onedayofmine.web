@@ -6,11 +6,7 @@ class odFacebook extends Facebook implements odSocialServicesProviderInterface
 {
   public static function getConfig()
   {
-    return array(
-      'appId'  => lmbToolkit::instance()->getConf('common')->get('fb_app_id'),
-      'secret' => lmbToolkit::instance()->getConf('common')->get('fb_app_secret'),
-      'cookie' => false
-    );
+    return (array) lmbToolkit::instance()->getConf('facebook');
   }
 
 	function __construct(array $config = null)

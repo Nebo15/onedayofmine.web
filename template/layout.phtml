@@ -1,7 +1,7 @@
 <?php
   $this->host_url = lmb_env_get('HOST_URL');
-  $this->fb_app_namespace = $this->toolkit->getConf('common')->fb_app_namespace;
-  $this->fb_app_id = $this->toolkit->getConf('common')->fb_app_id;
+  $this->fb_app_namespace = $this->toolkit->getConf('facebook')->namespace;
+  $this->fb_app_id = $this->toolkit->getConf('facebook')->appId;
 ?>
 <!DOCTYPE html>
 <html>
