@@ -68,8 +68,6 @@ abstract class BaseJsonController extends lmbController
     return $method_response;
   }
 
-
-
   protected function _tryFindGuestMethod($action)
   {
     $method = lmb_camel_case('do_guest_' . $action);
