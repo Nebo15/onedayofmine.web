@@ -4,7 +4,7 @@
  */
 function task_od_remove_cache($argv)
 {
-  if(lmb_env_get('OFFLINE_MODE'))
+  if(lmb_env_get('USE_API_CACHE'))
     return;
 
   lmb_require('limb/fs/src/lmbFs.class.php');

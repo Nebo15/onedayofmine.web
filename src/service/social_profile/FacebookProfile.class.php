@@ -21,7 +21,7 @@ class FacebookProfile implements SocialServicesProfileInterface
     $this->provider = new odFacebook(odFacebook::getConfig());
     $this->provider->setAccessToken($user->getFbAccessToken());
 
-    if(lmb_env_get('OFFLINE_MODE'))
+    if(lmb_env_get('USE_API_CACHE'))
       $this->provider = new odRemoteApiMock(
         $this->provider,
         lmbToolkit::instance()->createCacheConnectionByDSN('file:///'.lmb_var_dir().'/facebook_cache/'.$user->getFbAccessToken())

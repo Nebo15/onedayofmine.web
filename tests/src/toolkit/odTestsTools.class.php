@@ -113,7 +113,7 @@ class odTestsTools extends lmbAbstractTools
   function copyDayPageToProxy(Day $day)
   {
     $path = '/pages/'.$day->getId().'/day';
-    if(!lmb_env_get('OFFLINE_MODE'))
+    if(lmb_env_get('USE_FB_OBJECTS_PROXY'))
       $this->createProxyClient()->copyObjectPageToProxy($path);
     return $this->proxy_host.$path;
   }
@@ -121,7 +121,7 @@ class odTestsTools extends lmbAbstractTools
   function copyMomentPageToProxy(Moment $moment)
   {
     $path = '/pages/'.$moment->getId().'/moment';
-    if(!lmb_env_get('OFFLINE_MODE'))
+    if(lmb_env_get('USE_FB_OBJECTS_PROXY'))
       $this->createProxyClient()->copyObjectPageToProxy($path);
     return $this->proxy_host.$path;
   }

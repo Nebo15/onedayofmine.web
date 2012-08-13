@@ -57,7 +57,7 @@ class SocialAcceptanceTest extends odAcceptanceTestCase
   // TODO cache dont work on invalid tokens
   function testTwitterConnect_withUnvalidCredentials()
   {
-    if(lmb_env_get('OFFLINE_MODE'))
+    if(lmb_env_get('USE_API_CACHE'))
       return;
 
     $this->main_user->save();
