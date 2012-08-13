@@ -130,8 +130,8 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
     $users = User::find();
     $this->assertEqual(1, count($users));
     $user = $users->at(0)->exportForApi();
-    $this->assertFalse($user->image_36);
-    $this->assertFalse($user->image_72);
+    $this->assertEqual($user->image_36, lmbToolkit::instance()->getStaticUrl("default_36.png"));
+    $this->assertEqual($user->image_72, lmbToolkit::instance()->getStaticUrl("default_72.png"));
   }
 
   /**

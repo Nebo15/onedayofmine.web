@@ -85,8 +85,8 @@ class User extends BaseModel
     $result->twitter_uid = $this->twitter_uid;
     $result->name = $this->name;
     $result->sex = $this->sex;
-    $result->image_36 = lmbToolkit::instance()->getStaticUrl($this->getImageSmall(true));
-    $result->image_72 = lmbToolkit::instance()->getStaticUrl($this->getImageBig(true));
+    $result->image_36 = lmbToolkit::instance()->getStaticUrl($this->getImageSmall(true)) ?: lmbToolkit::instance()->getStaticUrl("default_36.png");
+    $result->image_72 = lmbToolkit::instance()->getStaticUrl($this->getImageBig(true)) ?: lmbToolkit::instance()->getStaticUrl("default_72.png");
     $result->birthday = $this->birthday;
     $result->occupation = $this->occupation;
     $result->location = $this->location;
