@@ -142,7 +142,7 @@ abstract class BaseJsonController extends lmbController
     }
     else
     {
-      return $this->_answerWithError($this->error_list->export());
+      return $this->_answerWithError($this->error_list->getReadable());
     }
   }
 

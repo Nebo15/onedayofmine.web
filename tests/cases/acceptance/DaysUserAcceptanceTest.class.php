@@ -1,5 +1,5 @@
 <?php
-lmb_require('tests/unit/odAcceptanceTestCase.class.php');
+lmb_require('tests/cases/acceptance/odAcceptanceTestCase.class.php');
 lmb_require('src/service/InterestCalculator.class.php');
 
 class DayUserAcceptanceTest extends odAcceptanceTestCase
@@ -134,7 +134,7 @@ class DayUserAcceptanceTest extends odAcceptanceTestCase
   	$this->_loginAndSetCookie($this->main_user);
 
   	$days = $this
-      ->get('days/favourites')
+      ->get('days/favourite')
       ->result;
   	if($this->assertResponse(200))
     {
@@ -146,7 +146,7 @@ class DayUserAcceptanceTest extends odAcceptanceTestCase
     }
 
     $days = $this
-      ->get('days/favourites', array('from' => $day4->getId()))
+      ->get('days/favourite', array('from' => $day4->getId()))
       ->result;
     if($this->assertResponse(200))
     {
@@ -157,7 +157,7 @@ class DayUserAcceptanceTest extends odAcceptanceTestCase
     }
 
     $days = $this
-      ->get('days/favourites', array(
+      ->get('days/favourite', array(
         'from' => $day4->getId(),
         'to' => $day1->getId()))
       ->result;
@@ -169,7 +169,7 @@ class DayUserAcceptanceTest extends odAcceptanceTestCase
     }
 
     $days = $this
-      ->get('days/favourites', array(
+      ->get('days/favourite', array(
        'from' => $day4->getId(),
         'to' => $day1->getId(),
         'limit' => 1))

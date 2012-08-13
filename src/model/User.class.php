@@ -1,6 +1,7 @@
 <?php
 lmb_require('src/model/BaseModel.class.php');
 lmb_require('limb/imagekit/src/lmbConvertImageHelper.class.php');
+lmb_require('limb/validation/src/rule/lmbValidValueRule.class.php');
 
 /**
  * @api
@@ -17,6 +18,9 @@ class User extends BaseModel
   const IMAGE_ORIG = 'orig';
   const IMAGE_SMALL = '36x36';
   const IMAGE_BIG = '72x72';
+
+  const SEX_MALE = 'male';
+  const SEX_FEMALE = 'female';
 
   protected function _defineRelations()
   {
@@ -73,6 +77,7 @@ class User extends BaseModel
   	$validator->addRequiredRule('fb_profile_utime');
   	$validator->addRequiredRule('timezone');
   	$validator->addRequiredRule('sex');
+    $validator->addRule(new lmbValidValueRule('sex', array_values(self::getSexTypes())), 'Wrong sex value');
   	$validator->addRequiredRule('birthday');
   	return $validator;
   }
@@ -108,6 +113,14 @@ class User extends BaseModel
       $item = UserSettings::createDefault($this);
     }
     return $item;
+  }
+
+  static function getSexTypes()
+  {
+    return array(
+      self::SEX_MALE => 'male',
+      self::SEX_FEMALE => 'female',
+    );
   }
 
   function getDaysWithLimitations($from_id = null, $to_id = null, $limit = null, $show_deleted = false)

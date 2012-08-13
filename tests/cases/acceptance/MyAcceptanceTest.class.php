@@ -1,5 +1,5 @@
 <?php
-lmb_require('tests/unit/odAcceptanceTestCase.class.php');
+lmb_require('tests/cases/acceptance/odAcceptanceTestCase.class.php');
 
 class MyAcceptanceTest extends odAcceptanceTestCase
 {
@@ -46,6 +46,7 @@ class MyAcceptanceTest extends odAcceptanceTestCase
 
 		$update = new stdClass();
 		$update->name = $this->generator->string(25);
+    $update->sex = User::SEX_FEMALE;
 		$update->occupation = $this->generator->string(25);
     $update->location = $this->generator->string(25);
     $update->email = $this->generator->email();
@@ -53,18 +54,16 @@ class MyAcceptanceTest extends odAcceptanceTestCase
     $update->image_content = base64_encode($this->generator->image());
 
     $updated_profile = $this->post('/my/profile', (array) $update)->result;
-
     if($this->assertResponse(200))
     {
       $this->assertEqual($update->name, $updated_profile->name);
+      $this->assertEqual($update->sex, $updated_profile->sex);
       $this->assertEqual($update->occupation, $updated_profile->occupation);
       $this->assertEqual($update->location, $updated_profile->location);
       $this->assertEqual($update->birthday, $updated_profile->birthday);
       $this->assertEqual($update->email, $updated_profile->email);
-      $this->assertProperty($updated_profile, 'image_36');
-      $content = @file_get_contents($updated_profile->image_36);
-      $this->assertTrue($content, "Image {$updated_profile->image_36} not found");
-      $this->assertProperty($updated_profile, 'image_72');
+      $this->assertValidImageUrl($updated_profile->image_36);
+      $this->assertValidImageUrl($updated_profile->image_72);
 
       $loaded_user = User::findById($this->main_user->getId());
 

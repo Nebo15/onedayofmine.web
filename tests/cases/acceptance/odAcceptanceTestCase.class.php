@@ -193,7 +193,7 @@ abstract class odAcceptanceTestCase extends WebTestCase
 
   protected function assertValidImageUrl($url)
   {
-    $content = file_get_contents($url);
+    $content = @file_get_contents($url);
     return $this->assertTrue(
       strlen($content),
       "Invalid image url '{$url}'"

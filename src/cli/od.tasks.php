@@ -172,7 +172,10 @@ function task_od_tests_users($argv)
   echo "== Loaded ".count($tests_users)." test users. ==".PHP_EOL;
 }
 
-function task_od_calc_interest()
+/**
+ * @alias od_calc_interest
+ */
+function task_od_calc_ratings()
 {
   lmb_require(taskman_prop('PROJECT_DIR').'setup.php');
   lmb_require('src/service/InterestCalculator.class.php');
@@ -194,16 +197,20 @@ function task_od_amazon_watch()
 
   foreach(lmb_glob(taskman_prop('PROJECT_DIR').'/../*onedayofmine*.access_log') as $log_file)
   {
-
     $value = exec("grep ' 500 ' $log_file | wc -l");
-    var_dump(basename($log_file), $value);
+    $log_name = str_replace('.access_log', '', basename($log_file));
+
+    $res  =  $acw->put_metric_data ('Sys/APP' ,
+      array(array('MetricName'  => 'ErrorsCount' ,
+        'Dimensions'  => array(array('Name'   => 'LogName',
+          'Value'  =>  $log_name)),
+        'Value'       => $value,
+        'Unit'        => 'Count')));
+    if(!$res->isOK())
+    {
+      echo $res->body->Error->Code.': '.$res->body->Error->Message.PHP_EOL;
+      exit(1);
+    }
   }
-//
-//  $res  =  $acw->put_metric_data ('Sys/APP' ,
-//    array(array('MetricName'  => 'ErrorsCount' ,
-//      'Dimensions'  => array(array('Name'   => 'HOST',
-//        'Value'  =>  lmb_env_get('HOST_URL'))),
-//      'Value'       => rand(1, 100),
-//      'Unit'        => 'Count')));
-//  echo $res->isOK() ? 'OK' : 'ERROR'.PHP_EOL.PHP_EOL;
+  echo 'SUCCESS'.PHP_EOL;
 }
