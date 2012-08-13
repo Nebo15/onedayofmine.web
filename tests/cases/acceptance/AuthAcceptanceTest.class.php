@@ -10,9 +10,17 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
    */
   function testIsLoggedIn()
   {
-    $res = $this->get('auth/is_logged_in');
+    $res = $this->get('auth/is_logged_in', ['token' => $this->main_user->getFbAccessToken()]);
     $this->assertResponse(200);
     $this->assertFalse($res->result);
+  }
+
+  function testIsLoggedIn_AccessTokenNotGiven()
+  {
+    $res = $this->get('auth/is_logged_in');
+    $this->assertResponse(412);
+    $this->assertEqual(count($res->errors), 1);
+    $this->assertEqual($res->errors[0], 'Token not given');
   }
 
 
@@ -49,7 +57,9 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
   function testLogin_AndSetCookie()
   {
     $this->_loginAndSetCookie($this->main_user);
-    $res = $this->get('auth/is_logged_in');
+    $res = $this->get('auth/is_logged_in', [
+      'token' => $this->main_user->getFbAccessToken()
+    ]);
     $this->assertResponse(200);
     $this->assertTrue($res->result);
   }
@@ -94,7 +104,7 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
    */
   function testLogin_WrongAccessToken()
   {
-    if(lmb_env_get('OFFLINE_MODE'))
+    if(lmb_env_get('USE_API_CACHE'))
       return;
 
     $errors = $res = $this->post('auth/login/', array('token' => $this->generator->string(11)))->errors;
@@ -114,7 +124,7 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
   /**
    * @deprecated
    */
-  function testLogout() {
+  function _testLogout() {
     $this->post('auth/logout/');
     $this->assertResponse(200);
 
