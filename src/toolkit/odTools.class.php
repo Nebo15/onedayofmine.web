@@ -7,6 +7,7 @@ lmb_require('src/service/social_profile/TwitterProfile.class.php');
 lmb_require('src/service/social_profile/FakeProfile.class.php');
 lmb_require('src/service/odNewsObserver.class.php');
 lmb_require('src/service/odRemoteApiMock.class.php');
+lmb_require('src/service/ImageHelper.class.php');
 
 class odTools extends lmbAbstractTools
 {
@@ -55,6 +56,19 @@ class odTools extends lmbAbstractTools
       $news_observer = new odNewsObserver();
 
     return $news_observer;
+  }
+
+  /**
+   * @return ImageHelper
+   */
+  function getImageHelper()
+  {
+    static $image_helper;
+
+    if(!$image_helper)
+      $image_helper = new ImageHelper();
+
+    return $image_helper;
   }
 
   /**
