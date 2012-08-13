@@ -107,11 +107,16 @@ class FacebookProfileTest extends odUnitTestCase
 
     $moment = $this->generator->moment($day);
     $moment->save();
+    $moment->attachImage($this->generator->image());
+    $moment->save();
+
     $moment_url = $this->_copyMomentPageToProxy($moment);
     $fb_id = lmbToolkit::instance()->getFacebookProfile($this->main_user)->shareMomentAdd($day, $day_url, $moment, $moment_url);
     $this->assertTrue($fb_id);
 
     $moment = $this->generator->moment($day);
+    $moment->save();
+    $moment->attachImage($this->generator->image());
     $moment->save();
     $moment_url = $this->_copyMomentPageToProxy($moment);
     $fb_id = lmbToolkit::instance()->getFacebookProfile($this->main_user)->shareMomentAdd($day, $day_url, $moment, $moment_url);
@@ -129,6 +134,8 @@ class FacebookProfileTest extends odUnitTestCase
     $day->save();
 
     $moment = $this->generator->moment($day);
+    $moment->save();
+    $moment->attachImage($this->generator->image());
     $moment->save();
     $moment_url = $this->_copyMomentPageToProxy($moment);
 
