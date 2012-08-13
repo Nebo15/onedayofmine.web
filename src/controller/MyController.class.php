@@ -5,25 +5,31 @@ class MyController extends BaseJsonController
 {
 	function doProfile()
 	{
+    $user = $this->_getUser();
     if($this->request->hasPost())
     {
-      $properties = array('name', 'email', 'location', 'occupation', 'birthday');
+      $properties = array('name', 'sex', 'email', 'location', 'occupation', 'birthday');
       foreach($properties as $property)
       {
         if($this->request->has($property))
-          $this->_getUser()->set($property, $this->request->getPost($property));
+          $user->set($property, $this->request->get($property));
       }
 
       if($this->request->has('image_content'))
-        $this->_getUser()->attachImage(base64_decode($this->request->get('image_content')));
+        $user->attachImage(base64_decode($this->request->get('image_content')));
 
-      $this->_getUser()->save();
+      if(!$user->validate($this->error_list))
+      {
+        return $this->_answerWithError($this->error_list->getReadable());
+      }
+      else
+        $user->save();
     }
 
-    $answer = $this->_getUser()->exportForApi();
-    $answer->favourites_count = $this->_getUser()->getFavouriteDays()->count();
-    $answer->days_count = $this->_getUser()->getDays()->count();
-    $answer->email = $this->_getUser()->getEmail();
+    $answer = $user->exportForApi();
+    $answer->favourites_count = $user->getFavouriteDays()->count();
+    $answer->days_count = $user->getDays()->count();
+    $answer->email = $user->getEmail();
     return $this->_answerOk($answer);
 	}
 
