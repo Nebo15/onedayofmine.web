@@ -142,8 +142,10 @@ abstract class odAcceptanceTestCase extends WebTestCase
     $this->assertEqual($valid_user->id,
       $user_from_response->id);
     $this->assertEqual($valid_user->name, $user_from_response->name);
-    $this->assertValidImageUrl($user_from_response->image_36);
-    $this->assertValidImageUrl($user_from_response->image_72);
+    if($user_from_response->image_36)
+      $this->assertValidImageUrl($user_from_response->image_36);
+    if($user_from_response->image_72)
+      $this->assertValidImageUrl($user_from_response->image_72);
     $this->assertEqual($valid_user->sex, $user_from_response->sex);
     $this->assertEqual($valid_user->birthday, $user_from_response->birthday);
     $this->assertEqual($valid_user->occupation, $user_from_response->occupation);
