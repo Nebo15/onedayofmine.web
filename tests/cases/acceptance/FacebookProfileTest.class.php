@@ -58,7 +58,7 @@ class FacebookProfileTest extends odUnitTestCase
   {
     // foo should have default avatar
     $pictures = lmbToolkit::instance()->getFacebookProfile($this->additional_user)->getPictures();
-    $this->assertEqual(count($pictures), 1);
+    $this->assertEqual(count($pictures), 0);
   }
 
   function testGetPictureContents()

@@ -91,17 +91,15 @@ class FacebookProfile implements SocialServicesProfileInterface
     // if($pic_hash == self::DEFAULT_MALE_PIC_HASH || $pic_hash == self::DEFAULT_FEMALE_PIC_HASH)
     //   return array();
 
-    $pictures = array();
-
     $arr = explode('.', $info['pic']);
-    if(array_pop($arr) != 'gif')
-      $pictures['100x300'] = $info['pic'];
+    $arr2 = explode('.', $info['pic_big']);
+    if(array_pop($arr) == 'gif' || array_pop($arr2) == 'gif')
+      return array();
 
-    $arr = explode('.', $info['pic_big']);
-    if(array_pop($arr) != 'gif')
-      $pictures['200x600'] = $info['pic_big'];
-
-    return $pictures;
+    return array(
+      '100x300' => $info['pic'],
+      '200x600' => $info['pic_big'],
+    );
   }
 
   /**

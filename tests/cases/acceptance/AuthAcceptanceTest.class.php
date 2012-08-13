@@ -42,9 +42,10 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
     $followers->add($this->additional_user);
     $followers->save();
 
-    $res = $res = $this->post('auth/login/', array(
-      'token' => $this->main_user->getFbAccessToken()
+    $res = $this->post('auth/login/', array(
+      'token' => $this->additional_user->getFbAccessToken()
     ))->result;
+
     if($this->assertResponse(200))
     {
       $loaded_user = User::findById($res->id);
@@ -119,6 +120,18 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
     $this->assertResponse(412);
     $this->assertEqual(1, count($errors));
     $this->assertEqual('Token not given', $errors[0]);
+  }
+
+  function testLogin_firstCallCreateNewUserWithDefaultAvatar()
+  {
+    // additional_user have default picture
+    $this->_loginAndSetCookie($this->additional_user);
+
+    $users = User::find();
+    $this->assertEqual(1, count($users));
+    $user = $users->at(0)->exportForApi();
+    $this->assertFalse($user->image_36);
+    $this->assertFalse($user->image_72);
   }
 
   /**

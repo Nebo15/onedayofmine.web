@@ -47,15 +47,16 @@ class AuthController extends BaseJsonController
     $user = new User();
     $user->setFbAccessToken($fb_access_token);
     $profile = $this->toolkit->getFacebookProfile($user);
-    $facebook_info = $profile->getInfo();
-    $user->import($facebook_info);
+    $user->import($profile->getInfo());
     $user->save();
 
     $userpics = $profile->getPictures();
-    $userpic_url = array_pop($userpics); // Returns biggest picture
-    $userpic_contents = $profile->getPictureContents($userpic_url);
-    $user->attachImage($userpic_contents);
-    $user->save();
+    if(count($userpics)) {
+      $userpic_url = array_pop($userpics); // Returns biggest picture
+      $userpic_contents = $profile->getPictureContents($userpic_url);
+      $user->attachImage($userpic_contents);
+      $user->save();
+    }
 
     return $user;
   }
