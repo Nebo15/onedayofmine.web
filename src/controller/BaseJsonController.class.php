@@ -26,9 +26,7 @@ abstract class BaseJsonController extends lmbController
 
     if(!$guest_method && !$user_method)
     {
-      throw new lmbException('No method defined in controller "' .
-        $this->getName(). '" for action "' . $this->current_action . '" ' .
-        'and no appropriate template found');
+      return $this->forward('not_found', 'display');
     }
     elseif($guest_method && $user_method)
     {
@@ -68,13 +66,13 @@ abstract class BaseJsonController extends lmbController
     return $method_response;
   }
 
-
-
   protected function _tryFindGuestMethod($action)
   {
     $method = lmb_camel_case('do_guest_' . $action);
     if(method_exists($this, $method))
       return $method;
+    else
+      return null;
   }
 
   protected function _tryFindUserMethod($action)
@@ -86,6 +84,8 @@ abstract class BaseJsonController extends lmbController
     $method = lmb_camel_case('do_user_' . $action);
     if(method_exists($this, $method))
       return $method;
+    else
+      return null;
   }
 
   /**
