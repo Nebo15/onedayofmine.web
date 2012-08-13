@@ -81,8 +81,9 @@ class odTools extends lmbAbstractTools
 
   function getStaticUrl($path = '')
   {
-    if(null === $path)
+    if(!$path)
       return null;
+
     return lmb_env_get('STATIC_HOST_URL').$path;
   }
 
