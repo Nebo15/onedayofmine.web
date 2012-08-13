@@ -69,6 +69,15 @@ class BaseJsonControllerTest extends odUnitTestCase
     $this->assertResponse('user_zoo');
   }
 
+  function testPerformAction_UnfoundedAction()
+  {
+    lmbToolkit::instance()->resetUser();
+    $controller = new BaseJsonControllerForTest();
+    $controller->setCurrentAction('wrong');
+    $controller->performAction();
+    $this->assertResponseCode(404);
+  }
+
   function assertResponseCode($code)
   {
     $response_json = lmbToolkit::instance()->getResponse()->getResponseString();
