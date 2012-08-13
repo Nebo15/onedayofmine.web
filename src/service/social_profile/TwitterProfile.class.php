@@ -147,11 +147,14 @@ class TwitterProfile implements SocialServicesProfileInterface
    */
   public function getPictures()
   {
+    if($this->getInfo_Raw()['default_profile_image'])
+      return array();
+
     $uid = $this->user->getTwitterUid();
-    return [
+    return array(
       '73x73' => 'http://api.twitter.com/1/users/profile_image?user_id='.$uid.'&size=bigger',
       '?x?'   => 'http://api.twitter.com/1/users/profile_image?user_id='.$uid.'&size=original'
-    ];
+    );
   }
 
   /**

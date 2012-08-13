@@ -3,6 +3,9 @@ lmb_require('src/service/social_profile/SocialServicesProfileInterface.class.php
 
 class FacebookProfile implements SocialServicesProfileInterface
 {
+  const DEFAULT_MALE_PIC_HASH   = 'e68ff6c48a3b96354d1830437545b7f5fcf980cb';
+  const DEFAULT_FEMALE_PIC_HASH = 'c2c3b583435d6856141e55a0267c3d436c3ecb2b';
+
   const ID = 'Facebook';
   /**
    * @var User
@@ -84,10 +87,21 @@ class FacebookProfile implements SocialServicesProfileInterface
   public function getPictures()
   {
     $info = $this->getInfo_Raw();
-    return array(
-      '100x300' => $info['pic'],
-      '200x600' => $info['pic_big']
-    );
+    // $pic_hash = sha1($this->getPictureContents($info['pic']));
+    // if($pic_hash == self::DEFAULT_MALE_PIC_HASH || $pic_hash == self::DEFAULT_FEMALE_PIC_HASH)
+    //   return array();
+
+    $pictures = array();
+
+    $arr = explode('.', $info['pic']);
+    if(array_pop($arr) != 'gif')
+      $pictures['100x300'] = $info['pic'];
+
+    $arr = explode('.', $info['pic_big']);
+    if(array_pop($arr) != 'gif')
+      $pictures['200x600'] = $info['pic_big'];
+
+    return $pictures;
   }
 
   /**

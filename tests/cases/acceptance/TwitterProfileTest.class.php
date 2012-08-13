@@ -63,6 +63,13 @@ class TwitterProfileTest extends odUnitTestCase
     $this->assertTrue(count($pictures));
   }
 
+  function testGetPictures_PicturesIfDefault()
+  {
+    // bar should have default avatar
+    $pictures = lmbToolkit::instance()->getTwitterProfile($this->additional_user)->getPictures();
+    $this->assertEqual(count($pictures), 0);
+  }
+
   function testGetPictureContents()
   {
     $profile = lmbToolkit::instance()->getTwitterProfile($this->main_user);
