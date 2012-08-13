@@ -296,7 +296,7 @@ class DaysController extends BaseJsonController
     return $this->_answerOk($answer);
   }
 
-  function doFavourites()
+  function doFavourite()
   {
     if(!$this->_isLoggedUser())
       return $this->_answerUnauthorized();
