@@ -20,25 +20,6 @@ abstract class BaseModel extends lmbActiveRecord
     $this->uip = lmbIp::encode(lmbIp::getRemoteIp());
   }
 
-  protected function _getImageExtensionByMimeType($mime_type)
-  {
-    lmb_assert_true($mime_type);
-
-    if(false !== strpos($mime_type, 'JPEG image data'))
-      return 'jpeg';
-
-    $exts = array(
-      'image/jpeg' => 'jpeg',
-      'image/png'  => 'png',
-      'image/gif'  => 'gif',
-    );
-
-    if(!isset($exts[$mime_type]))
-      throw new lmbException("Unknown mime-type '{$mime_type}'");
-
-    return $exts[$mime_type];
-  }
-
   static function isoToStamp($iso)
   {
     $date = DateTime::createFromFormat(DateTime::ISO8601, $iso);

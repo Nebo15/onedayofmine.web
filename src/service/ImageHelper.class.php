@@ -10,7 +10,7 @@ class ImageHelper {
     return exif_read_data($path, null, true);
   }
 
-  function exifGPSToDecemicalCords($exif, $separator = ';')
+  function exifGPSToDecemicalCords($exif)
   {
     $cords = $this->exifGPSToCords($exif);
     return array(
@@ -66,5 +66,24 @@ class ImageHelper {
       return $parts[0];
 
     return floatval($parts[0]) / floatval($parts[1]);
+  }
+
+  public function getImageExtensionByMimeType($mime_type)
+  {
+    lmb_assert_true($mime_type);
+
+    if(false !== strpos($mime_type, 'JPEG image data'))
+      return 'jpeg';
+
+    $exts = array(
+      'image/jpeg' => 'jpeg',
+      'image/png'  => 'png',
+      'image/gif'  => 'gif',
+    );
+
+    if(!isset($exts[$mime_type]))
+      throw new lmbException("Unknown mime-type '{$mime_type}'");
+
+    return $exts[$mime_type];
   }
 }
