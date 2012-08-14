@@ -23,6 +23,9 @@ class TwitterProfile implements SocialServicesProfileInterface
     $config['user_token']  = $user->getTwitterAccessToken();
     $config['user_secret'] = $user->getTwitterAccessTokenSecret();
 
+    lmb_assert_true($config['user_token']);
+    lmb_assert_true($config['user_secret']);
+
     $this->provider = new odTwitter($config);
     $this->user     = $user;
 

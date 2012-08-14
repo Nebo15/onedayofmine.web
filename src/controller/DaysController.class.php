@@ -60,8 +60,9 @@ class DaysController extends BaseJsonController
     $this->toolkit->getFacebookProfile($this->_getUser())
       ->shareDayBegin($day, $this->toolkit->getSiteUrl('/pages/'.$day->getId().'/day'));
 
-    $this->toolkit->getTwitterProfile($this->_getUser())
-      ->shareDayBegin($day, $this->toolkit->getSiteUrl('/pages/'.$day->getId().'/day'));
+    if($this->_getUser()->getTwitterUid())
+      $this->toolkit->getTwitterProfile($this->_getUser())
+        ->shareDayBegin($day, $this->toolkit->getSiteUrl('/pages/'.$day->getId().'/day'));
 
     // Notify friends about new day
     $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_DAY, $day);

@@ -22,6 +22,12 @@
 
   <div class="page-header">
     <h1>Welcome to API of OneDayOfMine.com</h1>
+    <?php
+    $commit_id = file_get_contents(lmb_env_get('APP_DIR').'/.git/refs/heads/master');
+    echo "Commit: <a href='https://github.com/daeq/one-day-of-mine/commit/{$commit_id}'>{$commit_id}</a>";
+    echo " / Deploy time: ".date("Y.m.d H:i:s", filemtime(lmb_env_get('APP_DIR').'/.git/refs/heads/master'));
+    echo " / Test time: ".date("Y.m.d H:i:s", filemtime(lmb_env_get('APP_DIR').'/www/api_doc/examples.markdown'));
+    ?>
   </div>
 
   <div class="tabbable tabs-left"> <!-- Only required for left/right tabs -->
