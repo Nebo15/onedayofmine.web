@@ -36,13 +36,14 @@ class InterestCalculatorTest extends odUnitTestCase
     $day3->save();
     $day4 = $this->generator->day($this->main_user);
     $day4->setLikesCount(4);
-    $day4->setCtime($time - 3 * $day);
+    $day4->setCtime($time - 5 * $day);
     $day4->save();
     $day5 = $this->generator->day($this->additional_user);
     $day5->setLikesCount(100);
     $day5->setCtime($time - $day);
     $day5->setIsDeleted(1);
     $day5->save();
+
 
     $calc->fillRating();
 
@@ -59,10 +60,10 @@ class InterestCalculatorTest extends odUnitTestCase
     $this->assertEqual($day3->getId(), $days[1]->getDay()->id);
     $this->assertEqual($day4->getId(), $days[2]->getDay()->id);
 
-    $days = $calc->getDaysRatings($day1->getId(), $day4->getId());
+    $days = $calc->getDaysRatings($day1->getId(), $day3->getId());
     $this->assertEqual(2, count($days));
     $this->assertEqual($day2->getId(), $days[0]->getDay()->id);
-    $this->assertEqual($day3->getId(), $days[1]->getDay()->id);
+    $this->assertEqual($day4->getId(), $days[1]->getDay()->id);
 
     $days = $calc->getDaysRatings($day1->getId(), $day4->getId(), 1);
     $this->assertEqual(1, count($days));

@@ -317,12 +317,12 @@ class DaysGuestAcceptanceTest extends odAcceptanceTestCase
     $result = $this
       ->get('days/interesting/', array(
       'from' => $day1->getId(),
-      'to'   => $day4->getId()))
+      'to'   => $day3->getId()))
       ->result;
     $this->assertResponse(200);
     $this->assertEqual(2, count($result));
     $this->assertEqual($day2->getId(), $result[0]->id);
-    $this->assertEqual($day3->getId(), $result[1]->id);
+    $this->assertEqual($day4->getId(), $result[1]->id);
 
     $result = $this
       ->get('days/interesting/', array(
