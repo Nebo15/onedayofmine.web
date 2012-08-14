@@ -60,7 +60,7 @@ class Day extends BaseModel
 
   function attachImage($content)
   {
-    $extension = $this->_getImageExtensionByMimeType((new finfo())->buffer($content, FILEINFO_MIME_TYPE));
+    $extension = lmbToolkit::instance()->getImageHelper()->getImageExtensionByImageContent($content);
     $this->setImageExt($extension);
 
     $orig_file = lmbToolkit::instance()->getAbsolutePath($this->getImageOrig());

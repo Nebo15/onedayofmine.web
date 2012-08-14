@@ -68,7 +68,12 @@ class ImageHelper {
     return floatval($parts[0]) / floatval($parts[1]);
   }
 
-  public function getImageExtensionByMimeType($mime_type)
+  function getMimeTypeByImageContent($content)
+  {
+    return (new finfo())->buffer($content, FILEINFO_MIME_TYPE);
+  }
+
+  function getImageExtensionByMimeType($mime_type)
   {
     lmb_assert_true($mime_type);
 
@@ -85,5 +90,10 @@ class ImageHelper {
       throw new lmbException("Unknown mime-type '{$mime_type}'");
 
     return $exts[$mime_type];
+  }
+
+  function getImageExtensionByImageContent($content)
+  {
+    return $this->getImageExtensionByMimeType($this->getMimeTypeByImageContent($content))
   }
 }
