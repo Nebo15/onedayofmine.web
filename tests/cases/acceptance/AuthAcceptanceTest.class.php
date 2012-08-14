@@ -17,9 +17,8 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
 
 
   /**
-   * @api description User authorization.
+   * @api description Authorizes and returns User.
    * @api input param string[118] token Facebook access token
-   * @api result User user Authorized user information
    */
   function testLogin()
   {
