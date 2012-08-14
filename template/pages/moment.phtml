@@ -5,7 +5,7 @@
   <meta property="og:url"    content="{$#host_url}pages/{$#moment.id}/moment" />
   <meta property="og:title"  content="{$#moment.description}" />
   <meta property="og:description"  content="{$#moment.description}" />
-  <meta property="og:image"  content="<?= lmbToolkit::instance()->getStaticUrl($this->moment->getImageSmall()); ?>" />
+  <meta property="og:image"  content="<?= lmbToolkit::instance()->getStaticUrl($this->moment->getImage()); ?>" />
   <meta property="one-day-of-mine:day" content="{$#moment.day.fb_id}" />
   {{/into}}
   {{into slot="content"}}

@@ -16,6 +16,8 @@ abstract class ImageModel extends BaseModel {
       $helper->resizeAndCropFrame($size);
       $helper->save($resized_file);
     }
+
+    return $orig_file;
   }
 
   function showImages(stdClass $export)
@@ -40,14 +42,11 @@ abstract class ImageModel extends BaseModel {
       return null;
 
     if(!$this->getId())
-      throw new Exception("Can't create image path, because entity have no ID.", array('class' => __CLASS__));
-
-    if(!$this->getUser() || !$this->getUser()->getId())
-      throw new Exception("Can't create image path, because entity have no corresponding User.", array('class' => __CLASS__));
+      throw new Exception("Can't create image path, because entity have no ID.", array('class' => get_called_class()));
 
     $placeholders = [
-      ':user_id'        => $this->getUser()->getId(),
-      ':hash'           => sha1('s0l7&p3pp$r'.$this->getUser()->getId().$this->getId()),
+      ':id'             => $this->getId(),
+      ':hash'           => sha1('s0l7&p3pp$r'.$this->getId()),
       ':file_extension' => $this->getImageExt(),
       ':image_width'    => count($size) ? $size['width'] : 'orig',
     ];
