@@ -15,14 +15,6 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
     $this->assertFalse($res->result);
   }
 
-  function testIsLoggedIn_AccessTokenNotGiven()
-  {
-    $res = $this->get('auth/is_logged_in');
-    $this->assertResponse(412);
-    $this->assertEqual(count($res->errors), 1);
-    $this->assertEqual($res->errors[0], 'Token not given');
-  }
-
 
   /**
    * @api description User authorization.
@@ -134,6 +126,12 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
     $this->assertEqual($user->image_72, lmbToolkit::instance()->getStaticUrl("default_image_72.png"));
     $this->assertEqual($user->image_86, lmbToolkit::instance()->getStaticUrl("default_image_86.png"));
     $this->assertEqual($user->image_192, lmbToolkit::instance()->getStaticUrl("default_image_192.png"));
+  }
+
+function testLogin_TokenLengthGreaterThan128()
+  {
+    $this->get('auth/is_logged_in', array('token' => str_repeat('A', 150)));
+    $this->assertResponse(200);
   }
 
   /**
