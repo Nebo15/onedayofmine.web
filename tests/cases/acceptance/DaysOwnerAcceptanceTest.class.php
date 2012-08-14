@@ -1,5 +1,5 @@
 <?php
-lmb_require('tests/unit/odAcceptanceTestCase.class.php');
+lmb_require('tests/cases/acceptance/odAcceptanceTestCase.class.php');
 
 class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
 {
@@ -128,7 +128,7 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
 	 * @api description Creates <a href="#Entity:Moment">moment</a> in current active day and returns it.
 	 * @api input param string description
 	 * @api input param string image_content File contents, that was previously encoded by base64
-   * @api input option int time ISO time, when picture was created. If omited, current time will be used.
+   * @api input option time ISO time of moment, when image was created
 	 */
 	function testCreateMoment()
 	{
@@ -140,7 +140,7 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
 		$res = $this->post('days/'.$day->getId().'/moment_create', array(
 				'description' => $description = $this->generator->string(200),
 				'image_content' => base64_encode($this->generator->image()),
-        'time' => $time = '2005-08-09T18:31:42+03:00'
+        'time' => $time = '2005-08-09T18:31:42+03:00',
 		))->result;
 
 		if($this->assertResponse(200))
@@ -154,6 +154,50 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
       $this->assertEqual($res->time, $time);
 		}
 	}
+
+  function testCreateMoment_withGPS()
+  {
+    $day = $this->generator->day($this->main_user);
+    $day->setIsEnded(0);
+    $day->save();
+
+    $this->_loginAndSetCookie($this->main_user);
+    $res = $this->post('days/'.$day->getId().'/moment_create', array(
+        'description' => $description = $this->generator->string(200),
+        'image_content' => base64_encode(file_get_contents(lmb_env_get('APP_DIR').'/tests/init/image_with_exif.jpeg')),
+    ))->result;
+
+    if($this->assertResponse(200))
+    {
+      $this->assertEqual($day->getMoments()->at(0)->getId(), $res->id);
+      $this->assertEqual($day->getId(), $res->day_id);
+
+      $moment = Moment::findOne();
+      $this->assertEqual($moment->getLocationLatitude(), '50.5062');
+      $this->assertEqual($moment->getLocationLongitude(), '30.6177');
+      // http://maps.googleapis.com/maps/api/geocode/json?latlng=50.5062,30.6177&sensor=true
+    }
+  }
+
+  function testCreateMoment_withoutTime()
+  {
+    $day = $this->generator->day($this->main_user);
+    $day->setIsEnded(0);
+    $day->save();
+
+    $this->_loginAndSetCookie($this->main_user);
+    $res = $this->post('days/'.$day->getId().'/moment_create', array(
+        'description' => $description = $this->generator->string(200),
+        'image_content' => base64_encode(file_get_contents(lmb_env_get('APP_DIR').'/tests/init/image_with_exif.jpeg')),
+    ))->result;
+
+    if($this->assertResponse(200))
+    {
+      $this->assertEqual($day->getMoments()->at(0)->getId(), $res->id);
+      $this->assertEqual($day->getId(), $res->day_id);
+      $this->assertEqual($res->time, Moment::stampToIso('1330600003', $this->main_user->getTimezone()));
+    }
+  }
 
   function testCreateMoment_CoverOnFirstMoment()
   {
