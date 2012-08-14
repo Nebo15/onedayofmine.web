@@ -25,7 +25,8 @@
     <?php
     $commit_id = file_get_contents(lmb_env_get('APP_DIR').'/.git/refs/heads/master');
     echo "Commit: <a href='https://github.com/daeq/one-day-of-mine/commit/{$commit_id}'>{$commit_id}</a>";
-    echo "/ Test time: ".date("Y.m.d H:i:s", filemtime(lmb_env_get('APP_DIR').'/www/api_doc/examples.markdown'));
+    echo " / Deploy time: ".date("Y.m.d H:i:s", filemtime(lmb_env_get('APP_DIR').'/.git/refs/heads/master'));
+    echo " / Test time: ".date("Y.m.d H:i:s", filemtime(lmb_env_get('APP_DIR').'/www/api_doc/examples.markdown'));
     ?>
   </div>
 
