@@ -74,9 +74,9 @@ class odRemoteApiMock
    * Функция идёт в odRemoteApi, потом переадресовывается в odFacebook тк нет кеша, там происходит исключение, которой не даёт методу api закешировать данные,
    * останавливая обработку на 59 строке.
    */
-  function validateAccessToken($error_list)
+  function getUid($error_list)
   {
-    return $this->provider->validateAccessToken($error_list, $this);
+    return $this->provider->getUid($error_list, $this);
   }
 
   function downloadImage($url)

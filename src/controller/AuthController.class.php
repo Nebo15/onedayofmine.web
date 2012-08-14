@@ -11,13 +11,12 @@ class AuthController extends BaseJsonController
     if(!$fb_access_token = $this->request->get('token'))
       return $this->_answerWithError('Token not given', null, 412);
 
-    if(!$this->toolkit->getFacebook($fb_access_token)->validateAccessToken($this->error_list))
+    if(!$uid = $this->toolkit->getFacebook($fb_access_token)->getUid($this->error_list))
       return $this->_answerWithError($this->error_list, null, 403);
 
     $new_user = false;
-    $facebook_info = null;
-    if(!$user = User::findByFbAccessToken($fb_access_token)) {
-      $user = $this->_register($fb_access_token, $facebook_info);
+    if(!$user = User::findByFbUid($uid)) {
+      $user = $this->_register($fb_access_token);
       if($this->request->get('disable_sharing'))
       {
         $settings = $user->getSettings();
