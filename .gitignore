@@ -17,7 +17,7 @@ tests/var/*
 www/media
 www/proxy.php
 www/tests
-www/users
+www/users/*/
 www/shared
 www/pages
 

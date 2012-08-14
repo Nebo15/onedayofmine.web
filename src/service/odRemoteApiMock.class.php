@@ -81,6 +81,11 @@ class odRemoteApiMock
 
   function downloadImage($url)
   {
-    return (new odObjectMother())->image();
+    $hash = md5($url);
+
+    if(!$this->cache->get($hash))
+      $this->cache->set($hash, file_get_contents($url));
+
+    return $this->cache->get($hash);
   }
 }

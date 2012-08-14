@@ -4,9 +4,11 @@
  */
 function task_od_remove_cache($argv)
 {
+  return;
+
   lmb_require('limb/fs/src/lmbFs.class.php');
-  lmbFs::rm(taskman_prop('PROJECT_DIR').'/var/facebook_cache');
-  lmbFs::rm(taskman_prop('PROJECT_DIR').'/var/twitter_cache');
+  lmbFs::rm(taskman_prop('PROJECT_DIR').'/var');
+  lmbFs::mkdir(taskman_prop('PROJECT_DIR').'/var');
 }
 
 /**
@@ -33,8 +35,6 @@ function task_od_parse_lj($argv)
   $types = Day::getTypes();
 
 	define('LJ_COMMUNITY_NAME', 'odin-moy-den');
-  // Returns ~6 posts on page
-  define('PAGES', 2);
   if(is_array($argv) && count($argv))
     define('POSTS_COUNT', $argv[0]);
   else

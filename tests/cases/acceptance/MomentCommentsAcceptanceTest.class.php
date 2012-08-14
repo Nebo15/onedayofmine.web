@@ -1,5 +1,5 @@
 <?php
-lmb_require('tests/unit/odAcceptanceTestCase.class.php');
+lmb_require('tests/cases/acceptance/odAcceptanceTestCase.class.php');
 
 class MomentCommentsAcceptanceTest extends odAcceptanceTestCase
 {

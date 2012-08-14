@@ -3,6 +3,9 @@ lmb_require('src/service/social_profile/SocialServicesProfileInterface.class.php
 
 class FacebookProfile implements SocialServicesProfileInterface
 {
+  const DEFAULT_MALE_PIC_HASH   = 'e68ff6c48a3b96354d1830437545b7f5fcf980cb';
+  const DEFAULT_FEMALE_PIC_HASH = 'c2c3b583435d6856141e55a0267c3d436c3ecb2b';
+
   const ID = 'Facebook';
   /**
    * @var User
@@ -21,7 +24,7 @@ class FacebookProfile implements SocialServicesProfileInterface
     $this->provider = new odFacebook(odFacebook::getConfig());
     $this->provider->setAccessToken($user->getFbAccessToken());
 
-    if(lmbToolkit::instance()->getConf('common')->remote_api_cache_enabled)
+    if(lmb_env_get('USE_API_CACHE'))
       $this->provider = new odRemoteApiMock(
         $this->provider,
         lmbToolkit::instance()->createCacheConnectionByDSN('file:///'.lmb_var_dir().'/facebook_cache/'.$user->getFbAccessToken())
@@ -84,9 +87,18 @@ class FacebookProfile implements SocialServicesProfileInterface
   public function getPictures()
   {
     $info = $this->getInfo_Raw();
+    // $pic_hash = sha1($this->getPictureContents($info['pic']));
+    // if($pic_hash == self::DEFAULT_MALE_PIC_HASH || $pic_hash == self::DEFAULT_FEMALE_PIC_HASH)
+    //   return array();
+
+    $arr = explode('.', $info['pic']);
+    $arr2 = explode('.', $info['pic_big']);
+    if(array_pop($arr) == 'gif' || array_pop($arr2) == 'gif')
+      return array();
+
     return array(
       '100x300' => $info['pic'],
-      '200x600' => $info['pic_big']
+      '200x600' => $info['pic_big'],
     );
   }
 

@@ -298,7 +298,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
   	$this->_loginAndSetCookie($this->main_user);
 
   	$days = $this
-      ->get('days/favourites')
+      ->get('days/favourite')
       ->result;
   	if($this->assertResponse(200))
     {
@@ -310,7 +310,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     }
 
     $days = $this
-      ->get('days/favourites', array('from' => $day4->getId()))
+      ->get('days/favourite', array('from' => $day4->getId()))
       ->result;
     if($this->assertResponse(200))
     {
@@ -321,7 +321,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     }
 
     $days = $this
-      ->get('days/favourites', array(
+      ->get('days/favourite', array(
         'from' => $day4->getId(),
         'to' => $day1->getId()))
       ->result;
@@ -333,7 +333,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     }
 
     $days = $this
-      ->get('days/favourites', array(
+      ->get('days/favourite', array(
        'from' => $day4->getId(),
         'to' => $day1->getId(),
         'limit' => 1))

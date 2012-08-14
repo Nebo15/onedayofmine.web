@@ -90,8 +90,8 @@ class User extends BaseModel
     $result->twitter_uid = $this->twitter_uid;
     $result->name = $this->name;
     $result->sex = $this->sex;
-    $result->image_36 = lmbToolkit::instance()->getStaticUrl($this->getImageSmall(true));
-    $result->image_72 = lmbToolkit::instance()->getStaticUrl($this->getImageBig(true));
+    $result->image_36 = lmbToolkit::instance()->getStaticUrl($this->getImageSmall(true)) ?: lmbToolkit::instance()->getStaticUrl("default_36.png");
+    $result->image_72 = lmbToolkit::instance()->getStaticUrl($this->getImageBig(true)) ?: lmbToolkit::instance()->getStaticUrl("default_72.png");
     $result->birthday = $this->birthday;
     $result->occupation = $this->occupation;
     $result->location = $this->location;
@@ -156,7 +156,7 @@ class User extends BaseModel
 
   function attachImage($content)
   {
-    $extension = $this->_getImageExtensionByMimeType((new finfo())->buffer($content, FILEINFO_MIME_TYPE));
+    $extension = lmbToolkit::instance()->getImageHelper()->getImageExtensionByImageContent($content);
     $this->setImageExt($extension);
 
     $orig_file = lmbToolkit::instance()->getAbsolutePath($this->getImageOrig());

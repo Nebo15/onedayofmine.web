@@ -86,29 +86,55 @@ class DaysController extends BaseJsonController
     if(!$this->request->hasPost())
       return $this->_answerWithError('Not a POST request');
 
-    $errors = $this->_checkPropertiesInRequest(array('description', 'time', 'image_content'));
+    $errors = $this->_checkPropertiesInRequest(array('description', 'image_content'));
     if(count($errors))
       return $this->_answerWithError($errors);
 
     if(!$day = Day::findUnfinished($this->_getUser()))
       return $this->_answerNotFound('Unfinished day not found');
 
+    $image_content = base64_decode($this->request->get('image_content'));
     if(!count($day->getMoments()))
     {
-      $day->attachImage(base64_decode($this->request->get('image_content')));
+      $day->attachImage($image_content);
       $day->save();
     }
 
     $moment = new Moment();
     $moment->setDay($day);
     $moment->setDescription($this->request->get('description'));
-
-    list($time, $timezone) = Moment::isoToStamp($this->request->get('time'));
-    $moment->setTime($time);
-    $moment->setTimezone($timezone);
-
     $moment->save();
-    $moment->attachImage(base64_decode($this->request->get('image_content')));
+
+    $moment->attachImage($image_content);
+    $moment->save();
+
+    // Exif info works only for jpeg and tiff
+    $helper = lmbToolkit::instance()->getImageHelper();
+    if($helper->getImageExtensionByImageContent($image_content) == 'jpeg') {
+      $exif = $helper->getExifInfo($moment->getImageOrig());
+
+      // Location
+      if(array_key_exists('GPS', $exif)) {
+        $cords = $helper->exifGPSToDecemicalCords($exif);
+        $moment->setLocationLatitude($cords['latitude']);
+        $moment->setLocationLongitude($cords['longitude']);
+      }
+
+      // Time
+      if(array_key_exists('IFD0', $exif) && array_key_exists('DateTime', $exif['IFD0']))
+        $moment->setTime(strtotime($exif['IFD0']['DateTime']));
+      elseif(array_key_exists('EXIF', $exif) && array_key_exists('DateTimeOriginal', $exif['EXIF']))
+        $moment->setTime(strtotime($exif['EXIF']['DateTimeOriginal']));
+
+      $moment->setTimezone($this->toolkit->getUser()->getTimezone());
+    }
+
+    if($this->request->get('time')) {
+      list($time, $timezone) = Moment::isoToStamp($this->request->get('time'));
+      $moment->setTime($time);
+      $moment->setTimezone($timezone);
+    }
+
     $moment->save();
 
     if($this->error_list->isEmpty()) {

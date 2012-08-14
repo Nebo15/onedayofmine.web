@@ -113,16 +113,16 @@ class odTestsTools extends lmbAbstractTools
   function copyDayPageToProxy(Day $day)
   {
     $path = '/pages/'.$day->getId().'/day';
-    //if(lmb_env_get('LIMB_APP_MODE') != 'devel') // TODO Dont waste time in development test
-    $this->createProxyClient()->copyObjectPageToProxy($path);
+    if(lmb_env_get('USE_FB_OBJECTS_PROXY'))
+      $this->createProxyClient()->copyObjectPageToProxy($path);
     return $this->proxy_host.$path;
   }
 
   function copyMomentPageToProxy(Moment $moment)
   {
     $path = '/pages/'.$moment->getId().'/moment';
-    //if(lmb_env_get('LIMB_APP_MODE') != 'devel')
-    $this->createProxyClient()->copyObjectPageToProxy($path);
+    if(lmb_env_get('USE_FB_OBJECTS_PROXY'))
+      $this->createProxyClient()->copyObjectPageToProxy($path);
     return $this->proxy_host.$path;
   }
 

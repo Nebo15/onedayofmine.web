@@ -54,6 +54,13 @@ class FacebookProfileTest extends odUnitTestCase
     $this->assertTrue(count($pictures));
   }
 
+  function testGetPictures_PicturesIfDefault()
+  {
+    // foo should have default avatar
+    $pictures = lmbToolkit::instance()->getFacebookProfile($this->additional_user)->getPictures();
+    $this->assertEqual(count($pictures), 0);
+  }
+
   function testGetPictureContents()
   {
     $profile = lmbToolkit::instance()->getFacebookProfile($this->main_user);
@@ -100,11 +107,16 @@ class FacebookProfileTest extends odUnitTestCase
 
     $moment = $this->generator->moment($day);
     $moment->save();
+    $moment->attachImage($this->generator->image());
+    $moment->save();
+
     $moment_url = $this->_copyMomentPageToProxy($moment);
     $fb_id = lmbToolkit::instance()->getFacebookProfile($this->main_user)->shareMomentAdd($day, $day_url, $moment, $moment_url);
     $this->assertTrue($fb_id);
 
     $moment = $this->generator->moment($day);
+    $moment->save();
+    $moment->attachImage($this->generator->image());
     $moment->save();
     $moment_url = $this->_copyMomentPageToProxy($moment);
     $fb_id = lmbToolkit::instance()->getFacebookProfile($this->main_user)->shareMomentAdd($day, $day_url, $moment, $moment_url);
@@ -122,6 +134,8 @@ class FacebookProfileTest extends odUnitTestCase
     $day->save();
 
     $moment = $this->generator->moment($day);
+    $moment->save();
+    $moment->attachImage($this->generator->image());
     $moment->save();
     $moment_url = $this->_copyMomentPageToProxy($moment);
 

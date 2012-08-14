@@ -10,7 +10,7 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
    */
   function testIsLoggedIn()
   {
-    $res = $this->get('auth/is_logged_in');
+    $res = $this->get('auth/is_logged_in', ['token' => $this->main_user->getFbAccessToken()]);
     $this->assertResponse(200);
     $this->assertFalse($res->result);
   }
@@ -34,9 +34,10 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
     $followers->add($this->additional_user);
     $followers->save();
 
-    $res = $res = $this->post('auth/login/', array(
-      'token' => $this->main_user->getFbAccessToken()
+    $res = $this->post('auth/login/', array(
+      'token' => $this->additional_user->getFbAccessToken()
     ))->result;
+
     if($this->assertResponse(200))
     {
       $loaded_user = User::findById($res->id);
@@ -49,7 +50,9 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
   function testLogin_AndSetCookie()
   {
     $this->_loginAndSetCookie($this->main_user);
-    $res = $this->get('auth/is_logged_in');
+    $res = $this->get('auth/is_logged_in', [
+      'token' => $this->main_user->getFbAccessToken()
+    ]);
     $this->assertResponse(200);
     $this->assertTrue($res->result);
   }
@@ -94,6 +97,9 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
    */
   function testLogin_WrongAccessToken()
   {
+    if(lmb_env_get('USE_API_CACHE'))
+      return;
+
     $errors = $res = $this->post('auth/login/', array('token' => $this->generator->string(11)))->errors;
     $this->assertResponse(403);
     $this->assertEqual(1, count($errors));
@@ -108,7 +114,19 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
     $this->assertEqual('Token not given', $errors[0]);
   }
 
-  function testLogin_TokenLengthGreaterThan128()
+  function testLogin_firstCallCreateNewUserWithDefaultAvatar()
+  {
+    // additional_user have default picture
+    $this->_loginAndSetCookie($this->additional_user);
+
+    $users = User::find();
+    $this->assertEqual(1, count($users));
+    $user = $users->at(0)->exportForApi();
+    $this->assertEqual($user->image_36, lmbToolkit::instance()->getStaticUrl("default_36.png"));
+    $this->assertEqual($user->image_72, lmbToolkit::instance()->getStaticUrl("default_72.png"));
+  }
+
+function testLogin_TokenLengthGreaterThan128()
   {
     $this->get('auth/is_logged_in', array('token' => str_repeat('A', 150)));
     $this->assertResponse(200);
@@ -117,7 +135,7 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
   /**
    * @deprecated
    */
-  function testLogout() {
+  function _testLogout() {
     $this->post('auth/logout/');
     $this->assertResponse(200);
 

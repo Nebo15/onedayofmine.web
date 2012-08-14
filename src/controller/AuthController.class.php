@@ -31,23 +31,10 @@ class AuthController extends BaseJsonController
 
     $this->toolkit->setUser($user);
 
-    $answer = $user->exportForApi();
-
     if($new_user)
-    {
       $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_USER, $user);
-    }
 
-    // $answer->followers = array();
-    // foreach ($user->getFollowers() as $follower) {
-    //   $answer->followers[] = $follower->exportForApi();
-    // }
-
-    // $answer->following = array();
-    // foreach ($user->getFollowing() as $followed) {
-    //   $answer->following[] = $followed->exportForApi();
-    // }
-
+    $answer = $user->exportForApi();
     $answer->favourites_count = $this->_getUser()->getFavouriteDays()->count();
     $answer->days_count = $this->_getUser()->getDays()->count();
     $answer->email = $this->_getUser()->getEmail();
@@ -60,21 +47,25 @@ class AuthController extends BaseJsonController
     $user = new User();
     $user->setFbAccessToken($fb_access_token);
     $profile = $this->toolkit->getFacebookProfile($user);
-    $facebook_info = $profile->getInfo();
-    $user->import($facebook_info);
+    $user->import($profile->getInfo());
     $user->save();
 
     $userpics = $profile->getPictures();
-    $userpic_url = array_pop($userpics); // Returns biggest picture
-    $userpic_contents = $profile->getPictureContents($userpic_url);
-    $user->attachImage($userpic_contents);
-    $user->save();
+    if(count($userpics)) {
+      $userpic_url = array_pop($userpics); // Returns biggest picture
+      $userpic_contents = $profile->getPictureContents($userpic_url);
+      $user->attachImage($userpic_contents);
+      $user->save();
+    }
 
     return $user;
   }
 
   function doGuestIsLoggedIn()
   {
+    if(!$this->request->get('token'))
+      return $this->_answerWithError('Token not given', null, 412);
+
     return $this->_answerOk($this->_isLoggedUser());
   }
 

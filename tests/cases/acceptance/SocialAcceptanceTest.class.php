@@ -1,5 +1,5 @@
 <?php
-lmb_require('tests/unit/odAcceptanceTestCase.class.php');
+lmb_require('tests/cases/acceptance/odAcceptanceTestCase.class.php');
 
 class SocialAcceptanceTest extends odAcceptanceTestCase
 {
@@ -57,6 +57,9 @@ class SocialAcceptanceTest extends odAcceptanceTestCase
   // TODO cache dont work on invalid tokens
   function testTwitterConnect_withUnvalidCredentials()
   {
+    if(lmb_env_get('USE_API_CACHE'))
+      return;
+
     $this->main_user->save();
     $this->_loginAndSetCookie($this->main_user);
     $result = $this->post('social/twitter_connect', array(

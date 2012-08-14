@@ -7,6 +7,7 @@ lmb_require('src/service/social_profile/TwitterProfile.class.php');
 lmb_require('src/service/social_profile/FakeProfile.class.php');
 lmb_require('src/service/odNewsObserver.class.php');
 lmb_require('src/service/odRemoteApiMock.class.php');
+lmb_require('src/service/ImageHelper.class.php');
 
 class odTools extends lmbAbstractTools
 {
@@ -58,6 +59,19 @@ class odTools extends lmbAbstractTools
   }
 
   /**
+   * @return ImageHelper
+   */
+  function getImageHelper()
+  {
+    static $image_helper;
+
+    if(!$image_helper)
+      $image_helper = new ImageHelper();
+
+    return $image_helper;
+  }
+
+  /**
    * @return string
    */
   function getSessidFromRequest()
@@ -81,8 +95,9 @@ class odTools extends lmbAbstractTools
 
   function getStaticUrl($path = '')
   {
-    if(null === $path)
+    if(!$path)
       return null;
+
     return lmb_env_get('STATIC_HOST_URL').$path;
   }
 
@@ -124,8 +139,9 @@ class odTools extends lmbAbstractTools
     lmb_assert_true($user);
     if(0 == $user->getSettings()->getSocialShareFacebook())
       return new FakeProfile($user);
-     lmb_assert_true($user->getFbAccessToken(), 'Facebook access token not specified.');
-     return new FacebookProfile($user);
+
+    lmb_assert_true($user->getFbAccessToken(), 'Facebook access token not specified.');
+    return new FacebookProfile($user);
   }
 
   /**
@@ -137,6 +153,7 @@ class odTools extends lmbAbstractTools
     lmb_assert_true($user);
     if(0 == $user->getSettings()->getSocialShareTwitter())
       return new FakeProfile($user);
+
     lmb_assert_true($user->getTwitterAccessToken(), 'Twitter access token not specified.');
     lmb_assert_true($user->getTwitterAccessTokenSecret(), 'Twitter access token secret not specified.');
     return new TwitterProfile($user);
@@ -163,7 +180,7 @@ class odTools extends lmbAbstractTools
 
       $twitter_instances[$access_token] = new odTwitter($config);
 
-      if(lmbToolkit::instance()->getConf('common')->remote_api_cache_enabled)
+      if(lmb_env_get('USE_API_CACHE'))
         $twitter_instances[$access_token] = new odRemoteApiMock(
           $twitter_instances[$access_token],
           lmbToolkit::instance()->createCacheConnectionByDSN('file:///'.lmb_var_dir().'/twitter_cache/'.$access_token)
@@ -191,7 +208,7 @@ class odTools extends lmbAbstractTools
       if(!is_null($access_token))
         $instance->setAccessToken($access_token);
 
-      if(lmbToolkit::instance()->getConf('common')->remote_api_cache_enabled)
+      if(lmb_env_get('USE_API_CACHE'))
         $facebook_instances[$access_token] = new odRemoteApiMock(
           $instance,
           lmbToolkit::instance()->createCacheConnectionByDSN('file:///'.lmb_var_dir().'/facebook_cache/'.$access_token)

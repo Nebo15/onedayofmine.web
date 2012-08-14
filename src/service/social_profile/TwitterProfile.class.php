@@ -26,7 +26,7 @@ class TwitterProfile implements SocialServicesProfileInterface
     $this->provider = new odTwitter($config);
     $this->user     = $user;
 
-    if(lmbToolkit::instance()->getConf('common')->remote_api_cache_enabled)
+    if(lmb_env_get('USE_API_CACHE'))
       $this->provider = new odRemoteApiMock(
         $this->provider,
         lmbToolkit::instance()->createCacheConnectionByDSN('file:///'.lmb_var_dir().'/twitter_cache/'.$user->getTwitterAccessToken())
@@ -147,11 +147,14 @@ class TwitterProfile implements SocialServicesProfileInterface
    */
   public function getPictures()
   {
+    if($this->getInfo_Raw()['default_profile_image'])
+      return array();
+
     $uid = $this->user->getTwitterUid();
-    return [
+    return array(
       '73x73' => 'http://api.twitter.com/1/users/profile_image?user_id='.$uid.'&size=bigger',
       '?x?'   => 'http://api.twitter.com/1/users/profile_image?user_id='.$uid.'&size=original'
-    ];
+    );
   }
 
   /**

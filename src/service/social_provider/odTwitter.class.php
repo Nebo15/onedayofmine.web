@@ -6,10 +6,7 @@ class odTwitter extends tmhOAuth implements odSocialServicesProviderInterface
 {
   public static function getConfig()
   {
-    return array(
-      'consumer_key'    => lmbToolkit::instance()->getConf('twitter')->twitter_consumer_key,
-      'consumer_secret' => lmbToolkit::instance()->getConf('twitter')->twitter_consumer_secret,
-    );
+    return (array) lmbToolkit::instance()->getConf('twitter');
   }
 
   function __construct(array $config = null)
