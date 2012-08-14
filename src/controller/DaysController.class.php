@@ -110,7 +110,7 @@ class DaysController extends BaseJsonController
 
     // Exif info works only for jpeg and tiff
     $helper = lmbToolkit::instance()->getImageHelper();
-    if($helper->getImageExtensionByFileContent($image_content) == 'jpeg') {
+    if($helper->getImageExtensionByImageContent($image_content) == 'jpeg') {
       $exif = $helper->getExifInfo($moment->getImageOrig());
 
       // Location

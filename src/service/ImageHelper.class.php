@@ -94,6 +94,6 @@ class ImageHelper {
 
   function getImageExtensionByImageContent($content)
   {
-    return $this->getImageExtensionByMimeType($this->getMimeTypeByImageContent($content))
+    return $this->getImageExtensionByMimeType($this->getMimeTypeByImageContent($content));
   }
 }
