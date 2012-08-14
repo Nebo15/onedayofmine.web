@@ -35,7 +35,7 @@ class lmbLogCSVFileWriter extends lmbLogBaseWriter
       $log_entrys[] = strftime("%b %d %Y %H:%M:%S", $entry->getTime());
 
       foreach ($params as $key => $value) {
-        $tmp = preg_replace('#[\s]{2,}#is', ' ', $value);
+        $tmp = preg_replace('#[\s]{2,}|[\n]#is', ' ', $value);
         $tmp = preg_replace('#image_content=[^&]*#is', 'image_conents=[img]', $tmp);
         if($tmp)
           $log_entrys[] = $tmp;
