@@ -89,25 +89,6 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
     $this->assertTrue($user->image_72);
   }
 
-//  function testLogin_firstCallCreateNewUserWithSharing()
-//  {
-//    $users = User::find();
-//    $this->assertEqual(0, count($users));
-//
-//    $this->_loginAndSetCookie($this->main_user, false);
-//
-//    $users = User::find();
-//    $this->assertEqual(1, count($users));
-//
-//    $this->_loginAndSetCookie($this->main_user, false);
-//
-//    $users = User::find();
-//    $this->assertEqual(1, count($users));
-//    $user = $users->at(0)->exportForApi();
-//    $this->assertTrue($user->image_36);
-//    $this->assertTrue($user->image_72);
-//  }
-
   /**
    * @api
    */
@@ -125,6 +106,12 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
     $this->assertResponse(412);
     $this->assertEqual(1, count($errors));
     $this->assertEqual('Token not given', $errors[0]);
+  }
+
+  function testLogin_TokenLengthGreaterThan128()
+  {
+    $this->get('auth/is_logged_in', array('token' => str_repeat('A', 150)));
+    $this->assertResponse(200);
   }
 
   /**

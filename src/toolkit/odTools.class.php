@@ -64,11 +64,11 @@ class odTools extends lmbAbstractTools
   {
     $request = $this->toolkit->getRequest();
     if($request->getPost('token'))
-      return $request->getPost('token');
+      return sha1($request->getPost('token'));
     if($request->getGet('token'))
-      return $request->getGet('token');
+      return sha1($request->getGet('token'));
     if($request->getCookie('token'))
-      return $request->getCookie('token');
+      return sha1($request->getCookie('token'));
     return null;
   }
 
