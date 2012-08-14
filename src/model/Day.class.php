@@ -1,16 +1,12 @@
 <?php
-lmb_require('src/model/BaseModel.class.php');
+lmb_require('src/model/ImageModel.class.php');
 
 /**
  * @api field int id User ID
  * @static Day findById()
  */
-class Day extends BaseModel
+class Day extends ImageModel
 {
-  const IMAGE_ORIG = 'orig';
-  const IMAGE_SMALL = '266x266';
-  const IMAGE_BIG = '532x532';
-
   protected function _defineRelations()
   {
     $this->_many_belongs_to = array(
@@ -41,8 +37,7 @@ class Day extends BaseModel
     $export->id = $this->getId();
     $export->user_id = $this->getUser()->getId();
     $export->fb_uid = $this->getUser()->fb_uid;
-    $export->image_266 = lmbToolkit::instance()->getStaticUrl($this->getImageSmall(true));
-    $export->image_532 = lmbToolkit::instance()->getStaticUrl($this->getImageBig(true));
+    $this->showImages($export);
     $export->title = $this->getTitle();
     $export->occupation = $this->getOccupation();
     $export->location = $this->getLocation();
@@ -58,60 +53,13 @@ class Day extends BaseModel
     return $export;
   }
 
-  function attachImage($content)
+  protected function _getAdditionalPlaceholders(&$placeholders)
   {
-    $extension = lmbToolkit::instance()->getImageHelper()->getImageExtensionByImageContent($content);
-    $this->setImageExt($extension);
-
-    $orig_file = lmbToolkit::instance()->getAbsolutePath($this->getImageOrig());
-    lmbFs::safeWrite($orig_file, $content);
-
-    $small_file = lmbToolkit::instance()->getAbsolutePath($this->getImageSmall());
-    $helper = new lmbConvertImageHelper($orig_file);
-    $helper->resizeAndCropFrame(array('width' => 266, 'height' => 266));
-    $helper->save($small_file);
-
-    $small_file = lmbToolkit::instance()->getAbsolutePath($this->getImageBig());
-    $helper = new lmbConvertImageHelper($orig_file);
-    $helper->resizeAndCropFrame(array('width' => 532, 'height' => 532));
-    $helper->save($small_file);
-  }
-
-  function getImageOrig($static = false)
-  {
-    return $this->getImagePath(self::IMAGE_ORIG, $static);
-  }
-
-  function getImageSmall($static = false)
-  {
-    return $this->getImagePath(self::IMAGE_SMALL, $static);
-  }
-
-  function getImageBig($static = false)
-  {
-    return $this->getImagePath(self::IMAGE_BIG, $static);
-  }
-
-  function getImagePath($size_variation, $static = false)
-  {
-    if(!$this->getImageExt())
-      return null;
-
-    if(!$this->getId())
-      return null;
-
     if(!$this->getUser() || !$this->getUser()->getId())
-      return null;
+      throw new Exception("Can't create image path, because entity have no corresponding User.", array('class' => get_called_class()));
 
-    $user_id = $this->getUser()->getId();
-    $hash = sha1('s0l7&p3pp$r'.$user_id.$this->getId());
-    $ext = $this->getImageExt();
-    $path = "{$user_id}/days/{$hash}_{$size_variation}.{$ext}";
-
-    if(!$static)
-      $path = "users/{$path}";
-
-    return $path;
+    $placeholders[':user_id'] = $this->getUser()->getId();
+    $placeholders[':hash']    = sha1('s0l7&p3pp$r'.$this->getUser()->getId().$this->getId());
   }
 
   static function getTypes()

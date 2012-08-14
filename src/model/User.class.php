@@ -1,5 +1,5 @@
 <?php
-lmb_require('src/model/BaseModel.class.php');
+lmb_require('src/model/ImageModel.class.php');
 lmb_require('limb/imagekit/src/lmbConvertImageHelper.class.php');
 lmb_require('limb/validation/src/rule/lmbValidValueRule.class.php');
 
@@ -13,12 +13,8 @@ lmb_require('limb/validation/src/rule/lmbValidValueRule.class.php');
  * @method UserSettings getSettings()
  * @method void
  */
-class User extends BaseModel
+class User extends ImageModel
 {
-  const IMAGE_ORIG = 'orig';
-  const IMAGE_SMALL = '36x36';
-  const IMAGE_BIG = '72x72';
-
   const SEX_MALE = 'male';
   const SEX_FEMALE = 'female';
 
@@ -90,8 +86,9 @@ class User extends BaseModel
     $result->twitter_uid = $this->twitter_uid;
     $result->name = $this->name;
     $result->sex = $this->sex;
-    $result->image_36 = lmbToolkit::instance()->getStaticUrl($this->getImageSmall(true)) ?: lmbToolkit::instance()->getStaticUrl("default_36.png");
-    $result->image_72 = lmbToolkit::instance()->getStaticUrl($this->getImageBig(true)) ?: lmbToolkit::instance()->getStaticUrl("default_72.png");
+    foreach ($this->getImages() as $image_width => $image) {
+      $result->$image_width = $image ?: lmbToolkit::instance()->getStaticUrl("default_{$image_width}.png");
+    }
     $result->birthday = $this->birthday;
     $result->occupation = $this->occupation;
     $result->location = $this->location;
@@ -152,59 +149,6 @@ class User extends BaseModel
       'criteria' => $criteria,
       'sort' => array('id' => 'DESC'),
     ))->paginate(0, $limit);
-  }
-
-  function attachImage($content)
-  {
-    $extension = lmbToolkit::instance()->getImageHelper()->getImageExtensionByImageContent($content);
-    $this->setImageExt($extension);
-
-    $orig_file = lmbToolkit::instance()->getAbsolutePath($this->getImageOrig());
-    lmbFs::safeWrite($orig_file, $content);
-
-    $small_file = lmbToolkit::instance()->getAbsolutePath($this->getImageSmall());
-    $helper = new lmbConvertImageHelper($orig_file);
-    $helper->resizeAndCropFrame(array('width' => 36, 'height' => 36));
-    $helper->save($small_file);
-
-    $small_file = lmbToolkit::instance()->getAbsolutePath($this->getImageBig());
-    $helper = new lmbConvertImageHelper($orig_file);
-    $helper->resizeAndCropFrame(array('width' => 72, 'height' => 72));
-    $helper->save($small_file);
-  }
-
-  function getImageOrig($static = false)
-  {
-    return $this->getImagePath(self::IMAGE_ORIG, $static);
-  }
-
-  function getImageSmall($static = false)
-  {
-    return $this->getImagePath(self::IMAGE_SMALL, $static);
-  }
-
-  function getImageBig($static = false)
-  {
-    return $this->getImagePath(self::IMAGE_BIG, $static);
-  }
-
-  function getImagePath($size_variation = User::IMAGE_ORIG, $static = false)
-  {
-    $ext = $this->getImageExt();
-    if(!$ext)
-      return '';
-
-    if(!$this->getId())
-      throw new lmbException("Can't create image path, because user have no id");
-    $user_id = $this->getId();
-    $hash = sha1('s0l7&p3pp$r'.$user_id);
-
-    $path = "{$user_id}/{$hash}_{$size_variation}.{$ext}";
-
-    if(!$static)
-      $path = "users/{$path}";
-
-    return $path;
   }
 
   static function findByFbAccessToken($fb_access_token)

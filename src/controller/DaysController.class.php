@@ -107,13 +107,13 @@ class DaysController extends BaseJsonController
     $moment->setDescription($this->request->get('description'));
     $moment->save();
 
-    $moment->attachImage($image_content);
+    $orig_image = $moment->attachImage($image_content);
     $moment->save();
 
     // Exif info works only for jpeg and tiff
     $helper = lmbToolkit::instance()->getImageHelper();
     if($helper->getImageExtensionByImageContent($image_content) == 'jpeg') {
-      $exif = $helper->getExifInfo($moment->getImageOrig());
+      $exif = $helper->getExifInfo($orig_image);
 
       // Location
       if(array_key_exists('GPS', $exif)) {
