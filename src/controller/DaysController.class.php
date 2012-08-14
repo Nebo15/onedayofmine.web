@@ -53,6 +53,8 @@ class DaysController extends BaseJsonController
     $day->setOccupation($this->request->getPost('occupation') ?: $this->_getUser()->getOccupation());
     $day->save();
 
+    $day->getDefaultConnection()->commitTransaction();
+
     $answer = $this->_exportDayWithSubentities($day);
 
     $this->toolkit->getFacebookProfile($this->_getUser())

@@ -265,8 +265,7 @@ class lmbActiveRecord extends lmbObject
   }
   /**
    *  Returns current default database connection object
-   *  @return object instance of concrete lmbDbConnection interface implementation
-   *  @see lmbDbConnection
+   *  @return lmbDbConnection instance of concrete lmbDbConnection interface implementation
    */
   static function getDefaultConnection()
   {
