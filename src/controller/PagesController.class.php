@@ -27,5 +27,4 @@ class PagesController extends lmbController
   {
     $this->response->setCode(404);
   }
-
 }

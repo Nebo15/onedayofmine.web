@@ -76,7 +76,7 @@ class FacebookProfileTest extends odUnitTestCase
     $day->setTitle('testBeginDay');
     $day->save();
 
-    $day_url = $this->_copyDayPageToProxy($day);
+    $day_url = $day->getPageUrl();
 
     $fb_id = lmbToolkit::instance()->getFacebookProfile($this->main_user)->shareDayBegin($day, $day_url);
     $this->assertTrue($fb_id);
@@ -88,7 +88,7 @@ class FacebookProfileTest extends odUnitTestCase
     $day->setTitle('testLikeDay');
     $day->save();
 
-    $day_url = $this->_copyDayPageToProxy($day);
+    $day_url = $day->getPageUrl();
 
     lmbToolkit::instance()->getFacebookProfile($this->main_user)->shareDayBegin($day, $day_url);
     lmbToolkit::instance()->getFacebookProfile($this->additional_user)->shareDayLike($day, $day_url);
@@ -100,7 +100,7 @@ class FacebookProfileTest extends odUnitTestCase
     $day->setTitle('testAddMoment - Day');
     $day->save();
 
-    $day_url = $this->_copyDayPageToProxy($day);
+    $day_url = $day->getPageUrl();
     $fb_id = lmbToolkit::instance()->getFacebookProfile($this->main_user)->shareDayBegin($day, $day_url);
     $day->setFbId($fb_id);
     $day->save();
@@ -110,7 +110,7 @@ class FacebookProfileTest extends odUnitTestCase
     $moment->attachImage($this->generator->image());
     $moment->save();
 
-    $moment_url = $this->_copyMomentPageToProxy($moment);
+    $moment_url = $moment->getPageUrl();
     $fb_id = lmbToolkit::instance()->getFacebookProfile($this->main_user)->shareMomentAdd($day, $day_url, $moment, $moment_url);
     $this->assertTrue($fb_id);
 
@@ -118,7 +118,7 @@ class FacebookProfileTest extends odUnitTestCase
     $moment->save();
     $moment->attachImage($this->generator->image());
     $moment->save();
-    $moment_url = $this->_copyMomentPageToProxy($moment);
+    $moment_url = $moment->getPageUrl();
     $fb_id = lmbToolkit::instance()->getFacebookProfile($this->main_user)->shareMomentAdd($day, $day_url, $moment, $moment_url);
     $this->assertTrue($fb_id);
   }
@@ -128,7 +128,7 @@ class FacebookProfileTest extends odUnitTestCase
     $day = $this->generator->day();
     $day->setTitle('testShareMomentLike - Day');
     $day->save();
-    $day_url = $this->_copyDayPageToProxy($day);
+    $day_url = $day->getPageUrl();
     $fb_id = lmbToolkit::instance()->getFacebookProfile($this->main_user)->shareDayBegin($day, $day_url);
     $day->setFbId($fb_id);
     $day->save();
@@ -137,7 +137,7 @@ class FacebookProfileTest extends odUnitTestCase
     $moment->save();
     $moment->attachImage($this->generator->image());
     $moment->save();
-    $moment_url = $this->_copyMomentPageToProxy($moment);
+    $moment_url = $moment->getPageUrl();
 
     $fb_id = lmbToolkit::instance()->getFacebookProfile($this->main_user)->shareMomentAdd($day, $day_url, $moment, $moment_url);
     $this->assertTrue($fb_id);
@@ -150,7 +150,7 @@ class FacebookProfileTest extends odUnitTestCase
     $day = $this->generator->day();
     $day->setTitle('testEndDay - Day');
     $day->save();
-    $day_url = $this->_copyDayPageToProxy($day);
+    $day_url = $day->getPageUrl();
 
     lmbToolkit::instance()->getFacebookProfile($this->main_user)->shareDayBegin($day, $day_url);
     lmbToolkit::instance()->getFacebookProfile($this->main_user)->shareDayEnd($day, $day_url);
@@ -162,7 +162,7 @@ class FacebookProfileTest extends odUnitTestCase
     $day->setTitle('shareDay - Day');
     $day->save();
 
-    $day_url = $this->_copyDayPageToProxy($day);
+    $day_url = $day->getPageUrl();
 
     lmbToolkit::instance()->getFacebookProfile($this->main_user)->shareDay($day, $day_url);
   }

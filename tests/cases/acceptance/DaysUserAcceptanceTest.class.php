@@ -74,8 +74,6 @@ class DayUserAcceptanceTest extends odAcceptanceTestCase
     $day = $this->generator->day($this->additional_user);
     $day->save();
 
-    $this->toolkit->copyDayPageToProxy($day);
-
     $this->_loginAndSetCookie($this->main_user);
 
     $res = $this->post('days/'.$day->getId().'/share')->result;
