@@ -36,7 +36,7 @@ class odRemoteApiMock
 
   function makeQuery($query)
   {
-    $hash = md5($query);
+    $hash = 'query_'.md5($query);
     if($cached_value = $this->cache->get($hash))
       return $cached_value;
     $result = $this->provider->makeQuery($query);
