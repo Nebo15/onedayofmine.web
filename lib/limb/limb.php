@@ -13,6 +13,8 @@ taskman_propsetor('TASKS_MASKS', 'limb/*/cli/*.tasks.php' . PATH_SEPARATOR .
 taskman_propsetor('PROJECT_DIR', $limb_dir.'/../../');
 taskman_propsetor('LIMB_DIR', $limb_dir.'/../');
 
+chdir(taskman_prop('PROJECT_DIR'));
+
 lmb_cli_init_tasks();
 taskman_run();
 
