@@ -1,5 +1,6 @@
 <?php
 lmb_require('tests/src/odObjectMother.class.php');
+lmb_require('facebook-proxy/src/Client.php');
 
 class odRemoteApiMock
 {
@@ -11,6 +12,10 @@ class odRemoteApiMock
    * @var lmbCacheAbstractConnection
    */
   protected $cache;
+  /**
+   * @var string
+   */
+  protected $proxy_host = 'http://stage.onedayofmine.com/';
 
   function __construct(odSocialServicesProviderInterface $provider, $cache)
   {
@@ -54,17 +59,33 @@ class odRemoteApiMock
     {
       // lmbToolkit::instance()
       //   ->getLog('test_request')
-      //   ->debug(get_class($this->social_provider).' fake request: ', array('arguments' => $arguments, 'result' => $cached_value));
+      //   ->info(get_class($this->social_provider).' fake request: ', array('arguments' => $arguments, 'result' => $cached_value));
       return $cached_value;
     }
 
+    array_walk_recursive($params, function(&$item) use($arguments) {
+      if(is_string($item)) {
+        preg_match('#^(.*)(/pages/([0-9]*)/(day|moment))$#is', $item, $out);
+        if(count($out)) {
+          $host = $out[1];
+          $path = $out[2];
+          $item = str_replace("{$host}/", $this->proxy_host, $item);
+          $this->_createProxyClient()->copyObjectPageToProxy($path);
+
+          lmbToolkit::instance()
+            ->getLog('test_request')
+            ->info(get_class($this->provider).' clone object request: ', array('found' => $out, 'item' => $item, 'args' => $arguments));
+        }
+      }
+    });
+
     $start_time = microtime(true);
-    $result = call_user_func_array(array($this->provider, 'api'), func_get_args());
+    $result = call_user_func_array(array($this->provider, 'api'), array($path, $method, $params));
     $delta = microtime(true) - $start_time;
 
     lmbToolkit::instance()
       ->getLog('test_request')
-      ->debug(get_class($this->provider).' real request: ', array('arguments' => $arguments, 'time' => $delta, 'result' => $result));
+      ->info(get_class($this->provider).' real request: ', array('arguments' => $arguments, 'time' => $delta, 'result' => $result));
 
     $this->cache->set($hash, $result);
     return $result;
@@ -81,11 +102,32 @@ class odRemoteApiMock
 
   function downloadImage($url)
   {
-    $hash = md5($url);
+    $hash = 'img_'.md5($url);
 
     if(!$this->cache->get($hash))
       $this->cache->set($hash, file_get_contents($url));
 
     return $this->cache->get($hash);
+  }
+
+  function isFileExists($url)
+  {
+    $hash = 'isfile_'.md5($url);
+
+    if(!$this->cache->get($hash))
+      $this->cache->set($hash, (bool) @fopen($url, "r"));
+
+    return $this->cache->get($hash);
+  }
+
+  /**
+   * @return Client
+   */
+  protected function _createProxyClient()
+  {
+    // static $client;
+    // if(!$client)
+      return new Client($this->proxy_host.'/proxy.php', lmbToolkit::instance()->getSiteUrl(''));
+    // return $client;
   }
 }
