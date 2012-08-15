@@ -95,10 +95,6 @@ class odRemoteApiMock
     return $result;
   }
 
-  /**
-   * Функция идёт в odRemoteApi, потом переадресовывается в odFacebook тк нет кеша, там происходит исключение, которой не даёт методу api закешировать данные,
-   * останавливая обработку на 59 строке.
-   */
   function getUid($error_list)
   {
     return $this->provider->getUid($error_list, $this);
@@ -110,16 +106,6 @@ class odRemoteApiMock
 
     if(!$this->cache->get($hash))
       $this->cache->set($hash, file_get_contents($url));
-
-    return $this->cache->get($hash);
-  }
-
-  function isFileExists($url)
-  {
-    $hash = 'isfile_'.md5($url);
-
-    if(!$this->cache->get($hash))
-      $this->cache->set($hash, (bool) @fopen($url, "r"));
 
     return $this->cache->get($hash);
   }
