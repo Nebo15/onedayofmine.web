@@ -53,6 +53,14 @@ class Day extends ImageModel
     return $export;
   }
 
+  function getPageUrl()
+  {
+    if(!$this->getId())
+      throw new lmbException("Can't get page ID.");
+
+    return lmb_env_get('HOST_URL').'pages/'.$this->getId().'/day';
+  }
+
   protected function _getAdditionalPlaceholders(&$placeholders)
   {
     if(!$this->getUser() || !$this->getUser()->getId())

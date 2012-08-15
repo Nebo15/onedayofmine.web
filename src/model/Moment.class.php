@@ -44,6 +44,14 @@ class Moment extends ImageModel
     return $moment;
   }
 
+  function getPageUrl()
+  {
+    if(!$this->getId())
+      throw new lmbException("Can't get moment ID.");
+
+    return lmb_env_get('HOST_URL').'pages/'.$this->getId().'/moment';
+  }
+
   protected function _getAdditionalPlaceholders(&$placeholders)
   {
     if(!$this->getDay()->getUser() || !$this->getDay()->getUser()->getId())
