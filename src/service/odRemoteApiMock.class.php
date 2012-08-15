@@ -52,15 +52,12 @@ class odRemoteApiMock
       if(is_string($item))
         $item = preg_replace('#/[0-9]{2,}/#is', '/:id/', $item);
     });
-    $hash = md5(serialize($arguments));
+    $hash = 'call_'.md5(serialize($arguments));
 
     $arguments = array('path' => $path, 'method' => $method, 'params' => $params);
     if($cached_value = $this->cache->get($hash))
     {
-      // lmbToolkit::instance()
-      //   ->getLog('test_request')
-      //   ->info(get_class($this->social_provider).' fake request: ', array('arguments' => $arguments, 'result' => $cached_value));
-      return $cached_value;
+      return unserialize($cached_value);
     }
 
     array_walk_recursive($params, function(&$item) use($arguments) {
@@ -80,14 +77,21 @@ class odRemoteApiMock
     });
 
     $start_time = microtime(true);
-    $result = call_user_func_array(array($this->provider, 'api'), array($path, $method, $params));
+    try {
+      $result = call_user_func_array(array($this->provider, 'api'), array($path, $method, $params));
+    } catch (Exception $e) {
+      $result = false;
+    }
     $delta = microtime(true) - $start_time;
 
     lmbToolkit::instance()
       ->getLog('test_request')
       ->info(get_class($this->provider).' real request: ', array('arguments' => $arguments, 'time' => $delta, 'result' => $result));
 
-    $this->cache->set($hash, $result);
+    $this->cache->set($hash, serialize($result));
+
+    throw $e;
+
     return $result;
   }
 
