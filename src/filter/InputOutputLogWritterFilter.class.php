@@ -1,5 +1,6 @@
 <?php
 lmb_require('limb/filter_chain/src/lmbInterceptingFilter.interface.php');
+lmb_require('limb/net/src/lmbIp.class.php');
 
 class InputOutputLogWritterFilter implements lmbInterceptingFilter
 {
@@ -13,6 +14,7 @@ class InputOutputLogWritterFilter implements lmbInterceptingFilter
     lmbArrayHelper :: toFlatArray($toolkit->request->getPost(), $flat);
     $toolkit->getLog('request')->info('Request', array(
       'id' => $id,
+      'ip' => lmbIp::getRealIp(),
       'type' => 'Request',
       'method' => $toolkit->request->getRequestMethod(),
       'uri'    => $toolkit->request->getUri()->toString(),
