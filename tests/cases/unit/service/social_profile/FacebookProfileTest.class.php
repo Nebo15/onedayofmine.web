@@ -70,30 +70,30 @@ class FacebookProfileTest extends odUnitTestCase
     $this->assertTrue($contents);
   }
 
-  function testBeginDay()
+  function testShareBeginDay()
   {
     $day = $this->generator->day();
-    $day->setTitle('testBeginDay');
+    $day->setTitle('testShareBeginDay');
     $day->save();
 
     $fb_id = lmbToolkit::instance()->getFacebookProfile($this->main_user)->shareDayBegin($day);
     $this->assertTrue($fb_id);
   }
 
-  function testLikeDay()
+  function testShareLikeDay()
   {
     $day = $this->generator->day();
-    $day->setTitle('testLikeDay');
+    $day->setTitle('testShareLikeDay');
     $day->save();
 
     lmbToolkit::instance()->getFacebookProfile($this->main_user)->shareDayBegin($day);
     lmbToolkit::instance()->getFacebookProfile($this->additional_user)->shareDayLike($day);
   }
 
-  function testAddMoment()
+  function testShareAddMoment()
   {
     $day = $this->generator->day();
-    $day->setTitle('testAddMoment - Day');
+    $day->setTitle('testShareAddMoment - Day');
     $day->save();
 
     $fb_id = lmbToolkit::instance()->getFacebookProfile($this->main_user)->shareDayBegin($day);
@@ -138,10 +138,10 @@ class FacebookProfileTest extends odUnitTestCase
     lmbToolkit::instance()->getFacebookProfile($this->main_user)->shareMomentLike($moment);
   }
 
-  function testEndDay()
+  function testShareEndDay()
   {
     $day = $this->generator->day();
-    $day->setTitle('testEndDay - Day');
+    $day->setTitle('testShareEndDay - Day');
     $day->save();
 
     lmbToolkit::instance()->getFacebookProfile($this->main_user)->shareDayBegin($day);
