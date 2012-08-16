@@ -30,8 +30,10 @@ abstract class BaseModel extends lmbActiveRecord
   {
     $date = DateTime::createFromFormat('U', $stamp + $timezone * 60, new DateTimeZone('UTC'));
     $date_time = strstr($date->format(Datetime::ISO8601), '+', true);
+    $sign = $timezone < 0 ? '-' : '+';
+    $timezone = abs($timezone);
     $hours = floor($timezone / 60);
     $minutes = $timezone - $hours * 60;
-    return sprintf('%s+%02d:%02d', $date_time, $hours, $minutes);
+    return sprintf('%s%s%02u:%02d', $date_time, $sign, $hours, $minutes);
   }
 }

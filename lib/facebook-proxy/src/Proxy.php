@@ -5,6 +5,9 @@ class Proxy
 {
   function process($http_request_params)
   {
+    if(!array_key_exists('action', $http_request_params))
+      exit('Action not specified');
+
     switch ($http_request_params['action'])
     {
       case 'create_page':

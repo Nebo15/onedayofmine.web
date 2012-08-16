@@ -96,14 +96,13 @@ class AuthAcceptanceTest extends odAcceptanceTestCase
    */
   function testLogin_WrongAccessToken()
   {
-    if(lmb_env_get('USE_API_CACHE'))
-      return;
-
-    $errors = $res = $this->post('auth/login/', array('token' => $this->generator->string(11)))->errors;
+    $result = $this->post('auth/login/', array('token' => 'Wrong_access_token'));
+    $errors = $result->errors;
     $this->assertResponse(403);
     $this->assertEqual(1, count($errors));
     $this->assertEqual('Invalid OAuth access token.', $errors[0]);
   }
+
 
   function testLogin_AccessTokenNotGiven()
   {

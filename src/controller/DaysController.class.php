@@ -57,12 +57,13 @@ class DaysController extends BaseJsonController
 
     $answer = $this->_exportDayWithSubentities($day);
 
-    $this->toolkit->getFacebookProfile($this->_getUser())
-      ->shareDayBegin($day, $this->toolkit->getSiteUrl('/pages/'.$day->getId().'/day'));
+    if($this->_getUser()->getSettings()->getSocialShareFacebook())
+      $this->toolkit->getFacebookProfile($this->_getUser())
+        ->shareDayBegin($day);
 
-    if($this->_getUser()->getTwitterUid())
+    if($this->_getUser()->getTwitterUid() && $this->_getUser()->getSettings()->getSocialShareTwitter())
       $this->toolkit->getTwitterProfile($this->_getUser())
-        ->shareDayBegin($day, $this->toolkit->getSiteUrl('/pages/'.$day->getId().'/day'));
+        ->shareDayBegin($day);
 
     // Notify friends about new day
     $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_DAY, $day);
@@ -182,8 +183,8 @@ class DaysController extends BaseJsonController
     if(!$day = Day::findById($this->request->id))
       return $this->_answerWithError("Day not found by id");
 
-    $day_url = $this->toolkit->getSiteUrl('/pages/'.$day->getId().'/day');
-    $response = $this->toolkit->getFacebookProfile($this->_getUser())->shareDay($day, $day_url);
+    if($this->_getUser()->getSettings()->getSocialShareFacebook())
+      $response = $this->toolkit->getFacebookProfile($this->_getUser())->shareDay($day);
 
     return $this->_answerOk($response);
   }

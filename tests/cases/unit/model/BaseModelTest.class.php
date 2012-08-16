@@ -1,5 +1,5 @@
 <?php
-  lmb_require('tests/cases/unit/odUnitTestCase.class.php');
+lmb_require('tests/cases/unit/odUnitTestCase.class.php');
 
 class BaseModelTest extends odUnitTestCase
 {
@@ -9,8 +9,18 @@ class BaseModelTest extends odUnitTestCase
     list($stamp, $timezone) = BaseModelForTest::isoToStamp($valid_iso);
     $iso = BaseModelForTest::stampToIso($stamp, $timezone);
     $this->assertEqual($valid_iso, $iso);
-
     $valid_iso = '2009-01-02T03:04:05+06:07';
+
+    list($stamp, $timezone) = BaseModelForTest::isoToStamp($valid_iso);
+    $iso = BaseModelForTest::stampToIso($stamp, $timezone);
+    $this->assertEqual($valid_iso, $iso);
+
+    $valid_iso = '2009-01-02T03:04:05-06:07';
+    list($stamp, $timezone) = BaseModelForTest::isoToStamp($valid_iso);
+    $iso = BaseModelForTest::stampToIso($stamp, $timezone);
+    $this->assertEqual($valid_iso, $iso);
+
+    $valid_iso = '2009-01-02T03:04:05-06:07';
     list($stamp, $timezone) = BaseModelForTest::isoToStamp($valid_iso);
     $iso = BaseModelForTest::stampToIso($stamp, $timezone);
     $this->assertEqual($valid_iso, $iso);

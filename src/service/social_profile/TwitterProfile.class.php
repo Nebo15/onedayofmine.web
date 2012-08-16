@@ -1,7 +1,8 @@
 <?php
 lmb_require('src/service/social_profile/SocialServicesProfileInterface.class.php');
+lmb_require('src/service/social_profile/SharesInterface.class.php');
 
-class TwitterProfile implements SocialServicesProfileInterface
+class TwitterProfile implements SocialServicesProfileInterface, SharesInterface
 {
   const ID = 'Twitter';
 
@@ -172,50 +173,53 @@ class TwitterProfile implements SocialServicesProfileInterface
   }
 
   /**
-   * @param $day_url
-   * @return string fb_id
-   */
-  public function shareDayBegin(Day $day, $day_url)
-  {
-    return $this->_tweet("Stay in touch with new day of my life. {$day_url}");
-  }
-
-  public function shareDay(Day $day, $day_url)
-  {
-    return $this->_tweet("Look how awesome is this day. {$day_url}");
-  }
-
-  public function shareDayLike(Day $day, $day_url)
-  {
-    return $this->_tweet("I really like this day. {$day_url}");
-  }
-
-  public function shareMomentAdd(Day $day, $day_url, Moment $moment, $moment_url)
-  {
-    return $this->_tweet("Look how awesome is this moment {$moment_url} in day {$day_url}.");
-  }
-
-  public function shareMomentLike(Moment $moment, $moment_url)
-  {
-    return $this->_tweet("I really like this moment. {$moment_url}");
-  }
-
-  public function shareDayEnd(Day $day, $day_url)
-  {
-    return $this->_tweet("This day is ended, review it here: {$day_url}.");
-  }
-
-  /**
    * Update twitter status.
    *
    * @param  string $string
    * @return mixed
    */
-  protected function _tweet($string)
+  protected function tweet($string)
   {
     return $this->provider->api('1/statuses/update', odTwitter::METHOD_POST, array(
       'status' => $string
     ));
+  }
+
+  public function shareDayBegin(Day $day)
+  {
+    $day_url = $day->getPageUrl();
+    return $this->tweet("Stay in touch with new day of my life. {$day_url}");
+  }
+
+  public function shareDay(Day $day)
+  {
+    $day_url = $day->getPageUrl();
+    return $this->tweet("Look how awesome is this day. {$day_url}");
+  }
+
+  public function shareDayLike(Day $day)
+  {
+    $day_url = $day->getPageUrl();
+    return $this->tweet("I really like this day. {$day_url}");
+  }
+
+  public function shareMomentAdd(Day $day, Moment $moment)
+  {
+    $day_url    = $day->getPageUrl();
+    $moment_url = $moment->getPageUrl();
+    return $this->tweet("Look how awesome is this moment {$moment_url} in day {$day_url}.");
+  }
+
+  public function shareMomentLike(Moment $moment)
+  {
+    $moment_url = $moment->getPageUrl();
+    return $this->tweet("I really like this moment. {$moment_url}");
+  }
+
+  public function shareDayEnd(Day $day)
+  {
+    $day_url = $day->getPageUrl();
+    return $this->tweet("This day is ended, review it here: {$day_url}.");
   }
 
   protected function _mapUserInfo($user_info)

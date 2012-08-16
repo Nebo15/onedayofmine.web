@@ -1,7 +1,8 @@
 <?php
 lmb_require('src/service/social_profile/SocialServicesProfileInterface.class.php');
+lmb_require('src/service/social_profile/SharesInterface.class.php');
 
-class FacebookProfile implements SocialServicesProfileInterface
+class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
 {
   const DEFAULT_MALE_PIC_HASH   = 'e68ff6c48a3b96354d1830437545b7f5fcf980cb';
   const DEFAULT_FEMALE_PIC_HASH = 'c2c3b583435d6856141e55a0267c3d436c3ecb2b';
@@ -113,76 +114,49 @@ class FacebookProfile implements SocialServicesProfileInterface
     return $this->getProvider()->downloadImage($url);
   }
 
-  /**
-   * @param $day_url
-   * @return string fb_id
-   */
-  public function shareDayBegin(Day $day, $day_url)
+  public function shareDayBegin(Day $day)
   {
-    if(!$this->user->getSettings()->getSocialShareFacebook())
-      return null;
-
     return $this->provider->api("/me/one-day-of-mine:begin", "post", array(
-      'day' => $day_url
+      'day' => $day->getPageUrl()
     ))['id'];
   }
 
-  public function shareDay(Day $day, $day_url)
+  public function shareDay(Day $day)
   {
-    if(!$this->user->getSettings()->getSocialShareFacebook())
-      return null;
-
-    if(count($day->getMoments()))
-      $image_url = lmbToolkit::instance()->getStaticUrl($day->getMoments()->at(0)->getImageUrl());
-    else
-      $image_url = '';
-
     return $this->provider->api("/me/feed", "post", array(
-      'name' => $day->getTitle(),
-      'picture' => $image_url,
-      'link' => $day_url,
+      'name'        => $day->getTitle(),
+      'picture'     => count($day->getMoments()) ? lmbToolkit::instance()->getStaticUrl($day->getMoments()->at(0)->getImageUrl()) : '',
+      'link'        => $day->getPageUrl(),
       'description' => 'Visit onedayofmine.com for more info',
     ));
   }
 
-  public function shareDayLike(Day $day, $day_url)
+  public function shareDayLike(Day $day)
   {
-    if(!$this->user->getSettings()->getSocialShareFacebook())
-      return null;
-
     return $this->provider->api("/me/og.likes", "post", array(
-      'object' => $day_url
+      'object'      => $day->getPageUrl()
     ));
   }
 
-  public function shareMomentAdd(Day $day, $day_url, Moment $moment, $moment_url)
+  public function shareMomentAdd(Day $day, Moment $moment)
   {
-    if(!$this->user->getSettings()->getSocialShareFacebook())
-      return null;
-
     return $this->provider->api("/me/one-day-of-mine:add_moment", "post", array(
-      'moment' => $moment_url,
-      'day' => $day_url
+      'moment'      => $moment->getPageUrl(),
+      'day'         => $day->getPageUrl()
     ))['id'];
   }
 
-  public function shareMomentLike(Moment $moment, $moment_url)
+  public function shareMomentLike(Moment $moment)
   {
-    if(!$this->user->getSettings()->getSocialShareFacebook())
-      return null;
-
     return $this->provider->api("/me/og.likes", "post", array(
-      'object' => $moment_url
+      'object'      => $moment->getPageUrl()
     ));
   }
 
-  public function shareDayEnd(Day $day, $day_url)
+  public function shareDayEnd(Day $day)
   {
-    if(!$this->user->getSettings()->getSocialShareFacebook())
-      return null;
-
     return $this->provider->api("/me/one-day-of-mine:end", "post", array(
-      'day' => $day_url
+      'day'         => $day->getPageUrl()
     ));
   }
 
