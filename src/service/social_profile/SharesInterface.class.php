@@ -1,10 +1,40 @@
 <?php
 interface SharesInterface
 {
-  function shareDayBegin(Day $day, $day_url);
-  function shareDayEnd(Day $day, $day_url);
-  function shareDay(Day $day, $day_url);
-  function shareDayLike(Day $day, $day_url);
-  function shareMomentAdd(Day $day, $day_url, Moment $moment, $moment_url);
-  function shareMomentLike(Moment $moment, $moment_url);
+  /**
+   * @param Day $day
+   * @return int share_id
+   */
+  function shareDayBegin(Day $day);
+
+  /**
+   * @param Day $day
+   * @return int share_id
+   */
+  function shareDayEnd(Day $day);
+
+  /**
+   * @param Day $day
+   * @return int share_id
+   */
+  function shareDay(Day $day);
+
+  /**
+   * @param Day $day
+   * @return int share_id
+   */
+  function shareDayLike(Day $day);
+
+  /**
+   * @param Day $day
+   * @param Moment $moment
+   * @return int share_id
+   */
+  function shareMomentAdd(Day $day, Moment $moment);
+
+  /**
+   * @param Moment $moment
+   * @return int share_id
+   */
+  function shareMomentLike(Moment $moment);
 }

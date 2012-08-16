@@ -85,10 +85,8 @@ class TwitterProfileTest extends odUnitTestCase
     $day->setTitle('testBeginDay');
     $day->save();
 
-    $day_url = $day->getPageUrl();
-
     $provider = lmbToolkit::instance()->getTwitterProfile($this->main_user);
-    $tweet = $provider->shareDayBegin($day, $day_url);
+    $tweet = $provider->shareDayBegin($day);
     if($this->assertTrue(count($tweet))) {
       $this->assertTrue($tweet['id']);
     }
@@ -100,13 +98,12 @@ class TwitterProfileTest extends odUnitTestCase
     $day->setTitle('testLikeDay');
     $day->save();
 
-    $day_url = $day->getPageUrl();
-
-    $tweet = lmbToolkit::instance()->getTwitterProfile($this->main_user)->shareDayBegin($day, $day_url);
+    $tweet = lmbToolkit::instance()->getTwitterProfile($this->main_user)->shareDayBegin($day);
     if($this->assertTrue(count($tweet))) {
       $this->assertTrue($tweet['id']);
     }
-    $tweet = lmbToolkit::instance()->getTwitterProfile($this->additional_user)->shareDayLike($day, $day_url);
+
+    $tweet = lmbToolkit::instance()->getTwitterProfile($this->additional_user)->shareDayLike($day);
     if($this->assertTrue(count($tweet))) {
       $this->assertTrue($tweet['id']);
     }
@@ -118,22 +115,19 @@ class TwitterProfileTest extends odUnitTestCase
     $day->setTitle('testAddMoment - Day');
     $day->save();
 
-    $day_url = $day->getPageUrl();
-    lmbToolkit::instance()->getTwitterProfile($this->main_user)->shareDayBegin($day, $day_url);
+    lmbToolkit::instance()->getTwitterProfile($this->main_user)->shareDayBegin($day);
     $day->save();
 
     $moment = $this->generator->moment($day);
     $moment->save();
-    $moment_url = $moment->getPageUrl();
-    $tweet = lmbToolkit::instance()->getTwitterProfile($this->main_user)->shareMomentAdd($day, $day_url, $moment, $moment_url);
+    $tweet = lmbToolkit::instance()->getTwitterProfile($this->main_user)->shareMomentAdd($day, $moment);
     if($this->assertTrue(count($tweet))) {
       $this->assertTrue($tweet['id']);
     }
 
     $moment = $this->generator->moment($day);
     $moment->save();
-    $moment_url = $moment->getPageUrl();
-    $tweet = lmbToolkit::instance()->getTwitterProfile($this->main_user)->shareMomentAdd($day, $day_url, $moment, $moment_url);
+    $tweet = lmbToolkit::instance()->getTwitterProfile($this->main_user)->shareMomentAdd($day, $moment);
     if($this->assertTrue(count($tweet))) {
       $this->assertTrue($tweet['id']);
     }
@@ -144,20 +138,18 @@ class TwitterProfileTest extends odUnitTestCase
     $day = $this->generator->day();
     $day->setTitle('testShareMomentLike - Day');
     $day->save();
-    $day_url = $day->getPageUrl();
-    $tweet = lmbToolkit::instance()->getTwitterProfile($this->main_user)->shareDayBegin($day, $day_url);
+    $tweet = lmbToolkit::instance()->getTwitterProfile($this->main_user)->shareDayBegin($day);
     $day->save();
 
     $moment = $this->generator->moment($day);
     $moment->save();
-    $moment_url = $moment->getPageUrl();
 
-    $tweet = lmbToolkit::instance()->getTwitterProfile($this->main_user)->shareMomentAdd($day, $day_url, $moment, $moment_url);
+    $tweet = lmbToolkit::instance()->getTwitterProfile($this->main_user)->shareMomentAdd($day, $moment);
     if($this->assertTrue(count($tweet))) {
       $this->assertTrue($tweet['id']);
     }
 
-    $tweet = lmbToolkit::instance()->getTwitterProfile($this->main_user)->shareMomentLike($moment, $moment_url);
+    $tweet = lmbToolkit::instance()->getTwitterProfile($this->main_user)->shareMomentLike($moment);
     if($this->assertTrue(count($tweet))) {
       $this->assertTrue($tweet);
     }
@@ -168,13 +160,12 @@ class TwitterProfileTest extends odUnitTestCase
     $day = $this->generator->day();
     $day->setTitle('testEndDay - Day');
     $day->save();
-    $day_url = $day->getPageUrl();
 
-    $tweet = lmbToolkit::instance()->getTwitterProfile($this->main_user)->shareDayBegin($day, $day_url);
+    $tweet = lmbToolkit::instance()->getTwitterProfile($this->main_user)->shareDayBegin($day);
     if($this->assertTrue(count($tweet))) {
       $this->assertTrue($tweet['id']);
     }
-    $tweet = lmbToolkit::instance()->getTwitterProfile($this->main_user)->shareDayEnd($day, $day_url);
+    $tweet = lmbToolkit::instance()->getTwitterProfile($this->main_user)->shareDayEnd($day);
     if($this->assertTrue(count($tweet))) {
       $this->assertTrue($tweet['id']);
     }
@@ -186,9 +177,8 @@ class TwitterProfileTest extends odUnitTestCase
     $day->setTitle('shareDay - Day');
     $day->save();
 
-    $day_url = $day->getPageUrl();
 
-    $tweet = lmbToolkit::instance()->getTwitterProfile($this->main_user)->shareDay($day, $day_url);
+    $tweet = lmbToolkit::instance()->getTwitterProfile($this->main_user)->shareDay($day);
     if($this->assertTrue(count($tweet))) {
       $this->assertTrue($tweet['id']);
     }
