@@ -109,8 +109,12 @@ function task_od_parse_lj($argv)
     $day->save();
 
     $first = true;
+    $time = time()-rand(0, 60*60*24*365);
+    $timezone = rand(0,24)-12;
     foreach($post->getMoments() as $moment_data)
     {
+      $time += rand(0, 60*60);
+
       if($first)
       {
         $img_url = $moment_data['img'];
@@ -123,6 +127,8 @@ function task_od_parse_lj($argv)
       $moment = new Moment();
       $moment->setDescription($moment_data['description']);
       $moment->setDay($day);
+      $moment->setTimezone($timezone);
+      $moment->setTime($time);
       $moment->save();
       $img_url = $moment_data['img'];
       if(!$cache->get(md5($img_url)))
