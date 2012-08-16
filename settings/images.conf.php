@@ -23,7 +23,7 @@ $conf = array(
     'sizes'     => array(
                      array('width' => 36, 'height'  => 36),
                      array('width' => 72, 'height'  => 72),
-                     array('width' => 86, 'height'  => 86),
+                     array('width' => 96, 'height'  => 96),
                      array('width' => 192, 'height' => 192),
                    ),
   ),
