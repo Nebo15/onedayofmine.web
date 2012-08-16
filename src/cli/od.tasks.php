@@ -9,9 +9,23 @@ function task_od_remove_cache($argv)
   lmbFs::mkdir(taskman_prop('PROJECT_DIR').'/var');
 }
 
+function task_od_remove_db_data()
+{
+  lmb_require(taskman_prop('PROJECT_DIR').'setup.php');
+  lmb_require('tests/src/toolkit/odTestsTools.class.php');
+
+  lmbToolkit::merge(new odTestsTools());
+  lmbToolkit::instance()->truncateTablesOf(
+    'Complaint',
+    'Day', 'DayComment', 'DayFavourite', 'DayInterestRecord',
+    'Moment',  'MomentComment',
+    'News',
+    'User', 'UserFollowing', 'UserSettings');
+}
+
 /**
  * @desc Fill db from lj community
- * @deps od_tests_users
+ * @deps od_remove_db_data,od_tests_users
  * @alias od_fill_from_lj
  */
 function task_od_parse_lj($argv)
@@ -92,9 +106,15 @@ function task_od_parse_lj($argv)
   $posts_remain = POSTS_COUNT;
   $tests_users = array();
   lmbArrayHelper::toFlatArray(User::find(), $tests_users);
+  $previous_id = -1;
   while($posts_remain--)
   {
-    $post = $posts[array_rand($posts)];
+    do {
+      $id = array_rand($posts);
+    } while($id == $previous_id);
+
+    $post = $posts[$id];
+    $previous_id = $id;
 
     echo $posts_remain.'. Creating day "'.$post->getTitle().'":'.PHP_EOL;
 
