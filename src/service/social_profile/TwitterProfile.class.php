@@ -20,7 +20,7 @@ class TwitterProfile implements SocialServicesProfileInterface, SharesInterface
    */
   public function __construct(User $user)
   {
-    $config = [];
+    $config = odTwitter::getConfig();
     $config['user_token']  = $user->getTwitterAccessToken();
     $config['user_secret'] = $user->getTwitterAccessTokenSecret();
 
