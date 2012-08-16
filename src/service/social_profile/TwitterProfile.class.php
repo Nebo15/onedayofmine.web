@@ -1,4 +1,5 @@
 <?php
+lmb_require('src/service/social_provider/odTwitter.class.php');
 lmb_require('src/service/social_profile/SocialServicesProfileInterface.class.php');
 lmb_require('src/service/social_profile/SharesInterface.class.php');
 
@@ -20,21 +21,15 @@ class TwitterProfile implements SocialServicesProfileInterface, SharesInterface
    */
   public function __construct(User $user)
   {
-    $config = odTwitter::getConfig();
-    $config['user_token']  = $user->getTwitterAccessToken();
-    $config['user_secret'] = $user->getTwitterAccessTokenSecret();
+    $user_token  = $user->getTwitterAccessToken();
+    $user_secret = $user->getTwitterAccessTokenSecret();
 
-    lmb_assert_true($config['user_token']);
-    lmb_assert_true($config['user_secret']);
+    lmb_assert_true($user, 'Twitter profile user not specified.');
+    lmb_assert_true($user_token, 'Twitter access token not specified.');
+    lmb_assert_true($user_secret, 'Twitter access token secret not specified.');
 
-    $this->provider = new odTwitter($config);
+    $this->provider = lmbToolkit::instance()->getTwitter($user_token, $user_secret);
     $this->user     = $user;
-
-    if(lmb_env_get('USE_API_CACHE'))
-      $this->provider = new odRemoteApiMock(
-        $this->provider,
-        lmbToolkit::instance()->createCacheConnectionByDSN('file:///'.lmb_var_dir().'/twitter_cache/'.$user->getTwitterAccessToken())
-      );
  }
 
   /**

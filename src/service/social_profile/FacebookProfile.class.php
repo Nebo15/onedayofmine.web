@@ -1,13 +1,12 @@
 <?php
+lmb_require('src/service/social_provider/odFacebook.class.php');
 lmb_require('src/service/social_profile/SocialServicesProfileInterface.class.php');
 lmb_require('src/service/social_profile/SharesInterface.class.php');
 
 class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
 {
-  const DEFAULT_MALE_PIC_HASH   = 'e68ff6c48a3b96354d1830437545b7f5fcf980cb';
-  const DEFAULT_FEMALE_PIC_HASH = 'c2c3b583435d6856141e55a0267c3d436c3ecb2b';
-
   const ID = 'Facebook';
+
   /**
    * @var User
    */
@@ -18,19 +17,22 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
   protected $provider;
 
   /**
+   * Hashes of default usepics on facebook.
+   */
+  const DEFAULT_MALE_PIC_HASH   = 'e68ff6c48a3b96354d1830437545b7f5fcf980cb';
+  const DEFAULT_FEMALE_PIC_HASH = 'c2c3b583435d6856141e55a0267c3d436c3ecb2b';
+
+  /**
    * @param User $user
    */
   public function __construct(User $user)
   {
-    $this->provider = new odFacebook(odFacebook::getConfig());
-    $this->provider->setAccessToken($user->getFbAccessToken());
+    $access_token   = $user->getFbAccessToken();
 
-    if(lmb_env_get('USE_API_CACHE'))
-      $this->provider = new odRemoteApiMock(
-        $this->provider,
-        lmbToolkit::instance()->createCacheConnectionByDSN('file:///'.lmb_var_dir().'/facebook_cache/'.$user->getFbAccessToken())
-      );
+    lmb_assert_true($user, 'Facebook profile user not specified.');
+    lmb_assert_true($access_token, 'Facebook access token not specified.');
 
+    $this->provider = lmbToolkit::instance()->getFacebook($access_token);
     $this->user     = $user;
   }
 
