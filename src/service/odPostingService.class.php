@@ -3,6 +3,16 @@ lmb_require('src/service/social_profile/SharesInterface.class.php');
 
 class odPostingService implements SharesInterface
 {
+  protected $twitter_profile;
+  protected $facebook_profile;
+
+  public function __construct()
+  {
+    $user                   = lmbToolkit::instance()->getUser();
+    $this->facebook_profile = new FacebookProfile($user);
+    $this->twitter_profile  = new TwitterProfile($user);
+  }
+
   /**
    * @throws lmbException
    */
@@ -12,14 +22,12 @@ class odPostingService implements SharesInterface
     $settings = $user->getSettings();
 
     if($settings->getSocialShareFacebook() && $user->getFbAccessToken()) {
-      $facebook_profile = $this->toolkit->getFacebookProfile($user);
-      if(!call_user_func_array(array($facebook_profile, $name), $args))
+      if(!call_user_func_array(array($this->facebook_profile, $name), $args))
         throw new lmbException("Can't share with Facebook.", array('function_name' => $name, 'function_args' => $args));
     }
 
     if($settings->getSocialShareTwitter() && $user->getTwitterAccessToken() && $user->getTwitterAccessTokenSecret()) {
-      $twitter_profile = $this->toolkit->getTwitterProfile($user);
-      if(!call_user_func_array(array($twitter_profile, $name), $args))
+      if(!call_user_func_array(array($this->twitter_profile, $name), $args))
         throw new lmbException("Can't share with Twitter.", array('function_name' => $name, 'function_args' => $args));
     }
   }

@@ -70,7 +70,7 @@ class odTestsTools extends lmbAbstractTools
 			$user = new User();
 			$user->setFbUid($user_info->id);
 			$user->setFbAccessToken($user_info->access_token);
-			$user->import(lmbToolkit::instance()->getFacebookProfile($user)->getInfo());
+			$user->import((new FacebookProfile($user))->getInfo());
 
       $settings = $user->getSettings();
       $settings->setSocialShareFacebook(0);

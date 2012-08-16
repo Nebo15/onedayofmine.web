@@ -188,7 +188,8 @@ class odNewsObserver {
     $news = $this->createNews($user);
     $this->applyText($news, self::MSG_FBFRIEND_REGISTERED, array($user->getName()));
 
-    foreach (lmbToolkit::instance()->getFacebookProfile($user)->getRegisteredFriends() as $friend) {
+    $profile = new FacebookProfile($user);
+    foreach ($profile->getRegisteredFriends() as $friend) {
       $this->sendToRecipient($news, $friend);
     }
   }

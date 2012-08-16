@@ -9,8 +9,9 @@ class SocialController extends BaseJsonController
     if(!$this->_getUser())
       $this->_answerUnauthorized();
 
+    $profile = new FacebookProfile($this->_getUser());
     $friends = array();
-    foreach($this->toolkit->getFacebookProfile($this->_getUser())->getRegisteredFriends() as $friend) {
+    foreach($profile->getRegisteredFriends() as $friend) {
       $friend = $friend->exportForApi();
       unset($friend->user_info['email']);
       unset($friend->user_info['timezone']);
@@ -44,7 +45,7 @@ class SocialController extends BaseJsonController
       $this->toolkit->getUser()->setTwitterAccessTokenSecret($access_token_secret);
 
       // 2 requests is not optimal solution
-      $twitter_uid = lmbToolkit::instance()->getTwitterProfile($this->_getUser())->getInfo()['twitter_uid'];
+      $twitter_uid = (new TwitterProfile($this->_getUser()))->getInfo()['twitter_uid'];
       $this->toolkit->getUser()->setTwitterUid($twitter_uid);
 
       $this->toolkit->getUser()->save();
