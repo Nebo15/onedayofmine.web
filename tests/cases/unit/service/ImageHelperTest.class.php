@@ -4,7 +4,7 @@ lmb_require('limb/fs/src/exception/lmbFileNotFoundException.class.php');
 lmb_require('tests/cases/unit/odUnitTestCase.class.php');
 lmb_require('src/service/ImageHelper.class.php');
 
-class ImageHelperTest //extends odUnitTestCase
+class ImageHelperTest extends odUnitTestCase
 {
   protected $image_with_gps_info;
   protected $image_without_gps_info;
@@ -63,12 +63,20 @@ class ImageHelperTest //extends odUnitTestCase
 
     $this->assertEqual(count($basic_cords['latitude']), 3);
     $this->assertEqual(count($basic_cords['longitude']), 3);
-
-    // how to write and read cors correctly?
   }
 
   function testExifGPSToDecemicalCords()
   {
+    $exif = lmbToolkit::instance()->getImageHelper()->getExifInfo($this->image_with_gps_info);
+    $helper = lmbToolkit::instance()->getImageHelper();
+    $decemical_cords = $helper->exifGPSToDecemicalCords($exif);
 
+    $this->assertTrue(array_key_exists('GPS', $exif));
+
+    $this->assertTrue(array_key_exists('latitude', $decemical_cords));
+    $this->assertTrue(array_key_exists('longitude', $decemical_cords));
+
+    $this->assertEqual(ceil($decemical_cords['latitude']*10000)/10000,  50.5062);
+    $this->assertEqual(ceil($decemical_cords['longitude']*10000)/10000, 30.6177);
   }
 }
