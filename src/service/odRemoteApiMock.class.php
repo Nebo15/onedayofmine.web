@@ -88,7 +88,7 @@ class odRemoteApiMock
       $result = call_user_func_array(array($this->provider, 'api'), array($path, $method, $params));
     } catch (Exception $e) {
       // Cache exceptions
-      $this->cache->set($hash_exception, serialize(new $e('Invalid OAuth access token.')));
+      $this->cache->set($hash_exception, serialize($e));
 
       // Log exceptions cache
       lmbToolkit::instance()
@@ -96,7 +96,6 @@ class odRemoteApiMock
         ->info(get_class($this->provider).' real request with exception: ', array(
           'arguments' => $arguments,
           'time' => microtime(true) - $start_time,
-          'exception' => $e
         ));
 
       // Throw exception that should be catched by outer handler
