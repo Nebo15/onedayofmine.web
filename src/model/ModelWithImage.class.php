@@ -1,7 +1,8 @@
 <?php
 lmb_require('src/model/BaseModel.class.php');
 
-abstract class ImageModel extends BaseModel {
+abstract class ModelWithImage extends BaseModel
+{
   function attachImage($content)
   {
     $extension = lmbToolkit::instance()->getImageHelper()->getImageExtensionByImageContent($content);

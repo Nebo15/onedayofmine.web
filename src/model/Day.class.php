@@ -1,11 +1,11 @@
 <?php
-lmb_require('src/model/ImageModel.class.php');
+lmb_require('src/model/ModelWithImage.class.php');
 
 /**
  * @api field int id User ID
  * @static Day findById()
  */
-class Day extends ImageModel
+class Day extends ModelWithImage
 {
   protected function _defineRelations()
   {
