@@ -1,7 +1,8 @@
 <?php
   lmb_require('src/service/social_profile/SocialServicesProfileInterface.class.php');
+  lmb_require('src/service/social_profile/SharesInterface.class.php');
 
-class FakeProfile implements SocialServicesProfileInterface
+class FakeProfile implements SocialServicesProfileInterface, SharesInterface
 {
   const ID = 'Fake';
 

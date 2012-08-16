@@ -1,7 +1,8 @@
 <?php
 lmb_require('src/service/social_profile/SocialServicesProfileInterface.class.php');
+lmb_require('src/service/social_profile/SharesInterface.class.php');
 
-class FacebookProfile implements SocialServicesProfileInterface
+class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
 {
   const DEFAULT_MALE_PIC_HASH   = 'e68ff6c48a3b96354d1830437545b7f5fcf980cb';
   const DEFAULT_FEMALE_PIC_HASH = 'c2c3b583435d6856141e55a0267c3d436c3ecb2b';

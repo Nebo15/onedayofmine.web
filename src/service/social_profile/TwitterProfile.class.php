@@ -1,7 +1,8 @@
 <?php
 lmb_require('src/service/social_profile/SocialServicesProfileInterface.class.php');
+lmb_require('src/service/social_profile/SharesInterface.class.php');
 
-class TwitterProfile implements SocialServicesProfileInterface
+class TwitterProfile implements SocialServicesProfileInterface, SharesInterface
 {
   const ID = 'Twitter';
 
