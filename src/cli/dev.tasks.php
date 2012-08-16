@@ -2,6 +2,23 @@
 lmb_require(taskman_prop('PROJECT_DIR').'setup.php');
 
 /**
+ * @desc Delete all rows from DB tables
+ */
+function task_od_remove_db_data()
+{
+  lmb_require(taskman_prop('PROJECT_DIR').'setup.php');
+  lmb_require('tests/src/toolkit/odTestsTools.class.php');
+
+  lmbToolkit::merge(new odTestsTools());
+  lmbToolkit::instance()->truncateTablesOf(
+    'Complaint',
+    'Day', 'DayComment', 'DayFavourite', 'DayInterestRecord',
+    'Moment',  'MomentComment',
+    'News',
+    'User', 'UserFollowing', 'UserSettings');
+}
+
+/**
  * @desc Fill db from lj community
  * @deps od_tests_users
  * @alias od_fill_from_lj
