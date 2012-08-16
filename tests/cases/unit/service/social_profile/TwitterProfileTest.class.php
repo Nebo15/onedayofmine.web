@@ -79,10 +79,10 @@ class TwitterProfileTest extends odUnitTestCase
     $this->assertTrue($contents);
   }
 
-  function testBeginDay()
+  function testShareBeginDay()
   {
     $day = $this->generator->day();
-    $day->setTitle('testBeginDay');
+    $day->setTitle('testShareBeginDay');
     $day->save();
 
     $provider = lmbToolkit::instance()->getTwitterProfile($this->main_user);
@@ -92,10 +92,10 @@ class TwitterProfileTest extends odUnitTestCase
     }
   }
 
-  function testLikeDay()
+  function testShareLikeDay()
   {
     $day = $this->generator->day();
-    $day->setTitle('testLikeDay');
+    $day->setTitle('testShareLikeDay');
     $day->save();
 
     $tweet = lmbToolkit::instance()->getTwitterProfile($this->main_user)->shareDayBegin($day);
@@ -109,10 +109,10 @@ class TwitterProfileTest extends odUnitTestCase
     }
   }
 
-  function testAddMoment()
+  function testShareAddMoment()
   {
     $day = $this->generator->day();
-    $day->setTitle('testAddMoment - Day');
+    $day->setTitle('testShareAddMoment - Day');
     $day->save();
 
     lmbToolkit::instance()->getTwitterProfile($this->main_user)->shareDayBegin($day);
@@ -155,10 +155,10 @@ class TwitterProfileTest extends odUnitTestCase
     }
   }
 
-  function testEndDay()
+  function testShareEndDay()
   {
     $day = $this->generator->day();
-    $day->setTitle('testEndDay - Day');
+    $day->setTitle('testShareEndDay - Day');
     $day->save();
 
     $tweet = lmbToolkit::instance()->getTwitterProfile($this->main_user)->shareDayBegin($day);
