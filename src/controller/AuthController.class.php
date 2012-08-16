@@ -30,6 +30,7 @@ class AuthController extends BaseJsonController
     else
     {
       $user->setFbAccessToken($fb_access_token);
+      $user->save();
     }
 
     $this->toolkit->setUser($user);
