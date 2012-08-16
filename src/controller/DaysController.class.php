@@ -57,10 +57,11 @@ class DaysController extends BaseJsonController
 
     $answer = $this->_exportDayWithSubentities($day);
 
-    $this->toolkit->getFacebookProfile($this->_getUser())
-      ->shareDayBegin($day);
+    if($this->_getUser()->getSettings()->getSocialShareFacebook())
+      $this->toolkit->getFacebookProfile($this->_getUser())
+        ->shareDayBegin($day);
 
-    if($this->_getUser()->getTwitterUid())
+    if($this->_getUser()->getTwitterUid() && $this->_getUser()->getSettings()->getSocialShareTwitter())
       $this->toolkit->getTwitterProfile($this->_getUser())
         ->shareDayBegin($day);
 
