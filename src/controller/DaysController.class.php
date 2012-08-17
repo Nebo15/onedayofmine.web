@@ -177,8 +177,7 @@ class DaysController extends BaseJsonController
     if(!$day = Day::findById($this->request->id))
       return $this->_answerWithError("Day not found by id");
 
-    if($this->_getUser()->getSettings()->getSocialShareFacebook())
-      $response = (new FacebookProfile($this->_getUser()))->shareDay($day);
+    $this->toolkit->getPostingService()->shareDay($day);
 
     return $this->_answerOk($response);
   }
