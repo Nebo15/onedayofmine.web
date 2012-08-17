@@ -156,11 +156,7 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $this->_loginAndSetCookie($this->main_user);
 
     $res = $this->post('days/'.$day->getId().'/share')->result;
-    if($this->assertResponse(200))
-    {
-    	$this->assertProperty($res, 'id');
-    	$this->assertTrue($res->id);
-    }
+    $this->assertResponse(200);
   }
 
   /**
