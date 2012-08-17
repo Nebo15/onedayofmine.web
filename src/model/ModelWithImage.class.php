@@ -8,6 +8,10 @@ abstract class ModelWithImage extends BaseModel
     $extension = lmbToolkit::instance()->getImageHelper()->getImageExtensionByImageContent($content);
     $this->setImageExt($extension);
 
+    $s3_conf = lmbToolkit::instance()->getConcreteAmazonServiceConfig('S3');
+    $s3 = lmbToolkit::instance()->createAmazonService('S3');
+    $is_s3_enabled = $s3_conf['enabled'];
+
     $orig_file = $this->_getSavePath();
     lmbFs::safeWrite($orig_file, $content);
 
@@ -16,6 +20,25 @@ abstract class ModelWithImage extends BaseModel
       $helper = new lmbConvertImageHelper($orig_file);
       $helper->resizeAndCropFrame($size);
       $helper->save($resized_file);
+      if($is_s3_enabled)
+      {
+        $s3->batch()->create_object($s3_conf['bucket'], $this->_getS3SavePath($size), array(
+            'fileUpload' => $resized_file
+        ));
+      }
+    }
+
+    if($is_s3_enabled)
+    {
+      $response = $s3->batch()->send();
+      if(!$response->areOK())
+        throw new lmbException('Error on file uploading');
+
+      foreach ($this->_getConfig()['sizes'] as $size) {
+        $resized_file = $this->_getSavePath($size);
+        lmbFs::rm($resized_file);
+      }
+      lmbFs::rm($orig_file);
     }
 
     return $orig_file;
@@ -72,5 +95,10 @@ abstract class ModelWithImage extends BaseModel
   protected function _getSavePath($size = null)
   {
     return lmb_env_get('APP_DIR').DIRECTORY_SEPARATOR.$this->_getConfig()['save_path'].DIRECTORY_SEPARATOR.$this->getImage($size);
+  }
+
+  protected function _getS3SavePath($size = null)
+  {
+    return $this->getImage($size);
   }
 }

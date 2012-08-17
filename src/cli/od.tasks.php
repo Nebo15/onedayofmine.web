@@ -25,11 +25,7 @@ function task_od_calc_ratings()
 
 function task_od_amazon_watch()
 {
-  require(taskman_prop('PROJECT_DIR').'/lib/amazon-sdk/sdk.class.php');
-
-  CFCredentials::set(array('@default' => lmbToolkit::instance()->getConf('amazon')));
-
-  $acw = new AmazonCloudWatch();
+  $acw = lmbToolkit::instance()->createAmazonService('CloudWatch');
   echo "Sending...";
 
   foreach(lmb_glob(taskman_prop('PROJECT_DIR').'/../*onedayofmine*.access_log') as $log_file)
