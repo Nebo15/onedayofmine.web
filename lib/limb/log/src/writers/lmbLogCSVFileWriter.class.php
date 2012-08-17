@@ -37,8 +37,9 @@ class lmbLogCSVFileWriter extends lmbLogBaseWriter
       foreach ($params as $key => $value) {
         $tmp = preg_replace('#[\s]{2,}|[\n]#is', ' ', $value);
         $tmp = preg_replace('#image_content=[^&]*#is', 'image_conents=[img]', $tmp);
+        $tmp = trim($tmp);
         if($tmp)
-          $log_entrys[] = $tmp;
+          $log_entrys[] = "$key=$tmp";
       }
 
       fwrite($fh, implode(';', $log_entrys).PHP_EOL);
