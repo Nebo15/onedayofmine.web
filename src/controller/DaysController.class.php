@@ -179,7 +179,7 @@ class DaysController extends BaseJsonController
 
     $this->toolkit->getPostingService()->shareDay($day);
 
-    return $this->_answerOk($response);
+    return $this->_answerOk();
   }
 
   function doLike()
