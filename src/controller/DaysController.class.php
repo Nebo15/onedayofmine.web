@@ -57,16 +57,10 @@ class DaysController extends BaseJsonController
 
     $answer = $this->_exportDayWithSubentities($day);
 
-    if($this->_getUser()->getSettings()->getSocialShareFacebook())
-      (new FacebookProfile($this->_getUser()))
-        ->shareDayBegin($day);
-
-    if($this->_getUser()->getTwitterUid() && $this->_getUser()->getSettings()->getSocialShareTwitter())
-      (new TwitterProfile($this->_getUser()))
-        ->shareDayBegin($day);
-
     // Notify friends about new day
     $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_DAY, $day);
+
+    $this->toolkit->getPostingService()->shareDayBegin($day);
 
     return $this->_answerOk($answer);
   }

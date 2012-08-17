@@ -119,7 +119,7 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
   public function shareDayBegin(Day $day)
   {
     return $this->provider->api("/me/one-day-of-mine:begin", "post", array(
-      'day' => $day->getPageUrl()
+      'day' => lmbToolkit::instance()->getDayPageUrl($day)
     ))['id'];
   }
 
@@ -128,7 +128,7 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
     return $this->provider->api("/me/feed", "post", array(
       'name'        => $day->getTitle(),
       'picture'     => count($day->getMoments()) ? lmbToolkit::instance()->getStaticUrl($day->getMoments()->at(0)->getImageUrl()) : '',
-      'link'        => $day->getPageUrl(),
+      'link'        => lmbToolkit::instance()->getDayPageUrl($day),
       'description' => 'Visit onedayofmine.com for more info',
     ));
   }
@@ -136,29 +136,29 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
   public function shareDayLike(Day $day)
   {
     return $this->provider->api("/me/og.likes", "post", array(
-      'object'      => $day->getPageUrl()
+      'object'      => lmbToolkit::instance()->getDayPageUrl($day)
     ));
   }
 
   public function shareMomentAdd(Day $day, Moment $moment)
   {
     return $this->provider->api("/me/one-day-of-mine:add_moment", "post", array(
-      'moment'      => $moment->getPageUrl(),
-      'day'         => $day->getPageUrl()
+      'moment'      => lmbToolkit::instance()->getMomentPageUrl($moment),
+      'day'         => lmbToolkit::instance()->getDayPageUrl($day)
     ))['id'];
   }
 
   public function shareMomentLike(Moment $moment)
   {
     return $this->provider->api("/me/og.likes", "post", array(
-      'object'      => $moment->getPageUrl()
+      'object'      => lmbToolkit::instance()->getMomentPageUrl($moment)
     ));
   }
 
   public function shareDayEnd(Day $day)
   {
     return $this->provider->api("/me/one-day-of-mine:end", "post", array(
-      'day'         => $day->getPageUrl()
+      'day'         => lmbToolkit::instance()->getDayPageUrl($day)
     ));
   }
 
