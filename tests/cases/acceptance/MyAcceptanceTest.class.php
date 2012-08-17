@@ -181,7 +181,6 @@ class MyAcceptanceTest extends odAcceptanceTestCase
 
     $settings = new UserSettings();
     $settings->setNotificationsNewDays(0);
-    $settings->setNotificationsNewComments(0);
     $settings->setNotificationsRelatedActivity(0);
     $settings->setNotificationsShootingPhotos(0);
     $settings->setPhotosSaveOriginal(0);
@@ -192,7 +191,6 @@ class MyAcceptanceTest extends odAcceptanceTestCase
     $settings = $this->post("/my/settings/", $settings->export())->result;
 
     $this->assertEqual(0, $settings->notifications_new_days);
-    $this->assertEqual(0, $settings->notifications_new_comments);
     $this->assertEqual(0, $settings->notifications_related_activity);
     $this->assertEqual(0, $settings->notifications_shooting_photos);
     $this->assertEqual(0, $settings->photos_save_original);
@@ -203,7 +201,6 @@ class MyAcceptanceTest extends odAcceptanceTestCase
     $real_settings_collection = UserSettings::find();
     $this->assertEqual($real_settings_collection->count(), 1);
     $this->assertEqual($real_settings_collection->at(0)->getNotificationsNewDays(), $settings->notifications_new_days);
-    $this->assertEqual($real_settings_collection->at(0)->getNotificationsNewComments(), $settings->notifications_new_comments);
     $this->assertEqual($real_settings_collection->at(0)->getNotificationsRelatedActivity(), $settings->notifications_related_activity);
     $this->assertEqual($real_settings_collection->at(0)->getNotificationsShootingPhotos(), $settings->notifications_shooting_photos);
     $this->assertEqual($real_settings_collection->at(0)->getPhotosSaveOriginal(), $settings->photos_save_original);
