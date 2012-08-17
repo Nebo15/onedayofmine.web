@@ -105,13 +105,11 @@ class User extends ModelWithImage
 
   function getSettings()
   {
-    if(!$settings = $this->getUserSettings()) {
-      $settings = UserSettings::createDefault($this);
-      $this->setUserSettings($settings);
-      $this->save();
+    if(!$item = $this->getUserSettings())
+    {
+      $item = UserSettings::createDefault($this);
     }
-
-    return $settings;
+    return $item;
   }
 
   static function getSexTypes()
