@@ -51,6 +51,14 @@ class odTestsTools extends lmbAbstractTools
 
 	function getTestsUsers($all = false)
 	{
+    static $users;
+    if(!$users)
+      $users = $this->_getTestsUsers($all);
+    return $users;
+	}
+
+  protected function _getTestsUsers($all = false)
+  {
     $fb_test_users = lmbToolkit::instance()->loadTestsUsersInfo();
     if($all)
       $users_infos = $fb_test_users;
@@ -64,23 +72,23 @@ class odTestsTools extends lmbAbstractTools
     }
 
     $users = array();
-		foreach($users_infos as $user_info)
-		{
-			$user_info = (object) $user_info;
-			$user = new User();
-			$user->setFbUid($user_info->id);
-			$user->setFbAccessToken($user_info->access_token);
-			$user->import((new FacebookProfile($user))->getInfo());
+    foreach($users_infos as $user_info)
+    {
+      $user_info = (object) $user_info;
+      $user = new User();
+      $user->setFbUid($user_info->id);
+      $user->setFbAccessToken($user_info->access_token);
+      $user->import((new FacebookProfile($user))->getInfo());
 
       $settings = $user->getSettings();
       $settings->setSocialShareFacebook(0);
       $settings->setSocialShareTwitter(0);
       $user->setSettings($settings);
 
-			$users[] = $user;
-		}
-		return $users;
-	}
+      $users[] = $user;
+    }
+    return $users;
+  }
 
 	static function truncateTablesOf($model_classes)
 	{

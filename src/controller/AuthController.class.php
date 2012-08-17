@@ -6,7 +6,7 @@ class AuthController extends BaseJsonController
 {
   function doGuestLogin()
   {
-    if(!$this->request->hasPost())
+    if(!$this->request->isPost())
       return $this->_answerWithError('Use POST, Luke', null, 405);
     if(!$fb_access_token = $this->request->get('token'))
       return $this->_answerWithError('Token not given', null, 412);
