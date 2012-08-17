@@ -196,7 +196,7 @@ class DaysController extends BaseJsonController
     $day->setLikesCount($day->getLikesCount() + 1);
     $day->save();
 
-    return $this->_answerOk('TODO'); //$response
+    return $this->_answerOk($this->_exportDayWithSubentities($day));
   }
 
   function doUpdate()
