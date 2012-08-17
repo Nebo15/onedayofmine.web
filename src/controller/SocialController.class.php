@@ -37,18 +37,16 @@ class SocialController extends BaseJsonController
 
       $provider = $this->toolkit->getTwitter($access_token, $access_token_secret);
 
-      if(!$provider->getUid($this->error_list)) {
+      if(!$uid = $provider->getUid($this->error_list)) {
         return $this->_answerWithError($this->error_list->export(), null, 403);
       }
 
-      $this->toolkit->getUser()->setTwitterAccessToken($access_token);
-      $this->toolkit->getUser()->setTwitterAccessTokenSecret($access_token_secret);
-
-      // 2 requests is not optimal solution
-      $twitter_uid = (new TwitterProfile($this->_getUser()))->getInfo()['twitter_uid'];
-      $this->toolkit->getUser()->setTwitterUid($twitter_uid);
-
-      $this->toolkit->getUser()->save();
+      $user = $this->toolkit->getUser();
+      $user->setTwitterUid($uid);
+      $user->setTwitterAccessToken($access_token);
+      $user->setTwitterAccessTokenSecret($access_token_secret);
+      $user->getSettings()->setSocialShareTwitter(1);
+      $user->save();
 
       return $this->_answerOk($this->toolkit->getUser());
     }
