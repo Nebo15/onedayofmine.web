@@ -134,6 +134,11 @@ class lmbController
     return $this->current_action;
   }
 
+  function setRequest(lmbHttpRequest $request)
+  {
+    $this->request = $request;
+  }
+
   protected function _guessName()
   {
     if($pos = strpos(get_class($this), 'Controller'))

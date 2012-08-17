@@ -1,12 +1,12 @@
 <?php
 $conf = array(
   'options' => array(
-    'key' => 'AKIAI2WHHEPI4N5HQAFQ',
-    'secret' => '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',
+    'key' => 'AKIAJCNJELKDN2KVFFOA',
+    'secret' => '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',
     'default_cache_config' => __DIR__.'/../../var/',
     'certificate_authority' => true),
   'S3' => array(
-    'bucket' => 'onedayofmine-stage',
-    'enabled' => true
+    'bucket' => 'onedayofmine-test',
+    'enabled' => false
   )
 );

@@ -109,6 +109,16 @@ class lmbHttpRequest extends lmbSet
     return $this->__request_method;
   }
 
+  function setRequestMethod($method)
+  {
+    return $this->__request_method = $method;
+  }
+
+  function isPost()
+  {
+    return 'POST' == $this->getRequestMethod();
+  }
+
   /**
    * @deprecated
    */
@@ -149,6 +159,12 @@ class lmbHttpRequest extends lmbSet
     return $this->_get($this->__post, $key, $default);
   }
 
+  function setPost($key, $value)
+  {
+    $this->__post[$key] = $value;
+    $this->set($key, $value);
+  }
+
   function hasPost()
   {
     if($this->__pretend_post)
@@ -183,9 +199,22 @@ class lmbHttpRequest extends lmbSet
     return $this->_get($this->__cookies, $key, $default);
   }
 
+  function setCookie($key, $value)
+  {
+    $this->__cookies[$key] = $value;
+    $this->set($key, $value);
+  }
+
+  function setCookies($cookies)
+  {
+    $this->__cookies = $cookies;
+    foreach($cookies as $key => $value)
+      $this->set($key, $value);
+  }
+
   function getSafe($var,$default = LIMB_UNDEFINED)
   {
-    return htmlspecialchars(parent :: get($var,$default));
+    return htmlspecialchars($this->get($var,$default));
   }
 
   function getFiltered($key, $filter, $default = LIMB_UNDEFINED)

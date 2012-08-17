@@ -8,6 +8,7 @@ lmb_require('src/service/odNewsObserver.class.php');
 lmb_require('src/service/odRemoteApiMock.class.php');
 lmb_require('src/service/ImageHelper.class.php');
 lmb_require('src/service/odPostingService.class.php');
+require_once('amazon-sdk/sdk.class.php');
 
 class odTools extends lmbAbstractTools
 {
@@ -215,5 +216,20 @@ class odTools extends lmbAbstractTools
     }
 
     return $facebook_instances[$access_token];
+  }
+
+  public function getConcreteAmazonServiceConfig($name)
+  {
+    $conf = lmbToolkit::instance()->getConf('amazon');
+    if(!isset($conf[$name]))
+      throw new lmbException("Can't find amazon service settings for '$name'");
+    return $conf[$name];
+  }
+
+  public function createAmazonService($name)
+  {
+    $class_name = 'Amazon'.$name;
+    CFCredentials::set(array('@default' => lmbToolkit::instance()->getConf('amazon')['options']));
+    return new $class_name;
   }
 }
