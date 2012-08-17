@@ -37,6 +37,7 @@ class lmbLogCSVFileWriter extends lmbLogBaseWriter
 
         $tmp = preg_replace('#[\s]{2,}|[\n]#is', ' ', $value);
         $tmp = preg_replace('#image_content=[^&]*#is', 'image_conents=[img]', $tmp);
+        $tmp = str_replace(';', '%semicolon;', $tmp);
         $tmp = trim($tmp);
 
         $log_entrys[] = $tmp;
