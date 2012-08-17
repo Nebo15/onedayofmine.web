@@ -140,6 +140,8 @@ class MyAcceptanceTest extends odAcceptanceTestCase
     $settings->setNotificationsShootingPhotos(0);
     $settings->setPhotosSaveOriginal(0);
     $settings->setPhotosSaveFiltered(0);
+    $settings->setSocialShareFacebook(0);
+    $settings->setSocialShareTwitter(0);
 
     $this->main_user->setSettings($settings);
     $this->main_user->save();
@@ -153,6 +155,8 @@ class MyAcceptanceTest extends odAcceptanceTestCase
     $settings->setNotificationsShootingPhotos(1);
     $settings->setPhotosSaveOriginal(1);
     $settings->setPhotosSaveFiltered(1);
+    $settings->setSocialShareFacebook(1);
+    $settings->setSocialShareTwitter(1);
 
     $settings = $this->post("/my/settings/", $settings->export())->result;
 
@@ -162,5 +166,49 @@ class MyAcceptanceTest extends odAcceptanceTestCase
     $this->assertEqual(1, $settings->notifications_shooting_photos);
     $this->assertEqual(1, $settings->photos_save_original);
     $this->assertEqual(1, $settings->photos_save_filtered);
+    $this->assertEqual(1, $settings->social_share_facebook);
+    $this->assertEqual(1, $settings->social_share_twitter);
+
+    $real_settings = UserSettings::findOne();
+    $this->assertEqual($real_settings->getNotificationsNewDays(), $settings->notifications_new_days);
+    $this->assertEqual($real_settings->getNotificationsNewComments(), $settings->notifications_new_comments);
+    $this->assertEqual($real_settings->getNotificationsRelatedActivity(), $settings->notifications_related_activity);
+    $this->assertEqual($real_settings->getNotificationsShootingPhotos(), $settings->notifications_shooting_photos);
+    $this->assertEqual($real_settings->getPhotosSaveOriginal(), $settings->photos_save_original);
+    $this->assertEqual($real_settings->getPhotosSaveFiltered(), $settings->photos_save_filtered);
+    $this->assertEqual($real_settings->getSocialShareFacebook(), $settings->social_share_facebook);
+    $this->assertEqual($real_settings->getSocialShareTwitter(), $settings->social_share_twitter);
+
+    $settings = new UserSettings();
+    $settings->setNotificationsNewDays(0);
+    $settings->setNotificationsNewComments(0);
+    $settings->setNotificationsRelatedActivity(0);
+    $settings->setNotificationsShootingPhotos(0);
+    $settings->setPhotosSaveOriginal(0);
+    $settings->setPhotosSaveFiltered(0);
+    $settings->setSocialShareFacebook(0);
+    $settings->setSocialShareTwitter(0);
+
+    $settings = $this->post("/my/settings/", $settings->export())->result;
+
+    $this->assertEqual(0, $settings->notifications_new_days);
+    $this->assertEqual(0, $settings->notifications_new_comments);
+    $this->assertEqual(0, $settings->notifications_related_activity);
+    $this->assertEqual(0, $settings->notifications_shooting_photos);
+    $this->assertEqual(0, $settings->photos_save_original);
+    $this->assertEqual(0, $settings->photos_save_filtered);
+    $this->assertEqual(0, $settings->social_share_facebook);
+    $this->assertEqual(0, $settings->social_share_twitter);
+
+    $real_settings_collection = UserSettings::find();
+    $this->assertEqual($real_settings_collection->count(), 1);
+    $this->assertEqual($real_settings_collection->at(0)->getNotificationsNewDays(), $settings->notifications_new_days);
+    $this->assertEqual($real_settings_collection->at(0)->getNotificationsNewComments(), $settings->notifications_new_comments);
+    $this->assertEqual($real_settings_collection->at(0)->getNotificationsRelatedActivity(), $settings->notifications_related_activity);
+    $this->assertEqual($real_settings_collection->at(0)->getNotificationsShootingPhotos(), $settings->notifications_shooting_photos);
+    $this->assertEqual($real_settings_collection->at(0)->getPhotosSaveOriginal(), $settings->photos_save_original);
+    $this->assertEqual($real_settings_collection->at(0)->getPhotosSaveFiltered(), $settings->photos_save_filtered);
+    $this->assertEqual($real_settings_collection->at(0)->getSocialShareFacebook(), $settings->social_share_facebook);
+    $this->assertEqual($real_settings_collection->at(0)->getSocialShareTwitter(), $settings->social_share_twitter);
 	}
 }
