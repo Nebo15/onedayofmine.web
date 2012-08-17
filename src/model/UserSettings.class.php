@@ -14,9 +14,20 @@ lmb_require('src/model/BaseModel.class.php');
  */
 class UserSettings extends BaseModel
 {
-  static function createDefault()
+  protected function _defineRelations()
+  {
+    $this->_belongs_to = array (
+      'user' => array (
+        'field' => 'user_settings_id',
+        'class' => 'User',
+      )
+    );
+  }
+
+  static function createDefault(User $user)
   {
     $item = new UserSettings();
+    $item->setUser($user);
     $item->setNotificationsNewDays(1);
     $item->setNotificationsNewComments(1);
     $item->setNotificationsRelatedActivity(1);
@@ -28,9 +39,10 @@ class UserSettings extends BaseModel
     return $item;
   }
 
-  static function createQuiet()
+  static function createQuiet(User $user)
   {
     $item = new UserSettings();
+    $item->setUser($user);
     $item->setNotificationsNewDays(0);
     $item->setNotificationsNewComments(0);
     $item->setNotificationsRelatedActivity(0);
