@@ -57,16 +57,10 @@ class DaysController extends BaseJsonController
 
     $answer = $this->_exportDayWithSubentities($day);
 
-    if($this->_getUser()->getSettings()->getSocialShareFacebook())
-      $this->toolkit->getFacebookProfile($this->_getUser())
-        ->shareDayBegin($day);
-
-    if($this->_getUser()->getTwitterUid() && $this->_getUser()->getSettings()->getSocialShareTwitter())
-      $this->toolkit->getTwitterProfile($this->_getUser())
-        ->shareDayBegin($day);
-
     // Notify friends about new day
     $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_DAY, $day);
+
+    $this->toolkit->getPostingService()->shareDayBegin($day);
 
     return $this->_answerOk($answer);
   }
@@ -183,8 +177,7 @@ class DaysController extends BaseJsonController
     if(!$day = Day::findById($this->request->id))
       return $this->_answerWithError("Day not found by id");
 
-    if($this->_getUser()->getSettings()->getSocialShareFacebook())
-      $response = $this->toolkit->getFacebookProfile($this->_getUser())->shareDay($day);
+    $this->toolkit->getPostingService()->shareDay($day);
 
     return $this->_answerOk($response);
   }
@@ -196,10 +189,6 @@ class DaysController extends BaseJsonController
 
     if(!$day = Day::findById($this->request->id))
       return $this->_answerWithError("Day not found by id");
-
-    // TODO FIXME
-    // $response = lmbToolkit::instance()->getFacebookProfile($user)
-    //               ->likeDay($day);
 
     // Notify friends about day like
     $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_LIKE, $day);

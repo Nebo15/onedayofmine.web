@@ -50,7 +50,7 @@ class AuthController extends BaseJsonController
   {
     $user = new User();
     $user->setFbAccessToken($fb_access_token);
-    $profile = $this->toolkit->getFacebookProfile($user);
+    $profile = new FacebookProfile($user);
     $user->import($profile->getInfo());
     $user->save();
 

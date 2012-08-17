@@ -24,7 +24,7 @@ class UserSettings extends BaseModel
     $item->setPhotosSaveOriginal(1);
     $item->setPhotosSaveFiltered(1);
     $item->setSocialShareFacebook(1);
-    $item->setSocialShareTwitter(1);
+    $item->setSocialShareTwitter(0);
     return $item;
   }
 

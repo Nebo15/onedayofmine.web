@@ -4,10 +4,10 @@ lmb_require('src/service/social_provider/odFacebook.class.php');
 lmb_require('src/service/social_provider/odTwitter.class.php');
 lmb_require('src/service/social_profile/FacebookProfile.class.php');
 lmb_require('src/service/social_profile/TwitterProfile.class.php');
-lmb_require('src/service/social_profile/FakeProfile.class.php');
 lmb_require('src/service/odNewsObserver.class.php');
 lmb_require('src/service/odRemoteApiMock.class.php');
 lmb_require('src/service/ImageHelper.class.php');
+lmb_require('src/service/odPostingService.class.php');
 
 class odTools extends lmbAbstractTools
 {
@@ -44,6 +44,18 @@ class odTools extends lmbAbstractTools
     lmbToolkit :: instance()->getSession()->destroy('user_id');
   }
 
+  /**
+   * @return odPostingService
+   */
+  function getPostingService(User $user = null)
+  {
+    static $posting_service;
+
+    if(!$posting_service)
+      $posting_service = new odPostingService();
+
+    return $posting_service;
+  }
 
   /**
    * @return odNewsObserver
@@ -101,6 +113,22 @@ class odTools extends lmbAbstractTools
     return lmb_env_get('STATIC_HOST_URL').$path;
   }
 
+  function getDayPageUrl(Day $day)
+  {
+    if(!$day->getId())
+      throw new lmbException("Can't get day ID.");
+
+    return $this->getSiteUrl('pages/'.$day->getId().'/day');
+  }
+
+  function getMomentPageUrl(Moment $moment)
+  {
+    if(!$moment->getId())
+      throw new lmbException("Can't get moment ID.");
+
+    return $this->getSiteUrl('pages/'.$moment->getId().'/moment');
+  }
+
   function getAbsolutePath($www_path)
   {
     return lmb_env_get('APP_DIR')."/www/".$www_path;
@@ -124,39 +152,10 @@ class odTools extends lmbAbstractTools
       // var_dump($value);
       $user->setFbUid($value['id']);
       $user->setFbAccessToken($value['access_token']);
-      $user->import($this->getFacebookProfile($user)->getInfo());
+      $user->import((new FacebookProfile($user))->getInfo());
       $users['data'][$key]['email'] = $user->getEmail();
     }
   	return $users['data'];
-  }
-
-  /**
-   * @param User $user
-   * @return FacebookProfile
-   */
-  function getFacebookProfile(User $user)
-  {
-    lmb_assert_true($user);
-    if(0 == $user->getSettings()->getSocialShareFacebook())
-      return new FakeProfile($user);
-
-    lmb_assert_true($user->getFbAccessToken(), 'Facebook access token not specified.');
-    return new FacebookProfile($user);
-  }
-
-  /**
-   * @param User $user
-   * @return TwitterProfile
-   */
-  function getTwitterProfile(User $user)
-  {
-    lmb_assert_true($user);
-    if(0 == $user->getSettings()->getSocialShareTwitter())
-      return new FakeProfile($user);
-
-    lmb_assert_true($user->getTwitterAccessToken(), 'Twitter access token not specified.');
-    lmb_assert_true($user->getTwitterAccessTokenSecret(), 'Twitter access token secret not specified.');
-    return new TwitterProfile($user);
   }
 
   /**
@@ -185,7 +184,6 @@ class odTools extends lmbAbstractTools
           $twitter_instances[$access_token],
           lmbToolkit::instance()->createCacheConnectionByDSN('file:///'.lmb_var_dir().'/twitter_cache/'.$access_token)
         );
-
     }
 
     return $twitter_instances[$access_token];
@@ -202,7 +200,6 @@ class odTools extends lmbAbstractTools
     static $facebook_instances = array();
 
     if(!array_key_exists($access_token, $facebook_instances)) {
-      // NOTICE: connection can be cached
       $instance = new odFacebook(odFacebook::getConfig());
 
       if(!is_null($access_token))
@@ -220,5 +217,3 @@ class odTools extends lmbAbstractTools
     return $facebook_instances[$access_token];
   }
 }
-
-
