@@ -116,8 +116,8 @@ abstract class odAcceptanceTestCase extends WebTestCase
     $decoded_body = json_decode($raw_response);
     if ($decoded_body === null) {
       throw new lmbException("Can't parse response", array(
-      		'url' => $this->getUrl(),
-      		'raw' => $raw_response
+          'url' => $this->getUrl(),
+          'raw' => $raw_response
       ));
     }
 
@@ -178,10 +178,10 @@ abstract class odAcceptanceTestCase extends WebTestCase
 
   function assertResponse($responses, $message = '%s')
   {
-  	$responses = (is_array($responses) ? $responses : array($responses));
+    $responses = (is_array($responses) ? $responses : array($responses));
     $code = $this->browser->getResponseCode();
     $message = sprintf('%s', "Expecting response in [" .
-    	implode(", ", $responses) . "] got [$code] in response:".($this->browser->getContent()));
+      implode(", ", $responses) . "] got [$code] in response:".($this->browser->getContent()));
     return $this->assertTrue(in_array($code, $responses), $message);
   }
 

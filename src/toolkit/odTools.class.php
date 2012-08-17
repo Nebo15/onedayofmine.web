@@ -137,11 +137,11 @@ class odTools extends lmbAbstractTools
 
   function loadTestsUsersInfo()
   {
-  	$fb = $this->toolkit->getFacebook();
-  	$params = array(
-  			'access_token' => $fb->getApplicationAccessToken()
-  	);
-  	$users = $fb->api("/".$fb->getAppId()."/accounts/test-users", "GET", $params);
+    $fb = $this->toolkit->getFacebook();
+    $params = array(
+        'access_token' => $fb->getApplicationAccessToken()
+    );
+    $users = $fb->api("/".$fb->getAppId()."/accounts/test-users", "GET", $params);
 
     if(!$users['data'])
     {
@@ -156,7 +156,7 @@ class odTools extends lmbAbstractTools
       $user->import((new FacebookProfile($user))->getInfo());
       $users['data'][$key]['email'] = $user->getEmail();
     }
-  	return $users['data'];
+    return $users['data'];
   }
 
   /**

@@ -65,17 +65,17 @@ class User extends ModelWithImage
 
   protected function _createValidator()
   {
-  	$validator = new lmbValidator();
-  	$validator->addRequiredRule('name');
+    $validator = new lmbValidator();
+    $validator->addRequiredRule('name');
 //    $validator->addRequiredRule('email');
-  	$validator->addRequiredRule('fb_uid');
-  	$validator->addRequiredRule('fb_access_token');
-  	$validator->addRequiredRule('fb_profile_utime');
-  	$validator->addRequiredRule('timezone');
-  	$validator->addRequiredRule('sex');
+    $validator->addRequiredRule('fb_uid');
+    $validator->addRequiredRule('fb_access_token');
+    $validator->addRequiredRule('fb_profile_utime');
+    $validator->addRequiredRule('timezone');
+    $validator->addRequiredRule('sex');
     $validator->addRule(new lmbValidValueRule('sex', array_values(self::getSexTypes())), 'Wrong sex value');
-  	$validator->addRequiredRule('birthday');
-  	return $validator;
+    $validator->addRequiredRule('birthday');
+    return $validator;
   }
 
   function exportForApi()

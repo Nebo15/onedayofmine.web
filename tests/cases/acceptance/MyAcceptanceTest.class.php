@@ -12,42 +12,42 @@ class MyAcceptanceTest extends odAcceptanceTestCase
   /**
    * @api description Returns <a href="#Entity:User">profile</a> of current logged in user.
    */
-	function testProfile()
-	{
-		$this->main_user->save();
-		$this->_loginAndSetCookie($this->main_user);
+  function testProfile()
+  {
+    $this->main_user->save();
+    $this->_loginAndSetCookie($this->main_user);
 
-		$profile = $this->get('/my/profile')->result;
-		if($this->assertResponse(200))
-		{
-			$this->assertEqual($this->main_user->id, $profile->id);
-			$this->assertEqual($this->main_user->name, $profile->name);
+    $profile = $this->get('/my/profile')->result;
+    if($this->assertResponse(200))
+    {
+      $this->assertEqual($this->main_user->id, $profile->id);
+      $this->assertEqual($this->main_user->name, $profile->name);
       $this->assertEqual($this->main_user->email, $profile->email);
-			$this->assertEqual($this->main_user->sex, $profile->sex);
-			$this->assertProperty($profile, 'image_36');
+      $this->assertEqual($this->main_user->sex, $profile->sex);
+      $this->assertProperty($profile, 'image_36');
       $this->assertProperty($profile, 'image_72');
-			$this->assertEqual($this->main_user->occupation, $profile->occupation);
+      $this->assertEqual($this->main_user->occupation, $profile->occupation);
       $this->assertEqual($this->main_user->location, $profile->location);
       $this->assertEqual($this->main_user->birthday, $profile->birthday);
       $this->assertEqual($this->main_user->getFollowers()->count(), $profile->followers_count);
       $this->assertEqual($this->main_user->getFollowing()->count(), $profile->following_count);
       $this->assertEqual($this->main_user->getFavouriteDays()->count(), $profile->favourites_count);
       $this->assertEqual($this->main_user->getDays()->count(), $profile->days_count);
-		}
-	}
+    }
+  }
 
-	/**
-	 * @api description Changes fields of current user <a href="#Entity:User">profile</a> and returns them (with new values). You are free to make selective changes.
-	 */
-	function testUpdateProfile()
-	{
+  /**
+   * @api description Changes fields of current user <a href="#Entity:User">profile</a> and returns them (with new values). You are free to make selective changes.
+   */
+  function testUpdateProfile()
+  {
     $this->main_user->save();
     $this->_loginAndSetCookie($this->main_user);
 
-		$update = new stdClass();
-		$update->name = $this->generator->string(25);
+    $update = new stdClass();
+    $update->name = $this->generator->string(25);
     $update->sex = User::SEX_FEMALE;
-		$update->occupation = $this->generator->string(25);
+    $update->occupation = $this->generator->string(25);
     $update->location = $this->generator->string(25);
     $update->email = $this->generator->email();
     $update->birthday = $this->generator->date_sql();
@@ -73,7 +73,7 @@ class MyAcceptanceTest extends odAcceptanceTestCase
       $this->assertEqual($loaded_user->birthday, $updated_profile->birthday);
       $this->assertEqual($loaded_user->email, $updated_profile->email);
     }
-	}
+  }
 
   function testUpdateProfile_Partial()
   {
@@ -97,11 +97,11 @@ class MyAcceptanceTest extends odAcceptanceTestCase
       $this->assertEqual($loaded_user->birthday, $updated_profile->birthday);
     }
   }
-	/**
-	 * @api Returns setting of current user.
-	 */
-	function testSettings()
-	{
+  /**
+   * @api Returns setting of current user.
+   */
+  function testSettings()
+  {
     $this->main_user->save();
 
     $settings = new UserSettings();
@@ -125,12 +125,12 @@ class MyAcceptanceTest extends odAcceptanceTestCase
     $this->assertEqual(0, $settings->notifications_shooting_photos);
     $this->assertEqual(1, $settings->photos_save_original);
     $this->assertEqual(0, $settings->photos_save_filtered);
-	}
-	/**
-	 * @api Changes fields of current <a href="#Entity:UserSettings">user settings</a> and returns them (with new values). You are free to make selective changes.
-	 */
-	function testUpdateSettings()
-	{
+  }
+  /**
+   * @api Changes fields of current <a href="#Entity:UserSettings">user settings</a> and returns them (with new values). You are free to make selective changes.
+   */
+  function testUpdateSettings()
+  {
     $this->main_user->save();
 
     $settings = new UserSettings();
@@ -210,5 +210,5 @@ class MyAcceptanceTest extends odAcceptanceTestCase
     $this->assertEqual($real_settings_collection->at(0)->getPhotosSaveFiltered(), $settings->photos_save_filtered);
     $this->assertEqual($real_settings_collection->at(0)->getSocialShareFacebook(), $settings->social_share_facebook);
     $this->assertEqual($real_settings_collection->at(0)->getSocialShareTwitter(), $settings->social_share_twitter);
-	}
+  }
 }

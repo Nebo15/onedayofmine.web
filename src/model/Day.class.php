@@ -87,13 +87,13 @@ class Day extends ModelWithImage
    */
   static function findByUsersIds(array $ids, $from_id = null, $to_id = null, $limit = null)
   {
-		$criteria = lmbSQLCriteria::in('user_id', $ids);
-		$criteria->add('is_deleted = 0');
-		if($from_id)
-			$criteria->add(lmbSQLCriteria::less('id', $from_id));
-		if($to_id)
-			$criteria->add(lmbSQLCriteria::greater('id', $to_id));
-		return Day::find(array(
+    $criteria = lmbSQLCriteria::in('user_id', $ids);
+    $criteria->add('is_deleted = 0');
+    if($from_id)
+      $criteria->add(lmbSQLCriteria::less('id', $from_id));
+    if($to_id)
+      $criteria->add(lmbSQLCriteria::greater('id', $to_id));
+    return Day::find(array(
       'criteria' => $criteria,
       'limit' => (!$limit || $limit > 100) ? 100 : $limit,
       'sort' => array('id' => 'DESC'),
@@ -105,12 +105,12 @@ class Day extends ModelWithImage
    */
   static function findNew($from_id = null, $to_id = null, $limit = null)
   {
-		$criteria = lmbSQLCriteria::equal('is_deleted', 0);
-		if($from_id)
-			$criteria->add(lmbSQLCriteria::less('id', $from_id));
-		if($to_id)
-			$criteria->add(lmbSQLCriteria::greater('id', $to_id));
-		return Day::find(array(
+    $criteria = lmbSQLCriteria::equal('is_deleted', 0);
+    if($from_id)
+      $criteria->add(lmbSQLCriteria::less('id', $from_id));
+    if($to_id)
+      $criteria->add(lmbSQLCriteria::greater('id', $to_id));
+    return Day::find(array(
       'criteria' => $criteria,
       'limit' => (!$limit || $limit > 100) ? 100 : $limit,
       'sort' => array('id' => 'DESC')
@@ -119,12 +119,12 @@ class Day extends ModelWithImage
 
   static function findUnfinished(User $user)
   {
-  	$criteria = lmbSQLCriteria::equal('is_deleted', 0);
-  	$criteria->add(lmbSQLCriteria::equal('is_ended', 0));
-  	$days = $user->getDays()->find(array('criteria' => $criteria));
-  	if(count($days) > 1)
-  		throw new lmbException("User {$user->getId()} has more than one open day");
-  	return $days->at(0);
+    $criteria = lmbSQLCriteria::equal('is_deleted', 0);
+    $criteria->add(lmbSQLCriteria::equal('is_ended', 0));
+    $days = $user->getDays()->find(array('criteria' => $criteria));
+    if(count($days) > 1)
+      throw new lmbException("User {$user->getId()} has more than one open day");
+    return $days->at(0);
   }
 
   static function findByString($query, $from_id = null, $to_id = null, $limit = null)

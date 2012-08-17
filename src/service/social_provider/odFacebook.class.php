@@ -9,12 +9,12 @@ class odFacebook extends Facebook implements odSocialServicesProviderInterface
     return (array) lmbToolkit::instance()->getConf('facebook');
   }
 
-	function __construct(array $config = null)
-	{
-		if('cli' == php_sapi_name())
-			session_id('CLI');
-		parent::__construct($config ?: self::getConfig());
-	}
+  function __construct(array $config = null)
+  {
+    if('cli' == php_sapi_name())
+      session_id('CLI');
+    parent::__construct($config ?: self::getConfig());
+  }
 
   function makeQuery($query)
   {

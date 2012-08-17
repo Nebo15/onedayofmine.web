@@ -72,29 +72,29 @@ class UsersController extends BaseJsonController
     if($this->_getUser()->getId() == $this->request->id)
       return $this->_answerWithError("You can't follow youself.");
 
-  	if(!$user = User::findById($this->request->id))
-  		return $this->_answerNotFound("User not found by id '{$this->request->id}'");
+    if(!$user = User::findById($this->request->id))
+      return $this->_answerNotFound("User not found by id '{$this->request->id}'");
 
-  	$following = $this->_getUser()->getFollowing();
-  	$following->add($user);
-  	$following->save();
+    $following = $this->_getUser()->getFollowing();
+    $following->add($user);
+    $following->save();
 
     // Notify user that somebody follow hem
     $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_FOLLOW, $user);
 
-  	return $this->_answerOk();
+    return $this->_answerOk();
   }
 
   function doUnfollow()
   {
-  	if(!$user = User::findById($this->request->id))
-  		return $this->_answerNotFound("User not found by id '{$this->request->id}'");
+    if(!$user = User::findById($this->request->id))
+      return $this->_answerNotFound("User not found by id '{$this->request->id}'");
 
-  	$following = $this->_getUser()->getFollowing();
-  	$following->remove($user);
-  	$following->save();
+    $following = $this->_getUser()->getFollowing();
+    $following->remove($user);
+    $following->save();
 
-  	return $this->_answerOk();
+    return $this->_answerOk();
   }
 
   function doGuestSearch()
@@ -116,10 +116,10 @@ class UsersController extends BaseJsonController
   protected function _loadUserFromRequest()
   {
     if(!$this->request->has('id'))
-  	{
+    {
       if(!$user = $this->_getUser())
         return $this->_answerUnauthorized();
-  	}
+    }
     else
     {
       if(!$user = User::findById($this->request->id))

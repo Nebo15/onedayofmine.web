@@ -102,8 +102,8 @@ abstract class odControllerTestCase extends UnitTestCase
     $decoded_body = json_decode($raw_response);
     if ($decoded_body === null) {
       throw new lmbException("Can't parse response", array(
-      		'url' => $this->getUrl(),
-      		'raw' => $raw_response
+          'url' => $this->getUrl(),
+          'raw' => $raw_response
       ));
     }
 
@@ -151,10 +151,10 @@ abstract class odControllerTestCase extends UnitTestCase
 
   function assertResponse($responses, $message = '%s')
   {
-  	$responses = (is_array($responses) ? $responses : array($responses));
+    $responses = (is_array($responses) ? $responses : array($responses));
     $code = $this->last_response->code;
     $message = sprintf('%s', "Expecting response in [" .
-    	implode(", ", $responses) . "] got [$code] in response:".($this->last_response_raw));
+      implode(", ", $responses) . "] got [$code] in response:".($this->last_response_raw));
     return $this->assertTrue(in_array($code, $responses), $message);
   }
 

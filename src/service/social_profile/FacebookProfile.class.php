@@ -164,7 +164,7 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
 
   protected function _getUserFbFieldsMap()
   {
-  	return array(
+    return array(
       'uid', 'email', 'first_name', 'last_name', 'sex', 'timezone', 'profile_update_time',
       'pic', 'pic_big', 'work', 'current_location', 'birthday_date'
     );
@@ -172,21 +172,21 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
 
   protected function _mapFbInfo($fb)
   {
-  	return array(
-  		'fb_uid'           => $fb['uid'],
+    return array(
+      'fb_uid'           => $fb['uid'],
       'email'            => $fb['email'],
-  		'name'             => $fb['first_name'] . ' ' . $fb['last_name'],
-  		'sex'              => $fb['sex'],
-  		'timezone'         => $fb['timezone'],
-  		'fb_profile_utime' => $fb['profile_update_time'],
-  		'pic'              => $fb['pic'],
-  		'occupation'       => isset($fb['work']['position']['name'])
-  	 													? $fb['work']['position']['name']
-  														: '',
-  		'current_location' => isset($fb['current_location']['name'])
-  														? $fb['current_location']['name']
-  														: '',
-  		'birthday'         => date('Y-m-d', strtotime($fb['birthday_date']))
-  	);
+      'name'             => $fb['first_name'] . ' ' . $fb['last_name'],
+      'sex'              => $fb['sex'],
+      'timezone'         => $fb['timezone'],
+      'fb_profile_utime' => $fb['profile_update_time'],
+      'pic'              => $fb['pic'],
+      'occupation'       => isset($fb['work']['position']['name'])
+                               ? $fb['work']['position']['name']
+                              : '',
+      'current_location' => isset($fb['current_location']['name'])
+                              ? $fb['current_location']['name']
+                              : '',
+      'birthday'         => date('Y-m-d', strtotime($fb['birthday_date']))
+    );
   }
 }

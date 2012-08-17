@@ -3,52 +3,52 @@ lmb_require('tests/cases/acceptance/odAcceptanceTestCase.class.php');
 
 class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
 {
-	function setUp()
-	{
-		parent::setUp();
-		odTestsTools::truncateTablesOf('Day', 'Moment', 'DayComment');
-	}
+  function setUp()
+  {
+    parent::setUp();
+    odTestsTools::truncateTablesOf('Day', 'Moment', 'DayComment');
+  }
 
-	function testStart_Negative()
-	{
-		$this->post('days/start');
-		$this->assertResponse(401);
+  function testStart_Negative()
+  {
+    $this->post('days/start');
+    $this->assertResponse(401);
 
     $this->main_user->save();
-		$this->_loginAndSetCookie($this->main_user);
+    $this->_loginAndSetCookie($this->main_user);
 
-		$this->get('days/start');
-		$this->assertResponse(405);
+    $this->get('days/start');
+    $this->assertResponse(405);
 
-		$errors = $this->post('days/start')->errors;
-		$this->assertResponse(400);
-		$this->assertEqual('array', gettype($errors));
-		$this->assertTrue(0 < count($errors));
-	}
+    $errors = $this->post('days/start')->errors;
+    $this->assertResponse(400);
+    $this->assertEqual('array', gettype($errors));
+    $this->assertTrue(0 < count($errors));
+  }
 
-	/**
-	 * @api description Starts a day, returns created <a href="#Entity:Day">day</a>.
-	 * @api input param string title
+  /**
+   * @api description Starts a day, returns created <a href="#Entity:Day">day</a>.
+   * @api input param string title
    * @api input option string occupation If omited, then user profile occupation will be used
    * @api input option string location If omited, then user profile occupation will be used
-	 * @api input param string type One of pre-defined types, see: GET day/type_names request
-	 */
-	function testStart()
-	{
+   * @api input param string type One of pre-defined types, see: GET day/type_names request
+   */
+  function testStart()
+  {
     $this->main_user->save();
 
-		$this->_loginAndSetCookie($this->main_user);
+    $this->_loginAndSetCookie($this->main_user);
 
     $day = $this->generator->day($this->main_user);
     $params = $day->exportForApi();
 
-		$response = $this->post('days/start', array(
+    $response = $this->post('days/start', array(
       'title' => $params->title,
       'location' => $params->location,
       'occupation' => $params->occupation,
       'type' => $params->type,
     ));
-		if($this->assertResponse(200))
+    if($this->assertResponse(200))
     {
       if($this->assertProperty($response->result, 'user'))
         $this->assertValidUserJson($day->getUser(), $response->result->user);
@@ -59,7 +59,7 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
       $this->assertEqual(0, $response->result->likes_count);
       $this->assertEqual(0, $response->result->is_ended);
     }
-	}
+  }
 
   function testStart_withNoOccupation() {
 
@@ -124,36 +124,36 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
 
   }
 
-	/**
-	 * @api description Creates <a href="#Entity:Moment">moment</a> in current active day and returns it.
-	 * @api input param string description
-	 * @api input param string image_content File contents, that was previously encoded by base64
+  /**
+   * @api description Creates <a href="#Entity:Moment">moment</a> in current active day and returns it.
+   * @api input param string description
+   * @api input param string image_content File contents, that was previously encoded by base64
    * @api input option time ISO time of moment, when image was created
-	 */
-	function testCreateMoment()
-	{
-		$day = $this->generator->day($this->main_user);
-		$day->setIsEnded(0);
-		$day->save();
+   */
+  function testCreateMoment()
+  {
+    $day = $this->generator->day($this->main_user);
+    $day->setIsEnded(0);
+    $day->save();
 
-		$this->_loginAndSetCookie($this->main_user);
-		$res = $this->post('days/'.$day->getId().'/moment_create', array(
-				'description' => $description = $this->generator->string(200),
-				'image_content' => base64_encode($this->generator->image()),
+    $this->_loginAndSetCookie($this->main_user);
+    $res = $this->post('days/'.$day->getId().'/moment_create', array(
+        'description' => $description = $this->generator->string(200),
+        'image_content' => base64_encode($this->generator->image()),
         'time' => $time = '2005-08-09T18:31:42+03:00',
-		))->result;
+    ))->result;
 
-		if($this->assertResponse(200))
-		{
-			$this->assertEqual($day->getMoments()->at(0)->getId(), $res->id);
-			$this->assertEqual($day->getId(), $res->day_id);
-			$this->assertProperty($res, 'image_266');
+    if($this->assertResponse(200))
+    {
+      $this->assertEqual($day->getMoments()->at(0)->getId(), $res->id);
+      $this->assertEqual($day->getId(), $res->day_id);
+      $this->assertProperty($res, 'image_266');
       $this->assertProperty($res, 'image_532');
-			$this->assertEqual(0, $res->likes_count);
-			$this->assertProperty($res, 'ctime');
+      $this->assertEqual(0, $res->likes_count);
+      $this->assertProperty($res, 'ctime');
       $this->assertEqual($res->time, $time);
-		}
-	}
+    }
+  }
 
   function testCreateMoment_withGPS()
   {
@@ -253,22 +253,22 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
     }
   }
 
-	/**
-	 * @api description Finish current day.
-	 */
-	function testFinish()
-	{
-		$day = $this->generator->day($this->main_user);
-		$day->save();
+  /**
+   * @api description Finish current day.
+   */
+  function testFinish()
+  {
+    $day = $this->generator->day($this->main_user);
+    $day->save();
 
-		$this->_loginAndSetCookie($this->main_user);
-		$this->post('days/'.$day->getId().'/finish')->result;
+    $this->_loginAndSetCookie($this->main_user);
+    $this->post('days/'.$day->getId().'/finish')->result;
 
-		$this->assertResponse(200);
-	}
+    $this->assertResponse(200);
+  }
 
-	//TODO
-	function testFinish_NotFound() {}
+  //TODO
+  function testFinish_NotFound() {}
 
   function testUpdate_NotFound()
   {

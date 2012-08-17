@@ -201,11 +201,11 @@ class DaysController extends BaseJsonController
 
   function doUpdate()
   {
-  	if(!$this->request->hasPost())
-  		return $this->_answerWithError('Not a POST request');
+    if(!$this->request->hasPost())
+      return $this->_answerWithError('Not a POST request');
 
-  	if(!$day = Day::findById($this->request->id))
-  		return $this->_answerNotFound('Day not found');
+    if(!$day = Day::findById($this->request->id))
+      return $this->_answerNotFound('Day not found');
 
     if($this->_getUser()->getId() != $day->getUserId())
       return $this->_answerNotFound('Day not found');
@@ -213,28 +213,28 @@ class DaysController extends BaseJsonController
     if($this->request->get('cover_content'))
       $day->attachImage(base64_decode($this->request->get('cover_content')));
 
-  	return $this->_importSaveAndAnswer($day, array('title', 'occupation', 'location', 'type'));
+    return $this->_importSaveAndAnswer($day, array('title', 'occupation', 'location', 'type'));
   }
 
 
   function doDelete()
   {
-  	if(!$this->request->hasPost())
-  		return $this->_answerWithError('Not a POST request');
+    if(!$this->request->hasPost())
+      return $this->_answerWithError('Not a POST request');
 
-  	if(!$day = Day::findById($this->request->id))
-  		return $this->_answerNotFound('Day not found');
+    if(!$day = Day::findById($this->request->id))
+      return $this->_answerNotFound('Day not found');
 
     if($day->getUserId() != $this->_getUser()->getId())
       return $this->_answerNotFound('Day not found');
 
-  	$day->setIsDeleted(1);
-  	$day->save();
+    $day->setIsDeleted(1);
+    $day->save();
 
     // Delete corresponding news
     lmbActiveRecord :: delete('News', 'day_id='.$day->getId());
 
-  	return $this->_answerOk();
+    return $this->_answerOk();
   }
 
   function doRestore()
@@ -257,7 +257,7 @@ class DaysController extends BaseJsonController
   function doFollowingUsers()
   {
     list($from, $to, $limit) = $this->_getFromToLimitations();
-  	$users_ids = lmbArrayHelper::getColumnValues('id', $this->_getUser()->getFollowing());
+    $users_ids = lmbArrayHelper::getColumnValues('id', $this->_getUser()->getFollowing());
 
     $days = Day::findByUsersIds($users_ids, $from, $to, $limit);
 
@@ -270,7 +270,7 @@ class DaysController extends BaseJsonController
 
       $answer[] = $export;
     }
-		return $this->_answerOk($answer);
+    return $this->_answerOk($answer);
   }
 
   function doGuestNew()
@@ -291,7 +291,7 @@ class DaysController extends BaseJsonController
       $answer[] = $export;
     }
 
-  	return $this->_answerOk($answer);
+    return $this->_answerOk($answer);
   }
 
   function doGuestInteresting()
@@ -341,32 +341,32 @@ class DaysController extends BaseJsonController
 
   function doMarkFavourite()
   {
-  	if(!$this->request->hasPost())
-  		return $this->_answerWithError('Not a POST request');
+    if(!$this->request->hasPost())
+      return $this->_answerWithError('Not a POST request');
 
-  	if(!$day = Day::findById($this->request->id))
-  		return $this->_answerNotFoound('Day not found');
+    if(!$day = Day::findById($this->request->id))
+      return $this->_answerNotFoound('Day not found');
 
-  	$favourites = $this->_getUser()->getFavouriteDays();
-  	$favourites->add($day);
-  	$favourites->save();
+    $favourites = $this->_getUser()->getFavouriteDays();
+    $favourites->add($day);
+    $favourites->save();
 
-  	return $this->_answerOk();
+    return $this->_answerOk();
   }
 
   function doUnmarkFavourite()
   {
-  	if(!$this->request->hasPost())
-  		return $this->_answerWithError('Not a POST request');
+    if(!$this->request->hasPost())
+      return $this->_answerWithError('Not a POST request');
 
-  	if(!$day = Day::findById($this->request->id))
-  		return $this->_answerNotFoound('Day not found');
+    if(!$day = Day::findById($this->request->id))
+      return $this->_answerNotFoound('Day not found');
 
-  	$favourites = $this->_getUser()->getFavouriteDays();
-  	$favourites->remove($day);
-  	$favourites->save();
+    $favourites = $this->_getUser()->getFavouriteDays();
+    $favourites->remove($day);
+    $favourites->save();
 
-  	return $this->_answerOk();
+    return $this->_answerOk();
   }
 
   function doMy()

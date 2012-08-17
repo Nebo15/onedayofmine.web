@@ -3,8 +3,8 @@ lmb_require('src/controller/BaseJsonController.class.php');
 
 class MyController extends BaseJsonController
 {
-	function doProfile()
-	{
+  function doProfile()
+  {
     $user = $this->_getUser();
     if($this->request->hasPost())
     {
@@ -31,10 +31,10 @@ class MyController extends BaseJsonController
     $answer->days_count = $user->getDays()->count();
     $answer->email = $user->getEmail();
     return $this->_answerOk($answer);
-	}
+  }
 
-	function doSettings()
-	{
+  function doSettings()
+  {
     $user = $this->_getUser();
     if(!$this->request->hasPost())
       return $this->_answerOk($user->getSettings());
@@ -52,5 +52,5 @@ class MyController extends BaseJsonController
       else
         return $this->_answerWithError($this->error_list);
     }
-	}
+  }
 }
