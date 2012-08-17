@@ -17,32 +17,36 @@ class odPostingService implements SharesInterface
 
     // Facebook
     if($settings->getSocialShareFacebook())
-      if($user->getFbAccessToken()) {
+    {
+      // if($user->getFbAccessToken()) {
         $this->facebook_profile = $this->facebook_profile ?: new FacebookProfile($user);
 
         if(!call_user_func_array(array($this->facebook_profile, $name), $args))
           throw new lmbException("Can't share with Facebook.", array('function_name' => $name, 'function_args' => $args));
-      }
-      else
-        lmbToolkit::instance()->log()->warning('Facebook sharing is on, while facebook token is empty.', array(
-          'user_id'             => $user->getId(),
-          'access_token'        => $user->getFbAccessToken(),
-        ));
+      // }
+      // else
+      //   lmbToolkit::instance()->log()->warning('Facebook sharing is on, while facebook token is empty.', array(
+      //     'user_id'             => $user->getId(),
+      //     'access_token'        => $user->getFbAccessToken(),
+      //   ));
+    }
 
     // Twitter
     if($settings->getSocialShareTwitter())
-      if($user->getTwitterAccessToken() && $user->getTwitterAccessTokenSecret()) {
+    {
+      // if($user->getTwitterAccessToken() && $user->getTwitterAccessTokenSecret()) {
         $this->twitter_profile = $this->twitter_profile ?: new TwitterProfile($user);
 
         if(!call_user_func_array(array($this->twitter_profile, $name), $args))
           throw new lmbException("Can't share with Twitter.", array('function_name' => $name, 'function_args' => $args));
-      }
-      else
-        lmbToolkit::instance()->log()->warning('Twitter sharing is on, while twitter is not connected.', array(
-          'user_id'             => $user->getId(),
-          'access_token'        => $user->getTwitterAccessToken(),
-          'access_token_secret' => $user->getTwitterAccessTokenSecret(),
-        ));
+      // }
+      // else
+      //   lmbToolkit::instance()->log()->warning('Twitter sharing is on, while twitter is not connected.', array(
+      //     'user_id'             => $user->getId(),
+      //     'access_token'        => $user->getTwitterAccessToken(),
+      //     'access_token_secret' => $user->getTwitterAccessTokenSecret(),
+      //   ));
+    }
   }
 
   public function shareDayBegin(Day $day)
