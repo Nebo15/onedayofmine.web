@@ -336,7 +336,7 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
     $this->_loginAndSetCookie($this->additional_user);
     $this->post('days/'.$day->getId().'/delete')->result;
 
-    $this->assertResponse(404);
+    $this->assertResponse(401);
   }
 
   /**
