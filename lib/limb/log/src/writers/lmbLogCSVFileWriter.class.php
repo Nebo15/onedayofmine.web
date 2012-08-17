@@ -28,18 +28,18 @@ class lmbLogCSVFileWriter extends lmbLogBaseWriter
     {
       @flock($fh, LOCK_EX);
 
-      $params = [];
-      lmbArrayHelper::toFlatArray($entry->getParams(), $params);
-
       $log_entrys = [];
       $log_entrys[] = strftime("%b %d %Y %H:%M:%S", $entry->getTime());
 
-      foreach ($params as $key => $value) {
+      foreach ($entry->getParams() as $key => $value) {
+        if(is_array($value))
+          $value = http_build_query($value);
+
         $tmp = preg_replace('#[\s]{2,}|[\n]#is', ' ', $value);
         $tmp = preg_replace('#image_content=[^&]*#is', 'image_conents=[img]', $tmp);
         $tmp = trim($tmp);
-        if($tmp)
-          $log_entrys[] = "$key=$tmp";
+
+        $log_entrys[] = $tmp;
       }
 
       fwrite($fh, implode(';', $log_entrys).PHP_EOL);
