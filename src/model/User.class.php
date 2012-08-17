@@ -67,7 +67,7 @@ class User extends ModelWithImage
   {
   	$validator = new lmbValidator();
   	$validator->addRequiredRule('name');
-    $validator->addRequiredRule('email');
+//    $validator->addRequiredRule('email');
   	$validator->addRequiredRule('fb_uid');
   	$validator->addRequiredRule('fb_access_token');
   	$validator->addRequiredRule('fb_profile_utime');
