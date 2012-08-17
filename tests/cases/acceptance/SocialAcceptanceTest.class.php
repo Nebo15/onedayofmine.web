@@ -38,6 +38,8 @@ class SocialAcceptanceTest extends odAcceptanceTestCase
   function testTwitterConnect()
   {
     $this->main_user->save();
+    $this->assertEqual(0, $user->getSettings()->getSocialShareTwitter());
+
     $this->main_user->getSettings()->setSocialShareTwitter(1);
     $this->main_user->save();
     $this->_loginAndSetCookie($this->main_user);
@@ -51,6 +53,7 @@ class SocialAcceptanceTest extends odAcceptanceTestCase
       $this->assertEqual($user->getTwitterUid(), $this->generator->twitter_credentials()[0]['uid']);
       $this->assertEqual($user->getTwitterAccessToken(), $this->generator->twitter_credentials()[0]['access_token']);
       $this->assertEqual($user->getTwitterAccessTokenSecret(), $this->generator->twitter_credentials()[0]['access_token_secret']);
+      $this->assertEqual(1, $user->getSettings()->getSocialShareTwitter());
     }
   }
 
