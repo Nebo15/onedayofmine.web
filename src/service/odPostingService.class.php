@@ -12,7 +12,7 @@ class odPostingService implements SharesInterface
     static $twitter_profile;
 
     $user = lmbToolkit::instance()->getUser();
-    lmb_assert_true($user, 'User is not set!');
+    lmb_assert_true($user, 'User is not logged in!');
     $settings = $user->getSettings();
 
     // Facebook
