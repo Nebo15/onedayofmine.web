@@ -22,8 +22,8 @@ class ImageHelper {
   function exifGPSToCords($exif)
   {
     return [
-      'latitude'  => $this->exifGPSSectionToCords($exif['GPS']['GPSLatitude']),
-      'longitude' => $this->exifGPSSectionToCords($exif['GPS']['GPSLongitude']),
+      'latitude'  => isset($exif['GPS']['GPSLatitude']) ? $this->exifGPSSectionToCords($exif['GPS']['GPSLatitude']) : '',
+      'longitude' => isset($exif['GPS']['GPSLongitude']) ? $this->exifGPSSectionToCords($exif['GPS']['GPSLongitude']) : '',
     ];
   }
 
