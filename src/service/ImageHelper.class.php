@@ -14,8 +14,8 @@ class ImageHelper {
   {
     $cords = $this->exifGPSToCords($exif);
     return array(
-      'latitude'  => $cords['latitude']['degrees']+((($cords['latitude']['minutes']*60)+($cords['latitude']['seconds']))/3600),
-      'longitude' => $cords['longitude']['degrees']+((($cords['longitude']['minutes']*60)+($cords['longitude']['seconds']))/3600)
+      'latitude'  => $cords['latitude'] ? $cords['latitude']['degrees']+((($cords['latitude']['minutes']*60)+($cords['latitude']['seconds']))/3600) : 0,
+      'longitude' => $cords['longitude'] ? $cords['longitude']['degrees']+((($cords['longitude']['minutes']*60)+($cords['longitude']['seconds']))/3600): 0
     );
   }
 
