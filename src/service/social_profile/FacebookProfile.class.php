@@ -119,7 +119,7 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
   public function shareDayBegin(Day $day)
   {
     return $this->provider->api("/me/one-day-of-mine:begin", "post", array(
-      'day' => lmbToolkit::instance()->getDayPageUrl($day)
+      'day' => lmbToolkit::instance()->getPageUrl($day)
     ))['id'];
   }
 
@@ -128,7 +128,7 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
     return $this->provider->api("/me/feed", "post", array(
       'name'        => $day->getTitle(),
       'picture'     => count($day->getMoments()) ? lmbToolkit::instance()->getStaticUrl($day->getMoments()->at(0)->getImageUrl()) : '',
-      'link'        => lmbToolkit::instance()->getDayPageUrl($day),
+      'link'        => lmbToolkit::instance()->getPageUrl($day),
       'description' => 'Visit onedayofmine.com for more info',
     ));
   }
@@ -136,29 +136,29 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
   public function shareDayLike(Day $day)
   {
     return $this->provider->api("/me/og.likes", "post", array(
-      'object'      => lmbToolkit::instance()->getDayPageUrl($day)
+      'object'      => lmbToolkit::instance()->getPageUrl($day)
     ));
   }
 
   public function shareMomentAdd(Day $day, Moment $moment)
   {
     return $this->provider->api("/me/one-day-of-mine:add_moment", "post", array(
-      'moment'      => lmbToolkit::instance()->getMomentPageUrl($moment),
-      'day'         => lmbToolkit::instance()->getDayPageUrl($day)
+      'moment'      => lmbToolkit::instance()->getPageUrl($moment),
+      'day'         => lmbToolkit::instance()->getPageUrl($day)
     ))['id'];
   }
 
   public function shareMomentLike(Moment $moment)
   {
     return $this->provider->api("/me/og.likes", "post", array(
-      'object'      => lmbToolkit::instance()->getMomentPageUrl($moment)
+      'object'      => lmbToolkit::instance()->getPageUrl($moment)
     ));
   }
 
   public function shareDayEnd(Day $day)
   {
     return $this->provider->api("/me/one-day-of-mine:end", "post", array(
-      'day'         => lmbToolkit::instance()->getDayPageUrl($day)
+      'day'         => lmbToolkit::instance()->getPageUrl($day)
     ));
   }
 

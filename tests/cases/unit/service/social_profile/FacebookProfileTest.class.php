@@ -3,18 +3,6 @@ lmb_require('tests/cases/unit/odUnitTestCase.class.php');
 
 class FacebookProfileTest extends odUnitTestCase
 {
-  function setUp()
-  {
-    parent::setUp();
-    $settings = $this->main_user->getSettings();
-    $settings->setSocialShareFacebook(1);
-    $settings->save();
-
-    $settings = $this->additional_user->getSettings();
-    $settings->setSocialShareFacebook(1);
-    $settings->save();
-  }
-
   function testGetInfoRaw()
   {
     $info = (new FacebookProfile($this->main_user))->getInfo_Raw();
@@ -39,7 +27,7 @@ class FacebookProfileTest extends odUnitTestCase
   function testGetRegisteredFriends()
   {
     $friends = (new FacebookProfile($this->main_user))->getRegisteredFriends();
-    $this->assertEqual(count($friends), 0);
+    $this->assertEqual(0, count($friends));
 
     $this->additional_user->save();
 

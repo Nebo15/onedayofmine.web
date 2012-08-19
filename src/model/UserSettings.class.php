@@ -24,6 +24,20 @@ class UserSettings extends BaseModel
     );
   }
 
+  function exportForApi()
+  {
+    $result = new stdClass();
+    $result->notifications_new_days = $this->notifications_new_days;
+    $result->notifications_new_comments = $this->notifications_new_comments;
+    $result->notifications_related_activity = $this->notifications_related_activity;
+    $result->notifications_shooting_photos = $this->notifications_shooting_photos;
+    $result->photos_save_original = $this->photos_save_original;
+    $result->photos_save_filtered = $this->photos_save_filtered;
+    $result->social_share_facebook = $this->social_share_facebook;
+    $result->social_share_twitter = $this->social_share_twitter;
+    return $result;
+  }
+
   static function createDefault(User $user)
   {
     $item = new UserSettings();

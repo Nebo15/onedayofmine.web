@@ -103,42 +103,23 @@ class DaysController extends BaseJsonController
     $moment->setDescription($this->request->get('description'));
     $moment->save();
 
-    $orig_image = $moment->attachImage($image_content);
+    $moment->attachImage($image_content);
     $moment->save();
-
-    // Exif info works only for jpeg and tiff
-    $helper = lmbToolkit::instance()->getImageHelper();
-    if($helper->getImageExtensionByImageContent($image_content) == 'jpeg') {
-      $exif = $helper->getExifInfo($orig_image);
-
-      // Location
-      if(array_key_exists('GPS', $exif)) {
-        $cords = $helper->exifGPSToDecemicalCords($exif);
-        $moment->setLocationLatitude($cords['latitude']);
-        $moment->setLocationLongitude($cords['longitude']);
-      }
-
-      // Time
-      if(array_key_exists('IFD0', $exif) && array_key_exists('DateTime', $exif['IFD0']))
-        $moment->setTime(strtotime($exif['IFD0']['DateTime']));
-      elseif(array_key_exists('EXIF', $exif) && array_key_exists('DateTimeOriginal', $exif['EXIF']))
-        $moment->setTime(strtotime($exif['EXIF']['DateTimeOriginal']));
-
-      $moment->setTimezone($this->toolkit->getUser()->getTimezone());
-    }
 
     if($this->request->get('time')) {
       list($time, $timezone) = Moment::isoToStamp($this->request->get('time'));
       $moment->setTime($time);
       $moment->setTimezone($timezone);
     }
-
+    else
+    {
+      $moment->setTimezone($this->toolkit->getUser()->getTimezone());
+    }
     $moment->save();
 
-    if($this->error_list->isEmpty()) {
-      // Notify friends about new moment
+    if($this->error_list->isEmpty())
+    {
       $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_MOMENT, $moment);
-
       return $this->_answerOk($moment->exportForApi());
     }
     else
@@ -226,7 +207,7 @@ class DaysController extends BaseJsonController
       return $this->_answerNotFound('Day not found');
 
     if($day->getUserId() != $this->_getUser()->getId())
-      return $this->_answerWithError('You can delete only your own days', null, 401);
+      return $this->_answerWithError('You can delete only your own days', null, 404);
 
     $day->setIsDeleted(1);
     $day->save();

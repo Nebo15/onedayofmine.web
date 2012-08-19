@@ -38,7 +38,7 @@ class SocialAcceptanceTest extends odAcceptanceTestCase
   function testTwitterConnect()
   {
     $this->main_user->save();
-    $this->assertEqual(0, $user->getSettings()->getSocialShareTwitter());
+    $this->assertEqual(0, $this->main_user->getSettings()->getSocialShareTwitter());
 
     $this->main_user->getSettings()->setSocialShareTwitter(1);
     $this->main_user->save();
