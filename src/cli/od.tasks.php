@@ -52,7 +52,7 @@ function task_od_amazon_s3_upload()
 {
   $s3 = lmbToolkit::instance()->createAmazonService('S3');
   $bucket = lmbToolkit::instance()->getConcreteAmazonServiceConfig('S3')['bucket'];
-  if(lmbToolkit::instance()->getConcreteAmazonServiceConfig('S3')['enabled'])
+  if(!lmbToolkit::instance()->getConcreteAmazonServiceConfig('S3')['enabled'])
   {
     echo "S3 disabled".PHP_EOL;
     exit(1);
