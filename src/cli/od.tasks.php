@@ -65,7 +65,7 @@ function task_od_amazon_s3_upload()
   {
     foreach ($chunk as $file)
     {
-      $s3_file = substr($file, $files_dir_length);
+      $s3_file = substr($file, $files_dir_length + 1);
       $s3->batch()->create_object($bucket, $s3_file, array(
         'fileUpload' => $file,
         'acl' => AmazonS3::ACL_PUBLIC
