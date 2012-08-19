@@ -515,7 +515,7 @@ class SimpleHttpResponse extends SimpleStickyError {
      *    @access private
      */
     protected function parse($raw) {
-        if (! $raw) {
+        if (!strlen($raw)) {
             $this->setError('Nothing fetched');
             $this->headers = new SimpleHttpHeaders('');
         } elseif ('file' == $this->url->getScheme()) {

@@ -138,7 +138,10 @@ class lmbTestShellReporter extends TextReporter
   {
     $regex = "~.*\[([^\]]+)\s+line\s+(\d+)\].*~";
     preg_match($regex, $message, $m);
-    return $m[1] . ':' . $m[2];
+    if(2 == count($m))
+      return $m[1] . ':' . $m[2];
+    else
+      return 'Internal';
   }
 }
 
