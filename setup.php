@@ -24,8 +24,6 @@ lmb_env_setor('LIMB_VAR_DIR', $app_dir . '/var/');
 if(array_key_exists('HTTP_NAME', $_SERVER))
   lmb_env_setor('HOST_URL', 'http://'.$_SERVER['HTTP_HOST'].'/');
 
-lmb_env_setor('STATIC_HOST_URL', 'http://static.onedayofmine.com/');
-
 lmb_env_setor('LIMB_APP_MODE' , 'production');
 lmb_env_setor('USE_API_CACHE', false);
 

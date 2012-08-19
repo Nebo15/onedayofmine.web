@@ -111,7 +111,7 @@ class odTools extends lmbAbstractTools
     if(!$path)
       return null;
 
-    return lmb_env_get('STATIC_HOST_URL').$path;
+    return $this->toolkit->getConf('images')['host'].$path;
   }
 
   function getDayPageUrl(Day $day)
