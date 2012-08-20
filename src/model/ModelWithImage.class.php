@@ -8,40 +8,34 @@ abstract class ModelWithImage extends BaseModel
     $extension = lmbToolkit::instance()->getImageHelper()->getImageExtensionByImageContent($content);
     $this->setImageExt($extension);
 
-    $s3_conf = lmbToolkit::instance()->getConcreteAmazonServiceConfig('S3');
-    $s3 = lmbToolkit::instance()->createAmazonService('S3');
-    $is_s3_enabled = $s3_conf['enabled'];
+    lmbFs::safeWrite($this->_getOrigSavePath(), $content);
 
-    $orig_file = $this->_getSavePath();
-    lmbFs::safeWrite($orig_file, $content);
-
-    foreach ($this->_getConfig()['sizes'] as $size) {
-      $resized_file = $this->_getSavePath($size);
-      $helper = new lmbConvertImageHelper($orig_file);
-      $helper->resizeAndCropFrame($size);
-      $helper->save($resized_file);
-      if($is_s3_enabled)
-      {
-        $s3->batch()->create_object($s3_conf['bucket'], $this->_getS3SavePath($size), array(
-            'fileUpload' => $resized_file
-        ));
-      }
-    }
-
-    if($is_s3_enabled)
+    foreach ($this->_getConfig()['sizes'] as $size)
     {
-      $response = $s3->batch()->send();
-      if(!$response->areOK())
-        throw new lmbException('Error on file uploading');
+      $helper = new lmbConvertImageHelper($this->_getOrigSavePath());
+      $helper->resizeAndCropFrame($size);
+      $helper->save($this->_getSavePath($size));
 
-      foreach ($this->_getConfig()['sizes'] as $size) {
-        $resized_file = $this->_getSavePath($size);
-        lmbFs::rm($resized_file);
-      }
-      lmbFs::rm($orig_file);
+      if('jpeg' == $extension && 'Moment' == get_called_class())
+        $this->_fillExifInfo();
+    }
+  }
+
+  protected function _fillExifInfo()
+  {
+    $helper = lmbToolkit::instance()->getImageHelper();
+    $exif = $helper->getExifInfo($this->_getOrigSavePath());
+
+    if(array_key_exists('GPS', $exif)) {
+      $cords = $helper->exifGPSToDecemicalCords($exif);
+      $this->setLocationLatitude($cords['latitude']);
+      $this->setLocationLongitude($cords['longitude']);
     }
 
-    return $orig_file;
+    if(array_key_exists('IFD0', $exif) && array_key_exists('DateTime', $exif['IFD0']))
+      $this->setTime(strtotime($exif['IFD0']['DateTime']));
+    elseif(array_key_exists('EXIF', $exif) && array_key_exists('DateTimeOriginal', $exif['EXIF']))
+      $this->setTime(strtotime($exif['EXIF']['DateTimeOriginal']));
   }
 
   function showImages(stdClass $export)
@@ -90,6 +84,11 @@ abstract class ModelWithImage extends BaseModel
   private function _getConfig()
   {
     return lmbToolkit::instance()->getConf('images')[get_called_class()];
+  }
+
+  protected function _getOrigSavePath()
+  {
+    return $this->_getSavePath();
   }
 
   protected function _getSavePath($size = null)

@@ -20,7 +20,7 @@ function task_od_remove_db_data()
 
 /**
  * @desc Fill db from lj community
- * @deps od_tests_users
+ * @deps migrate_load_all,migrate_run,od_tests_users
  * @alias od_fill_from_lj
  */
 function task_od_parse_lj($argv)

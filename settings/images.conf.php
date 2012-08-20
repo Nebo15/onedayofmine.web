@@ -1,6 +1,7 @@
 <?php
 
 $conf = array(
+  'host' => 'http://static.stage.onedayofmine.com/',
   'Day' => array(
     'path'      => ':user_id/days/:hash_:image_width.:file_extension',
     'save_path' => 'www/users',

@@ -111,23 +111,19 @@ class odTools extends lmbAbstractTools
     if(!$path)
       return null;
 
-    return lmb_env_get('STATIC_HOST_URL').$path;
+    return $this->toolkit->getConf('images')['host'].$path;
   }
 
-  function getDayPageUrl(Day $day)
+  function getPageUrl($object)
   {
-    if(!$day->getId())
-      throw new lmbException("Can't get day ID.");
+    if(!$object->getId())
+      throw new lmbException("Can't get object ID.");
 
-    return $this->getSiteUrl('pages/'.$day->getId().'/day');
-  }
-
-  function getMomentPageUrl(Moment $moment)
-  {
-    if(!$moment->getId())
-      throw new lmbException("Can't get moment ID.");
-
-    return $this->getSiteUrl('pages/'.$moment->getId().'/moment');
+    if('Day' == get_class($object))
+      return $this->getSiteUrl('pages/'.$object->getId().'/day');
+    if('Moment' == get_class($object))
+      return $this->getSiteUrl('pages/'.$object->getId().'/moment');
+    throw new lmbException('Unknown object class');
   }
 
   function getAbsolutePath($www_path)

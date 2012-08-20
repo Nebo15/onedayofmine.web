@@ -182,38 +182,38 @@ class TwitterProfile implements SocialServicesProfileInterface, SharesInterface
 
   public function shareDayBegin(Day $day)
   {
-    $day_url = $day->getPageUrl();
+    $day_url = lmbToolkit::instance()->getPageUrl($day);
     return $this->tweet("Stay in touch with new day of my life. {$day_url}");
   }
 
   public function shareDay(Day $day)
   {
-    $day_url = $day->getPageUrl();
+    $day_url = lmbToolkit::instance()->getPageUrl($day);
     return $this->tweet("Look how awesome is this day. {$day_url}");
   }
 
   public function shareDayLike(Day $day)
   {
-    $day_url = $day->getPageUrl();
+    $day_url = lmbToolkit::instance()->getPageUrl($day);
     return $this->tweet("I really like this day. {$day_url}");
   }
 
   public function shareMomentAdd(Day $day, Moment $moment)
   {
-    $day_url    = $day->getPageUrl();
-    $moment_url = $moment->getPageUrl();
+    $day_url    = lmbToolkit::instance()->getPageUrl($day);
+    $moment_url = lmbToolkit::instance()->getPageUrl($moment);
     return $this->tweet("Look how awesome is this moment {$moment_url} in day {$day_url}.");
   }
 
   public function shareMomentLike(Moment $moment)
   {
-    $moment_url = $moment->getPageUrl();
+    $moment_url = lmbToolkit::instance()->getPageUrl($moment);
     return $this->tweet("I really like this moment. {$moment_url}");
   }
 
   public function shareDayEnd(Day $day)
   {
-    $day_url = $day->getPageUrl();
+    $day_url    = lmbToolkit::instance()->getPageUrl($day);
     return $this->tweet("This day is ended, review it here: {$day_url}.");
   }
 
