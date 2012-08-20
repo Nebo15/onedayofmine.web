@@ -33,6 +33,14 @@ function task_od_parse_lj($argv)
 
   $occupations = array("Bus and Truck Mechanics", "Bus Boy / Bus Girl", "Bus Driver (School)", "Bus Driver (Transit)", "Business Professor", "Business Service Specialist", "Cabinet Maker", "Camp Director", "Caption Writer", "Cardiologist (MD)", "Cardiopulmonary Technologist", "Career Counselor", "Cargo and Freight Agents", "Carpenter's Assistant", "Carpet Installer", "Cartographer (Map Scientist)", "Cartographic Technician", "Cartoonist (Publications)", "Casino Cage Worker", "Casino Cashier", "Casino Dealer", "Casino Floor Person", "Casino Manager", "Casino Pit Boss", "Casino Slot Machine Mechanic", "Casino Surveillance Officer", "Casting Director", "Catering Administrator", "Ceiling Tile Installer", "Cement Mason", "Ceramic Engineer", "Certified Public Accountant (CPA)", "Chaplain (Prison, Military, Hospital)", "Chemical Engineer", "Chemical Equipment Operator", "Chemical Plant Operator", "Chemical Technicians", "Chemistry Professor", "Chief Financial Officer", "Child Care Center Administrator", "Child Care Worker", "Child Life Specialist", "Child Support Investigator", "Child Support Services Worker", "City Planning Aide", "Civil Drafter", "Civil Engineer", "Civil Engineering Technician", "Clergy Member (Religious Leader)", "Clinical Dietitian", "Clinical Psychologist", "Clinical Sociologist", "Coatroom and Dressing Room Attendants", "College/University Professor", "Commercial Designer", "Commercial Diver", "Commercial Fisherman", "Communication Equipment Mechanic", "Communications Professor", "Community Health Nurse", "Community Organization Worker", "Community Welfare Worker", "Compensation Administrator", "Compensation Specialist", "Compliance Officer", "Computer Aided Design (CAD) Technician", "Computer and Information Scientists, Research", "Computer and Information Systems Managers", "Computer Applications Engineer", "Computer Controlled Machine Tool Operators", "Computer Customer Support Specialist", "Computer Hardware Technician", "Computer Operators", "Computer Programmer", "Computer Science Professor");
 
+  $day_comments = array(
+    'It was truly wonderful day!', 'I hope to do this once more!', "I've really enjoyed this day", "U jelly?", 'I envy you', "It's really cool. I really appriciate your work", 'Sehr gut.', 'I also want to try this'
+  );
+
+  $moment_comments = array(
+    'Wow, nice shoot!', "You'r eyes is like the skies!", '*IN LOVE*', 'Take me back!', 'ooh! shiny! :)', 'good idea', 'Beautiful colours in the sky and the heather! The mist in the background adds that special touch :-)', 'Superb shot', 'Excellent landscape shot', 'Really nice, subtle colors. Excellent composition too.', 'Absolutely gorgeous!'
+  );
+
   $locations = array("museum", "park", "coffee shop", "restaurants",
     "bus stop", "city bus", "tram/subway", "city hall",
     "zoo", "school", "grocery store", "library", "hair salon/barber shop",
@@ -117,6 +125,16 @@ function task_od_parse_lj($argv)
     $day->setLikesCount(rand(1, 100));
     $day->save();
 
+    $day_comments_count = rand(-3, 3);
+    for($c = 0; $c < $day_comments_count; $c++)
+    {
+      $day_comment = new DayComment();
+      $day_comment->setText($day_comments[array_rand($day_comments)]);
+      $day_comment->setDay($day);
+      $day_comment->setUser($tests_users[array_rand($tests_users)]);
+      $day_comment->save();
+    }
+
     $first = true;
     $time = time()-rand(0, 60*60*24*365);
     $timezone = rand(0,24)-12;
@@ -143,6 +161,17 @@ function task_od_parse_lj($argv)
         $cache->add(md5($img_url), file_get_contents($img_url));
       $moment->attachImage($cache->get(md5($img_url)));
       $moment->save();
+
+      $moment_comments_count = rand(-10, 3);
+      for($c = 0; $c < $moment_comments_count; $c++)
+      {
+        $moment_comment = new MomentComment();
+        $moment_comment->setText($moment_comments[array_rand($moment_comments)]);
+        $moment_comment->setMoment($moment);
+        $moment_comment->setUser($tests_users[array_rand($tests_users)]);
+        $moment_comment->save();
+      }
+
       echo ".";
     }
     echo PHP_EOL;
