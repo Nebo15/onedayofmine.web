@@ -1,8 +1,8 @@
 <?php
 
 $conf = array(
-  'host' => 'http://static.stage.onedayofmine.com/',
-  'Day' => array(
+  'host'   => lmb_env_get('STATIC_HOST_URL') ?: 'http://static.stage.onedayofmine.com/',
+  'Day'    => array(
     'path'      => ':user_id/days/:hash_:image_width.:file_extension',
     'save_path' => 'www/users',
     'sizes'     => array(
@@ -18,7 +18,7 @@ $conf = array(
                      array('width' => 532, 'height' => 532),
                    ),
   ),
-  'User' => array(
+  'User'   => array(
     'path'      => ':id/:hash_:image_width.:file_extension',
     'save_path' => 'www/users',
     'sizes'     => array(
