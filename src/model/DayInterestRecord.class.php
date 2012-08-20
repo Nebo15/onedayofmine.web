@@ -1,5 +1,5 @@
 <?php
-
+// Can be removed?
 class DayInterestRecord extends lmbActiveRecord
 {
   protected $_db_table_name = 'day_interest';

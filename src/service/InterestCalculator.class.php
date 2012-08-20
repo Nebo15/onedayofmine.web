@@ -96,9 +96,13 @@ class InterestCalculator
 
         $recordObj = new DayInterestRecord($record);
         $recordObj->setDay($day);
-        $days_with_rating[] = $recordObj;
+        // $recordObj->setRating(array_search($day->getId(), $ids)); useless as DayInterestRecord
+        $days_with_rating[array_search($day->getId(), $ids)] = $recordObj;
       }
     }
+
+    sort($days_with_rating);
+
     return $days_with_rating;
   }
 }
