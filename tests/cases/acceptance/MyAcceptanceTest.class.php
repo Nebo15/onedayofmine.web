@@ -155,6 +155,7 @@ class MyAcceptanceTest extends odAcceptanceTestCase
 
     $settings = new UserSettings();
     $settings->setNotificationsNewDays(0);
+    $settings->setNotificationsNewComments(0);
     $settings->setNotificationsRelatedActivity(0);
     $settings->setNotificationsShootingPhotos(0);
     $settings->setPhotosSaveOriginal(0);
