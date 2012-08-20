@@ -5,6 +5,9 @@ class ErrorHandlingFilter extends lmbErrorHandlingFilter
 {
   protected function _renderTemplate($error, $params, lmbBacktrace $trace, $file, $line, $context, $request, $session)
   {
+    header('HTTP/1.x 500 Server Error');
+    header('Content-Type: application/json');
+
     return json_encode(array(
       'result' => null,
       'code' => 500,
@@ -15,6 +18,18 @@ class ErrorHandlingFilter extends lmbErrorHandlingFilter
     ));
   }
 
+  function _echoErrorPage()
+  {
+    header('HTTP/1.x 500 Server Error');
+    header('Content-Type: application/json');
+
+    echo json_encode(array(
+      'result' => null,
+      'code' => 500,
+      'status' => 'Internal error',
+      'errors' => array('Critical error occurred.'),
+    ));
+  }
 }
 
 
