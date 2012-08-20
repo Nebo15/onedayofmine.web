@@ -1,6 +1,7 @@
 <?php
 lmb_require('lib/tmhOAuth/*.php');
 lmb_require('src/service/social_provider/odSocialServicesProviderInterface.class.php');
+lmb_require('src/service/social_provider/odTwitterException.class.php');
 
 class odTwitter extends tmhOAuth implements odSocialServicesProviderInterface
 {
@@ -28,11 +29,12 @@ class odTwitter extends tmhOAuth implements odSocialServicesProviderInterface
       return $response;
     elseif(is_array($response)) {
       if(array_key_exists('error', $response)) {
-        throw new lmbException("Twitter API exception: {$response['error']}.", array('errors' => array($response['error'])));
+        throw new odTwitterException("Twitter API exception: {$response['error']}.", $response);
       }
-      elseif(array_key_exists('errors', $response)) { // Basic errors
-        throw new lmbException("Twitter API exception.", array('errors' => $response['errors']));
-      }
+
+      // elseif(array_key_exists('errors', $response)) {
+      throw new odTwitterException("Unknown Twitter API exception.", $response);
+      // }
     }
 
     return false;
@@ -52,7 +54,7 @@ class odTwitter extends tmhOAuth implements odSocialServicesProviderInterface
     }
     catch (Exception $e)
     {
-      $error_list->addError($e->getOriginalMessage());
+      $error_list->addError($e->getMessage());
       return false;
     }
   }

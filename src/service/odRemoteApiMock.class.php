@@ -58,8 +58,8 @@ class odRemoteApiMock
     $hash_exception = $hash.'_exception';
 
     // If exception cached
-    // if($this->cache->get($hash_exception))
-    //   throw $this->cache->get($hash_exception);
+    if($this->cache->get($hash_exception))
+      throw unserialize($this->cache->get($hash_exception));
 
     // If data cached
     if($cached_value = $this->cache->get($hash))
@@ -88,7 +88,7 @@ class odRemoteApiMock
       $result = call_user_func_array(array($this->provider, 'api'), array($path, $method, $params));
     } catch (Exception $e) {
       // Cache exceptions
-      // $this->cache->set($hash_exception, serialize($e));
+      $this->cache->set($hash_exception, serialize($e));
 
       // Log exceptions cache
       lmbToolkit::instance()

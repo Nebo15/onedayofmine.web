@@ -57,7 +57,6 @@ class SocialAcceptanceTest extends odAcceptanceTestCase
     }
   }
 
-  // TODO cache dont work on invalid tokens
   function testTwitterConnect_withUnvalidCredentials()
   {
     $this->main_user->save();
