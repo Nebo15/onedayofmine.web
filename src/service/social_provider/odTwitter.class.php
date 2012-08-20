@@ -28,7 +28,7 @@ class odTwitter extends tmhOAuth implements odSocialServicesProviderInterface
       return $response;
     elseif(is_array($response)) {
       if(array_key_exists('error', $response)) {
-        throw new lmbException("Twitter API exception.", array('errors' => array($response['error'])));
+        throw new lmbException("Twitter API exception: {$response['error']}.", array('errors' => array($response['error'])));
       }
       elseif(array_key_exists('errors', $response)) { // Basic errors
         throw new lmbException("Twitter API exception.", array('errors' => $response['errors']));
