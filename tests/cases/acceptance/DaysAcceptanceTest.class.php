@@ -553,8 +553,8 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $this->assertEqual(4, count($result));
     $this->assertEqual($day1->getId(), $result[0]->id);
     $this->assertEqual($day2->getId(), $result[1]->id);
-    $this->assertEqual($day3->getId(), $result[2]->id);
-    $this->assertEqual($day4->getId(), $result[3]->id);
+    $this->assertEqual($day4->getId(), $result[2]->id);
+    $this->assertEqual($day3->getId(), $result[3]->id);
 
     $result = $this
       ->get('days/interesting/', array('from' => $day1->getId()))
@@ -562,8 +562,8 @@ class DayAcceptanceTest extends odAcceptanceTestCase
     $this->assertResponse(200);
     $this->assertEqual(3, count($result));
     $this->assertEqual($day2->getId(), $result[0]->id);
-    $this->assertEqual($day3->getId(), $result[1]->id);
-    $this->assertEqual($day4->getId(), $result[2]->id);
+    $this->assertEqual($day4->getId(), $result[1]->id);
+    $this->assertEqual($day3->getId(), $result[2]->id);
 
     $result = $this
       ->get('days/interesting/', array(

@@ -51,14 +51,14 @@ class InterestCalculatorTest extends odUnitTestCase
     $this->assertEqual(4, count($days));
     $this->assertEqual($day1->getId(), $days[0]->getDay()->id);
     $this->assertEqual($day2->getId(), $days[1]->getDay()->id);
-    $this->assertEqual($day3->getId(), $days[2]->getDay()->id);
-    $this->assertEqual($day4->getId(), $days[3]->getDay()->id);
+    $this->assertEqual($day4->getId(), $days[2]->getDay()->id);
+    $this->assertEqual($day3->getId(), $days[3]->getDay()->id);
 
     $days = $calc->getDaysRatings($day1->getId());
     $this->assertEqual(3, count($days));
     $this->assertEqual($day2->getId(), $days[0]->getDay()->id);
-    $this->assertEqual($day3->getId(), $days[1]->getDay()->id);
-    $this->assertEqual($day4->getId(), $days[2]->getDay()->id);
+    $this->assertEqual($day4->getId(), $days[1]->getDay()->id);
+    $this->assertEqual($day3->getId(), $days[2]->getDay()->id);
 
     $days = $calc->getDaysRatings($day1->getId(), $day3->getId());
     $this->assertEqual(2, count($days));
