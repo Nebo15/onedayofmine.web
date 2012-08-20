@@ -46,10 +46,13 @@ class odTwitter extends tmhOAuth implements odSocialServicesProviderInterface
   public function getUid($error_list, $provider = null)
   {
     $provider = $provider ?: $this;
-    if($credentials = $provider->api('1/account/verify_credentials')) {
-      return $credentials['id'];
-    } else {
-      $error_list->addError("Access token seems to be unvalid.");
+    try
+    {
+      return $provider->api('1/account/verify_credentials')['id'];
+    }
+    catch (Exception $e)
+    {
+      $error_list->addError($e->getOriginalMessage());
       return false;
     }
   }
