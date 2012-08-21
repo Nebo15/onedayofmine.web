@@ -13,6 +13,37 @@
     <!--[if lt IE 9]>
     <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.1.0/js/bootstrap.min.js"></script>
+    <script src="//pagedown.googlecode.com/hg/Markdown.Converter.js"></script>
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $.get('/api_doc/doc.markdown', function (data) {
+          var converter = new Markdown.Converter();
+          $("#main-content").html(converter.makeHtml(data));
+        });
+
+        $.get('/api_doc/examples.markdown', function (data) {
+          var converter = new Markdown.Converter();
+          $("#api-content").html(converter.makeHtml(data));
+        });
+
+        $.get('/api_doc/entities.markdown', function (data) {
+          var converter = new Markdown.Converter();
+          $("#entities-content").html(converter.makeHtml(data));
+        });
+
+        // side bar
+        $('.bs-docs-sidenav').affix({
+          offset: {
+            top: 245,
+            bottom: 350
+          }
+        })
+
+      })();
+    </script>
   </head>
 
   <body data-spy="scroll" data-target=".bs-docs-sidebar">
@@ -132,36 +163,5 @@
         </div>
       </div>
     </div>
-
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.1.0/js/bootstrap.min.js"></script>
-    <script src="//pagedown.googlecode.com/hg/Markdown.Converter.js"></script>
-    <script type="text/javascript">
-      (function () {
-        $.get('/api_doc/doc.markdown', function (data) {
-          var converter = new Markdown.Converter();
-          $("#main-content").html(converter.makeHtml(data));
-        });
-
-        $.get('/api_doc/examples.markdown', function (data) {
-          var converter = new Markdown.Converter();
-          $("#api-content").html(converter.makeHtml(data));
-        });
-
-        $.get('/api_doc/entities.markdown', function (data) {
-          var converter = new Markdown.Converter();
-          $("#entities-content").html(converter.makeHtml(data));
-        });
-
-        // side bar
-        $('.bs-docs-sidenav').affix({
-          offset: {
-            top: 245,
-            bottom: 350
-          }
-        })
-
-      })();
-    </script>
   </body>
 </html>
