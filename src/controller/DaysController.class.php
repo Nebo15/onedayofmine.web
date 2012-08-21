@@ -332,8 +332,8 @@ class DaysController extends BaseJsonController
     if(count($errors))
       return $this->_answerWithError($errors);
 
-    if(!$day = Day::findUnfinished($this->_getUser()))
-      return $this->_answerNotFound('Unfinished day not found');
+    if(!$day = Day::findById($this->request->id))
+      return $this->_answerNotFound('Day not found');
 
     $image_content = base64_decode($this->request->get('image_content'));
     if(!count($day->getMoments()))
