@@ -303,6 +303,36 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
+   * @api description Mark day as current
+   * @api input param int id Day ID
+   */
+  function testMarkCurrent()
+  {
+    $day = $this->generator->day($this->main_user);
+    $day->save();
+
+    $this->_loginAndSetCookie($this->main_user);
+    $response = $this->post('days/'.$day->getId().'/mark_current');
+
+    $this->assertResponse(200);
+    $this->assertFalse($response->result);
+
+    $user = User::findById($this->main_user->getId());
+    $this->assertEqual($user->getCurrentDay()->getId(), $day->getId());
+  }
+
+  function testMarkCurrent_notFound()
+  {
+    $day = $this->generator->day($this->main_user);
+    $day->save();
+
+    $this->_loginAndSetCookie($this->main_user);
+    $response = $this->post('days/1337/mark_current');
+
+    $this->assertResponse(404);
+  }
+
+  /**
    * @api description Finish current day.
    */
   function testFinish()
@@ -324,6 +354,9 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
       $this->assertEqual($day->getOccupation(), $loaded_day->occupation);
       $this->assertEqual($day->getLikesCount(), $loaded_day->likes_count);
       $this->assertEqual($day->getCreateTime(), $loaded_day->ctime);
+
+      $user = User::findById($this->main_user->getId());
+      $this->assertFalse($user->getCurrentDay());
     }
   }
 
@@ -368,6 +401,9 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
       $this->assertEqual($day->getOccupation(), $loaded_day->occupation);
       $this->assertEqual($day->getLikesCount(), $loaded_day->likes_count);
       $this->assertEqual($day->getCreateTime(), $loaded_day->ctime);
+
+      $user = User::findById($this->main_user->getId());
+      $this->assertEqual($user->getCurrentDay()->getId(), $day2->getId());
     }
   }
 
