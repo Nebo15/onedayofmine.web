@@ -130,7 +130,6 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
   function testCreateMoment()
   {
     $day = $this->generator->day($this->main_user);
-    $day->setIsEnded(0);
     $day->save();
 
     $this->_loginAndSetCookie($this->main_user);
@@ -155,7 +154,6 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
   function testCreateMoment_withGPS()
   {
     $day = $this->generator->day($this->main_user);
-    $day->setIsEnded(0);
     $day->save();
 
     $this->_loginAndSetCookie($this->main_user);
@@ -179,7 +177,6 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
   function testCreateMoment_withoutTime()
   {
     $day = $this->generator->day($this->main_user);
-    $day->setIsEnded(0);
     $day->save();
 
     $this->_loginAndSetCookie($this->main_user);
@@ -199,7 +196,6 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
   function testCreateMoment_CoverOnFirstMoment()
   {
     $day = $this->generator->day($this->main_user);
-    $day->setIsEnded(0);
     $day->save();
 
     $this->_loginAndSetCookie($this->main_user);
@@ -226,7 +222,6 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
   function testUpdate()
   {
     $day = $this->generator->day($this->main_user);
-    $day->setIsEnded(0);
     $day->save();
 
     $this->_loginAndSetCookie($this->main_user);
@@ -284,7 +279,6 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
   function testUpdate_WrongUser()
   {
     $day = $this->generator->day($this->main_user);
-    $day->setIsEnded(0);
     $day->save();
 
     $this->_loginAndSetCookie($this->additional_user);
