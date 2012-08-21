@@ -280,7 +280,15 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
     $this->_loginAndSetCookie($this->main_user);
     $response = $this->post('days/'.$day->getId().'/finish');
 
-    $this->assertResponse(200);
+    if($this->assertResponse(200))
+    {
+      $loaded_day = $response->result;
+      $this->assertEqual($day->getId(), $loaded_day->id);
+      $this->assertEqual($day->getTitle(), $loaded_day->title);
+      $this->assertEqual($day->getOccupation(), $loaded_day->occupation);
+      $this->assertEqual($day->getLikesCount(), $loaded_day->likes_count);
+      $this->assertEqual($day->getCreateTime(), $loaded_day->ctime);
+    }
   }
 
   function testFinish_noCurrentDay()
@@ -291,7 +299,15 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
     $this->_loginAndSetCookie($this->main_user);
     $response = $this->post('days/'.$day->getId().'/finish');
 
-    $this->assertResponse(200);
+    if($this->assertResponse(200))
+    {
+      $loaded_day = $response->result;
+      $this->assertEqual($day->getId(), $loaded_day->id);
+      $this->assertEqual($day->getTitle(), $loaded_day->title);
+      $this->assertEqual($day->getOccupation(), $loaded_day->occupation);
+      $this->assertEqual($day->getLikesCount(), $loaded_day->likes_count);
+      $this->assertEqual($day->getCreateTime(), $loaded_day->ctime);
+    }
   }
 
   function testFinish_notCurrentDay()
@@ -308,7 +324,15 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
     $this->_loginAndSetCookie($this->main_user);
     $response = $this->post('days/'.$day->getId().'/finish');
 
-    $this->assertResponse(200);
+    if($this->assertResponse(200))
+    {
+      $loaded_day = $response->result;
+      $this->assertEqual($day->getId(), $loaded_day->id);
+      $this->assertEqual($day->getTitle(), $loaded_day->title);
+      $this->assertEqual($day->getOccupation(), $loaded_day->occupation);
+      $this->assertEqual($day->getLikesCount(), $loaded_day->likes_count);
+      $this->assertEqual($day->getCreateTime(), $loaded_day->ctime);
+    }
   }
 
   function testFinish_NotFound()

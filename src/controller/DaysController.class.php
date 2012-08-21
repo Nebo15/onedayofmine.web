@@ -106,17 +106,14 @@ class DaysController extends BaseJsonController
       return $this->_answerNotFound("Day not found");
 
     $user = $this->_getUser();
+    if($current_day = $user->getCurrentDay()) {
+      if($day->getId() == $current_day->getId()) {
+        $user->setCurrentDay(null);
+        $user->save();
+      }
+    }
 
-    if(!$current_day = $user->getCurrentDay())
-      return $this->_answerOk();
-
-    if($day->getId() != $current_day->getId())
-      return $this->_answerOk();
-
-    $user->setCurrentDay(null);
-    $user->save();
-
-    return $this->_answerOk();
+    return $this->_answerOk($this->_exportDayWithSubentities($day));
   }
 
   function doMarkCurrent()
