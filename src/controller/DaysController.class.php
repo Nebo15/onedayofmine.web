@@ -78,7 +78,9 @@ class DaysController extends BaseJsonController
     if($this->request->get('cover_content'))
       $day->attachImage(base64_decode($this->request->get('cover_content')));
 
-    return $this->_importSaveAndAnswer($day, array('title', 'occupation', 'location', 'type'));
+    $this->_importSaveAndAnswer($day, array('title', 'occupation', 'location', 'type'));
+
+    return $this->_answerOk($this->_exportDayWithSubentities($day));
   }
 
   function doCurrent()

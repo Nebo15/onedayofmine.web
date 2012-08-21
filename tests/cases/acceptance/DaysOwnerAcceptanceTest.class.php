@@ -236,12 +236,7 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
     if($this->assertResponse(200))
     {
       $loaded_day = Day::findById($day->getId());
-      $this->assertEqual($loaded_day->getTitle(), $title);
-      $this->assertEqual($loaded_day->getOccupation(), $occupation);
-      $this->assertEqual($loaded_day->getLocation(), $location);
-      $this->assertEqual($loaded_day->getType(), $type);
-      $this->assertValidImageUrl($res->image_266);
-      $this->assertValidImageUrl($res->image_532);
+      $this->assertValidDayJson($loaded_day, $response);
     }
   }
 
