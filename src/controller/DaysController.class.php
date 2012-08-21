@@ -128,7 +128,7 @@ class DaysController extends BaseJsonController
     $user->setCurrentDay($day);
     $user->save();
 
-    return $this->_answerOk($this->_exportDayWithSubentities($day));
+    return $this->_answerOk();
   }
 
   function doShare()
