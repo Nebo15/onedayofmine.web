@@ -72,8 +72,8 @@ class DaysController extends BaseJsonController
     if(!$this->request->hasPost())
       return $this->_answerWithError('Not a POST request', null, 405);
 
-    if(!$day = $this->_getUser()->getCurrentDay())
-      return $this->_answerNotFound('Current day not set');
+    if(!$day = Day::findById($this->request->id))
+      return $this->_answerNotFoound('Day not found');
 
     if($this->request->get('cover_content'))
       $day->attachImage(base64_decode($this->request->get('cover_content')));
