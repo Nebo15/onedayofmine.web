@@ -44,7 +44,6 @@ class DayAcceptanceTest extends odAcceptanceTestCase
       $this->assertEqual($day->getOccupation(), $loaded_day->occupation);
       $this->assertEqual($day->getLikesCount(), $loaded_day->likes_count);
       $this->assertEqual($day->getCreateTime(), $loaded_day->ctime);
-      $this->assertEqual($day->getIsEnded(), $loaded_day->is_ended);
       $this->assertEqual($moment1->getId(), $loaded_day->moments[0]->id);
       $this->assertEqual($moment2->getId(), $loaded_day->moments[1]->id);
 
@@ -54,7 +53,6 @@ class DayAcceptanceTest extends odAcceptanceTestCase
       $this->assertEqual(lmbToolkit::instance()->getConf('common')->default_comments_count, count($loaded_day->comments));
       $this->assertEqual($day->getComments()->at(0)->getId(), $loaded_day->comments[0]->id);
       $this->assertEqual($day->getMoments()->count(), count($loaded_day->moments));
-//      $this->assertEqual($day->getMoments()->at(0)->getComments()->count(), count($loaded_day->moments[0]->comments));
     }
   }
 

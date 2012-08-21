@@ -45,7 +45,6 @@ class Day extends ModelWithImage
     $export->likes_count = $this->getLikesCount() ?: 0;
     $export->ctime = $this->getCreateTime();
     $export->utime = $this->getUpdateTime();
-    $export->is_ended = $this->getIsEnded() ?: 0;
 
     if($this->getIsDeleted())
       $export->is_deleted = true;
@@ -107,16 +106,6 @@ class Day extends ModelWithImage
       'limit' => (!$limit || $limit > 100) ? 100 : $limit,
       'sort' => array('id' => 'DESC')
     ));
-  }
-
-  static function findUnfinished(User $user)
-  {
-    $criteria = lmbSQLCriteria::equal('is_deleted', 0);
-    $criteria->add(lmbSQLCriteria::equal('is_ended', 0));
-    $days = $user->getDays()->find(array('criteria' => $criteria));
-    if(count($days) > 1)
-      throw new lmbException("User {$user->getId()} has more than one open day");
-    return $days->at(0);
   }
 
   static function findByString($query, $from_id = null, $to_id = null, $limit = null)

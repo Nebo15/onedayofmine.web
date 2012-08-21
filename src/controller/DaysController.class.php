@@ -43,7 +43,6 @@ class DaysController extends BaseJsonController
       return $this->_answerWithError($errors);
 
     $day = new Day();
-    $day->setIsEnded(0);
     $day->setUser($this->_getUser());
     // Required
     $day->setTitle($this->request->getPost('title'));
@@ -70,10 +69,6 @@ class DaysController extends BaseJsonController
     if(!$this->request->hasPost())
       return $this->_answerWithError('Not a POST request');
 
-    if(!$day = Day::findUnfinished($this->_getUser()))
-      return $this->_answerNotFound('Unfinished day not found');
-
-    $day->setIsEnded(1);
     $day->save();
 
     return $this->_answerOk();
@@ -88,8 +83,8 @@ class DaysController extends BaseJsonController
     if(count($errors))
       return $this->_answerWithError($errors);
 
-    if(!$day = Day::findUnfinished($this->_getUser()))
-      return $this->_answerNotFound('Unfinished day not found');
+    // if(!$day = Day::findUnfinished($this->_getUser()))
+    //   return $this->_answerNotFound('Unfinished day not found');
 
     $image_content = base64_decode($this->request->get('image_content'));
     if(!count($day->getMoments()))

@@ -57,7 +57,6 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
       $this->assertEqual($day->location, $response->result->location);
       $this->assertEqual($day->type, $response->result->type);
       $this->assertEqual(0, $response->result->likes_count);
-      $this->assertEqual(0, $response->result->is_ended);
     }
   }
 
@@ -86,7 +85,6 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
       $this->assertEqual($day->location, $response->result->location);
       $this->assertEqual($day->type, $response->result->type);
       $this->assertEqual(0, $response->result->likes_count);
-      $this->assertEqual(0, $response->result->is_ended);
     }
   }
 
@@ -114,7 +112,6 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
       $this->assertEqual($this->main_user->location, $response->result->location);
       $this->assertEqual($day->type, $response->result->type);
       $this->assertEqual(0, $response->result->likes_count);
-      $this->assertEqual(0, $response->result->is_ended);
     }
   }
 
