@@ -20,12 +20,7 @@ class odModelToEntitiesWriter {
       $descriptions .= $this->_getEntityDescription($name, $fields) . PHP_EOL;
     }
 
-    $contents = <<<EOT
-# Entities #
-$descriptions
-
-EOT;
-
+    $contents = $descriptions;
     file_put_contents($this->filename, $contents);
   }
 

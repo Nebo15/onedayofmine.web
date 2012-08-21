@@ -66,8 +66,7 @@ class odApiToMarkdownWriter
 
   function saveFile()
   {
-    $output = "# API #".PHP_EOL;
-    $output .= " Version: ".date('d.m.y H:i:s').PHP_EOL.PHP_EOL;
+    $output = '';
     $output .= "## Table of contents: ##".PHP_EOL;
     $output .= "<a name='toc'></a>".PHP_EOL;
 

@@ -1,135 +1,160 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>OneDayOfMine API</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="">
-  <meta name="author" content="">
+  <head>
+    <meta charset="utf-8">
+    <title>OneDayOfMine API</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Le styles -->
-  <link href="http://current.bootstrapcdn.com/bootstrap-v204/css/bootstrap.css" rel="stylesheet">
-  <link href="http://current.bootstrapcdn.com/bootstrap-v204/css/bootstrap-responsive.css" rel="stylesheet">
+    <!-- Le styles -->
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.1.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="//current.bootstrapcdn.com/bootstrap-v204/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="//twitter.github.com/bootstrap/assets/css/docs.css" rel="stylesheet">
 
-  <!--[if lt IE 9]>
-  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-  <![endif]-->
-</head>
+    <!--[if lt IE 9]>
+    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
 
-<body>
-
-<div class="container">
-
-  <div class="page-header">
-    <h1>Welcome to API of OneDayOfMine.com</h1>
-    <?php
-    $commit_id = file_get_contents(lmb_env_get('APP_DIR').'/.git/refs/heads/master');
-    echo "Commit: <a href='https://github.com/daeq/one-day-of-mine/commit/{$commit_id}'>{$commit_id}</a>";
-    echo " / Deploy time: ".date("Y.m.d H:i:s", filemtime(lmb_env_get('APP_DIR').'/.git/refs/heads/master'));
-    echo " / Test time: ".date("Y.m.d H:i:s", filemtime(lmb_env_get('APP_DIR').'/www/api_doc/examples.markdown'));
-    ?>
-  </div>
-
-  <div class="tabbable tabs-left"> <!-- Only required for left/right tabs -->
-    <ul class="nav nav-tabs">
-      <li class="active"><a href="#tab-doc" data-toggle="tab">Core concepts</a></li>
-      <li><a href="#tab-examples" data-toggle="tab">API methods</a></li>
-      <li><a href="#tab-entities" data-toggle="tab">Data entities</a></li>
-      <li><a href="#tab-testing" data-toggle="tab">Hand-testing instructions</a></li>
-    </ul>
-    <div class="tab-content">
-      <div class="tab-pane active" id="tab-doc">
-        <div id="doc-content">
-          <div class="alert alert-info">
-            Downloading...
-          </div>
-        </div>
-      </div>
-      <div class="tab-pane active" id="tab-examples">
-        <div id="examples-content">
-          <div class="alert alert-info">
-            Downloading...
-          </div>
-        </div>
-      </div>
-      <div class="tab-pane active" id="tab-entities">
-        <div id="entities-content">
-          <div class="alert alert-info">
-            Downloading...
-          </div>
-        </div>
-      </div>
-      <div class="tab-pane" id="tab-testing">
-        <h3>Установка:</h3>
-        <ul>
-          <li>
-            устанавливаем <a href="https://chrome.google.com/webstore/detail/fdmmgilgnpjigdojojpjoooidkmcomcm">приложение</a>
-            для хрома
-          </li>
-          <li>сохраняем и импортируем в него <a href="/api_doc/postman.json">файлик</a></li>
-          <li>в окружении(в центре шапки, справа от глазика) задаем переменную host = 'http://api.onedayofmine.com/' именно со слешем в конце</li>
-        </ul>
-
-        <h3>Аутентификация:</h3>
-        <ul>
-          <li>выбираем Auth-Login и меняем параметр access_token на один из преведенных ниже</li>
-          <li>запускаем Auth-Login</li>
-          <li>теперь можно вызывать пользовательские методы</li>
-        </ul>
-
-        <h3>Пользователи для тестирования:</h3>
-        <?php $users = $this->toolkit->loadTestsUsersInfo(); ?>
-
-        {{list using="{$users}"}}
-        <ul>
-          {{list:item}}
-          <li>
-            ID: {$item.id}
-            <ul>
-              <li>Email: {$item.email}</li>
-              <li>Password: secret</li>
-              <li>Access_token: {$item.access_token}</li>
-              <?php if(lmb_env_get('LIMB_APP_MODE') != 'devel') { ?>
-              <li><a href="{$item.login_url}">login by user</a></li>
-              <?php } ?>
+  <body data-spy="scroll" data-target=".bs-docs-sidebar">
+    <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="">
+                <a href="http://api.onedayofmine.com/">Production docs</a>
+              </li>
+              <li class="">
+                <a href="http://stage.onedayofmine.com/">Stage docs</a>
+              </li>
+              <li class="">
+                <a href="http://docs.onedayofmine.apiary.io/">Apiary docs</a>
+              </li>
             </ul>
-          </li>
-          {{/list:item}}
-          {{list:empty}}
-            <p>Facebook не захотел показывать тестовых пользователей. Try to F5 later.</p>
-          	<img src="http://gifsforum.com/images/gif/F5/grand/rafresh-refresh-F5-eccbc87e4b5ce2fe28308fd9f2a7baf3-185.gif"/>
-          {{/list:empty}}
-        </ul>
-        {{/list}}
+          </div>
+        </div>
       </div>
     </div>
-  </div>
 
+    <header class="jumbotron subhead" id="overview">
+      <div class="container">
+        <h1>One Day of Mine Dev API</h1>
+        <p>
+          <small>
+            <?php
+            $commit_id = trim(file_get_contents(lmb_env_get('APP_DIR').'/.git/refs/heads/master'));
+            echo "Commit: <a href='//github.com/daeq/one-day-of-mine/commit/{$commit_id}'>{$commit_id}</a><br />";
+            echo "Deployed at ".date("y.m.d H:i:s", filemtime(lmb_env_get('APP_DIR').'/.git/refs/heads/master'));
+            echo " / tested at ".date("y.m.d H:i:s", filemtime(lmb_env_get('APP_DIR').'/www/api_doc/examples.markdown'));
+            ?>
+          </small>
+        </p>
+      </div>
+    </header>
 
-</div>
-<!-- /container -->
+    <div class="container">
+      <div class="row">
+        <div class="span3 bs-docs-sidebar">
+          <ul class="nav nav-list bs-docs-sidenav">
+            <li><a href="#main"><i class="icon-chevron-right"></i> Core concepts</a></li>
+            <li><a href="#api"><i class="icon-chevron-right"></i> API methods</a></li>
+            <li><a href="#entities"><i class="icon-chevron-right"></i> DB entities</a></li>
+            <li><a href="#testing"><i class="icon-chevron-right"></i> Testing instruction</a></li>
+          </ul>
+        </div>
+        <div class="span9">
+          <section id="main">
+            <div class="page-header">
+              <h1>Core concepts</h1>
+            </div>
+            <div id="main-content"></div>
+          </section>
+          <section id="api">
+            <div class="page-header">
+              <h1>API methods</h1>
+            </div>
+            <div id="api-content"></div>
+          </section>
+          <section id="entities">
+            <div class="page-header">
+              <h1>DB entities</h1>
+            </div>
+            <div id="entities-content"></div>
+          </section>
+          <section id="testing">
+            <div class="page-header">
+              <h1>Testing</h1>
+            </div>
+            <div id="testing-content">
+              <h3>Установка:</h3>
+              <ul>
+                <li>
+                  устанавливаем <a href="//chrome.google.com/webstore/detail/fdmmgilgnpjigdojojpjoooidkmcomcm">приложение</a>
+                  для хрома
+                </li>
+                <li>сохраняем и импортируем в него <a href="/api_doc/postman.json">файлик</a></li>
+                <li>в окружении(в центре шапки, справа от глазика) задаем переменную host = '//api.onedayofmine.com/' именно со слешем в конце</li>
+              </ul>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-<script src="http://current.bootstrapcdn.com/bootstrap-v204/js/bootstrap.js"></script>
-<script src="http://pagedown.googlecode.com/hg/Markdown.Converter.js"></script>
-<script type="text/javascript">
-  (function () {
-    $.get('/api_doc/doc.markdown', function (data) {
-      var converter = new Markdown.Converter();
-      $("#doc-content").html(converter.makeHtml(data));
-    });
+              <h3>Аутентификация:</h3>
+              <ul>
+                <li>выбираем Auth-Login и меняем параметр access_token на один из преведенных ниже</li>
+                <li>запускаем Auth-Login</li>
+                <li>теперь можно вызывать пользовательские методы</li>
+              </ul>
 
-    $.get('/api_doc/examples.markdown', function (data) {
-      var converter = new Markdown.Converter();
-      $("#examples-content").html(converter.makeHtml(data));
-    });
+              <h3>Пользователи для тестирования:</h3>
+              <?php $users = $this->toolkit->loadTestsUsersInfo(); ?>
 
-    $.get('/api_doc/entities.markdown', function (data) {
-      var converter = new Markdown.Converter();
-      $("#entities-content").html(converter.makeHtml(data));
-    });
+              {{list using="{$users}"}}
+              <ul>
+                {{list:item}}
+                <li>
+                  ID: {$item.id}
+                  <ul>
+                    <li>Email: {$item.email}</li>
+                    <li>Password: secret</li>
+                    <li>Access_token: {$item.access_token}</li>
+                    <?php if(lmb_env_get('LIMB_APP_MODE') != 'devel') { ?>
+                    <li><a href="{$item.login_url}">login by user</a></li>
+                    <?php } ?>
+                  </ul>
+                </li>
+                {{/list:item}}
+                {{list:empty}}
+                  <p>Facebook не захотел показывать тестовых пользователей. Try to F5 later.</p>
+                  <img src="//gifsforum.com/images/gif/F5/grand/rafresh-refresh-F5-eccbc87e4b5ce2fe28308fd9f2a7baf3-185.gif"/>
+                {{/list:empty}}
+              </ul>
+              {{/list}}
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
 
-  })();
-</script>
-</body>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
+    <script src="//twitter.github.com/bootstrap/assets/js/application.js"></script>
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.1.0/js/bootstrap.min.js"></script>
+    <script src="//pagedown.googlecode.com/hg/Markdown.Converter.js"></script>
+    <script type="text/javascript">
+      (function () {
+        $.get('/api_doc/doc.markdown', function (data) {
+          var converter = new Markdown.Converter();
+          $("#main-content").html(converter.makeHtml(data));
+        });
+
+        $.get('/api_doc/examples.markdown', function (data) {
+          var converter = new Markdown.Converter();
+          $("#api-content").html(converter.makeHtml(data));
+        });
+
+        $.get('/api_doc/entities.markdown', function (data) {
+          var converter = new Markdown.Converter();
+          $("#entities-content").html(converter.makeHtml(data));
+        });
+
+      })();
+    </script>
+  </body>
 </html>

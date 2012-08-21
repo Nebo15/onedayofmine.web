@@ -1,4 +1,3 @@
-# Entities #
 ### Complaint ###
 <a name="Entity:Complaint"></a>
 ###### Fields: ######
@@ -103,4 +102,3 @@
 </table>
 
 * * *
-
