@@ -26,6 +26,12 @@ class User extends ModelWithImage
         'class' => 'UserSettings',
         'can_be_null' => true,
         'cascade_delete' => false
+      ),
+      'current_day' => array (
+        'field' => 'current_day_id',
+        'class' => 'Day',
+        'can_be_null' => true,
+        'cascade_delete' => false
       )
     );
     $this->_has_many = array (

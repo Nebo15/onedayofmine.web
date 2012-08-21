@@ -52,97 +52,59 @@ class DaysController extends BaseJsonController
     $day->setOccupation($this->request->getPost('occupation') ?: $this->_getUser()->getOccupation());
     $day->save();
 
-    $day->getDefaultConnection()->commitTransaction();
+    $user = $this->_getUser();
+    $user->setCurrentDay($day);
+    $user->save();
 
-    $answer = $this->_exportDayWithSubentities($day);
+    $day->getDefaultConnection()->commitTransaction();
 
     // Notify friends about new day
     $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_DAY, $day);
 
+    // Share to social networks
     $this->toolkit->getPostingService()->shareDayBegin($day);
 
-    return $this->_answerOk($answer);
+    return $this->_answerOk($this->_exportDayWithSubentities($day));
+  }
+
+  function doUpdate()
+  {
+    if(!$this->request->hasPost())
+      return $this->_answerWithError('Not a POST request', null, 405);
+
+    if(!$day = $this->_getUser()->getCurrentDay())
+      return $this->_answerNotFound('Current day not set');
+
+    if($this->request->get('cover_content'))
+      $day->attachImage(base64_decode($this->request->get('cover_content')));
+
+    return $this->_importSaveAndAnswer($day, array('title', 'occupation', 'location', 'type'));
+  }
+
+  function doCurrent()
+  {
+    if(!$this->request->hasPost())
+      return $this->_answerWithError('Not a POST request', null, 405);
+
+    if(!$day = $this->_getUser()->getCurrentDay())
+      return $this->_answerNotFound('Current day not set');
+
+    return $this->_answerOk($this->_exportDayWithSubentities($day));
   }
 
   function doFinish()
   {
     if(!$this->request->hasPost())
-      return $this->_answerWithError('Not a POST request');
+      return $this->_answerWithError('Not a POST request', null, 405);
 
-    $day->save();
+    if(!$day = $this->_getUser()->getCurrentDay())
+      return $this->_answerNotFound('Current day not set');
+
+    $user = $this->_getUser();
+    $user->setCurrentDay(null);
+    $user->save();
 
     return $this->_answerOk();
-  }
-
-  function doMomentCreate()
-  {
-    if(!$this->request->hasPost())
-      return $this->_answerWithError('Not a POST request');
-
-    $errors = $this->_checkPropertiesInRequest(array('description', 'image_content'));
-    if(count($errors))
-      return $this->_answerWithError($errors);
-
-    // if(!$day = Day::findUnfinished($this->_getUser()))
-    //   return $this->_answerNotFound('Unfinished day not found');
-
-    $image_content = base64_decode($this->request->get('image_content'));
-    if(!count($day->getMoments()))
-    {
-      $day->attachImage($image_content);
-      $day->save();
-    }
-
-    $moment = new Moment();
-    $moment->setDay($day);
-    $moment->setDescription($this->request->get('description'));
-    $moment->save();
-
-    $moment->attachImage($image_content);
-    $moment->save();
-
-    if($this->request->get('time')) {
-      list($time, $timezone) = Moment::isoToStamp($this->request->get('time'));
-      $moment->setTime($time);
-      $moment->setTimezone($timezone);
-    }
-    else
-    {
-      $moment->setTimezone($this->toolkit->getUser()->getTimezone());
-    }
-    $moment->save();
-
-    if($this->error_list->isEmpty())
-    {
-      $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_MOMENT, $moment);
-      return $this->_answerOk($moment->exportForApi());
-    }
-    else
-      return $this->_answerWithError($this->error_list->export());
-  }
-
-  function doCommentCreate()
-  {
-    if(!$this->request->hasPost())
-      return $this->_answerWithError('Not a POST request');
-
-    $comment = new DayComment();
-    $comment->setText($this->request->get('text'));
-    $comment->setDay(Day::findById($this->request->id));
-    $comment->setUser($this->toolkit->getUser());
-    $comment->validate($this->error_list);
-
-    if($this->error_list->isEmpty())
-    {
-      $comment->saveSkipValidation();
-
-      // Notify friends about new comment in day
-      $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_COMMENT, $comment);
-
-      return $this->_answerOk($comment->exportForApi());
-    }
-    else
-      return $this->_answerWithError($this->error_list->export());
   }
 
   function doShare()
@@ -174,24 +136,6 @@ class DaysController extends BaseJsonController
 
     return $this->_answerOk($this->_exportDayWithSubentities($day));
   }
-
-  function doUpdate()
-  {
-    if(!$this->request->hasPost())
-      return $this->_answerWithError('Not a POST request');
-
-    if(!$day = Day::findById($this->request->id))
-      return $this->_answerNotFound('Day not found');
-
-    if($this->_getUser()->getId() != $day->getUserId())
-      return $this->_answerNotFound('Day not found');
-
-    if($this->request->get('cover_content'))
-      $day->attachImage(base64_decode($this->request->get('cover_content')));
-
-    return $this->_importSaveAndAnswer($day, array('title', 'occupation', 'location', 'type'));
-  }
-
 
   function doDelete()
   {
@@ -360,6 +304,77 @@ class DaysController extends BaseJsonController
     }
 
     return $this->_answerOk($answer);
+  }
+
+  function doMomentCreate()
+  {
+    if(!$this->request->hasPost())
+      return $this->_answerWithError('Not a POST request');
+
+    $errors = $this->_checkPropertiesInRequest(array('description', 'image_content'));
+    if(count($errors))
+      return $this->_answerWithError($errors);
+
+    if(!$day = Day::findUnfinished($this->_getUser()))
+      return $this->_answerNotFound('Unfinished day not found');
+
+    $image_content = base64_decode($this->request->get('image_content'));
+    if(!count($day->getMoments()))
+    {
+      $day->attachImage($image_content);
+      $day->save();
+    }
+
+    $moment = new Moment();
+    $moment->setDay($day);
+    $moment->setDescription($this->request->get('description'));
+    $moment->save();
+
+    $moment->attachImage($image_content);
+    $moment->save();
+
+    if($this->request->get('time')) {
+      list($time, $timezone) = Moment::isoToStamp($this->request->get('time'));
+      $moment->setTime($time);
+      $moment->setTimezone($timezone);
+    }
+    else
+    {
+      $moment->setTimezone($this->toolkit->getUser()->getTimezone());
+    }
+    $moment->save();
+
+    if($this->error_list->isEmpty())
+    {
+      $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_MOMENT, $moment);
+      return $this->_answerOk($moment->exportForApi());
+    }
+    else
+      return $this->_answerWithError($this->error_list->export());
+  }
+
+  function doCommentCreate()
+  {
+    if(!$this->request->hasPost())
+      return $this->_answerWithError('Not a POST request');
+
+    $comment = new DayComment();
+    $comment->setText($this->request->get('text'));
+    $comment->setDay(Day::findById($this->request->id));
+    $comment->setUser($this->toolkit->getUser());
+    $comment->validate($this->error_list);
+
+    if($this->error_list->isEmpty())
+    {
+      $comment->saveSkipValidation();
+
+      // Notify friends about new comment in day
+      $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_COMMENT, $comment);
+
+      return $this->_answerOk($comment->exportForApi());
+    }
+    else
+      return $this->_answerWithError($this->error_list->export());
   }
 
   function doCreateComplaint()
