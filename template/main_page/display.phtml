@@ -153,7 +153,14 @@
           $("#entities-content").html(converter.makeHtml(data));
         });
 
-        $('.bs-docs-sidenav').affix()
+        // side bar
+        $('.bs-docs-sidenav').affix({
+          offset: {
+            top: 245,
+            bottom: 350
+          }
+        })
+
       })();
     </script>
   </body>
