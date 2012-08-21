@@ -134,7 +134,6 @@
     </div>
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-    <script src="//twitter.github.com/bootstrap/assets/js/application.js"></script>
     <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.1.0/js/bootstrap.min.js"></script>
     <script src="//pagedown.googlecode.com/hg/Markdown.Converter.js"></script>
     <script type="text/javascript">
@@ -154,6 +153,7 @@
           $("#entities-content").html(converter.makeHtml(data));
         });
 
+        $('.bs-docs-sidenav').affix()
       })();
     </script>
   </body>
