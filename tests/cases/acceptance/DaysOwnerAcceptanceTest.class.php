@@ -267,6 +267,42 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
   }
 
   /**
+   * @api description Get current day.
+   */
+  function testCurrent()
+  {
+    $day = $this->generator->day($this->main_user);
+    $day->save();
+
+    $this->main_user->setCurrentDay($day);
+    $this->main_user->save();
+
+    $this->_loginAndSetCookie($this->main_user);
+    $response = $this->post('days/current');
+
+    if($this->assertResponse(200))
+    {
+      $loaded_day = $response->result;
+      $this->assertEqual($day->getId(), $loaded_day->id);
+      $this->assertEqual($day->getTitle(), $loaded_day->title);
+      $this->assertEqual($day->getOccupation(), $loaded_day->occupation);
+      $this->assertEqual($day->getLikesCount(), $loaded_day->likes_count);
+      $this->assertEqual($day->getCreateTime(), $loaded_day->ctime);
+    }
+  }
+
+  function testCurrent_notSet()
+  {
+    $day = $this->generator->day($this->main_user);
+    $day->save();
+
+    $this->_loginAndSetCookie($this->main_user);
+    $response = $this->post('days/current');
+
+    $this->assertResponse(404);
+  }
+
+  /**
    * @api description Finish current day.
    */
   function testFinish()
