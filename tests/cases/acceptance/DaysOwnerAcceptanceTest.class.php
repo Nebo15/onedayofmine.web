@@ -115,12 +115,6 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
     }
   }
 
-  // TODO
-  function testStart_withAlreadyStartedDay()
-  {
-
-  }
-
   /**
    * @api description Creates <a href="#Entity:Moment">moment</a> in current active day and returns it.
    * @api input param string description
@@ -226,36 +220,20 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
 
     $this->_loginAndSetCookie($this->main_user);
 
-    $res = $this->post('days/'.$day->getId().'/update', array(
+    $response = $this->post('days/'.$day->getId().'/update', array(
         'title' => $title = $this->generator->string(),
         'occupation' => $occupation = $this->generator->string(255),
         'location' => $location = $this->generator->string(),
         'type' => $type = 'Working day',
         'cover_content' => base64_encode($this->generator->image()),
     ))->result;
+
     if($this->assertResponse(200))
     {
       $loaded_day = Day::findById($day->getId());
       $this->assertValidDayJson($loaded_day, $response);
     }
   }
-
-  /**
-   * @api description Finish current day.
-   */
-  function testFinish()
-  {
-    $day = $this->generator->day($this->main_user);
-    $day->save();
-
-    $this->_loginAndSetCookie($this->main_user);
-    $this->post('days/'.$day->getId().'/finish')->result;
-
-    $this->assertResponse(200);
-  }
-
-  //TODO
-  function testFinish_NotFound() {}
 
   function testUpdate_NotFound()
   {
@@ -285,6 +263,59 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
       'type' => $type = 'Working',
       'cover' => $this->generator->image(),
     ));
+    $this->assertResponse(401);
+  }
+
+  /**
+   * @api description Finish current day.
+   */
+  function testFinish()
+  {
+    $day = $this->generator->day($this->main_user);
+    $day->save();
+
+    $this->main_user->setCurrentDay($day);
+    $this->main_user->save();
+
+    $this->_loginAndSetCookie($this->main_user);
+    $response = $this->post('days/'.$day->getId().'/finish');
+
+    $this->assertResponse(200);
+  }
+
+  function testFinish_noCurrentDay()
+  {
+    $day = $this->generator->day($this->main_user);
+    $day->save();
+
+    $this->_loginAndSetCookie($this->main_user);
+    $response = $this->post('days/'.$day->getId().'/finish');
+
+    $this->assertResponse(200);
+  }
+
+  function testFinish_notCurrentDay()
+  {
+    $day = $this->generator->day($this->main_user);
+    $day->save();
+
+    $day2 = $this->generator->day($this->main_user);
+    $day2->save();
+
+    $this->main_user->setCurrentDay($day2);
+    $this->main_user->save();
+
+    $this->_loginAndSetCookie($this->main_user);
+    $response = $this->post('days/'.$day->getId().'/finish');
+
+    $this->assertResponse(200);
+  }
+
+  function testFinish_NotFound()
+  {
+    $this->_loginAndSetCookie($this->main_user);
+    $response = $this->post('days/1337/finish');
+
     $this->assertResponse(404);
   }
 
@@ -360,6 +391,6 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
     $this->_loginAndSetCookie($this->additional_user);
     $this->post('days/'.$day->getId().'/restore')->result;
 
-    $this->assertResponse(404);
+    $this->assertResponse(401);
   }
 }
