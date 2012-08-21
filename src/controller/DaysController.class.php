@@ -227,7 +227,7 @@ class DaysController extends BaseJsonController
       return $this->_answerNotFound('Day not found');
 
     if($day->getUserId() != $this->_getUser()->getId())
-      return $this->_answerNotFound('Day not found');
+      return $this->_answerWithError('You can restore only your own days', null, 401);
 
     $day->setIsDeleted(0);
     $day->save();
