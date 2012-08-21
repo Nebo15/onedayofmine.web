@@ -109,6 +109,21 @@ class DaysController extends BaseJsonController
     return $this->_answerOk();
   }
 
+  function doMarkCurrent()
+  {
+    if(!$this->request->hasPost())
+      return $this->_answerWithError('Not a POST request', null, 405);
+
+    if(!$day = Day::findById($this->request->id))
+      return $this->_answerNotFoound('Day not found');
+
+    $user = $this->_getUser();
+    $user->setCurrentDay($day);
+    $user->save();
+
+    return $this->_answerOk($this->_exportDayWithSubentities($day));
+  }
+
   function doShare()
   {
     if(!$this->request->hasPost())
