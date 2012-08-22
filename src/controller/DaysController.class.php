@@ -113,6 +113,19 @@ class DaysController extends BaseJsonController
       }
     }
 
+    if($this->request->get('image_content')){
+      $day->attachImage(base64_decode($this->request->get('image_content')));
+      $day->save();
+    }
+
+    if($this->request->get('comment')) {
+      $comment = new DayComment();
+      $comment->setText($this->request->get('comment'));
+      $comment->setDay($day);
+      $comment->setUser($this->_getUser());
+      $comment->save();
+    }
+
     return $this->_answerOk($this->_exportDayWithSubentities($day));
   }
 

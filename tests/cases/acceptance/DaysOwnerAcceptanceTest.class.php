@@ -344,7 +344,10 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
     $this->main_user->save();
 
     $this->_loginAndSetCookie($this->main_user);
-    $response = $this->post('days/'.$day->getId().'/finish');
+    $response = $this->post('days/'.$day->getId().'/finish', array(
+      'image_content' => $image_content = base64_encode($this->generator->image()),
+      'comment' => $comment_text = $this->generator->string(),
+    ));
 
     if($this->assertResponse(200))
     {
@@ -354,6 +357,12 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
       $this->assertEqual($day->getOccupation(), $loaded_day->occupation);
       $this->assertEqual($day->getLikesCount(), $loaded_day->likes_count);
       $this->assertEqual($day->getCreateTime(), $loaded_day->ctime);
+
+      $this->assertEqual(count($day->getComments()), 1);
+      $this->assertEqual($day->getComments()->at(0)->getText(), $comment_text);
+
+      $this->assertValidImageUrl($loaded_day->image_266);
+      $this->assertValidImageUrl($loaded_day->image_532);
 
       $user = User::findById($this->main_user->getId());
       $this->assertFalse($user->getCurrentDay());
