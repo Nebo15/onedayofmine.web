@@ -7,6 +7,8 @@ lmb_require('src/model/ModelWithImage.class.php');
  */
 class Day extends ModelWithImage
 {
+  protected $_default_sort_params = array('id'=>'desc');
+
   protected function _defineRelations()
   {
     $this->_many_belongs_to = array(

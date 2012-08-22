@@ -25,7 +25,7 @@ class RelationsTest extends odUnitTestCase
 
     $loaded_user = User::findById($user->getId());
     $this->assertEqual(2, $loaded_user->getDays()->count());
-    $this->assertEqual($loaded_user->getDays()->at(0)->getId(), $day1->getId());
+    $this->assertEqual($loaded_user->getDays()->at(0)->getId(), $day2->getId());
 
     $loaded_day1 = Day::findById($day1->getId());
     $this->assertEqual($loaded_day1->getUser()->getId(), $user->getId());
