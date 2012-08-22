@@ -3,6 +3,7 @@ lmb_require(taskman_prop('PROJECT_DIR').'setup.php');
 
 /**
  * @desc Delete all rows from DB tables
+ * @deps devel,testing
  */
 function task_od_remove_db_data()
 {
@@ -21,6 +22,7 @@ function task_od_remove_db_data()
 /**
  * @desc Fill db from lj community
  * @deps migrate_load_all,migrate_run,od_tests_users
+ * @mods devel,testing
  * @alias od_fill_from_lj
  */
 function task_od_parse_lj($argv)
@@ -182,6 +184,7 @@ function task_od_parse_lj($argv)
 /**
  * @desc Register tests users
  * @deps od_remove_cache
+ * @deps devel,testing
  */
 function task_od_tests_users()
 {
@@ -213,6 +216,9 @@ function task_od_tests_users()
   echo "== Loaded ".count($tests_users)." test users. ==".PHP_EOL;
 }
 
+/**
+ * @deps devel,testing
+ */
 function task_od_delete_fb_objects()
 {
   lmb_require('tests/src/toolkit/odTestsTools.class.php');
