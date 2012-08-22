@@ -15,13 +15,13 @@ class TaskmanException extends Exception
   {
     global $TASKMAN_STACK;
 
-    $stack_str = ''; 
+    $stack_str = '';
     foreach($TASKMAN_STACK as $task)
     {
       $stack_str .= '->' . $task->getName();
     }
-    return get_class($this) . 
-            " '{$this->message}' in {$this->file}({$this->line})\n" . 
+    return get_class($this) .
+            " '{$this->message}' in {$this->file}({$this->line})\n" .
             "{$this->getTraceAsString()}\ntasks: $stack_str";
   }
 }
@@ -48,7 +48,7 @@ class TaskmanTask
 
   function getName()
   {
-    return $this->name;    
+    return $this->name;
   }
 
   function getFunc()
@@ -74,9 +74,19 @@ class TaskmanTask
     global $TASKMAN_CURRENT_TASK;
     global $TASKMAN_STACK;
 
+    if(function_exists('lmb_app_mode') && isset($this->props['mods']))
+    {
+      $mods = explode(',', $this->props['mods']);
+      if(!in_array(lmb_app_mode(), $mods))
+      {
+        echo "Task '".$this->getName()."' can be run modes ".$this->props['mods'].". Not in '".lmb_app_mode()."'.".PHP_EOL;
+        exit(1);
+      }
+    }
+
     $args_str = serialize($args);
 
-    if((isset($this->has_run[$args_str]) && $this->has_run[$args_str]) || 
+    if((isset($this->has_run[$args_str]) && $this->has_run[$args_str]) ||
        $this->is_running)
       return;
 
@@ -87,7 +97,7 @@ class TaskmanTask
     {
 
       if($task_handler = taskman_config('task_handler'))
-        $task_handler($this);
+        call_user_func($task_handler, $this);
 
       taskman_runtasks($this->_getBeforeDeps(), $this->args);
 
@@ -109,7 +119,7 @@ class TaskmanTask
 
       taskman_runtasks($this->_getAfterDeps(), $this->args);
 
-      taskman_sysmsg("************************* '" . $this->getName() . "' done (" . 
+      taskman_sysmsg("************************* '" . $this->getName() . "' done (" .
                      round(microtime(true)-$bench,2) . " sec.)*************************\n");
 
       $this->has_run[$args_str] = true;
@@ -118,7 +128,7 @@ class TaskmanTask
     catch(Exception $e)
     {
       if($error_handler = taskman_config('error_handler'))
-        $error_handler($e);
+        call_user_func($error_handler, $e);
       else
         throw $e;
     }
@@ -353,7 +363,7 @@ function taskman_process_argv(&$argv)
 
       taskman_sysmsg("Setting prop $def_name=$def_value\n");
       taskman_propset($def_name, $def_value);
-      
+
       $process_defs = false;
     }
     else
@@ -382,13 +392,13 @@ function taskman_collecttasks()
       throw new TaskmanException("Double definition of task with name '$name'");
 
     $task_obj = new TaskmanTask($func);
-    $TASKMAN_TASKS[$name] = $task_obj; 
+    $TASKMAN_TASKS[$name] = $task_obj;
 
     foreach($task_obj->getAliases() as $alias)
     {
       if(isset($TASKMAN_TASKS[$alias]) || isset($TASKMAN_TASK_ALIASES[$alias]))
         throw new TaskmanException("Double alias '$alias' definition of task with name '$name'");
-      $TASKMAN_TASK_ALIASES[$alias] = $task_obj; 
+      $TASKMAN_TASK_ALIASES[$alias] = $task_obj;
     }
   }
 }
@@ -648,7 +658,7 @@ function task_help($args = array())
   }
 
   $help_func = taskman_config('help_func', 'taskman_default_usage');
-  $help_func();
+  call_user_func($help_func);
 
   echo "\n";
   echo "Available tasks:\n";

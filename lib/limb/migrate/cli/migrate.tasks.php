@@ -95,6 +95,7 @@ function task_migrate_dump_all($argv)
  * @desc Load database schema and datas from files
  * @deps migrate_init_config
  * @example migrate_load_all
+ * @deps devel,testing
  */
 function task_migrate_load_all($argv)
 {
@@ -117,6 +118,7 @@ function task_migrate_diff($argv)
  * @desc Create migration file
  * @deps migrate_init_config
  * @example migrate_create
+ * @deps devel,testing
  */
 function task_migrate_create($argv)
 {
