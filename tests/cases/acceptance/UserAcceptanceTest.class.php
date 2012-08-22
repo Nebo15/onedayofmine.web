@@ -27,8 +27,8 @@ class UserAcceptanceTest extends odAcceptanceTestCase
     $days = $this->get('users/'.$this->main_user->getId().'/days/')->result;
     $this->assertResponse(200);
     $this->assertEqual(2, count($days));
-    $this->assertEqual($day1->getId(), $days[0]->id);
-    $this->assertEqual($day2->getId(), $days[1]->id);
+    $this->assertEqual($day2->getId(), $days[0]->id);
+    $this->assertEqual($day1->getId(), $days[1]->id);
   }
 
   /**
