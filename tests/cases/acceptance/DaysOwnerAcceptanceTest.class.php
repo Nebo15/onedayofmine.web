@@ -121,13 +121,13 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
    * @api input param string image_content File contents, that was previously encoded by base64
    * @api input option time ISO time of moment, when image was created
    */
-  function testCreateMoment()
+  function testAddMoment()
   {
     $day = $this->generator->day($this->main_user);
     $day->save();
 
     $this->_loginAndSetCookie($this->main_user);
-    $res = $this->post('days/'.$day->getId().'/moment_create', array(
+    $res = $this->post('days/'.$day->getId().'/add_moment', array(
         'description' => $description = $this->generator->string(200),
         'image_content' => base64_encode($this->generator->image()),
         'time' => $time = '2005-08-09T18:31:42+03:00',
@@ -145,13 +145,13 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
     }
   }
 
-  function testCreateMoment_withGPS()
+  function testAddMoment_withGPS()
   {
     $day = $this->generator->day($this->main_user);
     $day->save();
 
     $this->_loginAndSetCookie($this->main_user);
-    $res = $this->post('days/'.$day->getId().'/moment_create', array(
+    $res = $this->post('days/'.$day->getId().'/add_moment', array(
         'description' => $description = $this->generator->string(200),
         'image_content' => base64_encode(file_get_contents(lmb_env_get('APP_DIR').'/tests/init/image_with_exif.jpeg')),
     ))->result;
@@ -168,13 +168,13 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
     }
   }
 
-  function testCreateMoment_withoutTime()
+  function testAddMoment_withoutTime()
   {
     $day = $this->generator->day($this->main_user);
     $day->save();
 
     $this->_loginAndSetCookie($this->main_user);
-    $res = $this->post('days/'.$day->getId().'/moment_create', array(
+    $res = $this->post('days/'.$day->getId().'/add_moment', array(
         'description' => $description = $this->generator->string(200),
         'image_content' => base64_encode(file_get_contents(lmb_env_get('APP_DIR').'/tests/init/image_with_exif.jpeg')),
     ))->result;
@@ -187,13 +187,13 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
     }
   }
 
-  function testCreateMoment_CoverOnFirstMoment()
+  function testAddMoment_CoverOnFirstMoment()
   {
     $day = $this->generator->day($this->main_user);
     $day->save();
 
     $this->_loginAndSetCookie($this->main_user);
-    $this->post('days/'.$day->getId().'/moment_create', array(
+    $this->post('days/'.$day->getId().'/add_moment', array(
       'description' => $description = $this->generator->string(200),
       'image_content' => base64_encode($this->generator->image()),
       'time' => $time = '2005-08-09T18:31:42+03:00'

@@ -78,13 +78,13 @@ class NewsObserverAcceptanceTest extends odAcceptanceTestCase
     }
   }
 
-  function testCreateMoment()
+  function testAddMoment()
   {
     $day = $this->generator->day($this->main_user);
     $day->setIsEnded(0);
     $day->save();
 
-    $this->post('days/'.$day->getId().'/moment_create', array(
+    $this->post('days/'.$day->getId().'/add_moment', array(
         'description' => $description = $this->generator->string(200),
         'image_content' => 'iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAAXNSR0IArs4c6QAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9wGEg47HYlSsqsAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAOUlEQVQI13VOQQ4AIAiC1v+/TAcKZysOTkQUApCEDpI11YH7EQdJ103jsBA68MG8dutUPrdIFp5xF8lAKftzc/YPAAAAAElFTkSuQmCC',
         'time' => '2005-08-09T18:31:42+03:00'
@@ -105,7 +105,7 @@ class NewsObserverAcceptanceTest extends odAcceptanceTestCase
   function testDeleteMoment()
   {
     // Create and enshure it was created
-    $this->testCreateMoment();
+    $this->testAddMoment();
     $this->assertEqual($this->additional_user->getNews()->count(), 1);
 
     // Delete

@@ -330,7 +330,7 @@ class DaysController extends BaseJsonController
     return $this->_answerOk($answer);
   }
 
-  function doMomentCreate()
+  function doAddMoment()
   {
     if(!$this->request->hasPost())
       return $this->_answerWithError('Not a POST request');
