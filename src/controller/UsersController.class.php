@@ -70,7 +70,7 @@ class UsersController extends BaseJsonController
   function doFollow()
   {
     if($this->_getUser()->getId() == $this->request->id)
-      return $this->_answerWithError("You can't follow youself.");
+      return $this->_answerWithError("You can't follow youself");
 
     if(!$user = User::findById($this->request->id))
       return $this->_answerNotFound("User not found by id '{$this->request->id}'");
@@ -87,6 +87,9 @@ class UsersController extends BaseJsonController
 
   function doUnfollow()
   {
+    if($this->_getUser()->getId() == $this->request->id)
+      return $this->_answerWithError("You can't unfollow youself");
+
     if(!$user = User::findById($this->request->id))
       return $this->_answerNotFound("User not found by id '{$this->request->id}'");
 
