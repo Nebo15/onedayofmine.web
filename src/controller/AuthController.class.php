@@ -11,7 +11,7 @@ class AuthController extends BaseJsonController
     $answer->facebook               = new stdClass();
     $answer->facebook->appid        = $this->toolkit->getConf('facebook')['appId'];
     $answer->facebook->namespace    = $this->toolkit->getConf('facebook')['namespace'];
-    $answer->facebook->permissions  = implode(',', $this->toolkit->getConf('facebook')['permissions']);
+    // $answer->facebook->permissions  = implode(',', $this->toolkit->getConf('facebook')['permissions']);
 
     $answer->twitter                = new stdClass();
     $answer->twitter->consumer_key  = $this->toolkit->getConf('twitter')['consumer_key'];
