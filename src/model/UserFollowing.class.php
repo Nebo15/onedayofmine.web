@@ -8,6 +8,12 @@ class UserFollowing extends BaseModel
   }
 
   public static function isUsersFollowUser(lmbCollectionInterface $follower_users, User $followed_user) {
+    if(!$followed_user->getId())
+      throw new lmbException("Can't retrieve user id");
+
+    if(!$follower_users->count())
+      return [];
+
     $following_ids = [];
     foreach ($follower_users as $user) {
       $following_ids[$user->getId()] = false;
@@ -26,9 +32,18 @@ class UserFollowing extends BaseModel
     return $following_ids;
   }
 
-  public static function isUserFollowUsers(User $follower_user, lmbCollectionInterface $followed_user) {
+  public static function isUserFollowUsers(User $follower_user, lmbCollectionInterface $followed_users) {
+    if(!$follower_user->getId())
+      throw new lmbException("Can't retrieve user id");
+
+    if(!$followed_users->count())
+      return [];
+
     $following_ids = [];
-    foreach ($followed_user as $user) {
+    foreach ($followed_users as $user) {
+      if(!$user->getId())
+        throw new lmbException("Can't retrieve user id");
+
       $following_ids[$user->getId()] = false;
     }
 
