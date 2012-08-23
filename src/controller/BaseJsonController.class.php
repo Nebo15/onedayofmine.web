@@ -219,4 +219,87 @@ abstract class BaseJsonController extends lmbController
         'errors' => $errors)
     ));
   }
+
+    protected function _attachDayUser(stdClass $day_export, $day)
+  {
+    $day_export->user = $day->getUser()->exportForApi();
+    unset($day_export->user_id);
+
+    // if(lmbToolkit::instance()->getUser() && $day->getUser()->getId() != lmbToolkit::instance()->getUser()->getId()) {
+    //   $day_export->user->is_followed = UserFollowing::isFollowing(lmbToolkit::instance()->getUser(), $day->getUser());
+    //   $day_export->user->is_follower = UserFollowing::isFollowing($day->getUser(), lmbToolkit::instance()->getUser());
+    // }
+  }
+
+  protected function _attachDayIsFavorited(stdClass $day_export, $day)
+  {
+    if(!lmbToolkit::instance()->getUser())
+      return null;
+    $day_export->is_favourite = DayFavourite::isFavourited(lmbToolkit::instance()->getUser(), $day);
+  }
+
+  protected function _attachDayIsDeleted(stdClass $day_export, $day)
+  {
+    if(!lmbToolkit::instance()->getUser())
+      return null;
+    if(lmbToolkit::instance()->getUser()->getId() != $day->getUserId())
+      return null;
+    $day_export->is_deleted = $day->getIsDeleted();
+  }
+
+  protected function _attachComments(stdClass $export, $obj, $only_count = false)
+  {
+    $comments = $obj->getComments();
+    $export->comments_count = $comments->count();
+
+    if($only_count)
+      return;
+
+    $comments->paginate(0, lmbToolkit::instance()->getConf('common')->default_comments_count);
+    $export->comments = array();
+    foreach ($comments as $comment) {
+      $tmp = $comment->exportForApi();
+      $tmp->user = $comment->getUser()->exportForApi();
+      unset($tmp->day_id);
+      unset($tmp->user_id);
+      $export->comments[] = $tmp;
+    }
+  }
+
+  protected function _attachDayMoments(stdClass $day_export, $day)
+  {
+    $day_export->moments = array();
+    foreach($day->getMoments() as $moment) {
+      $moment_export = $moment->exportForApi();
+
+      // Moment day data
+      unset($moment_export->day_id);
+
+      // Moment comments data
+      //$this->_attachComments($moment_export, $moment);
+      // Comments count
+      $moment_export->comments_count = $moment->getComments()->count();
+
+      $day_export->moments[] = $moment_export;
+    }
+  }
+
+  protected function _exportDayWithSubentities($day)
+  {
+    $answer = $day->exportForApi();
+
+    // User data
+    $this->_attachDayUser($answer, $day);
+
+    // Favorites data
+    $this->_attachDayIsFavorited($answer, $day);
+
+    // Comments data
+    $this->_attachComments($answer, $day);
+
+    // Moments data
+    $this->_attachDayMoments($answer, $day);
+
+    return $answer;
+  }
 }
