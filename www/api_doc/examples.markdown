@@ -2,65 +2,66 @@
 <a name='toc'></a>
 
 ### <a href='#Auth'>Auth</a> ###
+1. <a href='#2e3ebba0713b57ebd0126c901e14cda2'>Parameters</a>
 1. <a href='#f3fe153a8e0372904ddc25f133cecd23'>IsLoggedIn</a>
 1. <a href='#bbc87c2030342e7f8609accf937e12ee'>Login</a>
 1. <a href='#a4f262f1ba860bb2759f57a1a5438a7d'>Login_WrongAccessToken</a>
 
 ### <a href='#Day'>Day</a> ###
-1. <a href='#b79f954df9df28cd54f711df9d509537'>Item</a>
-1. <a href='#d344aa53fed8eb3c073b4b29a5d7c2ed'>Item_Many</a>
-1. <a href='#678dbea98cb0bad694e3343fda975fbe'>CommentCreate</a>
-1. <a href='#229fe97c276ee022ecba67d0b474daef'>ShareDay</a>
-1. <a href='#87ca96e22bc43b03a6b0a93a32f5e583'>Like</a>
+1. <a href='#c7f50931cb7300676812b1be4452713e'>Item</a>
+1. <a href='#728358ce357cccc6fb929cc77e018968'>Item_Many</a>
+1. <a href='#dfa3c5c19c9182ad7e16264bc5eaaae4'>CommentCreate</a>
+1. <a href='#d7798cd025076ff25e3f19b562a7d3a6'>ShareDay</a>
+1. <a href='#8a99b7c4fd8c8f8be6e07bb6f220c550'>Like</a>
 1. <a href='#09f10c6db22580edd1ebac5ba800cc23'>Search</a>
 1. <a href='#f1f72ef4a12473ea2e0cd48d0d4ef5c0'>GetFavouriteDays</a>
-1. <a href='#d2027f4d8f942cd18515ae991db148bd'>AddToFavourites</a>
-1. <a href='#2fd21cb3abe6dda388334970d815b4fe'>RemoveFromFavourites</a>
+1. <a href='#9a6f900a628a37797c4cbcc842a37066'>AddToFavourites</a>
+1. <a href='#3e1cc261011ab2b31311c1a77fceb095'>RemoveFromFavourites</a>
 1. <a href='#1c5e784108f8a36beb283dc7a3e34030'>GetFollowingUsersDays</a>
 1. <a href='#ed1af553a9d8b9117548d9a3996ebab5'>GetNewDays</a>
 1. <a href='#58c74019b980810ae9e042bb65573a7a'>GetInterestingDays</a>
 1. <a href='#f2c5afe4a024dc21f1c43ff206afb8f1'>CurrentUserDays</a>
 1. <a href='#2a745393972745222ea3423302eb97c6'>Types</a>
-1. <a href='#c150f427117bc2c89797320300eebf76'>CreateComplaint</a>
+1. <a href='#a226223700c8c6b6f2c20d0cb50609ce'>CreateComplaint</a>
 
 ### <a href='#DaysGuest'>DaysGuest</a> ###
-1. <a href='#f598c609bf5b35ba9638ecd1f93ea445'>Item</a>
-1. <a href='#c29f2529f5fb506c585042f17df45957'>Item_Many</a>
+1. <a href='#f867eb4e1b723386238091f9d64a46bc'>Item</a>
+1. <a href='#b92318c5becd6aa858dfafcbbf60c221'>Item_Many</a>
 1. <a href='#09f10c6db22580edd1ebac5ba800cc23'>Search</a>
 1. <a href='#ed1af553a9d8b9117548d9a3996ebab5'>GetNewDays</a>
 1. <a href='#58c74019b980810ae9e042bb65573a7a'>GetInterestingDays</a>
 1. <a href='#2a745393972745222ea3423302eb97c6'>Types</a>
-1. <a href='#231c4f9e6bf5a8f6990b30f52c9abdf2'>CreateComplaint</a>
+1. <a href='#1aa9f5a195d54090a5e0077ec8203f9a'>CreateComplaint</a>
 
 ### <a href='#DaysOwner'>DaysOwner</a> ###
 1. <a href='#63bbaaed06ef382e262c395e07ba56ee'>Start</a>
-1. <a href='#5f0afed04c6ec5bc7c4feb1f29630b08'>AddMoment</a>
-1. <a href='#b38271bd3208ef0d30c3352b62f3a996'>Update</a>
+1. <a href='#7251ad4eefbe180e4a29aca386e7510f'>AddMoment</a>
+1. <a href='#ab55828a0d84604527a3b0a83718eec1'>Update</a>
 1. <a href='#b28bbddd553c012325f7e5ddcdf5f352'>Current</a>
-1. <a href='#3244d2221902928c63cedd4085fd98c4'>MarkCurrent</a>
-1. <a href='#56acaf8ab479b485bec0dd7317230059'>Finish</a>
-1. <a href='#b967fa41d19c98781692837c47d17bd0'>DeleteDay</a>
-1. <a href='#b6cc6c3dee60e47f5002ab6357aadab0'>RestoreDay</a>
+1. <a href='#171774b15e7e6c89987f2409f0a044c8'>MarkCurrent</a>
+1. <a href='#84c285634d2f797ea863136bfdafade3'>Finish</a>
+1. <a href='#bccdb1d38c5bc220a17ed098a856e865'>DeleteDay</a>
+1. <a href='#fd9adcd21f213d49c581fcd24436314f'>RestoreDay</a>
 
 ### <a href='#DayUser'>DayUser</a> ###
-1. <a href='#178cdac478043158aad0212ad2f12e9a'>Item</a>
-1. <a href='#5f98ddb5f1e92ae80add53842254a709'>CommentCreate</a>
-1. <a href='#5d9c34f7f2b3308ea886637729c1d5d6'>ShareDay</a>
-1. <a href='#4ee3512a05fd7e8192a54afd5b23e003'>Like</a>
+1. <a href='#ef2022760c7faaec8e3d9d6091c51d4f'>Item</a>
+1. <a href='#d41ecba390d2a4175d5a7c294f088583'>CommentCreate</a>
+1. <a href='#f055b8cb260f312035cde26f4d58ce09'>ShareDay</a>
+1. <a href='#121ee073edee4318fe8c7d667e0f342b'>Like</a>
 1. <a href='#f1f72ef4a12473ea2e0cd48d0d4ef5c0'>GetFavouriteDays</a>
-1. <a href='#3ebd5529683e8e4f782f1857ff9b4e4f'>AddToFavourites</a>
-1. <a href='#054f53f6a124b0ef4fc984bb2b24dffd'>RemoveFromFavourites</a>
+1. <a href='#0dd5e75f13f6f2b6dbe60e4178cfea52'>AddToFavourites</a>
+1. <a href='#69e2e5b69a5f901d887c03afd9a9fcf2'>RemoveFromFavourites</a>
 1. <a href='#1c5e784108f8a36beb283dc7a3e34030'>GetFollowingUsersDays</a>
 1. <a href='#f2c5afe4a024dc21f1c43ff206afb8f1'>CurrentUserDays</a>
 
 ### <a href='#MomentComments'>MomentComments</a> ###
-1. <a href='#58635fd22fd42e165ef0b5c3477a651c'>Update</a>
-1. <a href='#e34d1b6f402c9c77b86fd030f93da840'>Delete</a>
+1. <a href='#bea1e18467c94405f18b5c16f8bdac01'>Update</a>
+1. <a href='#8dfa71bc149df0a28c91ab40bc071f30'>Delete</a>
 
 ### <a href='#Moments'>Moments</a> ###
-1. <a href='#1a451a5f9a7ac250fbc3ea98b5b93423'>Update</a>
-1. <a href='#912e48c8ee5bd64ebfce7615037e67e6'>Delete</a>
-1. <a href='#4db827f6588e6f21623ccc1d6936460b'>Comment</a>
+1. <a href='#6c3fd30a4b9352f8239591b66f262230'>Update</a>
+1. <a href='#e84e51448d338b17bd2dd5bf9d97f731'>Delete</a>
+1. <a href='#9b0189daee8c9aadd7a178959692fb8e'>Comment</a>
 
 ### <a href='#My'>My</a> ###
 1. <a href='#7c42c715a02e964a2889306b19fe292c'>Profile</a>
@@ -74,14 +75,12 @@
 1. <a href='#3292f47a05d97e9f9f13470ea62f442c'>GetNewNews</a>
 
 ### <a href='#User'>User</a> ###
-1. <a href='#379a73ec48cd922c2a79cc0f7e285d65'>UserByIdDays</a>
-1. <a href='#314168ec4251ee79955965c09d6fe9f4'>UserById</a>
-1. <a href='#0907aac9dba2a8f9700b9333f7e36795'>Followers</a>
-1. <a href='#3a5f5e9c4c660f4b75e5e662b1daffd8'>FollowersByUserId</a>
-1. <a href='#774c23c770724885bdc9325b3159b700'>Following</a>
-1. <a href='#93a1f7842d26d2844c7b80767c77d811'>FollowingByUserId</a>
-1. <a href='#b5fab6df93c940e4610c11be2445a2cc'>Follow</a>
-1. <a href='#cdbabcb355ee343b582602aa2c5380ed'>Unfollow</a>
+1. <a href='#1a72181ed8a888d49d2f9be98d3601a1'>UserByIdDays</a>
+1. <a href='#7c85d92fb656d9e0382ff302ace98598'>UserById</a>
+1. <a href='#0017ace1ba81b8daabcf47dc8a58a5d3'>Followers</a>
+1. <a href='#70f5a8b7f8f2bff1898846d710436b51'>Following</a>
+1. <a href='#c18a5812a449f6ccfa6eac9f49b58e10'>Follow</a>
+1. <a href='#f43c7cd6fac99fe29a9aad6c0e47f022'>Unfollow</a>
 1. <a href='#b6a64e411df3885324cb5c0d6b5215e6'>Search</a>
 
 
@@ -89,6 +88,41 @@
 
 ### Auth ###
 <a name='Auth'></a>
+#### Parameters ####
+<a name="2e3ebba0713b57ebd0126c901e14cda2"></a>
+Returns app credentials that is needed to acquire access token.
+
+`GET auth/parameters`
+
+
+
+##### Response: #####
+###### Fields: ######
+<table class="table">
+<tr>
+  <th width="40">Type</th>
+  <th width="150">Name</th>
+  <th>Description</th>
+</tr>
+<tr><td>[type]</td><td>facebook</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>twitter</td><td>[description]</td></tr>
+
+</table>
+###### Example response: ######
+    {
+      "facebook":{
+        "appid":"395096410536617",
+        "namespace":"one-day-of-mine"
+      },
+      "twitter":{
+        "consumer_key":"7jJVJCSS3rAkfyBc1LbOQ"
+      }
+    }
+
+
+<a href="#toc">^ back to Table of conetens</a>
+
+* * *
 #### IsLoggedIn ####
 <a name="f3fe153a8e0372904ddc25f133cecd23"></a>
 Returns user authentication status.
@@ -186,7 +220,7 @@ Authorizes and returns User.
 </table>
 ###### Example response: ######
     {
-      "id":562,
+      "id":4249,
       "fb_uid":"100004093051334",
       "twitter_uid":0,
       "name":"foo foo",
@@ -242,10 +276,10 @@ Authorizes and returns User.
 ### Day ###
 <a name='Day'></a>
 #### Item ####
-<a name="b79f954df9df28cd54f711df9d509537"></a>
+<a name="c7f50931cb7300676812b1be4452713e"></a>
 Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields listed below.
 
-`GET days/324`
+`GET days/2017`
 
 ##### Request: #####
 ###### Params: ######
@@ -289,7 +323,7 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
 </table>
 ###### Example response: ######
     {
-      "id":324,
+      "id":2017,
       "fb_uid":"fooba",
       "image_266":null,
       "image_532":null,
@@ -298,10 +332,10 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
       "location":"foobarfoobarfoobarfoobarf",
       "type":"Working day",
       "likes_count":0,
-      "ctime":1345623223,
-      "utime":1345623223,
+      "ctime":1345723773,
+      "utime":1345723773,
       "user":{
-        "id":570,
+        "id":4257,
         "fb_uid":"fooba",
         "twitter_uid":0,
         "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
@@ -321,13 +355,13 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
       "comments_count":4,
       "comments":[
         {
-          "id":48,
+          "id":249,
           "text":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
           "likes_count":0,
-          "ctime":1345623223,
-          "utime":1345623223,
+          "ctime":1345723773,
+          "utime":1345723773,
           "user":{
-            "id":571,
+            "id":4258,
             "fb_uid":"fooba",
             "twitter_uid":0,
             "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
@@ -345,13 +379,13 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
           }
         },
         {
-          "id":49,
+          "id":250,
           "text":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
           "likes_count":0,
-          "ctime":1345623223,
-          "utime":1345623223,
+          "ctime":1345723773,
+          "utime":1345723773,
           "user":{
-            "id":572,
+            "id":4259,
             "fb_uid":"fooba",
             "twitter_uid":0,
             "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
@@ -369,13 +403,13 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
           }
         },
         {
-          "id":50,
+          "id":251,
           "text":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
           "likes_count":0,
-          "ctime":1345623223,
-          "utime":1345623223,
+          "ctime":1345723773,
+          "utime":1345723773,
           "user":{
-            "id":573,
+            "id":4260,
             "fb_uid":"fooba",
             "twitter_uid":0,
             "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
@@ -395,23 +429,23 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
       ],
       "moments":[
         {
-          "id":675,
+          "id":1052,
           "description":"description foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfooba",
           "image_266":null,
           "image_532":null,
           "time":"1970-01-01T00:00:00+00:00",
           "likes_count":0,
-          "ctime":1345623223,
+          "ctime":1345723773,
           "comments_count":4
         },
         {
-          "id":676,
+          "id":1053,
           "description":"description foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfooba",
           "image_266":null,
           "image_532":null,
           "time":"1970-01-01T00:00:00+00:00",
           "likes_count":0,
-          "ctime":1345623223,
+          "ctime":1345723773,
           "comments_count":4
         }
       ]
@@ -422,10 +456,10 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
 
 * * *
 #### Item_Many ####
-<a name="d344aa53fed8eb3c073b4b29a5d7c2ed"></a>
+<a name="728358ce357cccc6fb929cc77e018968"></a>
 Get few days in one request.
 
-`GET days/325;326;527/item`
+`GET days/2018;2019;770/item`
 
 ##### Request: #####
 ###### Params: ######
@@ -450,15 +484,15 @@ Get few days in one request.
   <th>Description</th>
 </tr>
 <tr><td><a href='#Entity:Day'>Day[]</a></td><td>days <span class='label label-important'>Removed</span></td><td>See GET days/:id/item</td></tr>
-<tr><td>[type]</td><td>325 <span class='label label-important'>Removed</span></td><td>[description]</td></tr>
-<tr><td>[type]</td><td>326 <span class='label label-important'>Removed</span></td><td>[description]</td></tr>
-<tr><td>[type]</td><td>527 <span class='label label-important'>Removed</span></td><td>[description]</td></tr>
+<tr><td>[type]</td><td>2018 <span class='label label-important'>Removed</span></td><td>[description]</td></tr>
+<tr><td>[type]</td><td>2019 <span class='label label-important'>Removed</span></td><td>[description]</td></tr>
+<tr><td>[type]</td><td>770 <span class='label label-important'>Removed</span></td><td>[description]</td></tr>
 
 </table>
 ###### Example response: ######
     {
-      "325":{
-        "id":325,
+      "2018":{
+        "id":2018,
         "fb_uid":"fooba",
         "image_266":null,
         "image_532":null,
@@ -467,10 +501,10 @@ Get few days in one request.
         "location":"foobarfoobarfoobarfoobarf",
         "type":"Working day",
         "likes_count":0,
-        "ctime":1345623223,
-        "utime":1345623223,
+        "ctime":1345723774,
+        "utime":1345723774,
         "user":{
-          "id":575,
+          "id":4262,
           "fb_uid":"fooba",
           "twitter_uid":0,
           "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
@@ -493,19 +527,19 @@ Get few days in one request.
         ],
         "moments":[
           {
-            "id":677,
+            "id":1054,
             "description":"description foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfooba",
             "image_266":null,
             "image_532":null,
             "time":"1970-01-01T00:00:00+00:00",
             "likes_count":0,
-            "ctime":1345623223,
+            "ctime":1345723774,
             "comments_count":0
           }
         ]
       },
-      "326":{
-        "id":326,
+      "2019":{
+        "id":2019,
         "fb_uid":"fooba",
         "image_266":null,
         "image_532":null,
@@ -514,10 +548,10 @@ Get few days in one request.
         "location":"foobarfoobarfoobarfoobarf",
         "type":"Working day",
         "likes_count":0,
-        "ctime":1345623223,
-        "utime":1345623223,
+        "ctime":1345723774,
+        "utime":1345723774,
         "user":{
-          "id":576,
+          "id":4263,
           "fb_uid":"fooba",
           "twitter_uid":0,
           "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
@@ -540,18 +574,18 @@ Get few days in one request.
         ],
         "moments":[
           {
-            "id":678,
+            "id":1055,
             "description":"description foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfooba",
             "image_266":null,
             "image_532":null,
             "time":"1970-01-01T00:00:00+00:00",
             "likes_count":0,
-            "ctime":1345623223,
+            "ctime":1345723774,
             "comments_count":0
           }
         ]
       },
-      "527":null
+      "770":null
     }
 
 
@@ -559,10 +593,10 @@ Get few days in one request.
 
 * * *
 #### CommentCreate ####
-<a name="678dbea98cb0bad694e3343fda975fbe"></a>
+<a name="dfa3c5c19c9182ad7e16264bc5eaaae4"></a>
 Creates comment for <a href="#Entity:Day">day</a> and returns it.
 
-`POST days/328/comment_create`
+`POST days/2021/comment_create`
 
 ##### Request: #####
 ###### Params: ######
@@ -603,13 +637,13 @@ Creates comment for <a href="#Entity:Day">day</a> and returns it.
 </table>
 ###### Example response: ######
     {
-      "id":52,
-      "user_id":580,
+      "id":253,
+      "user_id":4267,
       "text":"foobarfoobarfoobarfo...oobarfoobarfoobarfoo",
       "likes_count":0,
-      "ctime":1345623224,
-      "utime":1345623224,
-      "day_id":328
+      "ctime":1345723774,
+      "utime":1345723774,
+      "day_id":2021
     }
 
 
@@ -617,10 +651,10 @@ Creates comment for <a href="#Entity:Day">day</a> and returns it.
 
 * * *
 #### ShareDay ####
-<a name="229fe97c276ee022ecba67d0b474daef"></a>
+<a name="d7798cd025076ff25e3f19b562a7d3a6"></a>
 Share a day
 
-`POST days/329/share`
+`POST days/2022/share`
 
 ##### Request: #####
 ###### Params: ######
@@ -641,10 +675,10 @@ Share a day
 
 * * *
 #### Like ####
-<a name="87ca96e22bc43b03a6b0a93a32f5e583"></a>
+<a name="8a99b7c4fd8c8f8be6e07bb6f220c550"></a>
 
 
-`POST days/330/like`
+`POST days/2023/like`
 
 
 
@@ -676,7 +710,7 @@ Share a day
 </table>
 ###### Example response: ######
     {
-      "id":330,
+      "id":2023,
       "fb_uid":"100004093051334",
       "image_266":null,
       "image_532":null,
@@ -685,10 +719,10 @@ Share a day
       "location":"foobarfoobarfoobarfoobarf",
       "type":"Working day",
       "likes_count":1,
-      "ctime":1345623224,
-      "utime":1345623224,
+      "ctime":1345723775,
+      "utime":1345723775,
       "user":{
-        "id":583,
+        "id":4270,
         "fb_uid":"100004093051334",
         "twitter_uid":0,
         "name":"foo foo",
@@ -742,8 +776,8 @@ Share a day
 ###### Example request: ######
     {
       "query":"foo",
-      "from":334,
-      "to":331,
+      "from":2027,
+      "to":2024,
       "limit":1
     }
 
@@ -763,7 +797,7 @@ Share a day
 ###### Example response: ######
     [
       {
-        "id":333,
+        "id":2026,
         "fb_uid":"100004093051334",
         "image_266":null,
         "image_532":null,
@@ -772,10 +806,10 @@ Share a day
         "location":"foobarfoobarfoobarfoobarf",
         "type":"Working day",
         "likes_count":0,
-        "ctime":1345623225,
-        "utime":1345623225,
+        "ctime":1345723775,
+        "utime":1345723775,
         "user":{
-          "id":585,
+          "id":4272,
           "fb_uid":"100004093051334",
           "twitter_uid":0,
           "name":"foo foo",
@@ -820,8 +854,8 @@ Returns favourite based on <a href="#range-request">range-request</a>.
 </table>
 ###### Example request: ######
     {
-      "from":340,
-      "to":337,
+      "from":2033,
+      "to":2030,
       "limit":1
     }
 
@@ -841,7 +875,7 @@ Returns favourite based on <a href="#range-request">range-request</a>.
 ###### Example response: ######
     [
       {
-        "id":339,
+        "id":2032,
         "fb_uid":"100004093051334",
         "image_266":null,
         "image_532":null,
@@ -850,10 +884,10 @@ Returns favourite based on <a href="#range-request">range-request</a>.
         "location":"foobarfoobarfoobarfoobarf",
         "type":"Working day",
         "likes_count":0,
-        "ctime":1345623225,
-        "utime":1345623225,
+        "ctime":1345723775,
+        "utime":1345723775,
         "user":{
-          "id":587,
+          "id":4274,
           "fb_uid":"100004093051334",
           "twitter_uid":0,
           "name":"foo foo",
@@ -878,10 +912,10 @@ Returns favourite based on <a href="#range-request">range-request</a>.
 
 * * *
 #### AddToFavourites ####
-<a name="d2027f4d8f942cd18515ae991db148bd"></a>
+<a name="9a6f900a628a37797c4cbcc842a37066"></a>
 
 
-`POST /days/342/mark_favourite`
+`POST /days/2035/mark_favourite`
 
 
 
@@ -890,10 +924,10 @@ Returns favourite based on <a href="#range-request">range-request</a>.
 
 * * *
 #### RemoveFromFavourites ####
-<a name="2fd21cb3abe6dda388334970d815b4fe"></a>
+<a name="3e1cc261011ab2b31311c1a77fceb095"></a>
 
 
-`POST /days/343/unmark_favourite`
+`POST /days/2036/unmark_favourite`
 
 
 
@@ -923,8 +957,8 @@ Returns following users days based on <a href="#range-request">range-request</a>
 </table>
 ###### Example request: ######
     {
-      "from":347,
-      "to":344,
+      "from":2040,
+      "to":2037,
       "limit":1
     }
 
@@ -944,7 +978,7 @@ Returns following users days based on <a href="#range-request">range-request</a>
 ###### Example response: ######
     [
       {
-        "id":346,
+        "id":2039,
         "fb_uid":"100004093051334",
         "image_266":null,
         "image_532":null,
@@ -953,10 +987,10 @@ Returns following users days based on <a href="#range-request">range-request</a>
         "location":"foobarfoobarfoobarfoobarf",
         "type":"Working day",
         "likes_count":0,
-        "ctime":1345623226,
-        "utime":1345623226,
+        "ctime":1345723776,
+        "utime":1345723776,
         "user":{
-          "id":594,
+          "id":4281,
           "fb_uid":"100004093051334",
           "twitter_uid":0,
           "name":"foo foo",
@@ -1002,8 +1036,8 @@ Returns new days based on <a href="#range-request">range-request</a>.
 </table>
 ###### Example request: ######
     {
-      "from":353,
-      "to":349,
+      "from":2046,
+      "to":2042,
       "limit":1
     }
 
@@ -1023,7 +1057,7 @@ Returns new days based on <a href="#range-request">range-request</a>.
 ###### Example response: ######
     [
       {
-        "id":352,
+        "id":2045,
         "fb_uid":"100004087981387",
         "image_266":null,
         "image_532":null,
@@ -1032,10 +1066,10 @@ Returns new days based on <a href="#range-request">range-request</a>.
         "location":"foobarfoobarfoobarfoobarf",
         "type":"Working day",
         "likes_count":0,
-        "ctime":1345623226,
-        "utime":1345623226,
+        "ctime":1345723777,
+        "utime":1345723777,
         "user":{
-          "id":595,
+          "id":4282,
           "fb_uid":"100004087981387",
           "twitter_uid":0,
           "name":"bar bar",
@@ -1080,8 +1114,8 @@ Returns interesting days based on <a href="#range-request">range-request</a>.
 </table>
 ###### Example request: ######
     {
-      "from":354,
-      "to":357,
+      "from":2047,
+      "to":2050,
       "limit":1
     }
 
@@ -1101,7 +1135,7 @@ Returns interesting days based on <a href="#range-request">range-request</a>.
 ###### Example response: ######
     [
       {
-        "id":355,
+        "id":2048,
         "fb_uid":"100004087981387",
         "image_266":null,
         "image_532":null,
@@ -1110,10 +1144,10 @@ Returns interesting days based on <a href="#range-request">range-request</a>.
         "location":"foobarfoobarfoobarfoobarf",
         "type":"Working day",
         "likes_count":3,
-        "ctime":1345536827,
-        "utime":1345623227,
+        "ctime":1345637377,
+        "utime":1345723777,
         "user":{
-          "id":597,
+          "id":4284,
           "fb_uid":"100004087981387",
           "twitter_uid":0,
           "name":"bar bar",
@@ -1158,8 +1192,8 @@ Returns current user days based on <a href="#range-request">range-request</a>.
 </table>
 ###### Example request: ######
     {
-      "from":362,
-      "to":359,
+      "from":2055,
+      "to":2052,
       "limit":1
     }
 
@@ -1179,7 +1213,7 @@ Returns current user days based on <a href="#range-request">range-request</a>.
 ###### Example response: ######
     [
       {
-        "id":361,
+        "id":2054,
         "fb_uid":"100004087981387",
         "image_266":null,
         "image_532":null,
@@ -1188,10 +1222,10 @@ Returns current user days based on <a href="#range-request">range-request</a>.
         "location":"foobarfoobarfoobarfoobarf",
         "type":"Working day",
         "likes_count":0,
-        "ctime":1345623227,
-        "utime":1345623227,
+        "ctime":1345723777,
+        "utime":1345723777,
         "user":{
-          "id":599,
+          "id":4286,
           "fb_uid":"100004087981387",
           "twitter_uid":0,
           "name":"bar bar",
@@ -1253,10 +1287,10 @@ Returns list of acceptable types.
 
 * * *
 #### CreateComplaint ####
-<a name="c150f427117bc2c89797320300eebf76"></a>
+<a name="a226223700c8c6b6f2c20d0cb50609ce"></a>
 
 
-`POST /days/363/create_complaint`
+`POST /days/2056/create_complaint`
 
 ##### Request: #####
 ###### Params: ######
@@ -1296,8 +1330,8 @@ Returns list of acceptable types.
     {
       "day_id":null,
       "text":"foobar",
-      "ctime":1345623228,
-      "id":5
+      "ctime":1345723778,
+      "id":27
     }
 
 
@@ -1308,10 +1342,10 @@ Returns list of acceptable types.
 ### DaysGuest ###
 <a name='DaysGuest'></a>
 #### Item ####
-<a name="f598c609bf5b35ba9638ecd1f93ea445"></a>
+<a name="f867eb4e1b723386238091f9d64a46bc"></a>
 Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields listed below.
 
-`GET days/364`
+`GET days/2057`
 
 ##### Request: #####
 ###### Params: ######
@@ -1355,19 +1389,19 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
 </table>
 ###### Example response: ######
     {
-      "id":364,
+      "id":2057,
       "fb_uid":"fooba",
-      "image_266":"http:\/\/static.onedayofmine.dev\/603\/days\/0d114153febb017d0dc0416ce2dadf01059e8b30_266.jpeg",
-      "image_532":"http:\/\/static.onedayofmine.dev\/603\/days\/0d114153febb017d0dc0416ce2dadf01059e8b30_532.jpeg",
+      "image_266":"http:\/\/static.onedayofmine.dev\/4290\/days\/a8b4140e69095ed93017029545aefacaf34bbc9d_266.jpeg",
+      "image_532":"http:\/\/static.onedayofmine.dev\/4290\/days\/a8b4140e69095ed93017029545aefacaf34bbc9d_532.jpeg",
       "title":"foobarfoobarfoobarfoobarf",
       "occupation":"foobarfoobarfoobarfo...oobarfoobarfoobarfoo",
       "location":"foobarfoobarfoobarfoobarf",
       "type":"Working day",
       "likes_count":0,
-      "ctime":1345623228,
-      "utime":1345623228,
+      "ctime":1345723778,
+      "utime":1345723778,
       "user":{
-        "id":603,
+        "id":4290,
         "fb_uid":"fooba",
         "twitter_uid":0,
         "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
@@ -1386,13 +1420,13 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
       "comments_count":4,
       "comments":[
         {
-          "id":53,
+          "id":254,
           "text":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
           "likes_count":0,
-          "ctime":1345623228,
-          "utime":1345623228,
+          "ctime":1345723778,
+          "utime":1345723778,
           "user":{
-            "id":604,
+            "id":4291,
             "fb_uid":"fooba",
             "twitter_uid":0,
             "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
@@ -1410,13 +1444,13 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
           }
         },
         {
-          "id":54,
+          "id":255,
           "text":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
           "likes_count":0,
-          "ctime":1345623228,
-          "utime":1345623228,
+          "ctime":1345723778,
+          "utime":1345723778,
           "user":{
-            "id":605,
+            "id":4292,
             "fb_uid":"fooba",
             "twitter_uid":0,
             "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
@@ -1434,13 +1468,13 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
           }
         },
         {
-          "id":55,
+          "id":256,
           "text":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
           "likes_count":0,
-          "ctime":1345623228,
-          "utime":1345623228,
+          "ctime":1345723778,
+          "utime":1345723778,
           "user":{
-            "id":606,
+            "id":4293,
             "fb_uid":"fooba",
             "twitter_uid":0,
             "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
@@ -1460,23 +1494,23 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
       ],
       "moments":[
         {
-          "id":679,
+          "id":1056,
           "description":"description foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfooba",
           "image_266":null,
           "image_532":null,
           "time":"1970-01-01T00:00:00+00:00",
           "likes_count":0,
-          "ctime":1345623228,
+          "ctime":1345723778,
           "comments_count":4
         },
         {
-          "id":680,
+          "id":1057,
           "description":"description foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfooba",
           "image_266":null,
           "image_532":null,
           "time":"1970-01-01T00:00:00+00:00",
           "likes_count":0,
-          "ctime":1345623228,
+          "ctime":1345723778,
           "comments_count":4
         }
       ]
@@ -1487,10 +1521,10 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
 
 * * *
 #### Item_Many ####
-<a name="c29f2529f5fb506c585042f17df45957"></a>
+<a name="b92318c5becd6aa858dfafcbbf60c221"></a>
 Get few days in one request.
 
-`GET days/365;366;728/item`
+`GET days/2058;2059;111/item`
 
 ##### Request: #####
 ###### Params: ######
@@ -1515,15 +1549,15 @@ Get few days in one request.
   <th>Description</th>
 </tr>
 <tr><td><a href='#Entity:Day'>Day[]</a></td><td>days <span class='label label-important'>Removed</span></td><td>See GET days/:id/item</td></tr>
-<tr><td>[type]</td><td>365 <span class='label label-important'>Removed</span></td><td>[description]</td></tr>
-<tr><td>[type]</td><td>366 <span class='label label-important'>Removed</span></td><td>[description]</td></tr>
-<tr><td>[type]</td><td>728 <span class='label label-important'>Removed</span></td><td>[description]</td></tr>
+<tr><td>[type]</td><td>2058 <span class='label label-important'>Removed</span></td><td>[description]</td></tr>
+<tr><td>[type]</td><td>2059 <span class='label label-important'>Removed</span></td><td>[description]</td></tr>
+<tr><td>[type]</td><td>111 <span class='label label-important'>Removed</span></td><td>[description]</td></tr>
 
 </table>
 ###### Example response: ######
     {
-      "365":{
-        "id":365,
+      "2058":{
+        "id":2058,
         "fb_uid":"fooba",
         "image_266":null,
         "image_532":null,
@@ -1532,10 +1566,10 @@ Get few days in one request.
         "location":"foobarfoobarfoobarfoobarf",
         "type":"Working day",
         "likes_count":0,
-        "ctime":1345623229,
-        "utime":1345623229,
+        "ctime":1345723779,
+        "utime":1345723779,
         "user":{
-          "id":608,
+          "id":4295,
           "fb_uid":"fooba",
           "twitter_uid":0,
           "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
@@ -1557,19 +1591,19 @@ Get few days in one request.
         ],
         "moments":[
           {
-            "id":681,
+            "id":1058,
             "description":"description foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfooba",
             "image_266":null,
             "image_532":null,
             "time":"1970-01-01T00:00:00+00:00",
             "likes_count":0,
-            "ctime":1345623229,
+            "ctime":1345723779,
             "comments_count":0
           }
         ]
       },
-      "366":{
-        "id":366,
+      "2059":{
+        "id":2059,
         "fb_uid":"fooba",
         "image_266":null,
         "image_532":null,
@@ -1578,10 +1612,10 @@ Get few days in one request.
         "location":"foobarfoobarfoobarfoobarf",
         "type":"Working day",
         "likes_count":0,
-        "ctime":1345623229,
-        "utime":1345623229,
+        "ctime":1345723779,
+        "utime":1345723779,
         "user":{
-          "id":609,
+          "id":4296,
           "fb_uid":"fooba",
           "twitter_uid":0,
           "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
@@ -1603,18 +1637,18 @@ Get few days in one request.
         ],
         "moments":[
           {
-            "id":682,
+            "id":1059,
             "description":"description foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfooba",
             "image_266":null,
             "image_532":null,
             "time":"1970-01-01T00:00:00+00:00",
             "likes_count":0,
-            "ctime":1345623229,
+            "ctime":1345723779,
             "comments_count":0
           }
         ]
       },
-      "728":null
+      "111":null
     }
 
 
@@ -1645,8 +1679,8 @@ Get few days in one request.
 ###### Example request: ######
     {
       "query":"foo",
-      "from":371,
-      "to":368,
+      "from":2064,
+      "to":2061,
       "limit":1
     }
 
@@ -1666,7 +1700,7 @@ Get few days in one request.
 ###### Example response: ######
     [
       {
-        "id":370,
+        "id":2063,
         "fb_uid":"100004093051334",
         "image_266":null,
         "image_532":null,
@@ -1675,10 +1709,10 @@ Get few days in one request.
         "location":"foobarfoobarfoobarfoobarf",
         "type":"Working day",
         "likes_count":0,
-        "ctime":1345623229,
-        "utime":1345623229,
+        "ctime":1345723779,
+        "utime":1345723779,
         "user":{
-          "id":611,
+          "id":4298,
           "fb_uid":"100004093051334",
           "twitter_uid":0,
           "name":"foo foo",
@@ -1723,8 +1757,8 @@ Returns new days based on <a href="#range-request">range-request</a>.
 </table>
 ###### Example request: ######
     {
-      "from":378,
-      "to":374,
+      "from":2071,
+      "to":2067,
       "limit":1
     }
 
@@ -1744,19 +1778,19 @@ Returns new days based on <a href="#range-request">range-request</a>.
 ###### Example response: ######
     [
       {
-        "id":377,
+        "id":2070,
         "fb_uid":"100004087981387",
-        "image_266":"http:\/\/static.onedayofmine.dev\/613\/days\/8534dbdf0f6bc529f1eadd37fc33526bd5ee49d1_266.jpeg",
-        "image_532":"http:\/\/static.onedayofmine.dev\/613\/days\/8534dbdf0f6bc529f1eadd37fc33526bd5ee49d1_532.jpeg",
+        "image_266":"http:\/\/static.onedayofmine.dev\/4300\/days\/405b5c81573378e40153ec8943b02d42118d4e3d_266.jpeg",
+        "image_532":"http:\/\/static.onedayofmine.dev\/4300\/days\/405b5c81573378e40153ec8943b02d42118d4e3d_532.jpeg",
         "title":"foobarfoobarfoobarfoobarf",
         "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
         "location":"foobarfoobarfoobarfoobarf",
         "type":"Working day",
         "likes_count":0,
-        "ctime":1345623230,
-        "utime":1345623230,
+        "ctime":1345723779,
+        "utime":1345723780,
         "user":{
-          "id":613,
+          "id":4300,
           "fb_uid":"100004087981387",
           "twitter_uid":0,
           "name":"bar bar",
@@ -1801,8 +1835,8 @@ Returns interesting days based on <a href="#range-request">range-request</a>.
 </table>
 ###### Example request: ######
     {
-      "from":379,
-      "to":382,
+      "from":2072,
+      "to":2075,
       "limit":1
     }
 
@@ -1822,19 +1856,19 @@ Returns interesting days based on <a href="#range-request">range-request</a>.
 ###### Example response: ######
     [
       {
-        "id":380,
+        "id":2073,
         "fb_uid":"100004087981387",
-        "image_266":"http:\/\/static.onedayofmine.dev\/615\/days\/d69ebfa3e22fc9f4f35b697cfca71d8e4a66fe41_266.jpeg",
-        "image_532":"http:\/\/static.onedayofmine.dev\/615\/days\/d69ebfa3e22fc9f4f35b697cfca71d8e4a66fe41_532.jpeg",
+        "image_266":"http:\/\/static.onedayofmine.dev\/4302\/days\/6312be0bb3a7e174dab806c8865dbd5aa20498d7_266.jpeg",
+        "image_532":"http:\/\/static.onedayofmine.dev\/4302\/days\/6312be0bb3a7e174dab806c8865dbd5aa20498d7_532.jpeg",
         "title":"foobarfoobarfoobarfoobarf",
         "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
         "location":"foobarfoobarfoobarfoobarf",
         "type":"Working day",
         "likes_count":3,
-        "ctime":1345536830,
-        "utime":1345623231,
+        "ctime":1345637380,
+        "utime":1345723780,
         "user":{
-          "id":615,
+          "id":4302,
           "fb_uid":"100004087981387",
           "twitter_uid":0,
           "name":"bar bar",
@@ -1894,10 +1928,10 @@ Returns list of acceptable types.
 
 * * *
 #### CreateComplaint ####
-<a name="231c4f9e6bf5a8f6990b30f52c9abdf2"></a>
+<a name="1aa9f5a195d54090a5e0077ec8203f9a"></a>
 
 
-`POST /days/384/create_complaint`
+`POST /days/2077/create_complaint`
 
 ##### Request: #####
 ###### Params: ######
@@ -1937,8 +1971,8 @@ Returns list of acceptable types.
     {
       "day_id":null,
       "text":"foobar",
-      "ctime":1345623231,
-      "id":6
+      "ctime":1345723781,
+      "id":28
     }
 
 
@@ -2007,7 +2041,7 @@ Starts a day, returns created <a href="#Entity:Day">day</a>.
 </table>
 ###### Example response: ######
     {
-      "id":385,
+      "id":2078,
       "fb_uid":"100004087981387",
       "image_266":null,
       "image_532":null,
@@ -2016,10 +2050,10 @@ Starts a day, returns created <a href="#Entity:Day">day</a>.
       "location":"foobarfoobarfoobarfoobarf",
       "type":"Working day",
       "likes_count":0,
-      "ctime":1345623232,
-      "utime":1345623232,
+      "ctime":1345723781,
+      "utime":1345723781,
       "user":{
-        "id":620,
+        "id":4307,
         "fb_uid":"100004087981387",
         "twitter_uid":0,
         "name":"bar bar",
@@ -2050,10 +2084,10 @@ Starts a day, returns created <a href="#Entity:Day">day</a>.
 
 * * *
 #### AddMoment ####
-<a name="5f0afed04c6ec5bc7c4feb1f29630b08"></a>
+<a name="7251ad4eefbe180e4a29aca386e7510f"></a>
 Creates <a href="#Entity:Moment">moment</a> in current active day and returns it.
 
-`POST days/388/add_moment`
+`POST days/2081/add_moment`
 
 ##### Request: #####
 ###### Params: ######
@@ -2099,14 +2133,14 @@ Creates <a href="#Entity:Moment">moment</a> in current active day and returns it
 </table>
 ###### Example response: ######
     {
-      "id":683,
-      "day_id":388,
+      "id":1060,
+      "day_id":2081,
       "description":"foobarfoobarfoobarfo...foobarfoobarfoobarfo",
-      "image_266":"http:\/\/static.onedayofmine.dev\/623\/days\/388\/2b4ec97114c06d7a0c70668b9f09167523545555_266.jpeg",
-      "image_532":"http:\/\/static.onedayofmine.dev\/623\/days\/388\/2b4ec97114c06d7a0c70668b9f09167523545555_532.jpeg",
+      "image_266":"http:\/\/static.onedayofmine.dev\/4310\/days\/2081\/be5cd7f518b4b03434e70646306fd9dac33fb962_266.jpeg",
+      "image_532":"http:\/\/static.onedayofmine.dev\/4310\/days\/2081\/be5cd7f518b4b03434e70646306fd9dac33fb962_532.jpeg",
       "time":"2005-08-09T18:31:42+03:00",
       "likes_count":0,
-      "ctime":1345623233
+      "ctime":1345723782
     }
 
 
@@ -2114,10 +2148,10 @@ Creates <a href="#Entity:Moment">moment</a> in current active day and returns it
 
 * * *
 #### Update ####
-<a name="b38271bd3208ef0d30c3352b62f3a996"></a>
+<a name="ab55828a0d84604527a3b0a83718eec1"></a>
 Updates information about current <a href="#Entity:Day">day</a> and returns it. You are free to make selective changes.
 
-`POST days/392/update`
+`POST days/2085/update`
 
 ##### Request: #####
 ###### Params: ######
@@ -2174,19 +2208,19 @@ Updates information about current <a href="#Entity:Day">day</a> and returns it. 
 </table>
 ###### Example response: ######
     {
-      "id":392,
+      "id":2085,
       "fb_uid":"100004087981387",
-      "image_266":"http:\/\/static.onedayofmine.dev\/627\/days\/e41e81f54ea61bc8ef31ca9250418ae008ed2bf1_266.jpeg",
-      "image_532":"http:\/\/static.onedayofmine.dev\/627\/days\/e41e81f54ea61bc8ef31ca9250418ae008ed2bf1_532.jpeg",
+      "image_266":"http:\/\/static.onedayofmine.dev\/4314\/days\/4da26b5651890972af14c0275e4ac153dbc03a3a_266.jpeg",
+      "image_532":"http:\/\/static.onedayofmine.dev\/4314\/days\/4da26b5651890972af14c0275e4ac153dbc03a3a_532.jpeg",
       "title":"foobar",
       "occupation":"foobarfoobarfoobarfo...oobarfoobarfoobarfoo",
       "location":"foobar",
       "type":"Working day",
       "likes_count":0,
-      "ctime":1345623242,
-      "utime":1345623242,
+      "ctime":1345723788,
+      "utime":1345723789,
       "user":{
-        "id":627,
+        "id":4314,
         "fb_uid":"100004087981387",
         "twitter_uid":0,
         "name":"bar bar",
@@ -2252,7 +2286,7 @@ Get current day.
 </table>
 ###### Example response: ######
     {
-      "id":394,
+      "id":2087,
       "fb_uid":"100004087981387",
       "image_266":null,
       "image_532":null,
@@ -2261,10 +2295,10 @@ Get current day.
       "location":"foobarfoobarfoobarfoobarf",
       "type":"Working day",
       "likes_count":0,
-      "ctime":1345623243,
-      "utime":1345623243,
+      "ctime":1345723789,
+      "utime":1345723789,
       "user":{
-        "id":631,
+        "id":4318,
         "fb_uid":"100004087981387",
         "twitter_uid":0,
         "name":"bar bar",
@@ -2295,10 +2329,10 @@ Get current day.
 
 * * *
 #### MarkCurrent ####
-<a name="3244d2221902928c63cedd4085fd98c4"></a>
+<a name="171774b15e7e6c89987f2409f0a044c8"></a>
 Mark day as current
 
-`POST days/396/mark_current`
+`POST days/2089/mark_current`
 
 ##### Request: #####
 ###### Params: ######
@@ -2319,10 +2353,29 @@ Mark day as current
 
 * * *
 #### Finish ####
-<a name="56acaf8ab479b485bec0dd7317230059"></a>
+<a name="84c285634d2f797ea863136bfdafade3"></a>
 Finish current day.
 
-`POST days/398/finish`
+`POST days/2091/finish`
+
+##### Request: #####
+###### Params: ######
+<table class="table">
+<tr>
+  <th width="40">Type</th>
+  <th width="150">Name</th>
+  <th width="40">Required</th>
+  <th>Description</th>
+</tr>
+<tr><td>[type]</td><td>image_content</td><td></td><td>[description]</td></tr>
+<tr><td>[type]</td><td>comment</td><td></td><td>[description]</td></tr>
+
+</table>
+###### Example request: ######
+    {
+      "image_content":"\/9j\/4AAQSkZJRgABAQAA...J6muSdRzd2ZqrpY\/\/9k=",
+      "comment":"foobar"
+    }
 
 
 
@@ -2354,19 +2407,19 @@ Finish current day.
 </table>
 ###### Example response: ######
     {
-      "id":398,
+      "id":2091,
       "fb_uid":"100004087981387",
-      "image_266":null,
-      "image_532":null,
+      "image_266":"http:\/\/static.onedayofmine.dev\/4322\/days\/4bcf5f56aa37bee8ebaa2a3697895673ca704d62_266.jpeg",
+      "image_532":"http:\/\/static.onedayofmine.dev\/4322\/days\/4bcf5f56aa37bee8ebaa2a3697895673ca704d62_532.jpeg",
       "title":"foobarfoobarfoobarfoobarf",
       "occupation":"foobarfoobarfoobarfo...oobarfoobarfoobarfoo",
       "location":"foobarfoobarfoobarfoobarf",
       "type":"Working day",
       "likes_count":0,
-      "ctime":1345623244,
-      "utime":1345623244,
+      "ctime":1345723790,
+      "utime":1345723790,
       "user":{
-        "id":635,
+        "id":4322,
         "fb_uid":"100004087981387",
         "twitter_uid":0,
         "name":"bar bar",
@@ -2383,9 +2436,32 @@ Finish current day.
         "days_count":1
       },
       "is_favourite":false,
-      "comments_count":0,
+      "comments_count":1,
       "comments":[
-        
+        {
+          "id":258,
+          "text":"foobar",
+          "likes_count":0,
+          "ctime":1345723790,
+          "utime":1345723790,
+          "user":{
+            "id":4322,
+            "fb_uid":"100004087981387",
+            "twitter_uid":0,
+            "name":"bar bar",
+            "sex":"male",
+            "image_36":"http:\/\/static.onedayofmine.dev\/default_image_36.png",
+            "image_72":"http:\/\/static.onedayofmine.dev\/default_image_72.png",
+            "image_96":"http:\/\/static.onedayofmine.dev\/default_image_96.png",
+            "image_192":"http:\/\/static.onedayofmine.dev\/default_image_192.png",
+            "birthday":"1980-08-08",
+            "occupation":"",
+            "location":"",
+            "followers_count":0,
+            "following_count":0,
+            "days_count":1
+          }
+        }
       ],
       "moments":[
         
@@ -2397,10 +2473,10 @@ Finish current day.
 
 * * *
 #### DeleteDay ####
-<a name="b967fa41d19c98781692837c47d17bd0"></a>
+<a name="bccdb1d38c5bc220a17ed098a856e865"></a>
 Deletes a day
 
-`POST days/402/delete`
+`POST days/2095/delete`
 
 ##### Request: #####
 ###### Params: ######
@@ -2421,10 +2497,10 @@ Deletes a day
 
 * * *
 #### RestoreDay ####
-<a name="b6cc6c3dee60e47f5002ab6357aadab0"></a>
+<a name="fd9adcd21f213d49c581fcd24436314f"></a>
 Restore a deleted day
 
-`POST days/404/restore`
+`POST days/2097/restore`
 
 ##### Request: #####
 ###### Params: ######
@@ -2448,10 +2524,10 @@ Restore a deleted day
 ### DayUser ###
 <a name='DayUser'></a>
 #### Item ####
-<a name="178cdac478043158aad0212ad2f12e9a"></a>
+<a name="ef2022760c7faaec8e3d9d6091c51d4f"></a>
 Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields listed below.
 
-`GET days/406/item`
+`GET days/2099/item`
 
 ##### Request: #####
 ###### Params: ######
@@ -2495,7 +2571,7 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
 </table>
 ###### Example response: ######
     {
-      "id":406,
+      "id":2099,
       "fb_uid":"fooba",
       "image_266":null,
       "image_532":null,
@@ -2504,10 +2580,10 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
       "location":"foobarfoobarfoobarfoobarf",
       "type":"Working day",
       "likes_count":0,
-      "ctime":1345623245,
-      "utime":1345623245,
+      "ctime":1345723792,
+      "utime":1345723792,
       "user":{
-        "id":648,
+        "id":4335,
         "fb_uid":"fooba",
         "twitter_uid":0,
         "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
@@ -2527,13 +2603,13 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
       "comments_count":4,
       "comments":[
         {
-          "id":57,
+          "id":259,
           "text":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
           "likes_count":0,
-          "ctime":1345623245,
-          "utime":1345623245,
+          "ctime":1345723792,
+          "utime":1345723792,
           "user":{
-            "id":649,
+            "id":4336,
             "fb_uid":"fooba",
             "twitter_uid":0,
             "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
@@ -2551,13 +2627,13 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
           }
         },
         {
-          "id":58,
+          "id":260,
           "text":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
           "likes_count":0,
-          "ctime":1345623245,
-          "utime":1345623245,
+          "ctime":1345723792,
+          "utime":1345723792,
           "user":{
-            "id":650,
+            "id":4337,
             "fb_uid":"fooba",
             "twitter_uid":0,
             "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
@@ -2575,13 +2651,13 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
           }
         },
         {
-          "id":59,
+          "id":261,
           "text":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
           "likes_count":0,
-          "ctime":1345623245,
-          "utime":1345623245,
+          "ctime":1345723792,
+          "utime":1345723792,
           "user":{
-            "id":651,
+            "id":4338,
             "fb_uid":"fooba",
             "twitter_uid":0,
             "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
@@ -2609,10 +2685,10 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
 
 * * *
 #### CommentCreate ####
-<a name="5f98ddb5f1e92ae80add53842254a709"></a>
+<a name="d41ecba390d2a4175d5a7c294f088583"></a>
 Creates comment for <a href="#Entity:Day">day</a> and returns it.
 
-`POST days/407/comment_create`
+`POST days/2100/comment_create`
 
 ##### Request: #####
 ###### Params: ######
@@ -2653,13 +2729,13 @@ Creates comment for <a href="#Entity:Day">day</a> and returns it.
 </table>
 ###### Example response: ######
     {
-      "id":61,
-      "user_id":653,
+      "id":263,
+      "user_id":4340,
       "text":"foobarfoobarfoobarfo...oobarfoobarfoobarfoo",
       "likes_count":0,
-      "ctime":1345623246,
-      "utime":1345623246,
-      "day_id":407
+      "ctime":1345723792,
+      "utime":1345723792,
+      "day_id":2100
     }
 
 
@@ -2667,10 +2743,10 @@ Creates comment for <a href="#Entity:Day">day</a> and returns it.
 
 * * *
 #### ShareDay ####
-<a name="5d9c34f7f2b3308ea886637729c1d5d6"></a>
+<a name="f055b8cb260f312035cde26f4d58ce09"></a>
 Share a day
 
-`POST days/408/share`
+`POST days/2101/share`
 
 ##### Request: #####
 ###### Params: ######
@@ -2691,10 +2767,10 @@ Share a day
 
 * * *
 #### Like ####
-<a name="4ee3512a05fd7e8192a54afd5b23e003"></a>
+<a name="121ee073edee4318fe8c7d667e0f342b"></a>
 
 
-`POST days/409/like`
+`POST days/2102/like`
 
 
 
@@ -2726,7 +2802,7 @@ Share a day
 </table>
 ###### Example response: ######
     {
-      "id":409,
+      "id":2102,
       "fb_uid":"100004093051334",
       "image_266":null,
       "image_532":null,
@@ -2735,10 +2811,10 @@ Share a day
       "location":"foobarfoobarfoobarfoobarf",
       "type":"Working day",
       "likes_count":1,
-      "ctime":1345623246,
-      "utime":1345623246,
+      "ctime":1345723793,
+      "utime":1345723793,
       "user":{
-        "id":656,
+        "id":4343,
         "fb_uid":"100004093051334",
         "twitter_uid":0,
         "name":"foo foo",
@@ -2790,8 +2866,8 @@ Returns favourite based on <a href="#range-request">range-request</a>.
 </table>
 ###### Example request: ######
     {
-      "from":413,
-      "to":410,
+      "from":2106,
+      "to":2103,
       "limit":1
     }
 
@@ -2811,7 +2887,7 @@ Returns favourite based on <a href="#range-request">range-request</a>.
 ###### Example response: ######
     [
       {
-        "id":412,
+        "id":2105,
         "fb_uid":"100004093051334",
         "image_266":null,
         "image_532":null,
@@ -2820,10 +2896,10 @@ Returns favourite based on <a href="#range-request">range-request</a>.
         "location":"foobarfoobarfoobarfoobarf",
         "type":"Working day",
         "likes_count":0,
-        "ctime":1345623246,
-        "utime":1345623246,
+        "ctime":1345723793,
+        "utime":1345723793,
         "user":{
-          "id":658,
+          "id":4345,
           "fb_uid":"100004093051334",
           "twitter_uid":0,
           "name":"foo foo",
@@ -2848,10 +2924,10 @@ Returns favourite based on <a href="#range-request">range-request</a>.
 
 * * *
 #### AddToFavourites ####
-<a name="3ebd5529683e8e4f782f1857ff9b4e4f"></a>
+<a name="0dd5e75f13f6f2b6dbe60e4178cfea52"></a>
 
 
-`POST /days/415/mark_favourite`
+`POST /days/2108/mark_favourite`
 
 
 
@@ -2860,10 +2936,10 @@ Returns favourite based on <a href="#range-request">range-request</a>.
 
 * * *
 #### RemoveFromFavourites ####
-<a name="054f53f6a124b0ef4fc984bb2b24dffd"></a>
+<a name="69e2e5b69a5f901d887c03afd9a9fcf2"></a>
 
 
-`POST /days/416/unmark_favourite`
+`POST /days/2109/unmark_favourite`
 
 
 
@@ -2893,8 +2969,8 @@ Returns following users days based on <a href="#range-request">range-request</a>
 </table>
 ###### Example request: ######
     {
-      "from":420,
-      "to":417,
+      "from":2113,
+      "to":2110,
       "limit":1
     }
 
@@ -2914,19 +2990,19 @@ Returns following users days based on <a href="#range-request">range-request</a>
 ###### Example response: ######
     [
       {
-        "id":419,
+        "id":2112,
         "fb_uid":"100004093051334",
-        "image_266":"http:\/\/static.onedayofmine.dev\/665\/days\/9440f931a27728107673c89d5902ee2e0cbeb7df_266.jpeg",
-        "image_532":"http:\/\/static.onedayofmine.dev\/665\/days\/9440f931a27728107673c89d5902ee2e0cbeb7df_532.jpeg",
+        "image_266":"http:\/\/static.onedayofmine.dev\/4352\/days\/5ac0679de4779e3f9086bee25075e5aa1e30e149_266.jpeg",
+        "image_532":"http:\/\/static.onedayofmine.dev\/4352\/days\/5ac0679de4779e3f9086bee25075e5aa1e30e149_532.jpeg",
         "title":"foobarfoobarfoobarfoobarf",
         "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
         "location":"foobarfoobarfoobarfoobarf",
         "type":"Working day",
         "likes_count":0,
-        "ctime":1345623247,
-        "utime":1345623247,
+        "ctime":1345723794,
+        "utime":1345723794,
         "user":{
-          "id":665,
+          "id":4352,
           "fb_uid":"100004093051334",
           "twitter_uid":0,
           "name":"foo foo",
@@ -2972,8 +3048,8 @@ Returns current user days based on <a href="#range-request">range-request</a>.
 </table>
 ###### Example request: ######
     {
-      "from":425,
-      "to":422,
+      "from":2118,
+      "to":2115,
       "limit":1
     }
 
@@ -2993,19 +3069,19 @@ Returns current user days based on <a href="#range-request">range-request</a>.
 ###### Example response: ######
     [
       {
-        "id":424,
+        "id":2117,
         "fb_uid":"100004087981387",
-        "image_266":"http:\/\/static.onedayofmine.dev\/666\/days\/005604ce1c85a9668ef62b309db49df50fcf8524_266.jpeg",
-        "image_532":"http:\/\/static.onedayofmine.dev\/666\/days\/005604ce1c85a9668ef62b309db49df50fcf8524_532.jpeg",
+        "image_266":"http:\/\/static.onedayofmine.dev\/4353\/days\/6cbab3bda8587efeba6dac432dce45beedc5815f_266.jpeg",
+        "image_532":"http:\/\/static.onedayofmine.dev\/4353\/days\/6cbab3bda8587efeba6dac432dce45beedc5815f_532.jpeg",
         "title":"foobarfoobarfoobarfoobarf",
         "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
         "location":"foobarfoobarfoobarfoobarf",
         "type":"Working day",
         "likes_count":0,
-        "ctime":1345623248,
-        "utime":1345623248,
+        "ctime":1345723794,
+        "utime":1345723795,
         "user":{
-          "id":666,
+          "id":4353,
           "fb_uid":"100004087981387",
           "twitter_uid":0,
           "name":"bar bar",
@@ -3034,10 +3110,10 @@ Returns current user days based on <a href="#range-request">range-request</a>.
 ### MomentComments ###
 <a name='MomentComments'></a>
 #### Update ####
-<a name="58635fd22fd42e165ef0b5c3477a651c"></a>
+<a name="bea1e18467c94405f18b5c16f8bdac01"></a>
 
 
-`POST /moment_comments/324/update`
+`POST /moment_comments/589/update`
 
 ##### Request: #####
 ###### Params: ######
@@ -3077,13 +3153,13 @@ Returns current user days based on <a href="#range-request">range-request</a>.
 </table>
 ###### Example response: ######
     {
-      "id":324,
-      "user_id":667,
+      "id":589,
+      "user_id":4354,
       "text":"foobarfo",
       "likes_count":0,
-      "ctime":1345623249,
-      "utime":1345623249,
-      "moment_id":687
+      "ctime":1345723795,
+      "utime":1345723795,
+      "moment_id":1064
     }
 
 
@@ -3091,10 +3167,10 @@ Returns current user days based on <a href="#range-request">range-request</a>.
 
 * * *
 #### Delete ####
-<a name="e34d1b6f402c9c77b86fd030f93da840"></a>
+<a name="8dfa71bc149df0a28c91ab40bc071f30"></a>
 
 
-`POST /moment_comments/326/delete`
+`POST /moment_comments/591/delete`
 
 ##### Request: #####
 ###### Params: ######
@@ -3123,10 +3199,10 @@ Returns current user days based on <a href="#range-request">range-request</a>.
 ### Moments ###
 <a name='Moments'></a>
 #### Update ####
-<a name="1a451a5f9a7ac250fbc3ea98b5b93423"></a>
+<a name="6c3fd30a4b9352f8239591b66f262230"></a>
 Updates information about specified <a href="#Entity:Moment">moment</a> and returns it.
 
-`POST moments/691/update`
+`POST moments/1068/update`
 
 ##### Request: #####
 ###### Params: ######
@@ -3169,14 +3245,14 @@ Updates information about specified <a href="#Entity:Moment">moment</a> and retu
 </table>
 ###### Example response: ######
     {
-      "id":691,
-      "day_id":430,
+      "id":1068,
+      "day_id":2123,
       "description":"foobarfoobarfoobarfo...oobarfoobarfoobarfoo",
-      "image_266":"http:\/\/static.onedayofmine.dev\/677\/days\/430\/970cd1275af364d3b003292a5265693ade13fd0d_266.jpeg",
-      "image_532":"http:\/\/static.onedayofmine.dev\/677\/days\/430\/970cd1275af364d3b003292a5265693ade13fd0d_532.jpeg",
+      "image_266":"http:\/\/static.onedayofmine.dev\/4364\/days\/2123\/d361c6a047f3c30e6597f76f9928d6e8ef48907b_266.jpeg",
+      "image_532":"http:\/\/static.onedayofmine.dev\/4364\/days\/2123\/d361c6a047f3c30e6597f76f9928d6e8ef48907b_532.jpeg",
       "time":"1970-01-01T00:00:00+00:00",
       "likes_count":0,
-      "ctime":1345623249
+      "ctime":1345723796
     }
 
 
@@ -3184,10 +3260,10 @@ Updates information about specified <a href="#Entity:Moment">moment</a> and retu
 
 * * *
 #### Delete ####
-<a name="912e48c8ee5bd64ebfce7615037e67e6"></a>
+<a name="e84e51448d338b17bd2dd5bf9d97f731"></a>
 Delete a moment.
 
-`POST moments/692/delete`
+`POST moments/1069/delete`
 
 
 
@@ -3196,10 +3272,10 @@ Delete a moment.
 
 * * *
 #### Comment ####
-<a name="4db827f6588e6f21623ccc1d6936460b"></a>
+<a name="9b0189daee8c9aadd7a178959692fb8e"></a>
 Creates <a href="#Entity:MomentComment">moment comment</a> and returns it.
 
-`POST moments/693/comment`
+`POST moments/1070/comment`
 
 ##### Request: #####
 ###### Params: ######
@@ -3239,13 +3315,13 @@ Creates <a href="#Entity:MomentComment">moment comment</a> and returns it.
 </table>
 ###### Example response: ######
     {
-      "id":328,
-      "user_id":679,
+      "id":593,
+      "user_id":4366,
       "text":"foobarfoobarfoobarfo...oobarfoobarfoobarfoo",
       "likes_count":0,
-      "ctime":1345623250,
-      "utime":1345623250,
-      "moment_id":693
+      "ctime":1345723797,
+      "utime":1345723797,
+      "moment_id":1070
     }
 
 
@@ -3292,7 +3368,7 @@ Returns <a href="#Entity:User">profile</a> of current logged in user.
 </table>
 ###### Example response: ######
     {
-      "id":680,
+      "id":4367,
       "fb_uid":"100004087981387",
       "twitter_uid":0,
       "name":"bar bar",
@@ -3381,15 +3457,15 @@ Changes fields of current user <a href="#Entity:User">profile</a> and returns th
 </table>
 ###### Example response: ######
     {
-      "id":681,
+      "id":4368,
       "fb_uid":"100004087981387",
       "twitter_uid":0,
       "name":"foobarfoobarfoobarfoobarf",
       "sex":"female",
-      "image_36":"http:\/\/static.onedayofmine.dev\/681\/9f2a22479ebff00e08da5d777bd8ac12a69eb538_36.jpeg",
-      "image_72":"http:\/\/static.onedayofmine.dev\/681\/9f2a22479ebff00e08da5d777bd8ac12a69eb538_72.jpeg",
-      "image_96":"http:\/\/static.onedayofmine.dev\/681\/9f2a22479ebff00e08da5d777bd8ac12a69eb538_96.jpeg",
-      "image_192":"http:\/\/static.onedayofmine.dev\/681\/9f2a22479ebff00e08da5d777bd8ac12a69eb538_192.jpeg",
+      "image_36":"http:\/\/static.onedayofmine.dev\/4368\/795423cc3a834cb1ed218b8381e53e27e4dd7ef1_36.jpeg",
+      "image_72":"http:\/\/static.onedayofmine.dev\/4368\/795423cc3a834cb1ed218b8381e53e27e4dd7ef1_72.jpeg",
+      "image_96":"http:\/\/static.onedayofmine.dev\/4368\/795423cc3a834cb1ed218b8381e53e27e4dd7ef1_96.jpeg",
+      "image_192":"http:\/\/static.onedayofmine.dev\/4368\/795423cc3a834cb1ed218b8381e53e27e4dd7ef1_192.jpeg",
       "birthday":"1990-01-02",
       "occupation":"foobarfoobarfoobarfoobarf",
       "location":"foobarfoobarfoobarfoobarf",
@@ -3544,7 +3620,7 @@ Changes fields of current user <a href="#Entity:User">profile</a> and returns th
 ###### Example response: ######
     [
       {
-        "id":709,
+        "id":4396,
         "fb_uid":"100004093051334",
         "twitter_uid":0,
         "name":"foo foo",
@@ -3621,7 +3697,7 @@ Changes fields of current user <a href="#Entity:User">profile</a> and returns th
 </table>
 ###### Example response: ######
     {
-      "id":710,
+      "id":4397,
       "fb_uid":"100004087981387",
       "twitter_uid":637083468,
       "name":"bar bar",
@@ -3664,8 +3740,8 @@ Returns news for current logged in user.
 </table>
 ###### Example request: ######
     {
-      "from":86,
-      "to":83,
+      "from":473,
+      "to":470,
       "limit":1
     }
 
@@ -3685,12 +3761,12 @@ Returns news for current logged in user.
 ###### Example response: ######
     [
       {
-        "id":85,
-        "recipient_id":713,
+        "id":472,
+        "recipient_id":4400,
         "text":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob likes bar bar",
-        "ctime":1345623255,
+        "ctime":1345723803,
         "user":{
-          "id":717,
+          "id":4404,
           "fb_uid":"fooba",
           "twitter_uid":0,
           "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
@@ -3707,8 +3783,8 @@ Returns news for current logged in user.
           "days_count":0
         },
         "day":{
-          "id":440,
-          "user_id":716,
+          "id":2133,
+          "user_id":4403,
           "fb_uid":"fooba",
           "image_266":null,
           "image_532":null,
@@ -3717,17 +3793,17 @@ Returns news for current logged in user.
           "location":"foobarfoobarfoobarfoobarf",
           "type":"Working day",
           "likes_count":0,
-          "ctime":1345623255,
-          "utime":1345623255
+          "ctime":1345723803,
+          "utime":1345723803
         },
         "moment":{
-          "id":697,
+          "id":1074,
           "description":"description foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfooba",
           "image_266":null,
           "image_532":null,
           "time":"1970-01-01T00:00:00+00:00",
           "likes_count":0,
-          "ctime":1345623255
+          "ctime":1345723803
         }
       }
     ]
@@ -3740,10 +3816,10 @@ Returns news for current logged in user.
 ### User ###
 <a name='User'></a>
 #### UserByIdDays ####
-<a name="379a73ec48cd922c2a79cc0f7e285d65"></a>
+<a name="1a72181ed8a888d49d2f9be98d3601a1"></a>
 Returns days of specified user
 
-`GET users/719/days/`
+`GET users/4406/days/`
 
 ##### Request: #####
 ###### Params: ######
@@ -3774,8 +3850,7 @@ Returns days of specified user
 ###### Example response: ######
     [
       {
-        "id":442,
-        "user_id":719,
+        "id":2135,
         "fb_uid":"100004087981387",
         "image_266":null,
         "image_532":null,
@@ -3784,12 +3859,29 @@ Returns days of specified user
         "location":"foobarfoobarfoobarfoobarf",
         "type":"Working day",
         "likes_count":0,
-        "ctime":1345623255,
-        "utime":1345623255
+        "ctime":1345723803,
+        "utime":1345723803,
+        "user":{
+          "id":4406,
+          "fb_uid":"100004087981387",
+          "twitter_uid":0,
+          "name":"bar bar",
+          "sex":"male",
+          "image_36":"http:\/\/static.onedayofmine.dev\/default_image_36.png",
+          "image_72":"http:\/\/static.onedayofmine.dev\/default_image_72.png",
+          "image_96":"http:\/\/static.onedayofmine.dev\/default_image_96.png",
+          "image_192":"http:\/\/static.onedayofmine.dev\/default_image_192.png",
+          "birthday":"1980-08-08",
+          "occupation":"",
+          "location":"",
+          "followers_count":0,
+          "following_count":0,
+          "days_count":2
+        },
+        "is_favourite":false
       },
       {
-        "id":441,
-        "user_id":719,
+        "id":2134,
         "fb_uid":"100004087981387",
         "image_266":null,
         "image_532":null,
@@ -3798,8 +3890,26 @@ Returns days of specified user
         "location":"foobarfoobarfoobarfoobarf",
         "type":"Working day",
         "likes_count":0,
-        "ctime":1345623255,
-        "utime":1345623255
+        "ctime":1345723803,
+        "utime":1345723803,
+        "user":{
+          "id":4406,
+          "fb_uid":"100004087981387",
+          "twitter_uid":0,
+          "name":"bar bar",
+          "sex":"male",
+          "image_36":"http:\/\/static.onedayofmine.dev\/default_image_36.png",
+          "image_72":"http:\/\/static.onedayofmine.dev\/default_image_72.png",
+          "image_96":"http:\/\/static.onedayofmine.dev\/default_image_96.png",
+          "image_192":"http:\/\/static.onedayofmine.dev\/default_image_192.png",
+          "birthday":"1980-08-08",
+          "occupation":"",
+          "location":"",
+          "followers_count":0,
+          "following_count":0,
+          "days_count":2
+        },
+        "is_favourite":false
       }
     ]
 
@@ -3808,10 +3918,10 @@ Returns days of specified user
 
 * * *
 #### UserById ####
-<a name="314168ec4251ee79955965c09d6fe9f4"></a>
+<a name="7c85d92fb656d9e0382ff302ace98598"></a>
 Returns days of specified user
 
-`GET users/721/item/`
+`GET users/4408`
 
 ##### Request: #####
 ###### Params: ######
@@ -3848,15 +3958,14 @@ Returns days of specified user
 <tr><td>int</td><td>followers_count</td><td>Count of users, that follow selected user</td></tr>
 <tr><td>int</td><td>following_count</td><td>Count of users, that is followed by selected user</td></tr>
 <tr><td>int</td><td>days_count</td><td>Count of days, that was created by selected user</td></tr>
-<tr><td>bool</td><td>is_follower</td><td>TRUE if current logged in user if followed by selected user. Can be ommited if selected user is same as current logged in.</td></tr>
-<tr><td>bool</td><td>is_followed</td><td>TRUE if selected user is followed by current logged in user. Can be ommited if selected user is same as current logged in.</td></tr>
+<tr><td>bool</td><td>following</td><td>TRUE if selected user is followed by current logged in user. Can be ommited if selected user is same as current logged in.</td></tr>
 <tr><td>[type]</td><td>image_96</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>image_192</td><td>[description]</td></tr>
 
 </table>
 ###### Example response: ######
     {
-      "id":721,
+      "id":4408,
       "fb_uid":"100004087981387",
       "twitter_uid":0,
       "name":"bar bar",
@@ -3871,8 +3980,7 @@ Returns days of specified user
       "followers_count":1,
       "following_count":1,
       "days_count":0,
-      "is_followed":true,
-      "is_follower":true
+      "following":true
     }
 
 
@@ -3880,55 +3988,10 @@ Returns days of specified user
 
 * * *
 #### Followers ####
-<a name="0907aac9dba2a8f9700b9333f7e36795"></a>
-Returns list of users that follow current logged in user.
-
-`GET users/followers`
-
-
-
-##### Response: #####
-###### Fields: ######
-<table class="table">
-<tr>
-  <th width="40">Type</th>
-  <th width="150">Name</th>
-  <th>Description</th>
-</tr>
-<tr><td><a href='#Entity:User'>User[]</a></td><td>followers <span class='label label-important'>Removed</span></td><td></td></tr>
-
-</table>
-###### Example response: ######
-    [
-      {
-        "id":726,
-        "fb_uid":"100004093051334",
-        "twitter_uid":0,
-        "name":"foo foo",
-        "sex":"female",
-        "image_36":"http:\/\/static.onedayofmine.dev\/default_image_36.png",
-        "image_72":"http:\/\/static.onedayofmine.dev\/default_image_72.png",
-        "image_96":"http:\/\/static.onedayofmine.dev\/default_image_96.png",
-        "image_192":"http:\/\/static.onedayofmine.dev\/default_image_192.png",
-        "birthday":"1982-08-08",
-        "occupation":"",
-        "location":"",
-        "followers_count":0,
-        "following_count":1,
-        "days_count":0,
-        "is_followed":false
-      }
-    ]
-
-
-<a href="#toc">^ back to Table of conetens</a>
-
-* * *
-#### FollowersByUserId ####
-<a name="3a5f5e9c4c660f4b75e5e662b1daffd8"></a>
+<a name="0017ace1ba81b8daabcf47dc8a58a5d3"></a>
 Returns list of users that follow selected user.
 
-`GET users/727/followers`
+`GET users/4412/followers`
 
 ##### Request: #####
 ###### Params: ######
@@ -3953,12 +4016,13 @@ Returns list of users that follow selected user.
   <th>Description</th>
 </tr>
 <tr><td><a href='#Entity:User'>User[]</a></td><td>followers <span class='label label-important'>Removed</span></td><td></td></tr>
+<tr><td>[type]</td><td>1</td><td>[description]</td></tr>
 
 </table>
 ###### Example response: ######
     [
       {
-        "id":728,
+        "id":4413,
         "fb_uid":"100004093051334",
         "twitter_uid":0,
         "name":"foo foo",
@@ -3970,10 +4034,28 @@ Returns list of users that follow selected user.
         "birthday":"1982-08-08",
         "occupation":"",
         "location":"",
+        "followers_count":1,
+        "following_count":1,
+        "days_count":0,
+        "following":true
+      },
+      {
+        "id":4414,
+        "fb_uid":"fooba",
+        "twitter_uid":0,
+        "name":"Dum Dum",
+        "sex":"female",
+        "image_36":"http:\/\/static.onedayofmine.dev\/default_image_36.png",
+        "image_72":"http:\/\/static.onedayofmine.dev\/default_image_72.png",
+        "image_96":"http:\/\/static.onedayofmine.dev\/default_image_96.png",
+        "image_192":"http:\/\/static.onedayofmine.dev\/default_image_192.png",
+        "birthday":"1990-01-02",
+        "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfo",
+        "location":"",
         "followers_count":0,
         "following_count":1,
         "days_count":0,
-        "is_followed":false
+        "following":false
       }
     ]
 
@@ -3982,55 +4064,10 @@ Returns list of users that follow selected user.
 
 * * *
 #### Following ####
-<a name="774c23c770724885bdc9325b3159b700"></a>
-Returns list of users that is followed by current logged in user.
-
-`GET users/following`
-
-
-
-##### Response: #####
-###### Fields: ######
-<table class="table">
-<tr>
-  <th width="40">Type</th>
-  <th width="150">Name</th>
-  <th>Description</th>
-</tr>
-<tr><td><a href='#Entity:User'>User[]</a></td><td>followed <span class='label label-important'>Removed</span></td><td></td></tr>
-
-</table>
-###### Example response: ######
-    [
-      {
-        "id":730,
-        "fb_uid":"100004093051334",
-        "twitter_uid":0,
-        "name":"foo foo",
-        "sex":"female",
-        "image_36":"http:\/\/static.onedayofmine.dev\/default_image_36.png",
-        "image_72":"http:\/\/static.onedayofmine.dev\/default_image_72.png",
-        "image_96":"http:\/\/static.onedayofmine.dev\/default_image_96.png",
-        "image_192":"http:\/\/static.onedayofmine.dev\/default_image_192.png",
-        "birthday":"1982-08-08",
-        "occupation":"",
-        "location":"",
-        "followers_count":1,
-        "following_count":0,
-        "days_count":0,
-        "is_follower":false
-      }
-    ]
-
-
-<a href="#toc">^ back to Table of conetens</a>
-
-* * *
-#### FollowingByUserId ####
-<a name="93a1f7842d26d2844c7b80767c77d811"></a>
+<a name="70f5a8b7f8f2bff1898846d710436b51"></a>
 Returns list of users that is followed by selected user.
 
-`GET users/731/following`
+`GET users/4415/following`
 
 ##### Request: #####
 ###### Params: ######
@@ -4055,12 +4092,13 @@ Returns list of users that is followed by selected user.
   <th>Description</th>
 </tr>
 <tr><td><a href='#Entity:User'>User[]</a></td><td>followed <span class='label label-important'>Removed</span></td><td></td></tr>
+<tr><td>[type]</td><td>1</td><td>[description]</td></tr>
 
 </table>
 ###### Example response: ######
     [
       {
-        "id":732,
+        "id":4416,
         "fb_uid":"100004093051334",
         "twitter_uid":0,
         "name":"foo foo",
@@ -4073,9 +4111,25 @@ Returns list of users that is followed by selected user.
         "occupation":"",
         "location":"",
         "followers_count":1,
+        "following_count":1,
+        "days_count":0
+      },
+      {
+        "id":4417,
+        "fb_uid":"fooba",
+        "twitter_uid":0,
+        "name":"Dum Dum",
+        "sex":"female",
+        "image_36":"http:\/\/static.onedayofmine.dev\/default_image_36.png",
+        "image_72":"http:\/\/static.onedayofmine.dev\/default_image_72.png",
+        "image_96":"http:\/\/static.onedayofmine.dev\/default_image_96.png",
+        "image_192":"http:\/\/static.onedayofmine.dev\/default_image_192.png",
+        "birthday":"1990-01-02",
+        "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfo",
+        "location":"",
+        "followers_count":1,
         "following_count":0,
-        "days_count":0,
-        "is_follower":false
+        "days_count":0
       }
     ]
 
@@ -4084,10 +4138,10 @@ Returns list of users that is followed by selected user.
 
 * * *
 #### Follow ####
-<a name="b5fab6df93c940e4610c11be2445a2cc"></a>
+<a name="c18a5812a449f6ccfa6eac9f49b58e10"></a>
 Start following selected user.
 
-`POST users/734/follow`
+`POST users/4419/follow`
 
 ##### Request: #####
 ###### Params: ######
@@ -4108,10 +4162,10 @@ Start following selected user.
 
 * * *
 #### Unfollow ####
-<a name="cdbabcb355ee343b582602aa2c5380ed"></a>
+<a name="f43c7cd6fac99fe29a9aad6c0e47f022"></a>
 Stop following selected user.
 
-`POST users/736/unfollow`
+`POST users/4421/unfollow`
 
 ##### Request: #####
 ###### Params: ######
@@ -4155,8 +4209,8 @@ Stop following selected user.
 ###### Example request: ######
     {
       "query":"foo",
-      "from":737,
-      "to":740,
+      "from":4422,
+      "to":4425,
       "limit":1
     }
 
@@ -4176,7 +4230,7 @@ Stop following selected user.
 ###### Example response: ######
     [
       {
-        "id":738,
+        "id":4423,
         "fb_uid":"fooba",
         "twitter_uid":0,
         "name":"fooA",
