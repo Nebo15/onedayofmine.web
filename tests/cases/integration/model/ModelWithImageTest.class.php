@@ -1,5 +1,5 @@
 <?php
-lmb_require('tests/cases/acceptance/odAcceptanceTestCase.class.php');
+lmb_require('tests/cases/integration/odAcceptanceTestCase.class.php');
 lmb_require('src/model/ModelWithImage.class.php');
 
 class ModelWithImageTest extends odAcceptanceTestCase
