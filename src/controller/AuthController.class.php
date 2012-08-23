@@ -4,6 +4,21 @@ lmb_require('src/model/DayTest.class.php');
 
 class AuthController extends BaseJsonController
 {
+  function doGuestParameters()
+  {
+    $answer = new stdClass();
+
+    $answer->facebook               = new stdClass();
+    $answer->facebook->appid        = $this->toolkit->getConf('facebook')['appId'];
+    $answer->facebook->namespace    = $this->toolkit->getConf('facebook')['namespace'];
+    $answer->facebook->permissions  = implode(',', $this->toolkit->getConf('facebook')['permissions']);
+
+    $answer->twitter                = new stdClass();
+    $answer->twitter->consumer_key  = $this->toolkit->getConf('twitter')['consumer_key'];
+
+    return $this->_answerOk($answer);
+  }
+
   function doGuestLogin()
   {
     if(!$this->request->isPost())
