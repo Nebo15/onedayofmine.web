@@ -19,7 +19,6 @@ class RequestDispatchingFilter extends lmbRequestDispatchingFilter implements lm
 
     $controller = $this->_createController($dispatched_params);
 
-
     if(isset($dispatched_params['action']) && $controller->actionExists($dispatched_params['action']))
       $controller->setCurrentAction($dispatched_params['action']);
     elseif(!isset($dispatched_params['action']))

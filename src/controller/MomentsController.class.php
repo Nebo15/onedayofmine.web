@@ -8,7 +8,7 @@ class MomentsController extends BaseJsonController
 
   function doUpdate()
   {
-    if(!$this->request->hasPost())
+    if(!$this->request->isPost())
       return $this->_answerWithError('Not a POST request');
 
     if(!$moment = Moment::findById($this->request->id))
@@ -22,7 +22,7 @@ class MomentsController extends BaseJsonController
 
   function doComment()
   {
-    if(!$this->request->hasPost())
+    if(!$this->request->isPost())
       return $this->_answerWithError('Not a POST request');
 
     $comment = new MomentComment();
@@ -46,7 +46,7 @@ class MomentsController extends BaseJsonController
 
   function doDelete()
   {
-    if(!$this->request->hasPost())
+    if(!$this->request->isPost())
       return $this->_answerWithError('Not a POST request');
 
     if(!$moment = Moment::findById($this->request->id))
@@ -62,6 +62,4 @@ class MomentsController extends BaseJsonController
 
     return $this->_answerOk();
   }
-
-  //POST /moments/<momentId>/comments/<commentId>/update
 }

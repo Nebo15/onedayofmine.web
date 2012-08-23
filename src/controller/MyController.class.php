@@ -6,7 +6,7 @@ class MyController extends BaseJsonController
   function doProfile()
   {
     $user = $this->_getUser();
-    if($this->request->hasPost())
+    if($this->request->isPost())
     {
       $properties = array('name', 'sex', 'email', 'location', 'occupation', 'birthday');
       foreach($properties as $property)
@@ -36,7 +36,7 @@ class MyController extends BaseJsonController
   function doSettings()
   {
     $user = $this->_getUser();
-    if(!$this->request->hasPost())
+    if(!$this->request->isPost())
       return $this->_answerOk($user->getSettings());
     else
     {

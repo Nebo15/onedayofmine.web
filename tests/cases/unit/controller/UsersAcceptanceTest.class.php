@@ -1,8 +1,11 @@
 <?php
-lmb_require('tests/cases/acceptance/odAcceptanceTestCase.class.php');
+lmb_require('tests/cases/unit/controller/odControllerTestCase.class.php');
+lmb_require('src/controller/UsersController.class.php');
 
-class UserAcceptanceTest extends odAcceptanceTestCase
+class UsersControllerTest extends odControllerTestCase
 {
+  protected $controller_class = 'UsersController';
+
   function setUp()
   {
     parent::setUp();
@@ -24,7 +27,7 @@ class UserAcceptanceTest extends odAcceptanceTestCase
 
     $this->_loginAndSetCookie($this->additional_user);
 
-    $days = $this->get('users/'.$this->main_user->getId().'/days/')->result;
+    $days = $this->get('days', array(), $this->main_user->getId())->result;
     $this->assertResponse(200);
     $this->assertEqual(2, count($days));
     $this->assertEqual($day2->getId(), $days[0]->id);
@@ -64,7 +67,7 @@ class UserAcceptanceTest extends odAcceptanceTestCase
 
     $this->_loginAndSetCookie($this->additional_user);
 
-    $res = (array) $this->get('users/'.$this->main_user->getId())->result;
+    $res = (array) $this->get('item', array(), $this->main_user->getId())->result;
 
     if($this->assertResponse(200))
     {
@@ -85,7 +88,7 @@ class UserAcceptanceTest extends odAcceptanceTestCase
 
     $this->_loginAndSetCookie($this->main_user);
 
-    $response = $this->get('users/'.$this->main_user->getId().'/followers');
+    $response = $this->get('followers', array(), $this->main_user->getId());
     $followers = $response->result;
     $this->assertResponse(200);
     $this->assertEqual(0, count($followers));
@@ -105,7 +108,7 @@ class UserAcceptanceTest extends odAcceptanceTestCase
 
     $this->_loginAndSetCookie($this->additional_user);
 
-    $followers = $this->get('users/'.$this->main_user->getId().'/followers')->result;
+    $followers = $this->get('followers', array(), $this->main_user->getId())->result;
     $this->assertResponse(200);
     $this->assertEqual(0, count($followers));
 
@@ -118,7 +121,7 @@ class UserAcceptanceTest extends odAcceptanceTestCase
     $followers->add($this->main_user);
     $followers->save();
 
-    $followers = $this->get('users/'.$this->main_user->getId().'/followers')->result;
+    $followers = $this->get('followers', array(), $this->main_user->getId())->result;
     $this->assertResponse(200);
     $this->assertEqual(2, count($followers));
     $this->assertEqual($this->additional_user->getId(), $followers[0]->id);
@@ -141,7 +144,7 @@ class UserAcceptanceTest extends odAcceptanceTestCase
 
     $this->_loginAndSetCookie($this->additional_user);
 
-    $following = $this->get('users/'.$this->main_user->getId().'/following')->result;
+    $following = $this->get('following', array(), $this->main_user->getId())->result;
     $this->assertResponse(200);
     $this->assertEqual(0, count($following));
 
@@ -154,7 +157,7 @@ class UserAcceptanceTest extends odAcceptanceTestCase
     $following->add($this->main_user);
     $following->save();
 
-    $following = $this->get('users/'.$this->main_user->getId().'/following')->result;
+    $following = $this->get('following', array(), $this->main_user->getId())->result;
     $this->assertResponse(200);
     $this->assertEqual(2, count($following));
     $this->assertEqual($this->additional_user->getId(), $following[0]->id);
@@ -172,7 +175,7 @@ class UserAcceptanceTest extends odAcceptanceTestCase
     $this->assertEqual(0, $this->main_user->getFollowing()->count());
 
     $this->_loginAndSetCookie($this->main_user);
-    $this->post('users/'.$this->additional_user->getId().'/follow');
+    $this->post('follow', array(), $this->additional_user->getId());
     $this->assertResponse(200);
 
     $this->assertEqual(1, $this->main_user->getFollowing()->count());
@@ -192,7 +195,7 @@ class UserAcceptanceTest extends odAcceptanceTestCase
     $following->save();
 
     $this->_loginAndSetCookie($this->main_user);
-    $this->post('users/'.$this->additional_user->getId().'/unfollow');
+    $this->post('unfollow', array(), $this->additional_user->getId());
     $this->assertResponse(200);
 
     $this->assertEqual(0, $this->main_user->getFollowing()->count());
@@ -222,9 +225,7 @@ class UserAcceptanceTest extends odAcceptanceTestCase
     $user5->setName('bar');
     $user5->save();
 
-    $users = $this
-      ->get('users/search', array('query' => 'foo'))
-      ->result;
+    $users = $this->get('search', array('query' => 'foo'))->result;
     if($this->assertResponse(200))
     {
       $this->assertEqual(4, count($users));
@@ -235,7 +236,7 @@ class UserAcceptanceTest extends odAcceptanceTestCase
     }
 
     $users = $this
-      ->get('users/search', array('query' => 'foo', 'from' => $user1->getId()))
+      ->get('search', array('query' => 'foo', 'from' => $user1->getId()))
       ->result;
     if($this->assertResponse(200))
     {
@@ -246,7 +247,7 @@ class UserAcceptanceTest extends odAcceptanceTestCase
     }
 
     $users = $this
-      ->get('users/search', array(
+      ->get('search', array(
         'query' => 'foo',
         'from'  => $user1->getId(),
         'to'    => $user4->getId()))
@@ -259,12 +260,11 @@ class UserAcceptanceTest extends odAcceptanceTestCase
     }
 
     $users = $this
-      ->get('users/search', array(
+      ->get('search', array(
       'query' => 'foo',
       'from'  => $user1->getId(),
       'to'    => $user4->getId(),
       'limit' => 1))
-
       ->result;
     if($this->assertResponse(200))
     {

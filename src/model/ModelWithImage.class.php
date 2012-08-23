@@ -112,14 +112,19 @@ abstract class ModelWithImage extends BaseModel
     return str_replace(array_keys($placeholders), $placeholders, $this->_getConfig()['path']);
   }
 
+  private function _getCommonConfig()
+  {
+    return lmbToolkit::instance()->getConf('images');
+  }
+
   private function _getConfig()
   {
-    return lmbToolkit::instance()->getConf('images')[get_called_class()];
+    return $this->_getCommonConfig()[get_called_class()];
   }
 
   protected function _getSavePath($size = null)
   {
-    return lmb_env_get('APP_DIR').DIRECTORY_SEPARATOR.$this->_getConfig()['save_path'].DIRECTORY_SEPARATOR.$this->getImage($size);
+    return lmb_env_get('APP_DIR').DIRECTORY_SEPARATOR.$this->_getCommonConfig()['save_path'].DIRECTORY_SEPARATOR.$this->getImage($size);
   }
 
   protected function _getS3SavePath($size = null)

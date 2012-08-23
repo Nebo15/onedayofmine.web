@@ -1,8 +1,11 @@
 <?php
-lmb_require('tests/cases/acceptance/odAcceptanceTestCase.class.php');
+lmb_require('tests/cases/unit/controller/odControllerTestCase.class.php');
+lmb_require('src/controller/MomentCommentsController.class.php');
 
-class MomentCommentsAcceptanceTest extends odAcceptanceTestCase
+class MomentCommentsControllerTest extends odControllerTestCase
 {
+  protected $controller_class = 'MomentCommentsController';
+
   function setUp()
   {
     parent::setUp();
@@ -20,7 +23,7 @@ class MomentCommentsAcceptanceTest extends odAcceptanceTestCase
     $new_comment_text = $this->generator->string(8);
 
     $this->_loginAndSetCookie($this->main_user);
-    $this->post('/moment_comments/'.$comment->getId().'/update', array('text' => $new_comment_text));
+    $this->post('update', array('text' => $new_comment_text), $comment->getId());
     $this->assertResponse(200);
 
     $loaded_comment = MomentComment::findById($comment->getId());
@@ -35,7 +38,7 @@ class MomentCommentsAcceptanceTest extends odAcceptanceTestCase
     $new_comment_text = $this->generator->string(8);
 
     $this->_loginAndSetCookie($this->additional_user);
-    $this->post('/moment_comments/'.$comment->getId().'/update', array('text' => $new_comment_text));
+    $this->post('update', array('text' => $new_comment_text), $comment->getId());
     $this->assertResponse(404);
   }
 
@@ -50,7 +53,7 @@ class MomentCommentsAcceptanceTest extends odAcceptanceTestCase
     $new_comment_text = $this->generator->string(8);
 
     $this->_loginAndSetCookie($this->main_user);
-    $this->post('/moment_comments/'.$comment->getId().'/delete', array('text' => $new_comment_text));
+    $this->post('delete', array('text' => $new_comment_text), $comment->getId());
     $this->assertResponse(200);
 
     $loaded_comment = MomentComment::findById($comment->getId());
@@ -65,7 +68,7 @@ class MomentCommentsAcceptanceTest extends odAcceptanceTestCase
     $new_comment_text = $this->generator->string(8);
 
     $this->_loginAndSetCookie($this->additional_user);
-    $this->post('/moment_comments/'.$comment->getId().'/delete', array('text' => $new_comment_text));
+    $this->post('delete', array('text' => $new_comment_text), $comment->getId());
     $this->assertResponse(404);
   }
 }
