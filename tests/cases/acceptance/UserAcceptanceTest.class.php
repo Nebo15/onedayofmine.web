@@ -14,7 +14,7 @@ class UserAcceptanceTest extends odAcceptanceTestCase
    * @api input param int id ID of user
    * @api result Day[] days
    */
-  function testUserByIdDays()
+  function testUserDays()
   {
     $this->main_user->save();
     $day1 = $this->generator->day($this->main_user);
@@ -49,7 +49,7 @@ class UserAcceptanceTest extends odAcceptanceTestCase
    * @api result int days_count Count of days, that was created by selected user
    * @api result bool following TRUE if selected user is followed by current logged in user. Can be ommited if selected user is same as current logged in.
    */
-  function testUserById()
+  function testUser()
   {
     $this->main_user->save();
     $this->additional_user->save();
