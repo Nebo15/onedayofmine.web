@@ -25,6 +25,11 @@ $only_admin = array(array('title' => 'Администрирование', 'icon
     'url' => '/admin_user',
     'icon' => '/shared/cms/images/icons/user.png',
   ),
+  array(
+    'title' => 'Requests log',
+    'url' => '/admin_requests_log',
+    'icon' => '/shared/cms/images/icons/page.png',
+  ),
 )));
 
 $conf = array(

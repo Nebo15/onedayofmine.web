@@ -1,0 +1,71 @@
+{{wrap with="admin_page_layout.phtml" in="content_zone"}}
+
+  {{include file="_admin/selectors.phtml"/}}
+  {{include file="_admin_object/actions.phtml"/}}
+
+  <div id="header">
+    <h1>Requests log</h1>
+    <div class="header_actions">
+    </div>
+
+    {{include file='_admin/pager.phtml' items='{$this->items}'/}}
+  </div>
+
+  <div id="body">
+
+    {{list using="{$this->items}" as="$item" counter="$counter" parity='$parity'}}
+
+      <div class='list'>
+        <div class='list_actions'>
+          {{apply template="selectors_button" action="delete" title="Удалить" /}}
+        </div>
+        <table>
+          <tr>
+            <th>{{apply template="selectors_toggler"/}}</th>
+            <th>id
+            {{include file='_admin/sort_by_column.phtml' field='id'/}}
+            </th>
+            <th>Method</th>
+            <th>Path</th>
+            <th>Code</th>
+            <th>Time</th>
+            <th>IP</th>
+            <th>GET</th>
+            <th>POST</th>
+            <th>COOKIES</th>
+            <th>Response</th>
+            <th>Действия</th>
+          </tr>
+
+          {{list:item}}
+            <tr class="{$parity}">
+              <td>{{apply template="selector" value="{$item.id}"/}}</td>
+              <td>{$item.id}</td>
+              <td>{$item.method}</td>
+              <td>{$item.path}</td>
+              <td>{$item.code}</td>
+              <td>{$item.time}</td>
+              <td>{$item.ip}</td>
+              <td><pre><?= lmb_var_export(unserialize($item->get)); ?></pre></td>
+              <td><pre><?= lmb_var_export(unserialize($item->post)); ?></pre></td>
+              <td><pre><?= lmb_var_export(unserialize($item->cookies)); ?></pre></td>
+              <td>{$item.response|clip:120,'...'}</td>
+              <td class='actions'>
+                {{apply template="object_action_delete" item="{$item}"/}}
+              </td>
+            </tr>
+          {{/list:item}}
+          {{list:empty}}
+            <div class="empty_list">Записи отсутствуют</div>
+          {{/list:empty}}
+        </table>
+        <div class='list_actions'>
+          {{apply template="selectors_button" action="delete" title="Удалить" /}}
+        </div>
+      </div>
+
+    {{/list}}
+
+  </div>
+
+{{/wrap}}
