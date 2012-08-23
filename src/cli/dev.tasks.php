@@ -3,7 +3,7 @@ lmb_require(taskman_prop('PROJECT_DIR').'setup.php');
 
 /**
  * @desc Delete all rows from DB tables
- * @deps devel,testing
+ * @mods devel,testing
  */
 function task_od_remove_db_data()
 {
@@ -183,8 +183,7 @@ function task_od_parse_lj($argv)
 
 /**
  * @desc Register tests users
- * @deps od_remove_cache
- * @deps devel,testing
+ * @mods devel,testing
  */
 function task_od_tests_users()
 {
@@ -217,7 +216,7 @@ function task_od_tests_users()
 }
 
 /**
- * @deps devel,testing
+ * @mods devel,testing
  */
 function task_od_delete_fb_objects()
 {

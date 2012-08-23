@@ -2,16 +2,6 @@
 lmb_require(taskman_prop('PROJECT_DIR').'setup.php');
 
 /**
- * @desc Remove RemoteApiMock cache
- */
-function task_od_remove_cache($argv)
-{
-  lmb_require('limb/fs/src/lmbFs.class.php');
-  lmbFs::rm(taskman_prop('PROJECT_DIR').'/var');
-  lmbFs::mkdir(taskman_prop('PROJECT_DIR').'/var');
-}
-
-/**
  * @alias od_calc_interest
  */
 function task_od_calc_ratings()
@@ -63,7 +53,7 @@ function task_od_amazon_s3_upload()
 
   $files = lmbFs::findRecursive($files_dir, 'f', '', '~.*default.*~');
 
-  $chunk_size = 100;
+  $chunk_size = 10;
   $chunks = array_chunk($files, $chunk_size);
   $counter = count($files);
   foreach($chunks as $chunk)
@@ -73,7 +63,7 @@ function task_od_amazon_s3_upload()
       $s3_file = substr($file, $files_dir_length + 1);
       $s3->batch()->create_object($bucket, $s3_file, array(
         'fileUpload' => $file,
-        'acl' => AmazonS3::ACL_PUBLIC
+        'acl' => AmazonS3::ACL_PUBLIC,
       ));
       echo ($counter--).':'.$s3_file.PHP_EOL;
     }
@@ -84,9 +74,9 @@ function task_od_amazon_s3_upload()
         if(!$response->isOk())
           throw new lmbException('Error on file uploading: '.$response->body->Message);
 
-    foreach ($chunk as $file)
-    {
-      lmbFs::rm($file);
-    }
+//    foreach ($chunk as $file)
+//    {
+//      lmbFs::rm($file);
+//    }
   }
 }

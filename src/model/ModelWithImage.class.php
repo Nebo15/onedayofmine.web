@@ -8,23 +8,54 @@ abstract class ModelWithImage extends BaseModel
     $extension = lmbToolkit::instance()->getImageHelper()->getImageExtensionByImageContent($content);
     $this->setImageExt($extension);
 
-    lmbFs::safeWrite($this->_getOrigSavePath(), $content);
+    lmbFs::safeWrite($this->_getSavePath(), $content);
 
-    foreach ($this->_getConfig()['sizes'] as $size)
+    if('jpeg' == $extension && 'Moment' == get_called_class())
+      $this->_fillExifInfo($this->_getSavePath());
+
+    foreach ($this->_getConvertionSizes() as $size)
     {
-      $helper = new lmbConvertImageHelper($this->_getOrigSavePath());
+      $helper = new lmbConvertImageHelper($this->_getSavePath());
       $helper->resizeAndCropFrame($size);
       $helper->save($this->_getSavePath($size));
-
-      if('jpeg' == $extension && 'Moment' == get_called_class())
-        $this->_fillExifInfo();
     }
+
+    $is_s3_enabled = lmbToolkit::instance()->getConcreteAmazonServiceConfig('S3')['enabled'];
+    if($is_s3_enabled)
+    {
+      $this->_sendImagesToS3();
+
+      foreach ($this->_getAllSizes() as $size)
+        lmbFs::rm($this->_getSavePath($size));
+     }
   }
 
-  protected function _fillExifInfo()
+  protected function _sendImagesToS3()
+  {
+    $s3 = lmbToolkit::instance()->createAmazonService('S3');
+    $bucket = lmbToolkit::instance()->getConcreteAmazonServiceConfig('S3')['bucket'];
+
+    foreach ($this->_getAllSizes() as $size)
+    {
+      $s3->batch()->create_object($bucket, $this->_getS3SavePath($size), array(
+        'fileUpload' => $this->_getSavePath($size),
+        'acl' => AmazonS3::ACL_PUBLIC,
+        'https' => false
+      ));
+    }
+
+    $responses = $s3->batch()->send();
+
+    if(!$responses->areOK())
+      foreach($responses as $response)
+        if(!$response->isOk())
+          throw new lmbException('Error on file uploading: '.$response->body->Message);
+  }
+
+  protected function _fillExifInfo($image_file)
   {
     $helper = lmbToolkit::instance()->getImageHelper();
-    $exif = $helper->getExifInfo($this->_getOrigSavePath());
+    $exif = $helper->getExifInfo($image_file);
 
     if(array_key_exists('GPS', $exif)) {
       $cords = $helper->exifGPSToDecemicalCords($exif);
@@ -60,7 +91,7 @@ abstract class ModelWithImage extends BaseModel
       return null;
 
     if(!$this->getId())
-      throw new Exception("Can't create image path, because entity have no ID.", array('class' => get_called_class()));
+      throw new lmbException("Can't create image path, because entity have no ID.", array('class' => get_called_class()));
 
     $placeholders = [
       ':id'             => $this->getId(),
@@ -86,11 +117,6 @@ abstract class ModelWithImage extends BaseModel
     return lmbToolkit::instance()->getConf('images')[get_called_class()];
   }
 
-  protected function _getOrigSavePath()
-  {
-    return $this->_getSavePath();
-  }
-
   protected function _getSavePath($size = null)
   {
     return lmb_env_get('APP_DIR').DIRECTORY_SEPARATOR.$this->_getConfig()['save_path'].DIRECTORY_SEPARATOR.$this->getImage($size);
@@ -99,5 +125,17 @@ abstract class ModelWithImage extends BaseModel
   protected function _getS3SavePath($size = null)
   {
     return $this->getImage($size);
+  }
+
+  protected function _getAllSizes()
+  {
+    $sizes = $this->_getConfig()['sizes'];
+    $sizes[] = array('width' => 'orig', 'height' => '');
+    return $sizes;
+  }
+
+  protected function _getConvertionSizes()
+  {
+    return $this->_getConfig()['sizes'];
   }
 }
