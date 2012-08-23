@@ -5,6 +5,17 @@ lmb_require('tests/cases/acceptance/odAcceptanceTestCase.class.php');
 class AuthAcceptanceTest extends odAcceptanceTestCase
 {
   /**
+   * @api description Returns app credentials that is needed to acquire access token.
+   */
+  function testParameters()
+  {
+    $res = $this->get('auth/parameters');
+    $this->assertResponse(200);
+    $this->assertProperty($res->result, 'facebook');
+    $this->assertProperty($res->result, 'twitter');
+  }
+
+  /**
    * @api description Returns user authentication status.
    * @api result bool - TRUE if user is logged id, else - FALSE
    */

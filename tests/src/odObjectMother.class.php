@@ -13,7 +13,7 @@ class odObjectMother
   /**
    * @return User
    */
-  function user()
+  function user($name = null)
   {
     $user = new User();
     $user->setFbUid($this->string(5));
@@ -23,7 +23,7 @@ class odObjectMother
     $user->setFbPicBig($this->string(50));
     $user->setFbPicSquare($this->string(50));
     $user->setFbPicSmall($this->string(50));
-    $user->setName($this->string(100));
+    $user->setName($name ?: $this->string(100));
     $user->setTimezone($this->integer(1));
     $user->setSex('female');
     $user->setOccupation($this->string(50));

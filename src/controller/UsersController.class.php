@@ -12,65 +12,69 @@ class UsersController extends BaseJsonController
   function doGuestItem()
   {
     if(!$user = User::findById($this->request->id))
-      return $this->_answerNotFound("User with id {$this->request->id} not found");
-    else {
-      $export = $user->exportForApi();
-      if($user->getId() != lmbToolkit::instance()->getUser()->getId()) {
-        $export->is_followed = UserFollowing::isFollowing(lmbToolkit::instance()->getUser(), $user);
-        $export->is_follower = UserFollowing::isFollowing($user, lmbToolkit::instance()->getUser());
-      }
+      return $this->_answerNotFound("User not found by id '{$this->request->id}'");
 
-      return $this->_answerOk($export);
+    $export = $user->exportForApi();
+
+    if($user->getId() != lmbToolkit::instance()->getUser()->getId()) {
+      $export->following = UserFollowing::isUserFollowUser(lmbToolkit::instance()->getUser(), $user);
+      // $export->is_follower = UserFollowing::isUserFollowUser($user, lmbToolkit::instance()->getUser());
     }
+
+    return $this->_answerOk($export);
   }
 
   function doGuestDays()
   {
-    $user_or_answer = $this->_loadUserFromRequest();
-    if(!is_object($user_or_answer))
-      return $user_or_answer;
+    if(!$user = User::findById($this->request->id))
+      return $this->_answerNotFound("User not found by id '{$this->request->id}'");
 
     $answer = array();
-    foreach($user_or_answer->getDays() as $day)
-      $answer[] = $day->exportForApi();
+    foreach($user->getDays() as $day) {
+      $export = $day->exportForApi();
+      $this->_attachDayUser($export, $day);
+      $this->_attachDayIsFavorited($export, $day);
+      $answer[] = $export;
+    }
 
     return $this->_answerOk($answer);
   }
 
   function doFollowers()
   {
-    $user_or_answer = $this->_loadUserFromRequest();
-    if(!is_object($user_or_answer))
-      return $user_or_answer;
+    if(!$user = User::findById($this->request->id))
+      return $this->_answerNotFound("User not found by id '{$this->request->id}'");
+
+    $followers = $user->getFollowers();
+    $following = UserFollowing::isUserFollowUsers($user, $followers);
 
     $response = array();
-    foreach($user_or_answer->getFollowers() as $follower) {
+    foreach($user->getFollowers() as $follower) {
       $export = $follower->exportForApi();
-      $export->is_followed = UserFollowing::isFollowing(lmbToolkit::instance()->getUser(), $follower);
+      $export->following = $following[$follower->getId()];
       $response[] = $export;
     }
+
     return $this->_answerOk($response);
   }
 
   function doFollowing()
   {
-    $user_or_answer = $this->_loadUserFromRequest();
-    if(!is_object($user_or_answer))
-      return $user_or_answer;
+    if(!$user = User::findById($this->request->id))
+      return $this->_answerNotFound("User not found by id '{$this->request->id}'");
 
     $response = array();
-    foreach($user_or_answer->getFollowing() as $followed) {
-      $export = $followed->exportForApi();
-      $export->is_follower = UserFollowing::isFollowing($followed, lmbToolkit::instance()->getUser());
-      $response[] = $export;
+    foreach($user->getFollowing() as $followed) {
+      $response[] = $followed->exportForApi();
     }
+
     return $this->_answerOk($response);
   }
 
   function doFollow()
   {
     if($this->_getUser()->getId() == $this->request->id)
-      return $this->_answerWithError("You can't follow youself.");
+      return $this->_answerWithError("You can't follow youself");
 
     if(!$user = User::findById($this->request->id))
       return $this->_answerNotFound("User not found by id '{$this->request->id}'");
@@ -87,6 +91,9 @@ class UsersController extends BaseJsonController
 
   function doUnfollow()
   {
+    if($this->_getUser()->getId() == $this->request->id)
+      return $this->_answerWithError("You can't unfollow youself");
+
     if(!$user = User::findById($this->request->id))
       return $this->_answerNotFound("User not found by id '{$this->request->id}'");
 
@@ -107,25 +114,9 @@ class UsersController extends BaseJsonController
     foreach($users as $user) {
       $export = $user->exportForApi();
       if($this->_getUser())
-        $export->is_follower = UserFollowing::isFollowing($user, $this->_getUser());
+        $export->is_follower = UserFollowing::isUserFollowUser($user, $this->_getUser());
       $response[] = $export;
     }
     return $this->_answerOk($response);
-  }
-
-  protected function _loadUserFromRequest()
-  {
-    if(!$this->request->has('id'))
-    {
-      if(!$user = $this->_getUser())
-        return $this->_answerUnauthorized();
-    }
-    else
-    {
-      if(!$user = User::findById($this->request->id))
-      return $this->_answerNotFound("User with id {$this->request->id} not found");
-    }
-
-    return $user;
   }
 }

@@ -237,7 +237,7 @@ class NewsObserverAcceptanceTest extends odAcceptanceTestCase
   protected function _checkFollowMessage($recipient, $follower, $followed, $message, $news_count = 1)
   {
     // Check following in DB
-    $this->assertTrue(UserFollowing::isFollowing($follower, $followed));
+    $this->assertTrue(UserFollowing::isUserFollowUser($follower, $followed));
     // Check message
     $params = array($this->_getUsername($follower), $this->_getUsername($followed));
     $this->_checkMessage($recipient, $follower, $message, $params, $news_count);
