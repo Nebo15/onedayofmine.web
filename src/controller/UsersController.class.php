@@ -17,7 +17,7 @@ class UsersController extends BaseJsonController
       $export = $user->exportForApi();
       if($user->getId() != lmbToolkit::instance()->getUser()->getId()) {
         $export->is_followed = UserFollowing::isFollowing(lmbToolkit::instance()->getUser(), $user);
-        $export->is_follower = UserFollowing::isFollowing($user, lmbToolkit::instance()->getUser());
+        // $export->is_follower = UserFollowing::isFollowing($user, lmbToolkit::instance()->getUser());
       }
 
       return $this->_answerOk($export);
@@ -65,7 +65,7 @@ class UsersController extends BaseJsonController
     $response = array();
     foreach($user_or_answer->getFollowing() as $followed) {
       $export = $followed->exportForApi();
-      $export->is_follower = UserFollowing::isFollowing($followed, lmbToolkit::instance()->getUser());
+      // $export->is_follower = UserFollowing::isFollowing($followed, lmbToolkit::instance()->getUser());
       $response[] = $export;
     }
     return $this->_answerOk($response);
