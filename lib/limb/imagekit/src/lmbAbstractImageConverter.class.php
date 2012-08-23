@@ -18,6 +18,7 @@ lmb_require('limb/fs/src/lmbFileLocator.class.php');
  */
 abstract class lmbAbstractImageConverter
 {
+  /** @var lmbAbstractImageContainer */
   protected $container = null;
   protected $params;
 

@@ -20,7 +20,7 @@ class lmbConvertImageHelper
     lmbFs::rm($source_file);
   }
 
-  function save($dest_file, $quality = null)
+  function save($dest_file = null, $quality = null)
   {
     $container = $this->converter->getContainer();
     $min = min($container->getWidth(), $container->getHeight());
@@ -29,6 +29,11 @@ class lmbConvertImageHelper
     elseif($min <= 300)
       $quality = 92;
     return $this->converter->save($dest_file, null, $quality);
+  }
+
+  function getContent()
+  {
+    return $this->converter->getContainer()->getContent();
   }
 
   function resizeFixedWidth($size)
