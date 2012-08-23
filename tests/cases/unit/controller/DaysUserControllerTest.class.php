@@ -32,7 +32,7 @@ class DaysUserControllerTest extends odControllerTestCase
     $fav->add($day);
     $fav->save();
 
-    $this->_loginAndSetCookie($this->main_user);
+    lmbToolkit::instance()->setUser($this->main_user);
     $response = $this->get('item', array(), $day->getId());
     if($this->assertResponse(200))
     {
@@ -51,7 +51,7 @@ class DaysUserControllerTest extends odControllerTestCase
     $day = $this->generator->day($this->main_user);
     $day->save();
 
-    $this->_loginAndSetCookie($this->main_user);
+    lmbToolkit::instance()->setUser($this->main_user);
     $res = $this->post('comment_create',
       array('text' => $text = $this->generator->string(255)),
       $day->getId()
@@ -77,7 +77,7 @@ class DaysUserControllerTest extends odControllerTestCase
     $day = $this->generator->day($this->additional_user);
     $day->save();
 
-    $this->_loginAndSetCookie($this->main_user);
+    lmbToolkit::instance()->setUser($this->main_user);
 
     $this->post('share', array(), $day->getId());
     $this->assertResponse(200);
@@ -91,7 +91,7 @@ class DaysUserControllerTest extends odControllerTestCase
     $day = $this->generator->day($this->additional_user);
     $day->save();
 
-    $this->_loginAndSetCookie($this->main_user);
+    lmbToolkit::instance()->setUser($this->main_user);
     $this->post('like', array(), $day->getId());
 
     $this->assertResponse(200);
@@ -128,7 +128,7 @@ class DaysUserControllerTest extends odControllerTestCase
     $this->main_user->getFavouriteDays()->add($day5);
     $this->main_user->save();
 
-    $this->_loginAndSetCookie($this->main_user);
+    lmbToolkit::instance()->setUser($this->main_user);
 
     $days = $this->get('favourite')->result;
     if($this->assertResponse(200))
@@ -186,7 +186,7 @@ class DaysUserControllerTest extends odControllerTestCase
 
     $this->assertEqual(0, $this->main_user->getFavouriteDays()->count());
 
-    $this->_loginAndSetCookie($this->main_user);
+    lmbToolkit::instance()->setUser($this->main_user);
     $this->post('mark_favourite', array(), $day->getId());
 
     if($this->assertResponse(200))
@@ -209,7 +209,7 @@ class DaysUserControllerTest extends odControllerTestCase
     $this->main_user->getFavouriteDays()->add($day);
     $this->main_user->save();
 
-    $this->_loginAndSetCookie($this->main_user);
+    lmbToolkit::instance()->setUser($this->main_user);
     $this->post('unmark_favourite', array(), $day->getId());
 
     if($this->assertResponse(200))
@@ -243,7 +243,7 @@ class DaysUserControllerTest extends odControllerTestCase
     $day5->setIsDeleted(1);
     $day5->save();
 
-    $this->_loginAndSetCookie($this->main_user);
+    lmbToolkit::instance()->setUser($this->main_user);
 
     $days = $this->get('following_users')->result;
     $this->assertResponse(200);
@@ -304,7 +304,7 @@ class DaysUserControllerTest extends odControllerTestCase
     $day4 = $this->generator->day($this->main_user);
     $day4->save();
 
-    $this->_loginAndSetCookie($this->main_user);
+    lmbToolkit::instance()->setUser($this->main_user);
 
     $days = $this->get('my')->result;
     if($this->assertResponse(200))

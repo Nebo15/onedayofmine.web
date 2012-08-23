@@ -357,7 +357,7 @@ class DaysGuestControllerTest extends odControllerTestCase
     $day = $this->generator->day();
     $day->save();
 
-    $this->_loginAndSetCookie($this->main_user);
+    lmbToolkit::instance()->setUser($this->main_user);
     $res = $this->post('create_complaint',
       array('text' => $text = $this->generator->string()),
       $day->getId()

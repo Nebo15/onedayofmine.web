@@ -46,6 +46,7 @@ abstract class odControllerTestCase extends UnitTestCase
     parent::setUp();
     $this->toolkit->truncateTablesOf('UserSettings', 'User');
     list($this->main_user, $this->additional_user) = $this->toolkit->getTestsUsers($quiet = false);
+    $this->toolkit->resetUser();
   }
 
   protected function _loginAndSetCookie(User $user)

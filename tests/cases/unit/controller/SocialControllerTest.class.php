@@ -19,7 +19,7 @@ class SocialControllerTest extends odControllerTestCase
   {
     $this->main_user->save();
     $this->additional_user->save();
-    $this->_loginAndSetCookie($this->main_user);
+    lmbToolkit::instance()->setUser($this->main_user);
 
     $result = $this->get('facebook_friends');
     $friends = $result->result;
@@ -45,7 +45,7 @@ class SocialControllerTest extends odControllerTestCase
 
     $this->main_user->getSettings()->setSocialShareTwitter(1);
     $this->main_user->save();
-    $this->_loginAndSetCookie($this->main_user);
+    lmbToolkit::instance()->setUser($this->main_user);
     $result = $this->post('twitter_connect', array(
       'access_token'         => $this->generator->twitter_credentials()[0]['access_token'],
       'access_token_secret'  => $this->generator->twitter_credentials()[0]['access_token_secret']
@@ -63,7 +63,7 @@ class SocialControllerTest extends odControllerTestCase
   function testTwitterConnect_withUnvalidCredentials()
   {
     $this->main_user->save();
-    $this->_loginAndSetCookie($this->main_user);
+    lmbToolkit::instance()->setUser($this->main_user);
     $result = $this->post('twitter_connect', array(
       'access_token'         => 'Wrong twitter access token',
       'access_token_secret'  => 'Wrong twitter access token secret'
@@ -76,7 +76,7 @@ class SocialControllerTest extends odControllerTestCase
   function testTwitterConnect_withNoField()
   {
     $this->main_user->save();
-    $this->_loginAndSetCookie($this->main_user);
+    lmbToolkit::instance()->setUser($this->main_user);
     $result = $this->post('twitter_connect', array(
       'access_token'         => $this->generator->twitter_credentials()[0]['access_token']
     ));
@@ -92,7 +92,7 @@ class SocialControllerTest extends odControllerTestCase
    */
   function testGetNewNews() {
     $this->main_user->save(); // Save user to have static ID
-    $this->_loginAndSetCookie($this->main_user);
+    lmbToolkit::instance()->setUser($this->main_user);
 
     $response = $this->get('news');
     $this->assertResponse(200);

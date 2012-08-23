@@ -25,7 +25,7 @@ class MomentsControllerTest extends odControllerTestCase
     $moment = $this->generator->moment($day);
     $moment->save();
 
-    $this->_loginAndSetCookie($this->main_user);
+    lmbToolkit::instance()->setUser($this->main_user);
     $res = $this->post('update',
       array(
         'description' => $desc = $this->generator->string(255),
@@ -64,7 +64,7 @@ class MomentsControllerTest extends odControllerTestCase
     $moment = $this->generator->moment($day);
     $moment->save();
 
-    $this->_loginAndSetCookie($this->main_user);
+    lmbToolkit::instance()->setUser($this->main_user);
     $this->post('delete', array(), $moment->getId());
 
     $this->assertResponse(200);
@@ -89,7 +89,7 @@ class MomentsControllerTest extends odControllerTestCase
     $moment = $this->generator->moment($day);
     $moment->save();
 
-    $this->_loginAndSetCookie($this->main_user);
+    lmbToolkit::instance()->setUser($this->main_user);
     $res = $this->post('comment',
       array('text' => $text = $this->generator->string(255)),
       $moment->getId()

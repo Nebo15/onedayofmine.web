@@ -86,7 +86,7 @@ class UsersControllerTest extends odControllerTestCase
     $this->main_user->save();
     $this->additional_user->save();
 
-    $this->_loginAndSetCookie($this->main_user);
+    lmbToolkit::instance()->setUser($this->main_user);
 
     $response = $this->get('followers', array(), $this->main_user->getId());
     $followers = $response->result;
@@ -174,7 +174,7 @@ class UsersControllerTest extends odControllerTestCase
     $this->additional_user->save();
     $this->assertEqual(0, $this->main_user->getFollowing()->count());
 
-    $this->_loginAndSetCookie($this->main_user);
+    lmbToolkit::instance()->setUser($this->main_user);
     $this->post('follow', array(), $this->additional_user->getId());
     $this->assertResponse(200);
 
@@ -194,7 +194,7 @@ class UsersControllerTest extends odControllerTestCase
     $following->add($this->additional_user);
     $following->save();
 
-    $this->_loginAndSetCookie($this->main_user);
+    lmbToolkit::instance()->setUser($this->main_user);
     $this->post('unfollow', array(), $this->additional_user->getId());
     $this->assertResponse(200);
 

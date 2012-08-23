@@ -18,7 +18,7 @@ class MyControllerTest extends odControllerTestCase
   function testProfile()
   {
     $this->main_user->save();
-    $this->_loginAndSetCookie($this->main_user);
+    lmbToolkit::instance()->setUser($this->main_user);
 
     $profile = $this->get('profile')->result;
     if($this->assertResponse(200))
@@ -45,7 +45,7 @@ class MyControllerTest extends odControllerTestCase
   function testUpdateProfile()
   {
     $this->main_user->save();
-    $this->_loginAndSetCookie($this->main_user);
+    lmbToolkit::instance()->setUser($this->main_user);
 
     $update = new stdClass();
     $update->name = $this->generator->string(25);
@@ -81,7 +81,7 @@ class MyControllerTest extends odControllerTestCase
   function testUpdateProfile_Partial()
   {
     $this->main_user->save();
-    $this->_loginAndSetCookie($this->main_user);
+    lmbToolkit::instance()->setUser($this->main_user);
 
     $update = new stdClass();
     $update->name = $this->generator->string(25);
@@ -118,7 +118,7 @@ class MyControllerTest extends odControllerTestCase
     $this->main_user->setSettings($settings);
     $this->main_user->save();
 
-    $this->_loginAndSetCookie($this->main_user);
+    lmbToolkit::instance()->setUser($this->main_user);
 
     $settings = $this->get("settings")->result;
 

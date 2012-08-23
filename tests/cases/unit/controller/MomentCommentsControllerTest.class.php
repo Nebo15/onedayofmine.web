@@ -22,7 +22,7 @@ class MomentCommentsControllerTest extends odControllerTestCase
     $comment->save();
     $new_comment_text = $this->generator->string(8);
 
-    $this->_loginAndSetCookie($this->main_user);
+    lmbToolkit::instance()->setUser($this->main_user);
     $this->post('update', array('text' => $new_comment_text), $comment->getId());
     $this->assertResponse(200);
 
@@ -52,7 +52,7 @@ class MomentCommentsControllerTest extends odControllerTestCase
     $comment->save();
     $new_comment_text = $this->generator->string(8);
 
-    $this->_loginAndSetCookie($this->main_user);
+    lmbToolkit::instance()->setUser($this->main_user);
     $this->post('delete', array('text' => $new_comment_text), $comment->getId());
     $this->assertResponse(200);
 
