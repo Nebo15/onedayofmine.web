@@ -48,7 +48,7 @@ class UserAcceptanceTest extends odAcceptanceTestCase
    * @api result int following_count Count of users, that is followed by selected user
    * @api result int days_count Count of days, that was created by selected user
    * @api result bool is_follower TRUE if current logged in user if followed by selected user. Can be ommited if selected user is same as current logged in.
-   * @api result bool is_followed TRUE if selected user is followed by current logged in user. Can be ommited if selected user is same as current logged in.
+   * @api result bool following TRUE if selected user is followed by current logged in user. Can be ommited if selected user is same as current logged in.
    */
   function testUserById()
   {
@@ -75,7 +75,7 @@ class UserAcceptanceTest extends odAcceptanceTestCase
         if(array_key_exists($key, $user))
           $this->assertEqual($user[$key], $value);
       }
-      $this->assertTrue($res['is_followed']);
+      $this->assertTrue($res['following']);
       // $this->assertTrue($res['is_follower']);
     }
   }
