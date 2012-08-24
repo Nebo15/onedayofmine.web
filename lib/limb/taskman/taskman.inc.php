@@ -11,6 +11,7 @@ $GLOBALS['TASKMAN_CONFIG'] = array();
 
 class TaskmanException extends Exception
 {
+
   public function __toString()
   {
     global $TASKMAN_STACK;
@@ -34,6 +35,7 @@ class TaskmanTask
   private $is_running = false;
   private $has_run = array();
   private $args = array();
+  protected $lock_file_poiner;
 
   function __construct($func)
   {
@@ -78,10 +80,13 @@ class TaskmanTask
     {
       $mods = explode(',', $this->props['mods']);
       if(!in_array(lmb_app_mode(), $mods))
-      {
-        echo "Task '".$this->getName()."' can be run modes ".$this->props['mods'].". Not in '".lmb_app_mode()."'.".PHP_EOL;
-        exit(1);
-      }
+        throw new Exception("Task '".$this->getName()."' can be run in modes ".$this->props['mods'].". Not in '".lmb_app_mode()."'.".PHP_EOL);
+    }
+
+    if(!$this->acquireLock())
+    {
+      taskman_sysmsg("Task '".$this->getName()."' already runned".PHP_EOL);
+      exit();
     }
 
     $args_str = serialize($args);
@@ -124,6 +129,8 @@ class TaskmanTask
 
       $this->has_run[$args_str] = true;
       $this->is_running = false;
+
+      $this->releaseLock();
     }
     catch(Exception $e)
     {
@@ -222,6 +229,27 @@ class TaskmanTask
   function getProps()
   {
     return $this->props;
+  }
+
+  function acquireLock()
+  {
+    $this->lock_file_poiner = fopen($this->getLockFilename(), "w+");
+
+    if (flock($this->lock_file_poiner, LOCK_EX | LOCK_NB)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  function releaseLock()
+  {
+    fclose($this->lock_file_poiner);
+  }
+
+  function getLockFilename()
+  {
+    return sys_get_temp_dir().'/taskman-'.$this->getName().'.lock';
   }
 }
 

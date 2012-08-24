@@ -98,6 +98,13 @@ class lmbGdImageContainer extends lmbAbstractImageContainer
     return $this->img;
   }
 
+  function getContent()
+  {
+    ob_start();
+    $this->save(null, null);
+    return ob_get_clean();
+  }
+
   function replaceResource($img)
   {
     imagedestroy($this->img);
@@ -126,8 +133,6 @@ class lmbGdImageContainer extends lmbAbstractImageContainer
     imagedestroy($this->img);
     $this->img = null;
   }
-
-
 
   static function supportLoadType($type)
   {

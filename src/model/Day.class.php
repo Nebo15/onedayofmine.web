@@ -30,6 +30,7 @@ class Day extends ModelWithImage
     // $validator->addRequiredRule('occupation');
     // $validator->addRequiredRule('location');
     $validator->addRequiredRule('type');
+    $validator->addRule(new lmbValidValueRule('type', self::getTypes()));
     return $validator;
   }
 

@@ -183,7 +183,6 @@ function task_od_parse_lj($argv)
 
 /**
  * @desc Register tests users
- * @deps od_remove_cache
  * @mods devel,testing
  */
 function task_od_tests_users()

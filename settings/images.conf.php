@@ -1,7 +1,7 @@
 <?php
 
 $conf = array(
-  'host'   => lmb_env_get('STATIC_HOST_URL') ?: 'http://static.stage.onedayofmine.com/',
+  'host'   => 'http://onedayofmine-stage.s3.amazonaws.com/',
   'Day'    => array(
     'path'      => ':user_id/days/:hash_:image_width.:file_extension',
     'save_path' => 'www/users',
