@@ -150,7 +150,6 @@ abstract class odControllerTestCase extends UnitTestCase
     $this->assertEqual($valid_day->location, $day_from_response->location);
     $this->assertEqual($valid_day->type, $day_from_response->type);
     $this->assertEqual($valid_day->likes_count, $day_from_response->likes_count);
-    $this->assertEqual($valid_day->is_ended, $day_from_response->is_ended);
   }
 
   function assertResponse($responses)
