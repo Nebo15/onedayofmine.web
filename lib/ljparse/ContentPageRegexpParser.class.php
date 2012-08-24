@@ -84,6 +84,9 @@ class ContentPageRegexpParser extends ContentPageParser {
   {
     $text = str_replace('</p>', PHP_EOL, $text);
     $text = str_replace('<br />', PHP_EOL, $text);
+    $text = preg_replace('#^[\s\d\.]*#is', '', $text);
+    $text = preg_replace('#[\s\d\.]*$#is', '', $text);
+    $text = trim($text);
 
     return trim(html_entity_decode(strip_tags($text)));
   }
