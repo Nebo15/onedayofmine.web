@@ -111,7 +111,7 @@ class odTools extends lmbAbstractTools
     if(!$path)
       return null;
 
-    return $this->toolkit->getConf('images')['host'].$path;
+    return $this->toolkit->getConf('common')['static_host'].$path;
   }
 
   function getPageUrl($object)

@@ -1,7 +1,6 @@
 <?php
 
 $conf = array(
-  'host'   => 'http://onedayofmine-stage.s3.amazonaws.com/',
   'save_path' => 'www/users',
   'Day'    => array(
     'path'      => ':user_id/days/:hash_:image_width.:file_extension',
