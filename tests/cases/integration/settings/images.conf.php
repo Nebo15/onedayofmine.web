@@ -9,4 +9,3 @@ $conf['ModelWithImageForTests'] = array(
     array('width' => 532, 'height' => 532),
   ),
 );
-$conf['host'] = 'http://onedayofmine-stage.s3.amazonaws.com/';
