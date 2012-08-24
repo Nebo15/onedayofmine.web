@@ -1,9 +1,11 @@
 <?php
-lmb_require('tests/cases/acceptance/odAcceptanceTestCase.class.php');
-lmb_require('src/service/InterestCalculator.class.php');
+lmb_require('tests/cases/unit/controller/odControllerTestCase.class.php');
+lmb_require('src/controller/DaysController.class.php');
 
-class DayUserAcceptanceTest extends odAcceptanceTestCase
+class DaysUserControllerTest extends odControllerTestCase
 {
+  protected $controller_class = 'DaysController';
+
   function setUp()
   {
     parent::setUp();
@@ -30,8 +32,8 @@ class DayUserAcceptanceTest extends odAcceptanceTestCase
     $fav->add($day);
     $fav->save();
 
-    $this->_loginAndSetCookie($this->main_user);
-    $response = $this->get('days/'.$day->getId().'/item');
+    lmbToolkit::instance()->setUser($this->main_user);
+    $response = $this->get('item', array(), $day->getId());
     if($this->assertResponse(200))
     {
       $loaded_day = $response->result;
@@ -49,10 +51,11 @@ class DayUserAcceptanceTest extends odAcceptanceTestCase
     $day = $this->generator->day($this->main_user);
     $day->save();
 
-    $this->_loginAndSetCookie($this->main_user);
-    $res = $this->post('days/'.$day->getId().'/comment_create', array(
-      'text' => $text = $this->generator->string(255)
-    ))->result;
+    lmbToolkit::instance()->setUser($this->main_user);
+    $res = $this->post('comment_create',
+      array('text' => $text = $this->generator->string(255)),
+      $day->getId()
+    )->result;
 
     if($this->assertResponse(200))
     {
@@ -74,9 +77,9 @@ class DayUserAcceptanceTest extends odAcceptanceTestCase
     $day = $this->generator->day($this->additional_user);
     $day->save();
 
-    $this->_loginAndSetCookie($this->main_user);
+    lmbToolkit::instance()->setUser($this->main_user);
 
-    $res = $this->post('days/'.$day->getId().'/share')->result;
+    $this->post('share', array(), $day->getId());
     $this->assertResponse(200);
   }
 
@@ -88,8 +91,8 @@ class DayUserAcceptanceTest extends odAcceptanceTestCase
     $day = $this->generator->day($this->additional_user);
     $day->save();
 
-    $this->_loginAndSetCookie($this->main_user);
-    $this->post('days/'.$day->getId().'/like');
+    lmbToolkit::instance()->setUser($this->main_user);
+    $this->post('like', array(), $day->getId());
 
     $this->assertResponse(200);
     $this->assertEqual(Day::findOne()->getLikesCount(), 1);
@@ -125,11 +128,9 @@ class DayUserAcceptanceTest extends odAcceptanceTestCase
     $this->main_user->getFavouriteDays()->add($day5);
     $this->main_user->save();
 
-    $this->_loginAndSetCookie($this->main_user);
+    lmbToolkit::instance()->setUser($this->main_user);
 
-    $days = $this
-      ->get('days/favourite')
-      ->result;
+    $days = $this->get('favourite')->result;
     if($this->assertResponse(200))
     {
       $this->assertEqual(4, count($days));
@@ -139,9 +140,7 @@ class DayUserAcceptanceTest extends odAcceptanceTestCase
       $this->assertEqual($day1->getId(), $days[3]->id);
     }
 
-    $days = $this
-      ->get('days/favourite', array('from' => $day4->getId()))
-      ->result;
+    $days = $this->get('favourite', array('from' => $day4->getId()))->result;
     if($this->assertResponse(200))
     {
       $this->assertEqual(3, count($days));
@@ -151,7 +150,7 @@ class DayUserAcceptanceTest extends odAcceptanceTestCase
     }
 
     $days = $this
-      ->get('days/favourite', array(
+      ->get('favourite', array(
         'from' => $day4->getId(),
         'to' => $day1->getId()))
       ->result;
@@ -163,7 +162,7 @@ class DayUserAcceptanceTest extends odAcceptanceTestCase
     }
 
     $days = $this
-      ->get('days/favourite', array(
+      ->get('favourite', array(
        'from' => $day4->getId(),
         'to' => $day1->getId(),
         'limit' => 1))
@@ -187,8 +186,8 @@ class DayUserAcceptanceTest extends odAcceptanceTestCase
 
     $this->assertEqual(0, $this->main_user->getFavouriteDays()->count());
 
-    $this->_loginAndSetCookie($this->main_user);
-    $this->post('/days/'.$day->getId().'/mark_favourite');
+    lmbToolkit::instance()->setUser($this->main_user);
+    $this->post('mark_favourite', array(), $day->getId());
 
     if($this->assertResponse(200))
     {
@@ -210,8 +209,8 @@ class DayUserAcceptanceTest extends odAcceptanceTestCase
     $this->main_user->getFavouriteDays()->add($day);
     $this->main_user->save();
 
-    $this->_loginAndSetCookie($this->main_user);
-    $this->post('/days/'.$day->getId().'/unmark_favourite');
+    lmbToolkit::instance()->setUser($this->main_user);
+    $this->post('unmark_favourite', array(), $day->getId());
 
     if($this->assertResponse(200))
       $this->assertEqual(0, $this->main_user->getFavouriteDays()->count());
@@ -244,11 +243,9 @@ class DayUserAcceptanceTest extends odAcceptanceTestCase
     $day5->setIsDeleted(1);
     $day5->save();
 
-    $this->_loginAndSetCookie($this->main_user);
+    lmbToolkit::instance()->setUser($this->main_user);
 
-    $days = $this
-    ->get('days/following_users/')
-    ->result;
+    $days = $this->get('following_users')->result;
     $this->assertResponse(200);
     $this->assertEqual(4, count($days));
     $this->assertEqual($day4->getId(), $days[0]->id);
@@ -256,9 +253,7 @@ class DayUserAcceptanceTest extends odAcceptanceTestCase
     $this->assertEqual($day2->getId(), $days[2]->id);
     $this->assertEqual($day1->getId(), $days[3]->id);
 
-    $days = $this
-    ->get('days/following_users/', array('from' => $day4->getId()))
-    ->result;
+    $days = $this->get('following_users', array('from' => $day4->getId()))->result;
     $this->assertResponse(200);
     $this->assertEqual(3, count($days));
     $this->assertEqual($day3->getId(), $days[0]->id);
@@ -266,7 +261,7 @@ class DayUserAcceptanceTest extends odAcceptanceTestCase
     $this->assertEqual($day1->getId(), $days[2]->id);
 
     $days = $this
-    ->get('days/following_users/', array(
+    ->get('following_users', array(
       'from' => $day4->getId(),
       'to'   => $day1->getId()))
     ->result;
@@ -276,7 +271,7 @@ class DayUserAcceptanceTest extends odAcceptanceTestCase
     $this->assertEqual($day2->getId(), $days[1]->id);
 
     $days = $this
-      ->get('days/following_users/', array(
+      ->get('following_users', array(
       'from'  => $day4->getId(),
       'to'    => $day1->getId(),
       'limit' => 1))
@@ -309,17 +304,13 @@ class DayUserAcceptanceTest extends odAcceptanceTestCase
     $day4 = $this->generator->day($this->main_user);
     $day4->save();
 
-    $this->_loginAndSetCookie($this->main_user);
+    lmbToolkit::instance()->setUser($this->main_user);
 
-    $days = $this
-      ->get('days/my')
-      ->result;
+    $days = $this->get('my')->result;
     if($this->assertResponse(200))
       $this->assertEqual(4, count($days));
 
-    $days = $this
-      ->get('days/my', array('from' => $day4->getId()))
-      ->result;
+    $days = $this->get('my', array('from' => $day4->getId()))->result;
     if($this->assertResponse(200))
     {
       $this->assertEqual(3, count($days));
@@ -328,11 +319,7 @@ class DayUserAcceptanceTest extends odAcceptanceTestCase
       $this->assertEqual($day1->getId(), $days[2]->id);
     }
 
-    $days = $this
-      ->get('days/my', array(
-        'from' => $day4->getId(),
-        'to' => $day1->getId()))
-      ->result;
+    $days = $this->get('my', array('from' => $day4->getId(),'to' => $day1->getId()))->result;
     if($this->assertResponse(200))
     {
       $this->assertEqual(2, count($days));
@@ -342,7 +329,7 @@ class DayUserAcceptanceTest extends odAcceptanceTestCase
     }
 
     $days = $this
-      ->get('days/my', array(
+      ->get('my', array(
         'from' => $day4->getId(),
         'to' => $day1->getId(),
         'limit' => 1))

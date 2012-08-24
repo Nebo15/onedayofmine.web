@@ -48,6 +48,7 @@ class Day extends ModelWithImage
     $export->likes_count = $this->getLikesCount() ?: 0;
     $export->ctime = $this->getCreateTime();
     $export->utime = $this->getUpdateTime();
+    $export->is_ended = $this->is_ended;
 
     if($this->getIsDeleted())
       $export->is_deleted = true;

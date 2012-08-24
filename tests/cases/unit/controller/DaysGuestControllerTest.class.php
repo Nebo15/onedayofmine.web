@@ -1,9 +1,11 @@
 <?php
-lmb_require('tests/cases/acceptance/odAcceptanceTestCase.class.php');
-lmb_require('src/service/InterestCalculator.class.php');
+lmb_require('tests/cases/unit/controller/odControllerTestCase.class.php');
+lmb_require('src/controller/DaysController.class.php');
 
-class DaysGuestAcceptanceTest extends odAcceptanceTestCase
+class DaysGuestControllerTest extends odControllerTestCase
 {
+  protected $controller_class = 'DaysController';
+
   function setUp()
   {
     parent::setUp();
@@ -33,7 +35,7 @@ class DaysGuestAcceptanceTest extends odAcceptanceTestCase
     $day->attachImage($this->generator->image());
     $day->save();
 
-    $response = $this->get('days/'.$day->getId());
+    $response = $this->get('item', array(), $day->getId());
     if($this->assertResponse(200))
     {
       $loaded_day = $response->result;
@@ -44,7 +46,6 @@ class DaysGuestAcceptanceTest extends odAcceptanceTestCase
       $this->assertEqual($day->getComments()->at(0)->getId(), $loaded_day->comments[0]->id);
       $this->assertEqual($day->getMoments()->at(0)->getComments()->count(), $loaded_day->moments[0]->comments_count);
       $this->assertEqual($day->getMoments()->count(), count($loaded_day->moments));
-      // $this->assertEqual($day->getMoments()->at(0)->getComments()->count(), count($loaded_day->moments[0]->comments));
     }
   }
 
@@ -72,7 +73,7 @@ class DaysGuestAcceptanceTest extends odAcceptanceTestCase
     $not_exist_day_id = rand(100, 1000);
 
     $ids_string = implode(';', array($day1_id, $day2_id, $not_exist_day_id ));
-    $response = $this->get('days/'.$ids_string.'/item');
+    $response = $this->get('item', array(), $ids_string);
     $loaded_days = $response->result;
 
     $this->assertResponse(200);
@@ -91,7 +92,7 @@ class DaysGuestAcceptanceTest extends odAcceptanceTestCase
 
   function testItem_NotFound()
   {
-    $this->get('days/100500/item');
+    $this->get('item', array(), 100500);
     $this->assertResponse(404);
   }
 
@@ -102,7 +103,7 @@ class DaysGuestAcceptanceTest extends odAcceptanceTestCase
     $day->setIsDeleted(1);
     $day->save();
 
-    $this->get('days/'.$day->getId().'/item');
+    $this->get('item', array(), $day->getId());
     $this->assertResponse(404);
   }
 
@@ -141,9 +142,7 @@ class DaysGuestAcceptanceTest extends odAcceptanceTestCase
     $this->main_user->getFavouriteDays()->add($day6);
     $this->main_user->save();
 
-    $days = $this
-      ->get('days/search', array('query' => 'foo'))
-      ->result;
+    $days = $this->get('search', array('query' => 'foo'))->result;
     if($this->assertResponse(200))
     {
       $this->assertEqual(4, count($days));
@@ -153,9 +152,7 @@ class DaysGuestAcceptanceTest extends odAcceptanceTestCase
       $this->assertEqual($day1->getId(), $days[3]->id);
     }
 
-    $days = $this
-      ->get('days/search', array('query' => 'foo', 'from' => $day4->getId()))
-      ->result;
+    $days = $this->get('search', array('query' => 'foo', 'from' => $day4->getId()))->result;
     if($this->assertResponse(200))
     {
       $this->assertEqual(3, count($days));
@@ -165,7 +162,7 @@ class DaysGuestAcceptanceTest extends odAcceptanceTestCase
     }
 
     $days = $this
-      ->get('days/search', array(
+      ->get('search', array(
       'query' => 'foo',
       'from' => $day4->getId(),
       'to' => $day1->getId()))
@@ -178,7 +175,7 @@ class DaysGuestAcceptanceTest extends odAcceptanceTestCase
     }
 
     $days = $this
-      ->get('days/search', array(
+      ->get('search', array(
       'query' => 'foo',
       'from' => $day4->getId(),
       'to' => $day1->getId(),
@@ -217,7 +214,7 @@ class DaysGuestAcceptanceTest extends odAcceptanceTestCase
     $day5 = $this->generator->day($this->main_user);
     $day5->save();
 
-    $result = $this->get('days/new/')->result;
+    $result = $this->get('new')->result;
     $this->assertResponse(200);
     $this->assertEqual(4, count($result));
     $this->assertEqual($day5->getId(), $result[0]->id);
@@ -225,7 +222,7 @@ class DaysGuestAcceptanceTest extends odAcceptanceTestCase
     $this->assertEqual($day2->getId(), $result[2]->id);
     $this->assertEqual($day1->getId(), $result[3]->id);
 
-    $result = $this->get('days/new/', array('from' => $day5->getId()))->result;
+    $result = $this->get('new', array('from' => $day5->getId()))->result;
     $this->assertResponse(200);
     $this->assertEqual(3, count($result));
     $this->assertEqual($day4->getId(), $result[0]->id);
@@ -233,7 +230,7 @@ class DaysGuestAcceptanceTest extends odAcceptanceTestCase
     $this->assertEqual($day1->getId(), $result[2]->id);
 
     $result = $this
-      ->get('days/new/', array(
+      ->get('new', array(
       'from' => $day5->getId(),
       'to' => $day1->getId()))
       ->result;
@@ -243,7 +240,7 @@ class DaysGuestAcceptanceTest extends odAcceptanceTestCase
     $this->assertEqual($day2->getId(), $result[1]->id);
 
     $result = $this
-      ->get('days/new/', array(
+      ->get('new', array(
       'from' => $day5->getId(),
       'to' => $day1->getId(),
       'limit' => 1))
@@ -297,7 +294,7 @@ class DaysGuestAcceptanceTest extends odAcceptanceTestCase
     (new InterestCalculator())->reset();
     (new InterestCalculator())->fillRating();
 
-    $result = $this->get('days/interesting/')->result;
+    $result = $this->get('interesting')->result;
     $this->assertResponse(200);
     $this->assertEqual(4, count($result));
     $this->assertEqual($day1->getId(), $result[0]->id);
@@ -306,7 +303,7 @@ class DaysGuestAcceptanceTest extends odAcceptanceTestCase
     $this->assertEqual($day3->getId(), $result[3]->id);
 
     $result = $this
-      ->get('days/interesting/', array('from' => $day1->getId()))
+      ->get('interesting', array('from' => $day1->getId()))
       ->result;
     $this->assertResponse(200);
     $this->assertEqual(3, count($result));
@@ -315,7 +312,7 @@ class DaysGuestAcceptanceTest extends odAcceptanceTestCase
     $this->assertEqual($day3->getId(), $result[2]->id);
 
     $result = $this
-      ->get('days/interesting/', array(
+      ->get('interesting', array(
       'from' => $day1->getId(),
       'to'   => $day3->getId()))
       ->result;
@@ -325,7 +322,7 @@ class DaysGuestAcceptanceTest extends odAcceptanceTestCase
     $this->assertEqual($day4->getId(), $result[1]->id);
 
     $result = $this
-      ->get('days/interesting/', array(
+      ->get('interesting', array(
       'from'  => $day1->getId(),
       'to'    => $day4->getId(),
       'limit' => 1))
@@ -335,7 +332,6 @@ class DaysGuestAcceptanceTest extends odAcceptanceTestCase
       $this->assertEqual(1, count($result));
       $this->assertValidDayJson($day2, $result[0]);
     }
-
   }
 
   /**
@@ -343,7 +339,7 @@ class DaysGuestAcceptanceTest extends odAcceptanceTestCase
    */
   function testTypes()
   {
-    $types = $this->get('days/types')->result;
+    $types = $this->get('types')->result;
     $this->assertResponse(200);
     $this->assertEqual($types, Day::getTypes());
   }
@@ -361,10 +357,11 @@ class DaysGuestAcceptanceTest extends odAcceptanceTestCase
     $day = $this->generator->day();
     $day->save();
 
-    $this->_loginAndSetCookie($this->main_user);
-    $res = $this->post('/days/'.$day->getId().'/create_complaint', array(
-      'text' => $text = $this->generator->string()
-    ));
+    lmbToolkit::instance()->setUser($this->main_user);
+    $res = $this->post('create_complaint',
+      array('text' => $text = $this->generator->string()),
+      $day->getId()
+    );
     $this->assertResponse(200);
 
     $loaded_complaint = Complaint::find()->at(0);

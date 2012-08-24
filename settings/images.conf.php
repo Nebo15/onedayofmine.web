@@ -1,10 +1,9 @@
 <?php
 
 $conf = array(
-  'host'   => 'http://onedayofmine-stage.s3.amazonaws.com/',
+  'save_path' => 'www/users',
   'Day'    => array(
     'path'      => ':user_id/days/:hash_:image_width.:file_extension',
-    'save_path' => 'www/users',
     'sizes'     => array(
                      array('width' => 266, 'height' => 266),
                      array('width' => 532, 'height' => 532),
@@ -12,7 +11,6 @@ $conf = array(
   ),
   'Moment' => array(
     'path'      => ':user_id/days/:day_id/:hash_:image_width.:file_extension',
-    'save_path' => 'www/users',
     'sizes'     => array(
                      array('width' => 266, 'height' => 266),
                      array('width' => 532, 'height' => 532),
@@ -20,7 +18,6 @@ $conf = array(
   ),
   'User'   => array(
     'path'      => ':id/:hash_:image_width.:file_extension',
-    'save_path' => 'www/users',
     'sizes'     => array(
                      array('width' => 36, 'height'  => 36),
                      array('width' => 72, 'height'  => 72),

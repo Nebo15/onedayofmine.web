@@ -1,2 +1,7 @@
 #!/usr/bin/env bash
-php ./lib/limb/runtests.php $*
+if [ $# -eq 0 ];
+then
+  php ./lib/limb/runtests.php tests
+else
+  php ./lib/limb/runtests.php $*
+fi

@@ -35,7 +35,7 @@ class DaysController extends BaseJsonController
 
   function doStart()
   {
-    if(!$this->request->hasPost())
+    if(!$this->request->isPost())
       return $this->_answerWithError('Not a POST request', null, 405);
 
     $errors = $this->_checkPropertiesInRequest(array('title', 'type'));
@@ -69,7 +69,7 @@ class DaysController extends BaseJsonController
 
   function doUpdate()
   {
-    if(!$this->request->hasPost())
+    if(!$this->request->isPost())
       return $this->_answerWithError('Not a POST request', null, 405);
 
     if(!$day = Day::findById($this->request->id))
@@ -88,7 +88,7 @@ class DaysController extends BaseJsonController
 
   function doCurrent()
   {
-    if(!$this->request->hasPost())
+    if(!$this->request->isPost())
       return $this->_answerWithError('Not a POST request', null, 405);
 
     if(!$day = $this->_getUser()->getCurrentDay())
@@ -99,7 +99,7 @@ class DaysController extends BaseJsonController
 
   function doFinish()
   {
-    if(!$this->request->hasPost())
+    if(!$this->request->isPost())
       return $this->_answerWithError('Not a POST request', null, 405);
 
     if(!$day = Day::findById($this->request->id))
@@ -131,7 +131,7 @@ class DaysController extends BaseJsonController
 
   function doMarkCurrent()
   {
-    if(!$this->request->hasPost())
+    if(!$this->request->isPost())
       return $this->_answerWithError('Not a POST request', null, 405);
 
     if(!$day = Day::findById($this->request->id))
@@ -146,7 +146,7 @@ class DaysController extends BaseJsonController
 
   function doShare()
   {
-    if(!$this->request->hasPost())
+    if(!$this->request->isPost())
       return $this->_answerWithError('Not a POST request');
 
     if(!$day = Day::findById($this->request->id))
@@ -159,7 +159,7 @@ class DaysController extends BaseJsonController
 
   function doLike()
   {
-    if(!$this->request->hasPost())
+    if(!$this->request->isPost())
       return $this->_answerWithError('Not a POST request');
 
     if(!$day = Day::findById($this->request->id))
@@ -176,7 +176,7 @@ class DaysController extends BaseJsonController
 
   function doDelete()
   {
-    if(!$this->request->hasPost())
+    if(!$this->request->isPost())
       return $this->_answerWithError('Not a POST request');
 
     if(!$day = Day::findById($this->request->id))
@@ -196,7 +196,7 @@ class DaysController extends BaseJsonController
 
   function doRestore()
   {
-    if(!$this->request->hasPost())
+    if(!$this->request->isPost())
       return $this->_answerWithError('Not a POST request');
 
     if(!$day = Day::findById($this->request->id))
@@ -298,7 +298,7 @@ class DaysController extends BaseJsonController
 
   function doMarkFavourite()
   {
-    if(!$this->request->hasPost())
+    if(!$this->request->isPost())
       return $this->_answerWithError('Not a POST request');
 
     if(!$day = Day::findById($this->request->id))
@@ -313,7 +313,7 @@ class DaysController extends BaseJsonController
 
   function doUnmarkFavourite()
   {
-    if(!$this->request->hasPost())
+    if(!$this->request->isPost())
       return $this->_answerWithError('Not a POST request');
 
     if(!$day = Day::findById($this->request->id))
@@ -345,7 +345,7 @@ class DaysController extends BaseJsonController
 
   function doAddMoment()
   {
-    if(!$this->request->hasPost())
+    if(!$this->request->isPost())
       return $this->_answerWithError('Not a POST request');
 
     $errors = $this->_checkPropertiesInRequest(array('description', 'image_content'));
@@ -392,7 +392,7 @@ class DaysController extends BaseJsonController
 
   function doCommentCreate()
   {
-    if(!$this->request->hasPost())
+    if(!$this->request->isPost())
       return $this->_answerWithError('Not a POST request');
 
     $comment = new DayComment();
@@ -416,7 +416,7 @@ class DaysController extends BaseJsonController
 
   function doCreateComplaint()
   {
-    if(!$this->request->hasPost())
+    if(!$this->request->isPost())
       return $this->_answerNotPost();
 
     if(!Day::findById($this->request->id))

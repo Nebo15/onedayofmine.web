@@ -1,8 +1,11 @@
 <?php
-lmb_require('tests/cases/acceptance/odAcceptanceTestCase.class.php');
+lmb_require('tests/cases/unit/controller/odControllerTestCase.class.php');
+lmb_require('src/controller/MyController.class.php');
 
-class MyAcceptanceTest extends odAcceptanceTestCase
+class MyControllerTest extends odControllerTestCase
 {
+  protected $controller_class = 'MyController';
+
   function setUp()
   {
     parent::setUp();
@@ -15,9 +18,9 @@ class MyAcceptanceTest extends odAcceptanceTestCase
   function testProfile()
   {
     $this->main_user->save();
-    $this->_loginAndSetCookie($this->main_user);
+    lmbToolkit::instance()->setUser($this->main_user);
 
-    $profile = $this->get('/my/profile')->result;
+    $profile = $this->get('profile')->result;
     if($this->assertResponse(200))
     {
       $this->assertEqual($this->main_user->id, $profile->id);
@@ -42,7 +45,7 @@ class MyAcceptanceTest extends odAcceptanceTestCase
   function testUpdateProfile()
   {
     $this->main_user->save();
-    $this->_loginAndSetCookie($this->main_user);
+    lmbToolkit::instance()->setUser($this->main_user);
 
     $update = new stdClass();
     $update->name = $this->generator->string(25);
@@ -53,7 +56,7 @@ class MyAcceptanceTest extends odAcceptanceTestCase
     $update->birthday = $this->generator->date_sql();
     $update->image_content = base64_encode($this->generator->image());
 
-    $updated_profile = $this->post('/my/profile', (array) $update)->result;
+    $updated_profile = $this->post('profile', $update)->result;
     if($this->assertResponse(200))
     {
       $this->assertEqual($update->name, $updated_profile->name);
@@ -78,13 +81,13 @@ class MyAcceptanceTest extends odAcceptanceTestCase
   function testUpdateProfile_Partial()
   {
     $this->main_user->save();
-    $this->_loginAndSetCookie($this->main_user);
+    lmbToolkit::instance()->setUser($this->main_user);
 
     $update = new stdClass();
     $update->name = $this->generator->string(25);
     $update->birthday = $this->generator->date_sql();
 
-    $updated_profile = $this->post('/my/profile', (array) $update)->result;
+    $updated_profile = $this->post('profile', $update)->result;
 
     if($this->assertResponse(200))
     {
@@ -115,9 +118,9 @@ class MyAcceptanceTest extends odAcceptanceTestCase
     $this->main_user->setSettings($settings);
     $this->main_user->save();
 
-    $this->_loginAndSetCookie($this->main_user);
+    lmbToolkit::instance()->setUser($this->main_user);
 
-    $settings = $this->get("/my/settings/")->result;
+    $settings = $this->get("settings")->result;
 
     $this->assertEqual(1, $settings->notifications_new_days);
     $this->assertEqual(0, $settings->notifications_new_comments);
@@ -132,7 +135,6 @@ class MyAcceptanceTest extends odAcceptanceTestCase
   function testUpdateSettings()
   {
     $registered_user = $this->_loginAndSetCookie($this->main_user)->result;
-    $valid_settings_id = User::findById($registered_user->id)->getSettings()->id;
 
     $settings = new UserSettings();
     $settings->setNotificationsNewDays(1);
@@ -144,13 +146,11 @@ class MyAcceptanceTest extends odAcceptanceTestCase
     $settings->setSocialShareFacebook(1);
     $settings->setSocialShareTwitter(1);
 
-    $settings = $this->post("/my/settings/", $settings->export())->result;
-
+    $settings = $this->post("settings", $settings->export())->result;
     foreach($settings as $option => $value)
       $this->assertEqual(1, $value, "Error in $option. 1 != $value");
 
     $real_settings = User::findById($registered_user->id)->getSettings();
-    $this->assertEqual($valid_settings_id, $real_settings->id);
     $this->assertEqual($settings, $real_settings->exportForApi());
 
     $settings = new UserSettings();
@@ -163,14 +163,14 @@ class MyAcceptanceTest extends odAcceptanceTestCase
     $settings->setSocialShareFacebook(0);
     $settings->setSocialShareTwitter(0);
 
-    $settings = $this->post("/my/settings/", $settings->export())->result;
+    $this->_loginAndSetCookie($this->main_user)->result;
+    $settings = $this->post("settings", $settings->export())->result;
 
     foreach($settings as $option => $value)
       $this->assertEqual(0, $value, "Error in $option. 0 != $value");
 
     $real_settings_collection = UserSettings::find();
-    $this->assertEqual($real_settings_collection->count(), 1);
-    $this->assertEqual($valid_settings_id, $real_settings_collection->at(0)->id);
+    $this->assertEqual(1, count($real_settings_collection));
     $this->assertEqual($settings, $real_settings_collection->at(0)->exportForApi());
   }
 }

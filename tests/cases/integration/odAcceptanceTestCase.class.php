@@ -26,14 +26,19 @@ abstract class odAcceptanceTestCase extends WebTestCase
 
   function setUp()
   {
+
     $this->generator = new odObjectMother();
     $this->toolkit = lmbToolkit::instance();
+    $this->toolkit->resetConf('amazon');
+    $this->toolkit->resetConf('images');
+    $this->toolkit->resetConf('common');
+    $this->toolkit->setConfIncludePath('tests/cases/integration/settings;tests/settings;settings');
     parent::setUp();
     $this->toolkit->truncateTablesOf('UserSettings', 'User');
     list($this->main_user, $this->additional_user) = $this->toolkit->getTestsUsers($quiet = false);
   }
 
-  function get($url, $params = array(), $doc = true)
+  function get($url, $params = array())
   {
     $raw_response = parent::get(lmbToolkit::instance()->getSiteUrl($url), $params);
     $result = $this->_decodeResponse($raw_response);
@@ -45,12 +50,10 @@ abstract class odAcceptanceTestCase extends WebTestCase
     )
 
     $this->fail('Wrong response structure:'.PHP_EOL.$raw_response);
-    if($doc)
-      $this->_addRecordsToWriters($url, $params, 'GET', $result->result);
     return $result;
   }
 
-  function post($url, $params = array(), $content_type = false, $doc = true)
+  function post($url, $params = array(), $content_type = false)
   {
     if(is_object($params))
       $params = (array) $params;
@@ -64,8 +67,6 @@ abstract class odAcceptanceTestCase extends WebTestCase
     )
 
     $this->fail('Wrong response structure:'.PHP_EOL.$raw_response);
-    if($doc)
-      $this->_addRecordsToWriters($url, $params, 'POST', $result->result);
     return $result;
   }
 
