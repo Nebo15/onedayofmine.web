@@ -134,6 +134,7 @@ function task_od_parse_lj($argv)
       $day_comment->setText($day_comments[array_rand($day_comments)]);
       $day_comment->setDay($day);
       $day_comment->setUser($tests_users[array_rand($tests_users)]);
+      $day_comment->setLikesCount(rand(0, 10));
       $day_comment->save();
     }
 
@@ -171,10 +172,22 @@ function task_od_parse_lj($argv)
         $moment_comment->setText($moment_comments[array_rand($moment_comments)]);
         $moment_comment->setMoment($moment);
         $moment_comment->setUser($tests_users[array_rand($tests_users)]);
+        $moment_comment->setLikesCount(rand(0, 10));
         $moment_comment->save();
       }
 
       echo ".";
+    }
+
+    $rand = rand(0, 3);
+    if($rand < 3)
+    {
+      $finish_comment = new DayFinishComment();
+      $finish_comment->setText($day_comments[array_rand($day_comments)]);
+      $finish_comment->setUser($tests_users[array_rand($tests_users)]);
+      $finish_comment->setLikesCount(rand(0, 10));
+      $finish_comment->setDay($day);
+      $finish_comment->save();
     }
     echo PHP_EOL;
     echo 'Added '. count($day->getMoments()) .' moments.'.PHP_EOL;
