@@ -119,9 +119,9 @@ class DaysController extends BaseJsonController
     }
 
     if($this->request->get('comment')) {
-      $comment = new DayComment();
-      $comment->setText($this->request->get('comment'));
+      $comment = new DayFinishComment();
       $comment->setDay($day);
+      $comment->setText($this->request->get('comment'));
       $comment->setUser($this->_getUser());
       $comment->save();
     }

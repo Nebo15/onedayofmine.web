@@ -1,0 +1,7 @@
+
+SET FOREIGN_KEY_CHECKS = 0;
+
+ALTER TABLE `day` DROP `is_ended`;
+
+
+SET FOREIGN_KEY_CHECKS = 1;

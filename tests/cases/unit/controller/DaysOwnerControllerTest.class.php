@@ -9,7 +9,7 @@ class DaysOwnerControllerTest extends odControllerTestCase
   function setUp()
   {
     parent::setUp();
-    odTestsTools::truncateTablesOf('Day', 'Moment', 'DayComment');
+    odTestsTools::truncateTablesOf('Day', 'Moment', 'DayComment', 'DayFinishComment');
   }
 
   function testStart_Negative()
@@ -373,8 +373,12 @@ class DaysOwnerControllerTest extends odControllerTestCase
       $this->assertEqual($day->getLikesCount(), $loaded_day->likes_count);
       $this->assertEqual($day->getCreateTime(), $loaded_day->ctime);
 
-      $this->assertEqual(count($day->getComments()), 1);
-      $this->assertEqual($day->getComments()->at(0)->getText(), $comment_text);
+      $db_day = Day::findOne();
+      $this->assertProperty($loaded_day, 'finish_comment');
+      $this->assertTrue($loaded_day->finish_comment);
+      $this->assertEqual(count($db_day->getComments()), 0);
+      $this->assertTrue($db_day->getFinishComment());
+      $this->assertEqual($db_day->getFinishComment()->getText(), $comment_text);
 
       $this->assertValidImageUrl($loaded_day->image_266);
       $this->assertValidImageUrl($loaded_day->image_532);
