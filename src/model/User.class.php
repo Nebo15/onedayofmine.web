@@ -38,11 +38,6 @@ class User extends ModelWithImage
       'days' => array (
         'field' => 'user_id',
         'class' => 'Day',
-        'criteria' =>'`day`.`is_deleted` = 0'
-      ),
-      'all_days' => array (
-        'field' => 'user_id',
-        'class' => 'Day',
       ),
       'days_comments' => array ('field' => 'user_id', 'class' => 'DayComment'),
       'moments_comments' => array ('field' => 'user_id', 'class' => 'MomentComment'),
@@ -126,7 +121,7 @@ class User extends ModelWithImage
     );
   }
 
-  function getDaysWithLimitations($from_id = null, $to_id = null, $limit = null, $show_deleted = false)
+  function getDaysWithLimitations($from_id = null, $to_id = null, $limit = null)
   {
     $criteria = new lmbSQLCriteria();
     if($from_id)
@@ -135,8 +130,7 @@ class User extends ModelWithImage
       $criteria->add(lmbSQLCriteria::greater('id', $to_id));
     if(!$limit || $limit > 100)
       $limit = 100;
-    $days = $show_deleted ? $this->getAllDays() : $this->getDays();
-    return $days->find(array(
+    return $this->getDays()->find(array(
       'criteria' => $criteria,
       'sort' => array('id' => 'DESC')
     ))->paginate(0, $limit);
