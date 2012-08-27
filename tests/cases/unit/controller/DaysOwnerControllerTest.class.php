@@ -220,6 +220,7 @@ class DaysOwnerControllerTest extends odControllerTestCase
    * @api input option string title
    * @api input option string occupation Can be omited, then user profile occupation will be used
    * @api input option string type One of pre-defined types, see: GET day/type_names request
+   * @api input option string cover_content base64 encoded image content
    */
   function testUpdate()
   {

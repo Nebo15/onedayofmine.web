@@ -78,8 +78,10 @@ class DaysController extends BaseJsonController
     if($this->_getUser()->getId() != $day->getUser()->getId())
       return $this->_answerWithError('You can update only your own days', null, 401);
 
-    if($this->request->get('cover_content'))
+    if($this->request->get('cover_content')) {
       $day->attachImage(base64_decode($this->request->get('cover_content')));
+      $day->save();
+    }
 
     $this->_importSaveAndAnswer($day, array('title', 'occupation', 'location', 'type'));
 
