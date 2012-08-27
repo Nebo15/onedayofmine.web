@@ -157,6 +157,7 @@ class SocialControllerTest extends odAcceptanceTestCase
       $this->assertEqual(1, count($response->result));
       $this->assertEqual($news3->getId(), $response->result[0]->id);
     }
+    die();
   }
 
   /**
