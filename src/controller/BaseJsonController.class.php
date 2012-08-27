@@ -123,7 +123,8 @@ abstract class BaseJsonController extends lmbController
   protected function _importSaveAndAnswer($item, array $properties, array $raw_properties = array())
   {
     foreach($properties as $property)
-      $item->set($property, $this->request->get($property));
+      if($this->request->get($property))
+        $item->set($property, $this->request->get($property));
 
     foreach ($raw_properties as $key => $value)
       $item->set($key, $value);
