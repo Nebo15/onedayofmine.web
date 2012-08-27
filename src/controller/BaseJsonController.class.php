@@ -264,6 +264,8 @@ abstract class BaseJsonController extends lmbController
   protected function _attachFinishComment(stdClass $export, Day $day)
   {
     $export->finish_comment = $day->getFinishComment() ? $day->getFinishComment()->exportForApi() : null;
+    unset($export->finish_comment->user_id);
+    unset($export->finish_comment->day_id);
   }
 
   protected function _attachDayMoments(stdClass $day_export, $day)
