@@ -14,9 +14,8 @@ class Day extends ModelWithImage
     $this->_has_one = array(
       'finish_comment' => array(
         'field' =>'finish_comment_id',
-        'class' => 'DayComment',
+        'class' => 'DayFinishComment',
         'can_be_null' => true,
-        'cascade_delete' => false,
       )
     );
 
