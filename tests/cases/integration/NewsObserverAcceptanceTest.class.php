@@ -80,7 +80,6 @@ class NewsObserverAcceptanceTest extends odAcceptanceTestCase
   function testAddMoment()
   {
     $day = $this->generator->day($this->main_user);
-    $day->setIsEnded(0);
     $day->save();
 
     $this->post('days/'.$day->getId().'/add_moment', array(
