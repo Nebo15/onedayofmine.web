@@ -1,11 +1,11 @@
 <?php
-lmb_require('src/model/ModelWithImage.class.php');
+lmb_require('src/model/Imageable.class.php');
 
 /**
  * @api field int id User ID
  * @static Day findById()
  */
-class Day extends ModelWithImage
+class Day extends Imageable
 {
   protected $_default_sort_params = array('id'=>'desc');
 

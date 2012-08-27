@@ -1,10 +1,10 @@
 <?php
-lmb_require('src/model/Comment.class.php');
+lmb_require('src/model/Commentable.class.php');
 
 /**
  * @api
  */
-class DayComment extends Comment
+class DayComment extends Commentable
 {
   protected $_db_table_name = 'day_comment';
 

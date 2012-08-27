@@ -4,7 +4,7 @@ lmb_require('src/model/Comment.class.php');
 /**
  * @api
  */
-class DayFinishComment extends Comment
+class DayFinishComment extends Commentable
 {
   protected $_db_table_name = 'day_finish_comment';
 

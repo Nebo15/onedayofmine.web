@@ -1,7 +1,7 @@
 <?php
 lmb_require('src/model/BaseModel.class.php');
 
-abstract class ModelWithImage extends BaseModel
+abstract class Imageable extends BaseModel
 {
   function attachImage($content)
   {

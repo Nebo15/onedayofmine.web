@@ -1,5 +1,5 @@
 <?php
-lmb_require('src/model/ModelWithImage.class.php');
+lmb_require('src/model/Imageable.class.php');
 lmb_require('limb/imagekit/src/lmbConvertImageHelper.class.php');
 lmb_require('limb/validation/src/rule/lmbValidValueRule.class.php');
 
@@ -13,7 +13,7 @@ lmb_require('limb/validation/src/rule/lmbValidValueRule.class.php');
  * @method UserSettings getSettings()
  * @method void
  */
-class User extends ModelWithImage
+class User extends Imageable
 {
   const SEX_MALE = 'male';
   const SEX_FEMALE = 'female';
