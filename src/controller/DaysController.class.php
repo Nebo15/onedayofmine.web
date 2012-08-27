@@ -58,11 +58,17 @@ class DaysController extends BaseJsonController
 
     $day->getDefaultConnection()->commitTransaction();
 
-    // Notify friends about new day
-    $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_DAY, $day);
+    $this->toolkit->getNewsObserver()->onDay($day);
 
-    // Share to social networks
-    $this->toolkit->getPostingService()->shareDayBegin($day);
+    try
+    {
+      $this->toolkit->getPostingService()->shareDayBegin($day);
+    }
+    catch(odFacebookApiExpiredTokenException $e)
+    {
+      $day->destroy();
+      return $this->_answerUnauthorized('Token expired');
+    }
 
     return $this->_answerOk($this->_exportDayWithSubentities($day));
   }
@@ -165,8 +171,7 @@ class DaysController extends BaseJsonController
     if(!$day = Day::findById($this->request->id))
       return $this->_answerWithError("Day not found");
 
-    // Notify friends about day like
-    $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_LIKE, $day);
+    $this->toolkit->getNewsObserver()->onLike($day);
 
     $day->setLikesCount($day->getLikesCount() + 1);
     $day->save();
@@ -188,8 +193,7 @@ class DaysController extends BaseJsonController
     $day->setIsDeleted(1);
     $day->save();
 
-    // Delete corresponding news
-    lmbActiveRecord :: delete('News', 'day_id='.$day->getId());
+    $this->toolkit->getNewsObserver()->onDayDelete($day);
 
     return $this->_answerOk();
   }
@@ -383,7 +387,7 @@ class DaysController extends BaseJsonController
 
     if($this->error_list->isEmpty())
     {
-      $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_MOMENT, $moment);
+      $this->toolkit->getNewsObserver()->onMoment($moment);
       return $this->_answerOk($moment->exportForApi());
     }
     else
@@ -405,8 +409,7 @@ class DaysController extends BaseJsonController
     {
       $comment->saveSkipValidation();
 
-      // Notify friends about new comment in day
-      $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_COMMENT, $comment);
+      $this->toolkit->getNewsObserver()->onComment($comment);
 
       return $this->_answerOk($comment->exportForApi());
     }

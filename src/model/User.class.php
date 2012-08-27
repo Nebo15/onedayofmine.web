@@ -10,6 +10,7 @@ lmb_require('limb/validation/src/rule/lmbValidValueRule.class.php');
  * @method string getFbAccessToken()
  * @method void setFbAccessToken(string $fb_access_token)
  * @method string getTwitterUid()
+ * @method string getTwitterAccessToken()
  * @method UserSettings getSettings()
  * @method void
  */

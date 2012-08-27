@@ -1,8 +1,7 @@
 <?php
-lmb_require('tests/cases/unit/controller/odControllerTestCase.class.php');
-lmb_require('src/controller/SocialController.class.php');
+lmb_require('tests/cases/integration/odAcceptanceTestCase.class.php');
 
-class SocialControllerTest extends odControllerTestCase
+class SocialControllerTest extends odAcceptanceTestCase
 {
   protected $controller_class = 'SocialController';
 
@@ -19,9 +18,9 @@ class SocialControllerTest extends odControllerTestCase
   {
     $this->main_user->save();
     $this->additional_user->save();
-    lmbToolkit::instance()->setUser($this->main_user);
+    $this->_loginAndSetCookie($this->main_user);
 
-    $result = $this->get('facebook_friends');
+    $result = $this->get('social/facebook_friends');
     $friends = $result->result;
     $this->assertResponse(200);
     $this->assertTrue(is_array($friends));
@@ -40,13 +39,10 @@ class SocialControllerTest extends odControllerTestCase
    */
   function testTwitterConnect()
   {
-    $this->main_user->save();
-    $this->assertEqual(0, $this->main_user->getSettings()->getSocialShareTwitter());
-
     $this->main_user->getSettings()->setSocialShareTwitter(1);
     $this->main_user->save();
-    lmbToolkit::instance()->setUser($this->main_user);
-    $result = $this->post('twitter_connect', array(
+    $this->_loginAndSetCookie($this->main_user);
+    $result = $this->post('social/twitter_connect', array(
       'access_token'         => $this->generator->twitter_credentials()[0]['access_token'],
       'access_token_secret'  => $this->generator->twitter_credentials()[0]['access_token_secret']
     ));
@@ -63,8 +59,8 @@ class SocialControllerTest extends odControllerTestCase
   function testTwitterConnect_withUnvalidCredentials()
   {
     $this->main_user->save();
-    lmbToolkit::instance()->setUser($this->main_user);
-    $result = $this->post('twitter_connect', array(
+    $this->_loginAndSetCookie($this->main_user);
+    $result = $this->post('social/twitter_connect', array(
       'access_token'         => 'Wrong twitter access token',
       'access_token_secret'  => 'Wrong twitter access token secret'
     ));
@@ -76,8 +72,8 @@ class SocialControllerTest extends odControllerTestCase
   function testTwitterConnect_withNoField()
   {
     $this->main_user->save();
-    lmbToolkit::instance()->setUser($this->main_user);
-    $result = $this->post('twitter_connect', array(
+    $this->_loginAndSetCookie($this->main_user);
+    $this->post('social/twitter_connect', array(
       'access_token'         => $this->generator->twitter_credentials()[0]['access_token']
     ));
     $this->assertResponse(400);
@@ -92,9 +88,9 @@ class SocialControllerTest extends odControllerTestCase
    */
   function testGetNewNews() {
     $this->main_user->save(); // Save user to have static ID
-    lmbToolkit::instance()->setUser($this->main_user);
+    $this->_loginAndSetCookie($this->main_user);
 
-    $response = $this->get('news');
+    $response = $this->get('social/news');
     $this->assertResponse(200);
     $this->assertEqual(0, count($response->result));
 
@@ -112,7 +108,7 @@ class SocialControllerTest extends odControllerTestCase
     $news4 = $this->generator->news(null, $this->main_user);
     $news4->save();
 
-    $response = $this->get('news');
+    $response = $this->get('social/news');
     if($this->assertResponse(200))
     {
       $this->assertTrue(is_array($response->result));
@@ -124,11 +120,11 @@ class SocialControllerTest extends odControllerTestCase
     }
 
     // If there are no new news return shoud be empty with HTTP 304 status code
-    $response = $this->get('news', array('from' => $news1->getId()));
+    $response = $this->get('social/news', array('from' => $news1->getId()));
     $this->assertResponse(304);
     $this->assertEqual(0, count($response->result));
 
-    $response = $this->get('news', array('from' => $news4->getId()));
+    $response = $this->get('social/news', array('from' => $news4->getId()));
     if($this->assertResponse(200))
     {
       $this->assertTrue(is_array($response->result));
@@ -138,7 +134,7 @@ class SocialControllerTest extends odControllerTestCase
       $this->assertEqual($news1->getId(), $response->result[2]->id);
     }
 
-    $response = $this->get('news', array(
+    $response = $this->get('social/news', array(
       'from' => $news4->getId(),
       'to' => $news1->getId(),
     ));
@@ -150,7 +146,7 @@ class SocialControllerTest extends odControllerTestCase
       $this->assertEqual($news2->getId(), $response->result[1]->id);
     }
 
-    $response = $this->get('news', array(
+    $response = $this->get('social/news', array(
       'from' => $news4->getId(),
       'to' => $news1->getId(),
       'limit' => 1

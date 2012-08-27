@@ -134,7 +134,8 @@ class MyControllerTest extends odControllerTestCase
    */
   function testUpdateSettings()
   {
-    $registered_user = $this->_loginAndSetCookie($this->main_user)->result;
+    $this->toolkit->setUser($this->main_user);
+    $registered_user = $this->main_user->exportForApi();
 
     $settings = new UserSettings();
     $settings->setNotificationsNewDays(1);
@@ -150,7 +151,7 @@ class MyControllerTest extends odControllerTestCase
     foreach($settings as $option => $value)
       $this->assertEqual(1, $value, "Error in $option. 1 != $value");
 
-    $real_settings = User::findById($registered_user->id)->getSettings();
+    $real_settings = $this->main_user->getSettings();
     $this->assertEqual($settings, $real_settings->exportForApi());
 
     $settings = new UserSettings();
@@ -163,7 +164,7 @@ class MyControllerTest extends odControllerTestCase
     $settings->setSocialShareFacebook(0);
     $settings->setSocialShareTwitter(0);
 
-    $this->_loginAndSetCookie($this->main_user)->result;
+    $this->toolkit->setUser($this->main_user);
     $settings = $this->post("settings", $settings->export())->result;
 
     foreach($settings as $option => $value)

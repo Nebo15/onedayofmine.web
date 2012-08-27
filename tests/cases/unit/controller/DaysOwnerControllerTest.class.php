@@ -6,6 +6,7 @@ class DaysOwnerControllerTest extends odControllerTestCase
 {
   protected $controller_class = 'DaysController';
 
+
   function setUp()
   {
     parent::setUp();
@@ -88,8 +89,8 @@ class DaysOwnerControllerTest extends odControllerTestCase
     }
   }
 
-  function testStart_withNoLocation() {
-
+  function testStart_withNoLocation()
+  {
     $this->main_user->setLocation('testStart_withNoLocation - user');
     $this->main_user->save();
     lmbToolkit::instance()->setUser($this->main_user);
@@ -103,6 +104,7 @@ class DaysOwnerControllerTest extends odControllerTestCase
       'occupation' => $params->occupation,
       'type' => $params->type,
     ));
+
     if($this->assertResponse(200))
     {
       if($this->assertProperty($response->result, 'user'))
@@ -113,6 +115,27 @@ class DaysOwnerControllerTest extends odControllerTestCase
       $this->assertEqual($day->type, $response->result->type);
       $this->assertEqual(0, $response->result->likes_count);
     }
+  }
+
+  function testStart_ExpiredToken()
+  {
+    $this->main_user->save();
+
+    $this->toolkit->setUser($this->main_user);
+    $this->toolkit->setPostingService(new PostingServiceWithExpiredToken());
+
+    $day = $this->generator->day($this->main_user);
+    $params = $day->exportForApi();
+
+    $this->post('start', array(
+      'title' => $params->title,
+      'location' => $params->location,
+      'occupation' => $params->occupation,
+      'type' => $params->type,
+      'token' => 'wrong-token'
+    ));
+
+    $this->assertResponse(401);
   }
 
   /**
@@ -264,7 +287,7 @@ class DaysOwnerControllerTest extends odControllerTestCase
     $day = $this->generator->day($this->main_user);
     $day->save();
 
-    $this->_loginAndSetCookie($this->additional_user);
+    $this->toolkit->setUser($this->additional_user);
 
     $this->post('update',
       array(
@@ -470,7 +493,7 @@ class DaysOwnerControllerTest extends odControllerTestCase
     $day = $this->generator->day($this->main_user);
     $day->save();
 
-    $this->_loginAndSetCookie($this->additional_user);
+    $this->toolkit->setUser($this->additional_user);
     $this->post('delete', array(), $day->getId())->result;
 
     $this->assertResponse(401);
@@ -508,9 +531,17 @@ class DaysOwnerControllerTest extends odControllerTestCase
     $day = $this->generator->day($this->main_user);
     $day->save();
 
-    $this->_loginAndSetCookie($this->additional_user);
+    $this->toolkit->setUser($this->additional_user);
     $this->post('restore', array(), $day->getId())->result;
 
     $this->assertResponse(401);
+  }
+}
+
+class PostingServiceWithExpiredToken extends odPostingService
+{
+  function share($name, $args)
+  {
+    throw new odFacebookApiExpiredTokenException('Who are you? Come on, "Goodbye!"');
   }
 }

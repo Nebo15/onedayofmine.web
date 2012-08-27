@@ -25,7 +25,7 @@ class UsersControllerTest extends odControllerTestCase
     $day2 = $this->generator->day($this->main_user);
     $day2->save();
 
-    $this->_loginAndSetCookie($this->additional_user);
+    $this->toolkit->setUser($this->additional_user);
 
     $days = $this->get('days', array(), $this->main_user->getId())->result;
     $this->assertResponse(200);
@@ -65,7 +65,7 @@ class UsersControllerTest extends odControllerTestCase
     $followers->add($this->main_user);
     $followers->save();
 
-    $this->_loginAndSetCookie($this->additional_user);
+    $this->toolkit->setUser($this->additional_user);
 
     $res = (array) $this->get('item', array(), $this->main_user->getId())->result;
 
@@ -106,7 +106,7 @@ class UsersControllerTest extends odControllerTestCase
     $third_user = $this->generator->user('Dum Dum');
     $third_user->save();
 
-    $this->_loginAndSetCookie($this->additional_user);
+    $this->toolkit->setUser($this->additional_user);
 
     $followers = $this->get('followers', array(), $this->main_user->getId())->result;
     $this->assertResponse(200);
@@ -142,7 +142,7 @@ class UsersControllerTest extends odControllerTestCase
     $third_user = $this->generator->user('Dum Dum');
     $third_user->save();
 
-    $this->_loginAndSetCookie($this->additional_user);
+    $this->toolkit->setUser($this->additional_user);
 
     $following = $this->get('following', array(), $this->main_user->getId())->result;
     $this->assertResponse(200);

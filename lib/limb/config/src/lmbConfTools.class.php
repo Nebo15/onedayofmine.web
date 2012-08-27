@@ -58,7 +58,8 @@ class lmbConfTools extends lmbAbstractTools
 
   protected function _locateConfFiles($name)
   {
-    return $this->toolkit->findFileByAlias($name, $this->toolkit->getConfIncludePath(), 'config', false);
+    $res =  $this->toolkit->findFileByAlias($name, $this->toolkit->getConfIncludePath(), 'config', false);
+    return $res;
   }
 
   function getConf($name)
@@ -99,9 +100,9 @@ class lmbConfTools extends lmbAbstractTools
     return $this->confs[$name];
   }
 
-  function resetConf($name)
+  function resetConfs()
   {
-    unset($this->confs[$this->_normalizeConfName($name)]);
+    $this->confs = array();
   }
 
   protected function _normalizeConfName($name)
