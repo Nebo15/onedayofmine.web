@@ -1,7 +1,7 @@
 <?php
-lmb_require('tests/cases/unit/odUnitTestCase.class.php');
+lmb_require('tests/cases/integration/odAcceptanceTestCase.class.php');
 
-class FacebookProfileTest extends odUnitTestCase
+class FacebookProfileTest extends odAcceptanceTestCase
 {
   function testGetInfoRaw()
   {
