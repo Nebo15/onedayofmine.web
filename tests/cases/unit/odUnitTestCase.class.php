@@ -23,12 +23,18 @@ abstract class odUnitTestCase extends UnitTestCase
   {
     $this->generator = new odObjectMother();
     $this->toolkit = lmbToolkit::instance();
-    $this->toolkit->resetConf('amazon');
-    $this->toolkit->resetConf('images');
-    $this->toolkit->resetConf('common');
-    $this->toolkit->setConfIncludePath('tests/cases/unit/settings;tests/settings;settings');
+
     parent::setUp();
-    $this->toolkit->truncateTablesOf('User');
-    list($this->main_user, $this->additional_user) = $this->toolkit->getTestsUsers($quiet = false);
+
+    $this->toolkit->setConfIncludePath('tests/cases/unit/settings;tests/settings;settings');
+    $this->toolkit->resetConfs();
+    $this->toolkit->resetFileLocators();
+
+    $this->toolkit->truncateTablesOf('UserSettings', 'User');
+
+    $this->toolkit->resetUser();
+
+    $this->main_user = $this->generator->user();
+    $this->additional_user = $this->generator->user();
   }
 }

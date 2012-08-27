@@ -2,14 +2,15 @@
 //lmb_require('limb/tests_runner/lib/simpletest/web_tester.php');
 lmb_require('lib/DocCommentParser/*.class.php');
 lmb_require('lib/limb/net/src/lmbHttpRequest.class.php');
-lmb_require('src/controller/AuthController.class.php');
+lmb_require('tests/cases/unit/odUnitTestCase.class.php');
 
-abstract class odControllerTestCase extends UnitTestCase
+Mock::generate('odPostingService', 'PostingServiceMock');
+Mock::generate('odFacebook', 'FacebookMock');
+Mock::generate('odTwitter', 'TwitterMock');
+Mock::generate('FacebookProfile', 'FacebookProfileMock');
+
+abstract class odControllerTestCase extends odUnitTestCase
 {
-  /**
-   * @var OdObjectMother
-   */
-  protected $generator;
   /**
    * @var string
    */
@@ -21,48 +22,21 @@ abstract class odControllerTestCase extends UnitTestCase
   protected $last_response_raw;
   protected $cookies = array();
 
-  protected $last_profile_info;
-  /**
-   * @var User
-   */
-  protected $main_user;
-  /**
-   * @var User
-   */
-  protected $additional_user;
-
-  /**
-   * @var odTestsTools
-   */
-  protected $toolkit;
-
   function setUp()
   {
     if(!$this->controller_class)
       throw new lmbException('You must specify controller class');
 
-    $this->generator = new odObjectMother();
-    $this->toolkit = lmbToolkit::instance();
+    lmb_require('src/controller/'.$this->controller_class.'.class.php');
+
     parent::setUp();
-    $this->toolkit->truncateTablesOf('UserSettings', 'User');
-    list($this->main_user, $this->additional_user) = $this->toolkit->getTestsUsers($quiet = false);
-    $this->toolkit->resetUser();
-  }
-
-  protected function _loginAndSetCookie(User $user)
-  {
-    $this->cookies['token'] = $user->getFbAccessToken();
-    return $this->_login($user);
-  }
-
-  protected function _login(User $user)
-  {
-    $request = new lmbHttpRequest(null, null, array('token' => $user->getFbAccessToken()));
-    $request->setRequestMethod('POST');
-    $res = $this->request('AuthController', 'login', $request);
-    $this->assertResponse(200);
-    $this->assertProperty($res->result, 'name');
-    return $res;
+    $this->toolkit->setFacebook(new FacebookMock, $this->main_user->getFbAccessToken());
+    $this->toolkit->setTwitter(new TwitterMock(), $this->main_user->getTwitterAccessToken());
+    $this->toolkit->setFacebookProfile($this->main_user, new FacebookProfileMock);
+    $this->toolkit->setFacebook(new FacebookMock, $this->additional_user->getFbAccessToken());
+    $this->toolkit->setTwitter(new TwitterMock(), $this->additional_user->getTwitterAccessToken());
+    $this->toolkit->setFacebookProfile($this->additional_user, new FacebookProfileMock);
+    $this->toolkit->setPostingService(new PostingServiceMock);
   }
 
   function get($action, $params = array(), $id = null)

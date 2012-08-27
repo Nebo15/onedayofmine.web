@@ -2,6 +2,7 @@
 lmb_require('limb/web_app/src/controller/lmbController.class.php');
 lmb_require('src/odStaticObjectMother.class.php');
 lmb_require('src/Json.class.php');
+lmb_require('src/service/social_provider/odFacebookApiExpiredTokenException.class.php');
 
 abstract class BaseJsonController extends lmbController
 {
@@ -148,9 +149,9 @@ abstract class BaseJsonController extends lmbController
     }
   }
 
-  protected function _answerUnauthorized()
+  protected function _answerUnauthorized($message = 'Access allowed only for registered users')
   {
-    return $this->_answerWithError('Access allowed only for registered users', null, 401);
+    return $this->_answerWithError($message, null, 401);
   }
 
   protected function _answerOk($result = null, $status = null, $code = 200)

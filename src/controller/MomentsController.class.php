@@ -35,8 +35,7 @@ class MomentsController extends BaseJsonController
     {
       $comment->saveSkipValidation();
 
-      // Notify friends about new comment in moment
-      $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_COMMENT, $comment);
+      $this->toolkit->getNewsObserver()->onComment($comment);
 
       return $this->_answerOk($comment->exportForApi());
     }
@@ -57,8 +56,7 @@ class MomentsController extends BaseJsonController
 
     $moment->destroy();
 
-    // Delete corresponding news
-    lmbActiveRecord :: delete('News', 'moment_id='.$moment->getId());
+    $this->toolkit->getNewsObserver()->onMomentDelete($moment);
 
     return $this->_answerOk();
   }

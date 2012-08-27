@@ -64,7 +64,7 @@ class odTestsTools extends lmbAbstractTools
     }
 
     $users = array();
-    foreach($users_infos as $user_info)
+    foreach($users_infos as $key => $user_info)
     {
       $user_info = (object) $user_info;
       $user = new User();
@@ -73,10 +73,14 @@ class odTestsTools extends lmbAbstractTools
       $user->import((new FacebookProfile($user))->getInfo());
 
       $settings = $user->getSettings();
-      $settings->setSocialShareFacebook(0);
-      $settings->setSocialShareTwitter(0);
+      $settings->setSocialShareFacebook(1);
+      $settings->setSocialShareTwitter(1);
       $user->setSettings($settings);
 
+      $twitter_credentials = (new odObjectMother())->twitter_credentials()[$key % 2];
+      $user->setTwitterUid($twitter_credentials['uid']);
+      $user->setTwitterAccessToken($twitter_credentials['access_token']);
+      $user->setTwitterAccessTokenSecret($twitter_credentials['access_token_secret']);
       $users[] = $user;
     }
     return $users;

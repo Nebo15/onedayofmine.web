@@ -17,6 +17,18 @@ class odTools extends lmbAbstractTools
    */
   protected $user;
 
+  protected $tests_users;
+  /**
+   * @var odPostingService
+   */
+  protected $posting_service;
+
+  protected $facebook_instances = array();
+
+  protected $twitter_instances = array();
+
+  protected $facebook_profiles = array();
+
   function setUser($user)
   {
     $this->user = $user;
@@ -48,14 +60,17 @@ class odTools extends lmbAbstractTools
   /**
    * @return odPostingService
    */
-  function getPostingService(User $user = null)
+  function getPostingService()
   {
-    static $posting_service;
+    if(!$this->posting_service)
+      $this->posting_service = new odPostingService();
 
-    if(!$posting_service)
-      $posting_service = new odPostingService();
+    return $this->posting_service;
+  }
 
-    return $posting_service;
+  function setPostingService($posting_service)
+  {
+    $this->posting_service = $posting_service;
   }
 
   /**
@@ -66,7 +81,7 @@ class odTools extends lmbAbstractTools
     static $news_observer;
 
     if(!$news_observer)
-      $news_observer = new odNewsObserver();
+      $news_observer = new odNewsObserver($this->getUser());
 
     return $news_observer;
   }
@@ -114,16 +129,21 @@ class odTools extends lmbAbstractTools
     return $this->toolkit->getConf('common')['static_host'].$path;
   }
 
-  function getPageUrl($object)
+  function getPagePath($object)
   {
     if(!$object->getId())
       throw new lmbException("Can't get object ID.");
 
     if('Day' == get_class($object))
-      return $this->getSiteUrl('pages/'.$object->getId().'/day');
+      return 'pages/'.$object->getId().'/day';
     if('Moment' == get_class($object))
-      return $this->getSiteUrl('pages/'.$object->getId().'/moment');
+      return 'pages/'.$object->getId().'/moment';
     throw new lmbException('Unknown object class');
+  }
+
+  function getPageUrl($object)
+  {
+    return $this->getSiteUrl($this->getPagePath($object));
   }
 
   function getAbsolutePath($www_path)
@@ -133,26 +153,30 @@ class odTools extends lmbAbstractTools
 
   function loadTestsUsersInfo()
   {
-    $fb = $this->toolkit->getFacebook();
-    $params = array(
-        'access_token' => $fb->getApplicationAccessToken()
-    );
-    $users = $fb->api("/".$fb->getAppId()."/accounts/test-users", "GET", $params);
-
-    if(!$users['data'])
+    if(!$this->tests_users)
     {
-      return array();
-    }
+      $fb = $this->toolkit->getFacebook();
+      $params = array(
+        'access_token' => $fb->getApplicationAccessToken()
+      );
+      $users = $fb->api("/".$fb->getAppId()."/accounts/test-users", "GET", $params);
 
-    foreach ($users['data'] as $key => $value) {
-      $user = new User();
-      // var_dump($value);
-      $user->setFbUid($value['id']);
-      $user->setFbAccessToken($value['access_token']);
-      $user->import((new FacebookProfile($user))->getInfo());
-      $users['data'][$key]['email'] = $user->getEmail();
+      if(!$users['data'])
+      {
+        return array();
+      }
+
+      foreach ($users['data'] as $key => $value) {
+        $user = new User();
+        // var_dump($value);
+        $user->setFbUid($value['id']);
+        $user->setFbAccessToken($value['access_token']);
+        $user->import((new FacebookProfile($user))->getInfo());
+        $users['data'][$key]['email'] = $user->getEmail();
+      }
+      $this->tests_users = $users['data'];
     }
-    return $users['data'];
+    return $this->tests_users;
   }
 
   /**
@@ -164,9 +188,7 @@ class odTools extends lmbAbstractTools
    */
   public function getTwitter($access_token = null, $access_token_secret = null)
   {
-    static $twitter_instances = array();
-
-    if(!array_key_exists($access_token, $twitter_instances)) {
+    if(!array_key_exists($access_token, $this->twitter_instances)) {
       $config = odTwitter::getConfig();
 
       if(!is_null($access_token) && !is_null($access_token_secret)) {
@@ -174,16 +196,15 @@ class odTools extends lmbAbstractTools
         $config['user_secret'] = $access_token_secret;
       }
 
-      $twitter_instances[$access_token] = new odTwitter($config);
-
-      if(lmb_env_get('USE_API_CACHE'))
-        $twitter_instances[$access_token] = new odRemoteApiMock(
-          $twitter_instances[$access_token],
-          lmbToolkit::instance()->createCacheConnectionByDSN('file:///'.lmb_var_dir().'/twitter_cache/'.$access_token)
-        );
+      $this->twitter_instances[$access_token] = new odTwitter($config);
     }
 
-    return $twitter_instances[$access_token];
+    return $this->twitter_instances[$access_token];
+  }
+
+  function setTwitter($twitter, $access_token = null)
+  {
+    $this->twitter_instances[$access_token] = $twitter;
   }
 
   /**
@@ -192,26 +213,37 @@ class odTools extends lmbAbstractTools
    * @param  string $access_token
    * @return odFacebook
    */
-  public function getFacebook($access_token = null)
+  public function getFacebook($access_token_or_user = null)
   {
-    static $facebook_instances = array();
-
-    if(!array_key_exists($access_token, $facebook_instances)) {
+    $access_token = is_object($access_token_or_user) ? $access_token_or_user->getFbAccessToken() : $access_token_or_user;
+    if(!array_key_exists($access_token, $this->facebook_instances)) {
       $instance = new odFacebook(odFacebook::getConfig());
 
       if(!is_null($access_token))
         $instance->setAccessToken($access_token);
 
-      if(lmb_env_get('USE_API_CACHE'))
-        $facebook_instances[$access_token] = new odRemoteApiMock(
-          $instance,
-          lmbToolkit::instance()->createCacheConnectionByDSN('file:///'.lmb_var_dir().'/facebook_cache/'.$access_token)
-        );
-      else
-        $facebook_instances[$access_token] = $instance;
+      $this->facebook_instances[$access_token] = $instance;
     }
 
-    return $facebook_instances[$access_token];
+    return $this->facebook_instances[$access_token];
+  }
+
+  public function setFacebook($facebook, $access_token = null)
+  {
+    $this->facebook_instances[$access_token] = $facebook;
+  }
+
+  public function getFacebookProfile(User $user)
+  {
+    if(!array_key_exists($user->getFbAccessToken(), $this->facebook_profiles)) {
+      $this->facebook_profiles[$user->getFbAccessToken()] = new FacebookProfile($user);
+    }
+    return $this->facebook_profiles[$user->getFbAccessToken()];
+  }
+
+  function setFacebookProfile(User $user, $profile)
+  {
+    $this->facebook_profiles[$user->getFbAccessToken()] = $profile;
   }
 
   public function getConcreteAmazonServiceConfig($name)
