@@ -59,7 +59,7 @@ class odNewsObserver
   }
 
   /**
-   * @param Comment $comment
+   * @param Commentable $comment
    */
   function onComment(Comment $comment)
   {

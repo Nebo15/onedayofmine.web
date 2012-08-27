@@ -124,7 +124,8 @@ abstract class BaseJsonController extends lmbController
   protected function _importSaveAndAnswer($item, array $properties, array $raw_properties = array())
   {
     foreach($properties as $property)
-      $item->set($property, $this->request->get($property));
+      if($this->request->get($property))
+        $item->set($property, $this->request->get($property));
 
     foreach ($raw_properties as $key => $value)
       $item->set($key, $value);
@@ -243,9 +244,9 @@ abstract class BaseJsonController extends lmbController
     $day_export->is_deleted = $day->getIsDeleted();
   }
 
-  protected function _attachComments(stdClass $export, $obj, $only_count = false)
+  protected function _attachComments(stdClass $export, Day $day, $only_count = false)
   {
-    $comments = $obj->getComments();
+    $comments = $day->getComments();
     $export->comments_count = $comments->count();
 
     if($only_count)
@@ -260,6 +261,13 @@ abstract class BaseJsonController extends lmbController
       unset($tmp->user_id);
       $export->comments[] = $tmp;
     }
+  }
+
+  protected function _attachFinishComment(stdClass $export, Day $day)
+  {
+    $export->finish_comment = $day->getFinishComment() ? $day->getFinishComment()->exportForApi() : null;
+    unset($export->finish_comment->user_id);
+    unset($export->finish_comment->day_id);
   }
 
   protected function _attachDayMoments(stdClass $day_export, $day)
@@ -292,6 +300,7 @@ abstract class BaseJsonController extends lmbController
 
     // Comments data
     $this->_attachComments($answer, $day);
+    $this->_attachFinishComment($answer, $day);
 
     // Moments data
     $this->_attachDayMoments($answer, $day);
