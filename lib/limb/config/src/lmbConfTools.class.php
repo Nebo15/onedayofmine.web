@@ -81,7 +81,7 @@ class lmbConfTools extends lmbAbstractTools
     elseif($ext == '.yml')
     {
       $file = $this->_locateConfFiles($name);
-   
+
       $this->confs[$name] =  $this->parseYamlFile(lmbFs::normalizePath($file)) ;
 
     }
@@ -97,6 +97,11 @@ class lmbConfTools extends lmbAbstractTools
       throw new lmbException("'$ext' type configuration is not supported!");
 
     return $this->confs[$name];
+  }
+
+  function resetConf($name)
+  {
+    unset($this->confs[$this->_normalizeConfName($name)]);
   }
 
   protected function _normalizeConfName($name)
