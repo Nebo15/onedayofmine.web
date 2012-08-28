@@ -6,7 +6,7 @@
   <meta property="og:title"  content="{$#moment.description}" />
   <meta property="og:description"  content="{$#moment.description}" />
   <meta property="og:image"  content="<?= lmbToolkit::instance()->getStaticUrl($this->moment->getImage()); ?>" />
-  <meta property="one-day-of-mine:day" content="{$#moment.day.fb_id}" />
+  <meta property="{$#fb_app_namespace}:day" content="{$#moment.day.fb_id}" />
   {{/into}}
   {{into slot="content"}}
 <h1>Moment #{$#moment.id}</h1>

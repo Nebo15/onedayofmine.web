@@ -5,7 +5,6 @@ lmb_require('src/service/social_provider/odTwitter.class.php');
 lmb_require('src/service/social_profile/FacebookProfile.class.php');
 lmb_require('src/service/social_profile/TwitterProfile.class.php');
 lmb_require('src/service/odNewsObserver.class.php');
-lmb_require('src/service/odRemoteApiMock.class.php');
 lmb_require('src/service/ImageHelper.class.php');
 lmb_require('src/service/odPostingService.class.php');
 require_once('amazon-sdk/sdk.class.php');
@@ -143,7 +142,8 @@ class odTools extends lmbAbstractTools
 
   function getPageUrl($object)
   {
-    return str_replace('//', '/', $this->getSiteUrl($this->getPagePath($object)));
+    $str = str_replace('//', '/', $this->getSiteUrl($this->getPagePath($object)));
+    return str_replace(':/', '://', $str);
   }
 
   function getAbsolutePath($www_path)

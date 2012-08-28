@@ -3,6 +3,17 @@ lmb_require('tests/cases/integration/odAcceptanceTestCase.class.php');
 
 class FacebookProfileTest extends odAcceptanceTestCase
 {
+  /**
+   * @var Client
+   */
+  protected $proxy_client;
+
+  function setUp()
+  {
+    parent::setUp();
+    $this->proxy_client = new Client('http://stage.onedayofmine.com/proxy.php', 'http://onedayofmine.dev/');
+  }
+
   function testGetInfoRaw()
   {
     $info = (new FacebookProfile($this->main_user))->getInfo_Raw();
@@ -66,7 +77,7 @@ class FacebookProfileTest extends odAcceptanceTestCase
 
     $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($day));
 
-    $fb_id = (new FacebookProfile($this->main_user))->shareDayBegin($day);
+    $fb_id = (new FacebookProfileForTests($this->main_user))->shareDayBegin($day);
     $this->assertTrue($fb_id);
   }
 
@@ -78,8 +89,8 @@ class FacebookProfileTest extends odAcceptanceTestCase
 
     $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($day));
 
-    (new FacebookProfile($this->main_user))->shareDayBegin($day);
-    (new FacebookProfile($this->additional_user))->shareDayLike($day);
+    (new FacebookProfileForTests($this->main_user))->shareDayBegin($day);
+    (new FacebookProfileForTests($this->additional_user))->shareDayLike($day);
   }
 
   function testShareAddMoment()
@@ -90,7 +101,7 @@ class FacebookProfileTest extends odAcceptanceTestCase
 
     $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($day));
 
-    $fb_id = (new FacebookProfile($this->main_user))->shareDayBegin($day);
+    $fb_id = (new FacebookProfileForTests($this->main_user))->shareDayBegin($day);
     $day->setFbId($fb_id);
     $day->save();
 
@@ -101,7 +112,7 @@ class FacebookProfileTest extends odAcceptanceTestCase
 
     $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($moment));
 
-    $fb_id = (new FacebookProfile($this->main_user))->shareMomentAdd($day, $moment);
+    $fb_id = (new FacebookProfileForTests($this->main_user))->shareMomentAdd($day, $moment);
     $this->assertTrue($fb_id);
 
     $moment = $this->generator->moment($day);
@@ -111,7 +122,7 @@ class FacebookProfileTest extends odAcceptanceTestCase
 
     $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($moment));
 
-    $fb_id = (new FacebookProfile($this->main_user))->shareMomentAdd($day, $moment);
+    $fb_id = (new FacebookProfileForTests($this->main_user))->shareMomentAdd($day, $moment);
     $this->assertTrue($fb_id);
   }
 
@@ -121,7 +132,9 @@ class FacebookProfileTest extends odAcceptanceTestCase
     $day->setTitle('testShareMomentLike - Day');
     $day->save();
 
-    $fb_id = (new FacebookProfile($this->main_user))->shareDayBegin($day);
+    $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($day));
+
+    $fb_id = (new FacebookProfileForTests($this->main_user))->shareDayBegin($day);
     $day->setFbId($fb_id);
     $day->save();
 
@@ -134,10 +147,10 @@ class FacebookProfileTest extends odAcceptanceTestCase
 
     $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($moment));
 
-    $fb_id = (new FacebookProfile($this->main_user))->shareMomentAdd($day, $moment);
+    $fb_id = (new FacebookProfileForTests($this->main_user))->shareMomentAdd($day, $moment);
     $this->assertTrue($fb_id);
 
-    (new FacebookProfile($this->main_user))->shareMomentLike($moment);
+    (new FacebookProfileForTests($this->main_user))->shareMomentLike($moment);
   }
 
   function testShareEndDay()
@@ -148,8 +161,8 @@ class FacebookProfileTest extends odAcceptanceTestCase
 
     $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($day));
 
-    (new FacebookProfile($this->main_user))->shareDayBegin($day);
-    (new FacebookProfile($this->main_user))->shareDayEnd($day);
+    (new FacebookProfileForTests($this->main_user))->shareDayBegin($day);
+    (new FacebookProfileForTests($this->main_user))->shareDayEnd($day);
   }
 
   function testShareDay()
@@ -160,16 +173,15 @@ class FacebookProfileTest extends odAcceptanceTestCase
 
     $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($day));
 
-    (new FacebookProfile($this->main_user))->shareDay($day);
+    (new FacebookProfileForTests($this->main_user))->shareDay($day);
   }
+}
 
-  protected function _copyDayPageToProxy(Day $day)
+class FacebookProfileForTests extends FacebookProfile
+{
+  protected function _getPageUrl($object)
   {
-    return lmbToolkit::instance()->copyDayPageToProxy($day);
-  }
-
-  protected function _copyMomentPageToProxy(Moment $moment)
-  {
-    return lmbToolkit::instance()->copyMomentPageToProxy($moment);
+    $page_url = parent::_getPageUrl($object);
+    return str_replace('onedayofmine.dev', 'stage.onedayofmine.com', $page_url);
   }
 }

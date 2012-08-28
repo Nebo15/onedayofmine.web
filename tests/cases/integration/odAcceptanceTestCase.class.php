@@ -25,15 +25,8 @@ abstract class odAcceptanceTestCase extends WebTestCase
    */
   protected $toolkit;
 
-  /**
-   * @var Client
-   */
-  protected $proxy_client;
-
   function setUp()
   {
-    $this->proxy_client = new Client('http://stage.onedayofmine.com/proxy.php', lmbToolkit::instance()->getSiteUrl());
-    lmb_env_set('HOST_URL', 'http://stage.onedayofmine.com/');
     $this->generator = new odObjectMother();
     $this->toolkit = lmbToolkit::instance();
     $this->toolkit->setConfIncludePath('tests/cases/integration/settings;tests/settings;settings');
