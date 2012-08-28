@@ -32,13 +32,13 @@
         <table>
           <tr>
             <th width="7%">Time</th>
-            <th width="7"%">Method / Path</th>
+            <th width="7%">Method / Path</th>
             <th width="7%">Code</th>
             <th width="14%">Latency</th>
             <th width="7%">IP</th>
             <th width="25%">Request</th>
             <th width="25%">Response</th>
-            <th width="7%">Действия</th>
+            <th width="7%">Actions</th>
           </tr>
 
           {{list:item}}
@@ -48,48 +48,20 @@
               <td>{$item.code}</td>
               <td><?= round($item->time / 1000000, 2); ?></td>
               <td>{$item.ip}</td>
-              <?php
-                $gets = $item->get ? unserialize($item->get) : array();
-                $posts = $item->post ? unserialize($item->post) : array();
-                $cookies = $item->cookies ? unserialize($item->cookies) : array();
-              ?>
-              <td style="font-size:10px">
-                <ul>
-                  <li>
-                    {{list using="{$gets}" as="$get" key="$key"}}
-                      <strong>GET</strong>:
-                      <ul>
-                        {{list:item}}
-                          <li>&nbsp;&nbsp;<b>{$key}</b> = {$get}</li>
-                        {{/list:item}}
-                      </ul>
-                    {{/list}}
-                  </li>
-                  <li>
-                    {{list using="{$posts}" as="$post" key="$key"}}
-                      <strong>POST</strong>:
-                      <ul>
-                        {{list:item}}
-                          <li>&nbsp;&nbsp;<b>{$key}</b> = {$post}</li>
-                        {{/list:item}}
-                      </ul>
-                    {{/list}}
-                  </li>
-                  <li>
-                    {{list using="{$cookies}" as="$cookie" key="$key"}}
-                      <strong>COOKIES:</strong>
-                      <ul>
-                        {{list:item}}
-                          <li>&nbsp;&nbsp;<b>{$key}</b> = {$cookie}</li>
-                        {{/list:item}}
-                      </ul>
-                    {{/list}}
-                  </li>
-                </ul>
+              <td>
+                <div style="font-size:10px;">
+                  {{include file="admin_requests_log/include/params_list.phtml" item="$item"/}}
+                </div>
+                <a href='/admin_requests_log/request/{$item.id}' class="thickbox">View full</a>
               </td>
-              <td style="font-size:10px"><pre>{$item.response|clip:120,'...'|html}</pre></td>
+              <td>
+                <pre style="font-size:10px">
+                  {$item.response|clip:120,'...'|html}
+                </pre>
+                <a href='/admin_requests_log/response/{$item.id}' class="thickbox">View full</a>
+              </td>
               <td class='actions'>
-                {{apply template="object_action_delete" item="{$item}"/}}
+                {{apply template="object_action" action="item" title="run" icon="arrow_refresh" item="{$item}"/}}
               </td>
             </tr>
           {{/list:item}}

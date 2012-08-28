@@ -1,0 +1,37 @@
+<?php
+$gets = $item->get ? unserialize($item->get) : array();
+$posts = $item->post ? unserialize($item->post) : array();
+$cookies = $item->cookies ? unserialize($item->cookies) : array();
+?>
+<ul>
+  {{list using="{$gets}" as="$get" key="$key"}}
+  <li>
+    <strong>GET</strong>:
+    <ul>
+      {{list:item}}
+      <li>&nbsp;&nbsp;<b>{$key}</b> = {$get}</li>
+      {{/list:item}}
+    </ul>
+  </li>
+  {{/list}}
+  {{list using="{$posts}" as="$post" key="$key"}}
+  <li>
+    <strong>POST</strong>:
+    <ul>
+      {{list:item}}
+      <li>&nbsp;&nbsp;<b>{$key}</b> = {$post}</li>
+      {{/list:item}}
+    </ul>
+  </li>
+  {{/list}}
+  {{list using="{$cookies}" as="$cookie" key="$key"}}
+  <li>
+    <strong>COOKIES:</strong>
+    <ul>
+      {{list:item}}
+      <li>&nbsp;&nbsp;<b>{$key}</b> = {$cookie}</li>
+      {{/list:item}}
+    </ul>
+  </li>
+  {{/list}}
+</ul>

@@ -19,4 +19,19 @@ class AdminRequestsLogController extends lmbController
 
     $this->useForm('filter_form', $this->request);
   }
+
+  function doRequest()
+  {
+    $this->item = RequestsLogRecord::findById($this->request->get('id'));
+  }
+
+  function doResponse()
+  {
+    $this->item = RequestsLogRecord::findById($this->request->get('id'));
+  }
+
+  function doRun()
+  {
+
+  }
 }
