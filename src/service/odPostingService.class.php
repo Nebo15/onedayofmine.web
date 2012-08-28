@@ -25,7 +25,7 @@ class odPostingService implements SharesInterface
     }
 
     // Twitter
-    if($settings->getSocialShareTwitter())
+    if($settings->getSocialShareTwitter() && $user->getTwitterAccessToken() && $user->getTwitterAccessTokenSecret())
     {
         $this->twitter_profile = $this->twitter_profile ?: new TwitterProfile($user);
 
