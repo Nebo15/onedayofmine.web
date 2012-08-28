@@ -1,4 +1,5 @@
 <?php
+lmb_require('src/model/base/BaseModel.class.php');
 
 /**
  * @api
@@ -24,5 +25,4 @@ class Complaint extends BaseModel
     unset($exported['cip']);
     return (object) $exported;
   }
-
 }

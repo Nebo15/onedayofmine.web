@@ -1,6 +1,6 @@
 <?php
 lmb_require('tests/cases/integration/odAcceptanceTestCase.class.php');
-lmb_require('src/model/ModelWithImage.class.php');
+lmb_require('src/model/mixins/Imageable.class.php');
 
 class ModelWithImageTest extends odAcceptanceTestCase
 {
@@ -25,7 +25,9 @@ class ModelWithImageTest extends odAcceptanceTestCase
   }
 }
 
-class ModelWithImageForTests extends ModelWithImage
+class ModelWithImageForTests
 {
+  use Imageable;
+
   protected $_db_table_name = 'day';
 }

@@ -1,8 +1,7 @@
 <?php
-lmb_require('src/model/BaseModel.class.php');
+lmb_require('src/model/base/BaseModel.class.php');
 
-abstract class Commentable extends BaseModel {
-  protected $_default_sort_params = array('id'=>'asc');
+class BaseComment extends BaseModel {
   protected $_lazy_attributes = array('text');
 
   function exportForApi()
@@ -10,7 +9,6 @@ abstract class Commentable extends BaseModel {
     $export = new stdClass();
     $export->id = $this->getId();
     $export->user_id = $this->getUserId();
-    // $export->user_name = $this->getUser()->getName();
     $export->text = $this->getText();
     $export->likes_count = $this->getLikesCount() ?: 0;
     $export->ctime = $this->getCreateTime();

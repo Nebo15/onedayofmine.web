@@ -1,12 +1,15 @@
 <?php
-lmb_require('src/model/Imageable.class.php');
+lmb_require('src/model/base/BaseModel.class.php');
+lmb_require('src/model/traits/Imageable.trait.php');
 
 /**
  * @api field int id User ID
  * @static Day findById()
  */
-class Day extends Imageable
+class Day extends BaseModel
 {
+  use Imageable;
+
   protected $_default_sort_params = array('id'=>'desc');
 
   protected function _defineRelations()
@@ -24,8 +27,9 @@ class Day extends Imageable
     );
 
     $this->_has_many = array(
-      'moments' => array( 'field' => 'day_id', 'class' => 'Moment'),
+      'moments'  => array( 'field' => 'day_id', 'class' => 'Moment'),
       'comments' => array( 'field' => 'day_id', 'class' => 'DayComment'),
+      'likes'    => array( 'field' => 'day_id', 'class' => 'DayLike'),
     );
   }
 
