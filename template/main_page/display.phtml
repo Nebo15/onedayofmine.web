@@ -76,7 +76,6 @@
             $commit_id = trim(file_get_contents(lmb_env_get('APP_DIR').'/.git/refs/heads/master'));
             echo "Commit: <a href='//github.com/daeq/one-day-of-mine/commit/{$commit_id}'>{$commit_id}</a><br />";
             echo "Deployed at ".date("y.m.d H:i:s", filemtime(lmb_env_get('APP_DIR').'/.git/refs/heads/master'));
-            echo " / tested at ".date("y.m.d H:i:s", filemtime(lmb_env_get('APP_DIR').'/www/api_doc/examples.markdown'));
             ?>
           </small>
         </p>
