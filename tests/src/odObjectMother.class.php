@@ -152,9 +152,6 @@ class odObjectMother
 
   function string($length = 6)
   {
-    if(!$this->generate_random)
-      return substr(str_repeat("foobar", ceil($length/6)+1), 0, $length);
-
     $conso = array("b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "r", "s", "t", "v", "w", "x", "y", "z");
     $vocal = array("a", "e", "i", "o", "u");
     $password = "";
@@ -210,6 +207,22 @@ class odObjectMother
         'access_token'        => '718050210-SVERCoH3Zrxiw1KiBqjN3khC6tb6Rfwzkpx4D2kt',
         'access_token_secret' => 'KoZL6VY45Wfp0laFXhETkEdSKFdIY92YpRfCkzZu4'
       )
+    );
+  }
+
+  function facebookInfo($uid = null)
+  {
+    return array(
+     'fb_uid'           => $uid ?: $this->string(5),
+      'email'            => $this->email(),
+      'name'             => $this->string(10),
+      'sex'              => User::SEX_MALE,
+      'timezone'         => $this->integer(1),
+      'fb_profile_utime' => $this->integer(11),
+      'pic'              => $this->string(),
+      'occupation'       => $this->string(),
+      'current_location' => $this->string(),
+      'birthday'         => $this->date_sql()
     );
   }
 }

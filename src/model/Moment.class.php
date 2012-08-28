@@ -1,5 +1,5 @@
 <?php
-lmb_require('src/model/ModelWithImage.class.php');
+lmb_require('src/model/Imageable.class.php');
 
 /**
  * @api
@@ -11,7 +11,7 @@ lmb_require('src/model/ModelWithImage.class.php');
  * @method string getDescription()
  * @method void setFbAccessToken(string $fb_access_token)
  */
-class Moment extends ModelWithImage
+class Moment extends Imageable
 {
   protected function _defineRelations()
   {

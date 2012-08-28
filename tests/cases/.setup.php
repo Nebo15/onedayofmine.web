@@ -5,8 +5,6 @@ if('production' == lmb_app_mode())
   echo "Can't test in production mode".PHP_EOL;
   exit(1);
 }
-
-lmb_env_set('LIMB_CONF_INCLUDE_PATH', 'tests/settings;settings');
 lmb_env_set('LIMB_CACHE_DB_META_IN_FILE', false);
 
 lmb_require('tests/src/odObjectMother.class.php');

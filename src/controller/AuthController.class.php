@@ -11,7 +11,6 @@ class AuthController extends BaseJsonController
     $answer->facebook               = new stdClass();
     $answer->facebook->appid        = $this->toolkit->getConf('facebook')['appId'];
     $answer->facebook->namespace    = $this->toolkit->getConf('facebook')['namespace'];
-    // $answer->facebook->permissions  = implode(',', $this->toolkit->getConf('facebook')['permissions']);
 
     $answer->twitter                = new stdClass();
     $answer->twitter->consumer_key  = $this->toolkit->getConf('twitter')['consumer_key'];
@@ -51,7 +50,7 @@ class AuthController extends BaseJsonController
     $this->toolkit->setUser($user);
 
     if($new_user)
-      $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_USER, $user);
+      $this->toolkit->getNewsObserver()->onUser($user);
 
     $answer = $user->exportForApi();
     $answer->favourites_count = $this->_getUser()->getFavouriteDays()->count();
@@ -65,7 +64,7 @@ class AuthController extends BaseJsonController
   {
     $user = new User();
     $user->setFbAccessToken($fb_access_token);
-    $profile = new FacebookProfile($user);
+    $profile = $this->toolkit->getFacebookProfile($user);
     $user->import($profile->getInfo());
     $user->save();
 

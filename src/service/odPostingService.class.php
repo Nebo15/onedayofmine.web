@@ -18,14 +18,14 @@ class odPostingService implements SharesInterface
     // Facebook
     if($settings->getSocialShareFacebook())
     {
-        $this->facebook_profile = $this->facebook_profile ?: new FacebookProfile($user);
+      $this->facebook_profile = $this->facebook_profile ?: new FacebookProfile($user);
 
-        if(!call_user_func_array(array($this->facebook_profile, $name), $args))
-          throw new lmbException("Can't share with Facebook.", array('function_name' => $name, 'function_args' => $args));
+      if(!call_user_func_array(array($this->facebook_profile, $name), $args))
+        throw new lmbException("Can't share with Facebook.", array('function_name' => $name, 'function_args' => $args));
     }
 
     // Twitter
-    if($settings->getSocialShareTwitter())
+    if($settings->getSocialShareTwitter() && $user->getTwitterAccessToken() && $user->getTwitterAccessTokenSecret())
     {
         $this->twitter_profile = $this->twitter_profile ?: new TwitterProfile($user);
 

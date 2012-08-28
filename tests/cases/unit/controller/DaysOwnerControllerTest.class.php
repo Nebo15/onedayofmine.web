@@ -6,10 +6,11 @@ class DaysOwnerControllerTest extends odControllerTestCase
 {
   protected $controller_class = 'DaysController';
 
+
   function setUp()
   {
     parent::setUp();
-    odTestsTools::truncateTablesOf('Day', 'Moment', 'DayComment');
+    odTestsTools::truncateTablesOf('Day', 'Moment', 'DayComment', 'DayFinishComment');
   }
 
   function testStart_Negative()
@@ -88,8 +89,8 @@ class DaysOwnerControllerTest extends odControllerTestCase
     }
   }
 
-  function testStart_withNoLocation() {
-
+  function testStart_withNoLocation()
+  {
     $this->main_user->setLocation('testStart_withNoLocation - user');
     $this->main_user->save();
     lmbToolkit::instance()->setUser($this->main_user);
@@ -103,6 +104,7 @@ class DaysOwnerControllerTest extends odControllerTestCase
       'occupation' => $params->occupation,
       'type' => $params->type,
     ));
+
     if($this->assertResponse(200))
     {
       if($this->assertProperty($response->result, 'user'))
@@ -113,6 +115,27 @@ class DaysOwnerControllerTest extends odControllerTestCase
       $this->assertEqual($day->type, $response->result->type);
       $this->assertEqual(0, $response->result->likes_count);
     }
+  }
+
+  function testStart_ExpiredToken()
+  {
+    $this->main_user->save();
+
+    $this->toolkit->setUser($this->main_user);
+    $this->toolkit->setPostingService(new PostingServiceWithExpiredToken());
+
+    $day = $this->generator->day($this->main_user);
+    $params = $day->exportForApi();
+
+    $this->post('start', array(
+      'title' => $params->title,
+      'location' => $params->location,
+      'occupation' => $params->occupation,
+      'type' => $params->type,
+      'token' => 'wrong-token'
+    ));
+
+    $this->assertResponse(401);
   }
 
   /**
@@ -220,6 +243,7 @@ class DaysOwnerControllerTest extends odControllerTestCase
    * @api input option string title
    * @api input option string occupation Can be omited, then user profile occupation will be used
    * @api input option string type One of pre-defined types, see: GET day/type_names request
+   * @api input option string cover_content base64 encoded image content
    */
   function testUpdate()
   {
@@ -264,7 +288,7 @@ class DaysOwnerControllerTest extends odControllerTestCase
     $day = $this->generator->day($this->main_user);
     $day->save();
 
-    $this->_loginAndSetCookie($this->additional_user);
+    $this->toolkit->setUser($this->additional_user);
 
     $this->post('update',
       array(
@@ -373,8 +397,12 @@ class DaysOwnerControllerTest extends odControllerTestCase
       $this->assertEqual($day->getLikesCount(), $loaded_day->likes_count);
       $this->assertEqual($day->getCreateTime(), $loaded_day->ctime);
 
-      $this->assertEqual(count($day->getComments()), 1);
-      $this->assertEqual($day->getComments()->at(0)->getText(), $comment_text);
+      $db_day = Day::findOne();
+      $this->assertProperty($loaded_day, 'finish_comment');
+      $this->assertTrue($loaded_day->finish_comment);
+      $this->assertEqual(count($db_day->getComments()), 0);
+      $this->assertTrue($db_day->getFinishComment());
+      $this->assertEqual($db_day->getFinishComment()->getText(), $comment_text);
 
       $this->assertValidImageUrl($loaded_day->image_266);
       $this->assertValidImageUrl($loaded_day->image_532);
@@ -470,7 +498,7 @@ class DaysOwnerControllerTest extends odControllerTestCase
     $day = $this->generator->day($this->main_user);
     $day->save();
 
-    $this->_loginAndSetCookie($this->additional_user);
+    $this->toolkit->setUser($this->additional_user);
     $this->post('delete', array(), $day->getId())->result;
 
     $this->assertResponse(401);
@@ -508,9 +536,17 @@ class DaysOwnerControllerTest extends odControllerTestCase
     $day = $this->generator->day($this->main_user);
     $day->save();
 
-    $this->_loginAndSetCookie($this->additional_user);
+    $this->toolkit->setUser($this->additional_user);
     $this->post('restore', array(), $day->getId())->result;
 
     $this->assertResponse(401);
+  }
+}
+
+class PostingServiceWithExpiredToken extends odPostingService
+{
+  function share($name, $args)
+  {
+    throw new odFacebookApiExpiredTokenException('Who are you? Come on, "Goodbye!"');
   }
 }

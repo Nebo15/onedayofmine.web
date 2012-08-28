@@ -1,8 +1,8 @@
 <?php
-lmb_require('tests/cases/unit/odUnitTestCase.class.php');
+lmb_require('tests/cases/integration/odAcceptanceTestCase.class.php');
 lmb_require('facebook-proxy/src/Client.php');
 
-class TwitterProfileTest extends odUnitTestCase
+class TwitterProfileTest extends odAcceptanceTestCase
 {
 
   public function setUp()

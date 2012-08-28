@@ -83,8 +83,7 @@ class UsersController extends BaseJsonController
     $following->add($user);
     $following->save();
 
-    // Notify user that somebody follow hem
-    $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_FOLLOW, $user);
+    $this->toolkit->getNewsObserver()->onFollow($user);
 
     return $this->_answerOk();
   }
