@@ -1,4 +1,5 @@
 <?php
+lmb_require('tests/src/odObjectMother.class.php');
 lmb_require('tests/src/odPostmanWriter.class.php');
 lmb_require('tests/src/odApiToMarkdownWriter.class.php');
 lmb_require('tests/src/odModelToEntitiesWriter.class.php');
