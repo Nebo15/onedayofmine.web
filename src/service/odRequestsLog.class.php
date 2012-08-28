@@ -15,9 +15,9 @@ class odRequestsLog
       'type'         => 'request',
       'method'       => $request->getRequestMethod(),
       'path'         => $request->getUri()->getPath(),
-      'get'          => serialize(lmbArrayHelper :: convertToFlatArray($request->getGet())),
-      'post'         => serialize(lmbArrayHelper :: convertToFlatArray($request->getPost())),
-      'cookies'      => serialize(lmbArrayHelper :: convertToFlatArray($request->getCookie())),
+      'get'          => count($request->getGet()) ? serialize(lmbArrayHelper :: convertToFlatArray($request->getGet())) : '',
+      'post'         => count($request->getPost()) ? serialize(lmbArrayHelper :: convertToFlatArray($request->getPost())) : '',
+      'cookies'      => count($request->getCookie()) ? serialize(lmbArrayHelper :: convertToFlatArray($request->getCookie())) : '',
     ));
 
     $this->record->save();

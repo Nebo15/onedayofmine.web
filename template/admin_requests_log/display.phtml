@@ -1,55 +1,76 @@
 {{wrap with="admin_page_layout.phtml" in="content_zone"}}
 
-  {{include file="_admin/selectors.phtml"/}}
   {{include file="_admin_object/actions.phtml"/}}
 
   <div id="header">
-    <h1>Requests log</h1>
-    <div class="header_actions">
-    </div>
-
-    {{include file='_admin/pager.phtml' items='{$this->items}'/}}
+    <h1>Requests</h1>
+    {{include file='_admin/pager.phtml' items='{$#items}'/}}
   </div>
 
   <div id="body">
 
-    {{list using="{$this->items}" as="$item" counter="$counter" parity='$parity'}}
+    {{list using="{$#items}" as="$item" counter="$counter" parity='$parity'}}
 
       <div class='list'>
-        <div class='list_actions'>
-          {{apply template="selectors_button" action="delete" title="Удалить" /}}
-        </div>
         <table>
           <tr>
-            <th>{{apply template="selectors_toggler"/}}</th>
-            <th>id
-            {{include file='_admin/sort_by_column.phtml' field='id'/}}
-            </th>
-            <th>Method</th>
-            <th>Path</th>
-            <th>Code</th>
-            <th>Time</th>
-            <th>IP</th>
-            <th>GET</th>
-            <th>POST</th>
-            <th>COOKIES</th>
-            <th>Response</th>
-            <th>Действия</th>
+            <th width="5%">id</th>
+            <th width="5%">Method / Path</th>
+            <th width="5%">Code</th>
+            <th width="10%">Time</th>
+            <th width="5%">IP</th>
+            <th width="20%">Request</th>
+            <th width="20%">Response</th>
+            <th width="5%">Действия</th>
           </tr>
 
           {{list:item}}
             <tr class="{$parity}">
-              <td>{{apply template="selector" value="{$item.id}"/}}</td>
               <td>{$item.id}</td>
-              <td>{$item.method}</td>
-              <td>{$item.path}</td>
+              <td>{$item.method} {$item.path}</td>
               <td>{$item.code}</td>
               <td>{$item.time}</td>
               <td>{$item.ip}</td>
-              <td><pre><?= lmb_var_export(unserialize($item->get)); ?></pre></td>
-              <td><pre><?= lmb_var_export(unserialize($item->post)); ?></pre></td>
-              <td><pre><?= lmb_var_export(unserialize($item->cookies)); ?></pre></td>
-              <td>{$item.response|clip:120,'...'}</td>
+              <?php
+                $gets = $item->get ? unserialize($item->get) : array();
+                $posts = $item->post ? unserialize($item->post) : array();
+                $cookies = $item->cookies ? unserialize($item->cookies) : array();
+              ?>
+              <td style="font-size:10px">
+                <ul>
+                  <li>
+                    {{list using="{$gets}" as="$get" key="$key"}}
+                      <strong>GET</strong>:
+                      <ul>
+                        {{list:item}}
+                          <li>&nbsp;&nbsp;<b>{$key}</b> = {$get}</li>
+                        {{/list:item}}
+                      </ul>
+                    {{/list}}
+                  </li>
+                  <li>
+                    {{list using="{$posts}" as="$post" key="$key"}}
+                      <strong>POST</strong>:
+                      <ul>
+                        {{list:item}}
+                          <li>&nbsp;&nbsp;<b>{$key}</b> = {$post}</li>
+                        {{/list:item}}
+                      </ul>
+                    {{/list}}
+                  </li>
+                  <li>
+                    {{list using="{$cookies}" as="$cookie" key="$key"}}
+                      <strong>COOKIES:</strong>
+                      <ul>
+                        {{list:item}}
+                          <li>&nbsp;&nbsp;<b>{$key}</b> = {$cookie}</li>
+                        {{/list:item}}
+                      </ul>
+                    {{/list}}
+                  </li>
+                </ul>
+              </td>
+              <td style="font-size:10px"><pre>{$item.response|clip:120,'...'|html}</pre></td>
               <td class='actions'>
                 {{apply template="object_action_delete" item="{$item}"/}}
               </td>
@@ -59,9 +80,6 @@
             <div class="empty_list">Записи отсутствуют</div>
           {{/list:empty}}
         </table>
-        <div class='list_actions'>
-          {{apply template="selectors_button" action="delete" title="Удалить" /}}
-        </div>
       </div>
 
     {{/list}}

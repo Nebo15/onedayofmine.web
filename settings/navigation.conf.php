@@ -14,7 +14,7 @@ $editor = array(array('title' => 'Контент', 'icon' => '/shared/cms/images
   ),
   array(
     'title' => 'Users',
-    'url' => '/admin_user',
+    'url' => '/admin_site_user',
     'icon' => '/shared/cms/images/icons/layout.png',
   ),
 )));
