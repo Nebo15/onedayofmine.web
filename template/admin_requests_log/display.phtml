@@ -9,27 +9,44 @@
 
   <div id="body">
 
+    <div class="filter">
+      {{form id="filter_form" method="get"}}
+        <label for="filter_path">Path: {{input type="text" id="filter_path" name="filter_path"/}}</label>
+        <label for="filter_code">Code:
+          <?php
+            $codes = array_reverse(array_keys(lmbHttpResponse::$http_default_statuses));
+            $codes = array_combine($codes, $codes);
+          ?>
+          {{select id='filter_code' name='filter_code' options="$codes"}}
+            {{option prepend="true" value='0'}}any code{{/option}}
+          {{/select}}
+        </label>
+        <input type='submit' name='filter_action' value="Filter"  class='button'>
+        &nbsp;<a href="/admin_requests_log">Reset</a>
+      {{/form}}
+    </div>
+
     {{list using="{$#items}" as="$item" counter="$counter" parity='$parity'}}
 
       <div class='list'>
         <table>
           <tr>
-            <th width="5%">id</th>
-            <th width="5%">Method / Path</th>
-            <th width="5%">Code</th>
-            <th width="10%">Time</th>
-            <th width="5%">IP</th>
-            <th width="20%">Request</th>
-            <th width="20%">Response</th>
-            <th width="5%">Действия</th>
+            <th width="7%">Time</th>
+            <th width="7"%">Method / Path</th>
+            <th width="7%">Code</th>
+            <th width="14%">Latency</th>
+            <th width="7%">IP</th>
+            <th width="25%">Request</th>
+            <th width="25%">Response</th>
+            <th width="7%">Действия</th>
           </tr>
 
           {{list:item}}
             <tr class="{$parity}">
-              <td>{$item.id}</td>
-              <td>{$item.method} {$item.path}</td>
+              <td>{$item.ctime|i18n_date:"", "stamp", "short_date_time"}</td>
+              <td>{$item.method} <a href="{$item.path}">{$item.path}</a></td>
               <td>{$item.code}</td>
-              <td>{$item.time}</td>
+              <td><?= round($item->time / 1000000, 2); ?></td>
               <td>{$item.ip}</td>
               <?php
                 $gets = $item->get ? unserialize($item->get) : array();

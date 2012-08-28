@@ -10,6 +10,10 @@ class odRequestsLog
   {
     $this->time = microtime(true);
 
+    $cookies = $request->getCookie();
+    if(isset($cookies['LimbCMS']))
+      unset($cookies['LimbCMS']);
+
     $this->record = new RequestsLogRecord(array(
       'ip'           => lmbIp::getRealIp(),
       'type'         => 'request',
@@ -17,7 +21,7 @@ class odRequestsLog
       'path'         => $request->getUri()->getPath(),
       'get'          => count($request->getGet()) ? serialize(lmbArrayHelper :: convertToFlatArray($request->getGet())) : '',
       'post'         => count($request->getPost()) ? serialize(lmbArrayHelper :: convertToFlatArray($request->getPost())) : '',
-      'cookies'      => count($request->getCookie()) ? serialize(lmbArrayHelper :: convertToFlatArray($request->getCookie())) : '',
+      'cookies'      => count($cookies) ? serialize(lmbArrayHelper :: convertToFlatArray($cookies)) : '',
     ));
 
     $this->record->save();
