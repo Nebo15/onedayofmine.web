@@ -2,11 +2,11 @@
 lmb_require('tests/cases/integration/odAcceptanceTestCase.class.php');
 lmb_require('src/model/mixins/Imageable.class.php');
 
-class ModelWithImageTest extends odAcceptanceTestCase
+class ImageableTest extends odAcceptanceTestCase
 {
   function testAttachImage_local()
   {
-    $model = new ModelWithImageForTests();
+    $model = new ImageableForTests();
     $model->save();
     $model->attachImage($this->generator->image());
 
@@ -16,7 +16,7 @@ class ModelWithImageTest extends odAcceptanceTestCase
 
   function testAttachImage_s3()
   {
-    $model = new ModelWithImageForTests();
+    $model = new ImageableForTests();
     $model->save();
     $model->attachImage($this->generator->image());
 
@@ -25,7 +25,7 @@ class ModelWithImageTest extends odAcceptanceTestCase
   }
 }
 
-class ModelWithImageForTests
+class ImageableForTests extends Imageable
 {
   use Imageable;
 
