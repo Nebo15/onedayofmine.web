@@ -16,25 +16,31 @@ function task_od_calc_ratings()
 function task_od_amazon_cloudwatch_update()
 {
   $acw = lmbToolkit::instance()->createAmazonService('CloudWatch');
-  echo "Sending...";
 
-  foreach(lmb_glob(taskman_prop('PROJECT_DIR').'/../*onedayofmine*.access_log') as $log_file)
+  function errors_count_requests_log()
   {
-    $value = exec("grep ' 500 ' $log_file | wc -l");
-    $log_name = str_replace('.access_log', '', basename($log_file));
+    $errors_count = RequestsLogRecord::find(array('criteria' => lmbSQLCriteria::equal('code', 500)))->count();
 
-    $res  =  $acw->put_metric_data ('Sys/APP' ,
-      array(array('MetricName'  => 'ErrorsCount' ,
-        'Dimensions'  => array(array('Name'   => 'LogName',
-          'Value'  =>  $log_name)),
-        'Value'       => $value,
-        'Unit'        => 'Count')));
-    if(!$res->isOK())
-    {
-      echo $res->body->Error->Code.': '.$res->body->Error->Message.PHP_EOL;
-      exit(1);
-    }
+    return array(array(
+      'MetricName'  => 'ErrorsCountFromRequestsLog' ,
+      'Dimensions'  => array(array('Name' => 'Host', 'Value' => gethostname())),
+      'Value'       => $errors_count,
+      'Unit'        => 'Count',
+      'Timestamp'   => date( DATE_RFC822)
+    ));
   }
+
+  echo "Calc errors_count_requests_log...";
+  $acw->batch()->put_metric_data ('OD' ,errors_count_requests_log());
+  echo 'SUCCESS'.PHP_EOL;
+
+  echo "Sending...";
+  $responses = $acw->batch()->send();
+    if(!$responses->areOK())
+      foreach($responses as $response)
+        if(!$response->isOk())
+          throw new lmbException('Error on file uploading: '.$response->body->Message);
+
   echo 'SUCCESS'.PHP_EOL;
 }
 
