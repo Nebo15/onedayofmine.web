@@ -16,6 +16,10 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
    */
   protected $provider;
 
+  protected $pages_base_url;
+
+  protected $namespace;
+
   /**
    * Hashes of default usepics on facebook.
    */
@@ -34,6 +38,7 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
 
     $this->provider = lmbToolkit::instance()->getFacebook($access_token);
     $this->user     = $user;
+    $this->namespace = lmbToolkit::instance()->getConf('facebook')->namespace;
   }
 
   /**
@@ -118,8 +123,8 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
 
   public function shareDayBegin(Day $day)
   {
-    return $this->provider->api("/me/one-day-of-mine:begin", "post", array(
-      'day' => lmbToolkit::instance()->getPageUrl($day)
+    return $this->provider->api("/me/".$this->namespace.":begin", "post", array(
+      'day' => $this->_getPageUrl($day)
     ))['id'];
   }
 
@@ -128,7 +133,7 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
     return $this->provider->api("/me/feed", "post", array(
       'name'        => $day->getTitle(),
       'picture'     => count($day->getMoments()) ? lmbToolkit::instance()->getStaticUrl($day->getImage()) : '',
-      'link'        => lmbToolkit::instance()->getPageUrl($day),
+      'link'        => $this->_getPageUrl($day),
       'description' => 'Visit onedayofmine.com for more info',
     ));
   }
@@ -136,30 +141,35 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
   public function shareDayLike(Day $day)
   {
     return $this->provider->api("/me/og.likes", "post", array(
-      'object'      => lmbToolkit::instance()->getPageUrl($day)
+      'object'      => $this->_getPageUrl($day)
     ));
   }
 
   public function shareMomentAdd(Day $day, Moment $moment)
   {
-    return $this->provider->api("/me/one-day-of-mine:add_moment", "post", array(
-      'moment'      => lmbToolkit::instance()->getPageUrl($moment),
-      'day'         => lmbToolkit::instance()->getPageUrl($day)
+    return $this->provider->api("/me/".$this->namespace.":add_moment", "post", array(
+      'moment'      => $this->_getPageUrl($moment),
+      'day'         => $this->_getPageUrl($day)
     ))['id'];
   }
 
   public function shareMomentLike(Moment $moment)
   {
     return $this->provider->api("/me/og.likes", "post", array(
-      'object'      => lmbToolkit::instance()->getPageUrl($moment)
+      'object'      => $this->_getPageUrl($moment)
     ));
   }
 
   public function shareDayEnd(Day $day)
   {
-    return $this->provider->api("/me/one-day-of-mine:end", "post", array(
-      'day'         => lmbToolkit::instance()->getPageUrl($day)
+    return $this->provider->api("/me/".$this->namespace.":end", "post", array(
+      'day'         => $this->_getPageUrl($day)
     ));
+  }
+
+  protected function _getPageUrl($object)
+  {
+    return lmbToolkit::instance()->getPageUrl($object);
   }
 
   protected function _getUserFbFieldsMap()

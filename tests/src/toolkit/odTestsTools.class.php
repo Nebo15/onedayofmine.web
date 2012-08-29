@@ -1,4 +1,5 @@
 <?php
+lmb_require('tests/src/odObjectMother.class.php');
 lmb_require('tests/src/odPostmanWriter.class.php');
 lmb_require('tests/src/odApiToMarkdownWriter.class.php');
 lmb_require('tests/src/odModelToEntitiesWriter.class.php');
@@ -26,7 +27,7 @@ class odTestsTools extends lmbAbstractTools
   function getPostmanWriter()
   {
     if(!$this->postman_writer)
-      $this->postman_writer = new odPostmanWriter(lmb_env_get('APP_DIR').'/www/api_doc/postman.json');
+      $this->postman_writer = new odPostmanWriter();
     return $this->postman_writer;
   }
 
