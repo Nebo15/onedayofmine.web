@@ -98,6 +98,21 @@ class DaysUserControllerTest extends odControllerTestCase
     $this->assertEqual(Day::findOne()->getLikes()->count(), 1);
   }
 
+  function testLike_OwnDay() {}
+
+  function testLike_notExists() {}
+
+  /**
+   * @api
+   */
+  function testUnlike() {
+    $day = $this->generator->day($this->additional_user);
+    $day->save();
+    $like = $this->generator->dayLike($day);
+  }
+
+  function testUnlike_notExists() {}
+
   /**
    * @api description Returns favourite based on <a href="#range-request">range-request</a>.
    * @api input option int from
