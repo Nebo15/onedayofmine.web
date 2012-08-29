@@ -11,6 +11,6 @@ class MomentLike extends BaseLike
 
   static function findByMomentId($moment_id)
   {
-    return User::findOne(array('moment_id = ?', $moment_id));
+    return self::findOne(array('moment_id = ?', $moment_id));
   }
 }

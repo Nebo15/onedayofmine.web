@@ -11,6 +11,6 @@ class DayLike extends BaseLike
 
   static function findByDayId($day_id)
   {
-    return User::findOne(array('day_id = ?', $day_id));
+    return self::findOne(array('day_id = ?', $day_id));
   }
 }
