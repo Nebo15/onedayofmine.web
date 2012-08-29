@@ -8,4 +8,9 @@ class DayLike extends BaseLike
     parent::_defineRelations();
     $this->_many_belongs_to['day'] = array ('field' => 'day_id', 'class' => 'Day');
   }
+
+  static function findByDayId($day_id)
+  {
+    return User::findOne(array('day_id = ?', $day_id));
+  }
 }
