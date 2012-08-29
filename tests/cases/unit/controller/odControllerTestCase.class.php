@@ -147,7 +147,6 @@ abstract class odControllerTestCase extends odUnitTestCase
 
   protected function assertValidImageUrl($url)
   {
-    var_dump($url);
     $images_conf = lmbToolkit::instance()->getConf('images');
     $rel_path = str_replace(lmbToolkit::instance()->getConf('common')['static_host'], '', $url);
     $abs_path = lmb_env_get('APP_DIR').$images_conf['save_path'].'/'.$rel_path;
