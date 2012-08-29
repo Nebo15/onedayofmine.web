@@ -79,7 +79,6 @@ class DaysUserControllerTest extends odControllerTestCase
 
   /**
    * @api
-   * TODO
    */
   function testLike() {
     $day = $this->generator->day($this->additional_user);
@@ -92,9 +91,15 @@ class DaysUserControllerTest extends odControllerTestCase
     $this->assertEqual(Day::findOne()->getLikes()->count(), 1);
   }
 
-  function testLike_OwnDay() {}
+  function testLike_OwnDay() {
+    $day = $this->generator->day($this->additional_user);
+    $day->save();
 
-  function testLike_notExists() {}
+    lmbToolkit::instance()->setUser($this->additional_user);
+    $this->post('like', array(), $day->getId());
+
+    $this->assertResponse(400);
+  }
 
   /**
    * @api
