@@ -21,17 +21,15 @@ abstract class odUnitTestCase extends UnitTestCase
 
   function setUp()
   {
-    $this->generator = new odObjectMother();
     $this->toolkit = lmbToolkit::instance();
-
-    parent::setUp();
-
     $this->toolkit->setConfIncludePath('tests/cases/unit/settings;tests/settings;settings');
     $this->toolkit->resetConfs();
     $this->toolkit->resetFileLocators();
 
-    $this->toolkit->truncateTablesOf('UserSettings', 'User');
+    $this->generator = new odObjectMother();
 
+    parent::setUp();
+    $this->toolkit->truncateDb();
     $this->toolkit->resetUser();
 
     $this->main_user = $this->generator->user();

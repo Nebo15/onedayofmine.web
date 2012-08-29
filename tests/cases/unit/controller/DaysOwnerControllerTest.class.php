@@ -6,13 +6,6 @@ class DaysOwnerControllerTest extends odControllerTestCase
 {
   protected $controller_class = 'DaysController';
 
-
-  function setUp()
-  {
-    parent::setUp();
-    odTestsTools::truncateTablesOf('Day', 'Moment', 'DayComment', 'DayFinishComment');
-  }
-
   function testStart_Negative()
   {
     $this->main_user->save();

@@ -6,12 +6,6 @@ class MomentCommentsControllerTest extends odControllerTestCase
 {
   protected $controller_class = 'MomentCommentsController';
 
-  function setUp()
-  {
-    parent::setUp();
-    odTestsTools::truncateTablesOf('Day', 'Moment', 'MomentComment');
-  }
-
   /**
    * @api
    */

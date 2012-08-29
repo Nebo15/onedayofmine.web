@@ -3,11 +3,6 @@ lmb_require('tests/cases/unit/odUnitTestCase.class.php');
 
 class RelationsTest extends odUnitTestCase
 {
-  function setUp()
-  {
-    odTestsTools::truncateTablesOf('Day', 'Moment', 'DayComment', 'MomentComment', 'News');
-    parent::setUp();
-  }
 
   function testUserToDayRelation()
   {

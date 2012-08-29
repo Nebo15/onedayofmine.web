@@ -6,12 +6,6 @@ class UsersControllerTest extends odControllerTestCase
 {
   protected $controller_class = 'UsersController';
 
-  function setUp()
-  {
-    parent::setUp();
-    odTestsTools::truncateTablesOf('Day', 'UserFollowing');
-  }
-
   /**
    * @api description Returns days of specified user
    * @api input param int id ID of user

@@ -34,3 +34,5 @@ lmb_require('src/model/*.class.php');
 lmb_require('limb/toolkit/src/lmbToolkit.class.php');
 lmb_require('src/toolkit/odTools.class.php');
 lmbToolkit :: merge(new odTools());
+lmb_require('limb/dbal/src/toolkit/lmbDbTools.class.php');
+lmbToolkit :: merge(new lmbDbTools());

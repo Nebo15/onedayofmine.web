@@ -6,12 +6,6 @@ class DaysGuestControllerTest extends odControllerTestCase
 {
   protected $controller_class = 'DaysController';
 
-  function setUp()
-  {
-    parent::setUp();
-    odTestsTools::truncateTablesOf('Day', 'Moment', 'DayComment', 'Complaint');
-  }
-
   /**
    * @api description Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields listed below.
    * @api input param int day_id Day ID
