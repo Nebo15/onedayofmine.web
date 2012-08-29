@@ -12,9 +12,10 @@ class RequestDispatchingFilter extends lmbRequestDispatchingFilter implements lm
     $this->_putOtherParamsToRequest($dispatched_params);
 
     if(is_numeric($dispatched_params['action'])) {
+      $tmp = $dispatched_params['id'];
       $dispatched_params['id'] = (int) $dispatched_params['action'];
       $this->toolkit->getRequest()->set('id', (int) $dispatched_params['id']);
-      $dispatched_params['action'] = 'item';
+      $dispatched_params['action'] = $tmp;
     }
 
     $controller = $this->_createController($dispatched_params);
