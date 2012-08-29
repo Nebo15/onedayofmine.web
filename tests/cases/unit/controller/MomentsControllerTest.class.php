@@ -6,12 +6,6 @@ class MomentsControllerTest extends odControllerTestCase
 {
   protected $controller_class = 'MomentsController';
 
-  function setUp()
-  {
-    parent::setUp();
-    odTestsTools::truncateTablesOf('Day', 'Moment', 'MomentComment');
-  }
-
   /**
    * @api description Updates information about specified <a href="#Entity:Moment">moment</a> and returns it.
    * @api input option string description
@@ -37,11 +31,8 @@ class MomentsControllerTest extends odControllerTestCase
 
     $this->assertEqual($res->description, $desc);
     $this->assertProperty($res, 'image_266');
-    $content = @file_get_contents($res->image_266);
-    $this->assertTrue($content, "Image {$res->image_266} not found");
-    $this->assertProperty($res, 'image_532');
-    $content = @file_get_contents($res->image_532);
-    $this->assertTrue($content, "Image {$res->image_532} not found");
+    $this->assertValidImageUrl($res->image_266);
+    $this->assertValidImageUrl($res->image_532);
 
     $loaded_moment = Moment::findById($moment->getId());
     $this->assertEqual($loaded_moment->getDescription(), $desc);

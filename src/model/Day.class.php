@@ -75,7 +75,7 @@ class Day extends BaseModel
   static function getTypes()
   {
     $sql = "SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'day' AND COLUMN_NAME = 'type'";
-    $stmt = (new Day())->getDefaultConnection()->newStatement($sql); // connection recieving is ugly
+    $stmt = lmbToolkit::instance()->getDefaultDbConnection()->newStatement($sql);
     $stmt->execute(); // выполнит запрос.
     if(preg_match('/^enum\((.*)\)$/', $stmt->getOneRecord()->get('COLUMN_TYPE'), $matches) === 1) {
       return str_getcsv($matches[1], ',', "'");
