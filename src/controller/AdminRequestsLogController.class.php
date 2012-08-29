@@ -1,5 +1,6 @@
 <?php
 lmb_require('limb/web_app/src/controller/lmbController.class.php');
+lmb_require('tests/src/odPostmanWriter.class.php');
 
 class AdminRequestsLogController extends lmbController
 {
@@ -30,8 +31,21 @@ class AdminRequestsLogController extends lmbController
     $this->item = RequestsLogRecord::findById($this->request->get('id'));
   }
 
-  function doRun()
+  function doPostmanCollection()
   {
+    $this->response->setContentType('application/octet-stream');
 
+    $postman_writter = new odPostmanWriter();
+
+    $item = RequestsLogRecord::findById($this->request->get('id'));
+
+    $data = unserialize($item->post);
+    $postman_writter->addRequest($item->path, $item->path, $item->method, (array) $data);
+    $content = $postman_writter->getCollectionContent(
+      date('Y.m.d H:i:s', $item->ctime).' '.$item->path
+    );
+
+    $this->response->append($content);
+    $this->response->commit();
   }
 }

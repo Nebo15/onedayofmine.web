@@ -49,19 +49,19 @@
               <td><?= round($item->time / 1000000, 2); ?></td>
               <td>{$item.ip}</td>
               <td>
-                <div style="font-size:10px;">
+                <div style="font-size:10px;max-width: 200px;overflow: auto;">
                   {{include file="admin_requests_log/include/params_list.phtml" item="$item"/}}
                 </div>
                 <a href='/admin_requests_log/request/{$item.id}' class="thickbox">View full</a>
               </td>
               <td>
-                <pre style="font-size:10px">
+                <pre style="font-size:10px;max-width: 300px;overflow: auto;">
                   {$item.response|clip:120,'...'|html}
                 </pre>
                 <a href='/admin_requests_log/response/{$item.id}' class="thickbox">View full</a>
               </td>
               <td class='actions'>
-                {{apply template="object_action" action="item" title="run" icon="arrow_refresh" item="{$item}"/}}
+                {{apply template="object_action" action="postman_collection" title="Download collection for Postman" icon="application_put" item="{$item}"/}}
               </td>
             </tr>
           {{/list:item}}
