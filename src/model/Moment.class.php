@@ -1,5 +1,6 @@
 <?php
-lmb_require('src/model/Imageable.class.php');
+lmb_require('src/model/base/BaseModel.class.php');
+lmb_require('src/model/traits/Imageable.trait.php');
 
 /**
  * @api
@@ -11,12 +12,15 @@ lmb_require('src/model/Imageable.class.php');
  * @method string getDescription()
  * @method void setFbAccessToken(string $fb_access_token)
  */
-class Moment extends Imageable
+class Moment extends BaseModel
 {
+  use Imageable;
+
   protected function _defineRelations()
   {
     $this->_has_many = array (
       'comments' => array ('field' => 'moment_id', 'class' => 'MomentComment'),
+      'likes'    => array( 'field' => 'moment_id', 'class' => 'MomentLike'),
     );
     $this->_many_belongs_to = array (
       'day' => array ('field' => 'day_id', 'class' => 'Day')
@@ -40,6 +44,9 @@ class Moment extends Imageable
     $moment->time = self::stampToIso($this->getTime(), $this->getTimezone());
     $moment->likes_count = $this->getLikesCount() ?: 0;
     $moment->ctime = $this->getCtime();
+
+    if($this->getIsDeleted())
+      $export->is_deleted = true;
 
     return $moment;
   }

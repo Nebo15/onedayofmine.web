@@ -1,7 +1,5 @@
 <?php
-lmb_require('src/model/BaseModel.class.php');
-
-abstract class Imageable extends BaseModel
+trait Imageable
 {
   function attachImage($content)
   {

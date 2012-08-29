@@ -1,5 +1,6 @@
 <?php
-lmb_require('src/model/Imageable.class.php');
+lmb_require('src/model/base/BaseModel.class.php');
+lmb_require('src/model/traits/Imageable.trait.php');
 lmb_require('limb/imagekit/src/lmbConvertImageHelper.class.php');
 lmb_require('limb/validation/src/rule/lmbValidValueRule.class.php');
 
@@ -14,8 +15,10 @@ lmb_require('limb/validation/src/rule/lmbValidValueRule.class.php');
  * @method UserSettings getSettings()
  * @method void
  */
-class User extends Imageable
+class User extends BaseModel
 {
+  use Imageable;
+
   const SEX_MALE = 'male';
   const SEX_FEMALE = 'female';
 
@@ -40,10 +43,12 @@ class User extends Imageable
         'field' => 'user_id',
         'class' => 'Day',
       ),
-      'days_comments' => array ('field' => 'user_id', 'class' => 'DayComment'),
+      'days_comments'    => array ('field' => 'user_id', 'class' => 'DayComment'),
       'moments_comments' => array ('field' => 'user_id', 'class' => 'MomentComment'),
-      'news' => array ('field' => 'recipient_id', 'class' => 'News'),
-      'created_news' => array ('field' => 'user_id', 'class' => 'News'),
+      'news'             => array ('field' => 'recipient_id', 'class' => 'News'),
+      'created_news'     => array ('field' => 'user_id', 'class' => 'News'),
+      'day_likes'        => array ('field' => 'user_id', 'class' => 'DayLike'),
+      'moment_likes'     => array ('field' => 'user_id', 'class' => 'MomentLike'),
     );
     $this->_has_many_to_many = array(
       'favourite_days' => array(

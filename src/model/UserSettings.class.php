@@ -1,5 +1,5 @@
 <?php
-lmb_require('src/model/BaseModel.class.php');
+lmb_require('src/model/base/BaseModel.class.php');
 
 /**
  * @api

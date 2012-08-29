@@ -1,11 +1,12 @@
 <?php
-lmb_require('src/model/Commentable.class.php');
+lmb_require('src/model/base/BaseComment.class.php');
 
 /**
  * @api
  */
-class MomentComment extends Commentable
+class MomentComment extends BaseComment
 {
+  protected $_default_sort_params = array('id'=>'asc');
   protected $_db_table_name = 'moment_comment';
 
   protected function _defineRelations()

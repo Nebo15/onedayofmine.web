@@ -1,4 +1,5 @@
 <?php
+
 // Can be removed?
 class DayInterestRecord extends lmbActiveRecord
 {

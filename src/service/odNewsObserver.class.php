@@ -61,7 +61,7 @@ class odNewsObserver
   /**
    * @param Commentable $comment
    */
-  function onComment(Commentable $comment)
+  function onComment(BaseComment $comment)
   {
     $news = $this->createNews();
     $recipients = new lmbCollection();
