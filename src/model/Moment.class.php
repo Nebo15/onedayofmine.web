@@ -46,7 +46,7 @@ class Moment extends BaseModel
     $moment->ctime = $this->getCtime();
 
     if($this->getIsDeleted())
-      $export->is_deleted = true;
+      $moment->is_deleted = true;
 
     return $moment;
   }
