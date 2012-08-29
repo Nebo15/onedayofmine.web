@@ -173,6 +173,9 @@ class DaysController extends BaseJsonController
     if(!$day = Day::findById($this->request->id))
       return $this->_answerWithError("Day not found");
 
+    if($this->_getUser()->getId() == $day->getUserId())
+      return $this->_answerWithError("You can't like you'r own days");
+
     $like = new DayLike;
     $like->setDay($day);
     $like->setUser($this->_getUser());
