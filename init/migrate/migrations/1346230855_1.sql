@@ -1,0 +1,7 @@
+
+SET FOREIGN_KEY_CHECKS = 0;
+
+ALTER TABLE `requests_log` ADD `ctime` int(11) unsigned NOT NULL DEFAULT 0 COMMENT '' AFTER id;
+
+
+SET FOREIGN_KEY_CHECKS = 1;
