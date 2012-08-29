@@ -3,11 +3,6 @@ lmb_require('tests/cases/unit/odUnitTestCase.class.php');
 
 class UserFollowingTest extends odUnitTestCase
 {
-  function setUp()
-  {
-    parent::setUp();
-    odTestsTools::truncateTablesOf('User', 'UserFollowing');
-  }
 
   function testIsUserFollowUser()
   {

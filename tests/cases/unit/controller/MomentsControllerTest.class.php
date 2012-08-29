@@ -6,12 +6,6 @@ class MomentsControllerTest extends odControllerTestCase
 {
   protected $controller_class = 'MomentsController';
 
-  function setUp()
-  {
-    parent::setUp();
-    odTestsTools::truncateTablesOf('Day', 'Moment', 'MomentComment');
-  }
-
   /**
    * @api description Updates information about specified <a href="#Entity:Moment">moment</a> and returns it.
    * @api input option string description

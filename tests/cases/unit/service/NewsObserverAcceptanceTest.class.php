@@ -14,7 +14,6 @@ class NewsObserverAcceptanceTest extends odUnitTestCase
   function setUp()
   {
     parent::setUp();
-    odTestsTools::truncateTablesOf('News', 'Day', 'DayComment', 'Moment', 'MomentComment', 'UserFollowing');
 
     $this->main_user->save();
 

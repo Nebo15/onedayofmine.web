@@ -6,12 +6,6 @@ class MyControllerTest extends odControllerTestCase
 {
   protected $controller_class = 'MyController';
 
-  function setUp()
-  {
-    parent::setUp();
-    odTestsTools::truncateTablesOf('UserSettings');
-  }
-
   /**
    * @api description Returns <a href="#Entity:User">profile</a> of current logged in user.
    */

@@ -39,8 +39,6 @@ class Day extends BaseModel
     $validator->addRequiredRule('user');
     $validator->addRequiredObjectRule('user', 'User');
     $validator->addRequiredRule('title');
-    // $validator->addRequiredRule('occupation');
-    // $validator->addRequiredRule('location');
     $validator->addRequiredRule('type');
     $validator->addRule(new lmbValidValueRule('type', self::getTypes()));
     return $validator;
@@ -51,7 +49,6 @@ class Day extends BaseModel
     $export = new stdClass();
     $export->id = $this->getId();
     $export->user_id = $this->getUser()->getId();
-    $export->fb_uid = $this->getUser()->fb_uid;
     $this->showImages($export);
     $export->title = $this->getTitle();
     $export->occupation = $this->getOccupation();
@@ -79,7 +76,7 @@ class Day extends BaseModel
   static function getTypes()
   {
     $sql = "SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'day' AND COLUMN_NAME = 'type'";
-    $stmt = (new Day())->getDefaultConnection()->newStatement($sql); // connection recieving is ugly
+    $stmt = lmbToolkit::instance()->getDefaultDbConnection()->newStatement($sql);
     $stmt->execute(); // выполнит запрос.
     if(preg_match('/^enum\((.*)\)$/', $stmt->getOneRecord()->get('COLUMN_TYPE'), $matches) === 1) {
       return str_getcsv($matches[1], ',', "'");
