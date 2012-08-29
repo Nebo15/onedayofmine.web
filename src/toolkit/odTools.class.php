@@ -7,6 +7,7 @@ lmb_require('src/service/social_profile/TwitterProfile.class.php');
 lmb_require('src/service/odNewsObserver.class.php');
 lmb_require('src/service/ImageHelper.class.php');
 lmb_require('src/service/odPostingService.class.php');
+lmb_require('src/service/odRequestsLog.class.php');
 require_once('amazon-sdk/sdk.class.php');
 
 class odTools extends lmbAbstractTools
@@ -15,6 +16,10 @@ class odTools extends lmbAbstractTools
    * @var User Current logged in user.
    */
   protected $user;
+  /**
+   * @var odRequestsLog
+   */
+  protected $requests_log;
 
   protected $tests_users;
   /**

@@ -3,20 +3,12 @@ lmb_require('src/Json.class.php');
 
 class odPostmanWriter
 {
-  protected $file;
   protected $collection_id;
   protected $requests = array();
 
-  function __construct($file)
+  function __construct()
   {
-    $this->file = $file;
     $this->collection_id = uniqid('collection_');
-  }
-
-  function deleteFile()
-  {
-    if(file_exists($this->file))
-      unlink($this->file);
   }
 
   function addRequest($name, $url_path, $method, array $data = array())
@@ -36,13 +28,18 @@ class odPostmanWriter
     $this->requests[] = $request;
   }
 
-  function saveFile()
+  function getCollectionContent($name)
   {
     $output = new stdClass();
     $output->id = $this->collection_id;
-    $output->name = 'onedayofmine - '.date('d.m.y H:i:s');
+    $output->name = $name;
     $output->timestamp = time();
     $output->requests = $this->requests;
-    file_put_contents($this->file, Json::indent(json_encode($output)));
+    return Json::indent(json_encode($output));
+  }
+
+  function saveFile($file)
+  {
+    file_put_contents($file, $this->getCollectionContent('onedayofmine - '.date('d.m.y H:i:s')));
   }
 }

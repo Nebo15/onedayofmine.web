@@ -29,7 +29,7 @@ class lmbHttpResponse
   protected $http_code;
   protected $http_status;
 
-  protected $http_default_statuses = array(
+  static $http_default_statuses = array(
     // Informational 1xx
     100 => 'Continue',
     101 => 'Switching Protocols',
@@ -168,8 +168,8 @@ class lmbHttpResponse
 
     if($this->http_code)
     {
-      if(isset($this->http_default_statuses[$this->http_code]))
-        return $this->http_default_statuses[$this->http_code];
+      if(isset(self::$http_default_statuses[$this->http_code]))
+        return self::$http_default_statuses[$this->http_code];
     }
 
     return 200;
@@ -356,8 +356,8 @@ class lmbHttpResponse
         $header = 'HTTP/1.1 ' . $this->http_code . ' ' . $this->http_status;
       else
       {
-        lmb_assert_array_with_key($this->http_default_statuses, $this->http_code);
-        $header = 'HTTP/1.1 ' . $this->http_code . ' ' . $this->http_default_statuses[$this->http_code];
+        lmb_assert_array_with_key(self::$http_default_statuses, $this->http_code);
+        $header = 'HTTP/1.1 ' . $this->http_code . ' ' . self::$http_default_statuses[$this->http_code];
       }
       $this->headers[] = $header;
     }
