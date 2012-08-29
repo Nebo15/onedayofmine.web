@@ -88,8 +88,8 @@ class User extends ModelWithImage
   {
     $result = new stdClass();
     $result->id = $this->id;
-    $result->fb_uid = $this->fb_uid;
-    $result->twitter_uid = $this->twitter_uid;
+    // $result->fb_uid = $this->fb_uid;
+    // $result->twitter_uid = $this->twitter_uid;
     $result->name = $this->name;
     $result->sex = $this->sex;
     foreach ($this->getImages() as $image_width => $image) {

@@ -27,8 +27,6 @@ class Day extends ModelWithImage
     $validator->addRequiredRule('user');
     $validator->addRequiredObjectRule('user', 'User');
     $validator->addRequiredRule('title');
-    // $validator->addRequiredRule('occupation');
-    // $validator->addRequiredRule('location');
     $validator->addRequiredRule('type');
     $validator->addRule(new lmbValidValueRule('type', self::getTypes()));
     return $validator;
@@ -39,7 +37,6 @@ class Day extends ModelWithImage
     $export = new stdClass();
     $export->id = $this->getId();
     $export->user_id = $this->getUser()->getId();
-    $export->fb_uid = $this->getUser()->fb_uid;
     $this->showImages($export);
     $export->title = $this->getTitle();
     $export->occupation = $this->getOccupation();
