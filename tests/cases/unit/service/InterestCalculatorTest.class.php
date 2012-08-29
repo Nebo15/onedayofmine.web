@@ -7,7 +7,7 @@ class InterestCalculatorTest extends odUnitTestCase
   function setUp()
   {
     parent::setUp();
-    $this->toolkit->truncateTablesOf('Day');
+    $this->toolkit->truncateTablesOf('Day', 'DayLike');
     (new InterestCalculator())->reset();
   }
 
@@ -23,27 +23,26 @@ class InterestCalculatorTest extends odUnitTestCase
     $day = 86400;
 
     $day1 = $this->generator->day();
-    $day1->setLikesCount(4);
+    $this->generator->dayLikes($day1, 4);
     $day1->setCtime($time - $day);
     $day1->save();
     $day2 = $this->generator->day($this->main_user);
-    $day2->setLikesCount(3);
+    $this->generator->dayLikes($day2, 3);
     $day2->setCtime($time - $day);
     $day2->save();
     $day3 = $this->generator->day($this->additional_user);
-    $day3->setLikesCount(2);
+    $this->generator->dayLikes($day3, 2);
     $day3->setCtime($time - $day);
     $day3->save();
     $day4 = $this->generator->day($this->main_user);
-    $day4->setLikesCount(4);
+    $this->generator->dayLikes($day4, 4);
     $day4->setCtime($time - 5 * $day);
     $day4->save();
     $day5 = $this->generator->day($this->additional_user);
-    $day5->setLikesCount(100);
+    $this->generator->dayLikes($day5, 100);
     $day5->setCtime($time - $day);
     $day5->setIsDeleted(1);
     $day5->save();
-
 
     $calc->fillRating();
 

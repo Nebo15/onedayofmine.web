@@ -10,7 +10,7 @@ class DaysOwnerControllerTest extends odControllerTestCase
   function setUp()
   {
     parent::setUp();
-    odTestsTools::truncateTablesOf('Day', 'Moment', 'DayComment', 'DayFinishComment');
+    odTestsTools::truncateTablesOf('Day', 'Moment', 'DayComment', 'DayLike', 'MomentLike', 'DayFinishComment');
   }
 
   function testStart_Negative()
@@ -322,7 +322,7 @@ class DaysOwnerControllerTest extends odControllerTestCase
       $this->assertEqual($day->getId(), $loaded_day->id);
       $this->assertEqual($day->getTitle(), $loaded_day->title);
       $this->assertEqual($day->getOccupation(), $loaded_day->occupation);
-      $this->assertEqual($day->getLikesCount(), $loaded_day->likes_count);
+      $this->assertEqual($day->getLikes()->count(), $loaded_day->likes_count);
       $this->assertEqual($day->getCreateTime(), $loaded_day->ctime);
     }
   }
@@ -394,7 +394,7 @@ class DaysOwnerControllerTest extends odControllerTestCase
       $this->assertEqual($day->getId(), $loaded_day->id);
       $this->assertEqual($day->getTitle(), $loaded_day->title);
       $this->assertEqual($day->getOccupation(), $loaded_day->occupation);
-      $this->assertEqual($day->getLikesCount(), $loaded_day->likes_count);
+      $this->assertEqual($day->getLikes()->count(), $loaded_day->likes_count);
       $this->assertEqual($day->getCreateTime(), $loaded_day->ctime);
 
       $db_day = Day::findOne();
@@ -426,7 +426,7 @@ class DaysOwnerControllerTest extends odControllerTestCase
       $this->assertEqual($day->getId(), $loaded_day->id);
       $this->assertEqual($day->getTitle(), $loaded_day->title);
       $this->assertEqual($day->getOccupation(), $loaded_day->occupation);
-      $this->assertEqual($day->getLikesCount(), $loaded_day->likes_count);
+      $this->assertEqual($day->getLikes()->count(), $loaded_day->likes_count);
       $this->assertEqual($day->getCreateTime(), $loaded_day->ctime);
     }
   }
@@ -451,7 +451,7 @@ class DaysOwnerControllerTest extends odControllerTestCase
       $this->assertEqual($day->getId(), $loaded_day->id);
       $this->assertEqual($day->getTitle(), $loaded_day->title);
       $this->assertEqual($day->getOccupation(), $loaded_day->occupation);
-      $this->assertEqual($day->getLikesCount(), $loaded_day->likes_count);
+      $this->assertEqual($day->getLikes()->count(), $loaded_day->likes_count);
       $this->assertEqual($day->getCreateTime(), $loaded_day->ctime);
 
       $user = User::findById($this->main_user->getId());

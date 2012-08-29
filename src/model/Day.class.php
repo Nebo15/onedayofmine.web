@@ -57,7 +57,6 @@ class Day extends BaseModel
     $export->occupation = $this->getOccupation();
     $export->location = $this->getLocation();
     $export->type = $this->getType();
-    $export->likes_count = $this->getLikesCount() ?: 0;
     $export->ctime = $this->getCreateTime();
     $export->utime = $this->getUpdateTime();
 

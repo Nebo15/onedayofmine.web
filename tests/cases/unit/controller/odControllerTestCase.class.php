@@ -123,7 +123,7 @@ abstract class odControllerTestCase extends odUnitTestCase
     $this->assertEqual($valid_day->occupation, $day_from_response->occupation);
     $this->assertEqual($valid_day->location, $day_from_response->location);
     $this->assertEqual($valid_day->type, $day_from_response->type);
-    $this->assertEqual($valid_day->likes_count, $day_from_response->likes_count);
+    $this->assertProperty($day_from_response, 'likes_count');
   }
 
   function assertResponse($responses)

@@ -88,6 +88,27 @@ class odObjectMother
   }
 
   /**
+   * @param Day $day
+   * @param null|User $user
+   * @return DayLike
+   */
+  function dayLike(Day $day, User $user = null)
+  {
+    $like = new DayLike();
+    $like->setDay($day);
+    $like->setUser($user ?: $this->user());
+    return $like;
+  }
+
+  function dayLikes(Day $day, $likes_count)
+  {
+    for ($i=1; $i < $likes_count; $i++) {
+      $like = $this->dayLike($day);
+      $like->save();
+    }
+  }
+
+  /**
    * @param Day|null $day
    * @return Moment
    */
@@ -129,6 +150,19 @@ class odObjectMother
     $comment->setText($this->string(255));
     $comment->setUser($user ?: $this->user());
     return $comment;
+  }
+
+  /**
+   * @param Moment $moment
+   * @param null|User $user
+   * @return MomentLike
+   */
+  function momentLike(Moment $moment, User $user = null)
+  {
+    $like = new MomentLike();
+    $like->setMoment($moment);
+    $like->setUser($user ?: $this->user());
+    return $like;
   }
 
   function complaint($day = null)

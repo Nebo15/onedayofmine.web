@@ -244,9 +244,9 @@ abstract class BaseJsonController extends lmbController
     $day_export->is_deleted = $day->getIsDeleted();
   }
 
-  protected function _attachComments(stdClass $export, Day $day, $only_count = false)
+  protected function _attachComments(stdClass $export, $obj, $only_count = false)
   {
-    $comments = $day->getComments();
+    $comments = $obj->getComments();
     $export->comments_count = $comments->count();
 
     if($only_count)
@@ -263,7 +263,7 @@ abstract class BaseJsonController extends lmbController
     }
   }
 
-  protected function _attachFinishComment(stdClass $export, Day $day)
+  protected function _attachDayFinishComment(stdClass $export, Day $day)
   {
     $export->finish_comment = $day->getFinishComment() ? $day->getFinishComment()->exportForApi() : null;
     unset($export->finish_comment->user_id);
@@ -288,23 +288,31 @@ abstract class BaseJsonController extends lmbController
     }
   }
 
-  protected function _exportDayWithSubentities($day)
+  protected function _attachLikesCount(stdClass $export, $obj)
   {
-    $answer = $day->exportForApi();
+    $export->likes_count = $obj->getLikes()->count();
+  }
 
-    // User data
-    $this->_attachDayUser($answer, $day);
-
-    // Favorites data
-    $this->_attachDayIsFavorited($answer, $day);
+  protected function _exportFullDay($day)
+  {
+    $answer = $this->_exportDayWithSubentities($day);
 
     // Comments data
     $this->_attachComments($answer, $day);
-    $this->_attachFinishComment($answer, $day);
+    $this->_attachDayFinishComment($answer, $day);
 
     // Moments data
     $this->_attachDayMoments($answer, $day);
 
     return $answer;
+  }
+
+  protected function _exportDayWithSubentities($day)
+  {
+    $export = $day->exportForApi();
+    $this->_attachDayUser($export, $day);
+    $this->_attachDayIsFavorited($export, $day);
+    $this->_attachLikesCount($export, $day);
+    return $export;
   }
 }

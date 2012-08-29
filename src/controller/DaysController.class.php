@@ -30,7 +30,7 @@ class DaysController extends BaseJsonController
   {
     $day = Day::findById($id);
     if($day && !$day->getIsDeleted())
-      return $this->_exportDayWithSubentities($day);
+      return $this->_exportFullDay($day);
   }
 
   function doStart()
@@ -70,7 +70,7 @@ class DaysController extends BaseJsonController
       return $this->_answerUnauthorized('Token expired');
     }
 
-    return $this->_answerOk($this->_exportDayWithSubentities($day));
+    return $this->_answerOk($this->_exportFullDay($day));
   }
 
   function doUpdate()
@@ -91,7 +91,7 @@ class DaysController extends BaseJsonController
 
     $this->_importSaveAndAnswer($day, array('title', 'occupation', 'location', 'type'));
 
-    return $this->_answerOk($this->_exportDayWithSubentities($day));
+    return $this->_answerOk($this->_exportFullDay($day));
   }
 
   function doCurrent()
@@ -102,7 +102,7 @@ class DaysController extends BaseJsonController
     if(!$day = $this->_getUser()->getCurrentDay())
       return $this->_answerNotFound('Current day not set');
 
-    return $this->_answerOk($this->_exportDayWithSubentities($day));
+    return $this->_answerOk($this->_exportFullDay($day));
   }
 
   function doFinish()
@@ -134,7 +134,7 @@ class DaysController extends BaseJsonController
       $comment->save();
     }
 
-    return $this->_answerOk($this->_exportDayWithSubentities($day));
+    return $this->_answerOk($this->_exportFullDay($day));
   }
 
   function doMarkCurrent()
@@ -173,12 +173,14 @@ class DaysController extends BaseJsonController
     if(!$day = Day::findById($this->request->id))
       return $this->_answerWithError("Day not found");
 
+    $like = new DayLike;
+    $like->setDay($day);
+    $like->setUser($this->_getUser());
+    $like->save();
+
     $this->toolkit->getNewsObserver()->onLike($day);
 
-    $day->setLikesCount($day->getLikesCount() + 1);
-    $day->save();
-
-    return $this->_answerOk($this->_exportDayWithSubentities($day));
+    return $this->_answerOk($this->_exportFullDay($day));
   }
 
   function doDelete()
@@ -226,12 +228,7 @@ class DaysController extends BaseJsonController
 
     $answer = array();
     foreach ($days as $day) {
-      $export = $day->exportForApi();
-
-      $this->_attachDayUser($export, $day);
-      $this->_attachDayIsFavorited($export, $day);
-
-      $answer[] = $export;
+      $answer[] = $this->_exportDayWithSubentities($day);
     }
     return $this->_answerOk($answer);
   }
@@ -243,15 +240,7 @@ class DaysController extends BaseJsonController
 
     $answer = array();
     foreach ($days as $day) {
-      $export = $day->exportForApi();
-
-      // User data
-      $this->_attachDayUser($export, $day);
-
-      // Favorites data
-      $this->_attachDayIsFavorited($export, $day);
-
-      $answer[] = $export;
+      $answer[] = $this->_exportDayWithSubentities($day);
     }
 
     return $this->_answerOk($answer);
@@ -264,15 +253,7 @@ class DaysController extends BaseJsonController
 
     $answer = array();
     foreach ($days_ratings as $day_rating) {
-      $export = $day_rating->getDay()->exportForApi();
-
-      // User data
-      $this->_attachDayUser($export, $day_rating->getDay());
-
-      // Favorites data
-      $this->_attachDayIsFavorited($export, $day_rating->getDay());
-
-      $answer[] = $export;
+      $answer[] = $this->_exportDayWithSubentities($day_rating->getDay());
     }
 
     return $this->_answerOk($answer);
@@ -288,15 +269,7 @@ class DaysController extends BaseJsonController
 
     $answer = array();
     foreach ($days as $day) {
-      $export = $day->exportForApi();
-
-      // User data
-      $this->_attachDayUser($export, $day);
-
-      // Favorites data
-      $this->_attachDayIsFavorited($export, $day);
-
-      $answer[] = $export;
+      $answer[] = $this->_exportDayWithSubentities($day);
     }
 
     return $this->_answerOk($answer);
@@ -339,9 +312,7 @@ class DaysController extends BaseJsonController
 
     $answer = array();
     foreach ($days as $day) {
-      $export = $day->exportForApi();
-      $this->_attachDayUser($export, $day);
-      $this->_attachDayIsFavorited($export, $day);
+      $export = $this->_exportDayWithSubentities($day);
       $this->_attachDayIsDeleted($export, $day);
       $answer[] = $export;
     }
@@ -390,7 +361,10 @@ class DaysController extends BaseJsonController
     if($this->error_list->isEmpty())
     {
       $this->toolkit->getNewsObserver()->onMoment($moment);
-      return $this->_answerOk($moment->exportForApi());
+
+      $answer = $moment->exportForApi();
+      $answer->likes_count = $moment->getLikes()->count();
+      return $this->_answerOk($answer);
     }
     else
       return $this->_answerWithError($this->error_list->export());
@@ -443,15 +417,7 @@ class DaysController extends BaseJsonController
 
     $answer = array();
     foreach ($days as $day) {
-      $export = $day->exportForApi();
-
-      // User data
-      $this->_attachDayUser($export, $day);
-
-      // Favorites data
-      $this->_attachDayIsFavorited($export, $day);
-
-      $answer[] = $export;
+      $answer[] = $this->_exportDayWithSubentities($day);
     }
 
     return $this->_answerOk($answer);

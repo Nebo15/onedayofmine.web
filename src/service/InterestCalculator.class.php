@@ -25,7 +25,7 @@ class InterestCalculator
 
     $query = new lmbSelectQuery('day');
     $query->addField('day.id');
-    $query->addRawField("`likes_count`/(1+SQRT(($current_time-`ctime`)/86400)) as rating");
+    $query->addRawField("(SELECT COUNT(*) FROM `day_like` WHERE `day_like`.`day_id` = `day`.`id`)/(1+SQRT(($current_time-`ctime`)/86400)) as rating");
     $query->addLeftJoin('day_interest', 'day_id', 'day', 'id');
     $query->addCriteria(lmbSQLCriteria::equal('is_deleted', 0));
     $query->addCriteria(lmbSQLCriteria::isNull('day_interest.day_id'));
