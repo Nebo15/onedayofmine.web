@@ -9,6 +9,7 @@ lmb_require('src/model/traits/Imageable.trait.php');
 class Day extends BaseModel
 {
   use Imageable;
+  use Likeable;
 
   protected $_default_sort_params = array('id'=>'desc');
 

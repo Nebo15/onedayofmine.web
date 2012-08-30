@@ -47,10 +47,10 @@ class odObjectMother
    * @param null|User $user
    * @return Day
    */
-  function day(User $user = null, $with_comments = false)
+  function day(User $user = null, $with_comments = false, $title = null)
   {
     $day = new Day();
-    $day->setTitle($this->string(25));
+    $day->setTitle($title ?: $this->string(25));
     $day->setOccupation($this->string(255));
     $day->setTimezone(0);
     $day->setLocation($this->string(25));

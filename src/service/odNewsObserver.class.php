@@ -15,13 +15,12 @@ class odNewsObserver
   const MSG_DAY_CREATED         = '<a href="app://users/:id">%s</a> just created day <a href="app://days/:id">%s</a>';
   const MSG_DAY_COMMENT         = "%s has responded you in day %s";
   const MSG_DAY_LIKED           = "%s liked day %s";
-  const MSG_DAY_LIKED_DIRECT    = "%s liked your day %s";
+  const MSG_DAY_SHARE           = "%s share day %s";
 
   ## Moment ##
   const MSG_MOMENT_CREATED      = "%s created moment in day %s";
   const MSG_MOMENT_COMMENT      = "%s has responded you in moment of day %s";
   const MSG_MOMENT_LIKED        = "%s liked moment in day %s";
-  const MSG_MOMENT_LIKED_DIRECT = "%s liked your moment in day %s";
 
   ## Follow ##
   const MSG_FOLLOW              = "%s started to follow %s";
@@ -92,11 +91,23 @@ class odNewsObserver
     News::delete('day_id='.$day->getId());
   }
 
+  function odDayShare(Day $day)
+  {
+    $news = $this->createNews();
+    $this->applyText($news, self::MSG_DAY_SHARE, array($this->sender->getName(), $day->getTitle()));
+    $news->setDay($day);
+    $this->sendToFollowers($news);
+    $this->sendToRecipient($news, $day->getUser());
+  }
+
   /**
    * @param Moment $moment
    */
   function onMoment(Moment $moment)
   {
+    if(!$moment->id)
+      throw new lmbException('Not saved moment');
+
     $news = $this->createNews();
     $this->applyText($news, self::MSG_MOMENT_CREATED, array($this->sender->getName(), $moment->getDay()->getTitle()));
     $news->setDay($moment->getDay());
@@ -116,15 +127,23 @@ class odNewsObserver
    */
   function onLike(lmbActiveRecord $liked_object)
   {
+    if(!($liked_object instanceof Day) && !($liked_object instanceof Moment))
+      throw new lmbException("Not likeable object type '".get_class($liked_object)."'");
+
     $news = $this->createNews();
-    if($liked_object instanceof Day) {
+    if($liked_object instanceof Day)
+    {
+      $owner = $liked_object->getUser();
       $this->applyText($news, self::MSG_DAY_LIKED, array($this->sender->getName(), $liked_object->getTitle()));
-    } elseif($liked_object instanceof Moment) {
+    }
+    elseif($liked_object instanceof Moment)
+    {
+      $owner = $liked_object->getDay()->getUser();
       $this->applyText($news, self::MSG_MOMENT_LIKED, array($this->sender->getName(), $liked_object->getDay()->getTitle()));
-    } else {
-      throw new lmbException("Can't create news, unknown model passed. Day or Moment expected.");
     }
     $this->sendToFollowers($news);
+    if($owner->id != $this->sender->id)
+      $this->sendToRecipient($news, $owner);
   }
 
   /**
@@ -133,33 +152,31 @@ class odNewsObserver
   function onComment(BaseComment $comment)
   {
     $news = $this->createNews();
-    $recipients = new lmbCollection();
+    $recipients = array();
 
     if($comment instanceof DayComment)
     {
-      $day = $commented_object = $comment->getDay();
+      $day = $comment->getDay();
+      $commented_object = $comment->getDay();
       $msg_type = self::MSG_DAY_COMMENT;
     }
-    elseif($comment instanceof MomentComment)
+    else
     {
       $commented_object = $comment->getMoment();
       $day = $commented_object->getDay();
       $msg_type = self::MSG_MOMENT_COMMENT;
     }
-    else
-    {
-      throw new lmbException("Can't create news, uknown model passed. DayComment or MomentComment expected.");
-    }
 
+    $recipients[$day->user_id] = $day->getUser();
     foreach ($commented_object->getComments() as $comment_author)
     {
       $comment_author = $comment_author->getUser();
       if($this->sender->getId() != $comment_author->getId())
-        $recipients->add($comment_author);
+        $recipients[$comment_author->id] = $comment_author;
     }
 
-    $this->applyText($news, $msg_type, array($this->sender->getName(), $day->getTitle()));
-    $this->sendToRecipients($news, $recipients);
+    $this->applyText($news, $msg_type, array($this->sender->name, $day->title));
+    $this->sendToRecipients($news, new lmbCollection($recipients));
   }
 
   /**
@@ -188,7 +205,16 @@ class odNewsObserver
   public static function getMessage($type, array $params = array()) {
     lmb_assert_type($type, 'string');
     array_unshift($params, $type);
-    return call_user_func_array('sprintf', $params);
+    $replaces_mustbe = substr_count($type, '%');
+    $replaces_given = count($params) - 1;
+    if($replaces_mustbe != $replaces_given)
+    {
+      throw new lmbException("Wrong params count", array(
+        'type' => $type,
+        'params' => array_slice($params, 1)
+      ));
+    }
+    return vsprintf($type, $params);
   }
 
   /**

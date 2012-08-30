@@ -9,140 +9,143 @@ class odNewsObserverTest extends odUnitTestCase
   /**
    * @var odNewsObserver
    */
-  protected $main_user_observer;
+  protected $sender_observer;
+
+  protected $sender;
+  protected $follower;
 
   function setUp()
   {
     parent::setUp();
-
-    $this->main_user->save();
-
-    $this->additional_user->getFollowing()->add($this->main_user);
-    $this->additional_user->save();
-
-    $this->main_user_observer = new odNewsObserver($this->main_user);
+    $this->sender = $this->generator->user('sender');
+    $this->sender->save();
+    $this->sender_observer = new odNewsObserver($this->sender);
+    $this->follower = $this->generator->user();
+    $this->follower->save();
+    $this->sender->addToFollowers($this->follower);
+    $this->sender->save();
   }
 
   function testOnDay()
   {
-    $day = $this->generator->day($this->main_user);
+    $day = $this->generator->day($this->sender, false, 'testOnDay');
 
-    $this->main_user_observer->onDay($day);
+    $this->sender_observer->onDay($day);
 
-    $this->_checkMessage($this->additional_user,
-                           $this->main_user,
-                           odNewsObserver::MSG_DAY_CREATED,
-                           array($this->main_user->name, $day->title,));
+    $this->assertNewsUsers(News::findOne(), $this->follower, $this->sender);
+    $this->assertNewsText(News::findOne(), odNewsObserver::MSG_DAY_CREATED, $this->sender->name, $day->title);
   }
 
   function testOnDayDelete()
   {
-    $day = $this->generator->day($this->main_user);
-    $this->main_user_observer->onDay($day);
-    $this->main_user_observer->onDayDelete($day);
+    $day = $this->generator->day($this->sender);
+    $this->sender_observer->onDay($day);
+    $this->sender_observer->onDayDelete($day);
 
-    $news = News::findNewsForUser($this->additional_user);
+    $news = News::findNewsForUser($this->follower);
     $this->assertEqual($news->count(), 0);
   }
 
-  function testOnComment_DayComment()
+  function testOnComment_DayComment_OldCommentator()
   {
-    $old_commentor = $this->generator->user();
-    $new_commentor = $this->main_user;
+    $day_owner = $this->generator->user('onwer');
+    $old_commentator = $this->generator->user('old_commentator');
+    $new_commentator = $this->generator->user('new_commentator');
 
-    $day = $this->generator->day($new_commentor);
-    $old_comment = $this->generator->dayComment($day, $old_commentor);
+    $day = $this->generator->day($day_owner, false, 'some_day');
+    $old_comment = $this->generator->dayComment($day, $old_commentator);
     $old_comment->save();
 
-    $comment = $this->generator->dayComment($day, $new_commentor);
+    $comment = $this->generator->dayComment($day, $new_commentator);
 
-    $this->main_user_observer->onComment($comment);
+    (new odNewsObserver($new_commentator))->onComment($comment);
 
-    $this->assertEqual(News::find()->count(), 1);
+    $this->assertEqual(News::find()->count(), 2);
 
-    $this->assertEqual($this->additional_user->getNews()->count(), 0);
+    $news = $day_owner->getNews()->at(0);
+    $this->assertNewsUsers($news, $day_owner, $new_commentator);
+    $this->assertNewsText($news, odNewsObserver::MSG_DAY_COMMENT, $new_commentator->name, $day->title);
 
-    if($this->assertEqual($old_commentor->getNews()->count(), 1))
-    {
-      $one_news = $old_commentor->getNews()->at(0);
-      $this->assertEqual($one_news->getUser()->getId(), $new_commentor->getId());
-      $this->assertEqual($one_news->text, odNewsObserver::getMessage(odNewsObserver::MSG_DAY_COMMENT, array(
-        $new_commentor->name,
-        $day->getTitle(),
-      )));
-    }
+    $news = $old_commentator->getNews()->at(0);
+    $this->assertNewsUsers($news, $old_commentator, $new_commentator);
+    $this->assertNewsText($news, odNewsObserver::MSG_DAY_COMMENT, $new_commentator->name, $day->title);
   }
 
   function testOnMoment()
   {
-    $moment = $this->generator->moment();
-    $this->main_user_observer->onMoment($moment);
+    $day = $this->generator->day();
+    $moment = $this->generator->moment($day);
+    $moment->save();
+    $this->sender_observer->onMoment($moment);
 
-    $this->_checkMessage($this->additional_user,
-      $this->main_user,
-      odNewsObserver::MSG_MOMENT_CREATED,
-      array(
-        $this->main_user->getName(),
-        $moment->getDay()->getTitle(),
-      ));
+    $news = News::findOne();
+    $this->assertNewsUsers($news, $this->follower,$this->sender);
+    $this->assertNewsText($news, odNewsObserver::MSG_MOMENT_CREATED, $this->sender->name, $day->title);
   }
-
 
   function testOnMomentDelete()
   {
     $moment = $this->generator->moment();
-    $this->main_user_observer->onMoment($moment);
-
-    $this->main_user_observer->onMomentDelete($moment);
+    $moment->save();
+    $this->sender_observer->onMoment($moment);
+    $this->sender_observer->onMomentDelete($moment);
 
     $this->assertEqual(News::find()->count(), 0);
   }
 
   function testOnComment_MomentComment()
   {
-    $old_commentor = $this->generator->user();
-    $new_commentor = $this->main_user;
+    $day_owner = $this->generator->user('onwer');
+    $old_commentator = $this->generator->user();
+    $new_commentator = $this->sender;
 
-    $day = $this->generator->day($new_commentor);
+    $day = $this->generator->day($day_owner);
     $moment = $this->generator->moment($day);
-    $old_comment = $this->generator->momentComment($moment, $old_commentor);
+    $old_comment = $this->generator->momentComment($moment, $old_commentator);
     $old_comment->save();
 
-    $comment = $this->generator->momentComment($moment, $new_commentor);
+    $comment = $this->generator->momentComment($moment, $new_commentator);
 
-    $this->main_user_observer->onComment($comment);
+    (new odNewsObserver($new_commentator))->onComment($comment);
 
-    $this->assertEqual(News::find()->count(), 1);
+    $this->assertEqual(News::find()->count(), 2);
 
-    $this->assertEqual($this->additional_user->getNews()->count(), 0);
+    $news = $day_owner->getNews()->at(0);
+    $this->assertNewsUsers($news, $day_owner, $new_commentator);
+    $this->assertNewsText($news, odNewsObserver::MSG_MOMENT_COMMENT, $new_commentator->name, $day->title);
 
-    if($this->assertEqual($old_commentor->getNews()->count(), 1))
-    {
-      $one_news = $old_commentor->getNews()->at(0);
-      $this->assertEqual($one_news->getUser()->getId(), $new_commentor->getId());
-      $this->assertEqual($one_news->text, odNewsObserver::getMessage(odNewsObserver::MSG_MOMENT_COMMENT, array(
-        $new_commentor->name,
-        $day->getTitle(),
-      )));
-    }
+    $news = $old_commentator->getNews()->at(0);
+    $this->assertNewsUsers($news, $old_commentator, $new_commentator);
+    $this->assertNewsText($news, odNewsObserver::MSG_MOMENT_COMMENT, $new_commentator->name, $day->title);
   }
 
   function testFollow()
   {
-    $foo = $this->generator->user();
+    $foo = $this->generator->user('foo');
     $foo->save();
-    $bar = $this->generator->user();
+    $bar = $this->generator->user('bar');
     $bar->save();
-    $dum = $this->generator->user();
+    $dum = $this->generator->user('dum');
     $dum->save();
 
+
     (new odNewsObserver($bar))->onFollow($foo);
-    $this->_checkFollowMessage($foo, $bar, $foo, odNewsObserver::MSG_FOLLOW_DIRECT);
+
+    $news = $foo->getNews()->at(0);
+    $this->assertNewsUsers($news, $foo, $bar);
+    $this->assertNewsText($news, odNewsObserver::MSG_FOLLOW_DIRECT, $bar->name);
+
 
     $foo->addToFollowers($dum);
     (new odNewsObserver($foo))->onFollow($bar);
-    $this->_checkFollowMessage($foo, $bar, $foo, odNewsObserver::MSG_FOLLOW_DIRECT);
-    $this->_checkFollowMessage($foo, $bar, $dum, odNewsObserver::MSG_FOLLOW_DIRECT);
+
+    $news = $bar->getNews()->at(0);
+    $this->assertNewsUsers($news, $bar, $foo);
+    $this->assertNewsText($news, odNewsObserver::MSG_FOLLOW_DIRECT, $foo->name);
+
+    $news = $dum->getNews()->at(0);
+    $this->assertNewsUsers($news, $dum, $foo);
+    $this->assertNewsText($news, odNewsObserver::MSG_FOLLOW, $foo->name, $bar->name);
   }
 
   function testRegister()
@@ -159,47 +162,49 @@ class odNewsObserverTest extends odUnitTestCase
 
     (new odNewsObserver($new_user))->onUserRegister($new_user);
 
-    $this->_checkMessage($friend,
-                         $new_user,
-                         odNewsObserver::MSG_FBFRIEND_REGISTERED,
-                         array($new_user->name));
+    $news = $friend->getNews()->at(0);
+    $this->assertNewsUsers($news, $friend, $new_user);
+    $this->assertNewsText($news, odNewsObserver::MSG_FBFRIEND_REGISTERED, $new_user->name);
   }
 
   function testOnLike()
   {
-    $day = $this->generator->day($this->additional_user);
+    $day_owner = $this->generator->user();
+    $day = $this->generator->day($day_owner);
     $day->save();
 
-    $this->main_user_observer->onLike($day);
-    $this->_checkMessage($this->additional_user,
-                           $this->main_user,
-                           odNewsObserver::MSG_DAY_LIKED,
-                           array(
-                            $this->main_user->getName(),
-                            $day->getTitle(),
-                           ));
+    $this->sender_observer->onLike($day);
+
+    $this->assertEqual(2, News::find()->count());
+
+    $news = $this->follower->getNews()->at(0);
+    $this->assertNewsUsers($news, $this->follower, $this->sender);
+    $this->assertNewsText($news, odNewsObserver::MSG_DAY_LIKED, $this->sender->name, $day->title);
+
+    $news = $day_owner->getNews()->at(0);
+    $this->assertNewsUsers($news, $day_owner, $this->sender);
+    $this->assertNewsText($news, odNewsObserver::MSG_DAY_LIKED, $this->sender->name, $day->title);
   }
 
-  protected function _checkMessage($recipient, $creator, $message, $params, $news_count = 1, $news = null)
+//  function testOnDayShare()
+//  {
+//    $sender = $this->generator->user();
+//    $day = $this->generator->day();
+//    $day->save();
+//  }
+
+  protected function assertNewsUsers(News $news, $recipient, $sender)
   {
-    // Get news
-    $news = $news ?: $recipient->getNews();
-    // Enshure we created news
-    if($this->assertEqual($news->count(), $news_count)) {
-      // Enshure that sender ID was set correctly
-      $this->assertEqual($news->at(0)->getUser()->getId(), $creator->getId());
-      // Check message
-      $this->assertEqual($news->at(0)->text, odNewsObserver::getMessage($message, $params));
-    }
+    if(!$news->user_id = $sender->id)
+      return $this->fail('Wrong sender');
+    if(!$news->recipient_id = $recipient->id)
+      return $this->fail('Wrong recipient');
   }
 
-  protected function _checkFollowMessage($recipient, $follower, $followed, $message, $news_count = 1)
+  protected function assertNewsText(News $news, $message, $params)
   {
-    $params = array($follower->name, $followed->name);
-    $this->_checkMessage($recipient, $follower, $message, $params, $news_count);
-  }
-
-  protected function _getUsername($user) {
-    return $user->name;
+    $params = array_slice(func_get_args(), 2);
+    $text = odNewsObserver::getMessage($message, $params);
+    return $this->assertEqual($text, $news->text);
   }
 }
