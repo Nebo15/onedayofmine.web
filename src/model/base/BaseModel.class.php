@@ -5,9 +5,15 @@ abstract class BaseModel extends lmbActiveRecord
 {
   protected $_default_sort_params = array('id'=>'asc');
 
-  function exportForApi()
+  function exportForApi(array $properties = null)
   {
-    return (object) $this->export();
+    $export = array();
+    foreach($properties ?: $this->getPropertiesNames() as $property)
+    {
+      if(!is_object($this->get($property)))
+        $export[$property] = $this->get($property);
+    }
+    return (object) $export;
   }
 
   protected function _onBeforeCreate()

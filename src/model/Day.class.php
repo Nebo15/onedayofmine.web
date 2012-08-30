@@ -44,7 +44,7 @@ class Day extends BaseModel
     return $validator;
   }
 
-  function exportForApi()
+  function exportForApi(array $properties = null)
   {
     $export = new stdClass();
     $export->id = $this->getId();

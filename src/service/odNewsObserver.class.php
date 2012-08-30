@@ -41,56 +41,18 @@ class odNewsObserver
   }
 
   /**
-   * @todo moment like not implemented
-   * @todo add {Day, Moment} interface
-   * @param Day|Moment $liked_object
+   * @param User $user
    */
-  function onLike(lmbActiveRecord $liked_object)
+  function onUser(User $user)
   {
-    $news = $this->createNews();
-    if($liked_object instanceof Day) {
-      $this->applyText($news, self::MSG_DAY_LIKED, array($this->sender->getName(), $liked_object->getTitle()));
-    } elseif($liked_object instanceof Moment) {
-      $this->applyText($news, self::MSG_MOMENT_LIKED, array($this->sender->getName(), $liked_object->getDay()->getTitle()));
-    } else {
-      throw new lmbException("Can't create news, unknown model passed. Day or Moment expected.");
-    }
-    $this->sendToFollowers($news);
-  }
+    $news = $this->createNews($user);
+    $this->applyText($news, self::MSG_FBFRIEND_REGISTERED, array($user->getName()));
 
-  /**
-   * @param Commentable $comment
-   */
-  function onComment(BaseComment $comment)
-  {
-    $news = $this->createNews();
-    $recipients = new lmbCollection();
-
-    if($comment instanceof DayComment)
+    $profile = lmbToolkit::instance()->getFacebookProfile($user);
+    foreach ($profile->getRegisteredFriends() as $friend)
     {
-      $day = $commented_object = $comment->getDay();
-      $msg_type = self::MSG_DAY_COMMENT;
+      $this->sendToRecipient($news, $friend);
     }
-    elseif($comment instanceof MomentComment)
-    {
-      $commented_object = $comment->getMoment();
-      $day = $commented_object->getDay();
-      $msg_type = self::MSG_MOMENT_COMMENT;
-    }
-    else
-    {
-      throw new lmbException("Can't create news, uknown model passed. DayComment or MomentComment expected.");
-    }
-
-    foreach ($commented_object->getComments() as $comment_author)
-    {
-      $comment_author = $comment_author->getUser();
-      if($this->sender->getId() != $comment_author->getId())
-        $recipients->add($comment_author);
-    }
-
-    $this->applyText($news, $msg_type, array($this->sender->getName(), $day->getTitle()));
-    $this->sendToRecipients($news, $recipients);
   }
 
   /**
@@ -148,18 +110,56 @@ class odNewsObserver
   }
 
   /**
-   * @param User $user
+   * @todo moment like not implemented
+   * @todo add {Day, Moment} interface
+   * @param Day|Moment $liked_object
    */
-  function onUser(User $user)
+  function onLike(lmbActiveRecord $liked_object)
   {
-    $news = $this->createNews($user);
-    $this->applyText($news, self::MSG_FBFRIEND_REGISTERED, array($user->getName()));
-
-    $profile = lmbToolkit::instance()->getFacebookProfile($user);
-    foreach ($profile->getRegisteredFriends() as $friend)
-    {
-      $this->sendToRecipient($news, $friend);
+    $news = $this->createNews();
+    if($liked_object instanceof Day) {
+      $this->applyText($news, self::MSG_DAY_LIKED, array($this->sender->getName(), $liked_object->getTitle()));
+    } elseif($liked_object instanceof Moment) {
+      $this->applyText($news, self::MSG_MOMENT_LIKED, array($this->sender->getName(), $liked_object->getDay()->getTitle()));
+    } else {
+      throw new lmbException("Can't create news, unknown model passed. Day or Moment expected.");
     }
+    $this->sendToFollowers($news);
+  }
+
+  /**
+   * @param Commentable $comment
+   */
+  function onComment(BaseComment $comment)
+  {
+    $news = $this->createNews();
+    $recipients = new lmbCollection();
+
+    if($comment instanceof DayComment)
+    {
+      $day = $commented_object = $comment->getDay();
+      $msg_type = self::MSG_DAY_COMMENT;
+    }
+    elseif($comment instanceof MomentComment)
+    {
+      $commented_object = $comment->getMoment();
+      $day = $commented_object->getDay();
+      $msg_type = self::MSG_MOMENT_COMMENT;
+    }
+    else
+    {
+      throw new lmbException("Can't create news, uknown model passed. DayComment or MomentComment expected.");
+    }
+
+    foreach ($commented_object->getComments() as $comment_author)
+    {
+      $comment_author = $comment_author->getUser();
+      if($this->sender->getId() != $comment_author->getId())
+        $recipients->add($comment_author);
+    }
+
+    $this->applyText($news, $msg_type, array($this->sender->getName(), $day->getTitle()));
+    $this->sendToRecipients($news, $recipients);
   }
 
   /**
@@ -189,20 +189,6 @@ class odNewsObserver
     lmb_assert_type($type, 'string');
     array_unshift($params, $type);
     return call_user_func_array('sprintf', $params);
-  }
-
-  /**
-   * Returns username of $user. If no $user specified, then current logged-in user is used.
-   *
-   * @param User|stdClass $user
-   * @return string
-   */
-  public function getUserName($user = null)
-  {
-    if(is_null($user))
-      $user = $this->sender;
-
-    return $user->name;
   }
 
   /**

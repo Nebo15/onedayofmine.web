@@ -195,8 +195,28 @@ class UsersControllerTest extends odControllerTestCase
     $this->assertEqual(0, $this->main_user->getFollowing()->count());
   }
 
-  // TODO
-  function testActivity() {}
+  function testActivity()
+  {
+    $user = $this->generator->user();
+    $user->save();
+    $news1 = new News();
+    $news1->setUser($user);
+    $news1->setText($this->generator->string());
+    $news1->setRecipientId($this->generator->integer());
+    $news1->setDayId($this->generator->integer());
+    $news1->setDayCommentId($this->generator->integer());
+    $news1->setMomentId($this->generator->integer());
+    $news1->setMomentCommentId($this->generator->integer());
+    $news1->save();
+
+    lmbToolkit::instance()->setUser($this->main_user);
+    $activities = $this->get('activity', array(), $user->id)->result;
+    if($this->assertResponse(200))
+    {
+      $this->assertEqual(1, count($activities));
+      $this->assertEqual($news1->exportForApi(), $activities[0]);
+    }
+  }
 
   /**
    * @api

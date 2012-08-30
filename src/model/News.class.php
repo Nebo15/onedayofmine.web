@@ -24,9 +24,19 @@ class News extends BaseModel
     );
   }
 
-  function exportForApi()
+  protected function _createValidator()
   {
-    return (object) $this->export();;
+    $validator = new lmbValidator();
+    $validator->addRequiredRule('user_id');
+    $validator->addRequiredRule('text');
+    return $validator;
+  }
+
+  function exportForApi(array $properties = null)
+  {
+    return parent::exportForApi(array(
+      'id', 'user_id', 'recipient_id', 'text', 'day_id', 'day_comment_id', 'moment_id', 'moment_comment_id'
+    ));
   }
 
   /**

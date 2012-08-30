@@ -26,9 +26,9 @@ class MomentComment extends BaseComment
     return $validator;
   }
 
-  function exportForApi()
+  function exportForApi(array $properties = null)
   {
-    $export = parent::exportForApi();
+    $export = parent::exportForApi($properties);
     $export->moment_id = $this->getMoment()->getId();
     return $export;
   }

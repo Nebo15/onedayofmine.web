@@ -24,7 +24,7 @@ class UserSettings extends BaseModel
     );
   }
 
-  function exportForApi()
+  function exportForApi(array $properties = null)
   {
     $result = new stdClass();
     $result->notifications_new_days = $this->notifications_new_days;

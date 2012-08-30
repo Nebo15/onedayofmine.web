@@ -46,6 +46,7 @@ class User extends BaseModel
       'days_comments'    => array ('field' => 'user_id', 'class' => 'DayComment'),
       'moments_comments' => array ('field' => 'user_id', 'class' => 'MomentComment'),
       'news'             => array ('field' => 'recipient_id', 'class' => 'News'),
+      'activities'       => array ('field' => 'user_id', 'class' => 'News'),
       'created_news'     => array ('field' => 'user_id', 'class' => 'News'),
       'day_likes'        => array ('field' => 'user_id', 'class' => 'DayLike'),
       'moment_likes'     => array ('field' => 'user_id', 'class' => 'MomentLike'),
@@ -85,7 +86,7 @@ class User extends BaseModel
     return $validator;
   }
 
-  function exportForApi()
+  function exportForApi(array $properties = null)
   {
     $result = new stdClass();
     $result->id = $this->id;
