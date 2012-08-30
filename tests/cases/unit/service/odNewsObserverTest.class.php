@@ -4,7 +4,7 @@ lmb_require('src/service/odNewsObserver.class.php');
 
 Mock::generate('FacebookProfile', 'FacebookProfileMock');
 
-class NewsObserverAcceptanceTest extends odUnitTestCase
+class odNewsObserverTest extends odUnitTestCase
 {
   /**
    * @var odNewsObserver
