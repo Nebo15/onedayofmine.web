@@ -50,7 +50,7 @@ class AuthController extends BaseJsonController
     $this->toolkit->setUser($user);
 
     if($new_user)
-      $this->toolkit->getNewsObserver()->onUser($user);
+      $this->toolkit->getNewsObserver()->onUserRegister($user);
 
     $answer = $user->exportForApi();
     $answer->favourites_count = $this->_getUser()->getFavouriteDays()->count();

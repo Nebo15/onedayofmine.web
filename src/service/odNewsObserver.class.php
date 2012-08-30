@@ -43,7 +43,7 @@ class odNewsObserver
   /**
    * @param User $user
    */
-  function onUser(User $user)
+  function onUserRegister(User $user)
   {
     $news = $this->createNews($user);
     $this->applyText($news, self::MSG_FBFRIEND_REGISTERED, array($user->getName()));

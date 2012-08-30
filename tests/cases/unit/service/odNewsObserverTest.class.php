@@ -157,7 +157,7 @@ class odNewsObserverTest extends odUnitTestCase
     $mock->setReturnValue('getRegisteredFriends', array($friend));
     $this->toolkit->setFacebookProfile($new_user, $mock);
 
-    (new odNewsObserver($new_user))->onUser($new_user);
+    (new odNewsObserver($new_user))->onUserRegister($new_user);
 
     $this->_checkMessage($friend,
                          $new_user,
