@@ -181,10 +181,10 @@ class DaysController extends BaseJsonController
     $like->setUser($this->_getUser());
     $like->save();
 
-    // $this->toolkit->getPostingService()->shareDayLike($day);
+    $this->toolkit->getPostingService()->shareDayLike($day);
     $this->toolkit->getNewsObserver()->onLike($day);
 
-    return $this->_answerOk($this->_exportFullDay($day));
+    return $this->_answerOk();
   }
 
   function doUnlike()
@@ -192,15 +192,15 @@ class DaysController extends BaseJsonController
     if(!$this->request->isPost())
       return $this->_answerWithError('Not a POST request');
 
-    if(!$like = DayLike::findByDayId($this->request->id))
-      return $this->_answerWithError("Like not found");
+    if(!$day = Day::findById($this->request->id))
+      return $this->_answerWithError("Day not found");
 
-    $like->destroy();
+    DayLike::deleteUserLikeInDay($this->_getUser(), $day);
 
     // $this->toolkit->getPostingService()->shareDayLikeDelete($day);
     // $this->toolkit->getNewsObserver()->onLikeDelete($day);
 
-    return $this->_answerOk($this->_exportFullDay($day));
+    return $this->_answerOk();
   }
 
   function doDelete()

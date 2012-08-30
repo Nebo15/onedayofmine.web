@@ -127,6 +127,10 @@ class NewsObserverAcceptanceTest extends odUnitTestCase
     }
   }
 
+
+  // TODO
+  function testOnCommentDelete() {}
+
   function testFollow()
   {
     $foo = $this->generator->user();
@@ -144,6 +148,9 @@ class NewsObserverAcceptanceTest extends odUnitTestCase
     $this->_checkFollowMessage($foo, $bar, $foo, odNewsObserver::MSG_FOLLOW_DIRECT);
     $this->_checkFollowMessage($foo, $bar, $dum, odNewsObserver::MSG_FOLLOW_DIRECT);
   }
+
+  // TODO
+  function testOnUnfollow() {}
 
   function testRegister()
   {
@@ -179,6 +186,9 @@ class NewsObserverAcceptanceTest extends odUnitTestCase
                             $day->getTitle(),
                            ));
   }
+
+  // TODO
+  function testOnLikeDelete() {}
 
   protected function _checkMessage($recipient, $creator, $message, $params, $news_count = 1, $news = null)
   {
