@@ -129,11 +129,11 @@ class MyControllerTest extends odControllerTestCase
   function testUpdateSettings()
   {
     $this->toolkit->setUser($this->main_user);
-    $registered_user = $this->main_user->exportForApi();
 
     $settings = new UserSettings();
     $settings->setNotificationsNewDays(1);
     $settings->setNotificationsNewComments(1);
+    $settings->setNotificationsNewReplays(1);
     $settings->setNotificationsRelatedActivity(1);
     $settings->setNotificationsShootingPhotos(1);
     $settings->setPhotosSaveOriginal(1);
@@ -151,6 +151,7 @@ class MyControllerTest extends odControllerTestCase
     $settings = new UserSettings();
     $settings->setNotificationsNewDays(0);
     $settings->setNotificationsNewComments(0);
+    $settings->setNotificationsNewReplays(0);
     $settings->setNotificationsRelatedActivity(0);
     $settings->setNotificationsShootingPhotos(0);
     $settings->setPhotosSaveOriginal(0);
