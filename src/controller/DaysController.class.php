@@ -239,7 +239,7 @@ class DaysController extends BaseJsonController
     return $this->_answerOk();
   }
 
-  function doFollowingUsers()
+  function doFollowing()
   {
     list($from, $to, $limit) = $this->_getFromToLimitations();
     $users_ids = lmbArrayHelper::getColumnValues('id', $this->_getUser()->getFollowing());

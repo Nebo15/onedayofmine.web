@@ -1,0 +1,3 @@
+#!/bin/sh
+
+./runtests tests/cases/unit
