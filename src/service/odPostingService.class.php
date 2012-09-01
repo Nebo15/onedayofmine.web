@@ -15,12 +15,14 @@ class odPostingService implements SharesInterface
     lmb_assert_true($user, 'User is not logged in!');
     $settings = $user->getSettings();
 
+    $result = [];
+
     // Facebook
     if($settings->getSocialShareFacebook())
     {
       $this->facebook_profile = $this->facebook_profile ?: new FacebookProfile($user);
 
-      if(!call_user_func_array(array($this->facebook_profile, $name), $args))
+      if(!$result['facebook'] = call_user_func_array(array($this->facebook_profile, $name), $args))
         throw new lmbException("Can't share with Facebook.", array('function_name' => $name, 'function_args' => $args));
     }
 
@@ -29,9 +31,11 @@ class odPostingService implements SharesInterface
     {
         $this->twitter_profile = $this->twitter_profile ?: new TwitterProfile($user);
 
-        if(!call_user_func_array(array($this->twitter_profile, $name), $args))
+        if(!$result['twitter'] = call_user_func_array(array($this->twitter_profile, $name), $args))
           throw new lmbException("Can't share with Twitter.", array('function_name' => $name, 'function_args' => $args));
     }
+
+    return $result;
   }
 
   public function shareDayBegin(Day $day)
