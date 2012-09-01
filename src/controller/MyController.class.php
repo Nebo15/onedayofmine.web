@@ -53,4 +53,40 @@ class MyController extends BaseJsonController
         return $this->_answerWithError($this->error_list);
     }
   }
+
+  function doNews()
+  {
+    if($this->request->getRequestMethod() != 'GET')
+      return $this->_answerWithError('Not a GET request');
+
+    $user  = $this->toolkit->getUser();
+
+    list($from, $to, $limit) = $this->_getFromToLimitations();
+    $news = News::findNewsForUser($user, $from, $to, $limit);
+
+    if($from && !$to && !count($news))
+      return $this->_answerOk($news, 'Not Modified', 304);
+
+    $response = array();
+    foreach ($news as $id => $post) {
+      $export = $post->exportForApi();
+      $export->user = $post->getSender()->exportForApi();
+
+      if($post->getDay())
+        $export->day = $post->getDay()->exportForApi();
+      elseif($post->getMoment()) {
+        $export->day = $post->getMoment()->getDay()->exportForApi();
+        $export->moment = $post->getMoment()->exportForApi();
+        unset($export->moment->day_id);
+      }
+
+      unset($export->user_id);
+      unset($export->day_id);
+      unset($export->moment_id);
+
+      $response[] = $export;
+    }
+
+    return $this->_answerOk($response);
+  }
 }

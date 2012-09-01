@@ -133,8 +133,8 @@ class odObjectMother
     $recipient = $recipient ?: $this->user();
 
     $news = new News();
-    $news->setRecipient($recipient);
-    $news->setUser($creator);
+    $news->setRecipients(array($recipient));
+    $news->setSender($creator);
     $news->setText($creator->name . ' likes ' . $recipient->name);
     return $news;
   }
