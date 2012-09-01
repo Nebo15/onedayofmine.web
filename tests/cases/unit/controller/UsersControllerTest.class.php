@@ -32,7 +32,7 @@ class UsersControllerTest extends odControllerTestCase
    * @api description Returns days of specified user
    * @api input param int id ID of user
    * @api result int id User ID
-   * @api result string fb_uid Facebook user ID
+   * @api result string facebook_uid Facebook user ID
    * @api result string twitter_uid Twitter user ID
    * @api result string name Displayed name of the user
    * @api result string sex Gender {male,female}.

@@ -174,8 +174,8 @@ class odTools extends lmbAbstractTools
       foreach ($users['data'] as $key => $value) {
         $user = new User();
         // var_dump($value);
-        $user->setFbUid($value['id']);
-        $user->setFbAccessToken($value['access_token']);
+        $user->setFacebookUid($value['id']);
+        $user->setFacebookAccessToken($value['access_token']);
         $user->import((new FacebookProfile($user))->getInfo());
         $users['data'][$key]['email'] = $user->getEmail();
       }
@@ -220,7 +220,7 @@ class odTools extends lmbAbstractTools
    */
   public function getFacebook($access_token_or_user = null)
   {
-    $access_token = is_object($access_token_or_user) ? $access_token_or_user->getFbAccessToken() : $access_token_or_user;
+    $access_token = is_object($access_token_or_user) ? $access_token_or_user->getFacebookAccessToken() : $access_token_or_user;
     if(!array_key_exists($access_token, $this->facebook_instances)) {
       $instance = new odFacebook(odFacebook::getConfig());
 
@@ -240,15 +240,15 @@ class odTools extends lmbAbstractTools
 
   public function getFacebookProfile(User $user)
   {
-    if(!array_key_exists($user->getFbAccessToken(), $this->facebook_profiles)) {
-      $this->facebook_profiles[$user->getFbAccessToken()] = new FacebookProfile($user);
+    if(!array_key_exists($user->getFacebookAccessToken(), $this->facebook_profiles)) {
+      $this->facebook_profiles[$user->getFacebookAccessToken()] = new FacebookProfile($user);
     }
-    return $this->facebook_profiles[$user->getFbAccessToken()];
+    return $this->facebook_profiles[$user->getFacebookAccessToken()];
   }
 
   function setFacebookProfile(User $user, $profile)
   {
-    $this->facebook_profiles[$user->getFbAccessToken()] = $profile;
+    $this->facebook_profiles[$user->getFacebookAccessToken()] = $profile;
   }
 
   public function getConcreteAmazonServiceConfig($name)

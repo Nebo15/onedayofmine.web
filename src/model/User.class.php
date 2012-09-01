@@ -6,10 +6,10 @@ lmb_require('limb/validation/src/rule/lmbValidValueRule.class.php');
 
 /**
  * @api
- * @method string getFbUid()
- * @method void setFbUid(string $fb_user_id)
- * @method string getFbAccessToken()
- * @method void setFbAccessToken(string $fb_access_token)
+ * @method string getFacebookUid()
+ * @method void setFacebookUid(string $facebook_user_id)
+ * @method string getFacebookAccessToken()
+ * @method void setFacebookAccessToken(string $facebook_access_token)
  * @method string getTwitterUid()
  * @method string getTwitterAccessToken()
  * @method UserSettings getSettings()
@@ -80,9 +80,9 @@ class User extends BaseModel
     $validator = new lmbValidator();
     $validator->addRequiredRule('name');
 //    $validator->addRequiredRule('email');
-    $validator->addRequiredRule('fb_uid');
-    $validator->addRequiredRule('fb_access_token');
-    $validator->addRequiredRule('fb_profile_utime');
+    $validator->addRequiredRule('facebook_uid');
+    $validator->addRequiredRule('facebook_access_token');
+    $validator->addRequiredRule('facebook_profile_utime');
     $validator->addRequiredRule('timezone');
     $validator->addRequiredRule('sex');
     $validator->addRule(new lmbValidValueRule('sex', array_values(self::getSexTypes())), 'Wrong sex value');
@@ -175,14 +175,14 @@ class User extends BaseModel
     ))->paginate(0, $limit);
   }
 
-  static function findByFbAccessToken($fb_access_token)
+  static function findByFacebookAccessToken($facebook_access_token)
   {
-    return User::findOne(array('fb_access_token = ?', $fb_access_token));
+    return User::findOne(array('facebook_access_token = ?', $facebook_access_token));
   }
 
-  static function findByFbUid($fb_uid)
+  static function findByFacebookUid($facebook_uid)
   {
-    return User::findOne(array('fb_uid = ?', $fb_uid));
+    return User::findOne(array('facebook_uid = ?', $facebook_uid));
   }
 
   static function findByTwitterUid($twitter_uid)

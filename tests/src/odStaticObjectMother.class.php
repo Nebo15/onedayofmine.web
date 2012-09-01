@@ -6,10 +6,10 @@ class odStaticObjectMother
     $user = new stdClass();
     $user->cip = 2130706433;
     $user->ctime = 1339621518;
-    $user->fb_name = "Foo";
-    $user->fb_profile_url = "http://www.facebook.com/profile.php?id=100003921268738";
-    $user->fb_profile_utime = "1339136917";
-    $user->fb_uid ="100003921268738";
+    $user->facebook_name = "Foo";
+    $user->facebook_profile_url = "http://www.facebook.com/profile.php?id=100003921268738";
+    $user->facebook_profile_utime = "1339136917";
+    $user->facebook_uid ="100003921268738";
     $user->id = 1;
     $user->pic_big = "http://profile.ak.fbcdn.net/hprofile-ak-snc4/369578_100003921268738_1696883803_n.jpg";
     $user->pic_small = "http://profile.ak.fbcdn.net/hprofile-ak-snc4/369578_100003921268738_1696883803_t.jpg";

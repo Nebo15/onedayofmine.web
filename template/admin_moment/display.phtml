@@ -32,8 +32,8 @@
             <th>type
             {{include file='_admin/sort_by_column.phtml' field='type'/}}
             </th>
-            <th>fb_id
-            {{include file='_admin/sort_by_column.phtml' field='fb_id'/}}
+            <th>facebook_id
+            {{include file='_admin/sort_by_column.phtml' field='facebook_id'/}}
             </th>
             <th>likes_count
             {{include file='_admin/sort_by_column.phtml' field='likes_count'/}}
@@ -56,14 +56,14 @@
               <td>{$item.id}</td>
               <td>{$item.day_id}</td>
               <td>{$item.type}</td>
-              <td>{$item.fb_id}</td>
+              <td>{$item.facebook_id}</td>
               <td>{$item.likes_count}</td>
               <td>{$item.ctime|date:"d.m.Y"}</td>
               <td>{$item.utime|date:"d.m.Y"}</td>
               <td>{$item.cip}</td>
               <td class='actions'>
                 {{apply template="object_action_edit" item="{$item}"/}}
-                
+
                 {{apply template="object_action_delete" item="{$item}"/}}
               </td>
             </tr>

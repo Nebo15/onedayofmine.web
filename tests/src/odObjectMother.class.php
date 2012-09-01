@@ -16,13 +16,13 @@ class odObjectMother
   function user($name = null)
   {
     $user = new User();
-    $user->setFbUid($this->string(5));
-    $user->setFbAccessToken($this->string(50));
+    $user->setFacebookUid($this->string(5));
+    $user->setFacebookAccessToken($this->string(50));
     $user->setEmail($this->email());
-    $user->setFbProfileUtime($this->integer(11));
-    $user->setFbPicBig($this->string(50));
-    $user->setFbPicSquare($this->string(50));
-    $user->setFbPicSmall($this->string(50));
+    $user->setFacebookProfileUtime($this->integer(11));
+    $user->setFacebookPicBig($this->string(50));
+    $user->setFacebookPicSquare($this->string(50));
+    $user->setFacebookPicSmall($this->string(50));
     $user->setName($name ?: $this->string(100));
     $user->setTimezone($this->integer(1));
     $user->setSex('female');
@@ -202,12 +202,12 @@ class odObjectMother
   function facebookInfo($uid = null)
   {
     return array(
-     'fb_uid'           => $uid ?: $this->string(5),
+     'facebook_uid'           => $uid ?: $this->string(5),
       'email'            => $this->email(),
       'name'             => $this->string(10),
       'sex'              => User::SEX_MALE,
       'timezone'         => $this->integer(1),
-      'fb_profile_utime' => $this->integer(11),
+      'facebook_profile_utime' => $this->integer(11),
       'pic'              => $this->string(),
       'occupation'       => $this->string(),
       'current_location' => $this->string(),
