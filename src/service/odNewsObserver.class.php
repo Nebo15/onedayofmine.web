@@ -34,6 +34,8 @@ class odNewsObserver
    */
   protected $sender;
 
+  protected $recipients = array();
+
   public function __construct(User $sender)
   {
     $this->sender = $sender;
@@ -44,14 +46,10 @@ class odNewsObserver
    */
   function onUserRegister(User $user)
   {
-    $news = $this->createNews($user);
-    $this->applyText($news, self::MSG_FBFRIEND_REGISTERED, array($user->getName()));
-
     $profile = lmbToolkit::instance()->getFacebookProfile($user);
-    foreach ($profile->getRegisteredFriends() as $friend)
-    {
-      $this->sendToRecipient($news, $friend);
-    }
+
+    $this->addRecipients($profile->getRegisteredFriends());
+    $this->send(new News(), self::MSG_FBFRIEND_REGISTERED, array($user->name));
   }
 
   /**
@@ -59,18 +57,16 @@ class odNewsObserver
    */
   function onFollow(User $followed_user)
   {
-    $recipients = array();
     foreach($this->sender->getFollowers() as $recipient)
     {
       if($recipient->getId() != $followed_user->getId())
         if(1 == $recipient->getSettings()->getNotificationsRelatedActivity())
-          $recipients[$recipient->id] = $recipient;
+          $this->addRecipient($recipient);
     }
-    $recipients[$followed_user->id] = $followed_user;
+    $this->addRecipient($followed_user);
 
-    $news = $this->createNews();
-    $this->applyText($news, self::MSG_FOLLOW, array($this->sender->name, $followed_user->name));
-    $this->sendToRecipients($news, new lmbCollection($recipients));
+    $news = new News(array('user_id' => $followed_user->id));
+    $this->send($news, self::MSG_FOLLOW, array($this->sender->name, $followed_user->name));
   }
 
   /**
@@ -78,43 +74,42 @@ class odNewsObserver
    */
   function onDay(Day $day)
   {
-    $news = $this->createNews();
-    $this->applyText($news, self::MSG_DAY_CREATED, array($this->sender->getName(), $day->getTitle()));
-    $news->setDay($day);
-
-    $recipients = array();
+    lmb_assert_true($day->id);
+    $news = new News(array('day_id' => $day->id));
     foreach($this->sender->getFollowers() as $follower)
       if(1 == $follower->getSettings()->getNotificationsNewDays())
-        $recipients[] = $follower;
-    $this->sendToRecipients($news, new lmbCollection($recipients));
+        $this->addRecipient($follower);
+    $this->send($news, self::MSG_DAY_CREATED, array($this->sender->getName(), $day->getTitle()));
   }
 
   function onDayDelete(Day $day)
   {
+    lmb_assert_true($day->id);
     News::delete('day_id='.$day->getId());
   }
 
   function onDayShare(Day $day)
   {
-    $news = $this->createNews();
-    $this->applyText($news, self::MSG_DAY_SHARE, array($this->sender->name, $day->title));
-    $news->setDay($day);
+    lmb_assert_true($day->id);
+    $news = new News(array('day_id' => $day->id));
     if(1 == $day->getUser()->getSettings()->getNotificationsRelatedActivity())
-      $this->sendToRecipient($news, $day->getUser());
+      $this->addRecipient($day->getUser());
+    $this->send($news, self::MSG_DAY_SHARE, array($this->sender->name, $day->title));
   }
 
   function onDayFavourite(Day $day)
   {
-    $news = $this->createNews();
-    $this->applyText($news, self::MSG_DAY_FAVOURITE, array($this->sender->name, $day->title));
-    $news->setDay($day);
+    lmb_assert_true($day->id);
+    $news = new News(array('day_id' => $day->id));
 
     if(1 == $day->getUser()->getSettings()->getNotificationsRelatedActivity())
-      $this->sendToRecipient($news, $day->getUser());
+      $this->addRecipient($day->getUser());
 
     foreach($this->sender->getFollowers() as $follower)
       if(1 == $follower->getSettings()->getNotificationsRelatedActivity())
-        $this->sendToRecipient($news, $follower);
+        $this->addRecipient($follower);
+
+    $this->send($news, self::MSG_DAY_FAVOURITE, array($this->sender->name, $day->title));
   }
 
   /**
@@ -122,23 +117,20 @@ class odNewsObserver
    */
   function onMoment(Moment $moment)
   {
-    if(!$moment->id)
-      throw new lmbException('Not saved moment');
+    lmb_assert_true($moment->id);
 
-    $news = $this->createNews();
-    $this->applyText($news, self::MSG_MOMENT_CREATED, array($this->sender->getName(), $moment->getDay()->getTitle()));
-    $news->setDay($moment->getDay());
-    $news->setMoment($moment);
+    $news = new News(array('day_id' => $moment->day_id, 'moment_id' => $moment->id));
 
-    $recipients = array();
     foreach($this->sender->getFollowers() as $follower)
       if(1 == $follower->getSettings()->getNotificationsNewDays())
-        $recipients[] = $follower;
-    $this->sendToRecipients($news, new lmbCollection($recipients));
+        $this->addRecipient($follower);
+
+    $this->send($news, self::MSG_MOMENT_CREATED, array($this->sender->getName(), $moment->getDay()->getTitle()));
   }
 
   function onMomentDelete(Moment $moment)
   {
+    lmb_assert_true($moment->id);
     lmbActiveRecord :: delete('News', 'moment_id='.$moment->getId());
   }
 
@@ -149,27 +141,32 @@ class odNewsObserver
    */
   function onLike(lmbActiveRecord $liked_object)
   {
+    lmb_assert_true($liked_object->id);
     if(!($liked_object instanceof Day) && !($liked_object instanceof Moment))
       throw new lmbException("Not likeable object type '".get_class($liked_object)."'");
 
-    $news = $this->createNews();
     if($liked_object instanceof Day)
     {
+      $news = new News(array('day_id' => $liked_object->id));
       $owner = $liked_object->getUser();
-      $this->applyText($news, self::MSG_DAY_LIKED, array($this->sender->getName(), $liked_object->getTitle()));
+      if($owner->getSettings()->getNotificationsRelatedActivity())
+        $this->addRecipient($owner);
+      foreach($this->sender->getFollowers() as $follower)
+        if(1 == $follower->getSettings()->getNotificationsRelatedActivity())
+          $this->addRecipient($follower);
+      $this->send($news, self::MSG_DAY_LIKED, array($this->sender->name, $liked_object->title));
     }
     elseif($liked_object instanceof Moment)
     {
+      $news = new News(array('day_id' => $liked_object->day_id, 'moment_id' => $liked_object->id));
       $owner = $liked_object->getDay()->getUser();
-      $this->applyText($news, self::MSG_MOMENT_LIKED, array($this->sender->getName(), $liked_object->getDay()->getTitle()));
+      if($owner->getSettings()->getNotificationsRelatedActivity())
+        $this->addRecipient($owner);
+      foreach($this->sender->getFollowers() as $follower)
+        if(1 == $follower->getSettings()->getNotificationsRelatedActivity())
+          $this->addRecipient($follower);
+      $this->send($news, self::MSG_MOMENT_LIKED, array($this->sender->name, $liked_object->getDay()->title));
     }
-
-    if($owner->getSettings()->getNotificationsRelatedActivity())
-      $this->sendToRecipient($news, $owner);
-
-    foreach($this->sender->getFollowers() as $follower)
-      if(1 == $follower->getSettings()->getNotificationsRelatedActivity())
-        $this->sendToRecipient($news, $follower);
   }
 
   /**
@@ -177,35 +174,43 @@ class odNewsObserver
    */
   function onComment(BaseComment $comment)
   {
-    $news = $this->createNews();
-    $recipients = array();
+    lmb_assert_true($comment->id);
+    $news = new News;
 
     if($comment instanceof DayComment)
     {
       $day = $comment->getDay();
       $commented_object = $comment->getDay();
       $msg_type = self::MSG_DAY_COMMENT;
+      $news->day_comment_id = $comment->id;
     }
-    else
+    elseif($comment instanceof MomentComment)
     {
       $commented_object = $comment->getMoment();
       $day = $commented_object->getDay();
       $msg_type = self::MSG_MOMENT_COMMENT;
+      $news->moment_id = $commented_object->id;
+      $news->moment_comment_id = $comment->id;
+    }
+    else
+    {
+      throw new lmbException("Unknown comment type ".get_class($comment));
     }
 
+    $news->day_id = $day->id;
+
     if(1 == $day->getUser()->getSettings()->getNotificationsNewComments())
-      $recipients[$day->user_id] = $day->getUser();
+      $this->addRecipient($day->getUser());
 
     foreach ($commented_object->getComments() as $comment_author)
     {
       $comment_author = $comment_author->getUser();
       if($this->sender->getId() != $comment_author->getId())
         if(1 == $comment_author->getSettings()->getNotificationsNewReplays())
-          $recipients[$comment_author->id] = $comment_author;
+          $this->addRecipient($comment_author);
     }
 
-    $this->applyText($news, $msg_type, array($this->sender->name, $day->title));
-    $this->sendToRecipients($news, new lmbCollection($recipients));
+    $this->send($news, $msg_type, array($this->sender->name, $day->title));
   }
 
   /**
@@ -231,7 +236,8 @@ class odNewsObserver
    * @param  array  $params
    * @return string
    */
-  public static function getMessage($type, array $params = array()) {
+  public static function getMessage($type, array $params = array())
+  {
     lmb_assert_type($type, 'string');
     array_unshift($params, $type);
     $replaces_mustbe = substr_count($type, '%');
@@ -252,9 +258,10 @@ class odNewsObserver
    * @param  News                   $news
    * @param  lmbCollectionInterface $recipients
    */
-  protected function sendToRecipients(News $news, lmbCollectionInterface $recipients) {
+  protected function addRecipients($recipients)
+  {
     foreach($recipients as $recipient) {
-      $this->sendToRecipient($news, $recipient);
+      $this->addRecipient($recipient);
     }
   }
 
@@ -264,25 +271,21 @@ class odNewsObserver
    * @param News $news
    * @param User $recipient
    */
-  protected function sendToRecipient(News $news, User $recipient) {
-    $news = clone $news;
+  protected function addRecipient(User $recipient)
+  {
     lmb_assert_true($recipient->getId(), 'Recipient have no id');
     lmb_assert_true($this->sender->getId(), 'Sender have no id');
     if($recipient->getId() == $this->sender->getId())
       throw new lmbException("User can't send message to hemself.");
-    $news->setRecipient($recipient);
-    $news->save();
+    $this->recipients[$recipient->getId()] = $recipient;
   }
 
-  ###########################################################
-  ################ General-purpose functions ################
-  ###########################################################
-  /**
-   * @return News
-   */
-  protected function createNews(User $user = null) {
-    $news = new News();
-    $news->setUser($user ?: $this->sender);
-    return $news;
+  protected function send(News $news, $type, array $params = array())
+  {
+    $news->setSender($this->sender);
+
+    $news->setText(self::getMessage($type, $params));
+    $news->setRecipients($this->recipients);
+    $news->save();
   }
 }

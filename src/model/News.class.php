@@ -17,17 +17,21 @@ class News extends BaseModel
   protected function _defineRelations()
   {
     $this->_many_belongs_to = array (
-      'recipient'=> array ('field' => 'recipient_id', 'class' => 'User'),
-      'user'     => array ('field' => 'user_id',      'class' => 'User'),
-      'day'      => array ('field' => 'day_id',       'class' => 'Day',    'can_be_null' => true),
-      'moment'   => array ('field' => 'moment_id',    'class' => 'Moment', 'can_be_null' => true),
+      'sender'           => array ('field' => 'sender_id',    'class' => 'User'),
+    );
+    $this->_has_many_to_many = array(
+      'recipients' => array(
+        'field' => 'news_id',
+        'foreign_field' => 'recipient_id',
+        'table' => 'news_recipient',
+        'class' => 'User'),
     );
   }
 
   protected function _createValidator()
   {
     $validator = new lmbValidator();
-    $validator->addRequiredRule('user_id');
+    $validator->addRequiredRule('sender_id');
     $validator->addRequiredRule('text');
     return $validator;
   }
@@ -35,7 +39,7 @@ class News extends BaseModel
   function exportForApi(array $properties = null)
   {
     return parent::exportForApi(array(
-      'id', 'user_id', 'recipient_id', 'text', 'day_id', 'day_comment_id', 'moment_id', 'moment_comment_id'
+      'id', 'sender_id', 'recipient_id', 'text', 'user_id', 'day_id', 'day_comment_id', 'moment_id', 'moment_comment_id'
     ));
   }
 

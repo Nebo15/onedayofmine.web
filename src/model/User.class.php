@@ -45,7 +45,6 @@ class User extends BaseModel
       ),
       'days_comments'    => array ('field' => 'user_id', 'class' => 'DayComment'),
       'moments_comments' => array ('field' => 'user_id', 'class' => 'MomentComment'),
-      'news'             => array ('field' => 'recipient_id', 'class' => 'News'),
       'activities'       => array ('field' => 'user_id', 'class' => 'News'),
       'created_news'     => array ('field' => 'user_id', 'class' => 'News'),
       'day_likes'        => array ('field' => 'user_id', 'class' => 'DayLike'),
@@ -68,6 +67,11 @@ class User extends BaseModel
         'foreign_field' => 'user_id',
         'table' => 'user_following',
         'class' => 'User'),
+      'news' => array(
+        'field' => 'recipient_id',
+        'foreign_field' => 'news_id',
+        'table' => 'news_recipient',
+        'class' => 'News'),
     );
   }
 
