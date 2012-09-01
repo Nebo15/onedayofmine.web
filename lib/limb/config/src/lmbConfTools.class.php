@@ -58,7 +58,8 @@ class lmbConfTools extends lmbAbstractTools
 
   protected function _locateConfFiles($name)
   {
-    return $this->toolkit->findFileByAlias($name, $this->toolkit->getConfIncludePath(), 'config', false);
+    $res =  $this->toolkit->findFileByAlias($name, $this->toolkit->getConfIncludePath(), 'config', false);
+    return $res;
   }
 
   function getConf($name)
@@ -81,7 +82,7 @@ class lmbConfTools extends lmbAbstractTools
     elseif($ext == '.yml')
     {
       $file = $this->_locateConfFiles($name);
-   
+
       $this->confs[$name] =  $this->parseYamlFile(lmbFs::normalizePath($file)) ;
 
     }
@@ -97,6 +98,11 @@ class lmbConfTools extends lmbAbstractTools
       throw new lmbException("'$ext' type configuration is not supported!");
 
     return $this->confs[$name];
+  }
+
+  function resetConfs()
+  {
+    $this->confs = array();
   }
 
   protected function _normalizeConfName($name)

@@ -1,5 +1,5 @@
 <?php
-lmb_require('src/model/ModelWithImage.class.php');
+lmb_require('src/model/Imageable.class.php');
 lmb_require('limb/imagekit/src/lmbConvertImageHelper.class.php');
 lmb_require('limb/validation/src/rule/lmbValidValueRule.class.php');
 
@@ -10,10 +10,11 @@ lmb_require('limb/validation/src/rule/lmbValidValueRule.class.php');
  * @method string getFbAccessToken()
  * @method void setFbAccessToken(string $fb_access_token)
  * @method string getTwitterUid()
+ * @method string getTwitterAccessToken()
  * @method UserSettings getSettings()
  * @method void
  */
-class User extends ModelWithImage
+class User extends Imageable
 {
   const SEX_MALE = 'male';
   const SEX_FEMALE = 'female';
@@ -36,11 +37,6 @@ class User extends ModelWithImage
     );
     $this->_has_many = array (
       'days' => array (
-        'field' => 'user_id',
-        'class' => 'Day',
-        'criteria' =>'`day`.`is_deleted` = 0'
-      ),
-      'all_days' => array (
         'field' => 'user_id',
         'class' => 'Day',
       ),
@@ -126,7 +122,7 @@ class User extends ModelWithImage
     );
   }
 
-  function getDaysWithLimitations($from_id = null, $to_id = null, $limit = null, $show_deleted = false)
+  function getDaysWithLimitations($from_id = null, $to_id = null, $limit = null)
   {
     $criteria = new lmbSQLCriteria();
     if($from_id)
@@ -135,8 +131,7 @@ class User extends ModelWithImage
       $criteria->add(lmbSQLCriteria::greater('id', $to_id));
     if(!$limit || $limit > 100)
       $limit = 100;
-    $days = $show_deleted ? $this->getAllDays() : $this->getDays();
-    return $days->find(array(
+    return $this->getDays()->find(array(
       'criteria' => $criteria,
       'sort' => array('id' => 'DESC')
     ))->paginate(0, $limit);

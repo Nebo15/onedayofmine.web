@@ -1,16 +1,24 @@
 <?php
-lmb_require('src/model/ModelWithImage.class.php');
+lmb_require('src/model/Imageable.class.php');
 
 /**
  * @api field int id User ID
  * @static Day findById()
  */
-class Day extends ModelWithImage
+class Day extends Imageable
 {
   protected $_default_sort_params = array('id'=>'desc');
 
   protected function _defineRelations()
   {
+    $this->_has_one = array(
+      'finish_comment' => array(
+        'field' =>'finish_comment_id',
+        'class' => 'DayFinishComment',
+        'can_be_null' => true,
+      )
+    );
+
     $this->_many_belongs_to = array(
       'user' => array( 'field' => 'user_id', 'class' => 'User'),
     );

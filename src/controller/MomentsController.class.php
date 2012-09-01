@@ -8,7 +8,7 @@ class MomentsController extends BaseJsonController
 
   function doUpdate()
   {
-    if(!$this->request->hasPost())
+    if(!$this->request->isPost())
       return $this->_answerWithError('Not a POST request');
 
     if(!$moment = Moment::findById($this->request->id))
@@ -22,7 +22,7 @@ class MomentsController extends BaseJsonController
 
   function doComment()
   {
-    if(!$this->request->hasPost())
+    if(!$this->request->isPost())
       return $this->_answerWithError('Not a POST request');
 
     $comment = new MomentComment();
@@ -35,8 +35,7 @@ class MomentsController extends BaseJsonController
     {
       $comment->saveSkipValidation();
 
-      // Notify friends about new comment in moment
-      $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_COMMENT, $comment);
+      $this->toolkit->getNewsObserver()->onComment($comment);
 
       return $this->_answerOk($comment->exportForApi());
     }
@@ -46,7 +45,7 @@ class MomentsController extends BaseJsonController
 
   function doDelete()
   {
-    if(!$this->request->hasPost())
+    if(!$this->request->isPost())
       return $this->_answerWithError('Not a POST request');
 
     if(!$moment = Moment::findById($this->request->id))
@@ -57,11 +56,8 @@ class MomentsController extends BaseJsonController
 
     $moment->destroy();
 
-    // Delete corresponding news
-    lmbActiveRecord :: delete('News', 'moment_id='.$moment->getId());
+    $this->toolkit->getNewsObserver()->onMomentDelete($moment);
 
     return $this->_answerOk();
   }
-
-  //POST /moments/<momentId>/comments/<commentId>/update
 }

@@ -1,18 +1,21 @@
 <?php
-lmb_require('src/model/Commentable.class.php');
+lmb_require('src/model/Comment.class.php');
 
 /**
  * @api
  */
-class DayComment extends Commentable
+class DayFinishComment extends Commentable
 {
-  protected $_db_table_name = 'day_comment';
+  protected $_db_table_name = 'day_finish_comment';
 
   protected function _defineRelations()
   {
+    $this->_belongs_to = array(
+      'day' => array('field' => 'finish_comment_id', 'class' => 'Day')
+    );
+
     $this->_many_belongs_to = array (
       'user' => array ('field' => 'user_id', 'class' => 'User'),
-      'day' =>  array ('field' => 'day_id', 'class' => 'Day'),
     );
   }
 
@@ -20,15 +23,7 @@ class DayComment extends Commentable
   {
     $validator = new lmbValidator();
     $validator->addRequiredObjectRule('user', 'User', 'User is required');
-    $validator->addRequiredObjectRule('day', 'Day', 'Day is required');
     $validator->addRequiredRule('text');
     return $validator;
-  }
-
-  function exportForApi()
-  {
-    $export = parent::exportForApi();
-    $export->day_id = $this->getDay()->getId();
-    return $export;
   }
 }

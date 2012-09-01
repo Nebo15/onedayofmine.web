@@ -1,8 +1,10 @@
 <?php
-lmb_require('tests/cases/acceptance/odAcceptanceTestCase.class.php');
+lmb_require('tests/cases/integration/odAcceptanceTestCase.class.php');
 
-class SocialAcceptanceTest extends odAcceptanceTestCase
+class SocialControllerTest extends odAcceptanceTestCase
 {
+  protected $controller_class = 'SocialController';
+
   function setUp()
   {
     parent::setUp();
@@ -37,9 +39,6 @@ class SocialAcceptanceTest extends odAcceptanceTestCase
    */
   function testTwitterConnect()
   {
-    $this->main_user->save();
-    $this->assertEqual(0, $this->main_user->getSettings()->getSocialShareTwitter());
-
     $this->main_user->getSettings()->setSocialShareTwitter(1);
     $this->main_user->save();
     $this->_loginAndSetCookie($this->main_user);
@@ -74,7 +73,7 @@ class SocialAcceptanceTest extends odAcceptanceTestCase
   {
     $this->main_user->save();
     $this->_loginAndSetCookie($this->main_user);
-    $result = $this->post('social/twitter_connect', array(
+    $this->post('social/twitter_connect', array(
       'access_token'         => $this->generator->twitter_credentials()[0]['access_token']
     ));
     $this->assertResponse(400);

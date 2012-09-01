@@ -35,7 +35,7 @@ class DaysController extends BaseJsonController
 
   function doStart()
   {
-    if(!$this->request->hasPost())
+    if(!$this->request->isPost())
       return $this->_answerWithError('Not a POST request', null, 405);
 
     $errors = $this->_checkPropertiesInRequest(array('title', 'type'));
@@ -58,18 +58,24 @@ class DaysController extends BaseJsonController
 
     $day->getDefaultConnection()->commitTransaction();
 
-    // Notify friends about new day
-    $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_DAY, $day);
+    $this->toolkit->getNewsObserver()->onDay($day);
 
-    // Share to social networks
-    $this->toolkit->getPostingService()->shareDayBegin($day);
+    try
+    {
+      $this->toolkit->getPostingService()->shareDayBegin($day);
+    }
+    catch(odFacebookApiExpiredTokenException $e)
+    {
+      $day->destroy();
+      return $this->_answerUnauthorized('Token expired');
+    }
 
     return $this->_answerOk($this->_exportDayWithSubentities($day));
   }
 
   function doUpdate()
   {
-    if(!$this->request->hasPost())
+    if(!$this->request->isPost())
       return $this->_answerWithError('Not a POST request', null, 405);
 
     if(!$day = Day::findById($this->request->id))
@@ -78,8 +84,10 @@ class DaysController extends BaseJsonController
     if($this->_getUser()->getId() != $day->getUser()->getId())
       return $this->_answerWithError('You can update only your own days', null, 401);
 
-    if($this->request->get('cover_content'))
+    if($this->request->get('cover_content')) {
       $day->attachImage(base64_decode($this->request->get('cover_content')));
+      $day->save();
+    }
 
     $this->_importSaveAndAnswer($day, array('title', 'occupation', 'location', 'type'));
 
@@ -88,7 +96,7 @@ class DaysController extends BaseJsonController
 
   function doCurrent()
   {
-    if(!$this->request->hasPost())
+    if(!$this->request->isPost())
       return $this->_answerWithError('Not a POST request', null, 405);
 
     if(!$day = $this->_getUser()->getCurrentDay())
@@ -99,7 +107,7 @@ class DaysController extends BaseJsonController
 
   function doFinish()
   {
-    if(!$this->request->hasPost())
+    if(!$this->request->isPost())
       return $this->_answerWithError('Not a POST request', null, 405);
 
     if(!$day = Day::findById($this->request->id))
@@ -119,9 +127,9 @@ class DaysController extends BaseJsonController
     }
 
     if($this->request->get('comment')) {
-      $comment = new DayComment();
-      $comment->setText($this->request->get('comment'));
+      $comment = new DayFinishComment();
       $comment->setDay($day);
+      $comment->setText($this->request->get('comment'));
       $comment->setUser($this->_getUser());
       $comment->save();
     }
@@ -131,7 +139,7 @@ class DaysController extends BaseJsonController
 
   function doMarkCurrent()
   {
-    if(!$this->request->hasPost())
+    if(!$this->request->isPost())
       return $this->_answerWithError('Not a POST request', null, 405);
 
     if(!$day = Day::findById($this->request->id))
@@ -146,7 +154,7 @@ class DaysController extends BaseJsonController
 
   function doShare()
   {
-    if(!$this->request->hasPost())
+    if(!$this->request->isPost())
       return $this->_answerWithError('Not a POST request');
 
     if(!$day = Day::findById($this->request->id))
@@ -159,14 +167,13 @@ class DaysController extends BaseJsonController
 
   function doLike()
   {
-    if(!$this->request->hasPost())
+    if(!$this->request->isPost())
       return $this->_answerWithError('Not a POST request');
 
     if(!$day = Day::findById($this->request->id))
       return $this->_answerWithError("Day not found");
 
-    // Notify friends about day like
-    $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_LIKE, $day);
+    $this->toolkit->getNewsObserver()->onLike($day);
 
     $day->setLikesCount($day->getLikesCount() + 1);
     $day->save();
@@ -176,7 +183,7 @@ class DaysController extends BaseJsonController
 
   function doDelete()
   {
-    if(!$this->request->hasPost())
+    if(!$this->request->isPost())
       return $this->_answerWithError('Not a POST request');
 
     if(!$day = Day::findById($this->request->id))
@@ -188,15 +195,14 @@ class DaysController extends BaseJsonController
     $day->setIsDeleted(1);
     $day->save();
 
-    // Delete corresponding news
-    lmbActiveRecord :: delete('News', 'day_id='.$day->getId());
+    $this->toolkit->getNewsObserver()->onDayDelete($day);
 
     return $this->_answerOk();
   }
 
   function doRestore()
   {
-    if(!$this->request->hasPost())
+    if(!$this->request->isPost())
       return $this->_answerWithError('Not a POST request');
 
     if(!$day = Day::findById($this->request->id))
@@ -298,7 +304,7 @@ class DaysController extends BaseJsonController
 
   function doMarkFavourite()
   {
-    if(!$this->request->hasPost())
+    if(!$this->request->isPost())
       return $this->_answerWithError('Not a POST request');
 
     if(!$day = Day::findById($this->request->id))
@@ -313,7 +319,7 @@ class DaysController extends BaseJsonController
 
   function doUnmarkFavourite()
   {
-    if(!$this->request->hasPost())
+    if(!$this->request->isPost())
       return $this->_answerWithError('Not a POST request');
 
     if(!$day = Day::findById($this->request->id))
@@ -345,7 +351,7 @@ class DaysController extends BaseJsonController
 
   function doAddMoment()
   {
-    if(!$this->request->hasPost())
+    if(!$this->request->isPost())
       return $this->_answerWithError('Not a POST request');
 
     $errors = $this->_checkPropertiesInRequest(array('description', 'image_content'));
@@ -383,7 +389,7 @@ class DaysController extends BaseJsonController
 
     if($this->error_list->isEmpty())
     {
-      $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_MOMENT, $moment);
+      $this->toolkit->getNewsObserver()->onMoment($moment);
       return $this->_answerOk($moment->exportForApi());
     }
     else
@@ -392,7 +398,7 @@ class DaysController extends BaseJsonController
 
   function doCommentCreate()
   {
-    if(!$this->request->hasPost())
+    if(!$this->request->isPost())
       return $this->_answerWithError('Not a POST request');
 
     $comment = new DayComment();
@@ -405,8 +411,7 @@ class DaysController extends BaseJsonController
     {
       $comment->saveSkipValidation();
 
-      // Notify friends about new comment in day
-      $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_COMMENT, $comment);
+      $this->toolkit->getNewsObserver()->onComment($comment);
 
       return $this->_answerOk($comment->exportForApi());
     }
@@ -416,7 +421,7 @@ class DaysController extends BaseJsonController
 
   function doCreateComplaint()
   {
-    if(!$this->request->hasPost())
+    if(!$this->request->isPost())
       return $this->_answerNotPost();
 
     if(!Day::findById($this->request->id))

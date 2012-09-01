@@ -2,13 +2,15 @@
 //lmb_require('limb/tests_runner/lib/simpletest/web_tester.php');
 lmb_require('lib/DocCommentParser/*.class.php');
 lmb_require('lib/limb/net/src/lmbHttpRequest.class.php');
+lmb_require('tests/cases/unit/odUnitTestCase.class.php');
 
-abstract class odControllerTestCase extends UnitTestCase
+Mock::generate('odPostingService', 'PostingServiceMock');
+Mock::generate('odFacebook', 'FacebookMock');
+Mock::generate('odTwitter', 'TwitterMock');
+Mock::generate('FacebookProfile', 'FacebookProfileMock');
+
+abstract class odControllerTestCase extends odUnitTestCase
 {
-  /**
-   * @var OdObjectMother
-   */
-  protected $generator;
   /**
    * @var string
    */
@@ -20,61 +22,39 @@ abstract class odControllerTestCase extends UnitTestCase
   protected $last_response_raw;
   protected $cookies = array();
 
-  protected $last_profile_info;
-  /**
-   * @var User
-   */
-  protected $main_user;
-  /**
-   * @var User
-   */
-  protected $additional_user;
-
-  /**
-   * @var odTestsTools
-   */
-  protected $toolkit;
-
   function setUp()
   {
     if(!$this->controller_class)
       throw new lmbException('You must specify controller class');
 
-    $this->generator = new odObjectMother();
-    $this->toolkit = lmbToolkit::instance();
+    lmb_require('src/controller/'.$this->controller_class.'.class.php');
+
     parent::setUp();
-    $this->toolkit->truncateTablesOf('UserSettings', 'User');
-    list($this->main_user, $this->additional_user) = $this->toolkit->getTestsUsers($quiet = false);
+    $this->toolkit->setFacebook(new FacebookMock, $this->main_user->getFbAccessToken());
+    $this->toolkit->setTwitter(new TwitterMock(), $this->main_user->getTwitterAccessToken());
+    $this->toolkit->setFacebookProfile($this->main_user, new FacebookProfileMock);
+    $this->toolkit->setFacebook(new FacebookMock, $this->additional_user->getFbAccessToken());
+    $this->toolkit->setTwitter(new TwitterMock(), $this->additional_user->getTwitterAccessToken());
+    $this->toolkit->setFacebookProfile($this->additional_user, new FacebookProfileMock);
+    $this->toolkit->setPostingService(new PostingServiceMock);
   }
 
-  protected function _loginAndSetCookie(User $user)
-  {
-    $this->cookies['token'] = $user->getFbAccessToken();
-    return $this->_login($user);
-  }
-
-  protected function _login(User $user)
-  {
-    $request = new lmbHttpRequest(null, null, array('token' => $user->getFbAccessToken()));
-    $request->setRequestMethod('POST');
-    $res = $this->request('AuthController', 'login', $request);
-    $this->assertResponse(200);
-    $this->assertProperty($res->result, 'name');
-    return $res;
-  }
-
-  function get($action, $params = array())
+  function get($action, $params = array(), $id = null)
   {
     $request = new lmbHttpRequest(null, (array) $params);
     $request->setRequestMethod('GET');
+    if($id)
+      $request->set('id', $id);
     $result = $this->request($this->controller_class, $action, $request);
     return $result;
   }
 
-  function post($action, $params = array())
+  function post($action, $post_params = array(), $id = null)
   {
-    $request = new lmbHttpRequest(null, null, (array) $params);
+    $request = new lmbHttpRequest(null, null, (array) $post_params);
     $request->setRequestMethod('POST');
+    if($id)
+      $request->set('id', $id);
     $result = $this->request($this->controller_class, $action, $request);
     return $result;
   }
@@ -102,11 +82,9 @@ abstract class odControllerTestCase extends UnitTestCase
     $decoded_body = json_decode($raw_response);
     if ($decoded_body === null) {
       throw new lmbException("Can't parse response", array(
-          'url' => $this->getUrl(),
           'raw' => $raw_response
       ));
     }
-
     return $decoded_body;
   }
 
@@ -146,10 +124,9 @@ abstract class odControllerTestCase extends UnitTestCase
     $this->assertEqual($valid_day->location, $day_from_response->location);
     $this->assertEqual($valid_day->type, $day_from_response->type);
     $this->assertEqual($valid_day->likes_count, $day_from_response->likes_count);
-    $this->assertEqual($valid_day->is_ended, $day_from_response->is_ended);
   }
 
-  function assertResponse($responses, $message = '%s')
+  function assertResponse($responses)
   {
     $responses = (is_array($responses) ? $responses : array($responses));
     $code = $this->last_response->code;
@@ -170,9 +147,11 @@ abstract class odControllerTestCase extends UnitTestCase
 
   protected function assertValidImageUrl($url)
   {
-    $content = @file_get_contents($url);
+    $images_conf = lmbToolkit::instance()->getConf('images');
+    $rel_path = str_replace(lmbToolkit::instance()->getConf('common')['static_host'], '', $url);
+    $abs_path = lmb_env_get('APP_DIR').$images_conf['save_path'].'/'.$rel_path;
     return $this->assertTrue(
-      strlen($content),
+      file_exists($abs_path),
       "Invalid image url '{$url}'"
     );
   }

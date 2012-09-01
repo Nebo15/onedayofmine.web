@@ -50,7 +50,7 @@ class AuthController extends BaseJsonController
     $this->toolkit->setUser($user);
 
     if($new_user)
-      $this->toolkit->getNewsObserver()->notify(odNewsObserver::ACTION_NEW_USER, $user);
+      $this->toolkit->getNewsObserver()->onUser($user);
 
     $answer = $user->exportForApi();
     $answer->favourites_count = $this->_getUser()->getFavouriteDays()->count();
@@ -64,7 +64,7 @@ class AuthController extends BaseJsonController
   {
     $user = new User();
     $user->setFbAccessToken($fb_access_token);
-    $profile = new FacebookProfile($user);
+    $profile = $this->toolkit->getFacebookProfile($user);
     $user->import($profile->getInfo());
     $user->save();
 

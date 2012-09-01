@@ -67,5 +67,10 @@ class lmbFsTools extends lmbAbstractTools
     $this->file_locators[$locator_name] = $locator;
     return $locator;
   }
+
+  function resetFileLocators()
+  {
+    $this->file_locators = array();
+  }
 }
 

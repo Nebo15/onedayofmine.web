@@ -1,26 +1,27 @@
 <?php
-lmb_require('tests/cases/acceptance/odAcceptanceTestCase.class.php');
+lmb_require('tests/cases/unit/controller/odControllerTestCase.class.php');
+lmb_require('src/controller/DaysController.class.php');
 
-class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
+class DaysOwnerControllerTest extends odControllerTestCase
 {
+  protected $controller_class = 'DaysController';
+
+
   function setUp()
   {
     parent::setUp();
-    odTestsTools::truncateTablesOf('Day', 'Moment', 'DayComment');
+    odTestsTools::truncateTablesOf('Day', 'Moment', 'DayComment', 'DayFinishComment');
   }
 
   function testStart_Negative()
   {
-    $this->post('days/start');
-    $this->assertResponse(401);
-
     $this->main_user->save();
-    $this->_loginAndSetCookie($this->main_user);
+    lmbToolkit::instance()->setUser($this->main_user);
 
-    $this->get('days/start');
+    $this->get('start');
     $this->assertResponse(405);
 
-    $errors = $this->post('days/start')->errors;
+    $errors = $this->post('start')->errors;
     $this->assertResponse(400);
     $this->assertEqual('array', gettype($errors));
     $this->assertTrue(0 < count($errors));
@@ -37,12 +38,12 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
   {
     $this->main_user->save();
 
-    $this->_loginAndSetCookie($this->main_user);
+    lmbToolkit::instance()->setUser($this->main_user);
 
     $day = $this->generator->day($this->main_user);
     $params = $day->exportForApi();
 
-    $response = $this->post('days/start', array(
+    $response = $this->post('start', array(
       'title' => $params->title,
       'location' => $params->location,
       'occupation' => $params->occupation,
@@ -64,13 +65,13 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
 
     $this->main_user->setOccupation('testStart_withNoOccupation - user');
     $this->main_user->save();
-    $this->_loginAndSetCookie($this->main_user);
+    lmbToolkit::instance()->setUser($this->main_user);
 
     $day = $this->generator->day($this->main_user);
     $params = $day->exportForApi();
     $params->occupation = null;
 
-    $response = $this->post('days/start', array(
+    $response = $this->post('start', array(
       'title' => $params->title,
       'location' => $params->location,
       'occupation' => $params->occupation,
@@ -88,21 +89,22 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
     }
   }
 
-  function testStart_withNoLocation() {
-
+  function testStart_withNoLocation()
+  {
     $this->main_user->setLocation('testStart_withNoLocation - user');
     $this->main_user->save();
-    $this->_loginAndSetCookie($this->main_user);
+    lmbToolkit::instance()->setUser($this->main_user);
 
     $day = $this->generator->day($this->main_user);
     $params = $day->exportForApi();
     $params->location = null;
 
-    $response = $this->post('days/start', array(
+    $response = $this->post('start', array(
       'title' => $params->title,
       'occupation' => $params->occupation,
       'type' => $params->type,
     ));
+
     if($this->assertResponse(200))
     {
       if($this->assertProperty($response->result, 'user'))
@@ -113,6 +115,27 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
       $this->assertEqual($day->type, $response->result->type);
       $this->assertEqual(0, $response->result->likes_count);
     }
+  }
+
+  function testStart_ExpiredToken()
+  {
+    $this->main_user->save();
+
+    $this->toolkit->setUser($this->main_user);
+    $this->toolkit->setPostingService(new PostingServiceWithExpiredToken());
+
+    $day = $this->generator->day($this->main_user);
+    $params = $day->exportForApi();
+
+    $this->post('start', array(
+      'title' => $params->title,
+      'location' => $params->location,
+      'occupation' => $params->occupation,
+      'type' => $params->type,
+      'token' => 'wrong-token'
+    ));
+
+    $this->assertResponse(401);
   }
 
   /**
@@ -126,12 +149,14 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
     $day = $this->generator->day($this->main_user);
     $day->save();
 
-    $this->_loginAndSetCookie($this->main_user);
-    $res = $this->post('days/'.$day->getId().'/add_moment', array(
+    lmbToolkit::instance()->setUser($this->main_user);
+    $res = $this->post('add_moment',
+      array(
         'description' => $description = $this->generator->string(200),
         'image_content' => base64_encode($this->generator->image()),
-        'time' => $time = '2005-08-09T18:31:42+03:00',
-    ))->result;
+        'time' => $time = '2005-08-09T18:31:42+03:00',),
+      $day->getId()
+    )->result;
 
     if($this->assertResponse(200))
     {
@@ -150,11 +175,13 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
     $day = $this->generator->day($this->main_user);
     $day->save();
 
-    $this->_loginAndSetCookie($this->main_user);
-    $res = $this->post('days/'.$day->getId().'/add_moment', array(
+    lmbToolkit::instance()->setUser($this->main_user);
+    $res = $this->post('add_moment',
+      array(
         'description' => $description = $this->generator->string(200),
-        'image_content' => base64_encode(file_get_contents(lmb_env_get('APP_DIR').'/tests/init/image_with_exif.jpeg')),
-    ))->result;
+        'image_content' => base64_encode(file_get_contents(lmb_env_get('APP_DIR').'/tests/init/image_with_exif.jpeg'))),
+      $day->getId()
+    )->result;
 
     if($this->assertResponse(200))
     {
@@ -173,11 +200,13 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
     $day = $this->generator->day($this->main_user);
     $day->save();
 
-    $this->_loginAndSetCookie($this->main_user);
-    $res = $this->post('days/'.$day->getId().'/add_moment', array(
+    lmbToolkit::instance()->setUser($this->main_user);
+    $res = $this->post('add_moment',
+      array(
         'description' => $description = $this->generator->string(200),
-        'image_content' => base64_encode(file_get_contents(lmb_env_get('APP_DIR').'/tests/init/image_with_exif.jpeg')),
-    ))->result;
+        'image_content' => base64_encode(file_get_contents(lmb_env_get('APP_DIR').'/tests/init/image_with_exif.jpeg'))),
+      $day->getId()
+    )->result;
 
     if($this->assertResponse(200))
     {
@@ -192,12 +221,14 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
     $day = $this->generator->day($this->main_user);
     $day->save();
 
-    $this->_loginAndSetCookie($this->main_user);
-    $this->post('days/'.$day->getId().'/add_moment', array(
-      'description' => $description = $this->generator->string(200),
-      'image_content' => base64_encode($this->generator->image()),
-      'time' => $time = '2005-08-09T18:31:42+03:00'
-    ))->result;
+    lmbToolkit::instance()->setUser($this->main_user);
+    $this->post('add_moment',
+      array(
+        'description' => $description = $this->generator->string(200),
+        'image_content' => base64_encode($this->generator->image()),
+        'time' => $time = '2005-08-09T18:31:42+03:00'),
+      $day->getId()
+    )->result;
 
     if($this->assertResponse(200))
     {
@@ -212,21 +243,24 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
    * @api input option string title
    * @api input option string occupation Can be omited, then user profile occupation will be used
    * @api input option string type One of pre-defined types, see: GET day/type_names request
+   * @api input option string cover_content base64 encoded image content
    */
   function testUpdate()
   {
     $day = $this->generator->day($this->main_user);
     $day->save();
 
-    $this->_loginAndSetCookie($this->main_user);
+    lmbToolkit::instance()->setUser($this->main_user);
 
-    $response = $this->post('days/'.$day->getId().'/update', array(
+    $response = $this->post('update',
+      array(
         'title' => $title = $this->generator->string(),
         'occupation' => $occupation = $this->generator->string(255),
         'location' => $location = $this->generator->string(),
         'type' => $type = 'Working day',
-        'cover_content' => base64_encode($this->generator->image()),
-    ))->result;
+        'cover_content' => base64_encode($this->generator->image())),
+      $day->getId()
+    )->result;
 
     if($this->assertResponse(200))
     {
@@ -237,7 +271,7 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
 
   function testUpdate_NotFound()
   {
-    $this->_loginAndSetCookie($this->main_user);
+    lmbToolkit::instance()->setUser($this->main_user);
 
     $this->post('days/100500/update', array(
       'title' => $title = $this->generator->string(),
@@ -254,15 +288,17 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
     $day = $this->generator->day($this->main_user);
     $day->save();
 
-    $this->_loginAndSetCookie($this->additional_user);
+    $this->toolkit->setUser($this->additional_user);
 
-    $this->post('days/'.$day->getId().'/update', array(
-      'title' => $title = $this->generator->string(),
-      'occupation' => $occupation = $this->generator->string(),
-      'location' => $location = $this->generator->string(),
-      'type' => $type = 'Working',
-      'cover' => $this->generator->image(),
-    ));
+    $this->post('update',
+      array(
+        'title' => $title = $this->generator->string(),
+        'occupation' => $occupation = $this->generator->string(),
+        'location' => $location = $this->generator->string(),
+        'type' => $type = 'Working',
+        'cover' => $this->generator->image(),
+      ),
+      $day->getId());
     $this->assertResponse(401);
   }
 
@@ -277,8 +313,8 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
     $this->main_user->setCurrentDay($day);
     $this->main_user->save();
 
-    $this->_loginAndSetCookie($this->main_user);
-    $response = $this->post('days/current');
+    lmbToolkit::instance()->setUser($this->main_user);
+    $response = $this->post('current');
 
     if($this->assertResponse(200))
     {
@@ -296,8 +332,8 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
     $day = $this->generator->day($this->main_user);
     $day->save();
 
-    $this->_loginAndSetCookie($this->main_user);
-    $response = $this->post('days/current');
+    lmbToolkit::instance()->setUser($this->main_user);
+    $this->post('days/current');
 
     $this->assertResponse(404);
   }
@@ -311,8 +347,8 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
     $day = $this->generator->day($this->main_user);
     $day->save();
 
-    $this->_loginAndSetCookie($this->main_user);
-    $response = $this->post('days/'.$day->getId().'/mark_current');
+    lmbToolkit::instance()->setUser($this->main_user);
+    $response = $this->post('mark_current', array(), $day->getId());
 
     $this->assertResponse(200);
     $this->assertFalse($response->result);
@@ -326,8 +362,8 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
     $day = $this->generator->day($this->main_user);
     $day->save();
 
-    $this->_loginAndSetCookie($this->main_user);
-    $response = $this->post('days/1337/mark_current');
+    lmbToolkit::instance()->setUser($this->main_user);
+    $this->post('days/1337/mark_current');
 
     $this->assertResponse(404);
   }
@@ -343,11 +379,14 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
     $this->main_user->setCurrentDay($day);
     $this->main_user->save();
 
-    $this->_loginAndSetCookie($this->main_user);
-    $response = $this->post('days/'.$day->getId().'/finish', array(
-      'image_content' => $image_content = base64_encode($this->generator->image()),
-      'comment' => $comment_text = $this->generator->string(),
-    ));
+    lmbToolkit::instance()->setUser($this->main_user);
+    $response = $this->post('finish',
+      array(
+        'image_content' => $image_content = base64_encode($this->generator->image()),
+        'comment' => $comment_text = $this->generator->string()
+      ),
+      $day->getId()
+    );
 
     if($this->assertResponse(200))
     {
@@ -358,8 +397,12 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
       $this->assertEqual($day->getLikesCount(), $loaded_day->likes_count);
       $this->assertEqual($day->getCreateTime(), $loaded_day->ctime);
 
-      $this->assertEqual(count($day->getComments()), 1);
-      $this->assertEqual($day->getComments()->at(0)->getText(), $comment_text);
+      $db_day = Day::findOne();
+      $this->assertProperty($loaded_day, 'finish_comment');
+      $this->assertTrue($loaded_day->finish_comment);
+      $this->assertEqual(count($db_day->getComments()), 0);
+      $this->assertTrue($db_day->getFinishComment());
+      $this->assertEqual($db_day->getFinishComment()->getText(), $comment_text);
 
       $this->assertValidImageUrl($loaded_day->image_266);
       $this->assertValidImageUrl($loaded_day->image_532);
@@ -374,8 +417,8 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
     $day = $this->generator->day($this->main_user);
     $day->save();
 
-    $this->_loginAndSetCookie($this->main_user);
-    $response = $this->post('days/'.$day->getId().'/finish');
+    lmbToolkit::instance()->setUser($this->main_user);
+    $response = $this->post('finish', array(), $day->getId());
 
     if($this->assertResponse(200))
     {
@@ -399,8 +442,8 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
     $this->main_user->setCurrentDay($day2);
     $this->main_user->save();
 
-    $this->_loginAndSetCookie($this->main_user);
-    $response = $this->post('days/'.$day->getId().'/finish');
+    lmbToolkit::instance()->setUser($this->main_user);
+    $response = $this->post('finish', array(), $day->getId());
 
     if($this->assertResponse(200))
     {
@@ -418,8 +461,8 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
 
   function testFinish_NotFound()
   {
-    $this->_loginAndSetCookie($this->main_user);
-    $response = $this->post('days/1337/finish');
+    lmbToolkit::instance()->setUser($this->main_user);
+    $this->post('finish', array(), 100500);
 
     $this->assertResponse(404);
   }
@@ -433,8 +476,8 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
     $day = $this->generator->day($this->main_user);
     $day->save();
 
-    $this->_loginAndSetCookie($this->main_user);
-    $this->post('days/'.$day->getId().'/delete')->result;
+    lmbToolkit::instance()->setUser($this->main_user);
+    $this->post('delete', array(), $day->getId());
 
     $this->assertResponse(200);
 
@@ -444,8 +487,8 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
 
   function testDelete_NotFound()
   {
-    $this->_loginAndSetCookie($this->main_user);
-    $this->post('days/100000/delete')->result;
+    lmbToolkit::instance()->setUser($this->main_user);
+    $this->post('delete', array(), 100500);
 
     $this->assertResponse(404);
   }
@@ -455,8 +498,8 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
     $day = $this->generator->day($this->main_user);
     $day->save();
 
-    $this->_loginAndSetCookie($this->additional_user);
-    $this->post('days/'.$day->getId().'/delete')->result;
+    $this->toolkit->setUser($this->additional_user);
+    $this->post('delete', array(), $day->getId())->result;
 
     $this->assertResponse(401);
   }
@@ -471,8 +514,8 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
     $day->setIsDeleted(1);
     $day->save();
 
-    $this->_loginAndSetCookie($this->main_user);
-    $this->post('days/'.$day->getId().'/restore')->result;
+    lmbToolkit::instance()->setUser($this->main_user);
+    $this->post('restore', array(), $day->getId())->result;
 
     $this->assertResponse(200);
 
@@ -482,8 +525,8 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
 
   function testRestoreDay_NotFound()
   {
-    $this->_loginAndSetCookie($this->main_user);
-    $this->post('days/100000/delete')->result;
+    lmbToolkit::instance()->setUser($this->main_user);
+    $this->post('delete', array(), 100500)->result;
 
     $this->assertResponse(404);
   }
@@ -493,9 +536,17 @@ class DaysOwnerAcceptanceTest extends odAcceptanceTestCase
     $day = $this->generator->day($this->main_user);
     $day->save();
 
-    $this->_loginAndSetCookie($this->additional_user);
-    $this->post('days/'.$day->getId().'/restore')->result;
+    $this->toolkit->setUser($this->additional_user);
+    $this->post('restore', array(), $day->getId())->result;
 
     $this->assertResponse(401);
+  }
+}
+
+class PostingServiceWithExpiredToken extends odPostingService
+{
+  function share($name, $args)
+  {
+    throw new odFacebookApiExpiredTokenException('Who are you? Come on, "Goodbye!"');
   }
 }

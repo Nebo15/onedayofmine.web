@@ -1,8 +1,11 @@
 <?php
-lmb_require('tests/cases/acceptance/odAcceptanceTestCase.class.php');
+lmb_require('tests/cases/unit/controller/odControllerTestCase.class.php');
+lmb_require('src/controller/MomentsController.class.php');
 
-class MomentsAcceptanceTest extends odAcceptanceTestCase
+class MomentsControllerTest extends odControllerTestCase
 {
+  protected $controller_class = 'MomentsController';
+
   function setUp()
   {
     parent::setUp();
@@ -22,11 +25,14 @@ class MomentsAcceptanceTest extends odAcceptanceTestCase
     $moment = $this->generator->moment($day);
     $moment->save();
 
-    $this->_loginAndSetCookie($this->main_user);
-    $res = $this->post('moments/'.$moment->getId().'/update', array(
-      'description' => $desc = $this->generator->string(255),
-      'image_content' => base64_encode($this->generator->image()),
-      ))->result;
+    lmbToolkit::instance()->setUser($this->main_user);
+    $res = $this->post('update',
+      array(
+        'description' => $desc = $this->generator->string(255),
+        'image_content' => base64_encode($this->generator->image()),
+      ),
+      $moment->getId()
+    )->result;
     $this->assertResponse(200);
 
     $this->assertEqual($res->description, $desc);
@@ -42,7 +48,10 @@ class MomentsAcceptanceTest extends odAcceptanceTestCase
   }
 
   // TODO
-  function testUpdate_MomentNotFound() {}
+  function testUpdate_MomentNotFound()
+  {
+
+  }
 
   /**
    * @api description Delete a moment.
@@ -55,8 +64,8 @@ class MomentsAcceptanceTest extends odAcceptanceTestCase
     $moment = $this->generator->moment($day);
     $moment->save();
 
-    $this->_loginAndSetCookie($this->main_user);
-    $this->post('moments/'.$moment->getId().'/delete');
+    lmbToolkit::instance()->setUser($this->main_user);
+    $this->post('delete', array(), $moment->getId());
 
     $this->assertResponse(200);
     $this->assertFalse(Moment::findById($moment->getId()));
@@ -80,10 +89,11 @@ class MomentsAcceptanceTest extends odAcceptanceTestCase
     $moment = $this->generator->moment($day);
     $moment->save();
 
-    $this->_loginAndSetCookie($this->main_user);
-    $res = $this->post('moments/'.$moment->getId().'/comment', array(
-      'text' => $text = $this->generator->string(255)
-    ))->result;
+    lmbToolkit::instance()->setUser($this->main_user);
+    $res = $this->post('comment',
+      array('text' => $text = $this->generator->string(255)),
+      $moment->getId()
+    )->result;
 
     $this->assertResponse(200);
     $this->assertEqual($moment->getComments()->at(0)->getId(), $res->id);
