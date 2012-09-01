@@ -40,31 +40,47 @@ class odPostingService implements SharesInterface
 
   public function shareDayBegin(Day $day)
   {
-    $this->share('shareDayBegin', func_get_args());
+    $result = $this->share('shareDayBegin', func_get_args());
+    $this->setObjectIds($day, $result);
+    return $result;
   }
 
   public function shareDay(Day $day)
   {
-    $this->share('shareDay', func_get_args());
+    return $this->share('shareDay', func_get_args());
   }
+
+  public function shareDayDelete(Day $day){}
 
   public function shareDayLike(Day $day, DayLike $like)
   {
-    $this->share('shareDayLike', func_get_args());
+    return $this->share('shareDayLike', func_get_args());
   }
 
   public function shareMomentAdd(Day $day, Moment $moment)
   {
-    $this->share('shareMomentAdd', func_get_args());
+    $result = $this->share('shareMomentAdd', func_get_args());
+    $this->setObjectIds($moment, $result);
+    return $result;
   }
+
+  public function shareMomentDelete(Day $day, Moment $moment){}
 
   public function shareMomentLike(Moment $moment, MomentLike $like)
   {
-    $this->share('shareMomentLike', func_get_args());
+    return $this->share('shareMomentLike', func_get_args());
   }
 
   public function shareDayEnd(Day $day)
   {
-    $this->share('shareDayEnd', func_get_args());
+    return $this->share('shareDayEnd', func_get_args());
+  }
+
+  protected function setObjectIds(lmbActiveRecord $object, array $result)
+  {
+    foreach ($result as $key => $value) {
+      $method_name = 'set'.ucfirst($key).'Id';
+      $object->$method_name($value);
+    }
   }
 }
