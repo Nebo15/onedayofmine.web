@@ -1,11 +1,11 @@
 <? $this->title = $this->day->getTitle(); ?>
 {{wrap with="layout.phtml"}}
   {{into slot="meta"}}
-    <meta property="og:type" content="{$#fb_app_namespace}:day" />
+    <meta property="og:type" content="{$#facebook_app_namespace}:day" />
     <meta property="og:url" content="{$#host_url}pages/{$#day.id}/day" />
     <meta property="og:title" content="{$#day.title}" />
-    <meta property="{$#fb_app_namespace}:location" content="{$#day.location}" />
-    <meta property="{$#fb_app_namespace}:type" content="some type" />
+    <meta property="{$#facebook_app_namespace}:location" content="{$#day.location}" />
+    <meta property="{$#facebook_app_namespace}:type" content="some type" />
   {{/into}}
   {{into slot="content"}}
     <h1>Day #{$this->day.id}</h1>

@@ -25,7 +25,7 @@ class SocialControllerTest extends odAcceptanceTestCase
     $this->assertResponse(200);
     $this->assertTrue(is_array($friends));
     $this->assertEqual(1, count($friends));
-    $this->assertEqual($friends[0]->fb_uid, $this->additional_user->getFbUid());
+    $this->assertEqual($friends[0]->facebook_uid, $this->additional_user->getFacebookUid());
   }
 
   /**

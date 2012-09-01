@@ -22,15 +22,15 @@ class AuthController extends BaseJsonController
   {
     if(!$this->request->isPost())
       return $this->_answerWithError('Use POST, Luke', null, 405);
-    if(!$fb_access_token = $this->request->get('token'))
+    if(!$facebook_access_token = $this->request->get('token'))
       return $this->_answerWithError('Token not given', null, 412);
 
-    if(!$uid = $this->toolkit->getFacebook($fb_access_token)->getUid($this->error_list))
+    if(!$uid = $this->toolkit->getFacebook($facebook_access_token)->getUid($this->error_list))
       return $this->_answerWithError($this->error_list, null, 403);
 
     $new_user = false;
-    if(!$user = User::findByFbUid($uid)) {
-      $user = $this->_register($fb_access_token);
+    if(!$user = User::findByFacebookUid($uid)) {
+      $user = $this->_register($facebook_access_token);
       if($this->request->get('disable_sharing'))
       {
         $settings = $user->getSettings();
@@ -43,7 +43,7 @@ class AuthController extends BaseJsonController
     }
     else
     {
-      $user->setFbAccessToken($fb_access_token);
+      $user->setFacebookAccessToken($facebook_access_token);
       $user->save();
     }
 
@@ -60,10 +60,10 @@ class AuthController extends BaseJsonController
     return $this->_answerOk($answer);
   }
 
-  function _register($fb_access_token)
+  function _register($facebook_access_token)
   {
     $user = new User();
-    $user->setFbAccessToken($fb_access_token);
+    $user->setFacebookAccessToken($facebook_access_token);
     $profile = $this->toolkit->getFacebookProfile($user);
     $user->import($profile->getInfo());
     $user->save();

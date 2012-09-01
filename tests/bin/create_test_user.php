@@ -2,8 +2,8 @@
 <?php
 require_once(dirname(__FILE__) . '/../../setup.php');
 
-$app_id = lmbToolkit::instance()->getConf('common')->fb_app_id;
-$app_access_token = lmbToolkit::instance()->getConf('common')->fb_app_secret;
+$app_id = lmbToolkit::instance()->getConf('common')->facebook_app_id;
+$app_access_token = lmbToolkit::instance()->getConf('common')->facebook_app_secret;
 
 $remote_api_cache_enabled = lmbToolkit::instance()->getConf('common')->remote_api_cache_enabled;
 lmbToolkit::instance()->getConf('common')->remote_api_cache_enabled = false;

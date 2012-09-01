@@ -27,10 +27,10 @@
             {{include file='_admin/sort_by_column.phtml' field='id'/}}
             </th>
             <th>FB uid
-            {{include file='_admin/sort_by_column.phtml' field='fb_uid'/}}
+            {{include file='_admin/sort_by_column.phtml' field='facebook_uid'/}}
             </th>
             <th>Name
-              {{include file='_admin/sort_by_column.phtml' field='fb_uid'/}}
+              {{include file='_admin/sort_by_column.phtml' field='facebook_uid'/}}
             </th>
             <th>ctime
             {{include file='_admin/sort_by_column.phtml' field='ctime'/}}
@@ -48,7 +48,7 @@
             <tr class="{$parity}">
               <td>{{apply template="selector" value="{$item.id}"/}}</td>
               <td>{$item.id}</td>
-              <td>{$item.fb_uid}</td>
+              <td>{$item.facebook_uid}</td>
               <td>{$item.name}</td>
               <td>{$item.ctime|date:"d.m.Y H:i:s"}</td>
               <td>{$item.utime|date:"d.m.Y H:i:s"}</td>

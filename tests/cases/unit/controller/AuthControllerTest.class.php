@@ -11,7 +11,7 @@ class AuthControllerTest extends odControllerTestCase
    */
   function testIsLoggedIn()
   {
-    $res = $this->get('is_logged_in', ['token' => $this->main_user->getFbAccessToken()]);
+    $res = $this->get('is_logged_in', ['token' => $this->main_user->getFacebookAccessToken()]);
     $this->assertResponse(200);
     $this->assertFalse($res->result);
   }
@@ -35,10 +35,10 @@ class AuthControllerTest extends odControllerTestCase
     $followers->save();
 
     $this->toolkit->getFacebook($this->additional_user)
-      ->setReturnValue('getUid', $this->additional_user->getFbUid());
+      ->setReturnValue('getUid', $this->additional_user->getFacebookUid());
 
     $res = $this->post('login', array(
-      'token' => $this->additional_user->getFbAccessToken()
+      'token' => $this->additional_user->getFacebookAccessToken()
     ))->result;
 
     if($this->assertResponse(200))
@@ -54,13 +54,13 @@ class AuthControllerTest extends odControllerTestCase
   {
     $this->main_user->save();
     $this->toolkit->getFacebook($this->main_user)
-      ->setReturnValue('getUid', $this->main_user->getFbUid());
+      ->setReturnValue('getUid', $this->main_user->getFacebookUid());
 
     $this->post('login', [
-      'token' => $this->main_user->getFbAccessToken()
+      'token' => $this->main_user->getFacebookAccessToken()
     ]);
     $res = $this->get('is_logged_in', [
-      'token' => $this->main_user->getFbAccessToken()
+      'token' => $this->main_user->getFacebookAccessToken()
     ]);
     $this->assertResponse(200);
     $this->assertTrue($res->result);
@@ -70,12 +70,12 @@ class AuthControllerTest extends odControllerTestCase
   {
     $this->main_user->save();
     $this->toolkit->getFacebook($this->main_user)
-      ->setReturnValue('getUid', $this->main_user->getFbUid());
+      ->setReturnValue('getUid', $this->main_user->getFacebookUid());
 
     $this->post('login', [
-      'token' => $this->main_user->getFbAccessToken()
+      'token' => $this->main_user->getFacebookAccessToken()
     ]);
-    $res = $this->get('is_logged_in', array('token' => $this->main_user->getFbAccessToken()));
+    $res = $this->get('is_logged_in', array('token' => $this->main_user->getFacebookAccessToken()));
     $this->assertResponse(200);
     $this->assertTrue($res->result);
   }
@@ -84,12 +84,12 @@ class AuthControllerTest extends odControllerTestCase
   {
     $this->main_user->save();
     $this->toolkit->getFacebook($this->main_user)
-      ->setReturnValue('getUid', $this->main_user->getFbUid());
+      ->setReturnValue('getUid', $this->main_user->getFacebookUid());
 
     $this->post('login', [
-      'token' => $this->main_user->getFbAccessToken()
+      'token' => $this->main_user->getFacebookAccessToken()
     ]);
-    $res = $this->get('is_logged_in', array('token' => $this->main_user->getFbAccessToken()));
+    $res = $this->get('is_logged_in', array('token' => $this->main_user->getFacebookAccessToken()));
     $this->assertResponse(200);
     $this->assertTrue($res->result);
   }
@@ -100,18 +100,18 @@ class AuthControllerTest extends odControllerTestCase
     $this->assertEqual(0, count($users));
 
     $this->toolkit->getFacebook($this->main_user)
-      ->setReturnValue('getUid', $this->main_user->getFbUid());
+      ->setReturnValue('getUid', $this->main_user->getFacebookUid());
 
     $profile = $this->toolkit->getFacebookProfile($this->main_user);
-    $profile->setReturnValue('getInfo', $info = $this->generator->facebookInfo($this->main_user->fb_uid));
+    $profile->setReturnValue('getInfo', $info = $this->generator->facebookInfo($this->main_user->facebook_uid));
     $profile->setReturnValue('getRegisteredFriends', array());
 
-    $this->post('login', ['token' => $this->main_user->getFbAccessToken()]);
+    $this->post('login', ['token' => $this->main_user->getFacebookAccessToken()]);
 
     $users = User::find();
     $this->assertEqual(1, count($users));
 
-    $this->post('login', ['token' => $this->main_user->getFbAccessToken()]);
+    $this->post('login', ['token' => $this->main_user->getFacebookAccessToken()]);
 
     $users = User::find();
     $this->assertEqual(1, count($users));
@@ -146,15 +146,15 @@ class AuthControllerTest extends odControllerTestCase
   function testLogin_firstCallCreateNewUserWithDefaultAvatar()
   {
     $this->toolkit->getFacebook($this->additional_user)
-      ->setReturnValue('getUid', $this->additional_user->getFbUid());
+      ->setReturnValue('getUid', $this->additional_user->getFacebookUid());
 
     $profile = $this->toolkit->getFacebookProfile($this->additional_user);
-    $fb_info = $this->generator->facebookInfo($this->additional_user->fb_uid);
-    $fb_info['pic'] = 'http://fb.com/default_image.gif';
-    $profile->setReturnValue('getInfo', $fb_info);
+    $facebook_info = $this->generator->facebookInfo($this->additional_user->facebook_uid);
+    $facebook_info['pic'] = 'http://fb.com/default_image.gif';
+    $profile->setReturnValue('getInfo', $facebook_info);
     $profile->setReturnValue('getRegisteredFriends', array());
 
-    $this->post('login', ['token' => $this->additional_user->getFbAccessToken()]);
+    $this->post('login', ['token' => $this->additional_user->getFacebookAccessToken()]);
 
     $users = User::find();
     $this->assertEqual(1, count($users));

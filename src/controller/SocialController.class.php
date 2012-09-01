@@ -15,8 +15,8 @@ class SocialController extends BaseJsonController
       $friend = $friend->exportForApi();
       unset($friend->user_info['email']);
       unset($friend->user_info['timezone']);
-      unset($friend->user_info['fb_profile_utime']);
-      unset($friend->user_info['fb_uid']);
+      unset($friend->user_info['facebook_profile_utime']);
+      unset($friend->user_info['facebook_uid']);
       $friends[] = $friend;
     }
 

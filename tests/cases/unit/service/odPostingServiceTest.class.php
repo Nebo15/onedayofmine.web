@@ -46,7 +46,7 @@ class odPostingServiceTest extends odUnitTestCase
     $settings->setSocialShareTwitter(1);
     $settings->save();
 
-    $this->main_user->setFbAccessToken('Foo token');
+    $this->main_user->setFacebookAccessToken('Foo token');
     $this->main_user->setTwitterAccessToken('Foo token');
     $this->main_user->setTwitterAccessTokenSecret('Foo token');
     $this->main_user->save();

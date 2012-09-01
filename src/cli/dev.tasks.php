@@ -212,7 +212,7 @@ function task_od_tests_users()
     echo "Register '{$test_user->getName()}'...";
     $request = new HttpRequest(lmb_env_get('HOST_URL').'/auth/login');
     $request->setMethod(HTTP_METH_POST);
-    $request->setPostFields(array('token' => $test_user->getFbAccessToken()));
+    $request->setPostFields(array('token' => $test_user->getFacebookAccessToken()));
     $response = $request->send();
     if(200 != $response->getResponseCode())
     {
@@ -231,7 +231,7 @@ function task_od_tests_users()
 /**
  * @mods devel,testing
  */
-function task_od_delete_fb_objects()
+function task_od_delete_facebook_objects()
 {
   lmb_require('tests/src/toolkit/odTestsTools.class.php');
 
@@ -258,7 +258,7 @@ function task_od_delete_fb_objects()
 //  foreach($tests_users as $test_user)
 //  {
 //    echo "User: ".$test_user->getName().PHP_EOL;
-    $fb = lmbToolkit::instance()->getFacebook($tests_users[6]->getFbAccessToken());
+    $fb = lmbToolkit::instance()->getFacebook($tests_users[6]->getFacebookAccessToken());
     recursive_delete($fb, "/me/one-day-of-mine:add_moment/moment");
     recursive_delete($fb, "/me/one-day-of-mine:add_moment/day");
     recursive_delete($fb, "/me/one-day-of-mine:add_moment");

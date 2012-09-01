@@ -4,13 +4,13 @@ lmb_require('src/model/traits/Imageable.trait.php');
 
 /**
  * @api
- * @method string getFbUid()
- * @method void setFbUid(string $fb_user_id)
- * @method string getFbAccessToken()
+ * @method string getFacebookUid()
+ * @method void setFacebookUid(string $facebook_user_id)
+ * @method string getFacebookAccessToken()
  * @method string getDay()
  * @method string getDayId()
  * @method string getDescription()
- * @method void setFbAccessToken(string $fb_access_token)
+ * @method void setFacebookAccessToken(string $facebook_access_token)
  */
 class Moment extends BaseModel
 {

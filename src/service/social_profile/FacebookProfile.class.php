@@ -31,7 +31,7 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
    */
   public function __construct(User $user)
   {
-    $access_token   = $user->getFbAccessToken();
+    $access_token   = $user->getFacebookAccessToken();
 
     lmb_assert_true($user, 'Facebook profile user not specified.');
     lmb_assert_true($access_token, 'Facebook access token not specified.');
@@ -56,7 +56,7 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
    */
   public function getInfo_Raw()
   {
-    $raw = $this->provider->makeQuery('SELECT '.implode(',', self::_getUserFbFieldsMap()).' FROM user WHERE uid = me()');
+    $raw = $this->provider->makeQuery('SELECT '.implode(',', self::_getUserFacebookFieldsMap()).' FROM user WHERE uid = me()');
     lmb_assert_true(count($raw));
     return $raw[0];
   }
@@ -68,12 +68,12 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
    */
   public function getInfo()
   {
-    return self::_mapFbInfo($this->getInfo_Raw());
+    return self::_mapFacebookInfo($this->getInfo_Raw());
   }
 
   public function getFriends()
   {
-    $fields = implode(',', self::_getUserFbFieldsMap());
+    $fields = implode(',', self::_getUserFacebookFieldsMap());
     return $this->provider->makeQuery("SELECT {$fields} FROM user WHERE is_app_user AND uid IN (SELECT uid2 FROM friend WHERE uid1 = me())");
   }
 
@@ -82,8 +82,8 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
     $results = array();
     foreach($this->getFriends() as $raw_info)
     {
-      $info = $this->_mapFbInfo($raw_info);
-      $user = User::findByFbUid($info['fb_uid']);
+      $info = $this->_mapFacebookInfo($raw_info);
+      $user = User::findByFacebookUid($info['facebook_uid']);
       if(!$user)
         continue;
       $user->setUserInfo($info);
@@ -172,7 +172,7 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
     return lmbToolkit::instance()->getPageUrl($object);
   }
 
-  protected function _getUserFbFieldsMap()
+  protected function _getUserFacebookFieldsMap()
   {
     return array(
       'uid', 'email', 'first_name', 'last_name', 'sex', 'timezone', 'profile_update_time',
@@ -180,15 +180,15 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
     );
   }
 
-  protected function _mapFbInfo($fb)
+  protected function _mapFacebookInfo($fb)
   {
     return array(
-      'fb_uid'           => $fb['uid'],
+      'facebook_uid'           => $fb['uid'],
       'email'            => $fb['email'],
       'name'             => $fb['first_name'] . ' ' . $fb['last_name'],
       'sex'              => $fb['sex'],
       'timezone'         => $fb['timezone'],
-      'fb_profile_utime' => $fb['profile_update_time'],
+      'facebook_profile_utime' => $fb['profile_update_time'],
       'pic'              => $fb['pic'],
       'occupation'       => isset($fb['work']['position']['name'])
                                ? $fb['work']['position']['name']

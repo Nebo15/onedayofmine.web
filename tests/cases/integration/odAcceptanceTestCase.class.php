@@ -102,13 +102,13 @@ abstract class odAcceptanceTestCase extends WebTestCase
   protected function _loginAndSetCookie(User $user, $disable_sharing = true)
   {
     $res = $this->_login($user, $disable_sharing);
-    $this->setCookie('token', $user->getFbAccessToken());
+    $this->setCookie('token', $user->getFacebookAccessToken());
     return $res;
   }
 
   protected function _login(User $user, $disable_sharing = true)
   {
-    $params = array('token' => $user->getFbAccessToken());
+    $params = array('token' => $user->getFacebookAccessToken());
     if($disable_sharing)
       $params['disable_sharing'] = 1;
     $res = $this->post('auth/login/', $params);
