@@ -13,4 +13,12 @@ class MomentLike extends BaseLike
   {
     return self::findOne(array('moment_id = ?', $moment_id));
   }
+
+  static function deleteUserLikeInMoment(User $user, Moment $moment)
+  {
+    $criteria = lmbSQLCriteria::equal('moment_id', $moment->getId());
+    $criteria->add(lmbSQLCriteria::equal('user_id', $user->getId()));
+
+    return self::deleteRaw($criteria);
+  }
 }

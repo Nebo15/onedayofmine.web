@@ -90,9 +90,8 @@ class DaysUserControllerTest extends odControllerTestCase
     $this->post('like', array(), $day->getId());
 
     $this->assertResponse(200);
-    $this->assertEqual(Day::findOne()->getLikes()->count(), 1);
-
     $this->assertEqual(DayLike::find()->count(), 1);
+    $this->assertEqual(Day::findOne()->getLikes()->count(), 1);
   }
 
   function testLike_OwnDay() {

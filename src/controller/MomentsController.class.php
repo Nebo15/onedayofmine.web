@@ -12,7 +12,7 @@ class MomentsController extends BaseJsonController
       return $this->_answerWithError('Not a POST request');
 
     if(!$moment = Moment::findById($this->request->id))
-      return $this->_answerWithError("Moment not found by id");
+      return $this->_answerWithError("Moment not found");
 
     if($this->request->has('image_content'))
       $moment->attachImage(base64_decode($this->request->get('image_content')));
@@ -49,14 +49,52 @@ class MomentsController extends BaseJsonController
       return $this->_answerWithError('Not a POST request');
 
     if(!$moment = Moment::findById($this->request->id))
-      return $this->_answerWithError("Moment not found by id");
+      return $this->_answerWithError("Moment not found");
 
     if($moment->getDay()->getUserId() != $this->_getUser()->getId())
-      return $this->_answerWithError("Moment not found by id");
+      return $this->_answerWithError('You can delete only moment in your own days', null, 401);
 
     $moment->destroy();
 
     $this->toolkit->getNewsObserver()->onMomentDelete($moment);
+
+    return $this->_answerOk();
+  }
+
+  function doLike()
+  {
+    if(!$this->request->isPost())
+      return $this->_answerWithError('Not a POST request');
+
+    if(!$moment = Moment::findById($this->request->id))
+      return $this->_answerWithError("Moment not found");
+
+    if($this->_getUser()->getId() == $moment->getDay()->getUserId())
+      return $this->_answerWithError("You can't like moments in you'r own days");
+
+    $like = new MomentLike;
+    $like->setMoment($moment);
+    $like->setUser($this->_getUser());
+    $like->save();
+
+    $this->toolkit->getPostingService()->shareMomentLike($moment);
+    $this->toolkit->getNewsObserver()->onLike($moment);
+
+    return $this->_answerOk();
+  }
+
+  function doUnlike()
+  {
+    if(!$this->request->isPost())
+      return $this->_answerWithError('Not a POST request');
+
+    if(!$moment = Moment::findById($this->request->id))
+      return $this->_answerWithError("Moment not found");
+
+    MomentLike::deleteUserLikeInMoment($this->_getUser(), $moment);
+
+    // $this->toolkit->getPostingService()->shareMomentLikeDelete($moment);
+    // $this->toolkit->getNewsObserver()->onLikeDelete($moment);
 
     return $this->_answerOk();
   }
