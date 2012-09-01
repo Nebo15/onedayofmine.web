@@ -44,7 +44,7 @@ class odPostingService implements SharesInterface
     $this->share('shareDay', func_get_args());
   }
 
-  public function shareDayLike(Day $day)
+  public function shareDayLike(Day $day, DayLike $like)
   {
     $this->share('shareDayLike', func_get_args());
   }
@@ -54,7 +54,7 @@ class odPostingService implements SharesInterface
     $this->share('shareMomentAdd', func_get_args());
   }
 
-  public function shareMomentLike(Moment $moment)
+  public function shareMomentLike(Moment $moment, MomentLike $like)
   {
     $this->share('shareMomentLike', func_get_args());
   }

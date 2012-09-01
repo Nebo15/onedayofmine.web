@@ -77,7 +77,7 @@ class MomentsController extends BaseJsonController
     $like->setUser($this->_getUser());
     $like->save();
 
-    $this->toolkit->getPostingService()->shareMomentLike($moment);
+    $this->toolkit->getPostingService()->shareMomentLike($moment, $like);
     $this->toolkit->getNewsObserver()->onLike($moment);
 
     return $this->_answerOk();

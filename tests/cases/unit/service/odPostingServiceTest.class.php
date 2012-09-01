@@ -65,7 +65,7 @@ class odPostingServiceTest extends odUnitTestCase
     $mock->shareDayBegin($day);
   }
 
-  public function testShareDayBegin_0nlyFacebook()
+  public function testShareDayBegin_onlyFacebook()
   {
     $settings = $this->main_user->getSettings();
     $settings->setSocialShareFacebook(1);
@@ -117,12 +117,13 @@ class odPostingServiceTest extends odUnitTestCase
   function testShareDayLike()
   {
     $day = $this->generator->day();
+    $like = $this->generator->dayLike($day);
 
     $mock = new odPostingServiceMock($this);
     $mock->setReturnValue('shareDayLike', true);
     $mock->expectOnce('shareDayLike');
 
-    $mock->shareDayLike($day);
+    $mock->shareDayLike($day, $like);
   }
 
   function testShareAddMoment()
@@ -141,12 +142,13 @@ class odPostingServiceTest extends odUnitTestCase
   {
     $day = $this->generator->day();
     $moment = $this->generator->moment($day);
+    $like = $this->generator->momentLike($moment);
 
     $mock = new odPostingServiceMock($this);
     $mock->setReturnValue('shareMomentLike', true);
     $mock->expectOnce('shareMomentLike');
 
-    $mock->shareMomentLike($moment);
+    $mock->shareMomentLike($moment, $like);
   }
 
   function testShareEndDay()

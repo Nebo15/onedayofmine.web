@@ -106,7 +106,7 @@ class TwitterProfileTest extends odAcceptanceTestCase
     $like = $this->generator->dayLike($day);
     $like->save();
 
-    $tweet = (new TwitterProfile($this->additional_user))->shareDayLike($like);
+    $tweet = (new TwitterProfile($this->additional_user))->shareDayLike($day, $like);
     if($this->assertTrue(count($tweet))) {
       $this->assertTrue($tweet['id']);
     }
@@ -155,7 +155,7 @@ class TwitterProfileTest extends odAcceptanceTestCase
       $this->assertTrue($tweet['id']);
     }
 
-    $tweet = (new TwitterProfile($this->main_user))->shareMomentLike($like);
+    $tweet = (new TwitterProfile($this->main_user))->shareMomentLike($moment, $like);
     if($this->assertTrue(count($tweet))) {
       $this->assertTrue($tweet);
     }

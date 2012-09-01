@@ -138,9 +138,8 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
     ));
   }
 
-  public function shareDayLike(DayLike $like)
+  public function shareDayLike(Day $day, DayLike $like)
   {
-    $day = $like->getDay();
     return $this->provider->api("/me/og.likes", "post", array(
       'object'      => $this->_getPageUrl($day)
     ));
@@ -154,9 +153,8 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
     ))['id'];
   }
 
-  public function shareMomentLike(MomentLike $like)
+  public function shareMomentLike(Moment $moment, MomentLike $like)
   {
-    $moment = $like->getMoment();
     return $this->provider->api("/me/og.likes", "post", array(
       'object'      => $this->_getPageUrl($moment)
     ));

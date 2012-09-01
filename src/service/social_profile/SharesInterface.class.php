@@ -20,10 +20,11 @@ interface SharesInterface
   function shareDay(Day $day);
 
   /**
+   * @param Day $day
    * @param DayLike $like
    * @return int share_id
    */
-  function shareDayLike(DayLike $like);
+  function shareDayLike(Day $day, DayLike $like);
 
   /**
    * @param Day $day
@@ -33,8 +34,9 @@ interface SharesInterface
   function shareMomentAdd(Day $day, Moment $moment);
 
   /**
+   * @param Moment $moment
    * @param MomentLike $like
    * @return int share_id
    */
-  function shareMomentLike(MomentLike $like);
+  function shareMomentLike(Moment $moment, MomentLike $like);
 }

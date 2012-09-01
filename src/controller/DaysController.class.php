@@ -181,7 +181,7 @@ class DaysController extends BaseJsonController
     $like->setUser($this->_getUser());
     $like->save();
 
-    $this->toolkit->getPostingService()->shareDayLike($day);
+    $this->toolkit->getPostingService()->shareDayLike($day, $like);
     $this->toolkit->getNewsObserver()->onLike($day);
 
     return $this->_answerOk();
