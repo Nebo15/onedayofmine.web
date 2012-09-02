@@ -28,8 +28,6 @@ class DayComment extends BaseComment
 
   function exportForApi(array $properties = null)
   {
-    $export = parent::exportForApi($properties);
-    $export->day_id = $this->getDay()->getId();
-    return $export;
+    return parent::exportForApi($properties);
   }
 }

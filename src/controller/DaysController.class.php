@@ -428,7 +428,7 @@ class DaysController extends BaseJsonController
       return $this->_answerNotPost();
 
     if(!Day::findById($this->request->id))
-      return $this->_answerWithError("Day with id '".$this->request->get('day_id')."' not found");
+      return $this->_answerNotFound("Day with id '".$this->request->get('day_id')."' not found");
 
     return $this->_importSaveAndAnswer(new Complaint(), array('day_id', 'text'));
   }
@@ -454,6 +454,24 @@ class DaysController extends BaseJsonController
       // Favorites data
       $this->_attachDayIsFavorited($export, $day);
 
+      $answer[] = $export;
+    }
+
+    return $this->_answerOk($answer);
+  }
+
+  function doGuestComments()
+  {
+    if(!$day = Day::findById($this->request->id))
+      return $this->_answerNotFound("Day with id '".$this->request->get('day_id')."' not found");
+
+    list($from, $to, $limit) = $this->_getFromToLimitations();
+
+    $answer = array();
+    foreach ($day->getCommentsWithLimitation($from, $to, $limit) as $comment)
+    {
+      $export = $comment->exportForApi(array('id', 'text'));
+      $export->user = $comment->getUser()->exportForApi();
       $answer[] = $export;
     }
 

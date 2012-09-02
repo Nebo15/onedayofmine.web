@@ -54,7 +54,6 @@ class DaysUserControllerTest extends odControllerTestCase
     if($this->assertResponse(200))
     {
       $this->assertEqual($day->getComments()->at(0)->getId(), $res->id);
-      $this->assertEqual($day->getId(), $res->day_id);
       $this->assertEqual($text, $res->text);
     }
   }
