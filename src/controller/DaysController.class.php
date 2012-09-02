@@ -430,9 +430,9 @@ class DaysController extends BaseJsonController
       return $this->_answerNotPost();
 
     if(!Day::findById($this->request->id))
-      return $this->_answerNotFound("Day with id '".$this->request->get('day_id')."' not found");
+      return $this->_answerNotFound("Day with id '".$this->request->get('id')."' not found");
 
-    return $this->_importSaveAndAnswer(new Complaint(), array('day_id', 'text'));
+    return $this->_importSaveAndAnswer(new Complaint(), array('id', 'text'));
   }
 
   function doGuestTypes()
