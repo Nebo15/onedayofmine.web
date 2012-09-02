@@ -161,6 +161,7 @@ class DaysController extends BaseJsonController
       return $this->_answerWithError("Day not found");
 
     $this->toolkit->getPostingService()->shareDay($day);
+    $this->toolkit->getNewsObserver()->onDayShare($day);
 
     return $this->_answerOk();
   }
@@ -298,6 +299,8 @@ class DaysController extends BaseJsonController
 
       $answer[] = $export;
     }
+
+    $this->toolkit->getNewsObserver()->onDayFavourite($day);
 
     return $this->_answerOk($answer);
   }

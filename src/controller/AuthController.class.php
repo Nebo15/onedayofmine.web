@@ -31,14 +31,6 @@ class AuthController extends BaseJsonController
     $new_user = false;
     if(!$user = User::findByFbUid($uid)) {
       $user = $this->_register($fb_access_token);
-      if($this->request->get('disable_sharing'))
-      {
-        $settings = $user->getSettings();
-        $settings->setSocialShareTwitter(0);
-        $settings->setSocialShareFacebook(0);
-        $settings->save();
-        $user->setSettings($settings);
-      }
       $new_user = true;
     }
     else
