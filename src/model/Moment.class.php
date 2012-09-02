@@ -51,6 +51,21 @@ class Moment extends BaseModel
     return $moment;
   }
 
+  function getCommentsWithLimitation($from_id = null, $to_id = null, $limit = null)
+  {
+    $criteria = new lmbSQLCriteria();
+    if($from_id)
+      $criteria->add(lmbSQLCriteria::greater('id', $from_id));
+    if($to_id)
+      $criteria->add(lmbSQLCriteria::less('id', $to_id));
+    if(!$limit || $limit > 100)
+      $limit = 100;
+    return $this->getComments()->find(array(
+      'criteria' => $criteria,
+      'sort' => array('id' => 'ASC')
+    ))->paginate(0, $limit);
+  }
+
   protected function _getAdditionalPlaceholders(&$placeholders)
   {
     if(!$this->getDay()->getUser() || !$this->getDay()->getUser()->getId())

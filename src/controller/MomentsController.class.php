@@ -60,4 +60,22 @@ class MomentsController extends BaseJsonController
 
     return $this->_answerOk();
   }
+
+  function doGuestComments()
+  {
+    if(!$moment = Moment::findById($this->request->id))
+      return $this->_answerNotFound("Moment with id '".$this->request->get('id')."' not found");
+
+    list($from, $to, $limit) = $this->_getFromToLimitations();
+
+    $answer = array();
+    foreach ($moment->getCommentsWithLimitation($from, $to, $limit) as $comment)
+    {
+      $export = $comment->exportForApi();
+      $export->user = $comment->getUser()->exportForApi();
+      $answer[] = $export;
+    }
+
+    return $this->_answerOk($answer);
+  }
 }

@@ -72,24 +72,52 @@ class MomentsControllerTest extends odControllerTestCase
    * @api description Creates <a href="#Entity:MomentComment">moment comment</a> and returns it.
    * @api input param string text
    */
-  function testComment()
+  function testComments()
   {
-    $day = $this->generator->day($this->main_user);
+    $day = $this->generator->day(null, true);
     $day->save();
-
-    $moment = $this->generator->moment($day);
+    $moment = $this->generator->moment($day, true);
     $moment->save();
 
-    lmbToolkit::instance()->setUser($this->main_user);
-    $res = $this->post('comment',
-      array('text' => $text = $this->generator->string(255)),
-      $moment->getId()
-    )->result;
-
+    $res = $this->get('comments', array(), $moment->getId())->result;
     $this->assertResponse(200);
-    $this->assertEqual($moment->getComments()->at(0)->getId(), $res->id);
-    $this->assertEqual($moment->getId(), $res->moment_id);
-    $this->assertEqual($text, $res->text);
+    $this->assertEqual(4, count($res));
+    $this->assertEqual($moment->getComments()->at(0)->id, $res[0]->id);
+    $this->assertEqual($moment->getComments()->at(0)->text, $res[0]->text);
+    $this->assertEqual($moment->getComments()->at(0)->user->exportForApi(), $res[0]->user);
+    $this->assertEqual($moment->getComments()->at(1)->id, $res[1]->id);
+    $this->assertEqual($moment->getComments()->at(2)->id, $res[2]->id);
+    $this->assertEqual($moment->getComments()->at(3)->id, $res[3]->id);
+
+    $res = $this
+      ->get('comments', array(
+      'from' => $moment->getComments()->at(0)->id
+    ), $moment->getId())->result;
+    $this->assertResponse(200);
+    $this->assertEqual(3, count($res));
+    $this->assertEqual($moment->getComments()->at(1)->id, $res[0]->id);
+    $this->assertEqual($moment->getComments()->at(2)->id, $res[1]->id);
+    $this->assertEqual($moment->getComments()->at(3)->id, $res[2]->id);
+
+    $res = $this
+      ->get('comments', array(
+      'from' => $moment->getComments()->at(0)->id,
+      'to' => $moment->getComments()->at(3)->id,
+    ), $moment->getId())->result;
+    $this->assertResponse(200);
+    $this->assertEqual(2, count($res));
+    $this->assertEqual($moment->getComments()->at(1)->id, $res[0]->id);
+    $this->assertEqual($moment->getComments()->at(2)->id, $res[1]->id);
+
+    $res = $this
+      ->get('comments', array(
+      'from' => $moment->getComments()->at(0)->id,
+      'to' => $moment->getComments()->at(3)->id,
+      'limit' => 1
+    ), $moment->getId())->result;
+    $this->assertResponse(200);
+    $this->assertEqual(1, count($res));
+    $this->assertEqual($moment->getComments()->at(1)->id, $res[0]->id);
   }
 
   // TODO
