@@ -432,7 +432,21 @@ class DaysController extends BaseJsonController
     if(!Day::findById($this->request->id))
       return $this->_answerNotFound("Day with id '".$this->request->get('id')."' not found");
 
-    return $this->_importSaveAndAnswer(new Complaint(), array('id', 'text'));
+    $item = new Complaint();
+    $item->setDayId($this->request->get('day_id'));
+    $item->setText($this->request->get('text'));
+
+    $item->validate($this->error_list);
+    if($this->error_list->isValid())
+    {
+      $item->saveSkipValidation();
+      $res = $item->exportForApi();
+      return $this->_answerOk($res);
+    }
+    else
+    {
+      return $this->_answerWithError($this->error_list->getReadable());
+    }
   }
 
   function doGuestTypes()

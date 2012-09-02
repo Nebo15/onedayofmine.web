@@ -361,6 +361,7 @@ class DaysGuestControllerTest extends odControllerTestCase
     $loaded_complaint = Complaint::find()->at(0);
     $this->assertProperty($res->result, 'id');
     $this->assertEqual($loaded_complaint->getId(), $res->result->id);
+    $this->assertEqual($loaded_complaint->getDayId(), $res->result->day_id);
     $this->assertEqual($loaded_complaint->getText(), $text);
   }
 
