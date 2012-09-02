@@ -239,7 +239,7 @@ class DaysUserControllerTest extends odControllerTestCase
 
     lmbToolkit::instance()->setUser($this->main_user);
 
-    $days = $this->get('following_users')->result;
+    $days = $this->get('following')->result;
     $this->assertResponse(200);
     $this->assertEqual(4, count($days));
     $this->assertEqual($day4->getId(), $days[0]->id);
@@ -247,7 +247,7 @@ class DaysUserControllerTest extends odControllerTestCase
     $this->assertEqual($day2->getId(), $days[2]->id);
     $this->assertEqual($day1->getId(), $days[3]->id);
 
-    $days = $this->get('following_users', array('from' => $day4->getId()))->result;
+    $days = $this->get('following', array('from' => $day4->getId()))->result;
     $this->assertResponse(200);
     $this->assertEqual(3, count($days));
     $this->assertEqual($day3->getId(), $days[0]->id);
@@ -255,7 +255,7 @@ class DaysUserControllerTest extends odControllerTestCase
     $this->assertEqual($day1->getId(), $days[2]->id);
 
     $days = $this
-    ->get('following_users', array(
+    ->get('following', array(
       'from' => $day4->getId(),
       'to'   => $day1->getId()))
     ->result;
@@ -265,7 +265,7 @@ class DaysUserControllerTest extends odControllerTestCase
     $this->assertEqual($day2->getId(), $days[1]->id);
 
     $days = $this
-      ->get('following_users', array(
+      ->get('following', array(
       'from'  => $day4->getId(),
       'to'    => $day1->getId(),
       'limit' => 1))
