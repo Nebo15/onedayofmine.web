@@ -124,18 +124,7 @@ class UsersController extends BaseJsonController
     if(!$user = User::findById($this->request->id))
       return $this->_answerNotFound("User not found by id '{$this->request->id}'");
 
-    return $this->_answerOk($user->getActivities());
     list($from, $to, $limit) = $this->_getFromToLimitations();
-    $query = $this->request->getFiltered('query', FILTER_SANITIZE_STRING);
-    $users = User::findByString($query, $from, $to, $limit);
-
-    $response = array();
-    foreach($users as $user) {
-      $export = $user->exportForApi();
-      if($this->_getUser())
-        $export->is_follower = UserFollowing::isUserFollowUser($user, $this->_getUser());
-      $response[] = $export;
-    }
-    return $this->_answerOk($response);
+    return $this->_answerOk($user->getActivitiesWithLimitation($from, $to, $limit));
   }
 }

@@ -195,21 +195,67 @@ class UsersControllerTest extends odControllerTestCase
     $this->assertEqual(0, $this->main_user->getFollowing()->count());
   }
 
-//  function testActivity()
-//  {
-//    $user = $this->generator->user();
-//    $user->save();
-//    $news1 = $this->generator->news($user);
-//    $news1->save();
-//
-//    lmbToolkit::instance()->setUser($this->main_user);
-//    $activities = $this->get('activity', array(), $user->id)->result;
-//    if($this->assertResponse(200))
-//    {
-//      $this->assertEqual(1, count($activities));
-//      $this->assertEqual($news1->exportForApi(), $activities[0]);
-//    }
-//  }
+  function testActivity()
+  {
+    $user = $this->generator->user();
+    $user->save();
+    $news1 = $this->generator->news($user);
+    $news1->save();
+    $news2 = $this->generator->news($user);
+    $news2->save();
+    $news3 = $this->generator->news($user);
+    $news3->save();
+    $news4 = $this->generator->news($user);
+    $news4->save();
+    $another_user_news = $this->generator->news();
+    $another_user_news->save();
+
+    lmbToolkit::instance()->setUser($this->main_user);
+    $activities = $this->get('activity', array(), $user->id)->result;
+    if($this->assertResponse(200))
+    {
+      $this->assertEqual(4, count($activities));
+      $this->assertEqual($news4->exportForApi(), $activities[0]);
+      $this->assertEqual($news3->exportForApi(), $activities[1]);
+      $this->assertEqual($news2->exportForApi(), $activities[2]);
+      $this->assertEqual($news1->exportForApi(), $activities[3]);
+    }
+
+    $activities = $this->get('activity', array('from' => $news4->id), $user->id)->result;
+    if($this->assertResponse(200))
+    {
+      $this->assertEqual(3, count($activities));
+      $this->assertEqual($news3->exportForApi(), $activities[0]);
+      $this->assertEqual($news2->exportForApi(), $activities[1]);
+      $this->assertEqual($news1->exportForApi(), $activities[2]);
+    }
+
+    $activities = $this
+      ->get('activity', array(
+        'from' => $news4->id,
+        'to' => $news1->id
+      ), $user->id)
+      ->result;
+    if($this->assertResponse(200))
+    {
+      $this->assertEqual(2, count($activities));
+      $this->assertEqual($news3->exportForApi(), $activities[0]);
+      $this->assertEqual($news2->exportForApi(), $activities[1]);
+    }
+
+    $activities = $this
+      ->get('activity', array(
+      'from' => $news4->id,
+      'to' => $news1->id,
+      'limit' => 1
+    ), $user->id)
+      ->result;
+    if($this->assertResponse(200))
+    {
+      $this->assertEqual(1, count($activities));
+      $this->assertEqual($news3->exportForApi(), $activities[0]);
+    }
+  }
 
   /**
    * @api
