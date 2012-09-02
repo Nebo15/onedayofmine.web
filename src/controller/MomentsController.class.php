@@ -40,11 +40,15 @@ class MomentsController extends BaseJsonController
   function doComment()
   {
     if(!$this->request->isPost())
-      return $this->_answerWithError('Not a POST request');
+      return $this->_answerNotPost();
+
+    $moment = Moment::findById($this->request->id);
+    if(!$moment)
+      return $this->_answerNotFound("Moment with id=".$this->request->id." not found");
 
     $comment = new MomentComment();
     $comment->setText($this->request->get('text'));
-    $comment->setMoment(Moment::findById($this->request->id));
+    $comment->setMoment($moment);
     $comment->setUser($this->toolkit->getUser());
     $comment->validate($this->error_list);
 
@@ -54,7 +58,9 @@ class MomentsController extends BaseJsonController
 
       $this->toolkit->getNewsObserver()->onComment($comment);
 
-      return $this->_answerOk($comment->exportForApi());
+      $export = $comment->exportForApi();
+      $export->user = $this->_getUser()->exportForApi();
+      return $this->_answerOk($export);
     }
     else
       return $this->_answerWithError($this->error_list->export());

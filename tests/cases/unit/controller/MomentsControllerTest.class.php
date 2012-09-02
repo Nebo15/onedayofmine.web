@@ -112,6 +112,36 @@ class MomentsControllerTest extends odControllerTestCase
     $this->assertResponse(404);
   }
 
+  function testComment()
+  {
+    $day = $this->generator->day($this->main_user);
+    $day->save();
+
+    $moment = $this->generator->moment($day);
+    $moment->save();
+
+    lmbToolkit::instance()->setUser($this->additional_user);
+    $res = $this
+      ->post('comment', array('text' => $text = $this->generator->string(50)), $moment->getId())
+      ->result;
+
+    $this->assertResponse(200);
+    $new_comment = MomentComment::findOne();
+    $this->assertEqual($new_comment->id, $res->id);
+    $this->assertEqual($text, $res->text);
+    $this->assertEqual($this->additional_user->exportForApi(), $res->user);
+    $this->assertEqual($text, $new_comment->text);
+  }
+
+  function testComment_NotFound()
+  {
+    lmbToolkit::instance()->setUser($this->additional_user);
+    $this
+      ->post('comment', array('text' => $text = $this->generator->string(50)), 100500)
+      ->result;
+    $this->assertResponse(404);
+  }
+
   /**
    * @api description Creates <a href="#Entity:MomentComment">moment comment</a> and returns it.
    * @api input param string text
