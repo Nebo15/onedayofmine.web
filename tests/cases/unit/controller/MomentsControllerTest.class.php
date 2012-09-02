@@ -62,11 +62,23 @@ class MomentsControllerTest extends odControllerTestCase
     $this->assertFalse(Moment::findById($moment->getId()));
   }
 
-  // TODO
-  function testDelete_WrongUser() {}
+  function testDelete_WrongUser()
+  {
+    $moment = $this->generator->moment();
+    $moment->save();
 
-  // TODO
-  function testDelete_MomentNotFound() {}
+    lmbToolkit::instance()->setUser($this->main_user);
+    $this->post('delete', array(), $moment->getId());
+
+    $this->assertResponse(404);
+  }
+
+  function testDelete_MomentNotFound()
+  {
+    lmbToolkit::instance()->setUser($this->main_user);
+    $this->post('delete', array(), 100500);
+    $this->assertResponse(404);
+  }
 
   /**
    * @api description Creates <a href="#Entity:MomentComment">moment comment</a> and returns it.

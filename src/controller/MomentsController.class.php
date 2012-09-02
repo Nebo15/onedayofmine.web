@@ -46,13 +46,11 @@ class MomentsController extends BaseJsonController
   function doDelete()
   {
     if(!$this->request->isPost())
-      return $this->_answerWithError('Not a POST request');
+      return $this->_answerNotPost();
 
-    if(!$moment = Moment::findById($this->request->id))
-      return $this->_answerWithError("Moment not found by id");
-
-    if($moment->getDay()->getUserId() != $this->_getUser()->getId())
-      return $this->_answerWithError("Moment not found by id");
+    $moment = Moment::findById($this->request->id);
+    if(!$moment || $moment->getDay()->getUser()->id != $this->_getUser()->id)
+      return $this->_answerNotFound("Moment not found by id ".$this->request->id);
 
     $moment->destroy();
 
