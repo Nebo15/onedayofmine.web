@@ -9,15 +9,32 @@ class MomentsController extends BaseJsonController
   function doUpdate()
   {
     if(!$this->request->isPost())
-      return $this->_answerWithError('Not a POST request');
+      return $this->_answerNotPost();
 
-    if(!$moment = Moment::findById($this->request->id))
-      return $this->_answerWithError("Moment not found by id");
+    $moment = Moment::findById($this->request->id);
+    if(!$moment || $moment->getDay()->getUser()->id != $this->_getUser()->id)
+      return $this->_answerNotFound("Moment with id=".$this->request->id." not found");
 
     if($this->request->has('image_content'))
       $moment->attachImage(base64_decode($this->request->get('image_content')));
 
-    return $this->_importSaveAndAnswer($moment, array('description'));
+    if($this->request->get('time'))
+    {
+      list($stamp, $zone) = Moment::isoToStamp($this->request->get('time'));
+      $moment->setTime($stamp);
+      $moment->setTimezone($zone);
+    }
+
+    if($this->request->get('description'))
+      $moment->setDescription($this->request->get('description'));
+
+    if($this->error_list->isEmpty())
+    {
+      $moment->saveSkipValidation();
+      return $this->_answerOk($moment->exportForApi());
+    }
+    else
+      return $this->_answerWithError($this->error_list->export());
   }
 
   function doComment()

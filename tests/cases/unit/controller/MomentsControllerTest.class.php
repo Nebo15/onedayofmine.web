@@ -23,6 +23,7 @@ class MomentsControllerTest extends odControllerTestCase
     $res = $this->post('update',
       array(
         'description' => $desc = $this->generator->string(255),
+        'time' => $time = "2005-08-09T18:31:42+03:00",
         'image_content' => base64_encode($this->generator->image()),
       ),
       $moment->getId()
@@ -30,7 +31,7 @@ class MomentsControllerTest extends odControllerTestCase
     $this->assertResponse(200);
 
     $this->assertEqual($res->description, $desc);
-    $this->assertProperty($res, 'image_266');
+    $this->assertEqual($res->time, $time);
     $this->assertValidImageUrl($res->image_266);
     $this->assertValidImageUrl($res->image_532);
 
@@ -38,10 +39,38 @@ class MomentsControllerTest extends odControllerTestCase
     $this->assertEqual($loaded_moment->getDescription(), $desc);
   }
 
-  // TODO
   function testUpdate_MomentNotFound()
   {
+    lmbToolkit::instance()->setUser($this->main_user);
+    $this->post('update',
+      array(
+        'description' => $this->generator->string(255),
+        'time' => "2005-08-09T18:31:42+03:00",
+        'image_content' => base64_encode($this->generator->image()),
+      ),
+      100500
+    );
+    $this->assertResponse(404);
+  }
 
+  function testUpdate_WrongUser()
+  {
+    $day = $this->generator->day($this->main_user);
+    $day->save();
+
+    $moment = $this->generator->moment($day);
+    $moment->save();
+
+    lmbToolkit::instance()->setUser($this->additional_user);
+    $res = $this->post('update',
+      array(
+        'description' => $desc = $this->generator->string(255),
+        'time' => $time = "2005-08-09T18:31:42+03:00",
+        'image_content' => base64_encode($this->generator->image()),
+      ),
+      $moment->getId()
+    )->result;
+    $this->assertResponse(404);
   }
 
   /**
