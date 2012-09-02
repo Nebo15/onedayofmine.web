@@ -43,7 +43,7 @@ class Moment extends BaseModel
     $this->showImages($moment);
     $moment->time = self::stampToIso($this->getTime(), $this->getTimezone());
     $moment->likes_count = $this->getLikesCount() ?: 0;
-    $moment->ctime = $this->getCtime();
+    $moment->comments_count = $this->getComments()->count();
 
     if($this->getIsDeleted())
       $moment->is_deleted = true;

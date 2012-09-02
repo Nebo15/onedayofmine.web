@@ -16,7 +16,7 @@ class MomentsControllerTest extends odControllerTestCase
     $day = $this->generator->day($this->main_user);
     $day->save();
 
-    $moment = $this->generator->moment($day);
+    $moment = $this->generator->moment($day, true);
     $moment->save();
 
     lmbToolkit::instance()->setUser($this->main_user);
@@ -30,10 +30,13 @@ class MomentsControllerTest extends odControllerTestCase
     )->result;
     $this->assertResponse(200);
 
-    $this->assertEqual($res->description, $desc);
+    $this->assertEqual($res->id, $moment->id);
     $this->assertEqual($res->time, $time);
+    $this->assertEqual($res->description, $desc);
     $this->assertValidImageUrl($res->image_266);
     $this->assertValidImageUrl($res->image_532);
+    $this->assertEqual($res->likes_count, 0);
+    $this->assertEqual($res->comments_count, $moment->getComments()->count());
 
     $loaded_moment = Moment::findById($moment->getId());
     $this->assertEqual($loaded_moment->getDescription(), $desc);
