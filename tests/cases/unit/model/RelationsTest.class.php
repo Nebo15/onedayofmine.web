@@ -95,7 +95,7 @@ class RelationsTest extends odUnitTestCase
     $this->assertEqual($creator->getCreatedNews()->at(0)->getId(), $recipient->getNews()->at(0)->getId());
 
     // News to User
-    $this->assertEqual($news->getRecipient()->getId(), $recipient->getId());
+    $this->assertEqual($news->getRecipients()->at(0)->getId(), $recipient->getId());
   }
 
   function testNewsToDayRelations() {

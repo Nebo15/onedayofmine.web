@@ -34,7 +34,7 @@ class Moment extends BaseModel
     return $validator;
   }
 
-  function exportForApi()
+  function exportForApi(array $properties = null)
   {
     $moment = new stdClass();
     $moment->id = $this->getId();

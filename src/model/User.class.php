@@ -45,8 +45,8 @@ class User extends BaseModel
       ),
       'days_comments'    => array ('field' => 'user_id', 'class' => 'DayComment'),
       'moments_comments' => array ('field' => 'user_id', 'class' => 'MomentComment'),
-      'news'             => array ('field' => 'recipient_id', 'class' => 'News'),
-      'created_news'     => array ('field' => 'user_id', 'class' => 'News'),
+      'activities'       => array ('field' => 'sender_id', 'class' => 'News'),
+      'created_news'     => array ('field' => 'sender_id', 'class' => 'News'),
       'day_likes'        => array ('field' => 'user_id', 'class' => 'DayLike'),
       'moment_likes'     => array ('field' => 'user_id', 'class' => 'MomentLike'),
     );
@@ -67,6 +67,11 @@ class User extends BaseModel
         'foreign_field' => 'user_id',
         'table' => 'user_following',
         'class' => 'User'),
+      'news' => array(
+        'field' => 'user_id',
+        'foreign_field' => 'news_id',
+        'table' => 'news_recipient',
+        'class' => 'News'),
     );
   }
 
@@ -85,7 +90,7 @@ class User extends BaseModel
     return $validator;
   }
 
-  function exportForApi()
+  function exportForApi(array $properties = null)
   {
     $result = new stdClass();
     $result->id = $this->id;
@@ -152,6 +157,21 @@ class User extends BaseModel
     if(!$limit || $limit > 100)
       $limit = 100;
     return $this->getFavouriteDays()->find(array(
+      'criteria' => $criteria,
+      'sort' => array('id' => 'DESC'),
+    ))->paginate(0, $limit);
+  }
+
+  function getActivitiesWithLimitation($from_id = null, $to_id = null, $limit = null)
+  {
+    $criteria = new lmbSQLCriteria();
+    if($from_id)
+      $criteria->add(lmbSQLCriteria::less('id', $from_id));
+    if($to_id)
+      $criteria->add(lmbSQLCriteria::greater('id', $to_id));
+    if(!$limit || $limit > 100)
+      $limit = 100;
+    return $this->getActivities()->find(array(
       'criteria' => $criteria,
       'sort' => array('id' => 'DESC'),
     ))->paginate(0, $limit);

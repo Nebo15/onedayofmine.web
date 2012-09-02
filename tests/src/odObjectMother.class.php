@@ -29,17 +29,6 @@ class odObjectMother
     $user->setOccupation($this->string(50));
     $user->setBirthday($this->date_sql());
 
-    $settings = new UserSettings();
-    $settings->setNotificationsNewDays(0);
-    $settings->setNotificationsNewComments(0);
-    $settings->setNotificationsRelatedActivity(0);
-    $settings->setNotificationsShootingPhotos(0);
-    $settings->setPhotosSaveOriginal(0);
-    $settings->setPhotosSaveFiltered(0);
-    $settings->setSocialShareFacebook(0);
-    $settings->setSocialShareTwitter(0);
-    $user->setSettings($settings);
-
     return $user;
   }
 
@@ -47,10 +36,10 @@ class odObjectMother
    * @param null|User $user
    * @return Day
    */
-  function day(User $user = null, $with_comments = false)
+  function day(User $user = null, $with_comments = false, $title = null)
   {
     $day = new Day();
-    $day->setTitle($this->string(25));
+    $day->setTitle($title ?: $this->string(25));
     $day->setOccupation($this->string(255));
     $day->setTimezone(0);
     $day->setLocation($this->string(25));
@@ -144,8 +133,8 @@ class odObjectMother
     $recipient = $recipient ?: $this->user();
 
     $news = new News();
-    $news->setRecipient($recipient);
-    $news->setUser($creator);
+    $news->setRecipients(array($recipient));
+    $news->setSender($creator);
     $news->setText($creator->name . ' likes ' . $recipient->name);
     return $news;
   }

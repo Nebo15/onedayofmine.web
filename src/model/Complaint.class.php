@@ -19,9 +19,9 @@ class Complaint extends BaseModel
     );
   }
 
-  function exportForApi()
+  function exportForApi(array $properties = null)
   {
-    $exported = $this->export();
+    $exported = $this->export($properties);
     unset($exported['cip']);
     return (object) $exported;
   }

@@ -9,6 +9,7 @@ lmb_require('src/model/traits/Imageable.trait.php');
 class Day extends BaseModel
 {
   use Imageable;
+  use Likeable;
 
   protected $_default_sort_params = array('id'=>'desc');
 
@@ -44,7 +45,7 @@ class Day extends BaseModel
     return $validator;
   }
 
-  function exportForApi()
+  function exportForApi(array $properties = null)
   {
     $export = new stdClass();
     $export->id = $this->getId();
