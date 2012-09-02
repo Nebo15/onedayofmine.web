@@ -198,6 +198,8 @@ class TwitterProfile implements SocialServicesProfileInterface, SharesInterface
     // return $this->tweet("I really like this day. {$day_url}");
   }
 
+  public function shareDayUnlike(Day $day, DayLike $like) {}
+
   public function shareMomentAdd(Day $day, Moment $moment)
   {
     $day_url    = lmbToolkit::instance()->getPageUrl($day);
@@ -210,6 +212,8 @@ class TwitterProfile implements SocialServicesProfileInterface, SharesInterface
     // $moment_url = lmbToolkit::instance()->getPageUrl($moment);
     // return $this->tweet("I really like this moment. {$moment_url}");
   }
+
+  public function shareMomentDelete(Day $day, Moment $moment) {}
 
   public function shareDayEnd(Day $day)
   {

@@ -57,6 +57,8 @@ class odPostingService implements SharesInterface
     return $this->share('shareDayLike', func_get_args());
   }
 
+  public function shareDayUnlike(Day $day, DayLike $like) {}
+
   public function shareMomentAdd(Day $day, Moment $moment)
   {
     $result = $this->share('shareMomentAdd', func_get_args());
@@ -70,6 +72,8 @@ class odPostingService implements SharesInterface
   {
     return $this->share('shareMomentLike', func_get_args());
   }
+
+  public function shareMomentUnlike(Moment $moment, MomentLike $like) {}
 
   public function shareDayEnd(Day $day)
   {

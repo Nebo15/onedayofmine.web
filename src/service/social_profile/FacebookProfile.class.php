@@ -138,12 +138,16 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
     ));
   }
 
+  public function shareDayDelete(Day $day) {}
+
   public function shareDayLike(Day $day, DayLike $like)
   {
     return $this->provider->api("/me/og.likes", "post", array(
       'object'      => $this->_getPageUrl($day)
     ));
   }
+
+  public function shareDayUnlike(Day $day, DayLike $like) {}
 
   public function shareMomentAdd(Day $day, Moment $moment)
   {
@@ -153,12 +157,16 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
     ))['id'];
   }
 
+  public function shareMomentDelete(Day $day, Moment $moment) {}
+
   public function shareMomentLike(Moment $moment, MomentLike $like)
   {
     return $this->provider->api("/me/og.likes", "post", array(
       'object'      => $this->_getPageUrl($moment)
     ));
   }
+
+  public function shareMomentDelete(Day $day, Moment $moment){}
 
   public function shareDayEnd(Day $day)
   {
