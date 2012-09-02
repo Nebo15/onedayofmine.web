@@ -399,7 +399,7 @@ class DaysController extends BaseJsonController
       return $this->_answerWithError($this->error_list->export());
   }
 
-  function doCommentCreate()
+  function doComment()
   {
     if(!$this->request->isPost())
       return $this->_answerWithError('Not a POST request');
@@ -416,7 +416,9 @@ class DaysController extends BaseJsonController
 
       $this->toolkit->getNewsObserver()->onComment($comment);
 
-      return $this->_answerOk($comment->exportForApi());
+      $export = $comment->exportForApi();
+      $export->user = $comment->getUser()->exportForApi();
+      return $this->_answerOk($export);
     }
     else
       return $this->_answerWithError($this->error_list->export());
@@ -470,7 +472,7 @@ class DaysController extends BaseJsonController
     $answer = array();
     foreach ($day->getCommentsWithLimitation($from, $to, $limit) as $comment)
     {
-      $export = $comment->exportForApi(array('id', 'text'));
+      $export = $comment->exportForApi();
       $export->user = $comment->getUser()->exportForApi();
       $answer[] = $export;
     }

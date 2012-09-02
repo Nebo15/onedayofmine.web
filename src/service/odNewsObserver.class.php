@@ -276,7 +276,7 @@ class odNewsObserver
     lmb_assert_true($recipient->getId(), 'Recipient have no id');
     lmb_assert_true($this->sender->getId(), 'Sender have no id');
     if($recipient->getId() == $this->sender->getId())
-      throw new lmbException("User can't send message to hemself.");
+      return;
     $this->recipients[$recipient->getId()] = $recipient;
   }
 
