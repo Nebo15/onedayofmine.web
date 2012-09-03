@@ -14,16 +14,8 @@ class DayLike extends BaseLike
     return self::findOne(array('day_id = ?', $day_id));
   }
 
-  static function findByDayAndUserIds($day_id, $user_id)
+  static function findByDayIdAndUserId($day_id, $user_id)
   {
     return self::findOne(array('day_id = ? AND user_id = ?', $day_id, $user_id));
-  }
-
-  static function deleteUserLikeInDay(User $user, Day $day)
-  {
-    $criteria = lmbSQLCriteria::equal('day_id', $day->getId());
-    $criteria->add(lmbSQLCriteria::equal('user_id', $user->getId()));
-
-    return self::deleteRaw($criteria);
   }
 }
