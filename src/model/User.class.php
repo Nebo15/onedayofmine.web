@@ -204,4 +204,18 @@ class User extends BaseModel
       'sort' => array('id' => 'ASC')
     ));
   }
+
+  static function findUsersWithOldDays()
+  {
+    $criteria = lmbSQLCriteria::less('day.ctime', time() - 24 * 60 * 60);
+    $criteria->add(lmbSQLCriteria::isNotNull('current_day_id'));
+
+    $query = lmbARQuery :: create('Day')->eagerJoin('user')->addCriteria($criteria);
+
+    $users = array();
+    foreach($query->fetch() as $day)
+      $users[] = $day->getUser();
+
+    return new lmbCollection($users);
+  }
 }
