@@ -130,6 +130,7 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
 
   public function shareDay(Day $day)
   {
+    // TODO if($day->getFacebookId()) -> share fb:og entity that already exists
     return $this->provider->api("/me/feed", "post", array(
       'name'        => $day->getTitle(),
       'picture'     => count($day->getMoments()) ? lmbToolkit::instance()->getStaticUrl($day->getImage()) : '',
@@ -144,10 +145,13 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
   {
     return $this->provider->api("/me/og.likes", "post", array(
       'object'      => $this->_getPageUrl($day)
-    ));
+    ))['id'];
   }
 
-  public function shareDayUnlike(Day $day, DayLike $like) {}
+  public function shareDayUnlike(Day $day, DayLike $like)
+  {
+    return $this->_deleteBuiltInLike($like->getFacebookId());
+  }
 
   public function shareMomentAdd(Day $day, Moment $moment)
   {
@@ -163,16 +167,24 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
   {
     return $this->provider->api("/me/og.likes", "post", array(
       'object'      => $this->_getPageUrl($moment)
-    ));
+    ))['id'];
   }
 
-  public function shareMomentDelete(Day $day, Moment $moment){}
+  public function shareMomentUnlike(Moment $moment, MomentLike $like)
+  {
+    return $this->_deleteBuiltInLike($like->getFacebookId());
+  }
 
   public function shareDayEnd(Day $day)
   {
     return $this->provider->api("/me/".$this->namespace.":end", "post", array(
       'day'         => $this->_getPageUrl($day)
     ));
+  }
+
+  protected function _deleteBuiltInLike($like_instance_id)
+  {
+    return $this->provider->api("/{$like_instance_id}", "delete");
   }
 
   protected function _getPageUrl($object)

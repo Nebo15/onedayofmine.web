@@ -52,14 +52,19 @@ class odPostingService implements SharesInterface
     return $this->share('shareDay', func_get_args());
   }
 
-  public function shareDayDelete(Day $day){}
+  public function shareDayDelete(Day $day) {}
 
   public function shareDayLike(Day $day, DayLike $like)
   {
-    return $this->share('shareDayLike', func_get_args());
+    $result = $this->share('shareDayLike', func_get_args());
+    $like->setFacebookId($result);
+    $like->save();
+    return $result;
   }
 
-  public function shareDayUnlike(Day $day, DayLike $like) {}
+  public function shareDayUnlike(Day $day, DayLike $like) {
+    return $this->share('shareDayUnlike', func_get_args());
+  }
 
   public function shareMomentAdd(Day $day, Moment $moment)
   {
@@ -68,14 +73,20 @@ class odPostingService implements SharesInterface
     return $result;
   }
 
-  public function shareMomentDelete(Day $day, Moment $moment){}
+  public function shareMomentDelete(Day $day, Moment $moment) {}
 
   public function shareMomentLike(Moment $moment, MomentLike $like)
   {
-    return $this->share('shareMomentLike', func_get_args());
+    $result = $this->share('shareMomentLike', func_get_args());
+    $like->setFacebookId($result);
+    $like->save();
+    return $result;
   }
 
-  public function shareMomentUnlike(Moment $moment, MomentLike $like) {}
+  public function shareMomentUnlike(Moment $moment, MomentLike $like)
+  {
+    return $this->share('shareMomentUnlike', func_get_args());
+  }
 
   public function shareDayEnd(Day $day)
   {
