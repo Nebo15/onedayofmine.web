@@ -1,5 +1,7 @@
 <?php
 lmb_require('src/service/social_profile/SharesInterface.class.php');
+lmb_require('src/service/social_profile/FacebookProfile.class.php');
+lmb_require('src/service/social_profile/TwitterProfile.class.php');
 
 class odPostingService implements SharesInterface
 {
