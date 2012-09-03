@@ -158,7 +158,7 @@ class DaysController extends BaseJsonController
       return $this->_answerWithError('Not a POST request');
 
     if(!$day = Day::findById($this->request->id))
-      return $this->_answerWithError("Day not found");
+      return $this->_answerNotFound("Day not found");
 
     $this->toolkit->getPostingService()->shareDay($day);
 
@@ -171,7 +171,7 @@ class DaysController extends BaseJsonController
       return $this->_answerWithError('Not a POST request');
 
     if(!$day = Day::findById($this->request->id))
-      return $this->_answerWithError("Day not found");
+      return $this->_answerNotFound("Day not found");
 
     if($this->_getUser()->getId() == $day->getUserId())
       return $this->_answerWithError("You can't like you'r own days");
