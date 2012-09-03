@@ -2,6 +2,102 @@
 lmb_require(taskman_prop('PROJECT_DIR').'setup.php');
 
 /**
+ * @desc Delete all FB test users
+ * @mods devel,testing
+ */
+function task_od_delete_test_users()
+{
+  $app_id    = lmbToolkit::instance()->getConf('facebook')->appId;
+  $facebook = lmbToolkit::instance()->getFacebook();
+
+  foreach ($facebook->api("/{$app_id}/accounts/test-users", "GET")['data'] as $facebook_user) {
+    $facebook_tmp = lmbToolkit::instance()->getFacebook($facebook_user['access_token']);
+
+    if(!$facebook_tmp->api("/{$facebook_user['id']}", "DELETE"))
+      exit("Can't delete user!");
+    else
+      echo "User id='{$facebook_user['id']}' deleted.".PHP_EOL;
+  }
+}
+
+/**
+ * @desc Create FB test users. User avatars should be set manually.
+ * @deps od_delete_test_users
+ * @mods devel,testing
+ */
+function task_od_create_test_users()
+{
+  $app_id    = lmbToolkit::instance()->getConf('facebook')->appId;
+  $app_scope = lmbToolkit::instance()->getConf('facebook')->permissions;
+  $app_scope = implode(',', $app_scope);
+
+  $users = [
+    'Foo'               => ['id' => null, 'access_token' => null, 'friends' => ['Bar']],
+    'Bar'               => ['id' => null, 'access_token' => null, 'friends' => ['Foo']],
+    'Bill Chengsky'     => ['id' => null, 'access_token' => null, 'friends' => []],
+    'Joe Qinstein'      => ['id' => null, 'access_token' => null, 'friends' => ['Laura Vandervoort']],
+    'Laura Vandervoort' => ['id' => null, 'access_token' => null, 'friends' => ['John Doe']],
+    'John Doe'          => ['id' => null, 'access_token' => null, 'friends' => ['Laura Vandervoort']],
+    'Richard Bayers'    => ['id' => null, 'access_token' => null, 'friends' => ['Laura Vandervoort', 'John Doe']]
+  ];
+
+  $facebook = lmbToolkit::instance()->getFacebook();
+
+  foreach ($users as $name => $user) {
+    echo "Creating user '{$name}'...".PHP_EOL;
+    $url_name = urlencode($name);
+    $response = $facebook->api("/{$app_id}/accounts/test-users?installed=true&permissions={$app_scope}&name={$url_name}", 'POST');
+    $users[$name]['id'] = $response['id'];
+
+    echo "Setting '{$name}' password...".PHP_EOL;
+    $response = $facebook->api("/{$response['id']}?password=secret", 'POST');
+    if($response)
+      echo "Done.".PHP_EOL.PHP_EOL;
+    else
+      echo "Failed.".PHP_EOL.PHP_EOL;
+  }
+
+  echo "Getting access tokens...".PHP_EOL;
+  $facebook_users = $facebook->api("/{$app_id}/accounts/test-users", "GET")['data'];
+
+  foreach ($users as $name => $user) {
+    echo "Setting token for '{$name}': ";
+
+    foreach ($facebook_users as $facebook_user) {
+      if($user['id'] == $facebook_user['id']) {
+        $users[$name]['access_token'] = $facebook_user['access_token'];
+        break;
+      }
+    }
+
+    if(!$users[$name]['access_token'])
+      exit("User with id='{$user['id']}' not found!");
+    else
+      echo "Done".PHP_EOL;
+  }
+  echo PHP_EOL;
+
+  echo "Creating user relations...".PHP_EOL;
+  foreach ($users as $name => $user) {
+    $facebook_tmp = lmbToolkit::instance()->getFacebook($user['access_token']);
+
+    foreach ($user['friends'] as $friend) {
+      echo "'{$name}' wants to add '{$friend}' to friends: ";
+
+      if(!array_key_exists($friend, $users))
+        exit('Unknown user in friends list!');
+      else
+        $friend = $users[$friend];
+
+      if($facebook_tmp->api("{$user['id']}/friends/{$friend['id']}", 'POST'))
+        echo "Done".PHP_EOL;
+      else
+        exit("Relation can't be created!");
+    }
+  }
+}
+
+/**
  * @desc Delete all rows from DB tables
  * @mods devel,testing
  */
