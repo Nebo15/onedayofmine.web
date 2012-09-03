@@ -170,7 +170,7 @@ class odNewsObserver
   }
 
   /**
-   * @param Commentable $comment
+   * @param BaseComment $comment
    */
   function onComment(BaseComment $comment)
   {
@@ -225,8 +225,6 @@ class odNewsObserver
   {
     lmb_assert_type($type, 'string');
     $news->setText(self::getMessage($type, $params));
-//    $all_params = func_get_args();
-//    $news->setText(self::getMessage($type, array_slice($all_params, 0)));
   }
 
   /**
