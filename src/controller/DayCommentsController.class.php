@@ -40,42 +40,4 @@ class DayCommentsController extends BaseJsonController
 
     return $this->_answerOk();
   }
-
-  function doLike()
-  {
-    if(!$this->request->isPost())
-      return $this->_answerWithError('Not a POST request', null, 405);
-
-    if(!$comment = DayComment::findById($this->request->id))
-      return $this->_answerNotFound("Day comment not found by id");
-
-    if($this->_getUser()->getId() == $comment->getUser()->getId())
-      return $this->_answerWithError("You can't like you'r own comments");
-
-    $like = new DayCommentLike;
-    $like->setDayComment($comment);
-    $like->setUser($this->_getUser());
-    $like->save();
-
-    return $this->_answerOk();
-  }
-
-  function doUnlike()
-  {
-    if(!$this->request->isPost())
-      return $this->_answerWithError('Not a POST request', null, 405);
-
-    if(!$comment = DayComment::findById($this->request->id))
-      return $this->_answerNotFound("Day comment not found by id");
-
-    if(!$like = DayCommentLike::findByDayCommentIdAndUserId($comment->getId(), $this->_getUser()->getId()))
-      return $this->_answerOk("Like not found");
-
-    $this->toolkit->getPostingService()->shareDayUnlike($day);
-    // $this->toolkit->getNewsObserver()->onLikeDelete($day);
-
-    $like->destroy();
-
-    return $this->_answerOk();
-  }
 }
