@@ -77,8 +77,8 @@ class MomentsController extends BaseJsonController
     $like->setUser($this->_getUser());
     $like->save();
 
-    // $this->toolkit->getPostingService()->shareMomentLike($moment, $like);
-    // $this->toolkit->getNewsObserver()->onLike($moment);
+    $this->toolkit->getPostingService()->shareMomentLike($moment, $like);
+    $this->toolkit->getNewsObserver()->onLike($moment);
 
     return $this->_answerOk();
   }
@@ -94,7 +94,7 @@ class MomentsController extends BaseJsonController
     if(!$like = MomentLike::findByMomentIdAndUserId($moment->getId(), $this->_getUser()->getId()))
       return $this->_answerOk("Like not found");
 
-    // $this->toolkit->getPostingService()->shareMomentLikeDelete($moment);
+    $this->toolkit->getPostingService()->shareMomentLikeDelete($moment);
     // $this->toolkit->getNewsObserver()->onLikeDelete($moment);
 
     $like->destroy();
