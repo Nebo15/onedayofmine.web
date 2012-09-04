@@ -6,7 +6,7 @@ $conf = array(
     'default_cache_config' => __DIR__.'/../../var/',
     'certificate_authority' => true),
   'S3' => array(
-    'bucket' => 'onedayofmine-stage',
+    'bucket' => 'onedayofmine',
     'enabled' => true
   )
 );
