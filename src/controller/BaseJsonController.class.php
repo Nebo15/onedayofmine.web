@@ -293,6 +293,14 @@ abstract class BaseJsonController extends lmbController
     $export->likes_count = $obj->getLikes()->count();
   }
 
+  protected function _exportWithLikes($obj)
+  {
+    $exported = $obj->exportForApi();
+    $this->_attachLikesCount($exported);
+
+    return $exported;
+  }
+
   protected function _exportFullDay($day)
   {
     $answer = $this->_exportDayWithSubentities($day);
