@@ -281,8 +281,12 @@ abstract class BaseJsonController extends lmbController
 
       // Moment comments data
       //$this->_attachComments($moment_export, $moment);
+
       // Comments count
       $moment_export->comments_count = $moment->getComments()->count();
+
+      // Likes count
+      $moment_export->likes_count = $moment->getLikes()->count();
 
       $day_export->moments[] = $moment_export;
     }
