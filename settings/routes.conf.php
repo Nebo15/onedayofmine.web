@@ -16,7 +16,7 @@ $conf = array(
   ),
 
   'ControllerIdAction' => array(
-    'path' => '/:controller/:id/:action/',
+    'path' => '/:controller/:action/:id',
   ),
 
 );

@@ -9,7 +9,13 @@ abstract class odAcceptanceTestCase extends WebTestCase
    * @var OdObjectMother
    */
   protected $generator;
-
+  /**
+   * @var lmbSimpleDb
+   */
+  protected $db;
+  /**
+   * @var [type]
+   */
   protected $last_profile_info;
   /**
    * @var User
@@ -33,7 +39,7 @@ abstract class odAcceptanceTestCase extends WebTestCase
     $this->toolkit->resetConfs();
     $this->toolkit->resetFileLocators();
     parent::setUp();
-    $this->toolkit->truncateTablesOf('UserSettings', 'User');
+    $this->toolkit->truncateDb();
     list($this->main_user, $this->additional_user) = $this->toolkit->getTestsUsers($quiet = false);
   }
 

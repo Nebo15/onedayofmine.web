@@ -1,0 +1,78 @@
+{{wrap with="admin_page_layout.phtml" in="content_zone"}}
+
+  {{include file="_admin_object/actions.phtml"/}}
+
+  <div id="header">
+    <h1>Requests</h1>
+    {{include file='_admin/pager.phtml' items='{$#items}'/}}
+  </div>
+
+  <div id="body">
+
+    <div class="filter">
+      {{form id="filter_form" method="get"}}
+        <label for="filter_path">Path: {{input type="text" id="filter_path" name="filter_path"/}}</label>
+        <label for="filter_code">Code:
+          <?php
+            $codes = array_reverse(array_keys(lmbHttpResponse::$http_default_statuses));
+            $codes = array_combine($codes, $codes);
+          ?>
+          {{select id='filter_code' name='filter_code' options="$codes"}}
+            {{option prepend="true" value='0'}}any code{{/option}}
+          {{/select}}
+        </label>
+        <input type='submit' name='filter_action' value="Filter"  class='button'>
+        &nbsp;<a href="/admin_requests_log">Reset</a>
+      {{/form}}
+    </div>
+
+    {{list using="{$#items}" as="$item" counter="$counter" parity='$parity'}}
+
+      <div class='list'>
+        <table>
+          <tr>
+            <th width="7%">Time</th>
+            <th width="7%">Method / Path</th>
+            <th width="7%">Code</th>
+            <th width="14%">Latency</th>
+            <th width="7%">IP</th>
+            <th width="25%">Request</th>
+            <th width="25%">Response</th>
+            <th width="7%">Actions</th>
+          </tr>
+
+          {{list:item}}
+            <tr class="{$parity}">
+              <td>{$item.ctime|i18n_date:"", "stamp", "short_date_time"}</td>
+              <td>{$item.method} <a href="{$item.path}">{$item.path}</a></td>
+              <td>{$item.code}</td>
+              <td><?= round($item->time / 1000000, 2); ?></td>
+              <td>{$item.ip}</td>
+              <td>
+                <div style="font-size:10px;max-width: 200px;overflow: auto;">
+                  {{include file="admin_requests_log/include/params_list.phtml" item="$item"/}}
+                </div>
+                <a href='/admin_requests_log/request/{$item.id}' class="thickbox">View full</a>
+              </td>
+              <td>
+                <pre style="font-size:10px;max-width: 300px;overflow: auto;">
+                  {$item.response|clip:120,'...'|html}
+                </pre>
+                <a href='/admin_requests_log/response/{$item.id}' class="thickbox">View full</a>
+              </td>
+              <td class='actions'>
+                {{apply template="object_action" action="postman_collection" title="Download collection for Postman" icon="application_put" item="{$item}"/}}
+              </td>
+            </tr>
+          {{/list:item}}
+          {{list:empty}}
+            <div class="empty_list">Записи отсутствуют</div>
+          {{/list:empty}}
+        </table>
+      </div>
+
+    {{/list}}
+
+  </div>
+
+{{/wrap}}

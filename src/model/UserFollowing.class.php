@@ -1,4 +1,6 @@
 <?php
+lmb_require('src/model/base/BaseModel.class.php');
+
 class UserFollowing extends BaseModel
 {
   protected $_default_sort_params = array('ctime'=>'asc');

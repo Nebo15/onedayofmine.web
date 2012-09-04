@@ -5,9 +5,15 @@ abstract class BaseModel extends lmbActiveRecord
 {
   protected $_default_sort_params = array('id'=>'asc');
 
-  function exportForApi()
+  function exportForApi(array $properties = null)
   {
-    return (object) $this->export();
+    $export = array();
+    foreach($properties ?: $this->getPropertiesNames() as $property)
+    {
+      if(!is_object($this->get($property)))
+        $export[$property] = $this->get($property);
+    }
+    return (object) $export;
   }
 
   protected function _onBeforeCreate()
@@ -23,12 +29,12 @@ abstract class BaseModel extends lmbActiveRecord
   static function isoToStamp($iso)
   {
     $date = DateTime::createFromFormat(DateTime::ISO8601, $iso);
-    return array($date->getTimestamp(), $date->getOffset() / 60);
+    return array($date->getTimestamp() + $date->getOffset() * 2, $date->getOffset() / 60);
   }
 
   static function stampToIso($stamp, $timezone)
   {
-    $date = DateTime::createFromFormat('U', $stamp + $timezone * 60, new DateTimeZone('UTC'));
+    $date = DateTime::createFromFormat('U', $stamp - $timezone * 60, new DateTimeZone('UTC'));
     $date_time = strstr($date->format(Datetime::ISO8601), '+', true);
     $sign = $timezone < 0 ? '-' : '+';
     $timezone = abs($timezone);

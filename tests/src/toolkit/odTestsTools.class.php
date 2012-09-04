@@ -1,4 +1,6 @@
 <?php
+lmb_require('limb/dbal/src/lmbSimpleDb.class.php');
+lmb_require('tests/src/odObjectMother.class.php');
 lmb_require('tests/src/odPostmanWriter.class.php');
 lmb_require('tests/src/odApiToMarkdownWriter.class.php');
 lmb_require('tests/src/odModelToEntitiesWriter.class.php');
@@ -26,7 +28,7 @@ class odTestsTools extends lmbAbstractTools
   function getPostmanWriter()
   {
     if(!$this->postman_writer)
-      $this->postman_writer = new odPostmanWriter(lmb_env_get('APP_DIR').'/www/api_doc/postman.json');
+      $this->postman_writer = new odPostmanWriter();
     return $this->postman_writer;
   }
 
@@ -47,6 +49,16 @@ class odTestsTools extends lmbAbstractTools
     if(!$this->model_to_entities_writer)
       $this->model_to_entities_writer = new odModelToEntitiesWriter(lmb_env_get('APP_DIR').'/www/api_doc/entities.markdown');
     return $this->model_to_entities_writer;
+  }
+
+  /**
+   * @return lmbSimpleDb
+   */
+  function getSimpleDb() {
+    static $db;
+    if(!$db)
+      $db = new lmbSimpleDb(lmbToolkit::instance()->getDefaultDbConnection());
+    return $db;
   }
 
   function getTestsUsers($all = false)
@@ -86,14 +98,14 @@ class odTestsTools extends lmbAbstractTools
     return $users;
   }
 
-  static function truncateTablesOf($model_classes)
+  function truncateDb()
   {
-    if(!is_array($model_classes))
-      $model_classes = func_get_args();
-    foreach($model_classes as $model_class)
-    {
-      $model_class::delete();
+    $connection = lmbToolkit::instance()->getDefaultDbConnection();
+    foreach($connection->getDatabaseInfo()->getTableList() as $table) {
+      if($table != 'schema_info')
+        $connection->newStatement(sprintf("DELETE FROM %s", $connection->quoteIdentifier($table)))->execute();
     }
+    return $this;
   }
 
   function checkServer($uri_string)
@@ -108,5 +120,3 @@ class odTestsTools extends lmbAbstractTools
     }
   }
 }
-
-

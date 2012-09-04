@@ -1,11 +1,12 @@
 <?php
-lmb_require('src/model/Commentable.class.php');
+lmb_require('src/model/base/BaseComment.class.php');
 
 /**
  * @api
  */
-class DayComment extends Commentable
+class DayComment extends BaseComment
 {
+  protected $_default_sort_params = array('id'=>'asc');
   protected $_db_table_name = 'day_comment';
 
   protected function _defineRelations()
@@ -25,10 +26,8 @@ class DayComment extends Commentable
     return $validator;
   }
 
-  function exportForApi()
+  function exportForApi(array $properties = null)
   {
-    $export = parent::exportForApi();
-    $export->day_id = $this->getDay()->getId();
-    return $export;
+    return parent::exportForApi($properties);
   }
 }

@@ -1,12 +1,16 @@
 <?php
-lmb_require('src/model/Imageable.class.php');
+lmb_require('src/model/base/BaseModel.class.php');
+lmb_require('src/model/traits/Imageable.trait.php');
 
 /**
  * @api field int id User ID
  * @static Day findById()
  */
-class Day extends Imageable
+class Day extends BaseModel
 {
+  use Imageable;
+  use Likeable;
+
   protected $_default_sort_params = array('id'=>'desc');
 
   protected function _defineRelations()
@@ -24,8 +28,9 @@ class Day extends Imageable
     );
 
     $this->_has_many = array(
-      'moments' => array( 'field' => 'day_id', 'class' => 'Moment'),
+      'moments'  => array( 'field' => 'day_id', 'class' => 'Moment'),
       'comments' => array( 'field' => 'day_id', 'class' => 'DayComment'),
+      'likes'    => array( 'field' => 'day_id', 'class' => 'DayLike'),
     );
   }
 
@@ -40,7 +45,7 @@ class Day extends Imageable
     return $validator;
   }
 
-  function exportForApi()
+  function exportForApi(array $properties = null)
   {
     $export = new stdClass();
     $export->id = $this->getId();
@@ -69,10 +74,25 @@ class Day extends Imageable
     $placeholders[':hash']    = sha1('s0l7&p3pp$r'.$this->getUser()->getId().$this->getId());
   }
 
+  function getCommentsWithLimitation($from_id = null, $to_id = null, $limit = null)
+  {
+    $criteria = new lmbSQLCriteria();
+    if($from_id)
+      $criteria->add(lmbSQLCriteria::greater('id', $from_id));
+    if($to_id)
+      $criteria->add(lmbSQLCriteria::less('id', $to_id));
+    if(!$limit || $limit > 100)
+      $limit = 100;
+    return $this->getComments()->find(array(
+      'criteria' => $criteria,
+      'sort' => array('id' => 'ASC')
+    ))->paginate(0, $limit);
+  }
+
   static function getTypes()
   {
     $sql = "SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'day' AND COLUMN_NAME = 'type'";
-    $stmt = (new Day())->getDefaultConnection()->newStatement($sql); // connection recieving is ugly
+    $stmt = lmbToolkit::instance()->getDefaultDbConnection()->newStatement($sql);
     $stmt->execute(); // выполнит запрос.
     if(preg_match('/^enum\((.*)\)$/', $stmt->getOneRecord()->get('COLUMN_TYPE'), $matches) === 1) {
       return str_getcsv($matches[1], ',', "'");

@@ -1,5 +1,6 @@
 <?php
-lmb_require('src/model/Imageable.class.php');
+lmb_require('src/model/base/BaseModel.class.php');
+lmb_require('src/model/traits/Imageable.trait.php');
 
 /**
  * @api
@@ -11,12 +12,17 @@ lmb_require('src/model/Imageable.class.php');
  * @method string getDescription()
  * @method void setFbAccessToken(string $fb_access_token)
  */
-class Moment extends Imageable
+class Moment extends BaseModel
 {
+  use Imageable;
+
+  protected $_default_sort_params = array('time' => 'ASC');
+
   protected function _defineRelations()
   {
     $this->_has_many = array (
       'comments' => array ('field' => 'moment_id', 'class' => 'MomentComment'),
+      'likes'    => array( 'field' => 'moment_id', 'class' => 'MomentLike'),
     );
     $this->_many_belongs_to = array (
       'day' => array ('field' => 'day_id', 'class' => 'Day')
@@ -30,7 +36,7 @@ class Moment extends Imageable
     return $validator;
   }
 
-  function exportForApi()
+  function exportForApi(array $properties = null)
   {
     $moment = new stdClass();
     $moment->id = $this->getId();
@@ -39,9 +45,27 @@ class Moment extends Imageable
     $this->showImages($moment);
     $moment->time = self::stampToIso($this->getTime(), $this->getTimezone());
     $moment->likes_count = $this->getLikesCount() ?: 0;
-    $moment->ctime = $this->getCtime();
+    $moment->comments_count = $this->getComments()->count();
+
+    if($this->getIsDeleted())
+      $moment->is_deleted = true;
 
     return $moment;
+  }
+
+  function getCommentsWithLimitation($from_id = null, $to_id = null, $limit = null)
+  {
+    $criteria = new lmbSQLCriteria();
+    if($from_id)
+      $criteria->add(lmbSQLCriteria::greater('id', $from_id));
+    if($to_id)
+      $criteria->add(lmbSQLCriteria::less('id', $to_id));
+    if(!$limit || $limit > 100)
+      $limit = 100;
+    return $this->getComments()->find(array(
+      'criteria' => $criteria,
+      'sort' => array('id' => 'ASC')
+    ))->paginate(0, $limit);
   }
 
   protected function _getAdditionalPlaceholders(&$placeholders)

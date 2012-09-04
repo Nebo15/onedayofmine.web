@@ -6,12 +6,6 @@ class DaysUserControllerTest extends odControllerTestCase
 {
   protected $controller_class = 'DaysController';
 
-  function setUp()
-  {
-    parent::setUp();
-    odTestsTools::truncateTablesOf('Day', 'Moment', 'DayComment');
-  }
-
   /**
    * @api description Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields listed below.
    * @api input param int day_id Day ID
@@ -46,13 +40,13 @@ class DaysUserControllerTest extends odControllerTestCase
    * @api input param int day_id
    * @api input param string text Comment contents
    */
-  function testCommentCreate()
+  function testComment()
   {
     $day = $this->generator->day($this->main_user);
     $day->save();
 
     lmbToolkit::instance()->setUser($this->main_user);
-    $res = $this->post('comment_create',
+    $res = $this->post('comment',
       array('text' => $text = $this->generator->string(255)),
       $day->getId()
     )->result;
@@ -60,8 +54,8 @@ class DaysUserControllerTest extends odControllerTestCase
     if($this->assertResponse(200))
     {
       $this->assertEqual($day->getComments()->at(0)->getId(), $res->id);
-      $this->assertEqual($day->getId(), $res->day_id);
       $this->assertEqual($text, $res->text);
+      $this->assertEqual($this->main_user->exportForApi(), $res->user);
     }
   }
 
@@ -245,7 +239,7 @@ class DaysUserControllerTest extends odControllerTestCase
 
     lmbToolkit::instance()->setUser($this->main_user);
 
-    $days = $this->get('following_users')->result;
+    $days = $this->get('following')->result;
     $this->assertResponse(200);
     $this->assertEqual(4, count($days));
     $this->assertEqual($day4->getId(), $days[0]->id);
@@ -253,7 +247,7 @@ class DaysUserControllerTest extends odControllerTestCase
     $this->assertEqual($day2->getId(), $days[2]->id);
     $this->assertEqual($day1->getId(), $days[3]->id);
 
-    $days = $this->get('following_users', array('from' => $day4->getId()))->result;
+    $days = $this->get('following', array('from' => $day4->getId()))->result;
     $this->assertResponse(200);
     $this->assertEqual(3, count($days));
     $this->assertEqual($day3->getId(), $days[0]->id);
@@ -261,7 +255,7 @@ class DaysUserControllerTest extends odControllerTestCase
     $this->assertEqual($day1->getId(), $days[2]->id);
 
     $days = $this
-    ->get('following_users', array(
+    ->get('following', array(
       'from' => $day4->getId(),
       'to'   => $day1->getId()))
     ->result;
@@ -271,7 +265,7 @@ class DaysUserControllerTest extends odControllerTestCase
     $this->assertEqual($day2->getId(), $days[1]->id);
 
     $days = $this
-      ->get('following_users', array(
+      ->get('following', array(
       'from'  => $day4->getId(),
       'to'    => $day1->getId(),
       'limit' => 1))

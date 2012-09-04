@@ -1,5 +1,6 @@
 <?php
-lmb_require('src/model/Imageable.class.php');
+lmb_require('src/model/base/BaseModel.class.php');
+lmb_require('src/model/traits/Imageable.trait.php');
 lmb_require('limb/imagekit/src/lmbConvertImageHelper.class.php');
 lmb_require('limb/validation/src/rule/lmbValidValueRule.class.php');
 
@@ -14,8 +15,10 @@ lmb_require('limb/validation/src/rule/lmbValidValueRule.class.php');
  * @method UserSettings getSettings()
  * @method void
  */
-class User extends Imageable
+class User extends BaseModel
 {
+  use Imageable;
+
   const SEX_MALE = 'male';
   const SEX_FEMALE = 'female';
 
@@ -40,10 +43,12 @@ class User extends Imageable
         'field' => 'user_id',
         'class' => 'Day',
       ),
-      'days_comments' => array ('field' => 'user_id', 'class' => 'DayComment'),
+      'days_comments'    => array ('field' => 'user_id', 'class' => 'DayComment'),
       'moments_comments' => array ('field' => 'user_id', 'class' => 'MomentComment'),
-      'news' => array ('field' => 'recipient_id', 'class' => 'News'),
-      'created_news' => array ('field' => 'user_id', 'class' => 'News'),
+      'activities'       => array ('field' => 'sender_id', 'class' => 'News'),
+      'created_news'     => array ('field' => 'sender_id', 'class' => 'News'),
+      'day_likes'        => array ('field' => 'user_id', 'class' => 'DayLike'),
+      'moment_likes'     => array ('field' => 'user_id', 'class' => 'MomentLike'),
     );
     $this->_has_many_to_many = array(
       'favourite_days' => array(
@@ -62,6 +67,11 @@ class User extends Imageable
         'foreign_field' => 'user_id',
         'table' => 'user_following',
         'class' => 'User'),
+      'news' => array(
+        'field' => 'user_id',
+        'foreign_field' => 'news_id',
+        'table' => 'news_recipient',
+        'class' => 'News'),
     );
   }
 
@@ -80,12 +90,10 @@ class User extends Imageable
     return $validator;
   }
 
-  function exportForApi()
+  function exportForApi(array $properties = null)
   {
     $result = new stdClass();
     $result->id = $this->id;
-    // $result->fb_uid = $this->fb_uid;
-    // $result->twitter_uid = $this->twitter_uid;
     $result->name = $this->name;
     $result->sex = $this->sex;
     foreach ($this->getImages() as $image_width => $image) {
@@ -152,6 +160,21 @@ class User extends Imageable
     ))->paginate(0, $limit);
   }
 
+  function getActivitiesWithLimitation($from_id = null, $to_id = null, $limit = null)
+  {
+    $criteria = new lmbSQLCriteria();
+    if($from_id)
+      $criteria->add(lmbSQLCriteria::less('id', $from_id));
+    if($to_id)
+      $criteria->add(lmbSQLCriteria::greater('id', $to_id));
+    if(!$limit || $limit > 100)
+      $limit = 100;
+    return $this->getActivities()->find(array(
+      'criteria' => $criteria,
+      'sort' => array('id' => 'DESC'),
+    ))->paginate(0, $limit);
+  }
+
   static function findByFbAccessToken($fb_access_token)
   {
     return User::findOne(array('fb_access_token = ?', $fb_access_token));
@@ -180,5 +203,19 @@ class User extends Imageable
       'limit' => (!$limit || $limit > 100) ? 100 : $limit,
       'sort' => array('id' => 'ASC')
     ));
+  }
+
+  static function findUsersWithOldDays()
+  {
+    $criteria = lmbSQLCriteria::less('day.ctime', time() - 24 * 60 * 60);
+    $criteria->add(lmbSQLCriteria::isNotNull('current_day_id'));
+
+    $query = lmbARQuery :: create('Day')->eagerJoin('user')->addCriteria($criteria);
+
+    $users = array();
+    foreach($query->fetch() as $day)
+      $users[] = $day->getUser();
+
+    return new lmbCollection($users);
   }
 }
