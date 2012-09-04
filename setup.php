@@ -25,7 +25,6 @@ if(array_key_exists('HTTP_NAME', $_SERVER))
   lmb_env_setor('HOST_URL', 'http://'.$_SERVER['HTTP_HOST'].'/');
 
 lmb_env_setor('LIMB_APP_MODE' , 'production');
-lmb_env_setor('USE_API_CACHE', false);
 
 lmb_require('src/model/traits/*.trait.php');
 lmb_require('src/model/base/*.class.php');
