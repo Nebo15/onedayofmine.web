@@ -1,11 +1,12 @@
 <?php
-lmb_require('src/model/Comment.class.php');
+lmb_require('src/model/base/BaseComment.class.php');
 
 /**
  * @api
  */
-class DayFinishComment extends Commentable
+class DayFinishComment extends BaseComment
 {
+  protected $_default_sort_params = array('id'=>'asc');
   protected $_db_table_name = 'day_finish_comment';
 
   protected function _defineRelations()

@@ -6,12 +6,6 @@ class DaysGuestControllerTest extends odControllerTestCase
 {
   protected $controller_class = 'DaysController';
 
-  function setUp()
-  {
-    parent::setUp();
-    odTestsTools::truncateTablesOf('Day', 'Moment', 'DayComment', 'Complaint');
-  }
-
   /**
    * @api description Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields listed below.
    * @api input param int day_id Day ID
@@ -367,6 +361,53 @@ class DaysGuestControllerTest extends odControllerTestCase
     $loaded_complaint = Complaint::find()->at(0);
     $this->assertProperty($res->result, 'id');
     $this->assertEqual($loaded_complaint->getId(), $res->result->id);
+    $this->assertEqual($loaded_complaint->getDayId(), $res->result->day_id);
     $this->assertEqual($loaded_complaint->getText(), $text);
+  }
+
+  function testComments()
+  {
+    $day = $this->generator->day(null, true);
+    $day->save();
+
+    $res = $this->get('comments', array(), $day->getId())->result;
+    $this->assertResponse(200);
+    $this->assertEqual(4, count($res));
+    $this->assertEqual($day->getComments()->at(0)->id, $res[0]->id);
+    $this->assertEqual($day->getComments()->at(0)->text, $res[0]->text);
+    $this->assertEqual($day->getComments()->at(0)->user->exportForApi(), $res[0]->user);
+    $this->assertEqual($day->getComments()->at(1)->id, $res[1]->id);
+    $this->assertEqual($day->getComments()->at(2)->id, $res[2]->id);
+    $this->assertEqual($day->getComments()->at(3)->id, $res[3]->id);
+
+    $res = $this
+      ->get('comments', array(
+        'from' => $day->getComments()->at(0)->id
+      ), $day->getId())->result;
+    $this->assertResponse(200);
+    $this->assertEqual(3, count($res));
+    $this->assertEqual($day->getComments()->at(1)->id, $res[0]->id);
+    $this->assertEqual($day->getComments()->at(2)->id, $res[1]->id);
+    $this->assertEqual($day->getComments()->at(3)->id, $res[2]->id);
+
+    $res = $this
+      ->get('comments', array(
+      'from' => $day->getComments()->at(0)->id,
+      'to' => $day->getComments()->at(3)->id,
+    ), $day->getId())->result;
+    $this->assertResponse(200);
+    $this->assertEqual(2, count($res));
+    $this->assertEqual($day->getComments()->at(1)->id, $res[0]->id);
+    $this->assertEqual($day->getComments()->at(2)->id, $res[1]->id);
+
+    $res = $this
+      ->get('comments', array(
+      'from' => $day->getComments()->at(0)->id,
+      'to' => $day->getComments()->at(3)->id,
+      'limit' => 1
+    ), $day->getId())->result;
+    $this->assertResponse(200);
+    $this->assertEqual(1, count($res));
+    $this->assertEqual($day->getComments()->at(1)->id, $res[0]->id);
   }
 }

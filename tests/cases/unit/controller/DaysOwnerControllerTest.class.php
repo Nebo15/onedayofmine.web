@@ -6,13 +6,6 @@ class DaysOwnerControllerTest extends odControllerTestCase
 {
   protected $controller_class = 'DaysController';
 
-
-  function setUp()
-  {
-    parent::setUp();
-    odTestsTools::truncateTablesOf('Day', 'Moment', 'DayComment', 'DayFinishComment');
-  }
-
   function testStart_Negative()
   {
     $this->main_user->save();
@@ -165,7 +158,6 @@ class DaysOwnerControllerTest extends odControllerTestCase
       $this->assertProperty($res, 'image_266');
       $this->assertProperty($res, 'image_532');
       $this->assertEqual(0, $res->likes_count);
-      $this->assertProperty($res, 'ctime');
       $this->assertEqual($res->time, $time);
     }
   }

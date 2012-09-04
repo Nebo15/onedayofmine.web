@@ -161,6 +161,7 @@ class DaysController extends BaseJsonController
       return $this->_answerWithError("Day not found");
 
     $this->toolkit->getPostingService()->shareDay($day);
+    $this->toolkit->getNewsObserver()->onDayShare($day);
 
     return $this->_answerOk();
   }
@@ -217,7 +218,7 @@ class DaysController extends BaseJsonController
     return $this->_answerOk();
   }
 
-  function doFollowingUsers()
+  function doFollowing()
   {
     list($from, $to, $limit) = $this->_getFromToLimitations();
     $users_ids = lmbArrayHelper::getColumnValues('id', $this->_getUser()->getFollowing());
@@ -298,6 +299,8 @@ class DaysController extends BaseJsonController
 
       $answer[] = $export;
     }
+
+    $this->toolkit->getNewsObserver()->onDayFavourite($day);
 
     return $this->_answerOk($answer);
   }
@@ -396,7 +399,7 @@ class DaysController extends BaseJsonController
       return $this->_answerWithError($this->error_list->export());
   }
 
-  function doCommentCreate()
+  function doComment()
   {
     if(!$this->request->isPost())
       return $this->_answerWithError('Not a POST request');
@@ -413,7 +416,9 @@ class DaysController extends BaseJsonController
 
       $this->toolkit->getNewsObserver()->onComment($comment);
 
-      return $this->_answerOk($comment->exportForApi());
+      $export = $comment->exportForApi();
+      $export->user = $comment->getUser()->exportForApi();
+      return $this->_answerOk($export);
     }
     else
       return $this->_answerWithError($this->error_list->export());
@@ -425,9 +430,23 @@ class DaysController extends BaseJsonController
       return $this->_answerNotPost();
 
     if(!Day::findById($this->request->id))
-      return $this->_answerWithError("Day with id '".$this->request->get('day_id')."' not found");
+      return $this->_answerNotFound("Day with id '".$this->request->get('id')."' not found");
 
-    return $this->_importSaveAndAnswer(new Complaint(), array('day_id', 'text'));
+    $item = new Complaint();
+    $item->setDayId($this->request->get('day_id'));
+    $item->setText($this->request->get('text'));
+
+    $item->validate($this->error_list);
+    if($this->error_list->isValid())
+    {
+      $item->saveSkipValidation();
+      $res = $item->exportForApi();
+      return $this->_answerOk($res);
+    }
+    else
+    {
+      return $this->_answerWithError($this->error_list->getReadable());
+    }
   }
 
   function doGuestTypes()
@@ -451,6 +470,24 @@ class DaysController extends BaseJsonController
       // Favorites data
       $this->_attachDayIsFavorited($export, $day);
 
+      $answer[] = $export;
+    }
+
+    return $this->_answerOk($answer);
+  }
+
+  function doGuestComments()
+  {
+    if(!$day = Day::findById($this->request->id))
+      return $this->_answerNotFound("Day with id '".$this->request->get('day_id')."' not found");
+
+    list($from, $to, $limit) = $this->_getFromToLimitations();
+
+    $answer = array();
+    foreach ($day->getCommentsWithLimitation($from, $to, $limit) as $comment)
+    {
+      $export = $comment->exportForApi();
+      $export->user = $comment->getUser()->exportForApi();
       $answer[] = $export;
     }
 

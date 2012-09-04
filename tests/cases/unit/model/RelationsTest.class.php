@@ -3,11 +3,6 @@ lmb_require('tests/cases/unit/odUnitTestCase.class.php');
 
 class RelationsTest extends odUnitTestCase
 {
-  function setUp()
-  {
-    odTestsTools::truncateTablesOf('Day', 'Moment', 'DayComment', 'MomentComment', 'News');
-    parent::setUp();
-  }
 
   function testUserToDayRelation()
   {
@@ -100,7 +95,7 @@ class RelationsTest extends odUnitTestCase
     $this->assertEqual($creator->getCreatedNews()->at(0)->getId(), $recipient->getNews()->at(0)->getId());
 
     // News to User
-    $this->assertEqual($news->getRecipient()->getId(), $recipient->getId());
+    $this->assertEqual($news->getRecipients()->at(0)->getId(), $recipient->getId());
   }
 
   function testNewsToDayRelations() {

@@ -6,12 +6,6 @@ class MyControllerTest extends odControllerTestCase
 {
   protected $controller_class = 'MyController';
 
-  function setUp()
-  {
-    parent::setUp();
-    odTestsTools::truncateTablesOf('UserSettings');
-  }
-
   /**
    * @api description Returns <a href="#Entity:User">profile</a> of current logged in user.
    */
@@ -135,11 +129,11 @@ class MyControllerTest extends odControllerTestCase
   function testUpdateSettings()
   {
     $this->toolkit->setUser($this->main_user);
-    $registered_user = $this->main_user->exportForApi();
 
     $settings = new UserSettings();
     $settings->setNotificationsNewDays(1);
     $settings->setNotificationsNewComments(1);
+    $settings->setNotificationsNewReplays(1);
     $settings->setNotificationsRelatedActivity(1);
     $settings->setNotificationsShootingPhotos(1);
     $settings->setPhotosSaveOriginal(1);
@@ -157,6 +151,7 @@ class MyControllerTest extends odControllerTestCase
     $settings = new UserSettings();
     $settings->setNotificationsNewDays(0);
     $settings->setNotificationsNewComments(0);
+    $settings->setNotificationsNewReplays(0);
     $settings->setNotificationsRelatedActivity(0);
     $settings->setNotificationsShootingPhotos(0);
     $settings->setPhotosSaveOriginal(0);
@@ -173,5 +168,86 @@ class MyControllerTest extends odControllerTestCase
     $real_settings_collection = UserSettings::find();
     $this->assertEqual(1, count($real_settings_collection));
     $this->assertEqual($settings, $real_settings_collection->at(0)->exportForApi());
+  }
+
+  /**
+   * @api description Returns news for current logged in user.
+   * @api input param int from
+   * @api input param int to
+   * @api input param int limit
+   * @api result News[] - List of news. If you use the "from" option (wthout "to") and returned list is empty, than additionally HTTP 304 status code can be returned.
+   */
+  function testGetNewNews()
+  {
+    $this->main_user->save();
+    $this->toolkit->setUser($this->main_user);
+
+    $response = $this->get('news');
+    $this->assertResponse(200);
+    $this->assertEqual(0, count($response->result));
+
+    // Adding new news
+    $news1 = $this->generator->news(null, $this->main_user);
+    $news1->save();
+    $news2 = $this->generator->news(null, $this->main_user);
+    $news2->save();
+    $news3 = $this->generator->news(null, $this->main_user);
+    $moment = $this->generator->moment();
+    $moment->setDay($this->generator->day());
+    $moment->save();
+    $news3->setMoment($moment);
+    $news3->save();
+    $news4 = $this->generator->news(null, $this->main_user);
+    $news4->save();
+
+    $response = $this->get('news');
+    if($this->assertResponse(200))
+    {
+      $this->assertTrue(is_array($response->result));
+      $this->assertEqual(4, count($response->result));
+      $this->assertEqual($news4->getId(), $response->result[0]->id);
+      $this->assertEqual($news3->getId(), $response->result[1]->id);
+      $this->assertEqual($news2->getId(), $response->result[2]->id);
+      $this->assertEqual($news1->getId(), $response->result[3]->id);
+    }
+
+    // If there are no new news return shoud be empty with HTTP 304 status code
+    $response = $this->get('news', array('from' => $news1->getId()));
+    $this->assertResponse(304);
+    $this->assertEqual(0, count($response->result));
+
+    $response = $this->get('news', array('from' => $news4->getId()));
+    if($this->assertResponse(200))
+    {
+      $this->assertTrue(is_array($response->result));
+      $this->assertEqual(3, count($response->result));
+      $this->assertEqual($news3->getId(), $response->result[0]->id);
+      $this->assertEqual($news2->getId(), $response->result[1]->id);
+      $this->assertEqual($news1->getId(), $response->result[2]->id);
+    }
+
+    $response = $this->get('news', array(
+      'from' => $news4->getId(),
+      'to' => $news1->getId(),
+    ));
+    if($this->assertResponse(200))
+    {
+      $this->assertTrue(is_array($response->result));
+      $this->assertEqual(2, count($response->result));
+      $this->assertEqual($news3->getId(), $response->result[0]->id);
+      $this->assertEqual($news2->getId(), $response->result[1]->id);
+    }
+
+    $response = $this->get('news', array(
+      'from' => $news4->getId(),
+      'to' => $news1->getId(),
+      'limit' => 1
+    ));
+    if($this->assertResponse(200))
+    {
+      $this->assertTrue(is_array($response->result));
+      $this->assertEqual(1, count($response->result));
+      $this->assertEqual($news3->getId(), $response->result[0]->id);
+    }
   }
 }

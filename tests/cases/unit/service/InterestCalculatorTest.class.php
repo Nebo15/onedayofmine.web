@@ -7,7 +7,6 @@ class InterestCalculatorTest extends odUnitTestCase
   function setUp()
   {
     parent::setUp();
-    $this->toolkit->truncateTablesOf('Day');
     (new InterestCalculator())->reset();
   }
 

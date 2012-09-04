@@ -1,4 +1,5 @@
 <?php
+lmb_require('src/model/base/BaseModel.class.php');
 
 /**
  * @api
@@ -18,11 +19,10 @@ class Complaint extends BaseModel
     );
   }
 
-  function exportForApi()
+  function exportForApi(array $properties = null)
   {
-    $exported = $this->export();
+    $exported = $this->export($properties);
     unset($exported['cip']);
     return (object) $exported;
   }
-
 }
