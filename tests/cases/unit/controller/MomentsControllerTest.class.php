@@ -95,7 +95,7 @@ class MomentsControllerTest extends odControllerTestCase
   // TODO
   function testComment_MomentNotFound() {}
 
-    /**
+  /**
    * @api
    */
   function testLike() {

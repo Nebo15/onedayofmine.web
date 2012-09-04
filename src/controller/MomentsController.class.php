@@ -67,7 +67,7 @@ class MomentsController extends BaseJsonController
       return $this->_answerWithError('Not a POST request');
 
     if(!$moment = Moment::findById($this->request->id))
-      return $this->_answerWithError("Moment not found");
+      return $this->_answerNotFound("Moment not found");
 
     if($this->_getUser()->getId() == $moment->getDay()->getUserId())
       return $this->_answerWithError("You can't like moments in you'r own days");
@@ -77,8 +77,8 @@ class MomentsController extends BaseJsonController
     $like->setUser($this->_getUser());
     $like->save();
 
-    $this->toolkit->getPostingService()->shareMomentLike($moment, $like);
-    $this->toolkit->getNewsObserver()->onLike($moment);
+    // $this->toolkit->getPostingService()->shareMomentLike($moment, $like);
+    // $this->toolkit->getNewsObserver()->onLike($moment);
 
     return $this->_answerOk();
   }
@@ -91,10 +91,13 @@ class MomentsController extends BaseJsonController
     if(!$moment = Moment::findById($this->request->id))
       return $this->_answerWithError("Moment not found");
 
-    MomentLike::deleteUserLikeInMoment($this->_getUser(), $moment);
+    if(!$like = MomentLike::findByMomentIdAndUserId($moment->getId(), $this->_getUser()->getId()))
+      return $this->_answerOk("Like not found");
 
     // $this->toolkit->getPostingService()->shareMomentLikeDelete($moment);
     // $this->toolkit->getNewsObserver()->onLikeDelete($moment);
+
+    $like->destroy();
 
     return $this->_answerOk();
   }

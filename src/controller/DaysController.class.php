@@ -173,7 +173,7 @@ class DaysController extends BaseJsonController
     if(!$day = Day::findById($this->request->id))
       return $this->_answerNotFound("Day not found");
 
-    if($this->_getUser()->getId() == $day->getUserId())
+    if($this->_getUser()->getId() == $day->getUser()->getId())
       return $this->_answerWithError("You can't like you'r own days");
 
     $like = new DayLike;
@@ -181,7 +181,7 @@ class DaysController extends BaseJsonController
     $like->setUser($this->_getUser());
     $like->save();
 
-    $this->toolkit->getPostingService()->shareDayLike($day, $like);
+    // $this->toolkit->getPostingService()->shareDayLike($day, $like);
     $this->toolkit->getNewsObserver()->onLike($day);
 
     return $this->_answerOk();
@@ -193,12 +193,15 @@ class DaysController extends BaseJsonController
       return $this->_answerWithError('Not a POST request');
 
     if(!$day = Day::findById($this->request->id))
-      return $this->_answerWithError("Day not found");
+      return $this->_answerNotFound("Day not found");
 
-    DayLike::deleteUserLikeInDay($this->_getUser(), $day);
+    if(!$like = DayLike::findByDayIdAndUserId($day->getId(), $this->_getUser()->getId()))
+      return $this->_answerOk("Like not found");
 
-    // $this->toolkit->getPostingService()->shareDayLikeDelete($day);
-    // $this->toolkit->getNewsObserver()->onLikeDelete($day);
+    // $this->toolkit->getPostingService()->shareDayUnlike($day, $like);
+    $this->toolkit->getNewsObserver()->onLikeDelete($day);
+
+    $like->destroy();
 
     return $this->_answerOk();
   }
