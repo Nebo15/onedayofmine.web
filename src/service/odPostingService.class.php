@@ -57,8 +57,7 @@ class odPostingService implements SharesInterface
   public function shareDayLike(Day $day, DayLike $like)
   {
     $result = $this->share('shareDayLike', func_get_args());
-    $like->setFacebookId($result);
-    $like->save();
+    $this->setObjectIds($like, $result);
     return $result;
   }
 
@@ -78,8 +77,7 @@ class odPostingService implements SharesInterface
   public function shareMomentLike(Moment $moment, MomentLike $like)
   {
     $result = $this->share('shareMomentLike', func_get_args());
-    $like->setFacebookId($result);
-    $like->save();
+    $this->setObjectIds($like, $result);
     return $result;
   }
 
@@ -90,7 +88,9 @@ class odPostingService implements SharesInterface
 
   public function shareDayEnd(Day $day)
   {
-    return $this->share('shareDayEnd', func_get_args());
+    $result = $this->share('shareDayEnd', func_get_args());
+    // $this->setObjectIds($like, $result);
+    return $result;
   }
 
   protected function setObjectIds(lmbActiveRecord $object, array $result)
@@ -99,5 +99,6 @@ class odPostingService implements SharesInterface
       $method_name = 'set'.ucfirst($key).'Id';
       $object->$method_name($value);
     }
+    $object->save();
   }
 }
