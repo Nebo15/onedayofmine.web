@@ -1,5 +1,8 @@
 <?php
-lmb_require('src/model/*.class.php');
+lmb_require('src/model/Day.class.php');
+lmb_require('src/model/Moment.class.php');
+lmb_require('src/model/DayComment.class.php');
+lmb_require('src/model/MomentComment.class.php');
 
 /**
  * News creator.

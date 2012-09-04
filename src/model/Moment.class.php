@@ -16,6 +16,8 @@ class Moment extends BaseModel
 {
   use Imageable;
 
+  protected $_default_sort_params = array('time' => 'ASC');
+
   protected function _defineRelations()
   {
     $this->_has_many = array (

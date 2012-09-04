@@ -86,3 +86,16 @@ function task_od_amazon_s3_upload()
 //    }
   }
 }
+
+function task_od_close_old_days()
+{
+  echo 'Search for old days...';
+  $users = User::findUsersWithOldDays();
+  echo 'DONE'.PHP_EOL;
+  foreach($users as $user)
+  {
+    $user->setCurrentDayId(null);
+    $user->save();
+    echo "Removed current day fo user #".$user->id.PHP_EOL;
+  }
+}
