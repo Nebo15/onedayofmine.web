@@ -1,14 +1,6 @@
 
 SET FOREIGN_KEY_CHECKS = 0;
 
-CREATE TABLE `news_recipient` (
-    `id` int(11) unsigned NOT NULL COMMENT '' auto_increment,
-    `news_id` int(11) unsigned NOT NULL DEFAULT 0 COMMENT '',
-    `user_id` int(11) unsigned NOT NULL DEFAULT 0 COMMENT '',
-    `is_pushed` int(1) unsigned NOT NULL DEFAULT '0' COMMENT '',
-    PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
 ALTER TABLE `complaint` MODIFY `day_id` int(11) unsigned NULL DEFAULT NULL COMMENT '';
 #
 #  Fieldformat of 'complaint.day_id' changed from 'int(11) NULL DEFAULT NULL COMMENT '' to int(11) unsigned NULL DEFAULT NULL COMMENT ''. Possibly data modifications needed!
@@ -225,34 +217,6 @@ CREATE TABLE `moment_like` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 
-ALTER TABLE `news` DROP INDEX recipient_id;
-ALTER TABLE `news` ADD `sender_id` int(11) unsigned NOT NULL DEFAULT '0' COMMENT '' AFTER id;
-ALTER TABLE `news` ADD `day_comment_id` int(11) unsigned NULL DEFAULT NULL COMMENT '' AFTER moment_id;
-ALTER TABLE `news` ADD `moment_comment_id` int(11) unsigned NULL DEFAULT NULL COMMENT '' AFTER day_comment_id;
-ALTER TABLE `news` DROP `recipient_id`;
-ALTER TABLE `news` MODIFY `user_id` int(11) unsigned NULL DEFAULT NULL COMMENT '';
-#
-#  Fieldformat of 'news.user_id' changed from 'int(11) unsigned NOT NULL DEFAULT 0 COMMENT '' to int(11) unsigned NULL DEFAULT NULL COMMENT ''. Possibly data modifications needed!
-#
-
-ALTER TABLE `news` MODIFY `day_id` int(11) unsigned NULL DEFAULT NULL COMMENT '';
-#
-#  Fieldformat of 'news.day_id' changed from 'int(11) unsigned NOT NULL DEFAULT '0' COMMENT '' to int(11) unsigned NULL DEFAULT NULL COMMENT ''. Possibly data modifications needed!
-#
-
-ALTER TABLE `news` MODIFY `moment_id` int(11) unsigned NULL DEFAULT NULL COMMENT '';
-#
-#  Fieldformat of 'news.moment_id' changed from 'int(11) unsigned NOT NULL DEFAULT '0' COMMENT '' to int(11) unsigned NULL DEFAULT NULL COMMENT ''. Possibly data modifications needed!
-#
-
-ALTER TABLE `news` MODIFY `ctime` int(10) unsigned NOT NULL DEFAULT 0 COMMENT '';
-#
-#  Fieldformat of 'news.ctime' changed from 'int(11) unsigned NOT NULL DEFAULT 0 COMMENT '' to int(10) unsigned NOT NULL DEFAULT 0 COMMENT ''. Possibly data modifications needed!
-#
-
-ALTER TABLE `news` ADD INDEX `user_id-id` (`sender_id`, `id`);
-
-
 ALTER TABLE `schema_info` DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 
@@ -338,9 +302,5 @@ CREATE TABLE `user_following` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `follower_user_id-user_id` (`follower_user_id`,`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
-
-ALTER TABLE `user_settings` ADD `notifications_new_replays` int(1) unsigned NOT NULL DEFAULT '0' COMMENT '' AFTER notifications_new_comments;
-
 
 SET FOREIGN_KEY_CHECKS = 1;
