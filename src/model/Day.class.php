@@ -15,14 +15,6 @@ class Day extends BaseModel
 
   protected function _defineRelations()
   {
-    $this->_has_one = array(
-      'finish_comment' => array(
-        'field' =>'finish_comment_id',
-        'class' => 'DayFinishComment',
-        'can_be_null' => true,
-      )
-    );
-
     $this->_many_belongs_to = array(
       'user' => array( 'field' => 'user_id', 'class' => 'User'),
     );
@@ -54,12 +46,10 @@ class Day extends BaseModel
     $export->title = $this->getTitle();
     $export->occupation = $this->getOccupation();
     $export->location = $this->getLocation();
+    $export->final_description = $this->getFinalDescription();
     $export->type = $this->getType();
     $export->ctime = $this->getCreateTime();
     $export->utime = $this->getUpdateTime();
-
-    if($this->getIsDeleted())
-      $export->is_deleted = true;
 
     return $export;
   }

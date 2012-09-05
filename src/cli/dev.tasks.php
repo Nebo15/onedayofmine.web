@@ -292,16 +292,9 @@ function task_od_parse_lj($argv)
       echo ".";
     }
 
-    $rand = rand(0, 3);
-    if($rand < 3)
-    {
-      $finish_comment = new DayFinishComment(); // TODO
-      $finish_comment->setText($day_comments[array_rand($day_comments)]);
-      $finish_comment->setUser($tests_users[array_rand($tests_users)]);
-      $finish_comment->setLikesCount(rand(0, 10));
-      $finish_comment->setDay($day);
-      $finish_comment->save();
-    }
+    if(rand(0, 3) < 3)
+      $day->setFinalDescription($day_comments[array_rand($day_comments)]);
+
     echo PHP_EOL;
     echo 'Added '. count($day->getMoments()) .' moments.'.PHP_EOL;
   }

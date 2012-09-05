@@ -362,6 +362,7 @@ class DaysOwnerControllerTest extends odControllerTestCase
 
   /**
    * @api description Finish current day.
+   * @api input option string final_description Final day comment.
    */
   function testFinish()
   {
@@ -375,7 +376,7 @@ class DaysOwnerControllerTest extends odControllerTestCase
     $response = $this->post('finish',
       array(
         'image_content' => $image_content = base64_encode($this->generator->image()),
-        'comment' => $comment_text = $this->generator->string()
+        'final_description' => $comment_text = $this->generator->string()
       ),
       $day->getId()
     );
@@ -390,11 +391,11 @@ class DaysOwnerControllerTest extends odControllerTestCase
       $this->assertEqual($day->getCreateTime(), $loaded_day->ctime);
 
       $db_day = Day::findOne();
-      $this->assertProperty($loaded_day, 'finish_comment');
-      $this->assertTrue($loaded_day->finish_comment);
+      $this->assertProperty($loaded_day, 'final_description');
+      $this->assertTrue($loaded_day->final_description);
       $this->assertEqual(count($db_day->getComments()), 0);
-      $this->assertTrue($db_day->getFinishComment());
-      $this->assertEqual($db_day->getFinishComment()->getText(), $comment_text);
+      $this->assertTrue($db_day->getFinalDescription());
+      $this->assertEqual($db_day->getFinalDescription(), $comment_text);
 
       $this->assertValidImageUrl($loaded_day->image_266);
       $this->assertValidImageUrl($loaded_day->image_532);
