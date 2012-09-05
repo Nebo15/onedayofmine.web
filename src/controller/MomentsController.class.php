@@ -31,7 +31,7 @@ class MomentsController extends BaseJsonController
     if($this->error_list->isEmpty())
     {
       $moment->saveSkipValidation();
-      return $this->_answerOk($moment->exportForApi());
+      return $this->_answerOk($this->_exportMoment($moment));
     }
     else
       return $this->_answerWithError($this->error_list->export());
@@ -110,7 +110,7 @@ class MomentsController extends BaseJsonController
       return $this->_answerWithError('Not a POST request');
 
     if(!$moment = Moment::findById($this->request->id))
-      return $this->_answerWithError("Moment not found");
+      return $this->_answerNotFound("Moment not found");
 
     if(!$like = MomentLike::findByMomentIdAndUserId($moment->getId(), $this->_getUser()->getId()))
       return $this->_answerOk("Like not found");
@@ -121,6 +121,7 @@ class MomentsController extends BaseJsonController
     $like->destroy();
 
     return $this->_answerOk();
+  }
 
   function doGuestComments()
   {

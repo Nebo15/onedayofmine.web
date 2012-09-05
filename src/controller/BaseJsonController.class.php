@@ -274,22 +274,26 @@ abstract class BaseJsonController extends lmbController
   {
     $day_export->moments = array();
     foreach($day->getMoments() as $moment) {
-      $moment_export = $moment->exportForApi();
+      $moment_export = $this->_exportMoment($moment);
 
       // Moment day data
       unset($moment_export->day_id);
 
-      // Moment comments data
-      //$this->_attachComments($moment_export, $moment);
-
-      // Comments count
-      $moment_export->comments_count = $moment->getComments()->count();
-
-      // Likes count
-      $moment_export->likes_count = $moment->getLikes()->count();
-
       $day_export->moments[] = $moment_export;
     }
+  }
+
+  protected function _exportMoment($moment)
+  {
+    $moment_export = $moment->exportForApi();
+
+    // Comments count
+    $moment_export->comments_count = $moment->getComments()->count();
+
+    // Likes count
+    $moment_export->likes_count = $moment->getLikes()->count();
+
+    return $moment_export;
   }
 
   protected function _attachLikesCount(stdClass $export, $obj)

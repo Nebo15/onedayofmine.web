@@ -14,33 +14,6 @@ class FacebookProfileTest extends odAcceptanceTestCase
     $this->proxy_client = new Client('http://stage.onedayofmine.com/proxy.php', 'http://onedayofmine.dev/');
   }
 
-  function testShareMomentLike()
-  {
-    $day = $this->generator->day();
-    $day->setTitle('testShareMomentLike - Day');
-    $day->save();
-
-    $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($day));
-
-    $facebook_id = (new FacebookProfileForTests($this->main_user))->shareDayBegin($day);
-    $day->setFacebookId($facebook_id);
-    $day->save();
-
-    $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($day));
-
-    $moment = $this->generator->moment($day);
-    $moment->save();
-    $moment->attachImage($this->generator->image());
-    $moment->save();
-
-    $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($moment));
-
-    $facebook_id = (new FacebookProfileForTests($this->main_user))->shareMomentAdd($day, $moment);
-    $this->assertTrue($facebook_id);
-
-    (new FacebookProfileForTests($this->main_user))->shareMomentLike($moment);
-  }
-
   function testGetInfoRaw()
   {
     $info = (new FacebookProfile($this->main_user))->getInfo_Raw();

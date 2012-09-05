@@ -16,7 +16,6 @@ class AuthControllerTest extends odControllerTestCase
     $this->assertFalse($res->result);
   }
 
-
   /**
    * @api description Authorizes and returns User.
    * @api input param string[118] token Facebook access token
