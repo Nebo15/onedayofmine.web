@@ -130,7 +130,6 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
 
   public function shareDay(Day $day)
   {
-    // TODO if($day->getFacebookId()) -> share fb:og entity that already exists
     return $this->provider->api("/me/feed", "post", array(
       'name'        => $day->getTitle(),
       'picture'     => count($day->getMoments()) ? lmbToolkit::instance()->getStaticUrl($day->getImage()) : '',
