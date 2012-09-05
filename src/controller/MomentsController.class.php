@@ -94,7 +94,7 @@ class MomentsController extends BaseJsonController
     if(!$like = MomentLike::findByMomentIdAndUserId($moment->getId(), $this->_getUser()->getId()))
       return $this->_answerOk("Like not found");
 
-    $this->toolkit->getPostingService()->shareMomentLikeDelete($moment);
+    $this->toolkit->getPostingService()->shareMomentUnlike($moment, $like);
     // $this->toolkit->getNewsObserver()->onLikeDelete($moment);
 
     $like->destroy();
