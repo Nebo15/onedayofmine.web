@@ -115,4 +115,13 @@ class UsersController extends BaseJsonController
     }
     return $this->_answerOk($response);
   }
+
+  function doUserActivity()
+  {
+    if(!$user = User::findById($this->request->id))
+      return $this->_answerNotFound("User not found by id '{$this->request->id}'");
+
+    list($from, $to, $limit) = $this->_getFromToLimitations();
+    return $this->_answerOk($user->getActivitiesWithLimitation($from, $to, $limit));
+  }
 }

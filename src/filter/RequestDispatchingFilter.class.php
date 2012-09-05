@@ -33,5 +33,3 @@ class RequestDispatchingFilter extends lmbRequestDispatchingFilter implements lm
     $filter_chain->next();
   }
 }
-
-

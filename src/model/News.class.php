@@ -17,16 +17,33 @@ class News extends BaseModel
   protected function _defineRelations()
   {
     $this->_many_belongs_to = array (
-      'recipient'=> array ('field' => 'recipient_id', 'class' => 'User'),
-      'user'     => array ('field' => 'user_id',      'class' => 'User'),
-      'day'      => array ('field' => 'day_id',       'class' => 'Day',    'can_be_null' => true),
-      'moment'   => array ('field' => 'moment_id',    'class' => 'Moment', 'can_be_null' => true),
+      'sender'           => array ('field' => 'sender_id',    'class' => 'User'),
+      'user'             => array ('field' => 'user_id',      'class' => 'User'),
+      'day'              => array ('field' => 'day_id',       'class' => 'Day',    'can_be_null' => true),
+      'moment'           => array ('field' => 'moment_id',    'class' => 'Moment', 'can_be_null' => true),
+    );
+    $this->_has_many_to_many = array(
+      'recipients' => array(
+        'field' => 'news_id',
+        'foreign_field' => 'user_id',
+        'table' => 'news_recipient',
+        'class' => 'User'),
     );
   }
 
-  function exportForApi()
+  protected function _createValidator()
   {
-    return (object) $this->export();;
+    $validator = new lmbValidator();
+    $validator->addRequiredRule('sender_id');
+    $validator->addRequiredRule('text');
+    return $validator;
+  }
+
+  function exportForApi(array $properties = null)
+  {
+    return parent::exportForApi(array(
+      'id', 'sender_id', 'text', 'user_id', 'day_id', 'day_comment_id', 'moment_id', 'moment_comment_id'
+    ));
   }
 
   /**
@@ -34,7 +51,16 @@ class News extends BaseModel
    */
   static function findNewsForUser(User $user, $from_id = null, $to_id = null, $limit = null)
   {
-    $criteria = lmbSQLCriteria::equal('recipient_id', $user->getId());
+    $query = new lmbSelectQuery('news_recipient');
+    $query->addField('news_id');
+    $query->addCriteria(lmbSQLCriteria::equal('user_id', $user->getId()));
+
+    $result = $query->fetch();
+    $ids = lmbArrayHelper::getColumnValues('news_id', $result);
+    if(!count($ids))
+      return array();
+
+    $criteria = lmbSQLCriteria::in('id', $ids);
     if($from_id)
       $criteria->add(lmbSQLCriteria::less('id', $from_id));
     if($to_id)

@@ -16,6 +16,8 @@ class Moment extends BaseModel
 {
   use Imageable;
 
+  protected $_default_sort_params = array('time' => 'ASC');
+
   protected function _defineRelations()
   {
     $this->_has_many = array (
@@ -34,7 +36,7 @@ class Moment extends BaseModel
     return $validator;
   }
 
-  function exportForApi()
+  function exportForApi(array $properties = null)
   {
     $moment = new stdClass();
     $moment->id = $this->getId();
@@ -42,12 +44,26 @@ class Moment extends BaseModel
     $moment->description = $this->getDescription();
     $this->showImages($moment);
     $moment->time = self::stampToIso($this->getTime(), $this->getTimezone());
-    $moment->ctime = $this->getCtime();
 
     if($this->getIsDeleted())
-      $export->is_deleted = true;
+      $moment->is_deleted = true;
 
     return $moment;
+  }
+
+  function getCommentsWithLimitation($from_id = null, $to_id = null, $limit = null)
+  {
+    $criteria = new lmbSQLCriteria();
+    if($from_id)
+      $criteria->add(lmbSQLCriteria::greater('id', $from_id));
+    if($to_id)
+      $criteria->add(lmbSQLCriteria::less('id', $to_id));
+    if(!$limit || $limit > 100)
+      $limit = 100;
+    return $this->getComments()->find(array(
+      'criteria' => $criteria,
+      'sort' => array('id' => 'ASC')
+    ))->paginate(0, $limit);
   }
 
   protected function _getAdditionalPlaceholders(&$placeholders)

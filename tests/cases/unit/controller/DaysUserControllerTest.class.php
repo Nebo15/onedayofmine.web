@@ -40,13 +40,13 @@ class DaysUserControllerTest extends odControllerTestCase
    * @api input param int day_id
    * @api input param string text Comment contents
    */
-  function testCommentCreate()
+  function testComment()
   {
     $day = $this->generator->day($this->main_user);
     $day->save();
 
     lmbToolkit::instance()->setUser($this->main_user);
-    $res = $this->post('comment_create',
+    $res = $this->post('comment',
       array('text' => $text = $this->generator->string(255)),
       $day->getId()
     )->result;
@@ -54,8 +54,8 @@ class DaysUserControllerTest extends odControllerTestCase
     if($this->assertResponse(200))
     {
       $this->assertEqual($day->getComments()->at(0)->getId(), $res->id);
-      $this->assertEqual($day->getId(), $res->day_id);
       $this->assertEqual($text, $res->text);
+      $this->assertEqual($this->main_user->exportForApi(), $res->user);
     }
   }
 

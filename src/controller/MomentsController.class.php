@@ -9,25 +9,46 @@ class MomentsController extends BaseJsonController
   function doUpdate()
   {
     if(!$this->request->isPost())
-      return $this->_answerWithError('Not a POST request');
+      return $this->_answerNotPost();
 
-    if(!$moment = Moment::findById($this->request->id))
-      return $this->_answerWithError("Moment not found");
+    $moment = Moment::findById($this->request->id);
+    if(!$moment || $moment->getDay()->getUser()->id != $this->_getUser()->id)
+      return $this->_answerNotFound("Moment with id=".$this->request->id." not found");
 
     if($this->request->has('image_content'))
       $moment->attachImage(base64_decode($this->request->get('image_content')));
 
-    return $this->_importSaveAndAnswer($moment, array('description'));
+    if($this->request->get('time'))
+    {
+      list($stamp, $zone) = Moment::isoToStamp($this->request->get('time'));
+      $moment->setTime($stamp);
+      $moment->setTimezone($zone);
+    }
+
+    if($this->request->get('description'))
+      $moment->setDescription($this->request->get('description'));
+
+    if($this->error_list->isEmpty())
+    {
+      $moment->saveSkipValidation();
+      return $this->_answerOk($moment->exportForApi());
+    }
+    else
+      return $this->_answerWithError($this->error_list->export());
   }
 
   function doComment()
   {
     if(!$this->request->isPost())
-      return $this->_answerWithError('Not a POST request');
+      return $this->_answerNotPost();
+
+    $moment = Moment::findById($this->request->id);
+    if(!$moment)
+      return $this->_answerNotFound("Moment with id=".$this->request->id." not found");
 
     $comment = new MomentComment();
     $comment->setText($this->request->get('text'));
-    $comment->setMoment(Moment::findById($this->request->id));
+    $comment->setMoment($moment);
     $comment->setUser($this->toolkit->getUser());
     $comment->validate($this->error_list);
 
@@ -37,7 +58,9 @@ class MomentsController extends BaseJsonController
 
       $this->toolkit->getNewsObserver()->onComment($comment);
 
-      return $this->_answerOk($comment->exportForApi());
+      $export = $comment->exportForApi();
+      $export->user = $this->_getUser()->exportForApi();
+      return $this->_answerOk($export);
     }
     else
       return $this->_answerWithError($this->error_list->export());
@@ -46,13 +69,11 @@ class MomentsController extends BaseJsonController
   function doDelete()
   {
     if(!$this->request->isPost())
-      return $this->_answerWithError('Not a POST request');
+      return $this->_answerNotPost();
 
-    if(!$moment = Moment::findById($this->request->id))
-      return $this->_answerWithError("Moment not found");
-
-    if($moment->getDay()->getUserId() != $this->_getUser()->getId())
-      return $this->_answerWithError('You can delete only moment in your own days', null, 401);
+    $moment = Moment::findById($this->request->id);
+    if(!$moment || $moment->getDay()->getUser()->id != $this->_getUser()->id)
+      return $this->_answerNotFound("Moment not found by id ".$this->request->id);
 
     $moment->destroy();
 
@@ -100,5 +121,22 @@ class MomentsController extends BaseJsonController
     $like->destroy();
 
     return $this->_answerOk();
+
+  function doGuestComments()
+  {
+    if(!$moment = Moment::findById($this->request->id))
+      return $this->_answerNotFound("Moment with id '".$this->request->get('id')."' not found");
+
+    list($from, $to, $limit) = $this->_getFromToLimitations();
+
+    $answer = array();
+    foreach ($moment->getCommentsWithLimitation($from, $to, $limit) as $comment)
+    {
+      $export = $comment->exportForApi();
+      $export->user = $comment->getUser()->exportForApi();
+      $answer[] = $export;
+    }
+
+    return $this->_answerOk($answer);
   }
 }

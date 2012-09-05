@@ -16,32 +16,64 @@ class MomentsControllerTest extends odControllerTestCase
     $day = $this->generator->day($this->main_user);
     $day->save();
 
-    $moment = $this->generator->moment($day);
+    $moment = $this->generator->moment($day, true);
     $moment->save();
 
     lmbToolkit::instance()->setUser($this->main_user);
     $res = $this->post('update',
       array(
         'description' => $desc = $this->generator->string(255),
+        'time' => $time = "2005-08-09T18:31:42+03:00",
         'image_content' => base64_encode($this->generator->image()),
       ),
       $moment->getId()
     )->result;
     $this->assertResponse(200);
 
+    $this->assertEqual($res->id, $moment->id);
+    $this->assertEqual($res->time, $time);
     $this->assertEqual($res->description, $desc);
-    $this->assertProperty($res, 'image_266');
     $this->assertValidImageUrl($res->image_266);
     $this->assertValidImageUrl($res->image_532);
+    $this->assertEqual($res->likes_count, 0);
+    $this->assertEqual($res->comments_count, $moment->getComments()->count());
 
     $loaded_moment = Moment::findById($moment->getId());
     $this->assertEqual($loaded_moment->getDescription(), $desc);
   }
 
-  // TODO
   function testUpdate_MomentNotFound()
   {
+    lmbToolkit::instance()->setUser($this->main_user);
+    $this->post('update',
+      array(
+        'description' => $this->generator->string(255),
+        'time' => "2005-08-09T18:31:42+03:00",
+        'image_content' => base64_encode($this->generator->image()),
+      ),
+      100500
+    );
+    $this->assertResponse(404);
+  }
 
+  function testUpdate_WrongUser()
+  {
+    $day = $this->generator->day($this->main_user);
+    $day->save();
+
+    $moment = $this->generator->moment($day);
+    $moment->save();
+
+    lmbToolkit::instance()->setUser($this->additional_user);
+    $res = $this->post('update',
+      array(
+        'description' => $desc = $this->generator->string(255),
+        'time' => $time = "2005-08-09T18:31:42+03:00",
+        'image_content' => base64_encode($this->generator->image()),
+      ),
+      $moment->getId()
+    )->result;
+    $this->assertResponse(404);
   }
 
   /**
@@ -62,16 +94,24 @@ class MomentsControllerTest extends odControllerTestCase
     $this->assertFalse(Moment::findById($moment->getId()));
   }
 
-  // TODO
-  function testDelete_WrongUser() {}
+  function testDelete_WrongUser()
+  {
+    $moment = $this->generator->moment();
+    $moment->save();
 
-  // TODO
-  function testDelete_MomentNotFound() {}
+    lmbToolkit::instance()->setUser($this->main_user);
+    $this->post('delete', array(), $moment->getId());
 
-  /**
-   * @api description Creates <a href="#Entity:MomentComment">moment comment</a> and returns it.
-   * @api input param string text
-   */
+    $this->assertResponse(404);
+  }
+
+  function testDelete_MomentNotFound()
+  {
+    lmbToolkit::instance()->setUser($this->main_user);
+    $this->post('delete', array(), 100500);
+    $this->assertResponse(404);
+  }
+
   function testComment()
   {
     $day = $this->generator->day($this->main_user);
@@ -80,16 +120,78 @@ class MomentsControllerTest extends odControllerTestCase
     $moment = $this->generator->moment($day);
     $moment->save();
 
-    lmbToolkit::instance()->setUser($this->main_user);
-    $res = $this->post('comment',
-      array('text' => $text = $this->generator->string(255)),
-      $moment->getId()
-    )->result;
+    lmbToolkit::instance()->setUser($this->additional_user);
+    $res = $this
+      ->post('comment', array('text' => $text = $this->generator->string(50)), $moment->getId())
+      ->result;
 
     $this->assertResponse(200);
-    $this->assertEqual($moment->getComments()->at(0)->getId(), $res->id);
-    $this->assertEqual($moment->getId(), $res->moment_id);
+    $new_comment = MomentComment::findOne();
+    $this->assertEqual($new_comment->id, $res->id);
     $this->assertEqual($text, $res->text);
+    $this->assertEqual($this->additional_user->exportForApi(), $res->user);
+    $this->assertEqual($text, $new_comment->text);
+  }
+
+  function testComment_NotFound()
+  {
+    lmbToolkit::instance()->setUser($this->additional_user);
+    $this
+      ->post('comment', array('text' => $text = $this->generator->string(50)), 100500)
+      ->result;
+    $this->assertResponse(404);
+  }
+
+  /**
+   * @api description Creates <a href="#Entity:MomentComment">moment comment</a> and returns it.
+   * @api input param string text
+   */
+  function testComments()
+  {
+    $day = $this->generator->day(null, true);
+    $day->save();
+    $moment = $this->generator->moment($day, true);
+    $moment->save();
+
+    $res = $this->get('comments', array(), $moment->getId())->result;
+    $this->assertResponse(200);
+    $this->assertEqual(4, count($res));
+    $this->assertEqual($moment->getComments()->at(0)->id, $res[0]->id);
+    $this->assertEqual($moment->getComments()->at(0)->text, $res[0]->text);
+    $this->assertEqual($moment->getComments()->at(0)->user->exportForApi(), $res[0]->user);
+    $this->assertEqual($moment->getComments()->at(1)->id, $res[1]->id);
+    $this->assertEqual($moment->getComments()->at(2)->id, $res[2]->id);
+    $this->assertEqual($moment->getComments()->at(3)->id, $res[3]->id);
+
+    $res = $this
+      ->get('comments', array(
+      'from' => $moment->getComments()->at(0)->id
+    ), $moment->getId())->result;
+    $this->assertResponse(200);
+    $this->assertEqual(3, count($res));
+    $this->assertEqual($moment->getComments()->at(1)->id, $res[0]->id);
+    $this->assertEqual($moment->getComments()->at(2)->id, $res[1]->id);
+    $this->assertEqual($moment->getComments()->at(3)->id, $res[2]->id);
+
+    $res = $this
+      ->get('comments', array(
+      'from' => $moment->getComments()->at(0)->id,
+      'to' => $moment->getComments()->at(3)->id,
+    ), $moment->getId())->result;
+    $this->assertResponse(200);
+    $this->assertEqual(2, count($res));
+    $this->assertEqual($moment->getComments()->at(1)->id, $res[0]->id);
+    $this->assertEqual($moment->getComments()->at(2)->id, $res[1]->id);
+
+    $res = $this
+      ->get('comments', array(
+      'from' => $moment->getComments()->at(0)->id,
+      'to' => $moment->getComments()->at(3)->id,
+      'limit' => 1
+    ), $moment->getId())->result;
+    $this->assertResponse(200);
+    $this->assertEqual(1, count($res));
+    $this->assertEqual($moment->getComments()->at(1)->id, $res[0]->id);
   }
 
   // TODO

@@ -12,9 +12,14 @@ class BaseLike extends BaseModel
     );
   }
 
-  function exportForApi()
+  function exportForApi(array $properties = null)
   {
+<<<<<<< HEAD
     $exported = $this->export();
+=======
+    $exported = $this->export($properties);
+    unset($exported['cip']);
+>>>>>>> develop
     unset($exported['ctime']);
     return (object) $exported;
   }

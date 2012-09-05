@@ -36,22 +36,30 @@ class MomentCommentsControllerTest extends odControllerTestCase
     $this->assertResponse(404);
   }
 
-  /**
-   * @api
-   */
   function testDelete()
   {
     $this->main_user->save();
     $comment = $this->generator->momentComment(null, $this->main_user);
     $comment->save();
-    $new_comment_text = $this->generator->string(8);
 
     $this->toolkit->setUser($this->main_user);
-    $this->post('delete', array('text' => $new_comment_text), $comment->getId());
+
+    $this->post('delete', array(), $comment->getId());
     $this->assertResponse(200);
 
     $loaded_comment = MomentComment::findById($comment->getId());
     $this->assertFalse($loaded_comment);
+  }
+
+  function testDelete_WrongMethod()
+  {
+    $comment = $this->generator->momentComment(null, $this->main_user);
+    $comment->save();
+
+    $this->toolkit->setUser($this->main_user);
+
+    $this->get('delete', array(), $comment->getId());
+    $this->assertResponse(405);
   }
 
   function testDelete_WrongUser()
@@ -59,10 +67,16 @@ class MomentCommentsControllerTest extends odControllerTestCase
     $this->main_user->save();
     $comment = $this->generator->momentComment(null, $this->main_user);
     $comment->save();
-    $new_comment_text = $this->generator->string(8);
 
     $this->toolkit->setUser($this->additional_user);
-    $this->post('delete', array('text' => $new_comment_text), $comment->getId());
+    $this->post('delete', array(), $comment->getId());
+    $this->assertResponse(404);
+  }
+
+  function testDelete_NotFound()
+  {
+    $this->toolkit->setUser($this->additional_user);
+    $this->post('delete', array(), 100500);
     $this->assertResponse(404);
   }
 }
