@@ -31,10 +31,7 @@ class UsersController extends BaseJsonController
 
     $answer = array();
     foreach($user->getDays() as $day) {
-      $export = $day->exportForApi();
-      $this->_attachDayUser($export, $day);
-      $this->_attachDayIsFavorited($export, $day);
-      $answer[] = $export;
+      $answer[] = $this->_exportDayWithSubentities($day);
     }
 
     return $this->_answerOk($answer);

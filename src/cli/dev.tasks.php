@@ -220,7 +220,16 @@ function task_od_parse_lj($argv)
     $day->setTimezone(0);
     $day->setLocation($locations[array_rand($locations)]);
     $day->setType($types[array_rand($types)]);
-    $day->setLikesCount(rand(1, 100));
+
+    $likes_count = rand(-5, count($tests_users));
+    shuffle($tests_users);
+    for ($l=0; $l < $likes_count; $l++) {
+      $like = new DayLike;
+      $like->setDay($day);
+      $like->setUser($tests_users[$l]);
+      $like->save();
+    }
+
     $day->save();
 
     $day_comments_count = rand(-3, 3);
@@ -230,7 +239,6 @@ function task_od_parse_lj($argv)
       $day_comment->setText($day_comments[array_rand($day_comments)]);
       $day_comment->setDay($day);
       $day_comment->setUser($tests_users[array_rand($tests_users)]);
-      $day_comment->setLikesCount(rand(0, 10));
       $day_comment->save();
     }
 
@@ -255,6 +263,16 @@ function task_od_parse_lj($argv)
       $moment->setTimezone($timezone);
       $moment->setTime($time);
       $moment->save();
+
+      $likes_count = rand(-5, count($tests_users));
+      shuffle($tests_users);
+      for ($l=0; $l < $likes_count; $l++) {
+        $like = new MomentLike;
+        $like->setMoment($moment);
+        $like->setUser($tests_users[$l]);
+        $like->save();
+      }
+
       $img_url = $moment_data['img'];
       if(!$cache->get(md5($img_url)))
         $cache->add(md5($img_url), file_get_contents($img_url));
@@ -268,7 +286,6 @@ function task_od_parse_lj($argv)
         $moment_comment->setText($moment_comments[array_rand($moment_comments)]);
         $moment_comment->setMoment($moment);
         $moment_comment->setUser($tests_users[array_rand($tests_users)]);
-        $moment_comment->setLikesCount(rand(0, 10));
         $moment_comment->save();
       }
 
@@ -278,7 +295,7 @@ function task_od_parse_lj($argv)
     $rand = rand(0, 3);
     if($rand < 3)
     {
-      $finish_comment = new DayFinishComment();
+      $finish_comment = new DayFinishComment(); // TODO
       $finish_comment->setText($day_comments[array_rand($day_comments)]);
       $finish_comment->setUser($tests_users[array_rand($tests_users)]);
       $finish_comment->setLikesCount(rand(0, 10));

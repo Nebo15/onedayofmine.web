@@ -5,7 +5,7 @@ ALTER TABLE `day` ADD `facebook_id` varchar(20) NULL DEFAULT NULL COMMENT '' COL
 ALTER TABLE `day` DROP `fb_id`;
 
 
--- ALTER TABLE `day_comment_like` DROP `fb_id`;
+ALTER TABLE `day_comment_like` DROP `fb_id`;
 
 
 ALTER TABLE `day_like` DROP `fb_id`;
@@ -15,7 +15,7 @@ ALTER TABLE `moment` ADD `facebook_id` varchar(16) NULL DEFAULT NULL COMMENT '' 
 ALTER TABLE `moment` DROP `fb_id`;
 
 
--- ALTER TABLE `moment_comment_like` DROP `fb_id`;
+ALTER TABLE `moment_comment_like` DROP `fb_id`;
 
 
 ALTER TABLE `moment_like` DROP `fb_id`;

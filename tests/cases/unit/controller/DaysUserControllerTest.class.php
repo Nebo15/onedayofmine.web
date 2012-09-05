@@ -79,17 +79,46 @@ class DaysUserControllerTest extends odControllerTestCase
 
   /**
    * @api
-   * TODO
    */
   function testLike() {
     $day = $this->generator->day($this->additional_user);
     $day->save();
 
+    $this->assertEqual(DayLike::find()->count(), 0);
+
     lmbToolkit::instance()->setUser($this->main_user);
     $this->post('like', array(), $day->getId());
 
     $this->assertResponse(200);
-    $this->assertEqual(Day::findOne()->getLikesCount(), 1);
+    $this->assertEqual(DayLike::find()->count(), 1);
+    $this->assertEqual(Day::findOne()->getLikes()->count(), 1);
+  }
+
+  function testLike_OwnDay() {
+    $day = $this->generator->day($this->additional_user);
+    $day->save();
+
+    lmbToolkit::instance()->setUser($this->additional_user);
+    $this->post('like', array(), $day->getId());
+
+    $this->assertResponse(400);
+  }
+
+  /**
+   * @api
+   */
+  function testUnlike() {
+    $day = $this->generator->day($this->main_user);
+    $day->save();
+    $like = $this->generator->dayLike($day, $this->additional_user);
+    $like->save();
+    $this->assertEqual(DayLike::find()->count(), 1);
+
+    lmbToolkit::instance()->setUser($this->additional_user);
+    $this->post('unlike', array(), $day->getId());
+
+    $this->assertResponse(200);
+    $this->assertEqual(DayLike::find()->count(), 0);
   }
 
   /**

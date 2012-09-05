@@ -7,7 +7,8 @@ $conf = array(
     'email',
     'user_birthday',
     'user_location',
-    'publish_actions'
+    'publish_actions',
+    'publish_stream',
   ),
   'cookie'      => false,
   'fileUpload'  => false,

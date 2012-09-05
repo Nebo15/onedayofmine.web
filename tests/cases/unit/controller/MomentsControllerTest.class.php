@@ -197,6 +197,50 @@ class MomentsControllerTest extends odControllerTestCase
   // TODO
   function testComment_MomentNotFound() {}
 
-  // TODO-high
-  function testLike() {}
+  /**
+   * @api
+   */
+  function testLike() {
+    $moment = $this->generator->moment();
+    $moment->save();
+
+    $this->assertEqual(MomentLike::find()->count(), 0);
+
+    lmbToolkit::instance()->setUser($this->main_user);
+    $this->post('like', array(), $moment->getId());
+
+    $this->assertResponse(200);
+    $this->assertEqual(MomentLike::find()->count(), 1);
+    $this->assertEqual(Moment::findOne()->getLikes()->count(), 1);
+  }
+
+  function testLike_OwnDay() {
+    $day = $this->generator->day($this->additional_user);
+    $moment = $this->generator->moment($day);
+    $moment->save();
+
+    lmbToolkit::instance()->setUser($this->additional_user);
+    $this->post('like', array(), $moment->getId());
+
+    $this->assertResponse(400);
+  }
+
+  /**
+   * @api
+   */
+  function testUnlike() {
+    $moment = $this->generator->moment();
+    $moment->save();
+
+    $like = $this->generator->momentLike($moment, $this->additional_user);
+    $like->save();
+
+    $this->assertEqual(MomentLike::find()->count(), 1);
+
+    lmbToolkit::instance()->setUser($this->additional_user);
+    $this->post('unlike', array(), $moment->getId());
+
+    $this->assertResponse(200);
+    $this->assertEqual(MomentLike::find()->count(), 0);
+  }
 }

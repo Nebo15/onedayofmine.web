@@ -92,7 +92,7 @@ class TwitterProfileTest extends odAcceptanceTestCase
     }
   }
 
-  function testShareLikeDay()
+  function testShareDayLike()
   {
     $day = $this->generator->day();
     $day->setTitle('testShareLikeDay');
@@ -103,13 +103,16 @@ class TwitterProfileTest extends odAcceptanceTestCase
       $this->assertTrue($tweet['id']);
     }
 
-    $tweet = (new TwitterProfile($this->additional_user))->shareDayLike($day);
-    if($this->assertTrue(count($tweet))) {
-      $this->assertTrue($tweet['id']);
-    }
+    $like = $this->generator->dayLike($day);
+    $like->save();
+
+    $tweet = (new TwitterProfile($this->additional_user))->shareDayLike($day, $like);
+    // if($this->assertTrue(count($tweet))) {
+    //   $this->assertTrue($tweet['id']);
+    // }
   }
 
-  function testShareAddMoment()
+  function testShareMomentAdd()
   {
     $day = $this->generator->day();
     $day->setTitle('testShareAddMoment - Day');
@@ -144,18 +147,21 @@ class TwitterProfileTest extends odAcceptanceTestCase
     $moment = $this->generator->moment($day);
     $moment->save();
 
+    $like = $this->generator->momentLike($moment);
+    $like->save();
+
     $tweet = (new TwitterProfile($this->main_user))->shareMomentAdd($day, $moment);
     if($this->assertTrue(count($tweet))) {
       $this->assertTrue($tweet['id']);
     }
 
-    $tweet = (new TwitterProfile($this->main_user))->shareMomentLike($moment);
-    if($this->assertTrue(count($tweet))) {
-      $this->assertTrue($tweet);
-    }
+    $tweet = (new TwitterProfile($this->main_user))->shareMomentLike($moment, $like);
+    // if($this->assertTrue(count($tweet))) {
+    //   $this->assertTrue($tweet);
+    // }
   }
 
-  function testShareEndDay()
+  function testShareDayEnd()
   {
     $day = $this->generator->day();
     $day->setTitle('testShareEndDay - Day');

@@ -14,44 +14,6 @@ class FacebookProfileTest extends odAcceptanceTestCase
     $this->proxy_client = new Client('http://stage.onedayofmine.com/proxy.php', 'http://onedayofmine.dev/');
   }
 
-  function testShareMomentLike()
-  {
-    $day = $this->generator->day();
-    $day->setTitle('testShareMomentLike - Day');
-    $day->save();
-
-    $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($day));
-
-    $facebook_id = (new FacebookProfileForTests($this->main_user))->shareDayBegin($day);
-    $day->setFacebookId($facebook_id);
-    $day->save();
-
-    $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($day));
-
-    $moment = $this->generator->moment($day);
-    $moment->save();
-    $moment->attachImage($this->generator->image());
-    $moment->save();
-
-    $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($moment));
-
-    $facebook_id = (new FacebookProfileForTests($this->main_user))->shareMomentAdd($day, $moment);
-    $this->assertTrue($facebook_id);
-
-    (new FacebookProfileForTests($this->main_user))->shareMomentLike($moment);
-  }
-
-  function testShareEndDay()
-  {
-    $day = $this->generator->day();
-    $day->setTitle('testShareEndDay - Day');
-    $day->save();
-
-    $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($day));
-
-    (new FacebookProfileForTests($this->main_user))->shareDayBegin($day);
-    (new FacebookProfileForTests($this->main_user))->shareDayEnd($day);
-  }
   function testGetInfoRaw()
   {
     $info = (new FacebookProfile($this->main_user))->getInfo_Raw();
@@ -126,10 +88,13 @@ class FacebookProfileTest extends odAcceptanceTestCase
     $day->setTitle('testShareLikeDay');
     $day->save();
 
+    $like = $this->generator->dayLike($day);
+    $like->save();
+
     $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($day));
 
     (new FacebookProfileForTests($this->main_user))->shareDayBegin($day);
-    (new FacebookProfileForTests($this->additional_user))->shareDayLike($day);
+    (new FacebookProfileForTests($this->additional_user))->shareDayLike($day, $like);
   }
 
   function testShareAddMoment()
@@ -165,6 +130,35 @@ class FacebookProfileTest extends odAcceptanceTestCase
     $this->assertTrue($facebook_id);
   }
 
+  function testShareMomentLike()
+  {
+    $day = $this->generator->day();
+    $day->setTitle('testShareMomentLike - Day');
+    $day->save();
+
+    $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($day));
+
+    $facebook_id = (new FacebookProfileForTests($this->main_user))->shareDayBegin($day);
+    $day->setFacebookId($facebook_id);
+    $day->save();
+
+    $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($day));
+
+    $moment = $this->generator->moment($day);
+    $moment->save();
+    $moment->attachImage($this->generator->image());
+    $moment->save();
+
+    $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($moment));
+
+    $facebook_id = (new FacebookProfileForTests($this->main_user))->shareMomentAdd($day, $moment);
+    $this->assertTrue($facebook_id);
+
+    $like = $this->generator->momentLike($moment);
+    $like->save();
+
+    (new FacebookProfileForTests($this->main_user))->shareMomentLike($moment, $like);
+  }
 
   function testShareDay()
   {
@@ -175,6 +169,18 @@ class FacebookProfileTest extends odAcceptanceTestCase
     $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($day));
 
     (new FacebookProfileForTests($this->main_user))->shareDay($day);
+  }
+
+  function testShareEndDay()
+  {
+    $day = $this->generator->day();
+    $day->setTitle('testShareEndDay - Day');
+    $day->save();
+
+    $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($day));
+
+    (new FacebookProfileForTests($this->main_user))->shareDayBegin($day);
+    (new FacebookProfileForTests($this->main_user))->shareDayEnd($day);
   }
 }
 
