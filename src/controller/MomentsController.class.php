@@ -31,7 +31,7 @@ class MomentsController extends BaseJsonController
     if($this->error_list->isEmpty())
     {
       $moment->saveSkipValidation();
-      return $this->_answerOk($this->_exportMoment($moment));
+      return $this->_answerOk($this->toolkit->getExportHelper()->exportMoment($moment));
     }
     else
       return $this->_answerWithError($this->error_list->export());
@@ -58,9 +58,7 @@ class MomentsController extends BaseJsonController
 
       $this->toolkit->getNewsObserver()->onComment($comment);
 
-      $export = $comment->exportForApi();
-      $export->user = $this->_getUser()->exportForApi();
-      return $this->_answerOk($export);
+      return $this->_answerOk($this->toolkit->getExportHelper()->exportMomentComment($comment));
     }
     else
       return $this->_answerWithError($this->error_list->export());

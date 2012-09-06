@@ -14,14 +14,14 @@ class UsersController extends BaseJsonController
     if(!$user = User::findById($this->request->id))
       return $this->_answerNotFound("User not found by id '{$this->request->id}'");
 
-    $export = $user->exportForApi();
+    $exported = $this->toolkit->getExportHelper()->exportUser($user);
 
     if($user->getId() != lmbToolkit::instance()->getUser()->getId()) {
-      $export->following = UserFollowing::isUserFollowUser(lmbToolkit::instance()->getUser(), $user);
-      // $export->is_follower = UserFollowing::isUserFollowUser($user, lmbToolkit::instance()->getUser());
+      $exported->following = UserFollowing::isUserFollowUser(lmbToolkit::instance()->getUser(), $user);
+      // $exported->is_follower = UserFollowing::isUserFollowUser($user, lmbToolkit::instance()->getUser());
     }
 
-    return $this->_answerOk($export);
+    return $this->_answerOk($exported);
   }
 
   function doGuestDays()
@@ -29,12 +29,7 @@ class UsersController extends BaseJsonController
     if(!$user = User::findById($this->request->id))
       return $this->_answerNotFound("User not found by id '{$this->request->id}'");
 
-    $answer = array();
-    foreach($user->getDays() as $day) {
-      $answer[] = $this->_exportDayWithSubentities($day);
-    }
-
-    return $this->_answerOk($answer);
+    return $this->_answerOk($this->toolkit->getExportHelper()->exportDays($user->getDays()));
   }
 
   function doFollowers()

@@ -7,6 +7,7 @@ lmb_require('src/service/social_profile/TwitterProfile.class.php');
 lmb_require('src/service/odNewsObserver.class.php');
 lmb_require('src/service/ImageHelper.class.php');
 lmb_require('src/service/odPostingService.class.php');
+lmb_require('src/service/odExportHelper.class.php');
 lmb_require('src/service/odRequestsLog.class.php');
 require_once('amazon-sdk/sdk.class.php');
 
@@ -88,6 +89,19 @@ class odTools extends lmbAbstractTools
       $news_observer = new odNewsObserver($this->getUser());
 
     return $news_observer;
+  }
+
+  /**
+   * @return odExportHelper
+   */
+  function getExportHelper()
+  {
+    static $export_helper;
+
+    if(!$export_helper)
+      $export_helper = new odExportHelper();
+
+    return $export_helper;
   }
 
   /**

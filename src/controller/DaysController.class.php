@@ -30,7 +30,7 @@ class DaysController extends BaseJsonController
   {
     $day = Day::findById($id);
     if($day && !$day->getIsDeleted())
-      return $this->_exportFullDay($day);
+      return $this->toolkit->getExportHelper()->exportFullDay($day);
   }
 
   function doStart()
@@ -70,7 +70,7 @@ class DaysController extends BaseJsonController
       return $this->_answerUnauthorized('Token expired');
     }
 
-    return $this->_answerOk($this->_exportFullDay($day));
+    return $this->_answerOk($this->toolkit->getExportHelper()->exportFullDay($day));
   }
 
   function doUpdate()
@@ -91,7 +91,7 @@ class DaysController extends BaseJsonController
 
     $this->_importSaveAndAnswer($day, array('title', 'occupation', 'location', 'type'));
 
-    return $this->_answerOk($this->_exportFullDay($day));
+    return $this->_answerOk($this->toolkit->getExportHelper()->exportFullDay($day));
   }
 
   function doCurrent()
@@ -102,7 +102,7 @@ class DaysController extends BaseJsonController
     if(!$day = $this->_getUser()->getCurrentDay())
       return $this->_answerNotFound('Current day not set');
 
-    return $this->_answerOk($this->_exportFullDay($day));
+    return $this->_answerOk($this->toolkit->getExportHelper()->exportFullDay($day));
   }
 
   function doFinish()
@@ -131,7 +131,7 @@ class DaysController extends BaseJsonController
       $day->save();
     }
 
-    return $this->_answerOk($this->_exportFullDay($day));
+    return $this->_answerOk($this->toolkit->getExportHelper()->exportFullDay($day));
   }
 
   function doMarkCurrent()
@@ -152,7 +152,7 @@ class DaysController extends BaseJsonController
   function doShare()
   {
     if(!$this->request->isPost())
-      return $this->_answerWithError('Not a POST request');
+      return $this->_answerNotPost();
 
     if(!$day = Day::findById($this->request->id))
       return $this->_answerNotFound("Day not found");
@@ -166,7 +166,7 @@ class DaysController extends BaseJsonController
   function doLike()
   {
     if(!$this->request->isPost())
-      return $this->_answerWithError('Not a POST request');
+      return $this->_answerNotPost();
 
     if(!$day = Day::findById($this->request->id))
       return $this->_answerNotFound("Day not found");
@@ -188,7 +188,7 @@ class DaysController extends BaseJsonController
   function doUnlike()
   {
     if(!$this->request->isPost())
-      return $this->_answerWithError('Not a POST request');
+      return $this->_answerNotPost();
 
     if(!$day = Day::findById($this->request->id))
       return $this->_answerNotFound("Day not found");
@@ -207,7 +207,7 @@ class DaysController extends BaseJsonController
   function doDelete()
   {
     if(!$this->request->isPost())
-      return $this->_answerWithError('Not a POST request');
+      return $this->_answerNotPost();
 
     if(!$day = Day::findById($this->request->id))
       return $this->_answerNotFound('Day not found');
@@ -226,7 +226,7 @@ class DaysController extends BaseJsonController
   function doRestore()
   {
     if(!$this->request->isPost())
-      return $this->_answerWithError('Not a POST request');
+      return $this->_answerNotPost();
 
     if(!$day = Day::findById($this->request->id))
       return $this->_answerNotFound('Day not found');
@@ -247,11 +247,7 @@ class DaysController extends BaseJsonController
 
     $days = Day::findByUsersIds($users_ids, $from, $to, $limit);
 
-    $answer = array();
-    foreach ($days as $day) {
-      $answer[] = $this->_exportDayWithSubentities($day);
-    }
-    return $this->_answerOk($answer);
+    return $this->_answerOk($this->toolkit->getExportHelper()->exportDays($days));
   }
 
   function doGuestNew()
@@ -259,12 +255,7 @@ class DaysController extends BaseJsonController
     list($from, $to, $limit) = $this->_getFromToLimitations();
     $days = Day::findNew($from, $to, $limit);
 
-    $answer = array();
-    foreach ($days as $day) {
-      $answer[] = $this->_exportDayWithSubentities($day);
-    }
-
-    return $this->_answerOk($answer);
+    return $this->_answerOk($this->toolkit->getExportHelper()->exportDays($days));
   }
 
   function doGuestInteresting()
@@ -274,7 +265,7 @@ class DaysController extends BaseJsonController
 
     $answer = array();
     foreach ($days_ratings as $day_rating) {
-      $answer[] = $this->_exportDayWithSubentities($day_rating->getDay());
+      $answer[] = $this->toolkit->getExportHelper()->exportDay($day_rating->getDay());
     }
 
     return $this->_answerOk($answer);
@@ -288,20 +279,13 @@ class DaysController extends BaseJsonController
     list($from, $to, $limit) = $this->_getFromToLimitations();
     $days = $this->_getUser()->getFavouriteDaysWithLimitations($from, $to, $limit);
 
-    $answer = array();
-    foreach ($days as $day) {
-      $answer[] = $this->_exportDayWithSubentities($day);
-    }
-
-    $this->toolkit->getNewsObserver()->onDayFavourite($day);
-
-    return $this->_answerOk($answer);
+    return $this->_answerOk($this->toolkit->getExportHelper()->exportDays($days));
   }
 
   function doMarkFavourite()
   {
     if(!$this->request->isPost())
-      return $this->_answerWithError('Not a POST request');
+      return $this->_answerNotPost();
 
     if(!$day = Day::findById($this->request->id))
       return $this->_answerNotFound('Day not found');
@@ -310,13 +294,15 @@ class DaysController extends BaseJsonController
     $favourites->add($day);
     $favourites->save();
 
+    // $this->toolkit->getNewsObserver()->onDayFavourite($day);
+
     return $this->_answerOk();
   }
 
   function doUnmarkFavourite()
   {
     if(!$this->request->isPost())
-      return $this->_answerWithError('Not a POST request');
+      return $this->_answerNotPost();
 
     if(!$day = Day::findById($this->request->id))
       return $this->_answerNotFound('Day not found');
@@ -324,6 +310,8 @@ class DaysController extends BaseJsonController
     $favourites = $this->_getUser()->getFavouriteDays();
     $favourites->remove($day);
     $favourites->save();
+
+    // $this->toolkit->getNewsObserver()->onDayUnfavourite($day);
 
     return $this->_answerOk();
   }
@@ -335,8 +323,8 @@ class DaysController extends BaseJsonController
 
     $answer = array();
     foreach ($days as $day) {
-      $export = $this->_exportDayWithSubentities($day);
-      $this->_attachDayIsDeleted($export, $day);
+      $export = $this->toolkit->getExportHelper()->exportDay($day);
+      $this->toolkit->getExportHelper()->attachIsDeleted($day, $export);
       $answer[] = $export;
     }
 
@@ -346,7 +334,7 @@ class DaysController extends BaseJsonController
   function doAddMoment()
   {
     if(!$this->request->isPost())
-      return $this->_answerWithError('Not a POST request');
+      return $this->_answerNotPost();
 
     $errors = $this->_checkPropertiesInRequest(array('description', 'image_content'));
     if(count($errors))
@@ -385,9 +373,7 @@ class DaysController extends BaseJsonController
     {
       $this->toolkit->getNewsObserver()->onMoment($moment);
 
-      $answer = $moment->exportForApi();
-      $answer->likes_count = $moment->getLikes()->count();
-      return $this->_answerOk($answer);
+      return $this->_answerOk($this->toolkit->getExportHelper()->exportMoment($moment));
     }
     else
       return $this->_answerWithError($this->error_list->export());
@@ -396,7 +382,7 @@ class DaysController extends BaseJsonController
   function doComment()
   {
     if(!$this->request->isPost())
-      return $this->_answerWithError('Not a POST request');
+      return $this->_answerNotPost();
 
     $comment = new DayComment();
     $comment->setText($this->request->get('text'));
@@ -410,9 +396,7 @@ class DaysController extends BaseJsonController
 
       $this->toolkit->getNewsObserver()->onComment($comment);
 
-      $export = $comment->exportForApi();
-      $export->user = $comment->getUser()->exportForApi();
-      return $this->_answerOk($export);
+      return $this->_answerOk($this->toolkit->getExportHelper()->exportDayComment($comment));
     }
     else
       return $this->_answerWithError($this->error_list->export());
@@ -454,12 +438,7 @@ class DaysController extends BaseJsonController
     $query = $this->request->getFiltered('query', FILTER_SANITIZE_STRING);
     $days = Day::findByString($query, $from, $to, $limit);
 
-    $answer = array();
-    foreach ($days as $day) {
-      $answer[] = $this->_exportDayWithSubentities($day);
-    }
-
-    return $this->_answerOk($answer);
+    return $this->_answerOk($this->toolkit->getExportHelper()->exportDays($days));
   }
 
   function doGuestComments()
