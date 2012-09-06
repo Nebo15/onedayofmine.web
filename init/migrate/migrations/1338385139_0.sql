@@ -1,6 +1,0 @@
-
-SET FOREIGN_KEY_CHECKS = 0;
-
-ALTER TABLE `day` ADD `is_deleted` int(1) NULL DEFAULT 0 COMMENT '' AFTER likes_count;
-
-SET FOREIGN_KEY_CHECKS = 1;

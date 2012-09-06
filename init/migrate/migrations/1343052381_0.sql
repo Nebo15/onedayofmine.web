@@ -1,6 +1,0 @@
-
-SET FOREIGN_KEY_CHECKS = 0;
-
-ALTER TABLE `day` ADD `fb_id` varchar(20) NULL DEFAULT NULL COMMENT '' COLLATE utf8_general_ci AFTER user_id;
-
-SET FOREIGN_KEY_CHECKS = 1;
