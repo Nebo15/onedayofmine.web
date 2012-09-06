@@ -56,9 +56,6 @@ class MyController extends BaseJsonController
 
   function doNews()
   {
-    if($this->request->getRequestMethod() != 'GET')
-      return $this->_answerWithError('Not a GET request');
-
     $user  = $this->toolkit->getUser();
 
     list($from, $to, $limit) = $this->_getFromToLimitations();

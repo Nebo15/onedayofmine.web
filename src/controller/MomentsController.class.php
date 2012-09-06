@@ -11,9 +11,11 @@ class MomentsController extends BaseJsonController
     if(!$this->request->isPost())
       return $this->_answerNotPost();
 
-    $moment = Moment::findById($this->request->id);
-    if(!$moment || $moment->getDay()->getUser()->id != $this->_getUser()->id)
-      return $this->_answerNotFound("Moment with id=".$this->request->id." not found");
+    if(!$moment = Moment::findById($this->request->id))
+      return $this->_answerModelNotFoundById('Moment', $this->request->id);
+
+    if($moment->getDay()->getUser()->getId() != $this->_getUser()->getId())
+      return $this->_answerNotOwner();
 
     if($this->request->has('image_content'))
       $moment->attachImage(base64_decode($this->request->get('image_content')));
@@ -42,9 +44,8 @@ class MomentsController extends BaseJsonController
     if(!$this->request->isPost())
       return $this->_answerNotPost();
 
-    $moment = Moment::findById($this->request->id);
-    if(!$moment)
-      return $this->_answerNotFound("Moment with id=".$this->request->id." not found");
+    if(!$moment = Moment::findById($this->request->id))
+      return $this->_answerModelNotFoundById('Moment', $this->request->id);
 
     $comment = new MomentComment();
     $comment->setText($this->request->get('text'));
@@ -69,9 +70,11 @@ class MomentsController extends BaseJsonController
     if(!$this->request->isPost())
       return $this->_answerNotPost();
 
-    $moment = Moment::findById($this->request->id);
-    if(!$moment || $moment->getDay()->getUser()->id != $this->_getUser()->id)
-      return $this->_answerNotFound("Moment not found by id ".$this->request->id);
+    if(!$moment = Moment::findById($this->request->id))
+      return $this->_answerModelNotFoundById('Moment', $this->request->id);
+
+    if($moment->getDay()->getUser()->getId() != $this->_getUser()->getId())
+      return $this->_answerNotOwner();
 
     $moment->destroy();
 
@@ -83,13 +86,19 @@ class MomentsController extends BaseJsonController
   function doLike()
   {
     if(!$this->request->isPost())
-      return $this->_answerWithError('Not a POST request');
+      return $this->_answerNotPost();
 
     if(!$moment = Moment::findById($this->request->id))
-      return $this->_answerNotFound("Moment not found");
+      return $this->_answerModelNotFoundById('Moment', $this->request->id);
 
-    if($this->_getUser()->getId() == $moment->getDay()->getUserId())
-      return $this->_answerWithError("You can't like moments in you'r own days");
+    if($moment->getDay()->getUser()->getId() != $this->_getUser()->getId())
+      return $this->_answerNotOwner();
+
+    if(!$this->request->isPost())
+      return $this->_answerNotPost();
+
+    if(!$moment = Moment::findById($this->request->id))
+      return $this->_answerModelNotFoundById('Moment', $this->request->id);
 
     $like = new MomentLike;
     $like->setMoment($moment);
@@ -105,10 +114,10 @@ class MomentsController extends BaseJsonController
   function doUnlike()
   {
     if(!$this->request->isPost())
-      return $this->_answerWithError('Not a POST request');
+      return $this->_answerNotPost();
 
     if(!$moment = Moment::findById($this->request->id))
-      return $this->_answerNotFound("Moment not found");
+      return $this->_answerModelNotFoundById('Moment', $this->request->id);
 
     if(!$like = MomentLike::findByMomentIdAndUserId($moment->getId(), $this->_getUser()->getId()))
       return $this->_answerOk("Like not found");
@@ -124,7 +133,7 @@ class MomentsController extends BaseJsonController
   function doGuestComments()
   {
     if(!$moment = Moment::findById($this->request->id))
-      return $this->_answerNotFound("Moment with id '".$this->request->get('id')."' not found");
+      return $this->_answerModelNotFoundById('Moment', $this->request->id);
 
     list($from, $to, $limit) = $this->_getFromToLimitations();
 

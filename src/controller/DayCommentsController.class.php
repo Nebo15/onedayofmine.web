@@ -9,9 +9,11 @@ class DayCommentsController extends BaseJsonController
     if(!$this->request->isPost())
       return $this->_answerNotPost();
 
-    $comment = DayComment::findById($this->request->id);
-    if(!$comment || $comment->getUser()->id != $this->toolkit->getUser()->id)
-      return $this->_answerNotFound("Day comment with id '".$this->request->get('id')."' not found");
+    if(!$comment = DayComment::findById($this->request->id))
+      return $this->_answerModelNotFoundById('Day comment', $this->request->id);
+
+    if($comment->getUser()->getId() != $this->toolkit->getUser()->getId())
+      return $this->_answerNotOwner();
 
     $comment->destroy();
     return $this->_answerOk();

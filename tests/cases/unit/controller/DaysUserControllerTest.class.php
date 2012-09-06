@@ -101,7 +101,7 @@ class DaysUserControllerTest extends odControllerTestCase
     lmbToolkit::instance()->setUser($this->additional_user);
     $this->post('like', array(), $day->getId());
 
-    $this->assertResponse(400);
+    $this->assertResponse(200);
   }
 
   /**

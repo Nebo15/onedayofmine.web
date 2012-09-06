@@ -199,6 +199,16 @@ abstract class BaseJsonController extends lmbController
     return $this->_answer($message, array(), $message, 404);
   }
 
+  protected function _answerModelNotFoundById($model_name, $id)
+  {
+    return $this->_answerNotFound("{$model_name} with id='{$id}' not found");
+  }
+
+  protected function _answerNotOwner()
+  {
+    return $this->_answerWithError("Current user don't have permission to perform this action", null, 401);
+  }
+
   protected function _answerNotPost($message = 'Not a POST request')
   {
     return $this->_answerWithError($message, null, 405);

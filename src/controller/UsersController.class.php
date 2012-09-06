@@ -12,7 +12,7 @@ class UsersController extends BaseJsonController
   function doGuestItem()
   {
     if(!$user = User::findById($this->request->id))
-      return $this->_answerNotFound("User not found by id '{$this->request->id}'");
+      return $this->_answerModelNotFoundById('User', $this->request->id);
 
     $exported = $this->toolkit->getExportHelper()->exportUser($user);
 
@@ -27,7 +27,7 @@ class UsersController extends BaseJsonController
   function doGuestDays()
   {
     if(!$user = User::findById($this->request->id))
-      return $this->_answerNotFound("User not found by id '{$this->request->id}'");
+      return $this->_answerModelNotFoundById('User', $this->request->id);
 
     return $this->_answerOk($this->toolkit->getExportHelper()->exportDays($user->getDays()));
   }
@@ -35,7 +35,7 @@ class UsersController extends BaseJsonController
   function doFollowers()
   {
     if(!$user = User::findById($this->request->id))
-      return $this->_answerNotFound("User not found by id '{$this->request->id}'");
+      return $this->_answerModelNotFoundById('User', $this->request->id);
 
     $followers = $user->getFollowers();
     $following = UserFollowing::isUserFollowUsers($user, $followers);
@@ -53,7 +53,7 @@ class UsersController extends BaseJsonController
   function doFollowing()
   {
     if(!$user = User::findById($this->request->id))
-      return $this->_answerNotFound("User not found by id '{$this->request->id}'");
+      return $this->_answerModelNotFoundById('User', $this->request->id);
 
     $response = array();
     foreach($user->getFollowing() as $followed) {
@@ -69,7 +69,7 @@ class UsersController extends BaseJsonController
       return $this->_answerWithError("You can't follow youself");
 
     if(!$user = User::findById($this->request->id))
-      return $this->_answerNotFound("User not found by id '{$this->request->id}'");
+      return $this->_answerModelNotFoundById('User', $this->request->id);
 
     $following = $this->_getUser()->getFollowing();
     $following->add($user);
@@ -86,7 +86,7 @@ class UsersController extends BaseJsonController
       return $this->_answerWithError("You can't unfollow youself");
 
     if(!$user = User::findById($this->request->id))
-      return $this->_answerNotFound("User not found by id '{$this->request->id}'");
+      return $this->_answerModelNotFoundById('User', $this->request->id);
 
     $following = $this->_getUser()->getFollowing();
     $following->remove($user);
@@ -114,7 +114,7 @@ class UsersController extends BaseJsonController
   function doUserActivity()
   {
     if(!$user = User::findById($this->request->id))
-      return $this->_answerNotFound("User not found by id '{$this->request->id}'");
+      return $this->_answerModelNotFoundById('User', $this->request->id);
 
     list($from, $to, $limit) = $this->_getFromToLimitations();
     return $this->_answerOk($user->getActivitiesWithLimitation($from, $to, $limit));

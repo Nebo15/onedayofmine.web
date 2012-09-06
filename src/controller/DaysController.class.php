@@ -9,7 +9,7 @@ class DaysController extends BaseJsonController
 
   function doGuestItem()
   {
-    $id = $this->request->get('id');
+    $id = $this->request->id;
     if(false !== strpos($id, ';'))
     {
       $answer = array();
@@ -19,10 +19,10 @@ class DaysController extends BaseJsonController
     }
     else
     {
-      if($answer = $this->_item($id))
-        return $this->_answerOk($answer);
-      else
-        return $this->_answerNotFound("Day with id='{$id}' not found");
+      if(!$answer = $this->_item($id))
+        return $this->_answerModelNotFoundById('Day', $id);
+
+      return $this->_answerOk($answer);
     }
   }
 
@@ -36,7 +36,7 @@ class DaysController extends BaseJsonController
   function doStart()
   {
     if(!$this->request->isPost())
-      return $this->_answerWithError('Not a POST request', null, 405);
+      return $this->_answerNotPost();
 
     $errors = $this->_checkPropertiesInRequest(array('title', 'type'));
     if(count($errors))
@@ -76,13 +76,13 @@ class DaysController extends BaseJsonController
   function doUpdate()
   {
     if(!$this->request->isPost())
-      return $this->_answerWithError('Not a POST request', null, 405);
+      return $this->_answerNotPost();
 
     if(!$day = Day::findById($this->request->id))
-      return $this->_answerNotFound('Day not found');
+      return $this->_answerModelNotFoundById('Day', $this->request->id);
 
     if($this->_getUser()->getId() != $day->getUser()->getId())
-      return $this->_answerWithError('You can update only your own days', null, 401);
+      return $this->_answerNotOwner();
 
     if($this->request->get('cover_content')) {
       $day->attachImage(base64_decode($this->request->get('cover_content')));
@@ -97,7 +97,7 @@ class DaysController extends BaseJsonController
   function doCurrent()
   {
     if(!$this->request->isPost())
-      return $this->_answerWithError('Not a POST request', null, 405);
+      return $this->_answerNotPost();
 
     if(!$day = $this->_getUser()->getCurrentDay())
       return $this->_answerNotFound('Current day not set');
@@ -108,10 +108,10 @@ class DaysController extends BaseJsonController
   function doFinish()
   {
     if(!$this->request->isPost())
-      return $this->_answerWithError('Not a POST request', null, 405);
+      return $this->_answerNotPost();
 
     if(!$day = Day::findById($this->request->id))
-      return $this->_answerNotFound("Day not found");
+      return $this->_answerModelNotFoundById('Day', $this->request->id);
 
     $user = $this->_getUser();
     if($current_day = $user->getCurrentDay()) {
@@ -137,10 +137,10 @@ class DaysController extends BaseJsonController
   function doMarkCurrent()
   {
     if(!$this->request->isPost())
-      return $this->_answerWithError('Not a POST request', null, 405);
+      return $this->_answerNotPost();
 
     if(!$day = Day::findById($this->request->id))
-      return $this->_answerNotFound('Day not found');
+      return $this->_answerModelNotFoundById('Day', $this->request->id);
 
     $user = $this->_getUser();
     $user->setCurrentDay($day);
@@ -155,7 +155,7 @@ class DaysController extends BaseJsonController
       return $this->_answerNotPost();
 
     if(!$day = Day::findById($this->request->id))
-      return $this->_answerNotFound("Day not found");
+      return $this->_answerModelNotFoundById('Day', $this->request->id);
 
     $this->toolkit->getPostingService()->shareDay($day);
     $this->toolkit->getNewsObserver()->onDayShare($day);
@@ -169,10 +169,7 @@ class DaysController extends BaseJsonController
       return $this->_answerNotPost();
 
     if(!$day = Day::findById($this->request->id))
-      return $this->_answerNotFound("Day not found");
-
-    if($this->_getUser()->getId() == $day->getUser()->getId())
-      return $this->_answerWithError("You can't like you'r own days");
+      return $this->_answerModelNotFoundById('Day', $this->request->id);
 
     $like = new DayLike;
     $like->setDay($day);
@@ -191,7 +188,7 @@ class DaysController extends BaseJsonController
       return $this->_answerNotPost();
 
     if(!$day = Day::findById($this->request->id))
-      return $this->_answerNotFound("Day not found");
+      return $this->_answerModelNotFoundById('Day', $this->request->id);
 
     if(!$like = DayLike::findByDayIdAndUserId($day->getId(), $this->_getUser()->getId()))
       return $this->_answerOk("Like not found");
@@ -210,10 +207,10 @@ class DaysController extends BaseJsonController
       return $this->_answerNotPost();
 
     if(!$day = Day::findById($this->request->id))
-      return $this->_answerNotFound('Day not found');
+      return $this->_answerModelNotFoundById('Day', $this->request->id);
 
     if($day->getUserId() != $this->_getUser()->getId())
-      return $this->_answerWithError('You can delete only your own days', null, 401);
+      return $this->_answerNotOwner();
 
     $day->setIsDeleted(1);
     $day->save();
@@ -229,10 +226,10 @@ class DaysController extends BaseJsonController
       return $this->_answerNotPost();
 
     if(!$day = Day::findById($this->request->id))
-      return $this->_answerNotFound('Day not found');
+      return $this->_answerModelNotFoundById('Day', $this->request->id);
 
     if($day->getUserId() != $this->_getUser()->getId())
-      return $this->_answerWithError('You can restore only your own days', null, 401);
+      return $this->_answerNotOwner();
 
     $day->setIsDeleted(0);
     $day->save();
@@ -288,7 +285,7 @@ class DaysController extends BaseJsonController
       return $this->_answerNotPost();
 
     if(!$day = Day::findById($this->request->id))
-      return $this->_answerNotFound('Day not found');
+      return $this->_answerModelNotFoundById('Day', $this->request->id);
 
     $favourites = $this->_getUser()->getFavouriteDays();
     $favourites->add($day);
@@ -305,7 +302,7 @@ class DaysController extends BaseJsonController
       return $this->_answerNotPost();
 
     if(!$day = Day::findById($this->request->id))
-      return $this->_answerNotFound('Day not found');
+      return $this->_answerModelNotFoundById('Day', $this->request->id);
 
     $favourites = $this->_getUser()->getFavouriteDays();
     $favourites->remove($day);
@@ -341,7 +338,7 @@ class DaysController extends BaseJsonController
       return $this->_answerWithError($errors);
 
     if(!$day = Day::findById($this->request->id))
-      return $this->_answerNotFound('Day not found');
+      return $this->_answerModelNotFoundById('Day', $this->request->id);
 
     $image_content = base64_decode($this->request->get('image_content'));
     if(!count($day->getMoments()))
@@ -408,7 +405,7 @@ class DaysController extends BaseJsonController
       return $this->_answerNotPost();
 
     if(!Day::findById($this->request->id))
-      return $this->_answerNotFound("Day with id '".$this->request->get('id')."' not found");
+      return $this->_answerModelNotFoundById('Day', $this->request->id);
 
     $item = new Complaint();
     $item->setDayId($this->request->get('day_id'));
@@ -444,7 +441,7 @@ class DaysController extends BaseJsonController
   function doGuestComments()
   {
     if(!$day = Day::findById($this->request->id))
-      return $this->_answerNotFound("Day with id '".$this->request->get('day_id')."' not found");
+      return $this->_answerModelNotFoundById('Day', $this->request->id);
 
     list($from, $to, $limit) = $this->_getFromToLimitations();
 

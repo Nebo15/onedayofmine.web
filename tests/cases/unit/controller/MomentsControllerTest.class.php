@@ -73,7 +73,7 @@ class MomentsControllerTest extends odControllerTestCase
       ),
       $moment->getId()
     )->result;
-    $this->assertResponse(404);
+    $this->assertResponse(401);
   }
 
   /**
@@ -102,7 +102,7 @@ class MomentsControllerTest extends odControllerTestCase
     lmbToolkit::instance()->setUser($this->main_user);
     $this->post('delete', array(), $moment->getId());
 
-    $this->assertResponse(404);
+    $this->assertResponse(401);
   }
 
   function testDelete_MomentNotFound()
@@ -222,7 +222,7 @@ class MomentsControllerTest extends odControllerTestCase
     lmbToolkit::instance()->setUser($this->additional_user);
     $this->post('like', array(), $moment->getId());
 
-    $this->assertResponse(400);
+    $this->assertResponse(200);
   }
 
   /**

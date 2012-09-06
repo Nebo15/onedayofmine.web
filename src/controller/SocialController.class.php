@@ -25,8 +25,8 @@ class SocialController extends BaseJsonController
 
   function doTwitterConnect()
   {
-    if(!$this->request->hasPost())
-      return $this->_answerWithError('Not a POST request');
+    if(!$this->request->isPost())
+      return $this->_answerNotPost();
 
     $this->_checkPropertiesInRequest(array('access_token', 'access_token_secret'));
 
@@ -38,7 +38,7 @@ class SocialController extends BaseJsonController
       $provider = $this->toolkit->getTwitter($access_token, $access_token_secret);
 
       if(!$uid = $provider->getUid($this->error_list)) {
-        return $this->_answerWithError($this->error_list->export(), null, 403);
+        return $this->_answerWithError($this->error_list->export());
       }
 
       $user = $this->toolkit->getUser();
