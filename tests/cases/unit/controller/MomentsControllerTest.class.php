@@ -91,7 +91,7 @@ class MomentsControllerTest extends odControllerTestCase
     $this->post('delete', array(), $moment->getId());
 
     $this->assertResponse(200);
-    $this->assertFalse(Moment::findById($moment->getId()));
+    $this->assertEqual($day->getMoments()->count(), 0);
   }
 
   function testDelete_WrongUser()
@@ -111,6 +111,25 @@ class MomentsControllerTest extends odControllerTestCase
     $this->post('delete', array(), 100500);
     $this->assertResponse(404);
   }
+
+  // function testRestore()
+  // {
+  //   $day = $this->generator->day($this->main_user);
+  //   $day->save();
+
+  //   $moment = $this->generator->moment($day);
+  //   $moment->setIsDeleted(1);
+  //   $moment->save();
+
+  //   lmbToolkit::instance()->setUser($this->main_user);
+  //   $this->post('restore', array(), $moment->getId())->result;
+
+  //   $this->assertResponse(200);
+
+  //   $loaded_moment = Moment::findById($day->getId());
+  //   $this->assertEqual(0, $loaded_moment->getIsDeleted());
+  //   $this->assertEqual($day->getMoments()->count(), 1);
+  // }
 
   function testComment()
   {

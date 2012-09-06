@@ -76,14 +76,15 @@ class MomentsController extends BaseJsonController
     if($moment->getDay()->getUser()->getId() != $this->_getUser()->getId())
       return $this->_answerNotOwner();
 
-    $moment->destroy();
+    $moment->setIsDeleted(1);
+    $moment->save();
 
     $this->toolkit->getNewsObserver()->onMomentDelete($moment);
 
     return $this->_answerOk();
   }
 
-  function doLike()
+  function doRestore()
   {
     if(!$this->request->isPost())
       return $this->_answerNotPost();
@@ -94,6 +95,16 @@ class MomentsController extends BaseJsonController
     if($moment->getDay()->getUser()->getId() != $this->_getUser()->getId())
       return $this->_answerNotOwner();
 
+    $moment->setIsDeleted(0);
+    $moment->save();
+
+    // $this->toolkit->getNewsObserver()->onMomentRestore($moment);
+
+    return $this->_answerOk();
+  }
+
+  function doLike()
+  {
     if(!$this->request->isPost())
       return $this->_answerNotPost();
 

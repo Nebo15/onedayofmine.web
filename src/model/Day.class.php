@@ -20,7 +20,7 @@ class Day extends BaseModel
     );
 
     $this->_has_many = array(
-      'moments'  => array( 'field' => 'day_id', 'class' => 'Moment'),
+      'moments'  => array( 'field' => 'day_id', 'class' => 'Moment', 'criteria' => '`moment`.`is_deleted` = 0'),
       'comments' => array( 'field' => 'day_id', 'class' => 'DayComment'),
       'likes'    => array( 'field' => 'day_id', 'class' => 'DayLike'),
     );
