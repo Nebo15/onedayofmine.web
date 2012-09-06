@@ -207,10 +207,9 @@ function task_od_parse_lj($argv)
   $posts_remain = POSTS_COUNT;
   $tests_users = array();
   lmbArrayHelper::toFlatArray(User::find(), $tests_users);
-  while($posts_remain--)
-  {
-    $post = $posts[array_rand($posts)];
+  shuffle($posts);
 
+  foreach ($posts as $post) {
     echo $posts_remain.'. Creating day "'.$post->getTitle().'":'.PHP_EOL;
 
     $day = new Day();
@@ -297,6 +296,8 @@ function task_od_parse_lj($argv)
 
     echo PHP_EOL;
     echo 'Added '. count($day->getMoments()) .' moments.'.PHP_EOL;
+
+    $posts_remain--;
   }
 }
 

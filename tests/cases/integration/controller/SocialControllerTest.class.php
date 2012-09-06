@@ -64,7 +64,7 @@ class SocialControllerIntegrationTest extends odAcceptanceTestCase
       'access_token'         => 'Wrong twitter access token',
       'access_token_secret'  => 'Wrong twitter access token secret'
     ));
-    if($this->assertResponse(403)) {
+    if($this->assertResponse(400)) {
       $this->assertEqual($result->errors[0]->message, 'Twitter API exception: Invalid / expired Token.');
     }
   }

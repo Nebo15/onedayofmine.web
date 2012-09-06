@@ -270,9 +270,6 @@ class DaysController extends BaseJsonController
 
   function doFavourite()
   {
-    if(!$this->_isLoggedUser())
-      return $this->_answerUnauthorized();
-
     list($from, $to, $limit) = $this->_getFromToLimitations();
     $days = $this->_getUser()->getFavouriteDaysWithLimitations($from, $to, $limit);
 
