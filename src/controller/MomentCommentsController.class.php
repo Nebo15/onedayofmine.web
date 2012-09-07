@@ -32,6 +32,8 @@ class MomentCommentsController extends BaseJsonController
     if($comment->getUserId() != $this->_getUser()->getId())
       return $this->_answerNotOwner();
 
+    $this->toolkit->getNewsObserver()->onMomentCommentDelete($comment);
+
     $comment->destroy();
 
     return $this->_answerOk();

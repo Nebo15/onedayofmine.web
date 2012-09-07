@@ -71,7 +71,7 @@ class odNewsObserverTest extends odUnitTestCase
     $this->assertEqual(1, $this->follower->getNews()->count());
   }
 
-  function testOnComment_DayComment_Owner()
+  function testOnDayComment_Owner()
   {
     $day_owner = $this->generator->user('onwer');
     $day_owner->save();
@@ -83,7 +83,7 @@ class odNewsObserverTest extends odUnitTestCase
     $comment = $this->generator->dayComment($day, $commentator);
     $comment->save();
 
-    (new odNewsObserver($commentator))->onComment($comment);
+    (new odNewsObserver($commentator))->onDayComment($comment);
 
     $news = $day_owner->getNews()->at(0);
     $this->assertNewsUsers($news, $day_owner, $commentator);
@@ -92,7 +92,25 @@ class odNewsObserverTest extends odUnitTestCase
     $this->assertEqual($comment->id, $news->day_comment_id);
   }
 
-  function testOnComment_DayComment_Owner_DisabledInSettings()
+  function testOnDayCommentDelete()
+  {
+    $day_owner = $this->generator->user('onwer');
+    $day_owner->save();
+    $commentator = $this->generator->user('cmmentator');
+    $commentator->save();
+
+    $day = $this->generator->day($day_owner, false, 'some_day');
+
+    $comment = $this->generator->dayComment($day, $commentator);
+    $comment->save();
+
+    (new odNewsObserver($commentator))->onDayComment($comment);
+    $this->assertEqual(News::find()->count(), 1);
+    (new odNewsObserver($commentator))->onDayCommentDelete($comment);
+    $this->assertEqual(News::find()->count(), 0);
+  }
+
+  function testOnDayComment_Owner_DisabledInSettings()
   {
     $day_owner = $this->_createUserWithDisabledNotification('new_comments');
     $day_owner->save();
@@ -104,12 +122,12 @@ class odNewsObserverTest extends odUnitTestCase
     $comment = $this->generator->dayComment($day, $commentator);
     $comment->save();
 
-    (new odNewsObserver($commentator))->onComment($comment);
+    (new odNewsObserver($commentator))->onDayComment($comment);
 
     $this->assertNoNews($day_owner);
   }
 
-  function testOnComment_DayComment_OldCommentator()
+  function testOnDayComment_OldCommentator()
   {
     $old_commentator = $this->generator->user('old_commentator');
     $old_commentator->save();
@@ -124,14 +142,14 @@ class odNewsObserverTest extends odUnitTestCase
     $comment = $this->generator->dayComment($day, $new_commentator);
     $comment->save();
 
-    (new odNewsObserver($new_commentator))->onComment($comment);
+    (new odNewsObserver($new_commentator))->onDayComment($comment);
 
     $news = $old_commentator->getNews()->at(0);
     $this->assertNewsUsers($news, $old_commentator, $new_commentator);
     $this->assertNewsText($news, odNewsObserver::MSG_DAY_COMMENT, $new_commentator->name, $day->title);
   }
 
-  function testOnComment_DayComment_OldCommentator_DisabledInSettings()
+  function testOnDayComment_OldCommentator_DisabledInSettings()
   {
     $old_commentator = $this->_createUserWithDisabledNotification('new_replays');
     $old_commentator->save();
@@ -146,7 +164,7 @@ class odNewsObserverTest extends odUnitTestCase
     $comment = $this->generator->dayComment($day, $new_commentator);
     $comment->save();
 
-    (new odNewsObserver($new_commentator))->onComment($comment);
+    (new odNewsObserver($new_commentator))->onDayComment($comment);
 
     $this->assertNoNews($old_commentator);
   }
@@ -188,7 +206,7 @@ class odNewsObserverTest extends odUnitTestCase
     $this->assertNoNews($this->follower);
   }
 
-  function testOnComment_MomentComment_DayOwner()
+  function testOnMomentComment_DayOwner()
   {
     $commentator = $this->sender;
     $commentator->save();
@@ -198,7 +216,7 @@ class odNewsObserverTest extends odUnitTestCase
     $comment = $this->generator->momentComment($moment, $commentator);
     $comment->save();
 
-    (new odNewsObserver($commentator))->onComment($comment);
+    (new odNewsObserver($commentator))->onMomentComment($comment);
 
     $news = $day->getUser()->getNews()->at(0);
     $this->assertNewsUsers($news, $day->getUser(), $commentator);
@@ -208,7 +226,23 @@ class odNewsObserverTest extends odUnitTestCase
     $this->assertEqual($comment->id, $news->moment_comment_id);
   }
 
-  function testOnComment_MomentComment_DayOwner_DisabledInSettings()
+  function testOnMomentCommentDelete()
+  {
+    $commentator = $this->sender;
+    $commentator->save();
+
+    $day = $this->generator->day();
+    $moment = $this->generator->moment($day);
+    $comment = $this->generator->momentComment($moment, $commentator);
+    $comment->save();
+
+    (new odNewsObserver($commentator))->onMomentComment($comment);
+    $this->assertEqual(News::find()->count(), 1);
+    (new odNewsObserver($commentator))->onMomentCommentDelete($comment);
+    $this->assertEqual(News::find()->count(), 0);
+  }
+
+  function testOnMomentComment_DayOwner_DisabledInSettings()
   {
     $commentator = $this->sender;
     $commentator->save();
@@ -221,12 +255,12 @@ class odNewsObserverTest extends odUnitTestCase
     $comment = $this->generator->momentComment($moment, $commentator);
     $comment->save();
 
-    (new odNewsObserver($commentator))->onComment($comment);
+    (new odNewsObserver($commentator))->onMomentComment($comment);
 
     $this->assertNoNews($day->getUser());
   }
 
-  function testOnComment_MomentComment_OldCommentator()
+  function testOnMomentComment_OldCommentator()
   {
     $old_commentator = $this->generator->user();
     $new_commentator = $this->sender;
@@ -239,14 +273,14 @@ class odNewsObserverTest extends odUnitTestCase
     $comment = $this->generator->momentComment($moment, $new_commentator);
     $comment->save();
 
-    (new odNewsObserver($new_commentator))->onComment($comment);
+    (new odNewsObserver($new_commentator))->onMomentComment($comment);
 
     $news = $old_commentator->getNews()->at(0);
     $this->assertNewsUsers($news, $old_commentator, $new_commentator);
     $this->assertNewsText($news, odNewsObserver::MSG_MOMENT_COMMENT, $new_commentator->name, $day->title);
   }
 
-  function testOnComment_MomentComment_OldCommentator_DisabledInSettings()
+  function testOnMomentComment_OldCommentator_DisabledInSettings()
   {
     $old_commentator = $this->_createUserWithDisabledNotification('new_replays');
     $old_commentator->save();
@@ -260,7 +294,7 @@ class odNewsObserverTest extends odUnitTestCase
     $comment = $this->generator->momentComment($moment, $new_commentator);
     $comment->save();
 
-    (new odNewsObserver($new_commentator))->onComment($comment);
+    (new odNewsObserver($new_commentator))->onMomentComment($comment);
 
     $this->assertNoNews($old_commentator);
   }
@@ -335,56 +369,166 @@ class odNewsObserverTest extends odUnitTestCase
     $this->assertNewsText($news, odNewsObserver::MSG_FBFRIEND_REGISTERED, $new_user->name);
   }
 
-  function testOnLike_DayOwner()
+  function testOnDayLike_byOwner()
   {
     $day_owner = $this->generator->user();
     $day = $this->generator->day($day_owner);
     $day->save();
+    $like = $this->generator->dayLike($day);
+    $like->save();
 
-    $this->sender_observer->onLike($day);
+    $this->sender_observer->onDayLike($day, $like);
 
     $news = $day_owner->getNews()->at(0);
     $this->assertNewsUsers($news, $day_owner, $this->sender);
     $this->assertNewsText($news, odNewsObserver::MSG_DAY_LIKED, $this->sender->name, $day->title);
     $this->assertEqual($day->id, $news->day_id);
+    $this->assertEqual($like->id, $news->day_like_id);
   }
 
-  function testOnLike_DayOwner_DisabledInSettings()
+  function testOnDayLike_byOwner_DisabledInSettings()
   {
     $day_owner = $this->_createUserWithDisabledNotification('related_activity');
     $day = $this->generator->day($day_owner);
     $day->save();
+    $like = $this->generator->dayLike($day);
+    $like->save();
 
-    $this->sender_observer->onLike($day);
+    $this->sender_observer->onDayLike($day, $like);
 
     $this->assertNoNews($day_owner);
   }
 
-  function testOnLike_Followers()
+  function testOnDayLike_byFollowers()
   {
     $day_owner = $this->generator->user();
     $day = $this->generator->day($day_owner);
     $day->save();
+    $like = $this->generator->dayLike($day);
+    $like->save();
 
-    $this->sender_observer->onLike($day);
+    $this->sender_observer->onDayLike($day, $like);
 
     $news = $this->follower->getNews()->at(0);
     $this->assertNewsUsers($news, $this->follower, $this->sender);
     $this->assertNewsText($news, odNewsObserver::MSG_DAY_LIKED, $this->sender->name, $day->title);
     $this->assertEqual($day->id, $news->day_id);
+    $this->assertEqual($like->id, $news->day_like_id);
   }
 
-  function testOnLike_Followers_DisabledInSettings()
+  function testOnDayLike_byFollowers_DisabledInSettings()
   {
     $this->follower->disableNotification('related_activity');
     $this->follower->save();
 
     $day = $this->generator->day();
     $day->save();
+    $like = $this->generator->dayLike($day);
+    $like->save();
 
-    $this->sender_observer->onLike($day);
+    $this->sender_observer->onDayLike($day, $like);
 
     $this->assertNoNews($this->follower);
+  }
+
+  function testOnDayUnlike()
+  {
+    $day_owner = $this->generator->user();
+    $day = $this->generator->day($day_owner);
+    $day->save();
+    $like = $this->generator->dayLike($day);
+    $like->save();
+
+    $this->sender_observer->onDayLike($day, $like);
+    $this->assertEqual(News::find()->count(), 1);
+    $this->sender_observer->onDayUnlike($day, $like);
+    $this->assertEqual(News::find()->count(), 0);
+  }
+
+  function testOnMomentLike_byOwner()
+  {
+    $day_owner = $this->generator->user();
+    $day = $this->generator->day($day_owner);
+    $day->save();
+    $moment = $this->generator->moment($day);
+    $moment->save();
+    $like = $this->generator->momentLike($moment);
+    $like->save();
+
+    $this->sender_observer->onMomentLike($moment, $like);
+
+    $news = $day_owner->getNews()->at(0);
+    $this->assertNewsUsers($news, $day_owner, $this->sender);
+    $this->assertNewsText($news, odNewsObserver::MSG_MOMENT_LIKED, $this->sender->name, $day->title);
+    $this->assertEqual($moment->id, $news->moment_id);
+    $this->assertEqual($like->id, $news->moment_like_id);
+  }
+
+  function testOnMomentLike_byOwner_DisabledInSettings()
+  {
+    $day_owner = $this->_createUserWithDisabledNotification('related_activity');
+    $day = $this->generator->day($day_owner);
+    $day->save();
+    $moment = $this->generator->moment($day);
+    $moment->save();
+    $like = $this->generator->momentLike($moment);
+    $like->save();
+
+    $this->sender_observer->onMomentLike($moment, $like);
+
+    $this->assertNoNews($day_owner);
+  }
+
+  function testOnMomentLike_byFollowers()
+  {
+    $day_owner = $this->generator->user();
+    $day = $this->generator->day($day_owner);
+    $day->save();
+    $moment = $this->generator->moment($day);
+    $moment->save();
+    $like = $this->generator->momentLike($moment);
+    $like->save();
+
+    $this->sender_observer->onMomentLike($moment, $like);
+
+    $news = $this->follower->getNews()->at(0);
+    $this->assertNewsUsers($news, $this->follower, $this->sender);
+    $this->assertNewsText($news, odNewsObserver::MSG_MOMENT_LIKED, $this->sender->name, $day->title);
+    $this->assertEqual($moment->id, $news->moment_id);
+    $this->assertEqual($like->id, $news->moment_like_id);
+  }
+
+  function testOnMomentLike_byFollowers_DisabledInSettings()
+  {
+    $this->follower->disableNotification('related_activity');
+    $this->follower->save();
+
+    $day = $this->generator->day();
+    $day->save();
+    $moment = $this->generator->moment($day);
+    $moment->save();
+    $like = $this->generator->momentLike($moment);
+    $like->save();
+
+    $this->sender_observer->onMomentLike($moment, $like);
+
+    $this->assertNoNews($this->follower);
+  }
+
+  function testOnMomentUnlike()
+  {
+    $day_owner = $this->generator->user();
+    $day = $this->generator->day($day_owner);
+    $day->save();
+    $moment = $this->generator->moment($day);
+    $moment->save();
+    $like = $this->generator->momentLike($moment);
+    $like->save();
+
+    $this->sender_observer->onMomentLike($moment, $like);
+    $this->assertEqual(News::find()->count(), 1);
+    $this->sender_observer->onMomentUnlike($moment, $like);
+    $this->assertEqual(News::find()->count(), 0);
   }
 
   function testOnDayShare()

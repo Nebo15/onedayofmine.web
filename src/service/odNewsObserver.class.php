@@ -91,6 +91,9 @@ class odNewsObserver
     News::delete('day_id='.$day->getId());
   }
 
+  // TODO
+  function onDayRestore(Day $day) {}
+
   function onDayShare(Day $day)
   {
     lmb_assert_true($day->id);
@@ -137,83 +140,111 @@ class odNewsObserver
     lmbActiveRecord :: delete('News', 'moment_id='.$moment->getId());
   }
 
-  /**
-   * @todo moment like not implemented
-   * @todo add {Day, Moment} interface
-   * @param Day|Moment $liked_object
-   */
-  function onLike(lmbActiveRecord $liked_object)
-  {
-    lmb_assert_true($liked_object->id);
-    if(!($liked_object instanceof Day) && !($liked_object instanceof Moment))
-      throw new lmbException("Not likeable object type '".get_class($liked_object)."'");
+  // TODO
+  function onMomentRestore(Moment $moment) {}
 
-    if($liked_object instanceof Day)
-    {
-      $news = new News(array('day_id' => $liked_object->id));
-      $owner = $liked_object->getUser();
-      if($owner->getSettings()->getNotificationsRelatedActivity())
-        $this->addRecipient($owner);
-      foreach($this->sender->getFollowers() as $follower)
-        if(1 == $follower->getSettings()->getNotificationsRelatedActivity())
-          $this->addRecipient($follower);
-      $this->send($news, self::MSG_DAY_LIKED, array($this->sender->name, $liked_object->title));
-    }
-    elseif($liked_object instanceof Moment)
-    {
-      $news = new News(array('day_id' => $liked_object->day_id, 'moment_id' => $liked_object->id));
-      $owner = $liked_object->getDay()->getUser();
-      if($owner->getSettings()->getNotificationsRelatedActivity())
-        $this->addRecipient($owner);
-      foreach($this->sender->getFollowers() as $follower)
-        if(1 == $follower->getSettings()->getNotificationsRelatedActivity())
-          $this->addRecipient($follower);
-      $this->send($news, self::MSG_MOMENT_LIKED, array($this->sender->name, $liked_object->getDay()->title));
-    }
+  function onDayLike(Day $day, DayLike $like)
+  {
+    lmb_assert_true($day->id);
+    $news = new News(array('day_id' => $day->id, 'day_like_id' => $like->id));
+    $owner = $day->getUser();
+
+    if($owner->getSettings()->getNotificationsRelatedActivity())
+      $this->addRecipient($owner);
+
+    foreach($this->sender->getFollowers() as $follower)
+      if(1 == $follower->getSettings()->getNotificationsRelatedActivity())
+        $this->addRecipient($follower);
+
+    $this->send($news, self::MSG_DAY_LIKED, array($this->sender->name, $day->title));
   }
 
-  /**
-   * @param BaseComment $comment
-   */
-  function onComment(BaseComment $comment)
+  function onDayUnlike(Day $day, DayLike $like)
+  {
+    lmb_assert_true($like->id);
+    News::delete('day_like_id='.$like->getId());
+  }
+
+  function onMomentLike(Moment $moment, MomentLike $like)
+  {
+    lmb_assert_true($moment->id);
+    $news = new News(array('day_id' => $moment->day_id, 'moment_id' => $moment->id, 'moment_like_id' => $like->id));
+    $owner = $moment->getDay()->getUser();
+
+    if($owner->getSettings()->getNotificationsRelatedActivity())
+      $this->addRecipient($owner);
+
+    foreach($this->sender->getFollowers() as $follower)
+      if(1 == $follower->getSettings()->getNotificationsRelatedActivity())
+        $this->addRecipient($follower);
+
+    $this->send($news, self::MSG_MOMENT_LIKED, array($this->sender->name, $moment->getDay()->title));
+  }
+
+  function onMomentUnlike(Moment $moment, MomentLike $like)
+  {
+    lmb_assert_true($like->id);
+    News::delete('moment_like_id='.$like->getId());
+  }
+
+  function onDayComment(DayComment $comment)
   {
     lmb_assert_true($comment->id);
+    $day = $comment->getDay();
+
     $news = new News;
-
-    if($comment instanceof DayComment)
-    {
-      $day = $comment->getDay();
-      $commented_object = $comment->getDay();
-      $msg_type = self::MSG_DAY_COMMENT;
-      $news->day_comment_id = $comment->id;
-    }
-    elseif($comment instanceof MomentComment)
-    {
-      $commented_object = $comment->getMoment();
-      $day = $commented_object->getDay();
-      $msg_type = self::MSG_MOMENT_COMMENT;
-      $news->moment_id = $commented_object->id;
-      $news->moment_comment_id = $comment->id;
-    }
-    else
-    {
-      throw new lmbException("Unknown comment type ".get_class($comment));
-    }
-
+    $news->day_comment_id = $comment->id;
     $news->day_id = $day->id;
 
     if(1 == $day->getUser()->getSettings()->getNotificationsNewComments())
       $this->addRecipient($day->getUser());
 
-    foreach ($commented_object->getComments() as $comment_author)
+    foreach ($day->getComments() as $day_comment)
     {
-      $comment_author = $comment_author->getUser();
+      $comment_author = $day_comment->getUser();
       if($this->sender->getId() != $comment_author->getId())
         if(1 == $comment_author->getSettings()->getNotificationsNewReplays())
           $this->addRecipient($comment_author);
     }
 
-    $this->send($news, $msg_type, array($this->sender->name, $day->title));
+    $this->send($news, self::MSG_DAY_COMMENT, array($this->sender->name, $day->title));
+  }
+
+  function onDayCommentDelete(DayComment $comment)
+  {
+    lmb_assert_true($comment->id);
+    News::delete('day_comment_id='.$comment->getId());
+  }
+
+  function onMomentComment(MomentComment $comment)
+  {
+    lmb_assert_true($comment->id);
+    $moment = $comment->getMoment();
+    $day    = $moment->getDay();
+
+    $news = new News;
+    $news->moment_id = $moment->id;
+    $news->moment_comment_id = $comment->id;
+    $news->day_id = $day->id;
+
+    if(1 == $day->getUser()->getSettings()->getNotificationsNewComments())
+      $this->addRecipient($day->getUser());
+
+    foreach ($moment->getComments() as $moment_comment)
+    {
+      $comment_author = $moment_comment->getUser();
+      if($this->sender->getId() != $comment_author->getId())
+        if(1 == $comment_author->getSettings()->getNotificationsNewReplays())
+          $this->addRecipient($comment_author);
+    }
+
+    $this->send($news, self::MSG_MOMENT_COMMENT, array($this->sender->name, $day->title));
+  }
+
+  function onMomentCommentDelete(MomentComment $comment)
+  {
+    lmb_assert_true($comment->id);
+    News::delete('moment_comment_id='.$comment->getId());
   }
 
   /**
@@ -288,5 +319,7 @@ class odNewsObserver
     $news->setText(self::getMessage($type, $params));
     $news->setRecipients($this->recipients);
     $news->save();
+
+    $this->recipients = [];
   }
 }

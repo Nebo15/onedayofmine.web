@@ -131,6 +131,8 @@ class DaysController extends BaseJsonController
       $day->save();
     }
 
+    $this->toolkit->getPostingService()->shareDayEnd($day);
+
     return $this->_answerOk($this->toolkit->getExportHelper()->exportFullDay($day));
   }
 
@@ -177,7 +179,7 @@ class DaysController extends BaseJsonController
     $like->save();
 
     $this->toolkit->getPostingService()->shareDayLike($day, $like);
-    $this->toolkit->getNewsObserver()->onLike($day);
+    $this->toolkit->getNewsObserver()->onDayLike($day, $like);
 
     return $this->_answerOk();
   }
@@ -194,7 +196,7 @@ class DaysController extends BaseJsonController
       return $this->_answerOk("Like not found");
 
     $this->toolkit->getPostingService()->shareDayUnlike($day, $like);
-    // $this->toolkit->getNewsObserver()->onLikeDelete($day);
+    $this->toolkit->getNewsObserver()->onDayUnlike($day, $like);
 
     $like->destroy();
 
@@ -233,6 +235,8 @@ class DaysController extends BaseJsonController
 
     $day->setIsDeleted(0);
     $day->save();
+
+    $this->toolkit->getNewsObserver()->onDayRestore($day);
 
     return $this->_answerOk();
   }
@@ -288,8 +292,6 @@ class DaysController extends BaseJsonController
     $favourites->add($day);
     $favourites->save();
 
-    // $this->toolkit->getNewsObserver()->onDayFavourite($day);
-
     return $this->_answerOk();
   }
 
@@ -304,8 +306,6 @@ class DaysController extends BaseJsonController
     $favourites = $this->_getUser()->getFavouriteDays();
     $favourites->remove($day);
     $favourites->save();
-
-    // $this->toolkit->getNewsObserver()->onDayUnfavourite($day);
 
     return $this->_answerOk();
   }
@@ -388,7 +388,7 @@ class DaysController extends BaseJsonController
     {
       $comment->saveSkipValidation();
 
-      $this->toolkit->getNewsObserver()->onComment($comment);
+      $this->toolkit->getNewsObserver()->onDayComment($comment);
 
       return $this->_answerOk($this->toolkit->getExportHelper()->exportDayComment($comment));
     }

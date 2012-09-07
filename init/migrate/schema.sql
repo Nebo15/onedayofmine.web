@@ -296,6 +296,8 @@ CREATE TABLE `news` (
   `moment_id` int(11) unsigned DEFAULT NULL,
   `day_comment_id` int(11) unsigned DEFAULT NULL,
   `moment_comment_id` int(11) unsigned DEFAULT NULL,
+  `day_like_id` int(11) unsigned DEFAULT NULL,
+  `moment_like_id` int(11) unsigned DEFAULT NULL,
   `ctime` int(11) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id_id` (`sender_id`,`id`)
@@ -434,7 +436,7 @@ CREATE TABLE `user_settings` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-09-06 16:38:49
+-- Dump completed on 2012-09-07 12:58:24
 -- MySQL dump 10.13  Distrib 5.5.25a, for osx10.6 (i386)
 --
 -- Host: localhost    Database: one_day
@@ -470,4 +472,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-09-06 16:38:49
+-- Dump completed on 2012-09-07 12:58:24

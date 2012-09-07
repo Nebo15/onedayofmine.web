@@ -57,7 +57,7 @@ class MomentsController extends BaseJsonController
     {
       $comment->saveSkipValidation();
 
-      $this->toolkit->getNewsObserver()->onComment($comment);
+      $this->toolkit->getNewsObserver()->onMomentComment($comment);
 
       return $this->_answerOk($this->toolkit->getExportHelper()->exportMomentComment($comment));
     }
@@ -98,7 +98,7 @@ class MomentsController extends BaseJsonController
     $moment->setIsDeleted(0);
     $moment->save();
 
-    // $this->toolkit->getNewsObserver()->onMomentRestore($moment);
+    $this->toolkit->getNewsObserver()->onMomentRestore($moment);
 
     return $this->_answerOk();
   }
@@ -117,7 +117,7 @@ class MomentsController extends BaseJsonController
     $like->save();
 
     $this->toolkit->getPostingService()->shareMomentLike($moment, $like);
-    $this->toolkit->getNewsObserver()->onLike($moment);
+    $this->toolkit->getNewsObserver()->onMomentLike($moment, $like);
 
     return $this->_answerOk();
   }
@@ -134,7 +134,7 @@ class MomentsController extends BaseJsonController
       return $this->_answerOk("Like not found");
 
     $this->toolkit->getPostingService()->shareMomentUnlike($moment, $like);
-    // $this->toolkit->getNewsObserver()->onLikeDelete($moment);
+    $this->toolkit->getNewsObserver()->onMomentUnlike($moment, $like);
 
     $like->destroy();
 
