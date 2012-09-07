@@ -7,13 +7,13 @@ class odExportHelper
     $this->attachUser($day, $exported);
     $this->attachIsFavourited($day, $exported);
     $this->attachLikesCount($day, $exported);
+    $this->attachCommentsCount($day, $exported);
     return $exported;
   }
 
   function exportFullDay(Day $day)
   {
     $exported = $this->exportDay($day);
-    $this->attachCommentsCount($day, $exported);
     $this->attachComments($day, $exported);
     $this->attachMoments($day, $exported);
     return $exported;
