@@ -34,7 +34,12 @@ class odFacebook extends Facebook implements odSocialServicesProviderInterface
     {
       return $provider->api('/me')['id'];
     }
-    catch (Exception $e)
+    catch(odFacebookApiExpiredTokenException $e)
+    {
+      $error_list[] = 'Token expired';
+      return false;
+    }
+    catch (FacebookApiException $e)
     {
       $error_list[] = $e->getMessage();
       return false;
