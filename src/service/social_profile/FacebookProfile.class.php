@@ -74,19 +74,23 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
   public function getFriends()
   {
     $fields = implode(',', self::_getUserFacebookFieldsMap());
-    return $this->provider->makeQuery("SELECT {$fields} FROM user WHERE is_app_user AND uid IN (SELECT uid2 FROM friend WHERE uid1 = me())");
+    $friends = [];
+    foreach($this->provider->makeQuery("SELECT {$fields} FROM user WHERE is_app_user AND uid IN (SELECT uid2 FROM friend WHERE uid1 = me())") as $raw_info)
+    {
+      $friends[] = $this->_mapFacebookInfo($raw_info);
+    }
+    return $friends;
   }
 
   public function getRegisteredFriends()
   {
     $results = array();
-    foreach($this->getFriends() as $raw_info)
+    foreach($this->getFriends() as $info)
     {
-      $info = $this->_mapFacebookInfo($raw_info);
-      $user = User::findByFacebookUid($info['facebook_uid']);
-      if(!$user)
+      if(!$user = User::findByFacebookUid($info['facebook_uid']))
         continue;
-      $user->setUserInfo($info);
+
+      // $user->setUserInfo($info);
       $results[] = $user;
     }
     return $results;
@@ -202,19 +206,20 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
   protected function _mapFacebookInfo($fb)
   {
     return array(
-      'facebook_uid'           => $fb['uid'],
+      'facebook_uid'     => $fb['uid'],
       'email'            => $fb['email'],
       'name'             => $fb['first_name'] . ' ' . $fb['last_name'],
       'sex'              => $fb['sex'],
       'timezone'         => $fb['timezone'],
       'facebook_profile_utime' => $fb['profile_update_time'],
       'pic'              => $fb['pic'],
+      'pic_big'          => $fb['pic_big'],
       'occupation'       => isset($fb['work']['position']['name'])
                                ? $fb['work']['position']['name']
-                              : '',
+                               : '',
       'current_location' => isset($fb['current_location']['name'])
-                              ? $fb['current_location']['name']
-                              : '',
+                               ? $fb['current_location']['name']
+                               : '',
       'birthday'         => date('Y-m-d', strtotime($fb['birthday_date']))
     );
   }

@@ -32,7 +32,7 @@ class FacebookProfileTest extends odAcceptanceTestCase
   {
     $friends = (new FacebookProfile($this->additional_user))->getFriends();
     $this->assertEqual(count($friends), 1);
-    $this->assertEqual($friends[0]['uid'], $this->main_user->getFacebookUid());
+    $this->assertEqual($friends[0]['facebook_uid'], $this->main_user->getFacebookUid());
   }
 
   function testGetRegisteredFriends()

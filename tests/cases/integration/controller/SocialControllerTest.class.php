@@ -18,6 +18,7 @@ class SocialControllerIntegrationTest extends odAcceptanceTestCase
   {
     $this->main_user->save();
     $this->additional_user->save();
+
     $this->_loginAndSetCookie($this->main_user);
 
     $result = $this->get('social/facebook_friends');
@@ -25,8 +26,31 @@ class SocialControllerIntegrationTest extends odAcceptanceTestCase
     $this->assertResponse(200);
     $this->assertTrue(is_array($friends));
     $this->assertEqual(1, count($friends));
-    // $this->assertEqual($friends[0]->facebook_uid, $this->additional_user->getFacebookUid());
+    $this->assertEqual($friends[0]->facebook_uid, $this->additional_user->getFacebookUid());
+    $this->assertProperty($friends[0], 'user');
   }
+
+  function testFacebookFiends_following()
+  {
+    $this->main_user->save();
+    $this->additional_user->save();
+
+    $following = $this->main_user->getFollowing();
+    $following->add($this->additional_user);
+    $following->save();
+
+    $this->_loginAndSetCookie($this->main_user);
+
+    $result = $this->get('social/facebook_friends');
+    $friends = $result->result;
+    $this->assertResponse(200);
+    $this->assertTrue(is_array($friends));
+    $this->assertEqual(1, count($friends));
+    $this->assertEqual($friends[0]->facebook_uid, $this->additional_user->getFacebookUid());
+    $this->assertProperty($friends[0], 'user');
+  }
+
+  function testFacebookFiends_notRegisteredUser(){}
 
   /**
    * example

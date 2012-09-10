@@ -11,12 +11,22 @@ class SocialController extends BaseJsonController
 
     $profile = new FacebookProfile($this->_getUser());
     $friends = array();
-    foreach($profile->getRegisteredFriends() as $friend) {
-      $friend = $friend->exportForApi();
-      unset($friend->user_info['email']);
-      unset($friend->user_info['timezone']);
-      unset($friend->user_info['facebook_profile_utime']);
-      unset($friend->user_info['facebook_uid']);
+    foreach($profile->getFriends() as $friend) {
+      $friend = (object) $friend;
+      unset($friend->email);
+      unset($friend->timezone);
+      unset($friend->facebook_profile_utime);
+      unset($friend->work);
+      unset($friend->current_location);
+
+      if($user = User::findByFacebookUid($friend->facebook_uid)) {
+        $friend->user = $user->exportForApi();
+        $friend->user->following = UserFollowing::isUserFollowUser($this->_getUser(), $user);
+      }
+      else
+        $friend->user = null;
+
+
       $friends[] = $friend;
     }
 
