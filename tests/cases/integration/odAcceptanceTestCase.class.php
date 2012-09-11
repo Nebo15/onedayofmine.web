@@ -108,7 +108,10 @@ abstract class odAcceptanceTestCase extends WebTestCase
 
   protected function _login(User $user, $disable_sharing = true)
   {
-    $params = array('token' => $user->getFacebookAccessToken());
+    $params = array(
+      'token' => $user->getFacebookAccessToken(),
+      'device_token' => $this->generator->string(64)
+    );
     if($disable_sharing)
       $params['disable_sharing'] = 1;
     $res = $this->post('auth/login/', $params);
