@@ -43,7 +43,7 @@ abstract class BaseJsonController extends lmbController
       if(!$is_logged)
       {
         $this->response->write($this->_answerUnauthorized());
-        return null;
+        return $this->_answerUnauthorized();
       }
     }
 
