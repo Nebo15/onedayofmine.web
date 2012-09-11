@@ -26,13 +26,8 @@ class AuthController extends BaseJsonController
     if(!$facebook_access_token = $this->request->get('token'))
       return $this->_answerWithError('Token not given', null, 412);
 
-    if(!$this->request->get('device_token'))
-      return $this->_answerWithError('APNS token not given', null, 412);
-
     if(!$uid = $this->toolkit->getFacebook($facebook_access_token)->getUid($this->error_list))
-    {
       return $this->_answerWithError($this->error_list, null, 403);
-    }
 
     $is_new_user = false;
     if(!$user = User::findByFacebookUid($uid))
@@ -46,7 +41,10 @@ class AuthController extends BaseJsonController
       $user->save();
     }
 
-    $this->_onLoginBeforeExport($user, $is_new_user);
+    $this->toolkit->setUser($user);
+    if($is_new_user)
+      $this->toolkit->getNewsObserver()->onUserRegister($user);
+    $this->_processDeviceToken($user);
 
     $answer = $user->exportForApi();
     $answer->favourites_count = $this->_getUser()->getFavouriteDays()->count();
@@ -75,19 +73,22 @@ class AuthController extends BaseJsonController
     return $user;
   }
 
-  function _onLoginBeforeExport($user, $is_new_user)
+  function _processDeviceToken($user)
   {
     $device_token = $this->request->get('device_token');
-    $token = DeviceToken::findOneByToken($device_token);
-    if($token && $token->user_id != $user->id)
+    if(!$device_token)
+      return;
+
+    $token_obj = DeviceToken::findOneByToken($device_token);
+    if($token_obj && $token_obj->user_id != $user->id)
     {
-      $token->destroy();
-      $token = null;
+      $token_obj->destroy();
+      $token_obj = null;
     }
 
-    if(!$token)
+    if(!$token_obj)
     {
-      $token = new DeviceToken([
+      $token_obj = new DeviceToken([
         'user_id' => $user->id,
         'token' => $device_token,
         'logins_count' => 1
@@ -95,13 +96,10 @@ class AuthController extends BaseJsonController
     }
     else
     {
-      $token->logins_count = $token->logins_count++;
+      $token_obj->logins_count = $token_obj->logins_count++;
     }
-    $token->save();
 
-    $this->toolkit->setUser($user);
-    if($is_new_user)
-      $this->toolkit->getNewsObserver()->onUserRegister($user);
+    $token_obj->save();
   }
 
   function doGuestIsLoggedIn()

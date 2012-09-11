@@ -161,15 +161,6 @@ class AuthControllerTest extends odControllerTestCase
     $this->assertEqual('Token not given', $errors[0]);
   }
 
-  function testLogin_ApnsTokenNotGiven()
-  {
-    $this->cookies = array();
-    $errors = $this->post('login', ['token' => $this->main_user->getFacebookAccessToken()])->errors;
-    $this->assertResponse(412);
-    $this->assertEqual(1, count($errors));
-    $this->assertEqual('APNS token not given', $errors[0]);
-  }
-
   function testLogin_AddSecondDeviceToken()
   {
     $this->main_user->save();
