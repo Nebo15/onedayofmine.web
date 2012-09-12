@@ -69,6 +69,10 @@ class DaysController extends BaseJsonController
       $day->destroy();
       return $this->_answerUnauthorized('Token expired');
     }
+    catch(FacebookApiException $e)
+    {
+      lmbToolkit::instance()->getLog()->warn($e->getMessage());
+    }
 
     return $this->_answerOk($this->_exportDayWithSubentities($day));
   }
