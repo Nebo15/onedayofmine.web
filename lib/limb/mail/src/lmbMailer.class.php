@@ -28,44 +28,45 @@ class lmbMailer implements lmbBaseMailerInterface
   public $smtp_auth;
   public $smtp_user;
   public $smtp_password;
+  public $sender;
 
   function __construct($config = array())
   {
-  	$conf = lmbToolkit::instance()->getConf('mail');
-  	            
+    $conf = lmbToolkit::instance()->getConf('mail');
+
     $this->use_phpmail = $conf['use_phpmail'];
     $this->smtp_host = $conf['smtp_host'];
     $this->smtp_port = $conf['smtp_port'];
     $this->smtp_auth = $conf['smtp_auth'];
     $this->smtp_user = $conf['smtp_user'];
     $this->smtp_password = $conf['smtp_password'];
-      
+    $this->sender = $conf['sender'];
+
     $this->setConfig($config);
-      
+
     $php_mailer_version = lmb_env_get('PHPMAILER_VERSION_NAME', 'phpmailer-5.1');
-    include_once('limb/mail/lib/' .  $php_mailer_version . '/class.phpmailer.php');
+    include_once('limb/mail/lib/' . $php_mailer_version . '/class.phpmailer.php');
   }
 
   public function setConfig($config)
   {
-    foreach($config as $property_name => $property_value)
+    foreach ($config as $property_name => $property_value)
       $this->$property_name = $property_value;
   }
 
   protected function _createMailer()
-  {    
+  {
     $mailer = new PHPMailer(true);
     $mailer->set('LE', "\r\n");
 
-    if($this->use_phpmail)
+    if ($this->use_phpmail)
       return $mailer;
 
     $mailer->IsSMTP();
     $mailer->Host = $this->smtp_host;
     $mailer->Port = $this->smtp_port;
 
-    if($this->smtp_auth == true)
-    {
+    if ($this->smtp_auth == true) {
       $mailer->SMTPAuth = true;
       $mailer->Username = $this->smtp_user;
       $mailer->Password = $this->smtp_password;
@@ -83,7 +84,7 @@ class lmbMailer implements lmbBaseMailerInterface
     );
   }
 
-  function embedImage($path, $cid, $name="", $encoding="base64", $type="application/octet-stream")
+  function embedImage($path, $cid, $name = "", $encoding = "base64", $type = "application/octet-stream")
   {
     $this->images[] = array(
       'path' => $path,
@@ -94,100 +95,93 @@ class lmbMailer implements lmbBaseMailerInterface
     );
   }
 
-  function sendPlainMail($recipients, $sender, $subject, $body, $charset = 'utf-8')
+  function sendPlainMail($recipients, $subject, $body, $charset = 'utf-8')
   {
-  	try 
-	{
+    try {
       $mailer = $this->_createMailer();
 
       $mailer->IsHTML(false);
       $mailer->CharSet = $charset;
 
-      if(!empty($this->attachments))
+      if (!empty($this->attachments))
         $this->_addAttachments($mailer);
 
-      if(!empty($this->images))
+      if (!empty($this->images))
         $this->_addEmbeddedImages($mailer);
 
       $this->_addRepliesTo($mailer);
-    
+
       $recipients = $this->processMailRecipients($recipients);
 
-      foreach($recipients as $recipient)
+      foreach ($recipients as $recipient)
         $mailer->AddAddress($recipient['address'], $recipient['name']);
 
-      if(!$sender = $this->processMailAddressee($sender))
+      if (!$sender = $this->processMailAddressee($this->sender))
         return false;
 
       $mailer->From = $sender['address'];
       $mailer->FromName = $sender['name'];
       $mailer->Subject = $subject;
-      $mailer->Body    = $body;
+      $mailer->Body = $body;
 
       return $mailer->Send();
-	}
-    catch (phpmailerException $e)
-    {
+    } catch (phpmailerException $e) {
       throw new lmbException($e->getMessage());
     }
   }
 
-  function addReplyTo($replyTo) 
+  function addReplyTo($replyTo)
   {
     $this->replyTo[] = $replyTo;
   }
-  
-  function sendHtmlMail($recipients, $sender, $subject, $html, $text = null, $charset = 'utf-8')
+
+  function sendHtmlMail($recipients, $subject, $html, $text = null, $charset = 'utf-8')
   {
-  	try
-    {
-	  $mailer = $this->_createMailer();
-	
-	  $mailer->IsHTML(true);
-	  $mailer->CharSet = $charset;
-	
-	  $mailer->Body = $html;
-	
-	  if(!empty($this->attachments))
-	    $this->_addAttachments($mailer);
-	
-	  if(!empty($this->images))
-	    $this->_addEmbeddedImages($mailer);
-	    
-	  $this->_addRepliesTo($mailer);
-	
-	  if(!is_null($text))
-	    $mailer->AltBody = $text;
-	
-	  $recipients = $this->processMailRecipients($recipients);
-	
-	  foreach($recipients as $recipient)
-	    $mailer->AddAddress($recipient['address'], $recipient['name']);
-	
-	  if(!$sender = $this->processMailAddressee($sender))
-	    return false;
-	
-	  $mailer->From = $sender['address'];
-	  $mailer->FromName = $sender['name'];
-	  $mailer->Subject = $subject;
-    
+    try {
+      $mailer = $this->_createMailer();
+
+      $mailer->IsHTML(true);
+      $mailer->CharSet = $charset;
+
+      $mailer->Body = $html;
+
+      if (!empty($this->attachments))
+        $this->_addAttachments($mailer);
+
+      if (!empty($this->images))
+        $this->_addEmbeddedImages($mailer);
+
+      $this->_addRepliesTo($mailer);
+
+      if (!is_null($text))
+        $mailer->AltBody = $text;
+
+      $recipients = $this->processMailRecipients($recipients);
+
+      foreach ($recipients as $recipient)
+        $mailer->AddAddress($recipient['address'], $recipient['name']);
+
+      if (!$sender = $this->processMailAddressee($this->sender))
+        return false;
+
+      $mailer->From = $sender['address'];
+      $mailer->FromName = $sender['name'];
+      $mailer->Subject = $subject;
+
       return $mailer->Send();
-    }
-    catch (phpmailerException $e)
-    {
+    } catch (phpmailerException $e) {
       throw new lmbException($e->getMessage());
     }
   }
 
   function processMailRecipients($recipients)
   {
-    if(!is_array($recipients) || isset($recipients['name']))
-       $recipients = array($recipients);
+    if (!is_array($recipients) || isset($recipients['name']))
+      $recipients = array($recipients);
 
     $result = array();
-    foreach($recipients as $recipient)
-    {
-      if($recipient = $this->processMailAddressee($recipient))
+    foreach ($recipients as $recipient) {
+      if ($recipient = $this->processMailAddressee($recipient))
         $result[] = $recipient;
     }
 
@@ -196,14 +190,12 @@ class lmbMailer implements lmbBaseMailerInterface
 
   function processMailAddressee($adressee)
   {
-    if(is_array($adressee))
-    {
-      if(isset($adressee['address']) && isset($adressee['name']))
+    if (is_array($adressee)) {
+      if (isset($adressee['address']) && isset($adressee['name']))
         return $adressee;
 
       return null;
-    }
-    elseif(preg_match('~("|\')?([^"\']+)("|\')?\s*<([^>]+)>~u', $adressee, $matches))
+    } elseif (preg_match('~("|\')?([^"\']+)("|\')?\s*<([^>]+)>~u', $adressee, $matches))
       return array('address' => $matches[4], 'name' => $matches[2]);
     else
       return array('address' => $adressee, 'name' => '');
@@ -211,33 +203,32 @@ class lmbMailer implements lmbBaseMailerInterface
 
   protected function _addAttachments($mailer)
   {
-    foreach($this->attachments as $attachment)
+    foreach ($this->attachments as $attachment)
       $mailer->AddAttachment($attachment['path'],
-                             $attachment['name'],
-                             $attachment['encoding'],
-                             $attachment['type']);
+        $attachment['name'],
+        $attachment['encoding'],
+        $attachment['type']);
   }
 
   protected function _addEmbeddedImages($mailer)
   {
-    foreach ($this->images as $image)
-    {
+    foreach ($this->images as $image) {
       $mailer->AddEmbeddedImage($image['path'],
-                                $image['cid'],
-                                $image['name'],
-                                $image['encoding'],
-                                $image['type']);
+        $image['cid'],
+        $image['name'],
+        $image['encoding'],
+        $image['type']);
     }
   }
-  
-  protected function _addRepliesTo($mailer) 
+
+  protected function _addRepliesTo($mailer)
   {
     if (!$this->replyTo)
       return;
-    
+
     $recipients = $this->processMailRecipients($this->replyTo);
-    
-    foreach($recipients as $recipient)
+
+    foreach ($recipients as $recipient)
       $mailer->AddReplyTo($recipient['address'], $recipient['name']);
   }
 }

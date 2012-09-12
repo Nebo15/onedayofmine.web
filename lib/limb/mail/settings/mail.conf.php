@@ -1,7 +1,6 @@
 <?php
 
 $conf = array(
-
   'use_phpmail' 		=> lmb_env_get('LIMB_USE_PHPMAIL', false),
   'smtp_host' 			=> lmb_env_get('LIMB_SMTP_HOST', 'localhost'),
   'smtp_port' 			=> lmb_env_get('LIMB_SMTP_PORT', '25'),

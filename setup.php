@@ -16,6 +16,7 @@ if(file_exists(dirname(__FILE__) . '/setup.override.php'))
 lmb_package_require('cms');
 lmb_package_require('cache2');
 lmb_package_require('profile');
+lmb_package_require('mail');
 
 lmb_env_setor('APP_DIR', $app_dir);
 lmb_env_setor('LIBS_DIR', $libs_dir);
