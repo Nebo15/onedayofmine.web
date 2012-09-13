@@ -79,6 +79,11 @@ class TwitterProfileTest extends odAcceptanceTestCase
     $this->assertTrue($contents);
   }
 
+  function testShareInvitation()
+  {
+    (new TwitterProfile($this->main_user))->shareInvitation($this->additional_user->getTwitterUid());
+  }
+
   function testShareBeginDay()
   {
     $day = $this->generator->day();
@@ -182,7 +187,6 @@ class TwitterProfileTest extends odAcceptanceTestCase
     $day = $this->generator->day();
     $day->setTitle('shareDay - Day');
     $day->save();
-
 
     $tweet = (new TwitterProfile($this->main_user))->shareDay($day);
     if($this->assertTrue(count($tweet))) {

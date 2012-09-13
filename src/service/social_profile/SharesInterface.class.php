@@ -2,6 +2,11 @@
 interface SharesInterface
 {
   /**
+   * @param  string $social_user_id
+   * @return int post_id
+   */
+  function shareInvitation($social_user_id);
+  /**
    * @param Day $day
    * @return int share_id
    */

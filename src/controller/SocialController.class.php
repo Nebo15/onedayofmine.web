@@ -33,6 +33,24 @@ class SocialController extends BaseJsonController
     return $this->_answerOk($friends);
   }
 
+  function doFacebookInvite()
+  {
+    if(!$this->request->isPost())
+      return $this->_answerNotPost();
+
+    $uid = $this->request->getPost('uid');
+    if(!$uid)
+      return $this->_answerWithError('You need to specify facebook user uid');
+
+    if($user = User::findByFacebookUid($uid))
+      return $this->_answerOk('User is already registered');
+
+    $profile = new FacebookProfile($this->_getUser());
+    $profile->shareInvitation($uid);
+
+    return $this->_answerOk();
+  }
+
   function doTwitterConnect()
   {
     if(!$this->request->isPost())
@@ -79,7 +97,7 @@ class SocialController extends BaseJsonController
     $text =<<<EOD
 Hello!
 
-Your friend %name% wants you to become part of One Day of Mine community, where you can find out how another people live their days and share same information about you.";
+Your friend %name% wants you to become part of One Day of Mine community, where you can find out how another people live their days and share same information about you.
 EOD;
 
     $email = $this->request->get('email');

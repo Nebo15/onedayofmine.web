@@ -74,11 +74,15 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
   public function getFriends()
   {
     $fields = implode(',', self::_getUserFacebookFieldsMap());
+    $fql_result = $this->provider->makeQuery("SELECT {$fields} FROM user WHERE is_app_user AND uid IN (SELECT uid2 FROM friend WHERE uid1 = me())");
     $friends = [];
-    foreach($this->provider->makeQuery("SELECT {$fields} FROM user WHERE is_app_user AND uid IN (SELECT uid2 FROM friend WHERE uid1 = me())") as $raw_info)
-    {
-      $friends[] = $this->_mapFacebookInfo($raw_info);
-    }
+
+    if($fql_result)
+      foreach($fql_result as $raw_info)
+      {
+        $friends[] = $this->_mapFacebookInfo($raw_info);
+      }
+
     return $friends;
   }
 
@@ -123,6 +127,16 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
   public function getPictureContents($url)
   {
     return $this->getProvider()->downloadImage($url);
+  }
+
+  public function shareInvitation($facebook_user_id)
+  {
+    return $this->provider->api("/{$facebook_user_id}/feed", "post", array(
+      'name'        => 'One Day of Mine invitation',
+      // 'picture'     => count($day->getMoments()) ? lmbToolkit::instance()->getStaticUrl($day->getImage()) : '',
+      'link'        => lmbToolkit::instance()->getSiteUrl(),
+      'description' => "Hi, come and check out my photos in One Day of Mine, where people share days of their lifes.",
+    ))['id'];
   }
 
   public function shareDayBegin(Day $day)
