@@ -49,6 +49,7 @@ class User extends BaseModel
       'created_news'     => array ('field' => 'sender_id', 'class' => 'News'),
       'day_likes'        => array ('field' => 'user_id', 'class' => 'DayLike'),
       'moment_likes'     => array ('field' => 'user_id', 'class' => 'MomentLike'),
+      'device_tokens'      => array ('field' => 'user_id', 'class' => 'DeviceToken'),
     );
     $this->_has_many_to_many = array(
       'favourite_days' => array(

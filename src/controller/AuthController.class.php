@@ -21,17 +21,19 @@ class AuthController extends BaseJsonController
   function doGuestLogin()
   {
     if(!$this->request->isPost())
-      return $this->_answerWithError('Use POST, Luke', null, 405);
+      return $this->_answerNotPost();
+
     if(!$facebook_access_token = $this->request->get('token'))
       return $this->_answerWithError('Token not given', null, 412);
 
     if(!$uid = $this->toolkit->getFacebook($facebook_access_token)->getUid($this->error_list))
       return $this->_answerWithError($this->error_list, null, 403);
 
-    $new_user = false;
-    if(!$user = User::findByFacebookUid($uid)) {
+    $is_new_user = false;
+    if(!$user = User::findByFacebookUid($uid))
+    {
       $user = $this->_register($facebook_access_token);
-      $new_user = true;
+      $is_new_user = true;
     }
     else
     {
@@ -40,9 +42,9 @@ class AuthController extends BaseJsonController
     }
 
     $this->toolkit->setUser($user);
-
-    if($new_user)
+    if($is_new_user)
       $this->toolkit->getNewsObserver()->onUserRegister($user);
+    $this->_processDeviceToken($user);
 
     $answer = $user->exportForApi();
     $answer->favourites_count = $this->_getUser()->getFavouriteDays()->count();
@@ -71,6 +73,35 @@ class AuthController extends BaseJsonController
     return $user;
   }
 
+  function _processDeviceToken($user)
+  {
+    $device_token = $this->request->get('device_token');
+    if(!$device_token)
+      return;
+
+    $token_obj = DeviceToken::findOneByToken($device_token);
+    if($token_obj && $token_obj->user_id != $user->id)
+    {
+      $token_obj->destroy();
+      $token_obj = null;
+    }
+
+    if(!$token_obj)
+    {
+      $token_obj = new DeviceToken([
+        'user_id' => $user->id,
+        'token' => $device_token,
+        'logins_count' => 1
+      ]);
+    }
+    else
+    {
+      $token_obj->logins_count = $token_obj->logins_count++;
+    }
+
+    $token_obj->save();
+  }
+
   function doGuestIsLoggedIn()
   {
     if(!$this->request->get('token'))
@@ -79,9 +110,20 @@ class AuthController extends BaseJsonController
     return $this->_answerOk($this->_isLoggedUser());
   }
 
-  function doGuestLogout()
+  function doUserLogout()
   {
-    if($this->session->valid()) $this->session->reset();
+    if($this->session->valid())
+      $this->session->reset();
+
+    $this->toolkit->resetUser();
+
+    if(!$device_token = $this->request->get('device_token'))
+      return $this->_answerWithError('APNS token not given', null, 412);
+
+    $token_obj = DeviceToken::findOneByToken($device_token);
+    if($token_obj)
+      $token_obj->destroy();
+
     return $this->_answerOk();
   }
 }

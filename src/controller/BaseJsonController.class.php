@@ -43,7 +43,7 @@ abstract class BaseJsonController extends lmbController
       if(!$is_logged)
       {
         $this->response->write($this->_answerUnauthorized());
-        return null;
+        return $this->_answerUnauthorized();
       }
     }
 
@@ -118,7 +118,7 @@ abstract class BaseJsonController extends lmbController
       if(!$this->request->get($property))
         $this->error_list->addError("Property '$property' not found in request");
     }
-    return $this->error_list->export();
+    return $this->error_list->getReadable();
   }
 
   protected function _importSaveAndAnswer($item, array $properties, array $raw_properties = array())

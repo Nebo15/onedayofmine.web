@@ -63,4 +63,29 @@ class SocialController extends BaseJsonController
     else
       return $this->_answerWithError($this->error_list->export());
   }
+
+  function doUserEmail()
+  {
+    if('invite' == $this->request->get('id'))
+      return $this->_doEmailInvite();
+  }
+
+  protected function _doEmailInvite()
+  {
+    $errors = $this->_checkPropertiesInRequest(['email', 'name']);
+    if(count($errors))
+      return $this->_answerWithError($errors);
+
+    $text =<<<EOD
+Hello!
+
+Your friend %name% wants you to become part of One Day of Mine community, where you can find out how another people live their days and share same information about you.";
+EOD;
+
+    $email = $this->request->get('email');
+    $text = str_replace('%name%', $this->request->get('name'), $text);
+
+    $this->toolkit->getMailer()->sendPlainMail($email, 'Invitation to One Day of Mine', $text);
+    return $this->_answerOk();
+  }
 }

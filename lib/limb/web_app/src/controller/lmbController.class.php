@@ -84,7 +84,7 @@ class lmbController
   protected $view;
   /**
    *
-   * @var array
+   * @var lmbErrorList
    */
   protected $error_list;
   /**
