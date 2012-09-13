@@ -7,7 +7,7 @@ lmb_require('src/model/MomentComment.class.php');
 /**
  * News creator.
  */
-class odNewsObserver
+class odNewsService
 {
   /*
    * Messages text description.
