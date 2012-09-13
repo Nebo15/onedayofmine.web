@@ -4,7 +4,7 @@ lmb_require('src/service/social_provider/odFacebook.class.php');
 lmb_require('src/service/social_provider/odTwitter.class.php');
 lmb_require('src/service/social_profile/FacebookProfile.class.php');
 lmb_require('src/service/social_profile/TwitterProfile.class.php');
-lmb_require('src/service/odNewsObserver.class.php');
+lmb_require('src/service/odNewsService.class.php');
 lmb_require('src/service/ImageHelper.class.php');
 lmb_require('src/service/odPostingService.class.php');
 lmb_require('src/service/odExportHelper.class.php');
@@ -79,14 +79,14 @@ class odTools extends lmbAbstractTools
   }
 
   /**
-   * @return odNewsObserver
+   * @return odNewsService
    */
   function getNewsObserver()
   {
     static $news_observer;
 
     if(!$news_observer)
-      $news_observer = new odNewsObserver($this->getUser());
+      $news_observer = new odNewsService($this->getUser());
 
     return $news_observer;
   }

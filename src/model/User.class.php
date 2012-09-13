@@ -12,7 +12,6 @@ lmb_require('limb/validation/src/rule/lmbValidValueRule.class.php');
  * @method void setFacebookAccessToken(string $facebook_access_token)
  * @method string getTwitterUid()
  * @method string getTwitterAccessToken()
- * @method UserSettings getSettings()
  * @method void
  */
 class User extends BaseModel
@@ -80,7 +79,6 @@ class User extends BaseModel
   {
     $validator = new lmbValidator();
     $validator->addRequiredRule('name');
-//    $validator->addRequiredRule('email');
     $validator->addRequiredRule('facebook_uid');
     $validator->addRequiredRule('facebook_access_token');
     $validator->addRequiredRule('facebook_profile_utime');
