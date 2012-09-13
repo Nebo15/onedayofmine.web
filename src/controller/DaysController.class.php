@@ -100,9 +100,6 @@ class DaysController extends BaseJsonController
 
   function doCurrent()
   {
-    if(!$this->request->isPost())
-      return $this->_answerWithError('Not a POST request', null, 405);
-
     if(!$day = $this->_getUser()->getCurrentDay())
       return $this->_answerNotFound('Current day not set');
 
