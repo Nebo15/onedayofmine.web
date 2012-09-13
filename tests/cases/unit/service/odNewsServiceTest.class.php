@@ -1,6 +1,6 @@
 <?php
 lmb_require('tests/cases/unit/odUnitTestCase.class.php');
-lmb_require('src/service/odNewsObserver.class.php');
+lmb_require('src/service/odNewsService.class.php');
 
 Mock::generate('FacebookProfile', 'FacebookProfileMock');
 
@@ -620,6 +620,34 @@ class odNewsServiceTest extends odUnitTestCase
     $this->sender_observer->onDayFavourite($day);
 
     $this->assertNoNews($this->follower);
+  }
+
+  function testNotifications()
+  {
+    $notifications = lmbDBAL::selectQuery('device_notification')->fetch()->getFlatArray();
+    $this->assertEqual(0, count($notifications));
+
+    $device_token = $this->generator->deviceToken($this->follower);
+    $device_token->save();
+
+    $day = $this->generator->day($this->sender, false, 'testOnDay');
+    $day->save();
+    $this->sender_observer->onDay($day);
+
+    $notifications = lmbDBAL::selectQuery('device_notification')->fetch()->getFlatArray();
+    if($this->assertEqual(1, count($notifications)))
+    {
+      $notification = $notifications[0];
+      $this->assertEqual($device_token->id, $notification['device_token_id']);
+      $valid_text = odNewsService::getMessage(
+        odNewsService::MSG_DAY_CREATED,
+        [$this->sender->name, $day->title]
+      );
+      $this->assertEqual($valid_text, $notification['text']);
+      $this->assertEqual(null, $notification['icon']);
+      $this->assertEqual(null, $notification['sound']);
+      $this->assertEqual(0, $notification['is_sended']);
+    }
   }
 
   protected function assertNoNews(User $user)

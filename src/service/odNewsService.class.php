@@ -251,7 +251,7 @@ class odNewsService
    * Apply message with text $text to news $news. You can specify additional text $params.
    *
    * @param  News  $news
-   * @param  int   $type   One of {@see odNewsObserver::MSG_*} constants. Notice: type is text-string right now.
+   * @param  int   $type   One of {@see odNewsService::MSG_*} constants. Notice: type is text-string right now.
    * @param  array $params
    * @return void
    */
@@ -264,7 +264,7 @@ class odNewsService
   /**
    * Returns message based on it's $type and $params.
    *
-   * @param  string $type      One of {@see odNewsObserver::MSG_*} constants. Notice: type is text-string right now.
+   * @param  string $type      One of {@see odNewsService::MSG_*} constants. Notice: type is text-string right now.
    * @param  array  $params
    * @return string
    */
@@ -314,12 +314,37 @@ class odNewsService
 
   protected function send(News $news, $type, array $params = array())
   {
+    $text = self::getMessage($type, $params);
     $news->setSender($this->sender);
-
-    $news->setText(self::getMessage($type, $params));
+    $news->setText($text);
     $news->setRecipients($this->recipients);
     $news->save();
 
+    $this->_addNotifications($this->recipients, $text);
+
     $this->recipients = [];
+  }
+
+  protected function _addNotifications($recipients, $text)
+  {
+    $query = lmbDBAL::bulkInsertQuery('device_notification');
+
+    $is_empty = true;
+    foreach($recipients as $recipient)
+    {
+      foreach($recipient->getDeviceTokens() as $token)
+      {
+        $query->addSet([
+          'device_token_id' => $token->id,
+          'text' => $text,
+          'icon' => null,
+          'sound' => null,
+          'is_sended' => 0
+        ]);
+        $is_empty = false;
+      }
+    }
+    if(!$is_empty)
+      $query->execute();
   }
 }

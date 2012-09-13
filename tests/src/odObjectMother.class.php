@@ -173,6 +173,14 @@ class odObjectMother
     return $news;
   }
 
+  function deviceToken(User $user)
+  {
+    $device_token = new DeviceToken();
+    $device_token->setToken($this->string(64));
+    $device_token->setUser($user);
+    return $device_token;
+  }
+
   function string($length = 6)
   {
     $conso = array("b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "r", "s", "t", "v", "w", "x", "y", "z");
