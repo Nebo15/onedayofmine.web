@@ -31,6 +31,24 @@ class TasksTest extends odUnitTestCase
     $this->assertEqual(1, $loaded_notification->is_sended);
   }
 
+  function testApnsPush_OldNotification()
+  {
+    $this->_setUpApns();
+
+    $notification = $this->generator->deviceNotification();
+    $notification->setCtime(time() - 24 * 60 * 60 - 10);
+    $notification->save();
+
+    $apns = new ApnsMock();
+    $apns->expectNever('send');
+
+    $this->toolkit->setApns($apns);
+
+    task_od_apns_push();
+
+    $this->assertEqual(0, count(DeviceNotification::find()));
+  }
+
   function testApnsPush_InvalidDeviceToken()
   {
     $this->_setUpApns();

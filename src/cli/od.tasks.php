@@ -119,7 +119,8 @@ function task_od_apns_push()
 
   foreach(DeviceNotification::findNotSended() as $notification)
   {
-    if(!$notification->getDeviceToken())
+    $notification_age_in_secs = time() - $notification->ctime;
+    if(!$notification->getDeviceToken() || 24*60*60 < $notification_age_in_secs)
     {
       $notification->destroy();
       continue;
