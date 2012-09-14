@@ -173,12 +173,23 @@ class odObjectMother
     return $news;
   }
 
-  function deviceToken(User $user)
+  function deviceToken(User $user = null)
   {
     $device_token = new DeviceToken();
     $device_token->setToken($this->string(64));
-    $device_token->setUser($user);
+    $device_token->setUser($user ?: $this->user());
     return $device_token;
+  }
+
+  function deviceNotification(DeviceToken $token = null)
+  {
+    $notification = new DeviceNotification();
+    $notification->setDeviceToken($token ?: $this->deviceToken());
+    $notification->text = $this->string(32);
+    $notification->icon = $this->integer(1);
+    $notification->sound = $this->string();
+    $notification->is_sended = 0;
+    return $notification;
   }
 
   function string($length = 6)

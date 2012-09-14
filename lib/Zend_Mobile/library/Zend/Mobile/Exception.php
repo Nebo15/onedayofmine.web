@@ -19,9 +19,6 @@
  * @version    $Id$
  */
 
-/** Zend_Exception */
-require_once 'Zend/Exception.php';
-
 /**
  * @category   Zend
  * @package    Zend_Mobile
@@ -29,5 +26,5 @@ require_once 'Zend/Exception.php';
  * @license    http://framework.zend.com/license/new-bsd     New BSD License
  * @version    $Id$
  */
-class Zend_Mobile_Exception extends Zend_Exception
+class Zend_Mobile_Exception extends lmbException
 {}

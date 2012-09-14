@@ -79,11 +79,6 @@ function task_od_amazon_s3_upload()
       foreach($responses as $response)
         if(!$response->isOk())
           throw new lmbException('Error on file uploading: '.$response->body->Message);
-
-//    foreach ($chunk as $file)
-//    {
-//      lmbFs::rm($file);
-//    }
   }
 }
 
@@ -97,5 +92,88 @@ function task_od_close_old_days()
     $user->setCurrentDayId(null);
     $user->save();
     echo "Removed current day fo user #".$user->id.PHP_EOL;
+  }
+}
+
+function task_od_apns_feedback()
+{
+  $apns = lmbToolkit::instance()->getApns();
+
+  od_apns_connect($apns, 10);
+
+  $tokens = $apns->feedback();
+  while(list($token, $time) = each($tokens))
+  {
+    echo $time . "\t" . $token . PHP_EOL;
+  }
+  $apns->close();
+}
+
+function task_od_apns_push()
+{
+  $apns = lmbToolkit::instance()->getApns();
+
+  taskman_msg("Try to connect to APNS...");
+  od_apns_connect($apns, 10);
+  taskman_msg("DONE".PHP_EOL);
+
+  foreach(DeviceNotification::findNotSended() as $notification)
+  {
+    if(!$notification->getDeviceToken())
+    {
+      $notification->destroy();
+      continue;
+    }
+
+    $message = new Zend_Mobile_Push_Message_Apns();
+    $message->setAlert($notification->text);
+    $message->setBadge($notification->icon ?: 1);
+    $message->setSound($notification->sound ?: 'default');
+    $message->setId($notification->id);
+    $message->setToken($notification->getDeviceToken()->token);
+
+    try
+    {
+      $apns->send($message);
+      $notification->setIsSended(1);
+      $notification->save();
+    }
+    catch (Zend_Mobile_Push_Exception_InvalidToken $e)
+    {
+      $notification->getDeviceToken()->destroy();
+    }
+    catch (lmbException $e)
+    {
+      lmbToolkit::instance()->getLog()->logException($e);
+      continue;
+    }
+
+    $apns->close();
+  }
+}
+
+function od_apns_connect($apns, $attempts)
+{
+  taskman_msg($attempts." ");
+  if(!$attempts)
+  {
+    taskman_sysmsg("Can't connect");
+    exit(1);
+  }
+
+  try
+  {
+    $apns->connect(Zend_Mobile_Push_Apns::SERVER_SANDBOX_URI);
+  }
+  catch (Zend_Mobile_Push_Exception_ServerUnavailable $e)
+  {
+    sleep(10);
+    od_apns_connect($apns, $attempts-1);
+    exit(1);
+  }
+  catch (Zend_Mobile_Push_Exception $e)
+  {
+    taskman_sysmsg('APNS Connection Error:' . $e->getMessage());
+    exit(1);
   }
 }

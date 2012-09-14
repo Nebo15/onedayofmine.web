@@ -34,6 +34,11 @@ class odTools extends lmbAbstractTools
 
   protected $facebook_profiles = array();
 
+  /**
+   * @var Zend_Mobile_Push_Apns
+   */
+  protected $apns;
+
   function setUser($user)
   {
     $this->user = $user;
@@ -278,5 +283,24 @@ class odTools extends lmbAbstractTools
     $class_name = 'Amazon'.$name;
     CFCredentials::set(array('@default' => lmbToolkit::instance()->getConf('amazon')['options']));
     return new $class_name;
+  }
+
+  function setApns(Zend_Mobile_Push_Apns $apns)
+  {
+    $this->apns = $apns;
+  }
+
+  function getApns()
+  {
+    if(!$this->apns)
+    {
+      set_include_path(implode(PATH_SEPARATOR,
+        array('lib/Zend_Mobile/library', get_include_path())
+      ));
+      lmb_require('Zend_Mobile/library/Zend/Mobile/Push/Apns.php');
+      lmb_require('Zend_Mobile/library/Zend/Mobile/Push/Message/Apns.php');
+      $this->apns = new Zend_Mobile_Push_Apns();
+    }
+    return $this->apns;
   }
 }
