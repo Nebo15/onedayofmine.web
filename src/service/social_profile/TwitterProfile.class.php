@@ -180,6 +180,8 @@ class TwitterProfile implements SocialServicesProfileInterface, SharesInterface
     ));
   }
 
+  public function shareInvitation($twitter_user_id) {}
+
   public function shareDayBegin(Day $day)
   {
     $day_url = lmbToolkit::instance()->getPageUrl($day);

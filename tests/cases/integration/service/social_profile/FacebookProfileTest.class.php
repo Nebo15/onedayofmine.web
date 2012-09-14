@@ -70,6 +70,12 @@ class FacebookProfileTest extends odAcceptanceTestCase
     $this->assertTrue($contents);
   }
 
+  function testShareInvitation()
+  {
+    $facebook_id = (new FacebookProfileForTests($this->main_user))->shareInvitation($this->additional_user->getFacebookUid());
+    $this->assertTrue($facebook_id);
+  }
+
   function testShareBeginDay()
   {
     $day = $this->generator->day();

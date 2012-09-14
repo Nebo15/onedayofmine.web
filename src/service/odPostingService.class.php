@@ -40,6 +40,8 @@ class odPostingService implements SharesInterface
     return $result;
   }
 
+  public function shareInvitation($social_user_id){}
+
   public function shareDayBegin(Day $day)
   {
     $result = $this->share('shareDayBegin', func_get_args());
