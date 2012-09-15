@@ -29,8 +29,13 @@ class DaysController extends BaseJsonController
   function _item($id)
   {
     $day = Day::findById($id);
-    if($day && !$day->getIsDeleted())
-      return $this->toolkit->getExportHelper()->exportFullDay($day);
+    if(!$day || $day->getIsDeleted())
+      return null;
+
+    $day->views_count = $day->views_count + 1;
+    $day->save();
+
+    return $this->toolkit->getExportHelper()->exportFullDay($day);
   }
 
   function doStart()

@@ -48,6 +48,7 @@ class Day extends BaseModel
     $export->location = $this->getLocation();
     $export->final_description = $this->getFinalDescription();
     $export->type = $this->getType();
+    $export->views_count = $this->views_count;
     $export->ctime = $this->getCreateTime();
     $export->utime = $this->getUpdateTime();
 

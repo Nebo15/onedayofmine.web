@@ -40,6 +40,7 @@ class DaysGuestControllerTest extends odControllerTestCase
       $this->assertEqual($day->getComments()->at(0)->getId(), $loaded_day->comments[0]->id);
       $this->assertEqual($day->getMoments()->at(0)->getComments()->count(), $loaded_day->moments[0]->comments_count);
       $this->assertEqual($day->getMoments()->count(), count($loaded_day->moments));
+      $this->assertEqual(1, $loaded_day->views_count);
     }
   }
 
@@ -78,9 +79,11 @@ class DaysGuestControllerTest extends odControllerTestCase
     $this->assertEqual($day1->getId(), $loaded_days->$day1_id->id);
     $this->assertEqual($day1->getUserId(), $loaded_days->$day1_id->user->id);
     $this->assertEqual($day1->getMoments()->at(0)->getId(), $loaded_days->$day1_id->moments[0]->id);
+    $this->assertEqual(1, $loaded_days->$day1_id->views_count);
     $this->assertEqual($day2->getId(), $loaded_days->$day2_id->id);
     $this->assertEqual($day2->getUserId(), $loaded_days->$day2_id->user->id);
     $this->assertEqual($day2->getMoments()->at(0)->getId(), $loaded_days->$day2_id->moments[0]->id);
+    $this->assertEqual(1, $loaded_days->$day2_id->views_count);
     $this->assertEqual(null, $loaded_days->$not_exist_day_id);
   }
 
