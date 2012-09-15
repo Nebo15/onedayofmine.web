@@ -40,7 +40,7 @@ lmbToolkit :: merge(new lmbDbTools());
 if(extension_loaded('newrelic'))
 {
   newrelic_set_appname('ODOM-stage');
-  newrelic_name_transaction($_SERVER['REQUEST_URI']);
+  newrelic_name_transaction($_SERVER['REQUEST_URI'] ?: 'CLI');
   lmbErrorGuard :: registerFatalErrorHandler('newrelic_notice_error');
   lmbErrorGuard :: registerExceptionHandler('newrelic_notice_error');
 }
