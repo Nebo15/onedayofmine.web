@@ -36,3 +36,10 @@ lmb_require('src/toolkit/odTools.class.php');
 lmbToolkit :: merge(new odTools());
 lmb_require('limb/dbal/src/toolkit/lmbDbTools.class.php');
 lmbToolkit :: merge(new lmbDbTools());
+
+if(extension_loaded('newrelic'))
+{
+  newrelic_set_appname('ODOM-stage');
+  lmbErrorGuard :: registerFatalErrorHandler('newrelic_notice_error');
+  lmbErrorGuard :: registerExceptionHandler($this, 'handleException');
+}
