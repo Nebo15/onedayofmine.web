@@ -9,28 +9,13 @@ class DaysController extends BaseJsonController
 
   function doGuestItem()
   {
-    $id = $this->request->id;
-    if(false !== strpos($id, ';'))
-    {
-      $answer = array();
-      foreach(explode(';', $id) as $one_id)
-        $answer[$one_id] = $this->_item($one_id);
-      return $this->_answerOk($answer);
-    }
-    else
-    {
-      if(!$answer = $this->_item($id))
-        return $this->_answerModelNotFoundById('Day', $id);
+    if(!$day = Day::findById($this->request->id))
+      return $this->_answerModelNotFoundById('Day', $this->request->id);
 
-      return $this->_answerOk($answer);
-    }
-  }
+    if($day->getIsDeleted())
+      return $this->_answerModelNotFoundById('Day', $this->request->id);
 
-  function _item($id)
-  {
-    $day = Day::findById($id);
-    if($day && !$day->getIsDeleted())
-      return $this->toolkit->getExportHelper()->exportFullDay($day);
+    return $this->_answerOk($this->toolkit->getExportHelper()->exportDay($day));
   }
 
   function doStart()
@@ -44,12 +29,8 @@ class DaysController extends BaseJsonController
 
     $day = new Day();
     $day->setUser($this->_getUser());
-    // Required
     $day->setTitle($this->request->getPost('title'));
     $day->setType($this->request->getPost('type'));
-    // Optional
-    $day->setLocation($this->request->getPost('location') ?: $this->_getUser()->getLocation());
-    $day->setOccupation($this->request->getPost('occupation') ?: $this->_getUser()->getOccupation());
     $day->save();
 
     $user = $this->_getUser();
@@ -74,7 +55,7 @@ class DaysController extends BaseJsonController
       lmbToolkit::instance()->getLog()->warn($e->getMessage());
     }
 
-    return $this->_answerOk($this->toolkit->getExportHelper()->exportFullDay($day));
+    return $this->_answerOk($this->toolkit->getExportHelper()->exportDay($day));
   }
 
   function doUpdate()
@@ -95,7 +76,7 @@ class DaysController extends BaseJsonController
 
     $this->_importSaveAndAnswer($day, array('title', 'occupation', 'location', 'type'));
 
-    return $this->_answerOk($this->toolkit->getExportHelper()->exportFullDay($day));
+    return $this->_answerOk($this->toolkit->getExportHelper()->exportDay($day));
   }
 
   function doCurrent()
@@ -106,7 +87,7 @@ class DaysController extends BaseJsonController
     if(!$day = $this->_getUser()->getCurrentDay())
       return $this->_answerNotFound('Current day not set');
 
-    return $this->_answerOk($this->toolkit->getExportHelper()->exportFullDay($day));
+    return $this->_answerOk($this->toolkit->getExportHelper()->exportDay($day));
   }
 
   function doFinish()
@@ -137,7 +118,7 @@ class DaysController extends BaseJsonController
 
     $this->toolkit->getPostingService()->shareDayEnd($day);
 
-    return $this->_answerOk($this->toolkit->getExportHelper()->exportFullDay($day));
+    return $this->_answerOk($this->toolkit->getExportHelper()->exportDay($day));
   }
 
   function doMarkCurrent()
@@ -252,7 +233,7 @@ class DaysController extends BaseJsonController
 
     $days = Day::findByUsersIds($users_ids, $from, $to, $limit);
 
-    return $this->_answerOk($this->toolkit->getExportHelper()->exportDays($days));
+    return $this->_answerOk($this->toolkit->getExportHelper()->exportDayItems($days));
   }
 
   function doGuestNew()
@@ -260,7 +241,7 @@ class DaysController extends BaseJsonController
     list($from, $to, $limit) = $this->_getFromToLimitations();
     $days = Day::findNew($from, $to, $limit);
 
-    return $this->_answerOk($this->toolkit->getExportHelper()->exportDays($days));
+    return $this->_answerOk($this->toolkit->getExportHelper()->exportDayItems($days));
   }
 
   function doGuestInteresting()
@@ -268,12 +249,7 @@ class DaysController extends BaseJsonController
     list($from, $to, $limit) = $this->_getFromToLimitations();
     $days_ratings = (new InterestCalculator())->getDaysRatings($from, $to, $limit);
 
-    $answer = array();
-    foreach ($days_ratings as $day_rating) {
-      $answer[] = $this->toolkit->getExportHelper()->exportDay($day_rating->getDay());
-    }
-
-    return $this->_answerOk($answer);
+    return $this->_answerOk($this->toolkit->getExportHelper()->exportDayInterestingItems($days_ratings));
   }
 
   function doFavourite()
@@ -281,7 +257,7 @@ class DaysController extends BaseJsonController
     list($from, $to, $limit) = $this->_getFromToLimitations();
     $days = $this->_getUser()->getFavouriteDaysWithLimitations($from, $to, $limit);
 
-    return $this->_answerOk($this->toolkit->getExportHelper()->exportDays($days));
+    return $this->_answerOk($this->toolkit->getExportHelper()->exportDayItems($days));
   }
 
   function doMarkFavourite()
@@ -319,14 +295,7 @@ class DaysController extends BaseJsonController
     list($from, $to, $limit) = $this->_getFromToLimitations();
     $days = $this->_getUser()->getDaysWithLimitations($from, $to, $limit, true);
 
-    $answer = array();
-    foreach ($days as $day) {
-      $export = $this->toolkit->getExportHelper()->exportDay($day);
-      $this->toolkit->getExportHelper()->attachIsDeleted($day, $export);
-      $answer[] = $export;
-    }
-
-    return $this->_answerOk($answer);
+    return $this->_answerOk($this->toolkit->getExportHelper()->exportDayItems_forOwner($day));
   }
 
   function doAddMoment()
@@ -356,7 +325,8 @@ class DaysController extends BaseJsonController
     $moment->attachImage($image_content);
     $moment->save();
 
-    if($this->request->get('time')) {
+    if($this->request->get('time'))
+    {
       list($time, $timezone) = Moment::isoToStamp($this->request->get('time'));
       $moment->setTime($time);
       $moment->setTimezone($timezone);
@@ -408,16 +378,16 @@ class DaysController extends BaseJsonController
     if(!Day::findById($this->request->id))
       return $this->_answerModelNotFoundById('Day', $this->request->id);
 
-    $item = new Complaint();
-    $item->setDayId($this->request->get('day_id'));
-    $item->setText($this->request->get('text'));
+    $complaint = new Complaint();
+    $complaint->setDayId($this->request->get('day_id'));
+    $complaint->setText($this->request->get('text'));
 
-    $item->validate($this->error_list);
+    $complaint->validate($this->error_list);
     if($this->error_list->isValid())
     {
-      $item->saveSkipValidation();
-      $res = $item->exportForApi();
-      return $this->_answerOk($res);
+      $complaint->saveSkipValidation();
+
+      return $this->_answerOk($this->toolkit->getExportHelper()->exportComplaint($complaint));
     }
     else
     {
@@ -436,7 +406,7 @@ class DaysController extends BaseJsonController
     $query = $this->request->getFiltered('query', FILTER_SANITIZE_STRING);
     $days = Day::findByString($query, $from, $to, $limit);
 
-    return $this->_answerOk($this->toolkit->getExportHelper()->exportDays($days));
+    return $this->_answerOk($this->toolkit->getExportHelper()->exportDayItems($days));
   }
 
   function doGuestComments()
@@ -446,14 +416,6 @@ class DaysController extends BaseJsonController
 
     list($from, $to, $limit) = $this->_getFromToLimitations();
 
-    $answer = array();
-    foreach ($day->getCommentsWithLimitation($from, $to, $limit) as $comment)
-    {
-      $export = $comment->exportForApi();
-      $export->user = $comment->getUser()->exportForApi();
-      $answer[] = $export;
-    }
-
-    return $this->_answerOk($answer);
+    return $this->_answerOk($this->toolkit->getExportHelper()->exportDayCommentItems($day->getCommentsWithLimitation($from, $to, $limit)));
   }
 }

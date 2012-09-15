@@ -103,9 +103,6 @@ class User extends BaseModel
     $result->birthday = $this->birthday;
     $result->occupation = $this->occupation;
     $result->location = $this->location;
-    $result->followers_count = $this->getFollowers()->count();
-    $result->following_count = $this->getFollowing()->count();
-    $result->days_count = $this->getDays()->count();
     return $result;
   }
 

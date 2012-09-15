@@ -1,142 +1,288 @@
 <?php
 class odExportHelper
 {
+  ############### Day ###############
   function exportDay(Day $day)
   {
+    $exported = $this->exportDayItem($day);
+
+    $exported->moments  = $this->exportMomentItems($day->getMoments());
+
+    $comments = $day->getComments();
+    $comments->paginate(0, lmbToolkit::instance()->getConf('common')->default_comments_count);
+    $exported->comments = $this->exportDayCommentItems($comments);
+
+    return $exported;
+  }
+
+  function exportDayItem(Day $day)
+  {
+    $exported = $this->exportDaySubentity($day);
+
+    if($current_user = lmbToolkit::instance()->getUser()) {
+      $exported->is_favourite = DayFavourite::isFavourited($current_user, $day);
+
+      if($current_user->getId() == $day->getUser()->getId())
+        $exported->is_deleted = $day->getIsDeleted();
+    }
+
+    $exported->likes_count    = $day->getLikes()->count();
+    $exported->comments_count = $day->getComments()->count();
+
+    return $exported;
+  }
+
+  function exportDaySubentity(Day $day)
+  {
     $exported = $day->exportForApi();
-    $this->attachUser($day, $exported);
-    $this->attachIsFavourited($day, $exported);
-    $this->attachLikesCount($day, $exported);
-    $this->attachCommentsCount($day, $exported);
+
+    $this->attachUserSubentityToExport($day->getUser(), $exported);
+
     return $exported;
   }
 
-  function exportFullDay(Day $day)
+  function exportDayItems(lmbCollectionInterface $days)
   {
-    $exported = $this->exportDay($day);
-    $this->attachComments($day, $exported);
-    $this->attachMoments($day, $exported);
-    return $exported;
-  }
-
-  function exportDays(lmbCollectionInterface $days)
-  {
-    $exported = array();
+    $exported = [];
     foreach ($days as $day) {
-      $exported[] = $this->exportDay($day);
+      $exported[] = $this->exportDayItem($day);
     }
     return $exported;
   }
 
-  function exportMoment(Moment $moment)
+  ############### > Interesting ###############
+  function exportDayInterestingItem(DayInterestRecord $day_rating)
   {
-    $exported = $moment->exportForApi();
-    $this->attachCommentsCount($moment, $exported);
-    $this->attachLikesCount($moment, $exported);
+    return $this->exportDayItem($day_rating->getDay());
+  }
+
+  function exportDayInterestingItems($day_ratings)
+  {
+    $exported = [];
+    foreach ($day_ratings as $day_rating) {
+      $exported[] = $this->exportDayInterestingItem($day_rating);
+    }
     return $exported;
   }
 
-  function exportMoments(lmbCollectionInterface $moments)
+  ############### User ###############
+  function exportUser(User $user)
+  {
+    $exported = $user->exportForApi();
+
+    $exported->days_count       = $user->getDays()->count();
+    $exported->favourites_count = $user->getFavouriteDays()->count();
+    $exported->followers_count  = $user->getFollowers()->count();
+    $exported->following_count  = $user->getFollowing()->count();
+
+    if($current_user = lmbToolkit::instance()->getUser()) {
+      if($current_user->getId() == $user->getId())
+        $exported->email        = $user->getEmail();
+      else
+        $exported->following = UserFollowing::isUserFollowUser($user, $current_user);
+    }
+
+    return $exported;
+  }
+
+  function exportUserItem(User $user)
+  {
+    $exported = $this->exportUserSubentity($user);
+
+    if(lmbToolkit::instance()->getUser())
+      $exported->following = UserFollowing::isUserFollowUser($user, lmbToolkit::instance()->getUser());
+
+    return $exported;
+  }
+
+  function exportUserSubentity(User $user)
+  {
+    $exported = $user->exportForApi();
+
+    unset($exported->birthday);
+
+    return $exported;
+  }
+
+  function exportUserItems(lmbCollectionInterface $users)
+  {
+    $following = [];
+    if($me = lmbToolkit::instance()->getUser())
+      $following = UserFollowing::isUsersFollowUser($users, $me);
+
+    $exported = [];
+    foreach($users as $followed) {
+      $export = $this->exportUserItem($followed);
+
+      if(count($following))
+        $export->following = $following[$followed->getId()];
+
+      $exported[] = $export;
+    }
+
+    return $exported;
+  }
+
+  function attachUserSubentityToExport(User $user, stdClass $exported)
+  {
+    $exported->user = $this->exportUserItem($user);
+    unset($exported->user_id);
+  }
+
+  ############### Moment ###############
+  function exportMoment(Moment $moment)
+  {
+    return $this->exportMomentItem($moment);
+  }
+
+  function exportMomentItem(Moment $moment)
+  {
+    return $this->exportMomentSubentity($moment);
+  }
+
+  function exportMomentSubentity(Moment $moment)
+  {
+    $exported = $moment->exportForApi();
+
+    unset($exported->day_id);
+
+    $exported->likes_count    = $moment->getLikes()->count();
+    $exported->comments_count = $moment->getComments()->count();
+
+    return $exported;
+  }
+
+  function exportMomentItems(lmbCollectionInterface $moments)
   {
     $exported = [];
     foreach($moments as $moment) {
-      $moment_exported = $this->exportMoment($moment);
-      unset($moment_exported->day_id);
-      $exported[] = $moment_exported;
+      $exported[] = $this->exportMomentItem($moment);
     }
     return $exported;
   }
 
-  function attachMoments(Day $day, stdClass $exported)
+  ############### Comments ###############
+  protected function exportComment(BaseComment $comment)
   {
-    $exported->moments = $this->exportMoments($day->getMoments());
+    $exported = $comment->exportForApi();
+
+    $this->attachUserSubentityToExport($comment->getUser(), $exported);
+
+    return $exported;
   }
 
+  ################ > DayComments ###############
   function exportDayComment(DayComment $comment)
   {
-    $exported = $comment->exportForApi();
-    $exported->user = $comment->getUser()->exportForApi();
+    return $this->exportDayCommentItem($comment);
+  }
+
+  function exportDayCommentItem(DayComment $comment)
+  {
+    return $this->exportDayCommentSubentity($comment);
+  }
+
+  function exportDayCommentSubentity(DayComment $comment)
+  {
+    $exported = $this->exportComment($comment);
+
     unset($exported->day_id);
-    unset($exported->user_id);
+
     return $exported;
   }
 
-  function exportDayComments(Day $day)
+  function exportDayCommentItems(lmbCollectionInterface $comments)
   {
-    $comments = $day->getComments();
     $exported = [];
     foreach ($comments as $comment) {
-      $exported[] = $this->exportDayComment($comment);
+      $exported[] = $this->exportDayCommentItem($comment);
     }
     return $exported;
   }
 
-  function attachComments(Day $day, stdClass $exported)
-  {
-    $comments = $day->getComments();
-    $comments->paginate(0, lmbToolkit::instance()->getConf('common')->default_comments_count);
-
-    $this->attachCommentsCount($day, $exported);
-
-    $exported->comments = $this->exportDayComments($day);
-  }
-
+  ################ > MomentComments ###############
   function exportMomentComment(MomentComment $comment)
   {
-    $exported = $comment->exportForApi();
-    $exported->user = $comment->getUser()->exportForApi();
+    return $this->exportMomentCommentItem($comment);
+  }
+
+  function exportMomentCommentItem(MomentComment $comment)
+  {
+    return $this->exportMomentCommentSubentity($comment);
+  }
+
+  function exportMomentCommentSubentity(MomentComment $comment)
+  {
+    $exported = $this->exportComment($comment);
+
     unset($exported->moment_id);
-    unset($exported->user_id);
+
     return $exported;
   }
 
-  function exportMomentComments(Moment $comment)
+  function exportMomentCommentItems(lmbCollectionInterface $comments)
   {
-    $comments = $day->getComments();
     $exported = [];
     foreach ($comments as $comment) {
-      $exported[] = $this->exportMomentComment($comment);
+      $exported[] = $this->exportMomentCommentItem($comment);
     }
     return $exported;
   }
 
-  function exportUser(User $user)
+  ############### News ###############
+  ################ > News ###############
+  function exportNewsItem(News $news)
   {
-    return $user->exportForApi();
+    $exported = $news->exportForApi();
+
+    if ($news->getSender())
+      $this->attachUserSubentityToExport($news->getSender(), $exported);
+
+    if($news->getDay())
+      $exported->day    = $this->exportDaySubentity($news->getDay());
+    elseif($news->getMoment()) {
+      $exported->day    = $this->exportDaySubentity($news->getMoment()->getDay());
+      $exported->moment = $this->exportMomentSubentity($news->getMoment());
+      unset($exported->moment->day_id);
+    }
+
+    unset($exported->day_id);
+    unset($exported->moment_id);
+    // unset($exported->day_comment_id);
+    // unset($exported->moment_comment_id);
+    // unset($exported->day_like_id);
+    // unset($exported->moment_like_id);
+
+    return $exported;
   }
 
-  function attachUser(BaseModel $userable, stdClass $exported)
+  function exportNewsItems($news)
   {
-    $exported->user = $userable->getUser()->exportForApi();
-    unset($exported->user_id);
+    $exported = [];
+    foreach ($news as $news_item) {
+      $exported[] = $this->exportNewsItem($news_item);
+    }
+    return $exported;
   }
 
-  function attachCommentsCount(BaseModel $commentable, stdClass $exported)
+  ################ > Activity ###############
+  function exportActivityItem(News $activity)
   {
-    $exported->comments_count = $commentable->getComments()->count();
+    return $activity->exportForApi();
   }
 
-  function attachLikesCount(BaseModel $likeable, stdClass $exported)
+  function exportActivityItems($activities)
   {
-    $exported->likes_count = $likeable->getLikes()->count();
+    $exported = [];
+    foreach ($activities as $activity) {
+      $exported[] = $this->exportActivityItem($activity);
+    }
+    return $exported;
   }
 
-  function attachIsFavourited(Day $day, stdClass $exported)
+  ############### Complain ###############
+  function exportComplaint(Complaint $complaint)
   {
-    if(!$user = lmbToolkit::instance()->getUser())
-      return null;
-
-    $exported->is_favourite = DayFavourite::isFavourited($user, $day);
-  }
-
-  function attachIsDeleted(BaseModel $day_or_moment, stdClass $exported)
-  {
-    if(!lmbToolkit::instance()->getUser())
-      return null;
-
-    if(lmbToolkit::instance()->getUser()->getId() != $day_or_moment->getUser()->getId())
-      return null;
-
-    $exported->is_deleted = $day_or_moment->getIsDeleted();
+    return $complaint->exportForApi();
   }
 }

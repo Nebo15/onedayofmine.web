@@ -148,14 +148,6 @@ class MomentsController extends BaseJsonController
 
     list($from, $to, $limit) = $this->_getFromToLimitations();
 
-    $answer = array();
-    foreach ($moment->getCommentsWithLimitation($from, $to, $limit) as $comment)
-    {
-      $export = $comment->exportForApi();
-      $export->user = $comment->getUser()->exportForApi();
-      $answer[] = $export;
-    }
-
-    return $this->_answerOk($answer);
+    return $this->_answerOk($this->toolkit->getExportHelper()->exportMomentCommentItems($moment->getCommentsWithLimitation($from, $to, $limit)));
   }
 }

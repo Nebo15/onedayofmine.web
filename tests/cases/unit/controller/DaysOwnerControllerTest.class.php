@@ -38,8 +38,6 @@ class DaysOwnerControllerTest extends odControllerTestCase
 
     $response = $this->post('start', array(
       'title' => $params->title,
-      'location' => $params->location,
-      'occupation' => $params->occupation,
       'type' => $params->type,
     ));
     if($this->assertResponse(200))
@@ -47,64 +45,6 @@ class DaysOwnerControllerTest extends odControllerTestCase
       if($this->assertProperty($response->result, 'user'))
         $this->assertValidUserJson($day->getUser(), $response->result->user);
       $this->assertEqual($day->title, $response->result->title);
-      $this->assertEqual($day->occupation, $response->result->occupation);
-      $this->assertEqual($day->location, $response->result->location);
-      $this->assertEqual($day->type, $response->result->type);
-      $this->assertEqual(0, $response->result->likes_count);
-    }
-  }
-
-  function testStart_withNoOccupation() {
-
-    $this->main_user->setOccupation('testStart_withNoOccupation - user');
-    $this->main_user->save();
-    lmbToolkit::instance()->setUser($this->main_user);
-
-    $day = $this->generator->day($this->main_user);
-    $params = $day->exportForApi();
-    $params->occupation = null;
-
-    $response = $this->post('start', array(
-      'title' => $params->title,
-      'location' => $params->location,
-      'occupation' => $params->occupation,
-      'type' => $params->type,
-    ));
-    if($this->assertResponse(200))
-    {
-      if($this->assertProperty($response->result, 'user'))
-        $this->assertValidUserJson($day->getUser(), $response->result->user);
-      $this->assertEqual($day->title, $response->result->title);
-      $this->assertEqual($this->main_user->occupation, $response->result->occupation);
-      $this->assertEqual($day->location, $response->result->location);
-      $this->assertEqual($day->type, $response->result->type);
-      $this->assertEqual(0, $response->result->likes_count);
-    }
-  }
-
-  function testStart_withNoLocation()
-  {
-    $this->main_user->setLocation('testStart_withNoLocation - user');
-    $this->main_user->save();
-    lmbToolkit::instance()->setUser($this->main_user);
-
-    $day = $this->generator->day($this->main_user);
-    $params = $day->exportForApi();
-    $params->location = null;
-
-    $response = $this->post('start', array(
-      'title' => $params->title,
-      'occupation' => $params->occupation,
-      'type' => $params->type,
-    ));
-
-    if($this->assertResponse(200))
-    {
-      if($this->assertProperty($response->result, 'user'))
-        $this->assertValidUserJson($day->getUser(), $response->result->user);
-      $this->assertEqual($day->title, $response->result->title);
-      $this->assertEqual($day->occupation, $response->result->occupation);
-      $this->assertEqual($this->main_user->location, $response->result->location);
       $this->assertEqual($day->type, $response->result->type);
       $this->assertEqual(0, $response->result->likes_count);
     }
@@ -122,8 +62,6 @@ class DaysOwnerControllerTest extends odControllerTestCase
 
     $this->post('start', array(
       'title' => $params->title,
-      'location' => $params->location,
-      'occupation' => $params->occupation,
       'type' => $params->type,
       'token' => 'wrong-token'
     ));
@@ -154,7 +92,7 @@ class DaysOwnerControllerTest extends odControllerTestCase
     if($this->assertResponse(200))
     {
       $this->assertEqual($day->getMoments()->at(0)->getId(), $res->id);
-      $this->assertEqual($day->getId(), $res->day_id);
+      $this->assertEqual($day->getId(), Moment::findOne()->getDay()->getId());
       $this->assertProperty($res, 'image_266');
       $this->assertProperty($res, 'image_532');
       $this->assertEqual(0, $res->likes_count);
@@ -178,7 +116,7 @@ class DaysOwnerControllerTest extends odControllerTestCase
     if($this->assertResponse(200))
     {
       $this->assertEqual($day->getMoments()->at(0)->getId(), $res->id);
-      $this->assertEqual($day->getId(), $res->day_id);
+      $this->assertEqual($day->getId(), Moment::findOne()->getDay()->getId());
 
       $moment = Moment::findOne();
       $this->assertEqual($moment->getLocationLatitude(), '50.5062');
@@ -203,7 +141,7 @@ class DaysOwnerControllerTest extends odControllerTestCase
     if($this->assertResponse(200))
     {
       $this->assertEqual($day->getMoments()->at(0)->getId(), $res->id);
-      $this->assertEqual($day->getId(), $res->day_id);
+      $this->assertEqual($day->getId(), Moment::findOne()->getDay()->getId());
       $this->assertEqual($res->time, Moment::stampToIso('1330600003', $this->main_user->getTimezone()));
     }
   }
@@ -247,8 +185,6 @@ class DaysOwnerControllerTest extends odControllerTestCase
     $response = $this->post('update',
       array(
         'title' => $title = $this->generator->string(),
-        'occupation' => $occupation = $this->generator->string(255),
-        'location' => $location = $this->generator->string(),
         'type' => $type = 'Working day',
         'cover_content' => base64_encode($this->generator->image())),
       $day->getId()
@@ -267,8 +203,6 @@ class DaysOwnerControllerTest extends odControllerTestCase
 
     $this->post('days/100500/update', array(
       'title' => $title = $this->generator->string(),
-      'occupation' => $occupation = $this->generator->string(),
-      'location' => $location = $this->generator->string(),
       'type' => $type = 'Working',
       'cover' => $this->generator->image(),
     ));
@@ -285,8 +219,6 @@ class DaysOwnerControllerTest extends odControllerTestCase
     $this->post('update',
       array(
         'title' => $title = $this->generator->string(),
-        'occupation' => $occupation = $this->generator->string(),
-        'location' => $location = $this->generator->string(),
         'type' => $type = 'Working',
         'cover' => $this->generator->image(),
       ),
@@ -313,9 +245,7 @@ class DaysOwnerControllerTest extends odControllerTestCase
       $loaded_day = $response->result;
       $this->assertEqual($day->getId(), $loaded_day->id);
       $this->assertEqual($day->getTitle(), $loaded_day->title);
-      $this->assertEqual($day->getOccupation(), $loaded_day->occupation);
       $this->assertEqual($day->getLikes()->count(), $loaded_day->likes_count);
-      $this->assertEqual($day->getCreateTime(), $loaded_day->ctime);
     }
   }
 
@@ -386,9 +316,7 @@ class DaysOwnerControllerTest extends odControllerTestCase
       $loaded_day = $response->result;
       $this->assertEqual($day->getId(), $loaded_day->id);
       $this->assertEqual($day->getTitle(), $loaded_day->title);
-      $this->assertEqual($day->getOccupation(), $loaded_day->occupation);
       $this->assertEqual($day->getLikes()->count(), $loaded_day->likes_count);
-      $this->assertEqual($day->getCreateTime(), $loaded_day->ctime);
 
       $db_day = Day::findOne();
       $this->assertProperty($loaded_day, 'final_description');
@@ -418,9 +346,7 @@ class DaysOwnerControllerTest extends odControllerTestCase
       $loaded_day = $response->result;
       $this->assertEqual($day->getId(), $loaded_day->id);
       $this->assertEqual($day->getTitle(), $loaded_day->title);
-      $this->assertEqual($day->getOccupation(), $loaded_day->occupation);
       $this->assertEqual($day->getLikes()->count(), $loaded_day->likes_count);
-      $this->assertEqual($day->getCreateTime(), $loaded_day->ctime);
     }
   }
 
@@ -443,9 +369,7 @@ class DaysOwnerControllerTest extends odControllerTestCase
       $loaded_day = $response->result;
       $this->assertEqual($day->getId(), $loaded_day->id);
       $this->assertEqual($day->getTitle(), $loaded_day->title);
-      $this->assertEqual($day->getOccupation(), $loaded_day->occupation);
       $this->assertEqual($day->getLikes()->count(), $loaded_day->likes_count);
-      $this->assertEqual($day->getCreateTime(), $loaded_day->ctime);
 
       $user = User::findById($this->main_user->getId());
       $this->assertEqual($user->getCurrentDay()->getId(), $day2->getId());
