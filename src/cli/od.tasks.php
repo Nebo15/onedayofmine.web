@@ -1,6 +1,9 @@
 <?php
 lmb_require(taskman_prop('PROJECT_DIR').'setup.php');
 
+if(extension_loaded('newrelic'))
+  newrelic_background_job(true);
+
 /**
  * @alias od_calc_interest
  */
