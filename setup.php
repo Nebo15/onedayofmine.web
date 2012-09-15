@@ -42,5 +42,11 @@ if(extension_loaded('newrelic'))
   newrelic_set_appname('ODOM-stage');
   newrelic_name_transaction(isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : 'CLI');
   lmbErrorGuard :: registerFatalErrorHandler('newrelic_notice_error');
-  lmbErrorGuard :: registerExceptionHandler('newrelic_notice_error');
+
+  function processException($e)
+  {
+    newrelic_notice_error($e->getOriginalMessage(), $e);
+  }
+
+  lmbErrorGuard :: registerExceptionHandler('processException');
 }
