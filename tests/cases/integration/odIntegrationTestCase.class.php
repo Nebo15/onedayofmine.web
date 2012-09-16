@@ -3,7 +3,7 @@ lmb_require('limb/tests_runner/lib/simpletest/web_tester.php');
 lmb_require('lib/DocCommentParser/*.class.php');
 lmb_require('facebook-proxy/src/Client.php');
 
-abstract class odAcceptanceTestCase extends WebTestCase
+abstract class odIntegrationTestCase extends WebTestCase
 {
   /**
    * @var OdObjectMother
@@ -187,9 +187,9 @@ abstract class odAcceptanceTestCase extends WebTestCase
   function assertResponse($responses, $message = '%s')
   {
     $responses = (is_array($responses) ? $responses : array($responses));
-    $code = $this->browser->getResponseCode();
+    $code = $this->getBrowser()->getResponseCode();
     $message = sprintf('%s', "Expecting response in [" .
-      implode(", ", $responses) . "] got [$code] in response:".($this->browser->getContent()));
+      implode(", ", $responses) . "] got [$code] in response:".($this->getBrowser()->getContent()));
     return $this->assertTrue(in_array($code, $responses), $message);
   }
 
@@ -210,5 +210,16 @@ abstract class odAcceptanceTestCase extends WebTestCase
       strlen($content),
       "Invalid image url '{$url}'"
     );
+  }
+
+  protected function assert404Url($url)
+  {
+    $r = new HttpRequest($url, HttpRequest::METH_GET);
+    try {
+      $r->send();
+      $this->assertEqual(404, $r->getResponseCode());
+    } catch (HttpException $ex) {
+      $this->fail($ex->getMessage());
+    }
   }
 }

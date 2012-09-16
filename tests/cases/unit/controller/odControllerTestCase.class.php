@@ -151,24 +151,4 @@ abstract class odControllerTestCase extends odUnitTestCase
       implode(", ", $responses) . "] got [$code] in response:".($this->last_response_raw));
     return $this->assertTrue(in_array($code, $responses), $message);
   }
-
-  protected function assertProperty($obj, $property, $message = "Property '%s' not found")
-  {
-    if(!is_object($obj))
-      return $this->fail("Expected a object but '".gettype($obj)."' given");
-    return $this->assertTrue(
-      property_exists($obj, $property),
-      sprintf($message, $property)
-    );
-  }
-
-  protected function assertValidImageUrl($url)
-  {
-    return true;
-
-    $images_conf = lmbToolkit::instance()->getConf('images');
-    $rel_path = str_replace(lmbToolkit::instance()->getConf('common')['static_host'], '', $url);
-    $abs_path = lmb_env_get('APP_DIR').'/'.$images_conf['save_path'].'/'.$rel_path;
-    return $this->assertTrue(file_exists($abs_path), "Invalid image url '{$url}'");
-  }
 }

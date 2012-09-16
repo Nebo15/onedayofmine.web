@@ -1,13 +1,13 @@
 <?php
-lmb_require('tests/cases/integration/odAcceptanceTestCase.class.php');
+lmb_require('tests/cases/integration/odIntegrationTestCase.class.php');
 lmb_require('src/model/base/BaseModel.class.php');
 lmb_require('src/model/traits/Imageable.trait.php');
 
-class ImageableTest extends odAcceptanceTestCase
+class ImageableIntegrationTest extends odIntegrationTestCase
 {
-  function testAttachImage_local()
+  function testAttachImage_s3()
   {
-    $model = new ImageableForTests();
+    $model = new ImageableForIntegrationTests();
     $model->save();
     $model->attachImage($this->generator->image());
 
@@ -15,18 +15,19 @@ class ImageableTest extends odAcceptanceTestCase
     $this->assertValidImageUrl($url);
   }
 
-  function testAttachImage_s3()
+  function testDestroy_s3()
   {
-    $model = new ImageableForTests();
+    $model = new ImageableForIntegrationTests();
     $model->save();
     $model->attachImage($this->generator->image());
+    $model->destroy();
 
     $url = lmbToolkit::instance()->getStaticUrl($model->getImage());
-    $this->assertValidImageUrl($url);
+    $this->assert404Url($url);
   }
 }
 
-class ImageableForTests extends BaseModel
+class ImageableForIntegrationTests extends BaseModel
 {
   use Imageable;
 

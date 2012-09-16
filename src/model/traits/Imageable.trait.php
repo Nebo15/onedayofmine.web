@@ -28,6 +28,42 @@ trait Imageable
      }
   }
 
+  protected function _onBeforeDestroy()
+  {
+    if(!$this->image_ext)
+      return;
+
+    $is_s3_enabled = lmbToolkit::instance()->getConcreteAmazonServiceConfig('S3')['enabled'];
+    if(!$is_s3_enabled)
+    {
+      foreach ($this->_getAllSizes() as $size)
+      {
+        if($size)
+          lmbFs::rm($this->_getSavePath($size));
+      }
+    }
+    else
+    {
+      $s3 = lmbToolkit::instance()->createAmazonService('S3');
+      $bucket = lmbToolkit::instance()->getConcreteAmazonServiceConfig('S3')['bucket'];
+
+      foreach ($this->_getAllSizes() as $size)
+      {
+        $s3->batch()->delete_object($bucket, $this->_getS3SavePath($size), array(
+          'acl' => AmazonS3::ACL_PUBLIC,
+          'https' => false
+        ));
+      }
+
+      $responses = $s3->batch()->send();
+
+      if(!$responses->areOK())
+        foreach($responses as $response)
+          if(!$response->isOk())
+            throw new lmbException('Error on file delete: '.$response->body->Message);
+    }
+  }
+
   protected function _sendImagesToS3()
   {
     $s3 = lmbToolkit::instance()->createAmazonService('S3');
