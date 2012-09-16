@@ -18,7 +18,7 @@ class MomentCommentsController extends BaseJsonController
     $comment->setText($this->request->get('text'));
     $comment->save();
 
-    return $this->_answerOk($comment);
+    return $this->_answerOk($this->toolkit->getExportHelper()->exportMomentComment($comment));
   }
 
   function doUserDelete()

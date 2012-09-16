@@ -14,14 +14,7 @@ class UsersController extends BaseJsonController
     if(!$user = User::findById($this->request->id))
       return $this->_answerModelNotFoundById('User', $this->request->id);
 
-    $exported = $this->toolkit->getExportHelper()->exportUser($user);
-
-    if($user->getId() != lmbToolkit::instance()->getUser()->getId()) {
-      $exported->following = UserFollowing::isUserFollowUser(lmbToolkit::instance()->getUser(), $user);
-      // $exported->is_follower = UserFollowing::isUserFollowUser($user, lmbToolkit::instance()->getUser());
-    }
-
-    return $this->_answerOk($exported);
+    return $this->_answerOk($this->toolkit->getExportHelper()->exportUser($user));
   }
 
   function doGuestDays()
@@ -29,7 +22,7 @@ class UsersController extends BaseJsonController
     if(!$user = User::findById($this->request->id))
       return $this->_answerModelNotFoundById('User', $this->request->id);
 
-    return $this->_answerOk($this->toolkit->getExportHelper()->exportDays($user->getDays()));
+    return $this->_answerOk($this->toolkit->getExportHelper()->exportDayItems($user->getDays()));
   }
 
   function doFollowers()
@@ -38,16 +31,8 @@ class UsersController extends BaseJsonController
       return $this->_answerModelNotFoundById('User', $this->request->id);
 
     $followers = $user->getFollowers();
-    $following = UserFollowing::isUserFollowUsers($user, $followers);
 
-    $response = array();
-    foreach($user->getFollowers() as $follower) {
-      $export = $follower->exportForApi();
-      $export->following = $following[$follower->getId()];
-      $response[] = $export;
-    }
-
-    return $this->_answerOk($response);
+    return $this->_answerOk($this->toolkit->getExportHelper()->exportUserItems($followers));
   }
 
   function doFollowing()
@@ -55,12 +40,9 @@ class UsersController extends BaseJsonController
     if(!$user = User::findById($this->request->id))
       return $this->_answerModelNotFoundById('User', $this->request->id);
 
-    $response = array();
-    foreach($user->getFollowing() as $followed) {
-      $response[] = $followed->exportForApi();
-    }
+    $followed_users = $user->getFollowing();
 
-    return $this->_answerOk($response);
+    return $this->_answerOk($this->toolkit->getExportHelper()->exportUserItems($followed_users));
   }
 
   function doFollow()
@@ -101,14 +83,7 @@ class UsersController extends BaseJsonController
     $query = $this->request->getFiltered('query', FILTER_SANITIZE_STRING);
     $users = User::findByString($query, $from, $to, $limit);
 
-    $response = array();
-    foreach($users as $user) {
-      $export = $user->exportForApi();
-      if($this->_getUser())
-        $export->is_follower = UserFollowing::isUserFollowUser($user, $this->_getUser());
-      $response[] = $export;
-    }
-    return $this->_answerOk($response);
+    return $this->_answerOk($this->toolkit->getExportHelper()->exportUserItems($users));
   }
 
   function doUserActivity()

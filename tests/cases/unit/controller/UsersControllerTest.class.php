@@ -72,7 +72,6 @@ class UsersControllerTest extends odControllerTestCase
           $this->assertEqual($user[$key], $value);
       }
       $this->assertTrue($res['following']);
-      // $this->assertTrue($res['is_follower']);
     }
   }
 
@@ -111,16 +110,49 @@ class UsersControllerTest extends odControllerTestCase
     $followers->add($third_user);
     $followers->save();
 
-    $followers = $this->additional_user->getFollowers();
-    $followers->add($this->main_user);
-    $followers->save();
+    lmbToolkit::instance()->setUser($this->main_user);
 
     $followers = $this->get('followers', array(), $this->main_user->getId())->result;
+
     $this->assertResponse(200);
     $this->assertEqual(2, count($followers));
     $this->assertEqual($this->additional_user->getId(), $followers[0]->id);
     $this->assertTrue($followers[0]->following);
-    $this->assertFalse($followers[1]->following);
+    $this->assertTrue($followers[1]->following);
+    $this->assertEqual($this->additional_user->getId(), $followers[0]->id);
+    $this->assertEqual($third_user->getId(), $followers[1]->id);
+  }
+
+  function testFollowers_anotherUser()
+  {
+    $this->main_user->save();
+    $this->additional_user->save();
+    $third_user = $this->generator->user('Dum Dum');
+    $third_user->save();
+
+    $this->toolkit->setUser($this->additional_user);
+
+    $followers = $this->get('followers', array(), $this->main_user->getId())->result;
+    $this->assertResponse(200);
+    $this->assertEqual(0, count($followers));
+
+    $followers = $this->additional_user->getFollowers();
+    $followers->add($third_user);
+    $followers->add($this->main_user);
+    $followers->save();
+
+    $followers = $this->main_user->getFollowers();
+    $followers->add($third_user);
+    $followers->save();
+
+    lmbToolkit::instance()->setUser($this->main_user);
+
+    $followers = $this->get('followers', array(), $this->additional_user->getId())->result;
+    $this->assertResponse(200);
+    $this->assertEqual(2, count($followers));
+    $this->assertFalse($followers[0]->following);
+    $this->assertTrue($followers[1]->following);
+    $this->assertEqual($this->main_user->getId(), $followers[0]->id);
     $this->assertEqual($third_user->getId(), $followers[1]->id);
   }
 
@@ -151,10 +183,45 @@ class UsersControllerTest extends odControllerTestCase
     $following->add($this->main_user);
     $following->save();
 
+    lmbToolkit::instance()->setUser($this->main_user);
+
     $following = $this->get('following', array(), $this->main_user->getId())->result;
     $this->assertResponse(200);
     $this->assertEqual(2, count($following));
     $this->assertEqual($this->additional_user->getId(), $following[0]->id);
+    $this->assertTrue($following[0]->following);
+    $this->assertFalse($following[1]->following);
+  }
+
+  function testFollowing_anotherUser()
+  {
+    $this->main_user->save();
+    $this->additional_user->save();
+    $third_user = $this->generator->user('Dum Dum');
+    $third_user->save();
+
+    $this->toolkit->setUser($this->additional_user);
+
+    $following = $this->get('following', array(), $this->main_user->getId())->result;
+    $this->assertResponse(200);
+    $this->assertEqual(0, count($following));
+
+    $following = $this->main_user->getFollowing();
+    $following->add($this->additional_user);
+    $following->add($third_user);
+    $following->save();
+
+    $following = $this->additional_user->getFollowing();
+    $following->add($this->main_user);
+    $following->save();
+
+    lmbToolkit::instance()->setUser($this->main_user);
+
+    $following = $this->get('following', array(), $this->additional_user->getId())->result;
+    $this->assertResponse(200);
+    $this->assertEqual(1, count($following));
+    $this->assertEqual($this->main_user->getId(), $following[0]->id);
+    $this->assertFalse($following[0]->following);
   }
 
 

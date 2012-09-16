@@ -44,13 +44,11 @@ class Day extends BaseModel
     $export->user_id = $this->getUser()->getId();
     $this->showImages($export);
     $export->title = $this->getTitle();
-    $export->occupation = $this->getOccupation();
-    $export->location = $this->getLocation();
+    // $export->occupation = $this->getOccupation();
+    // $export->location = $this->getLocation();
     $export->final_description = $this->getFinalDescription();
     $export->type = $this->getType();
     $export->views_count = $this->views_count;
-    $export->ctime = $this->getCreateTime();
-    $export->utime = $this->getUpdateTime();
 
     return $export;
   }

@@ -55,7 +55,7 @@ class DaysUserControllerTest extends odControllerTestCase
     {
       $this->assertEqual($day->getComments()->at(0)->getId(), $res->id);
       $this->assertEqual($text, $res->text);
-      $this->assertEqual($this->main_user->exportForApi(), $res->user);
+      $this->assertEqual(lmbToolkit::instance()->getExportHelper()->exportUserItem($this->main_user), $res->user);
     }
   }
 
@@ -312,7 +312,7 @@ class DaysUserControllerTest extends odControllerTestCase
    * @api input option int limit
    * @api result Day[] day
    */
-  function testCurrentUserDays()
+  function _testCurrentUserDays()
   {
     $this->main_user->save();
     $day1 = $this->generator->day($this->main_user);

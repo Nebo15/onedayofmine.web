@@ -42,16 +42,13 @@ class AuthController extends BaseJsonController
     }
 
     $this->toolkit->setUser($user);
+
     if($is_new_user)
       $this->toolkit->getNewsObserver()->onUserRegister($user);
+
     $this->_processDeviceToken($user);
 
-    $answer = $user->exportForApi();
-    $answer->favourites_count = $this->_getUser()->getFavouriteDays()->count();
-    $answer->days_count = $this->_getUser()->getDays()->count();
-    $answer->email = $this->_getUser()->getEmail();
-
-    return $this->_answerOk($answer);
+    return $this->_answerOk($this->toolkit->getExportHelper()->exportUser($user));
   }
 
   function _register($facebook_access_token)
