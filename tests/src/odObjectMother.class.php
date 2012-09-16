@@ -170,6 +170,7 @@ class odObjectMother
     $news->setRecipients(array($recipient));
     $news->setSender($creator);
     $news->setText($creator->name . ' likes ' . $recipient->name);
+    $news->setLink($this->string());
     return $news;
   }
 
