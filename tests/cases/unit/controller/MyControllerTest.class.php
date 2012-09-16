@@ -205,20 +205,6 @@ class MyControllerTest extends odControllerTestCase
     {
       $this->assertTrue(is_array($response->result));
       $this->assertEqual(4, count($response->result));
-
-      $this->assertEqual(
-        (object) [
-          'id' => $news4->id,
-          'sender_id' => $news4->sender_id,
-          'text' => $news4->text,
-          'day_comment_id' => '',
-          'moment_comment_id' => '',
-          'user' => $this->additional_user->exportForApi(),
-          'link' => $news4->link
-        ],
-        $response->result[0]
-      );
-
       $this->assertEqual($news4->getId(), $response->result[0]->id);
       $this->assertEqual($news3->getId(), $response->result[1]->id);
       $this->assertEqual($news2->getId(), $response->result[2]->id);
