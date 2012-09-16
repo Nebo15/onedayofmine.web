@@ -148,7 +148,7 @@ class MomentsControllerTest extends odControllerTestCase
     $new_comment = MomentComment::findOne();
     $this->assertEqual($new_comment->id, $res->id);
     $this->assertEqual($text, $res->text);
-    $this->assertEqual($this->additional_user->exportForApi(), $res->user);
+    $this->assertEqual(lmbToolkit::instance()->getExportHelper()->exportUserItem($this->additional_user), $res->user);
     $this->assertEqual($text, $new_comment->text);
   }
 
@@ -177,7 +177,7 @@ class MomentsControllerTest extends odControllerTestCase
     $this->assertEqual(4, count($res));
     $this->assertEqual($moment->getComments()->at(0)->id, $res[0]->id);
     $this->assertEqual($moment->getComments()->at(0)->text, $res[0]->text);
-    $this->assertEqual($moment->getComments()->at(0)->user->exportForApi(), $res[0]->user);
+    $this->assertEqual(lmbToolkit::instance()->getExportHelper()->exportUserItem($moment->getComments()->at(0)->user), $res[0]->user);
     $this->assertEqual($moment->getComments()->at(1)->id, $res[1]->id);
     $this->assertEqual($moment->getComments()->at(2)->id, $res[2]->id);
     $this->assertEqual($moment->getComments()->at(3)->id, $res[3]->id);

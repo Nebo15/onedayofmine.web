@@ -6,7 +6,7 @@ class TasksTest extends odUnitTestCase
   function setUp()
   {
     lmb_require('lib/limb/taskman/taskman.inc.php');
-    taskman_propset('PROJECT_DIR', lmb_env_get('APP_DIR'));
+    taskman_propset('PROJECT_DIR', lmb_env_get('APP_DIR').'/');
     lmb_require('src/cli/od.tasks.php');
 
     parent::setUp();

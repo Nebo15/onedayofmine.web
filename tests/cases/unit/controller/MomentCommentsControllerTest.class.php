@@ -6,9 +6,6 @@ class MomentCommentsControllerTest extends odControllerTestCase
 {
   protected $controller_class = 'MomentCommentsController';
 
-  /**
-   * @api
-   */
   function testUpdate()
   {
     $this->main_user->save();
