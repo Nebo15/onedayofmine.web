@@ -11,7 +11,6 @@ $GLOBALS['TASKMAN_CONFIG'] = array();
 
 class TaskmanException extends Exception
 {
-
   public function __toString()
   {
     global $TASKMAN_STACK;

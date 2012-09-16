@@ -40,6 +40,7 @@ class DaysGuestControllerTest extends odControllerTestCase
       $this->assertEqual($day->getComments()->at(0)->getId(), $loaded_day->comments[0]->id);
       $this->assertEqual($day->getMoments()->at(0)->getComments()->count(), $loaded_day->moments[0]->comments_count);
       $this->assertEqual($day->getMoments()->count(), count($loaded_day->moments));
+      $this->assertEqual(1, $loaded_day->views_count);
     }
   }
 

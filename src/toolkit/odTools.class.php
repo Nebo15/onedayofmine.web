@@ -4,7 +4,7 @@ lmb_require('src/service/social_provider/odFacebook.class.php');
 lmb_require('src/service/social_provider/odTwitter.class.php');
 lmb_require('src/service/social_profile/FacebookProfile.class.php');
 lmb_require('src/service/social_profile/TwitterProfile.class.php');
-lmb_require('src/service/odNewsObserver.class.php');
+lmb_require('src/service/odNewsService.class.php');
 lmb_require('src/service/ImageHelper.class.php');
 lmb_require('src/service/odPostingService.class.php');
 lmb_require('src/service/odExportHelper.class.php');
@@ -33,6 +33,11 @@ class odTools extends lmbAbstractTools
   protected $twitter_instances = array();
 
   protected $facebook_profiles = array();
+
+  /**
+   * @var Zend_Mobile_Push_Apns
+   */
+  protected $apns;
 
   function setUser($user)
   {
@@ -79,14 +84,14 @@ class odTools extends lmbAbstractTools
   }
 
   /**
-   * @return odNewsObserver
+   * @return odNewsService
    */
   function getNewsObserver()
   {
     static $news_observer;
 
     if(!$news_observer)
-      $news_observer = new odNewsObserver($this->getUser());
+      $news_observer = new odNewsService($this->getUser());
 
     return $news_observer;
   }
@@ -278,5 +283,24 @@ class odTools extends lmbAbstractTools
     $class_name = 'Amazon'.$name;
     CFCredentials::set(array('@default' => lmbToolkit::instance()->getConf('amazon')['options']));
     return new $class_name;
+  }
+
+  function setApns(Zend_Mobile_Push_Apns $apns)
+  {
+    $this->apns = $apns;
+  }
+
+  function getApns()
+  {
+    if(!$this->apns)
+    {
+      set_include_path(implode(PATH_SEPARATOR,
+        array('lib/Zend_Mobile/library', get_include_path())
+      ));
+      lmb_require('Zend_Mobile/library/Zend/Mobile/Push/Apns.php');
+      lmb_require('Zend_Mobile/library/Zend/Mobile/Push/Message/Apns.php');
+      $this->apns = new Zend_Mobile_Push_Apns();
+    }
+    return $this->apns;
   }
 }

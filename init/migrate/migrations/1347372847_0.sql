@@ -1,6 +1,7 @@
 
 SET FOREIGN_KEY_CHECKS = 0;
 
+DROP TABLE IF EXISTS `device_token`;
 CREATE TABLE `device_token` (
     `id` int(11) unsigned NOT NULL COMMENT '' auto_increment,
     `user_id` int(11) unsigned NOT NULL DEFAULT 0 COMMENT '',
