@@ -56,8 +56,8 @@ class lmbBulkInsertQuery extends lmbTemplateQuery
       $values = array();
       foreach($this->_fields as $field)
       {
-        if(!isset($set[$field]))
-          throw new lmbException('Field "' . '" not found in set ' . print_r($set, true));
+        if(!array_key_exists($field, $set))
+          throw new lmbException("Field '$field' not found in set " . print_r($set, true));
 
         $values[] = ":{$index}_{$field}:";
       }

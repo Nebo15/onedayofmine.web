@@ -15,20 +15,12 @@ class Day extends BaseModel
 
   protected function _defineRelations()
   {
-    $this->_has_one = array(
-      'finish_comment' => array(
-        'field' =>'finish_comment_id',
-        'class' => 'DayFinishComment',
-        'can_be_null' => true,
-      )
-    );
-
     $this->_many_belongs_to = array(
       'user' => array( 'field' => 'user_id', 'class' => 'User'),
     );
 
     $this->_has_many = array(
-      'moments'  => array( 'field' => 'day_id', 'class' => 'Moment'),
+      'moments'  => array( 'field' => 'day_id', 'class' => 'Moment', 'criteria' => '`moment`.`is_deleted` = 0'),
       'comments' => array( 'field' => 'day_id', 'class' => 'DayComment'),
       'likes'    => array( 'field' => 'day_id', 'class' => 'DayLike'),
     );
@@ -52,15 +44,11 @@ class Day extends BaseModel
     $export->user_id = $this->getUser()->getId();
     $this->showImages($export);
     $export->title = $this->getTitle();
-    $export->occupation = $this->getOccupation();
-    $export->location = $this->getLocation();
+    // $export->occupation = $this->getOccupation();
+    // $export->location = $this->getLocation();
+    $export->final_description = $this->getFinalDescription();
     $export->type = $this->getType();
-    $export->likes_count = $this->getLikesCount() ?: 0;
-    $export->ctime = $this->getCreateTime();
-    $export->utime = $this->getUpdateTime();
-
-    if($this->getIsDeleted())
-      $export->is_deleted = true;
+    $export->views_count = $this->views_count;
 
     return $export;
   }

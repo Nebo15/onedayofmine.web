@@ -7,26 +7,32 @@ class MomentCommentsController extends BaseJsonController
   function doUserUpdate()
   {
     if(!$this->request->isPost())
-      return $this->_answerNotPost('Not a POST request');
+      return $this->_answerNotPost();
 
-    $comment = MomentComment::findById($this->request->id);
-    if(!$comment || $comment->getUserId() != $this->_getUser()->getId())
-      return $this->_answerNotFound("Moment comment with id ".$this->request->get('id')." not found");
+    if(!$comment = MomentComment::findById($this->request->id))
+      return $this->_answerModelNotFoundById('Moment comment', $this->request->id);
+
+    if($comment->getUserId() != $this->_getUser()->getId())
+      return $this->_answerNotOwner();
 
     $comment->setText($this->request->get('text'));
     $comment->save();
 
-    return $this->_answerOk($comment);
+    return $this->_answerOk($this->toolkit->getExportHelper()->exportMomentComment($comment));
   }
 
   function doUserDelete()
   {
     if(!$this->request->isPost())
-      return $this->_answerNotPost('Not a POST request');
+      return $this->_answerNotPost();
 
-    $comment = MomentComment::findById($this->request->id);
-    if(!$comment || $comment->getUserId() != $this->_getUser()->getId())
-      return $this->_answerNotFound("Moment comment with id ".$this->request->get('id')." not found");
+    if(!$comment = MomentComment::findById($this->request->id))
+      return $this->_answerModelNotFoundById('Moment comment', $this->request->id);
+
+    if($comment->getUserId() != $this->_getUser()->getId())
+      return $this->_answerNotOwner();
+
+    $this->toolkit->getNewsObserver()->onMomentCommentDelete($comment);
 
     $comment->destroy();
 

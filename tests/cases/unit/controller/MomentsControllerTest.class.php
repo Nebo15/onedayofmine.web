@@ -73,7 +73,7 @@ class MomentsControllerTest extends odControllerTestCase
       ),
       $moment->getId()
     )->result;
-    $this->assertResponse(404);
+    $this->assertResponse(401);
   }
 
   /**
@@ -91,7 +91,7 @@ class MomentsControllerTest extends odControllerTestCase
     $this->post('delete', array(), $moment->getId());
 
     $this->assertResponse(200);
-    $this->assertFalse(Moment::findById($moment->getId()));
+    $this->assertEqual($day->getMoments()->count(), 0);
   }
 
   function testDelete_WrongUser()
@@ -102,7 +102,7 @@ class MomentsControllerTest extends odControllerTestCase
     lmbToolkit::instance()->setUser($this->main_user);
     $this->post('delete', array(), $moment->getId());
 
-    $this->assertResponse(404);
+    $this->assertResponse(401);
   }
 
   function testDelete_MomentNotFound()
@@ -111,6 +111,25 @@ class MomentsControllerTest extends odControllerTestCase
     $this->post('delete', array(), 100500);
     $this->assertResponse(404);
   }
+
+  // function testRestore()
+  // {
+  //   $day = $this->generator->day($this->main_user);
+  //   $day->save();
+
+  //   $moment = $this->generator->moment($day);
+  //   $moment->setIsDeleted(1);
+  //   $moment->save();
+
+  //   lmbToolkit::instance()->setUser($this->main_user);
+  //   $this->post('restore', array(), $moment->getId())->result;
+
+  //   $this->assertResponse(200);
+
+  //   $loaded_moment = Moment::findById($day->getId());
+  //   $this->assertEqual(0, $loaded_moment->getIsDeleted());
+  //   $this->assertEqual($day->getMoments()->count(), 1);
+  // }
 
   function testComment()
   {
@@ -129,7 +148,7 @@ class MomentsControllerTest extends odControllerTestCase
     $new_comment = MomentComment::findOne();
     $this->assertEqual($new_comment->id, $res->id);
     $this->assertEqual($text, $res->text);
-    $this->assertEqual($this->additional_user->exportForApi(), $res->user);
+    $this->assertEqual(lmbToolkit::instance()->getExportHelper()->exportUserItem($this->additional_user), $res->user);
     $this->assertEqual($text, $new_comment->text);
   }
 
@@ -158,7 +177,7 @@ class MomentsControllerTest extends odControllerTestCase
     $this->assertEqual(4, count($res));
     $this->assertEqual($moment->getComments()->at(0)->id, $res[0]->id);
     $this->assertEqual($moment->getComments()->at(0)->text, $res[0]->text);
-    $this->assertEqual($moment->getComments()->at(0)->user->exportForApi(), $res[0]->user);
+    $this->assertEqual(lmbToolkit::instance()->getExportHelper()->exportUserItem($moment->getComments()->at(0)->user), $res[0]->user);
     $this->assertEqual($moment->getComments()->at(1)->id, $res[1]->id);
     $this->assertEqual($moment->getComments()->at(2)->id, $res[2]->id);
     $this->assertEqual($moment->getComments()->at(3)->id, $res[3]->id);
@@ -197,6 +216,50 @@ class MomentsControllerTest extends odControllerTestCase
   // TODO
   function testComment_MomentNotFound() {}
 
-  // TODO-high
-  function testLike() {}
+  /**
+   * @api
+   */
+  function testLike() {
+    $moment = $this->generator->moment();
+    $moment->save();
+
+    $this->assertEqual(MomentLike::find()->count(), 0);
+
+    lmbToolkit::instance()->setUser($this->main_user);
+    $this->post('like', array(), $moment->getId());
+
+    $this->assertResponse(200);
+    $this->assertEqual(MomentLike::find()->count(), 1);
+    $this->assertEqual(Moment::findOne()->getLikes()->count(), 1);
+  }
+
+  function testLike_OwnDay() {
+    $day = $this->generator->day($this->additional_user);
+    $moment = $this->generator->moment($day);
+    $moment->save();
+
+    lmbToolkit::instance()->setUser($this->additional_user);
+    $this->post('like', array(), $moment->getId());
+
+    $this->assertResponse(200);
+  }
+
+  /**
+   * @api
+   */
+  function testUnlike() {
+    $moment = $this->generator->moment();
+    $moment->save();
+
+    $like = $this->generator->momentLike($moment, $this->additional_user);
+    $like->save();
+
+    $this->assertEqual(MomentLike::find()->count(), 1);
+
+    lmbToolkit::instance()->setUser($this->additional_user);
+    $this->post('unlike', array(), $moment->getId());
+
+    $this->assertResponse(200);
+    $this->assertEqual(MomentLike::find()->count(), 0);
+  }
 }

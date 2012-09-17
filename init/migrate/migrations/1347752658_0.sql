@@ -1,0 +1,8 @@
+
+SET FOREIGN_KEY_CHECKS = 0;
+
+ALTER TABLE `day` DROP `location`;
+ALTER TABLE `day` DROP `occupation`;
+
+
+SET FOREIGN_KEY_CHECKS = 1;

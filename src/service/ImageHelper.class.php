@@ -7,7 +7,7 @@ class ImageHelper {
     if(!is_file($path))
       throw new lmbFileNotFoundException($path);
 
-    return exif_read_data($path, null, true);
+    return @exif_read_data($path, null, true);
   }
 
   function exifGPSToDecemicalCords($exif)

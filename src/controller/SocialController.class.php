@@ -11,22 +11,50 @@ class SocialController extends BaseJsonController
 
     $profile = new FacebookProfile($this->_getUser());
     $friends = array();
-    foreach($profile->getRegisteredFriends() as $friend) {
-      $friend = $friend->exportForApi();
-      unset($friend->user_info['email']);
-      unset($friend->user_info['timezone']);
-      unset($friend->user_info['fb_profile_utime']);
-      unset($friend->user_info['fb_uid']);
+    foreach($profile->getFriends() as $friend) {
+      $friend = (object) $friend;
+      unset($friend->email);
+      unset($friend->timezone);
+      unset($friend->facebook_profile_utime);
+      unset($friend->work);
+      unset($friend->current_location);
+
+      if($user = User::findByFacebookUid($friend->facebook_uid)) {
+        $friend->user = $user->exportForApi();
+        $friend->user->following = UserFollowing::isUserFollowUser($this->_getUser(), $user);
+      }
+      else
+        $friend->user = null;
+
+
       $friends[] = $friend;
     }
 
     return $this->_answerOk($friends);
   }
 
+  function doFacebookInvite()
+  {
+    if(!$this->request->isPost())
+      return $this->_answerNotPost();
+
+    $uid = $this->request->getPost('uid');
+    if(!$uid)
+      return $this->_answerWithError('You need to specify facebook user uid');
+
+    if($user = User::findByFacebookUid($uid))
+      return $this->_answerOk('User is already registered');
+
+    $profile = new FacebookProfile($this->_getUser());
+    $profile->shareInvitation($uid);
+
+    return $this->_answerOk();
+  }
+
   function doTwitterConnect()
   {
-    if(!$this->request->hasPost())
-      return $this->_answerWithError('Not a POST request');
+    if(!$this->request->isPost())
+      return $this->_answerNotPost();
 
     $this->_checkPropertiesInRequest(array('access_token', 'access_token_secret'));
 
@@ -38,7 +66,7 @@ class SocialController extends BaseJsonController
       $provider = $this->toolkit->getTwitter($access_token, $access_token_secret);
 
       if(!$uid = $provider->getUid($this->error_list)) {
-        return $this->_answerWithError($this->error_list->export(), null, 403);
+        return $this->_answerWithError($this->error_list->export());
       }
 
       $user = $this->toolkit->getUser();
@@ -52,5 +80,30 @@ class SocialController extends BaseJsonController
     }
     else
       return $this->_answerWithError($this->error_list->export());
+  }
+
+  function doUserEmail()
+  {
+    if('invite' == $this->request->get('id'))
+      return $this->_doEmailInvite();
+  }
+
+  protected function _doEmailInvite()
+  {
+    $errors = $this->_checkPropertiesInRequest(['email', 'name']);
+    if(count($errors))
+      return $this->_answerWithError($errors);
+
+    $text =<<<EOD
+Hello!
+
+Your friend %name% wants you to become part of One Day of Mine community, where you can find out how another people live their days and share same information about you.
+EOD;
+
+    $email = $this->request->get('email');
+    $text = str_replace('%name%', $this->request->get('name'), $text);
+
+    $this->toolkit->getMailer()->sendPlainMail($email, 'Invitation to One Day of Mine', $text);
+    return $this->_answerOk();
   }
 }

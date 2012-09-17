@@ -6,13 +6,12 @@ lmb_require('limb/validation/src/rule/lmbValidValueRule.class.php');
 
 /**
  * @api
- * @method string getFbUid()
- * @method void setFbUid(string $fb_user_id)
- * @method string getFbAccessToken()
- * @method void setFbAccessToken(string $fb_access_token)
+ * @method string getFacebookUid()
+ * @method void setFacebookUid(string $facebook_user_id)
+ * @method string getFacebookAccessToken()
+ * @method void setFacebookAccessToken(string $facebook_access_token)
  * @method string getTwitterUid()
  * @method string getTwitterAccessToken()
- * @method UserSettings getSettings()
  * @method void
  */
 class User extends BaseModel
@@ -49,6 +48,7 @@ class User extends BaseModel
       'created_news'     => array ('field' => 'sender_id', 'class' => 'News'),
       'day_likes'        => array ('field' => 'user_id', 'class' => 'DayLike'),
       'moment_likes'     => array ('field' => 'user_id', 'class' => 'MomentLike'),
+      'device_tokens'      => array ('field' => 'user_id', 'class' => 'DeviceToken'),
     );
     $this->_has_many_to_many = array(
       'favourite_days' => array(
@@ -79,10 +79,9 @@ class User extends BaseModel
   {
     $validator = new lmbValidator();
     $validator->addRequiredRule('name');
-//    $validator->addRequiredRule('email');
-    $validator->addRequiredRule('fb_uid');
-    $validator->addRequiredRule('fb_access_token');
-    $validator->addRequiredRule('fb_profile_utime');
+    $validator->addRequiredRule('facebook_uid');
+    $validator->addRequiredRule('facebook_access_token');
+    $validator->addRequiredRule('facebook_profile_utime');
     $validator->addRequiredRule('timezone');
     $validator->addRequiredRule('sex');
     $validator->addRule(new lmbValidValueRule('sex', array_values(self::getSexTypes())), 'Wrong sex value');
@@ -102,9 +101,6 @@ class User extends BaseModel
     $result->birthday = $this->birthday;
     $result->occupation = $this->occupation;
     $result->location = $this->location;
-    $result->followers_count = $this->getFollowers()->count();
-    $result->following_count = $this->getFollowing()->count();
-    $result->days_count = $this->getDays()->count();
     return $result;
   }
 
@@ -175,14 +171,14 @@ class User extends BaseModel
     ))->paginate(0, $limit);
   }
 
-  static function findByFbAccessToken($fb_access_token)
+  static function findByFacebookAccessToken($facebook_access_token)
   {
-    return User::findOne(array('fb_access_token = ?', $fb_access_token));
+    return User::findOne(array('facebook_access_token = ?', $facebook_access_token));
   }
 
-  static function findByFbUid($fb_uid)
+  static function findByFacebookUid($facebook_uid)
   {
-    return User::findOne(array('fb_uid = ?', $fb_uid));
+    return User::findOne(array('facebook_uid = ?', $facebook_uid));
   }
 
   static function findByTwitterUid($twitter_uid)

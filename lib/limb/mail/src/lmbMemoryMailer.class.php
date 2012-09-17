@@ -13,10 +13,10 @@ class lmbMemoryMailer implements lmbBaseMailerInterface
 
   static $mail_contents = array();
 
-  function sendHtmlMail($recipients, $sender, $subject, $html, $text = null, $charset = 'utf-8')
+  function sendHtmlMail($recipients, $subject, $html, $text = null, $charset = 'utf-8')
   {
     $this->recipient = $recipients;
-    $this->sender = $sender;
+    $this->sender = $this->sender;
     $this->subject = $subject;
     $this->html = $html;
     $this->text = $text;
@@ -25,10 +25,10 @@ class lmbMemoryMailer implements lmbBaseMailerInterface
     self::$mail_contents[] = $this->html;
   }
 
-  function sendPlainMail($recipients, $sender, $subject, $body, $charset = 'utf-8')
+  function sendPlainMail($recipients, $subject, $body, $charset = 'utf-8')
   {
     $this->recipient = $recipients;
-    $this->sender = $sender;
+    $this->sender = $this->sender;
     $this->subject = $subject;
     $this->text = $body;
     $this->charset = $charset;
@@ -43,6 +43,6 @@ class lmbMemoryMailer implements lmbBaseMailerInterface
   {
     self::$mail_contents = array();
   }
-  
+
   function setConfig($config)  {}
 }

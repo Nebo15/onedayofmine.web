@@ -43,7 +43,7 @@ abstract class BaseJsonController extends lmbController
       if(!$is_logged)
       {
         $this->response->write($this->_answerUnauthorized());
-        return null;
+        return $this->_answerUnauthorized();
       }
     }
 
@@ -118,7 +118,7 @@ abstract class BaseJsonController extends lmbController
       if(!$this->request->get($property))
         $this->error_list->addError("Property '$property' not found in request");
     }
-    return $this->error_list->export();
+    return $this->error_list->getReadable();
   }
 
   protected function _importSaveAndAnswer($item, array $properties, array $raw_properties = array())
@@ -199,6 +199,16 @@ abstract class BaseJsonController extends lmbController
     return $this->_answer($message, array(), $message, 404);
   }
 
+  protected function _answerModelNotFoundById($model_name, $id)
+  {
+    return $this->_answerNotFound("{$model_name} with id='{$id}' not found");
+  }
+
+  protected function _answerNotOwner()
+  {
+    return $this->_answerWithError("Current user don't have permission to perform this action", null, 401);
+  }
+
   protected function _answerNotPost($message = 'Not a POST request')
   {
     return $this->_answerWithError($message, null, 405);
@@ -220,91 +230,5 @@ abstract class BaseJsonController extends lmbController
         'result' => $result,
         'errors' => $errors)
     ));
-  }
-
-  protected function _attachDayUser(stdClass $day_export, $day)
-  {
-    $day_export->user = $day->getUser()->exportForApi();
-    unset($day_export->user_id);
-  }
-
-  protected function _attachDayIsFavorited(stdClass $day_export, $day)
-  {
-    if(!$user = lmbToolkit::instance()->getUser())
-      return null;
-    $day_export->is_favourite = DayFavourite::isFavourited($user, $day);
-  }
-
-  protected function _attachDayIsDeleted(stdClass $day_export, $day)
-  {
-    if(!lmbToolkit::instance()->getUser())
-      return null;
-    if(lmbToolkit::instance()->getUser()->getId() != $day->getUserId())
-      return null;
-    $day_export->is_deleted = $day->getIsDeleted();
-  }
-
-  protected function _attachComments(stdClass $export, Day $day, $only_count = false)
-  {
-    $comments = $day->getComments();
-    $export->comments_count = $comments->count();
-
-    if($only_count)
-      return;
-
-    $comments->paginate(0, lmbToolkit::instance()->getConf('common')->default_comments_count);
-    $export->comments = array();
-    foreach ($comments as $comment) {
-      $tmp = $comment->exportForApi();
-      $tmp->user = $comment->getUser()->exportForApi();
-      unset($tmp->day_id);
-      unset($tmp->user_id);
-      $export->comments[] = $tmp;
-    }
-  }
-
-  protected function _attachFinishComment(stdClass $export, Day $day)
-  {
-    $export->finish_comment = $day->getFinishComment() ? $day->getFinishComment()->exportForApi() : null;
-    unset($export->finish_comment->user_id);
-    unset($export->finish_comment->day_id);
-  }
-
-  protected function _attachDayMoments(stdClass $day_export, $day)
-  {
-    $day_export->moments = array();
-    foreach($day->getMoments() as $moment) {
-      $moment_export = $moment->exportForApi();
-
-      // Moment day data
-      unset($moment_export->day_id);
-
-      // Moment comments data
-      //$this->_attachComments($moment_export, $moment);
-      // Comments count
-      $moment_export->comments_count = $moment->getComments()->count();
-
-      $day_export->moments[] = $moment_export;
-    }
-  }
-
-  protected function _exportDayWithSubentities($day)
-  {
-    $answer = $day->exportForApi();
-
-    // User data
-    $this->_attachDayUser($answer, $day);
-
-    // Favorites data
-    $this->_attachDayIsFavorited($answer, $day);
-
-    // Comments data
-    $this->_attachComments($answer, $day);
-    $this->_attachFinishComment($answer, $day);
-
-    // Moments data
-    $this->_attachDayMoments($answer, $day);
-
-    return $answer;
   }
 }

@@ -16,13 +16,13 @@ class odObjectMother
   function user($name = null)
   {
     $user = new User();
-    $user->setFbUid($this->string(5));
-    $user->setFbAccessToken($this->string(50));
+    $user->setFacebookUid($this->string(5));
+    $user->setFacebookAccessToken($this->string(50));
     $user->setEmail($this->email());
-    $user->setFbProfileUtime($this->integer(11));
-    $user->setFbPicBig($this->string(50));
-    $user->setFbPicSquare($this->string(50));
-    $user->setFbPicSmall($this->string(50));
+    $user->setFacebookProfileUtime($this->integer(11));
+    $user->setFacebookPicBig($this->string(50));
+    $user->setFacebookPicSquare($this->string(50));
+    $user->setFacebookPicSmall($this->string(50));
     $user->setName($name ?: $this->string(100));
     $user->setTimezone($this->integer(1));
     $user->setSex('female');
@@ -77,6 +77,27 @@ class odObjectMother
   }
 
   /**
+   * @param Day $day
+   * @param null|User $user
+   * @return DayLike
+   */
+  function dayLike(Day $day, User $user = null)
+  {
+    $like = new DayLike();
+    $like->setDay($day);
+    $like->setUser($user ?: $this->user());
+    return $like;
+  }
+
+  function dayLikes(Day $day, $likes_count)
+  {
+    for ($i=1; $i < $likes_count; $i++) {
+      $like = $this->dayLike($day);
+      $like->save();
+    }
+  }
+
+  /**
    * @param Day|null $day
    * @return Moment
    */
@@ -120,6 +141,19 @@ class odObjectMother
     return $comment;
   }
 
+  /**
+   * @param Moment $moment
+   * @param null|User $user
+   * @return MomentLike
+   */
+  function momentLike(Moment $moment, User $user = null)
+  {
+    $like = new MomentLike();
+    $like->setMoment($moment);
+    $like->setUser($user ?: $this->user());
+    return $like;
+  }
+
   function complaint($day = null)
   {
     $complaint = new Complaint();
@@ -136,7 +170,27 @@ class odObjectMother
     $news->setRecipients(array($recipient));
     $news->setSender($creator);
     $news->setText($creator->name . ' likes ' . $recipient->name);
+    $news->setLink($this->string());
     return $news;
+  }
+
+  function deviceToken(User $user = null)
+  {
+    $device_token = new DeviceToken();
+    $device_token->setToken($this->string(64));
+    $device_token->setUser($user ?: $this->user());
+    return $device_token;
+  }
+
+  function deviceNotification(DeviceToken $token = null)
+  {
+    $notification = new DeviceNotification();
+    $notification->setDeviceToken($token ?: $this->deviceToken());
+    $notification->text = $this->string(32);
+    $notification->icon = $this->integer(1);
+    $notification->sound = $this->string();
+    $notification->is_sended = 0;
+    return $notification;
   }
 
   function string($length = 6)
@@ -202,12 +256,12 @@ class odObjectMother
   function facebookInfo($uid = null)
   {
     return array(
-     'fb_uid'           => $uid ?: $this->string(5),
+     'facebook_uid'           => $uid ?: $this->string(5),
       'email'            => $this->email(),
       'name'             => $this->string(10),
       'sex'              => User::SEX_MALE,
       'timezone'         => $this->integer(1),
-      'fb_profile_utime' => $this->integer(11),
+      'facebook_profile_utime' => $this->integer(11),
       'pic'              => $this->string(),
       'occupation'       => $this->string(),
       'current_location' => $this->string(),

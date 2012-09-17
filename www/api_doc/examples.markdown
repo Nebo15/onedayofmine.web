@@ -200,7 +200,7 @@ Authorizes and returns User.
   <th>Description</th>
 </tr>
 <tr><td>[type]</td><td>id</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>fb_uid</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>facebook_uid</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>twitter_uid</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>name</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>sex</td><td>[description]</td></tr>
@@ -221,7 +221,7 @@ Authorizes and returns User.
 ###### Example response: ######
     {
       "id":4525,
-      "fb_uid":"100004093051334",
+      "facebook_uid":"100004093051334",
       "twitter_uid":0,
       "name":"foo foo",
       "sex":"female",
@@ -309,7 +309,7 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
 <tr><td><a href='#Entity:Moment'>Moment[]</a></td><td>moments</td><td>All day moments</td></tr>
 <tr><td>bool</td><td>is_favourite</td><td></td></tr>
 <tr><td>[type]</td><td>id</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>fb_uid</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>facebook_uid</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>image_266</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>image_532</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>title</td><td>[description]</td></tr>
@@ -324,7 +324,7 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
 ###### Example response: ######
     {
       "id":2163,
-      "fb_uid":"fooba",
+      "facebook_uid":"fooba",
       "image_266":null,
       "image_532":null,
       "title":"foobarfoobarfoobarfoobarf",
@@ -336,7 +336,7 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
       "utime":1345725627,
       "user":{
         "id":4533,
-        "fb_uid":"fooba",
+        "facebook_uid":"fooba",
         "twitter_uid":0,
         "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
         "sex":"female",
@@ -362,7 +362,7 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
           "utime":1345725627,
           "user":{
             "id":4534,
-            "fb_uid":"fooba",
+            "facebook_uid":"fooba",
             "twitter_uid":0,
             "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
             "sex":"female",
@@ -386,7 +386,7 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
           "utime":1345725627,
           "user":{
             "id":4535,
-            "fb_uid":"fooba",
+            "facebook_uid":"fooba",
             "twitter_uid":0,
             "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
             "sex":"female",
@@ -410,7 +410,7 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
           "utime":1345725627,
           "user":{
             "id":4536,
-            "fb_uid":"fooba",
+            "facebook_uid":"fooba",
             "twitter_uid":0,
             "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
             "sex":"female",
@@ -493,7 +493,7 @@ Get few days in one request.
     {
       "2164":{
         "id":2164,
-        "fb_uid":"fooba",
+        "facebook_uid":"fooba",
         "image_266":null,
         "image_532":null,
         "title":"foobarfoobarfoobarfoobarf",
@@ -505,7 +505,7 @@ Get few days in one request.
         "utime":1345725628,
         "user":{
           "id":4538,
-          "fb_uid":"fooba",
+          "facebook_uid":"fooba",
           "twitter_uid":0,
           "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
           "sex":"female",
@@ -523,7 +523,7 @@ Get few days in one request.
         "is_favourite":false,
         "comments_count":0,
         "comments":[
-          
+
         ],
         "moments":[
           {
@@ -540,7 +540,7 @@ Get few days in one request.
       },
       "2165":{
         "id":2165,
-        "fb_uid":"fooba",
+        "facebook_uid":"fooba",
         "image_266":null,
         "image_532":null,
         "title":"foobarfoobarfoobarfoobarf",
@@ -552,7 +552,7 @@ Get few days in one request.
         "utime":1345725628,
         "user":{
           "id":4539,
-          "fb_uid":"fooba",
+          "facebook_uid":"fooba",
           "twitter_uid":0,
           "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
           "sex":"female",
@@ -570,7 +570,7 @@ Get few days in one request.
         "is_favourite":false,
         "comments_count":0,
         "comments":[
-          
+
         ],
         "moments":[
           {
@@ -691,7 +691,7 @@ Share a day
   <th>Description</th>
 </tr>
 <tr><td>[type]</td><td>id</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>fb_uid</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>facebook_uid</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>image_266</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>image_532</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>title</td><td>[description]</td></tr>
@@ -711,7 +711,7 @@ Share a day
 ###### Example response: ######
     {
       "id":2169,
-      "fb_uid":"100004093051334",
+      "facebook_uid":"100004093051334",
       "image_266":null,
       "image_532":null,
       "title":"foobarfoobarfoobarfoobarf",
@@ -723,7 +723,7 @@ Share a day
       "utime":1345725630,
       "user":{
         "id":4546,
-        "fb_uid":"100004093051334",
+        "facebook_uid":"100004093051334",
         "twitter_uid":0,
         "name":"foo foo",
         "sex":"female",
@@ -741,10 +741,10 @@ Share a day
       "is_favourite":false,
       "comments_count":0,
       "comments":[
-        
+
       ],
       "moments":[
-        
+
       ]
     }
 
@@ -798,7 +798,7 @@ Share a day
     [
       {
         "id":2172,
-        "fb_uid":"100004093051334",
+        "facebook_uid":"100004093051334",
         "image_266":null,
         "image_532":null,
         "title":"AfooA",
@@ -810,7 +810,7 @@ Share a day
         "utime":1345725630,
         "user":{
           "id":4548,
-          "fb_uid":"100004093051334",
+          "facebook_uid":"100004093051334",
           "twitter_uid":0,
           "name":"foo foo",
           "sex":"female",
@@ -876,7 +876,7 @@ Returns favourite based on <a href="#range-request">range-request</a>.
     [
       {
         "id":2178,
-        "fb_uid":"100004093051334",
+        "facebook_uid":"100004093051334",
         "image_266":null,
         "image_532":null,
         "title":"foobarfoobarfoobarfoobarf",
@@ -888,7 +888,7 @@ Returns favourite based on <a href="#range-request">range-request</a>.
         "utime":1345725630,
         "user":{
           "id":4550,
-          "fb_uid":"100004093051334",
+          "facebook_uid":"100004093051334",
           "twitter_uid":0,
           "name":"foo foo",
           "sex":"female",
@@ -979,7 +979,7 @@ Returns following users days based on <a href="#range-request">range-request</a>
     [
       {
         "id":2185,
-        "fb_uid":"100004093051334",
+        "facebook_uid":"100004093051334",
         "image_266":null,
         "image_532":null,
         "title":"foobarfoobarfoobarfoobarf",
@@ -991,7 +991,7 @@ Returns following users days based on <a href="#range-request">range-request</a>
         "utime":1345725633,
         "user":{
           "id":4557,
-          "fb_uid":"100004093051334",
+          "facebook_uid":"100004093051334",
           "twitter_uid":0,
           "name":"foo foo",
           "sex":"female",
@@ -1058,7 +1058,7 @@ Returns new days based on <a href="#range-request">range-request</a>.
     [
       {
         "id":2191,
-        "fb_uid":"100004087981387",
+        "facebook_uid":"100004087981387",
         "image_266":null,
         "image_532":null,
         "title":"foobarfoobarfoobarfoobarf",
@@ -1070,7 +1070,7 @@ Returns new days based on <a href="#range-request">range-request</a>.
         "utime":1345725635,
         "user":{
           "id":4558,
-          "fb_uid":"100004087981387",
+          "facebook_uid":"100004087981387",
           "twitter_uid":0,
           "name":"bar bar",
           "sex":"male",
@@ -1136,7 +1136,7 @@ Returns interesting days based on <a href="#range-request">range-request</a>.
     [
       {
         "id":2194,
-        "fb_uid":"100004087981387",
+        "facebook_uid":"100004087981387",
         "image_266":null,
         "image_532":null,
         "title":"foobarfoobarfoobarfoobarf",
@@ -1148,7 +1148,7 @@ Returns interesting days based on <a href="#range-request">range-request</a>.
         "utime":1345725636,
         "user":{
           "id":4560,
-          "fb_uid":"100004087981387",
+          "facebook_uid":"100004087981387",
           "twitter_uid":0,
           "name":"bar bar",
           "sex":"male",
@@ -1214,7 +1214,7 @@ Returns current user days based on <a href="#range-request">range-request</a>.
     [
       {
         "id":2200,
-        "fb_uid":"100004087981387",
+        "facebook_uid":"100004087981387",
         "image_266":null,
         "image_532":null,
         "title":"foobarfoobarfoobarfoobarf",
@@ -1226,7 +1226,7 @@ Returns current user days based on <a href="#range-request">range-request</a>.
         "utime":1345725637,
         "user":{
           "id":4562,
-          "fb_uid":"100004087981387",
+          "facebook_uid":"100004087981387",
           "twitter_uid":0,
           "name":"bar bar",
           "sex":"male",
@@ -1375,7 +1375,7 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
 <tr><td><a href='#Entity:Moment'>Moment[]</a></td><td>moments</td><td>All day moments</td></tr>
 <tr><td>bool</td><td>is_favourite <span class='label label-important'>Removed</span></td><td></td></tr>
 <tr><td>[type]</td><td>id</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>fb_uid</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>facebook_uid</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>image_266</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>image_532</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>title</td><td>[description]</td></tr>
@@ -1390,7 +1390,7 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
 ###### Example response: ######
     {
       "id":2203,
-      "fb_uid":"fooba",
+      "facebook_uid":"fooba",
       "image_266":"http:\/\/static.onedayofmine.dev\/4566\/days\/859f745153cf49e577014fbd199f4f2dbb78ed3c_266.jpeg",
       "image_532":"http:\/\/static.onedayofmine.dev\/4566\/days\/859f745153cf49e577014fbd199f4f2dbb78ed3c_532.jpeg",
       "title":"foobarfoobarfoobarfoobarf",
@@ -1402,7 +1402,7 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
       "utime":1345725638,
       "user":{
         "id":4566,
-        "fb_uid":"fooba",
+        "facebook_uid":"fooba",
         "twitter_uid":0,
         "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
         "sex":"female",
@@ -1427,7 +1427,7 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
           "utime":1345725638,
           "user":{
             "id":4567,
-            "fb_uid":"fooba",
+            "facebook_uid":"fooba",
             "twitter_uid":0,
             "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
             "sex":"female",
@@ -1451,7 +1451,7 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
           "utime":1345725638,
           "user":{
             "id":4568,
-            "fb_uid":"fooba",
+            "facebook_uid":"fooba",
             "twitter_uid":0,
             "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
             "sex":"female",
@@ -1475,7 +1475,7 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
           "utime":1345725638,
           "user":{
             "id":4569,
-            "fb_uid":"fooba",
+            "facebook_uid":"fooba",
             "twitter_uid":0,
             "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
             "sex":"female",
@@ -1558,7 +1558,7 @@ Get few days in one request.
     {
       "2204":{
         "id":2204,
-        "fb_uid":"fooba",
+        "facebook_uid":"fooba",
         "image_266":null,
         "image_532":null,
         "title":"foobarfoobarfoobarfoobarf",
@@ -1570,7 +1570,7 @@ Get few days in one request.
         "utime":1345725639,
         "user":{
           "id":4571,
-          "fb_uid":"fooba",
+          "facebook_uid":"fooba",
           "twitter_uid":0,
           "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
           "sex":"female",
@@ -1587,7 +1587,7 @@ Get few days in one request.
         },
         "comments_count":0,
         "comments":[
-          
+
         ],
         "moments":[
           {
@@ -1604,7 +1604,7 @@ Get few days in one request.
       },
       "2205":{
         "id":2205,
-        "fb_uid":"fooba",
+        "facebook_uid":"fooba",
         "image_266":null,
         "image_532":null,
         "title":"foobarfoobarfoobarfoobarf",
@@ -1616,7 +1616,7 @@ Get few days in one request.
         "utime":1345725639,
         "user":{
           "id":4572,
-          "fb_uid":"fooba",
+          "facebook_uid":"fooba",
           "twitter_uid":0,
           "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
           "sex":"female",
@@ -1633,7 +1633,7 @@ Get few days in one request.
         },
         "comments_count":0,
         "comments":[
-          
+
         ],
         "moments":[
           {
@@ -1701,7 +1701,7 @@ Get few days in one request.
     [
       {
         "id":2209,
-        "fb_uid":"100004093051334",
+        "facebook_uid":"100004093051334",
         "image_266":null,
         "image_532":null,
         "title":"AfooA",
@@ -1713,7 +1713,7 @@ Get few days in one request.
         "utime":1345725639,
         "user":{
           "id":4574,
-          "fb_uid":"100004093051334",
+          "facebook_uid":"100004093051334",
           "twitter_uid":0,
           "name":"foo foo",
           "sex":"female",
@@ -1779,7 +1779,7 @@ Returns new days based on <a href="#range-request">range-request</a>.
     [
       {
         "id":2216,
-        "fb_uid":"100004087981387",
+        "facebook_uid":"100004087981387",
         "image_266":"http:\/\/static.onedayofmine.dev\/4576\/days\/bc0598bbb848e600db49b30c0dd71eea496fa841_266.jpeg",
         "image_532":"http:\/\/static.onedayofmine.dev\/4576\/days\/bc0598bbb848e600db49b30c0dd71eea496fa841_532.jpeg",
         "title":"foobarfoobarfoobarfoobarf",
@@ -1791,7 +1791,7 @@ Returns new days based on <a href="#range-request">range-request</a>.
         "utime":1345725640,
         "user":{
           "id":4576,
-          "fb_uid":"100004087981387",
+          "facebook_uid":"100004087981387",
           "twitter_uid":0,
           "name":"bar bar",
           "sex":"male",
@@ -1857,7 +1857,7 @@ Returns interesting days based on <a href="#range-request">range-request</a>.
     [
       {
         "id":2219,
-        "fb_uid":"100004087981387",
+        "facebook_uid":"100004087981387",
         "image_266":"http:\/\/static.onedayofmine.dev\/4578\/days\/c0b087bb430bf64c62fd412f2dc84791c9aabb5c_266.jpeg",
         "image_532":"http:\/\/static.onedayofmine.dev\/4578\/days\/c0b087bb430bf64c62fd412f2dc84791c9aabb5c_532.jpeg",
         "title":"foobarfoobarfoobarfoobarf",
@@ -1869,7 +1869,7 @@ Returns interesting days based on <a href="#range-request">range-request</a>.
         "utime":1345725640,
         "user":{
           "id":4578,
-          "fb_uid":"100004087981387",
+          "facebook_uid":"100004087981387",
           "twitter_uid":0,
           "name":"bar bar",
           "sex":"male",
@@ -2022,7 +2022,7 @@ Starts a day, returns created <a href="#Entity:Day">day</a>.
   <th>Description</th>
 </tr>
 <tr><td>[type]</td><td>id</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>fb_uid</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>facebook_uid</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>image_266</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>image_532</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>title</td><td>[description]</td></tr>
@@ -2042,7 +2042,7 @@ Starts a day, returns created <a href="#Entity:Day">day</a>.
 ###### Example response: ######
     {
       "id":2224,
-      "fb_uid":"100004087981387",
+      "facebook_uid":"100004087981387",
       "image_266":null,
       "image_532":null,
       "title":"foobarfoobarfoobarfoobarf",
@@ -2054,7 +2054,7 @@ Starts a day, returns created <a href="#Entity:Day">day</a>.
       "utime":1345725641,
       "user":{
         "id":4583,
-        "fb_uid":"100004087981387",
+        "facebook_uid":"100004087981387",
         "twitter_uid":0,
         "name":"bar bar",
         "sex":"male",
@@ -2072,10 +2072,10 @@ Starts a day, returns created <a href="#Entity:Day">day</a>.
       "is_favourite":false,
       "comments_count":0,
       "comments":[
-        
+
       ],
       "moments":[
-        
+
       ]
     }
 
@@ -2189,7 +2189,7 @@ Updates information about current <a href="#Entity:Day">day</a> and returns it. 
   <th>Description</th>
 </tr>
 <tr><td>[type]</td><td>id</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>fb_uid</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>facebook_uid</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>image_266</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>image_532</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>title</td><td>[description]</td></tr>
@@ -2209,7 +2209,7 @@ Updates information about current <a href="#Entity:Day">day</a> and returns it. 
 ###### Example response: ######
     {
       "id":2231,
-      "fb_uid":"100004087981387",
+      "facebook_uid":"100004087981387",
       "image_266":"http:\/\/static.onedayofmine.dev\/4590\/days\/71152b4f8e9821ef96630da96350ca32987f2e7f_266.jpeg",
       "image_532":"http:\/\/static.onedayofmine.dev\/4590\/days\/71152b4f8e9821ef96630da96350ca32987f2e7f_532.jpeg",
       "title":"foobar",
@@ -2221,7 +2221,7 @@ Updates information about current <a href="#Entity:Day">day</a> and returns it. 
       "utime":1345725664,
       "user":{
         "id":4590,
-        "fb_uid":"100004087981387",
+        "facebook_uid":"100004087981387",
         "twitter_uid":0,
         "name":"bar bar",
         "sex":"male",
@@ -2239,10 +2239,10 @@ Updates information about current <a href="#Entity:Day">day</a> and returns it. 
       "is_favourite":false,
       "comments_count":0,
       "comments":[
-        
+
       ],
       "moments":[
-        
+
       ]
     }
 
@@ -2267,7 +2267,7 @@ Get current day.
   <th>Description</th>
 </tr>
 <tr><td>[type]</td><td>id</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>fb_uid</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>facebook_uid</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>image_266</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>image_532</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>title</td><td>[description]</td></tr>
@@ -2287,7 +2287,7 @@ Get current day.
 ###### Example response: ######
     {
       "id":2233,
-      "fb_uid":"100004087981387",
+      "facebook_uid":"100004087981387",
       "image_266":null,
       "image_532":null,
       "title":"foobarfoobarfoobarfoobarf",
@@ -2299,7 +2299,7 @@ Get current day.
       "utime":1345725665,
       "user":{
         "id":4594,
-        "fb_uid":"100004087981387",
+        "facebook_uid":"100004087981387",
         "twitter_uid":0,
         "name":"bar bar",
         "sex":"male",
@@ -2317,10 +2317,10 @@ Get current day.
       "is_favourite":false,
       "comments_count":0,
       "comments":[
-        
+
       ],
       "moments":[
-        
+
       ]
     }
 
@@ -2388,7 +2388,7 @@ Finish current day.
   <th>Description</th>
 </tr>
 <tr><td>[type]</td><td>id</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>fb_uid</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>facebook_uid</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>image_266</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>image_532</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>title</td><td>[description]</td></tr>
@@ -2408,7 +2408,7 @@ Finish current day.
 ###### Example response: ######
     {
       "id":2237,
-      "fb_uid":"100004087981387",
+      "facebook_uid":"100004087981387",
       "image_266":"http:\/\/static.onedayofmine.dev\/4598\/days\/ef37d244fc2d4e648e9ba95d7e8ffdb42bd3fd4b_266.jpeg",
       "image_532":"http:\/\/static.onedayofmine.dev\/4598\/days\/ef37d244fc2d4e648e9ba95d7e8ffdb42bd3fd4b_532.jpeg",
       "title":"foobarfoobarfoobarfoobarf",
@@ -2420,7 +2420,7 @@ Finish current day.
       "utime":1345725667,
       "user":{
         "id":4598,
-        "fb_uid":"100004087981387",
+        "facebook_uid":"100004087981387",
         "twitter_uid":0,
         "name":"bar bar",
         "sex":"male",
@@ -2446,7 +2446,7 @@ Finish current day.
           "utime":1345725667,
           "user":{
             "id":4598,
-            "fb_uid":"100004087981387",
+            "facebook_uid":"100004087981387",
             "twitter_uid":0,
             "name":"bar bar",
             "sex":"male",
@@ -2464,7 +2464,7 @@ Finish current day.
         }
       ],
       "moments":[
-        
+
       ]
     }
 
@@ -2557,7 +2557,7 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
 <tr><td><a href='#Entity:Moment'>Moment[]</a></td><td>moments</td><td>All day moments</td></tr>
 <tr><td>bool</td><td>is_favourite</td><td></td></tr>
 <tr><td>[type]</td><td>id</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>fb_uid</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>facebook_uid</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>image_266</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>image_532</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>title</td><td>[description]</td></tr>
@@ -2572,7 +2572,7 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
 ###### Example response: ######
     {
       "id":2245,
-      "fb_uid":"fooba",
+      "facebook_uid":"fooba",
       "image_266":null,
       "image_532":null,
       "title":"foobarfoobarfoobarfoobarf",
@@ -2584,7 +2584,7 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
       "utime":1345725669,
       "user":{
         "id":4611,
-        "fb_uid":"fooba",
+        "facebook_uid":"fooba",
         "twitter_uid":0,
         "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
         "sex":"female",
@@ -2610,7 +2610,7 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
           "utime":1345725669,
           "user":{
             "id":4612,
-            "fb_uid":"fooba",
+            "facebook_uid":"fooba",
             "twitter_uid":0,
             "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
             "sex":"female",
@@ -2634,7 +2634,7 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
           "utime":1345725669,
           "user":{
             "id":4613,
-            "fb_uid":"fooba",
+            "facebook_uid":"fooba",
             "twitter_uid":0,
             "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
             "sex":"female",
@@ -2658,7 +2658,7 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
           "utime":1345725669,
           "user":{
             "id":4614,
-            "fb_uid":"fooba",
+            "facebook_uid":"fooba",
             "twitter_uid":0,
             "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
             "sex":"female",
@@ -2676,7 +2676,7 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
         }
       ],
       "moments":[
-        
+
       ]
     }
 
@@ -2783,7 +2783,7 @@ Share a day
   <th>Description</th>
 </tr>
 <tr><td>[type]</td><td>id</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>fb_uid</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>facebook_uid</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>image_266</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>image_532</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>title</td><td>[description]</td></tr>
@@ -2803,7 +2803,7 @@ Share a day
 ###### Example response: ######
     {
       "id":2248,
-      "fb_uid":"100004093051334",
+      "facebook_uid":"100004093051334",
       "image_266":null,
       "image_532":null,
       "title":"foobarfoobarfoobarfoobarf",
@@ -2815,7 +2815,7 @@ Share a day
       "utime":1345725670,
       "user":{
         "id":4619,
-        "fb_uid":"100004093051334",
+        "facebook_uid":"100004093051334",
         "twitter_uid":0,
         "name":"foo foo",
         "sex":"female",
@@ -2833,10 +2833,10 @@ Share a day
       "is_favourite":false,
       "comments_count":0,
       "comments":[
-        
+
       ],
       "moments":[
-        
+
       ]
     }
 
@@ -2888,7 +2888,7 @@ Returns favourite based on <a href="#range-request">range-request</a>.
     [
       {
         "id":2251,
-        "fb_uid":"100004093051334",
+        "facebook_uid":"100004093051334",
         "image_266":null,
         "image_532":null,
         "title":"foobarfoobarfoobarfoobarf",
@@ -2900,7 +2900,7 @@ Returns favourite based on <a href="#range-request">range-request</a>.
         "utime":1345725670,
         "user":{
           "id":4621,
-          "fb_uid":"100004093051334",
+          "facebook_uid":"100004093051334",
           "twitter_uid":0,
           "name":"foo foo",
           "sex":"female",
@@ -2991,9 +2991,9 @@ Returns following users days based on <a href="#range-request">range-request</a>
     [
       {
         "id":2258,
-        "fb_uid":"100004093051334",
-        "image_266":"http:\/\/static.onedayofmine.dev\/4628\/days\/972dec27448bbd2f831ed4f5564f369423515ffb_266.jpeg",
-        "image_532":"http:\/\/static.onedayofmine.dev\/4628\/days\/972dec27448bbd2f831ed4f5564f369423515ffb_532.jpeg",
+        "facebook_uid":"100004093051334",
+        "image_266":"http:\/\/static.onedayofmine.dev\/4628\/days\/972dec27448bbd2f831ed4f5564f369423515ffacebook_266.jpeg",
+        "image_532":"http:\/\/static.onedayofmine.dev\/4628\/days\/972dec27448bbd2f831ed4f5564f369423515ffacebook_532.jpeg",
         "title":"foobarfoobarfoobarfoobarf",
         "occupation":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoo",
         "location":"foobarfoobarfoobarfoobarf",
@@ -3003,7 +3003,7 @@ Returns following users days based on <a href="#range-request">range-request</a>
         "utime":1345725671,
         "user":{
           "id":4628,
-          "fb_uid":"100004093051334",
+          "facebook_uid":"100004093051334",
           "twitter_uid":0,
           "name":"foo foo",
           "sex":"female",
@@ -3070,7 +3070,7 @@ Returns current user days based on <a href="#range-request">range-request</a>.
     [
       {
         "id":2263,
-        "fb_uid":"100004087981387",
+        "facebook_uid":"100004087981387",
         "image_266":"http:\/\/static.onedayofmine.dev\/4629\/days\/58984426180d67c7ab3371361930fae01727f448_266.jpeg",
         "image_532":"http:\/\/static.onedayofmine.dev\/4629\/days\/58984426180d67c7ab3371361930fae01727f448_532.jpeg",
         "title":"foobarfoobarfoobarfoobarf",
@@ -3082,7 +3082,7 @@ Returns current user days based on <a href="#range-request">range-request</a>.
         "utime":1345725671,
         "user":{
           "id":4629,
-          "fb_uid":"100004087981387",
+          "facebook_uid":"100004087981387",
           "twitter_uid":0,
           "name":"bar bar",
           "sex":"male",
@@ -3348,7 +3348,7 @@ Returns <a href="#Entity:User">profile</a> of current logged in user.
   <th>Description</th>
 </tr>
 <tr><td>[type]</td><td>id</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>fb_uid</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>facebook_uid</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>twitter_uid</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>name</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>sex</td><td>[description]</td></tr>
@@ -3369,7 +3369,7 @@ Returns <a href="#Entity:User">profile</a> of current logged in user.
 ###### Example response: ######
     {
       "id":4643,
-      "fb_uid":"100004087981387",
+      "facebook_uid":"100004087981387",
       "twitter_uid":0,
       "name":"bar bar",
       "sex":"male",
@@ -3437,7 +3437,7 @@ Changes fields of current user <a href="#Entity:User">profile</a> and returns th
   <th>Description</th>
 </tr>
 <tr><td>[type]</td><td>id</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>fb_uid</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>facebook_uid</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>twitter_uid</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>name</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>sex</td><td>[description]</td></tr>
@@ -3458,7 +3458,7 @@ Changes fields of current user <a href="#Entity:User">profile</a> and returns th
 ###### Example response: ######
     {
       "id":4644,
-      "fb_uid":"100004087981387",
+      "facebook_uid":"100004087981387",
       "twitter_uid":0,
       "name":"foobarfoobarfoobarfoobarf",
       "sex":"female",
@@ -3621,7 +3621,7 @@ Changes fields of current user <a href="#Entity:User">profile</a> and returns th
     [
       {
         "id":4672,
-        "fb_uid":"100004093051334",
+        "facebook_uid":"100004093051334",
         "twitter_uid":0,
         "name":"foo foo",
         "sex":"female",
@@ -3679,7 +3679,7 @@ Changes fields of current user <a href="#Entity:User">profile</a> and returns th
   <th>Description</th>
 </tr>
 <tr><td>[type]</td><td>id</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>fb_uid</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>facebook_uid</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>twitter_uid</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>name</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>sex</td><td>[description]</td></tr>
@@ -3698,7 +3698,7 @@ Changes fields of current user <a href="#Entity:User">profile</a> and returns th
 ###### Example response: ######
     {
       "id":4673,
-      "fb_uid":"100004087981387",
+      "facebook_uid":"100004087981387",
       "twitter_uid":637083468,
       "name":"bar bar",
       "sex":"male",
@@ -3767,7 +3767,7 @@ Returns news for current logged in user.
         "ctime":1345725678,
         "user":{
           "id":4680,
-          "fb_uid":"fooba",
+          "facebook_uid":"fooba",
           "twitter_uid":0,
           "name":"foobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoobarfoob",
           "sex":"female",
@@ -3785,7 +3785,7 @@ Returns news for current logged in user.
         "day":{
           "id":2279,
           "user_id":4679,
-          "fb_uid":"fooba",
+          "facebook_uid":"fooba",
           "image_266":null,
           "image_532":null,
           "title":"foobarfoobarfoobarfoobarf",
@@ -3851,7 +3851,7 @@ Returns days of specified user
     [
       {
         "id":2281,
-        "fb_uid":"100004087981387",
+        "facebook_uid":"100004087981387",
         "image_266":null,
         "image_532":null,
         "title":"foobarfoobarfoobarfoobarf",
@@ -3863,7 +3863,7 @@ Returns days of specified user
         "utime":1345725679,
         "user":{
           "id":4682,
-          "fb_uid":"100004087981387",
+          "facebook_uid":"100004087981387",
           "twitter_uid":0,
           "name":"bar bar",
           "sex":"male",
@@ -3882,7 +3882,7 @@ Returns days of specified user
       },
       {
         "id":2280,
-        "fb_uid":"100004087981387",
+        "facebook_uid":"100004087981387",
         "image_266":null,
         "image_532":null,
         "title":"foobarfoobarfoobarfoobarf",
@@ -3894,7 +3894,7 @@ Returns days of specified user
         "utime":1345725679,
         "user":{
           "id":4682,
-          "fb_uid":"100004087981387",
+          "facebook_uid":"100004087981387",
           "twitter_uid":0,
           "name":"bar bar",
           "sex":"male",
@@ -3946,7 +3946,7 @@ Returns days of specified user
   <th>Description</th>
 </tr>
 <tr><td>int</td><td>id</td><td>User ID</td></tr>
-<tr><td>string</td><td>fb_uid</td><td>Facebook user ID</td></tr>
+<tr><td>string</td><td>facebook_uid</td><td>Facebook user ID</td></tr>
 <tr><td>string</td><td>twitter_uid</td><td>Twitter user ID</td></tr>
 <tr><td>string</td><td>name</td><td>Displayed name of the user</td></tr>
 <tr><td>string</td><td>sex</td><td>Gender {male,female}.</td></tr>
@@ -3966,7 +3966,7 @@ Returns days of specified user
 ###### Example response: ######
     {
       "id":4684,
-      "fb_uid":"100004087981387",
+      "facebook_uid":"100004087981387",
       "twitter_uid":0,
       "name":"bar bar",
       "sex":"male",
@@ -4023,7 +4023,7 @@ Returns list of users that follow selected user.
     [
       {
         "id":4689,
-        "fb_uid":"100004093051334",
+        "facebook_uid":"100004093051334",
         "twitter_uid":0,
         "name":"foo foo",
         "sex":"female",
@@ -4041,7 +4041,7 @@ Returns list of users that follow selected user.
       },
       {
         "id":4690,
-        "fb_uid":"fooba",
+        "facebook_uid":"fooba",
         "twitter_uid":0,
         "name":"Dum Dum",
         "sex":"female",
@@ -4099,7 +4099,7 @@ Returns list of users that is followed by selected user.
     [
       {
         "id":4692,
-        "fb_uid":"100004093051334",
+        "facebook_uid":"100004093051334",
         "twitter_uid":0,
         "name":"foo foo",
         "sex":"female",
@@ -4116,7 +4116,7 @@ Returns list of users that is followed by selected user.
       },
       {
         "id":4693,
-        "fb_uid":"fooba",
+        "facebook_uid":"fooba",
         "twitter_uid":0,
         "name":"Dum Dum",
         "sex":"female",
@@ -4231,7 +4231,7 @@ Stop following selected user.
     [
       {
         "id":4699,
-        "fb_uid":"fooba",
+        "facebook_uid":"fooba",
         "twitter_uid":0,
         "name":"fooA",
         "sex":"female",

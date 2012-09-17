@@ -16,6 +16,7 @@ if(file_exists(dirname(__FILE__) . '/setup.override.php'))
 lmb_package_require('cms');
 lmb_package_require('cache2');
 lmb_package_require('profile');
+lmb_package_require('mail');
 
 lmb_env_setor('APP_DIR', $app_dir);
 lmb_env_setor('LIBS_DIR', $libs_dir);
@@ -25,7 +26,6 @@ if(array_key_exists('HTTP_NAME', $_SERVER))
   lmb_env_setor('HOST_URL', 'http://'.$_SERVER['HTTP_HOST'].'/');
 
 lmb_env_setor('LIMB_APP_MODE' , 'production');
-lmb_env_setor('USE_API_CACHE', false);
 
 lmb_require('src/model/traits/*.trait.php');
 lmb_require('src/model/base/*.class.php');
@@ -36,3 +36,17 @@ lmb_require('src/toolkit/odTools.class.php');
 lmbToolkit :: merge(new odTools());
 lmb_require('limb/dbal/src/toolkit/lmbDbTools.class.php');
 lmbToolkit :: merge(new lmbDbTools());
+
+if(extension_loaded('newrelic'))
+{
+  newrelic_set_appname('ODOM');
+  newrelic_name_transaction(isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : 'CLI');
+  lmbErrorGuard :: registerFatalErrorHandler('newrelic_notice_error');
+
+  function processException($e)
+  {
+    newrelic_notice_error($e->getOriginalMessage(), $e);
+  }
+
+  lmbErrorGuard :: registerExceptionHandler('processException');
+}

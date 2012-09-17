@@ -1,5 +1,0 @@
-SET FOREIGN_KEY_CHECKS = 0;
-
-ALTER TABLE `day` ADD `top_moment_id` int(11) unsigned NULL DEFAULT NULL AFTER user_id;
-
-SET FOREIGN_KEY_CHECKS = 1;

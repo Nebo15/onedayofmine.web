@@ -8,4 +8,14 @@ class MomentLike extends BaseLike
     parent::_defineRelations();
     $this->_many_belongs_to['moment'] = array ('field' => 'moment_id', 'class' => 'Moment');
   }
+
+  static function findByMomentId($moment_id)
+  {
+    return self::findOne(array('moment_id = ?', $moment_id));
+  }
+
+  static function findByMomentIdAndUserId($moment_id, $user_id)
+  {
+    return self::findOne(array('moment_id = ? AND user_id = ?', $moment_id, $user_id));
+  }
 }

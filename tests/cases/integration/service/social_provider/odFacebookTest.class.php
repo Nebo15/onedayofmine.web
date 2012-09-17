@@ -1,7 +1,7 @@
 <?php
-lmb_require('tests/cases/integration/odAcceptanceTestCase.class.php');
+lmb_require('tests/cases/integration/odIntegrationTestCase.class.php');
 
-class odFacebookTest extends odAcceptanceTestCase
+class odFacebookTest extends odIntegrationTestCase
 {
   function testApi_ExpiredToken()
   {

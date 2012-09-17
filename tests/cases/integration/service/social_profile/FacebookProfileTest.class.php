@@ -1,7 +1,7 @@
 <?php
-lmb_require('tests/cases/integration/odAcceptanceTestCase.class.php');
+lmb_require('tests/cases/integration/odIntegrationTestCase.class.php');
 
-class FacebookProfileTest extends odAcceptanceTestCase
+class FacebookProfileTest extends odIntegrationTestCase
 {
   /**
    * @var Client
@@ -18,21 +18,21 @@ class FacebookProfileTest extends odAcceptanceTestCase
   {
     $info = (new FacebookProfile($this->main_user))->getInfo_Raw();
     $this->assertTrue(count($info));
-    $this->assertEqual($info['uid'], $this->main_user->getFbUid());
+    $this->assertEqual($info['uid'], $this->main_user->getFacebookUid());
   }
 
   function testGetInfo()
   {
     $info = (new FacebookProfile($this->main_user))->getInfo();
     $this->assertTrue(count($info));
-    $this->assertEqual($info['fb_uid'], $this->main_user->getFbUid());
+    $this->assertEqual($info['facebook_uid'], $this->main_user->getFacebookUid());
   }
 
   function testGetFriends()
   {
     $friends = (new FacebookProfile($this->additional_user))->getFriends();
     $this->assertEqual(count($friends), 1);
-    $this->assertEqual($friends[0]['uid'], $this->main_user->getFbUid());
+    $this->assertEqual($friends[0]['facebook_uid'], $this->main_user->getFacebookUid());
   }
 
   function testGetRegisteredFriends()
@@ -49,24 +49,31 @@ class FacebookProfileTest extends odAcceptanceTestCase
 
   function testGetPictures()
   {
-    $pictures = (new FacebookProfile($this->main_user))->getPictures();
+    $pictures = (new FacebookProfile($this->additional_user))->getPictures();
     $this->assertTrue(count($pictures));
   }
 
   function testGetPictures_PicturesIfDefault()
   {
     // foo should have default avatar
-    $pictures = (new FacebookProfile($this->additional_user))->getPictures();
+    $pictures = (new FacebookProfile($this->main_user))->getPictures();
     $this->assertEqual(count($pictures), 0);
   }
 
   function testGetPictureContents()
   {
-    $profile = (new FacebookProfile($this->main_user));
+    // Bar should have not-default avatar
+    $profile = (new FacebookProfile($this->additional_user));
     $pictures = $profile->getPictures();
     $biggest = array_pop($pictures);
     $contents = $profile->getPictureContents($biggest);
     $this->assertTrue($contents);
+  }
+
+  function testShareInvitation()
+  {
+    $facebook_id = (new FacebookProfileForTests($this->main_user))->shareInvitation($this->additional_user->getFacebookUid());
+    $this->assertTrue($facebook_id);
   }
 
   function testShareBeginDay()
@@ -77,8 +84,8 @@ class FacebookProfileTest extends odAcceptanceTestCase
 
     $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($day));
 
-    $fb_id = (new FacebookProfileForTests($this->main_user))->shareDayBegin($day);
-    $this->assertTrue($fb_id);
+    $facebook_id = (new FacebookProfileForTests($this->main_user))->shareDayBegin($day);
+    $this->assertTrue($facebook_id);
   }
 
   function testShareDayLike()
@@ -87,10 +94,13 @@ class FacebookProfileTest extends odAcceptanceTestCase
     $day->setTitle('testShareLikeDay');
     $day->save();
 
+    $like = $this->generator->dayLike($day);
+    $like->save();
+
     $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($day));
 
     (new FacebookProfileForTests($this->main_user))->shareDayBegin($day);
-    (new FacebookProfileForTests($this->additional_user))->shareDayLike($day);
+    (new FacebookProfileForTests($this->additional_user))->shareDayLike($day, $like);
   }
 
   function testShareAddMoment()
@@ -101,8 +111,8 @@ class FacebookProfileTest extends odAcceptanceTestCase
 
     $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($day));
 
-    $fb_id = (new FacebookProfileForTests($this->main_user))->shareDayBegin($day);
-    $day->setFbId($fb_id);
+    $facebook_id = (new FacebookProfileForTests($this->main_user))->shareDayBegin($day);
+    $day->setFacebookId($facebook_id);
     $day->save();
 
     $moment = $this->generator->moment($day);
@@ -112,8 +122,8 @@ class FacebookProfileTest extends odAcceptanceTestCase
 
     $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($moment));
 
-    $fb_id = (new FacebookProfileForTests($this->main_user))->shareMomentAdd($day, $moment);
-    $this->assertTrue($fb_id);
+    $facebook_id = (new FacebookProfileForTests($this->main_user))->shareMomentAdd($day, $moment);
+    $this->assertTrue($facebook_id);
 
     $moment = $this->generator->moment($day);
     $moment->save();
@@ -122,8 +132,8 @@ class FacebookProfileTest extends odAcceptanceTestCase
 
     $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($moment));
 
-    $fb_id = (new FacebookProfileForTests($this->main_user))->shareMomentAdd($day, $moment);
-    $this->assertTrue($fb_id);
+    $facebook_id = (new FacebookProfileForTests($this->main_user))->shareMomentAdd($day, $moment);
+    $this->assertTrue($facebook_id);
   }
 
   function testShareMomentLike()
@@ -134,8 +144,8 @@ class FacebookProfileTest extends odAcceptanceTestCase
 
     $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($day));
 
-    $fb_id = (new FacebookProfileForTests($this->main_user))->shareDayBegin($day);
-    $day->setFbId($fb_id);
+    $facebook_id = (new FacebookProfileForTests($this->main_user))->shareDayBegin($day);
+    $day->setFacebookId($facebook_id);
     $day->save();
 
     $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($day));
@@ -147,10 +157,24 @@ class FacebookProfileTest extends odAcceptanceTestCase
 
     $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($moment));
 
-    $fb_id = (new FacebookProfileForTests($this->main_user))->shareMomentAdd($day, $moment);
-    $this->assertTrue($fb_id);
+    $facebook_id = (new FacebookProfileForTests($this->main_user))->shareMomentAdd($day, $moment);
+    $this->assertTrue($facebook_id);
 
-    (new FacebookProfileForTests($this->main_user))->shareMomentLike($moment);
+    $like = $this->generator->momentLike($moment);
+    $like->save();
+
+    (new FacebookProfileForTests($this->main_user))->shareMomentLike($moment, $like);
+  }
+
+  function testShareDay()
+  {
+    $day = $this->generator->day();
+    $day->setTitle('shareDay - Day');
+    $day->save();
+
+    $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($day));
+
+    (new FacebookProfileForTests($this->main_user))->shareDay($day);
   }
 
   function testShareEndDay()
@@ -163,17 +187,6 @@ class FacebookProfileTest extends odAcceptanceTestCase
 
     (new FacebookProfileForTests($this->main_user))->shareDayBegin($day);
     (new FacebookProfileForTests($this->main_user))->shareDayEnd($day);
-  }
-
-  function testShareDay()
-  {
-    $day = $this->generator->day();
-    $day->setTitle('shareDay - Day');
-    $day->save();
-
-    $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($day));
-
-    (new FacebookProfileForTests($this->main_user))->shareDay($day);
   }
 }
 

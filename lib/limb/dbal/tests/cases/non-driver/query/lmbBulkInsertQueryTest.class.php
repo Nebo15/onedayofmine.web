@@ -19,8 +19,16 @@ class lmbBulkInsertQueryTest extends lmbQueryBaseTestCase
   function testInsert()
   {
     $query = new lmbBulkInsertQuery('test_db_table', $this->conn);
-    $query->addSet(array('id' => 2, 'title' => 'some title', 'description' => 'some description'));
-    $query->addSet(array('id' => 4, 'title' => 'some other title', 'description' => 'some other description'));
+    $query->addSet(array(
+      'id' => 2,
+      'title' => 'some title',
+      'description' => null
+    ));
+    $query->addSet(array(
+      'id' => 4,
+      'title' => 'some other title',
+      'description' => 'some other description'
+    ));
     $stmt = $query->getStatement();
     $stmt->execute();
 
@@ -30,7 +38,7 @@ class lmbBulkInsertQueryTest extends lmbQueryBaseTestCase
     $this->assertEqual(sizeof($arr), 2);
     $this->assertEqual($arr[0]['id'], 2);
     $this->assertEqual($arr[0]['title'], 'some title');
-    $this->assertEqual($arr[0]['description'], 'some description');
+    $this->assertEqual($arr[0]['description'], null);
     $this->assertEqual($arr[1]['id'], 4);
     $this->assertEqual($arr[1]['description'], 'some other description');
     $this->assertEqual($arr[1]['title'], 'some other title');

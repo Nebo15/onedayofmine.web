@@ -6,9 +6,6 @@ class MomentCommentsControllerTest extends odControllerTestCase
 {
   protected $controller_class = 'MomentCommentsController';
 
-  /**
-   * @api
-   */
   function testUpdate()
   {
     $this->main_user->save();
@@ -33,7 +30,7 @@ class MomentCommentsControllerTest extends odControllerTestCase
 
     $this->toolkit->setUser($this->additional_user);
     $this->post('update', array('text' => $new_comment_text), $comment->getId());
-    $this->assertResponse(404);
+    $this->assertResponse(401);
   }
 
   function testDelete()
@@ -70,7 +67,7 @@ class MomentCommentsControllerTest extends odControllerTestCase
 
     $this->toolkit->setUser($this->additional_user);
     $this->post('delete', array(), $comment->getId());
-    $this->assertResponse(404);
+    $this->assertResponse(401);
   }
 
   function testDelete_NotFound()

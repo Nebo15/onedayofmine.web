@@ -1,6 +1,7 @@
 
 SET FOREIGN_KEY_CHECKS = 0;
 
+DROP TABLE IF EXISTS `requests_log`;
 CREATE TABLE `requests_log` (
     `id` int(11) unsigned NOT NULL COMMENT '' auto_increment,
     `ip` varchar(15) NOT NULL DEFAULT '' COMMENT '' COLLATE ascii_bin,

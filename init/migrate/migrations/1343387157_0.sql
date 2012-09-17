@@ -1,7 +1,0 @@
-
-SET FOREIGN_KEY_CHECKS = 0;
-
-ALTER TABLE `user` DROP `fb_profile_url`;
-
-
-SET FOREIGN_KEY_CHECKS = 1;

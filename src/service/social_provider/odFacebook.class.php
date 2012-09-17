@@ -34,7 +34,12 @@ class odFacebook extends Facebook implements odSocialServicesProviderInterface
     {
       return $provider->api('/me')['id'];
     }
-    catch (Exception $e)
+    catch(odFacebookApiExpiredTokenException $e)
+    {
+      $error_list[] = 'Token expired';
+      return false;
+    }
+    catch (FacebookApiException $e)
     {
       $error_list[] = $e->getMessage();
       return false;
@@ -50,7 +55,7 @@ class odFacebook extends Facebook implements odSocialServicesProviderInterface
   {
     $message = $result['error']['message'];
 
-    if(false !== strpos($message, 'Error validating access token: Session has expired'))
+    if(false !== strpos($message, 'Error validating access token'))
       throw new odFacebookApiExpiredTokenException($message);
 
     parent::throwAPIException($result);

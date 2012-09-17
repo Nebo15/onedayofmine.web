@@ -63,11 +63,11 @@ class odTestsTools extends lmbAbstractTools
 
   function getTestsUsers($all = false)
   {
-    $fb_test_users = lmbToolkit::instance()->loadTestsUsersInfo();
+    $facebook_test_users = lmbToolkit::instance()->loadTestsUsersInfo();
     if($all)
-      $users_infos = $fb_test_users;
+      $users_infos = $facebook_test_users;
     else
-      $users_infos = array(array_pop($fb_test_users), array_pop($fb_test_users));
+      $users_infos = array(array_pop($facebook_test_users), array_pop($facebook_test_users));
 
     if(!count($users_infos))
     {
@@ -80,8 +80,8 @@ class odTestsTools extends lmbAbstractTools
     {
       $user_info = (object) $user_info;
       $user = new User();
-      $user->setFbUid($user_info->id);
-      $user->setFbAccessToken($user_info->access_token);
+      $user->setFacebookUid($user_info->id);
+      $user->setFacebookAccessToken($user_info->access_token);
       $user->import((new FacebookProfile($user))->getInfo());
 
       $settings = $user->getSettings();
@@ -101,9 +101,29 @@ class odTestsTools extends lmbAbstractTools
   function truncateDb()
   {
     $connection = lmbToolkit::instance()->getDefaultDbConnection();
+
     foreach($connection->getDatabaseInfo()->getTableList() as $table) {
       if($table != 'schema_info')
-        $connection->newStatement(sprintf("DELETE FROM %s", $connection->quoteIdentifier($table)))->execute();
+      {
+        $table = $connection->quoteIdentifier($table);
+        $connection->newStatement(sprintf("DELETE FROM %s", $table))
+          ->execute();
+      }
+    }
+    return $this;
+  }
+
+  function makeUniqueTablesIdsOffset($offset)
+  {
+    $connection = lmbToolkit::instance()->getDefaultDbConnection();
+
+    foreach($connection->getDatabaseInfo()->getTableList() as $table) {
+      if($table != 'schema_info')
+      {
+        $table = $connection->quoteIdentifier($table);
+        $connection->newStatement(sprintf("ALTER TABLE %s AUTO_INCREMENT = %s", $table, $offset))
+          ->execute();
+      }
     }
     return $this;
   }

@@ -31,7 +31,7 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
    */
   public function __construct(User $user)
   {
-    $access_token   = $user->getFbAccessToken();
+    $access_token   = $user->getFacebookAccessToken();
 
     lmb_assert_true($user, 'Facebook profile user not specified.');
     lmb_assert_true($access_token, 'Facebook access token not specified.');
@@ -56,7 +56,7 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
    */
   public function getInfo_Raw()
   {
-    $raw = $this->provider->makeQuery('SELECT '.implode(',', self::_getUserFbFieldsMap()).' FROM user WHERE uid = me()');
+    $raw = $this->provider->makeQuery('SELECT '.implode(',', self::_getUserFacebookFieldsMap()).' FROM user WHERE uid = me()');
     lmb_assert_true(count($raw));
     return $raw[0];
   }
@@ -68,25 +68,33 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
    */
   public function getInfo()
   {
-    return self::_mapFbInfo($this->getInfo_Raw());
+    return self::_mapFacebookInfo($this->getInfo_Raw());
   }
 
   public function getFriends()
   {
-    $fields = implode(',', self::_getUserFbFieldsMap());
-    return $this->provider->makeQuery("SELECT {$fields} FROM user WHERE is_app_user AND uid IN (SELECT uid2 FROM friend WHERE uid1 = me())");
+    $fields = implode(',', self::_getUserFacebookFieldsMap());
+    $fql_result = $this->provider->makeQuery("SELECT {$fields} FROM user WHERE is_app_user AND uid IN (SELECT uid2 FROM friend WHERE uid1 = me())");
+    $friends = [];
+
+    if($fql_result)
+      foreach($fql_result as $raw_info)
+      {
+        $friends[] = $this->_mapFacebookInfo($raw_info);
+      }
+
+    return $friends;
   }
 
   public function getRegisteredFriends()
   {
     $results = array();
-    foreach($this->getFriends() as $raw_info)
+    foreach($this->getFriends() as $info)
     {
-      $info = $this->_mapFbInfo($raw_info);
-      $user = User::findByFbUid($info['fb_uid']);
-      if(!$user)
+      if(!$user = User::findByFacebookUid($info['facebook_uid']))
         continue;
-      $user->setUserInfo($info);
+
+      // $user->setUserInfo($info);
       $results[] = $user;
     }
     return $results;
@@ -121,6 +129,16 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
     return $this->getProvider()->downloadImage($url);
   }
 
+  public function shareInvitation($facebook_user_id)
+  {
+    return $this->provider->api("/{$facebook_user_id}/feed", "post", array(
+      'name'        => 'One Day of Mine invitation',
+      // 'picture'     => count($day->getMoments()) ? lmbToolkit::instance()->getStaticUrl($day->getImage()) : '',
+      'link'        => lmbToolkit::instance()->getSiteUrl(),
+      'description' => "Hi, come and check out my photos in One Day of Mine, where people share days of their lifes.",
+    ))['id'];
+  }
+
   public function shareDayBegin(Day $day)
   {
     return $this->provider->api("/me/".$this->namespace.":begin", "post", array(
@@ -138,11 +156,18 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
     ));
   }
 
-  public function shareDayLike(Day $day)
+  public function shareDayDelete(Day $day) {}
+
+  public function shareDayLike(Day $day, DayLike $like)
   {
     return $this->provider->api("/me/og.likes", "post", array(
       'object'      => $this->_getPageUrl($day)
-    ));
+    ))['id'];
+  }
+
+  public function shareDayUnlike(Day $day, DayLike $like)
+  {
+    return $this->_deleteBuiltInLike($like->getFacebookId());
   }
 
   public function shareMomentAdd(Day $day, Moment $moment)
@@ -153,11 +178,18 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
     ))['id'];
   }
 
-  public function shareMomentLike(Moment $moment)
+  public function shareMomentDelete(Day $day, Moment $moment) {}
+
+  public function shareMomentLike(Moment $moment, MomentLike $like)
   {
     return $this->provider->api("/me/og.likes", "post", array(
       'object'      => $this->_getPageUrl($moment)
-    ));
+    ))['id'];
+  }
+
+  public function shareMomentUnlike(Moment $moment, MomentLike $like)
+  {
+    return $this->_deleteBuiltInLike($like->getFacebookId());
   }
 
   public function shareDayEnd(Day $day)
@@ -167,12 +199,17 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
     ));
   }
 
+  protected function _deleteBuiltInLike($like_instance_id)
+  {
+    return $this->provider->api("/{$like_instance_id}", "delete");
+  }
+
   protected function _getPageUrl($object)
   {
     return lmbToolkit::instance()->getPageUrl($object);
   }
 
-  protected function _getUserFbFieldsMap()
+  protected function _getUserFacebookFieldsMap()
   {
     return array(
       'uid', 'email', 'first_name', 'last_name', 'sex', 'timezone', 'profile_update_time',
@@ -180,22 +217,23 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
     );
   }
 
-  protected function _mapFbInfo($fb)
+  protected function _mapFacebookInfo($fb)
   {
     return array(
-      'fb_uid'           => $fb['uid'],
+      'facebook_uid'     => $fb['uid'],
       'email'            => $fb['email'],
       'name'             => $fb['first_name'] . ' ' . $fb['last_name'],
       'sex'              => $fb['sex'],
       'timezone'         => $fb['timezone'],
-      'fb_profile_utime' => $fb['profile_update_time'],
+      'facebook_profile_utime' => $fb['profile_update_time'],
       'pic'              => $fb['pic'],
+      'pic_big'          => $fb['pic_big'],
       'occupation'       => isset($fb['work']['position']['name'])
                                ? $fb['work']['position']['name']
-                              : '',
+                               : '',
       'current_location' => isset($fb['current_location']['name'])
-                              ? $fb['current_location']['name']
-                              : '',
+                               ? $fb['current_location']['name']
+                               : '',
       'birthday'         => date('Y-m-d', strtotime($fb['birthday_date']))
     );
   }

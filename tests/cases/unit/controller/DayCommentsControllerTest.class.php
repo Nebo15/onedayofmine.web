@@ -47,6 +47,6 @@ class DayCommentsControllerTest extends odControllerTestCase
     lmbToolkit::instance()->setUser($this->main_user);
 
     $this->post('delete', array(), $comment->id);
-    $this->assertResponse(404);
+    $this->assertResponse(401);
   }
 }

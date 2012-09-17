@@ -11,9 +11,11 @@ class MomentsController extends BaseJsonController
     if(!$this->request->isPost())
       return $this->_answerNotPost();
 
-    $moment = Moment::findById($this->request->id);
-    if(!$moment || $moment->getDay()->getUser()->id != $this->_getUser()->id)
-      return $this->_answerNotFound("Moment with id=".$this->request->id." not found");
+    if(!$moment = Moment::findById($this->request->id))
+      return $this->_answerModelNotFoundById('Moment', $this->request->id);
+
+    if($moment->getDay()->getUser()->getId() != $this->_getUser()->getId())
+      return $this->_answerNotOwner();
 
     if($this->request->has('image_content'))
       $moment->attachImage(base64_decode($this->request->get('image_content')));
@@ -31,7 +33,7 @@ class MomentsController extends BaseJsonController
     if($this->error_list->isEmpty())
     {
       $moment->saveSkipValidation();
-      return $this->_answerOk($moment->exportForApi());
+      return $this->_answerOk($this->toolkit->getExportHelper()->exportMoment($moment));
     }
     else
       return $this->_answerWithError($this->error_list->export());
@@ -42,9 +44,8 @@ class MomentsController extends BaseJsonController
     if(!$this->request->isPost())
       return $this->_answerNotPost();
 
-    $moment = Moment::findById($this->request->id);
-    if(!$moment)
-      return $this->_answerNotFound("Moment with id=".$this->request->id." not found");
+    if(!$moment = Moment::findById($this->request->id))
+      return $this->_answerModelNotFoundById('Moment', $this->request->id);
 
     $comment = new MomentComment();
     $comment->setText($this->request->get('text'));
@@ -56,11 +57,9 @@ class MomentsController extends BaseJsonController
     {
       $comment->saveSkipValidation();
 
-      $this->toolkit->getNewsObserver()->onComment($comment);
+      $this->toolkit->getNewsObserver()->onMomentComment($comment);
 
-      $export = $comment->exportForApi();
-      $export->user = $this->_getUser()->exportForApi();
-      return $this->_answerOk($export);
+      return $this->_answerOk($this->toolkit->getExportHelper()->exportMomentComment($comment));
     }
     else
       return $this->_answerWithError($this->error_list->export());
@@ -71,13 +70,73 @@ class MomentsController extends BaseJsonController
     if(!$this->request->isPost())
       return $this->_answerNotPost();
 
-    $moment = Moment::findById($this->request->id);
-    if(!$moment || $moment->getDay()->getUser()->id != $this->_getUser()->id)
-      return $this->_answerNotFound("Moment not found by id ".$this->request->id);
+    if(!$moment = Moment::findById($this->request->id))
+      return $this->_answerModelNotFoundById('Moment', $this->request->id);
 
-    $moment->destroy();
+    if($moment->getDay()->getUser()->getId() != $this->_getUser()->getId())
+      return $this->_answerNotOwner();
+
+    $moment->setIsDeleted(1);
+    $moment->save();
 
     $this->toolkit->getNewsObserver()->onMomentDelete($moment);
+
+    return $this->_answerOk();
+  }
+
+  function doRestore()
+  {
+    if(!$this->request->isPost())
+      return $this->_answerNotPost();
+
+    if(!$moment = Moment::findById($this->request->id))
+      return $this->_answerModelNotFoundById('Moment', $this->request->id);
+
+    if($moment->getDay()->getUser()->getId() != $this->_getUser()->getId())
+      return $this->_answerNotOwner();
+
+    $moment->setIsDeleted(0);
+    $moment->save();
+
+    $this->toolkit->getNewsObserver()->onMomentRestore($moment);
+
+    return $this->_answerOk();
+  }
+
+  function doLike()
+  {
+    if(!$this->request->isPost())
+      return $this->_answerNotPost();
+
+    if(!$moment = Moment::findById($this->request->id))
+      return $this->_answerModelNotFoundById('Moment', $this->request->id);
+
+    $like = new MomentLike;
+    $like->setMoment($moment);
+    $like->setUser($this->_getUser());
+    $like->save();
+
+    $this->toolkit->getPostingService()->shareMomentLike($moment, $like);
+    $this->toolkit->getNewsObserver()->onMomentLike($moment, $like);
+
+    return $this->_answerOk();
+  }
+
+  function doUnlike()
+  {
+    if(!$this->request->isPost())
+      return $this->_answerNotPost();
+
+    if(!$moment = Moment::findById($this->request->id))
+      return $this->_answerModelNotFoundById('Moment', $this->request->id);
+
+    if(!$like = MomentLike::findByMomentIdAndUserId($moment->getId(), $this->_getUser()->getId()))
+      return $this->_answerOk("Like not found");
+
+    $this->toolkit->getPostingService()->shareMomentUnlike($moment, $like);
+    $this->toolkit->getNewsObserver()->onMomentUnlike($moment, $like);
+
+    $like->destroy();
 
     return $this->_answerOk();
   }
@@ -85,18 +144,10 @@ class MomentsController extends BaseJsonController
   function doGuestComments()
   {
     if(!$moment = Moment::findById($this->request->id))
-      return $this->_answerNotFound("Moment with id '".$this->request->get('id')."' not found");
+      return $this->_answerModelNotFoundById('Moment', $this->request->id);
 
     list($from, $to, $limit) = $this->_getFromToLimitations();
 
-    $answer = array();
-    foreach ($moment->getCommentsWithLimitation($from, $to, $limit) as $comment)
-    {
-      $export = $comment->exportForApi();
-      $export->user = $comment->getUser()->exportForApi();
-      $answer[] = $export;
-    }
-
-    return $this->_answerOk($answer);
+    return $this->_answerOk($this->toolkit->getExportHelper()->exportMomentCommentItems($moment->getCommentsWithLimitation($from, $to, $limit)));
   }
 }

@@ -1,7 +1,7 @@
 <?php
 require('settings/images.conf.php');
 
-$conf['ImageableForTests'] = array(
+$conf['ImageableForIntegrationTests'] = array(
   'path'      => 'tests/:id_:image_width.:file_extension',
   'save_path' => "www/users",
   'sizes'     => array(

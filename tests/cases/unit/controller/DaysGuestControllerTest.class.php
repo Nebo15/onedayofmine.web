@@ -40,48 +40,8 @@ class DaysGuestControllerTest extends odControllerTestCase
       $this->assertEqual($day->getComments()->at(0)->getId(), $loaded_day->comments[0]->id);
       $this->assertEqual($day->getMoments()->at(0)->getComments()->count(), $loaded_day->moments[0]->comments_count);
       $this->assertEqual($day->getMoments()->count(), count($loaded_day->moments));
+      $this->assertEqual(1, $loaded_day->views_count);
     }
-  }
-
-  /**
-   * @api description Get few days in one request.
-   * @api input param string ids List of ID's, that was separated by ";".
-   * @api result Day[] days See GET days/:id/item
-   */
-  function testItem_Many()
-  {
-    $user1 = $this->generator->user();
-    $day1 = $this->generator->day($user1);
-    $user1->addToDays($day1);
-    $day1->addToMoments($this->generator->moment($day1));
-    $user1->save();
-    $day1_id = $day1->getId();
-
-    $user2 = $this->generator->user();
-    $day2 = $this->generator->day($user2);
-    $user2->addToDays($day2);
-    $day2->addToMoments($this->generator->moment($day2));
-    $user2->save();
-    $day2_id = $day2->getId();
-
-    $not_exist_day_id = rand(100, 1000);
-
-    $ids_string = implode(';', array($day1_id, $day2_id, $not_exist_day_id ));
-    $response = $this->get('item', array(), $ids_string);
-    $loaded_days = $response->result;
-
-    $this->assertResponse(200);
-    $this->assertEqual(
-      array($day1_id, $day2_id, $not_exist_day_id),
-      array_keys(get_object_vars($loaded_days))
-    );
-    $this->assertEqual($day1->getId(), $loaded_days->$day1_id->id);
-    $this->assertEqual($day1->getUserId(), $loaded_days->$day1_id->user->id);
-    $this->assertEqual($day1->getMoments()->at(0)->getId(), $loaded_days->$day1_id->moments[0]->id);
-    $this->assertEqual($day2->getId(), $loaded_days->$day2_id->id);
-    $this->assertEqual($day2->getUserId(), $loaded_days->$day2_id->user->id);
-    $this->assertEqual($day2->getMoments()->at(0)->getId(), $loaded_days->$day2_id->moments[0]->id);
-    $this->assertEqual(null, $loaded_days->$not_exist_day_id);
   }
 
   function testItem_NotFound()
@@ -262,25 +222,25 @@ class DaysGuestControllerTest extends odControllerTestCase
     $day = 86400;
 
     $day1 = $this->generator->day($this->additional_user);
-    $day1->setLikesCount(4);
+    $this->generator->dayLikes($day1, 4);
     $day1->setCtime($time - $day);
     $day1->save();
     $day2 = $this->generator->day($this->main_user);
-    $day2->setLikesCount(3);
+    $this->generator->dayLikes($day2, 3);
     $day2->setCtime($time - $day);
     $day2->save();
     $day2->attachImage($this->generator->image());
     $day2->save();
     $day3 = $this->generator->day($this->additional_user);
-    $day3->setLikesCount(2);
+    $this->generator->dayLikes($day3, 2);
     $day3->setCtime($time - $day);
     $day3->save();
     $day4 = $this->generator->day($this->main_user);
-    $day4->setLikesCount(4);
-    $day4->setCtime($time - 3 * $day);
+    $this->generator->dayLikes($day4, 4);
+    $day4->setCtime($time - 5 * $day);
     $day4->save();
     $day5 = $this->generator->day($this->additional_user);
-    $day5->setLikesCount(100);
+    $this->generator->dayLikes($day5, 100);
     $day5->setCtime($time - $day);
     $day5->setIsDeleted(1);
     $day5->save();
@@ -375,7 +335,7 @@ class DaysGuestControllerTest extends odControllerTestCase
     $this->assertEqual(4, count($res));
     $this->assertEqual($day->getComments()->at(0)->id, $res[0]->id);
     $this->assertEqual($day->getComments()->at(0)->text, $res[0]->text);
-    $this->assertEqual($day->getComments()->at(0)->user->exportForApi(), $res[0]->user);
+    $this->assertEqual(lmbToolkit::instance()->getExportHelper()->exportUserSubentity($day->getComments()->at(0)->user), $res[0]->user);
     $this->assertEqual($day->getComments()->at(1)->id, $res[1]->id);
     $this->assertEqual($day->getComments()->at(2)->id, $res[2]->id);
     $this->assertEqual($day->getComments()->at(3)->id, $res[3]->id);
