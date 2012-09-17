@@ -47,44 +47,6 @@ function task_od_amazon_cloudwatch_update()
   echo 'SUCCESS'.PHP_EOL;
 }
 
-function task_od_amazon_s3_upload()
-{
-  $s3 = lmbToolkit::instance()->createAmazonService('S3');
-  $bucket = lmbToolkit::instance()->getConcreteAmazonServiceConfig('S3')['bucket'];
-  if(!lmbToolkit::instance()->getConcreteAmazonServiceConfig('S3')['enabled'])
-  {
-    echo "S3 disabled".PHP_EOL;
-    exit(1);
-  }
-
-  $files_dir = realpath(taskman_prop('PROJECT_DIR').'/www/users/');
-  $files_dir_length = strlen($files_dir);
-
-  $files = lmbFs::findRecursive($files_dir, 'f', '', '~.*default.*~');
-
-  $chunk_size = 10;
-  $chunks = array_chunk($files, $chunk_size);
-  $counter = count($files);
-  foreach($chunks as $chunk)
-  {
-    foreach ($chunk as $file)
-    {
-      $s3_file = substr($file, $files_dir_length + 1);
-      $s3->batch()->create_object($bucket, $s3_file, array(
-        'fileUpload' => $file,
-        'acl' => AmazonS3::ACL_PUBLIC,
-      ));
-      echo ($counter--).':'.$s3_file.PHP_EOL;
-    }
-
-    $responses = $s3->batch()->send();
-    if(!$responses->areOK())
-      foreach($responses as $response)
-        if(!$response->isOk())
-          throw new lmbException('Error on file uploading: '.$response->body->Message);
-  }
-}
-
 function task_od_close_old_days()
 {
   echo 'Search for old days...';
