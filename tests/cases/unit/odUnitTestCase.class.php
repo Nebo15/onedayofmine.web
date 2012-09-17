@@ -48,20 +48,19 @@ abstract class odUnitTestCase extends UnitTestCase
 
   protected function assertValidImageUrl($url)
   {
-    $images_conf = lmbToolkit::instance()->getConf('images');
-    $rel_path = str_replace(lmbToolkit::instance()->getConf('common')['static_host'], '', $url);
-    $abs_path = lmb_env_get('APP_DIR').'/'.$images_conf['save_path'].'/'.$rel_path;
-    return $this->assertTrue(file_exists($abs_path), "Invalid image url '{$url}'");
+    return $this->assertTrue($this->_isUrlExists($url), "Invalid image url '{$url}'");
   }
 
   protected function assert404Url($url)
   {
-    $r = new HttpRequest($url, HttpRequest::METH_GET);
-    try {
-      $r->send();
-      $this->assertEqual(404, $r->getResponseCode());
-    } catch (HttpException $ex) {
-      $this->fail($ex->getMessage());
-    }
+    return $this->assertFalse($this->_isUrlExists($url), "Image exists '{$url}'");
+  }
+
+  protected function _isUrlExists($url)
+  {
+    $images_conf = lmbToolkit::instance()->getConf('images');
+    $rel_path = str_replace(lmbToolkit::instance()->getConf('common')['static_host'], '', $url);
+    $abs_path = lmb_env_get('APP_DIR').'/'.$images_conf['save_path'].'/'.$rel_path;
+    return file_exists($abs_path);
   }
 }
