@@ -89,7 +89,8 @@ trait Imageable
   protected function _fillExifInfo($image_file)
   {
     $helper = lmbToolkit::instance()->getImageHelper();
-    $exif = $helper->getExifInfo($image_file);
+    if(!$exif = $helper->getExifInfo($image_file))
+      return;
 
     if(array_key_exists('GPS', $exif)) {
       $cords = $helper->exifGPSToDecemicalCords($exif);
