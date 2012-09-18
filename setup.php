@@ -42,11 +42,8 @@ if(extension_loaded('newrelic'))
   newrelic_set_appname(lmb_app_mode());
   newrelic_name_transaction(isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : 'CLI');
   lmbErrorGuard :: registerFatalErrorHandler('newrelic_notice_error');
-
-  function processException($e)
-  {
-    newrelic_notice_error($e->getOriginalMessage(), $e);
-  }
-
-  lmbErrorGuard :: registerExceptionHandler('processException');
+  lmbErrorGuard :: registerExceptionHandler(function($e) {
+    $message = ($e instanceof lmbException) ? $e->getOriginalMessage() : $e->getMessage();
+    newrelic_notice_error($message, $e);
+  });
 }
