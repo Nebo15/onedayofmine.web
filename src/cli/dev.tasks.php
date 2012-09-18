@@ -276,9 +276,15 @@ function task_od_parse_lj($argv)
       }
 
       $img_url = $moment_data['img'];
-      if(!$cache->get(md5($img_url)))
-        $cache->add(md5($img_url), file_get_contents($img_url));
-      $moment->attachImage($cache->get(md5($img_url)));
+      $img_key = md5($img_url);
+      if(!$cache->get($img_key))
+      {
+        if(!$img_content = od_download_image($img_url, 10))
+          continue;
+        $cache->add($img_key, $img_content);
+      }
+
+      $moment->attachImage($cache->get($img_key));
       $moment->save();
 
       $moment_comments_count = rand(-10, 3);
@@ -302,6 +308,18 @@ function task_od_parse_lj($argv)
 
     $posts_remain--;
   }
+}
+
+function od_download_image($url, $attempts)
+{
+  if(!$attempts)
+    return '';
+
+  $ctx = stream_context_create(['http' => ['timeout' => 1]]);
+  if(!$content = @file_get_contents($url, 0, $ctx))
+    return od_download_image($url, $attempts - 1);
+  else
+    return $content;
 }
 
 /**
