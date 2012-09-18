@@ -10,5 +10,5 @@ lmb_env_set('LIMB_CACHE_DB_META_IN_FILE', false);
 lmb_require('tests/src/toolkit/odTestsTools.class.php');
 lmbToolkit :: merge(new odTestsTools());
 
-$uniq_hostname_hash = (base_convert(substr(md5(gethostname()), 0, 6), 16, 10));
+$uniq_hostname_hash = (base_convert(substr(md5(gethostname().time()), 0, 6), 16, 10));
 lmbToolkit::instance()->makeUniqueTablesIdsOffset($uniq_hostname_hash);
