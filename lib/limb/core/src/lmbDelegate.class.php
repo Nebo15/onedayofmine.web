@@ -2,9 +2,9 @@
 /*
  * Limb PHP Framework
  *
- * @link http://limb-project.com 
+ * @link http://limb-project.com
  * @copyright  Copyright &copy; 2004-2009 BIT(http://bit-creative.com)
- * @license    LGPL http://www.gnu.org/copyleft/lesser.html 
+ * @license    LGPL http://www.gnu.org/copyleft/lesser.html
  */
 
 /**
@@ -78,21 +78,21 @@ class lmbDelegate
     $this->is_valid = is_callable($this->php_callback);
     return $this->is_valid;
   }
-    
+
   function equal($delegate)
   {
     $delegate = self::objectify($delegate);
     if(!$this->isValid() || !$delegate->isValid())
       return false;
-      
+
     $callback1 = $this->getCallback();
     $callback2 = $delegate->getCallback();
-    
+
     $array_cb1 = is_array($callback1);
     $array_cb2 = is_array($callback2);
     if($array_cb1 != $array_cb2)
       return false;
-      
+
     if($array_cb1)
     {
       return $callback1[0] === $callback2[0] && $callback1[1] == $callback2[1];
@@ -100,13 +100,15 @@ class lmbDelegate
     else
     {
       return $callback1 == $callback2;
-    }    
+    }
   }
 
   static function objectify($delegate)
   {
     if(is_object($delegate) && $delegate instanceof lmbDelegate)
       return $delegate;
+    if(is_array($delegate) && 1 == count($delegate))
+      $delegate = $delegate[0];
     return new lmbDelegate($delegate);
   }
 
