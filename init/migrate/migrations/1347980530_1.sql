@@ -1,0 +1,6 @@
+
+SET FOREIGN_KEY_CHECKS = 0;
+
+ALTER TABLE `news` ADD `link` varchar(256) NOT NULL DEFAULT '' COMMENT '' COLLATE utf8_general_ci AFTER user_id;
+
+SET FOREIGN_KEY_CHECKS = 1;
