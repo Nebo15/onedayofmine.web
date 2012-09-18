@@ -280,7 +280,10 @@ function task_od_parse_lj($argv)
       if(!$cache->get($img_key))
       {
         if(!$img_content = od_download_image($img_url, 10))
+        {
+          echo '-';
           continue;
+        }
         $cache->add($img_key, $img_content);
       }
 
@@ -344,7 +347,7 @@ function task_od_tests_users()
     $response = $request->send();
     if(200 != $response->getResponseCode())
     {
-      var_dump($response);
+      var_dump($request->getUrl(), $response);
       exit(1);
     }
     else
