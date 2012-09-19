@@ -99,21 +99,19 @@ abstract class odIntegrationTestCase extends WebTestCase
 
   }
 
-  protected function _loginAndSetCookie(User $user, $disable_sharing = true)
+  protected function _loginAndSetCookie(User $user)
   {
-    $res = $this->_login($user, $disable_sharing);
+    $res = $this->_login($user);
     $this->setCookie('token', $user->getFacebookAccessToken());
     return $res;
   }
 
-  protected function _login(User $user, $disable_sharing = true)
+  protected function _login(User $user)
   {
     $params = array(
       'token' => $user->getFacebookAccessToken(),
       'device_token' => $this->generator->string(64)
     );
-    if($disable_sharing)
-      $params['disable_sharing'] = 1;
     $res = $this->post('auth/login/', $params);
     $this->assertResponse(200);
     $this->assertProperty($res->result, 'name');
