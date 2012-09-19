@@ -238,7 +238,7 @@ class DaysOwnerControllerTest extends odControllerTestCase
     $this->main_user->save();
 
     lmbToolkit::instance()->setUser($this->main_user);
-    $response = $this->post('current');
+    $response = $this->get('current');
 
     if($this->assertResponse(200))
     {
@@ -255,7 +255,7 @@ class DaysOwnerControllerTest extends odControllerTestCase
     $day->save();
 
     lmbToolkit::instance()->setUser($this->main_user);
-    $this->post('days/current');
+    $this->get('days/current');
 
     $this->assertResponse(404);
   }

@@ -84,9 +84,6 @@ class DaysController extends BaseJsonController
 
   function doCurrent()
   {
-    if(!$this->request->isPost())
-      return $this->_answerNotPost();
-
     if(!$day = $this->_getUser()->getCurrentDay())
       return $this->_answerNotFound('Current day not set');
 
@@ -301,7 +298,7 @@ class DaysController extends BaseJsonController
     list($from, $to, $limit) = $this->_getFromToLimitations();
     $days = $this->_getUser()->getDaysWithLimitations($from, $to, $limit, true);
 
-    return $this->_answerOk($this->toolkit->getExportHelper()->exportDayItems_forOwner($day));
+    return $this->_answerOk($this->toolkit->getExportHelper()->exportDayItems_forOwner($days));
   }
 
   function doAddMoment()

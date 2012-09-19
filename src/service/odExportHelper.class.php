@@ -50,6 +50,11 @@ class odExportHelper
     return $exported;
   }
 
+  function exportDayItems_forOwner(lmbCollectionInterface $days)
+  {
+    return $this->exportDayItems($days);
+  }
+
   ############### > Interesting ###############
   function exportDayInterestingItem(DayInterestRecord $day_rating)
   {
