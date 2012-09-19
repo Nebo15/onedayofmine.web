@@ -234,6 +234,9 @@ class DaysController extends BaseJsonController
     list($from, $to, $limit) = $this->_getFromToLimitations();
     $users_ids = lmbArrayHelper::getColumnValues('id', $this->_getUser()->getFollowing());
 
+    if(!count($users_ids))
+      return $this->_answerOk([]);
+
     $days = Day::findByUsersIds($users_ids, $from, $to, $limit);
 
     return $this->_answerOk($this->toolkit->getExportHelper()->exportDayItems($days));
