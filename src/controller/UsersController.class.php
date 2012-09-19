@@ -25,7 +25,7 @@ class UsersController extends BaseJsonController
     return $this->_answerOk($this->toolkit->getExportHelper()->exportDayItems($user->getDays()));
   }
 
-  function doFollowers()
+  function doGuestFollowers()
   {
     if(!$user = User::findById($this->request->id))
       return $this->_answerModelNotFoundById('User', $this->request->id);
@@ -35,7 +35,7 @@ class UsersController extends BaseJsonController
     return $this->_answerOk($this->toolkit->getExportHelper()->exportUserItems($followers));
   }
 
-  function doFollowing()
+  function doGuestFollowing()
   {
     if(!$user = User::findById($this->request->id))
       return $this->_answerModelNotFoundById('User', $this->request->id);
@@ -86,7 +86,7 @@ class UsersController extends BaseJsonController
     return $this->_answerOk($this->toolkit->getExportHelper()->exportUserItems($users));
   }
 
-  function doUserActivity()
+  function doGuestActivity()
   {
     if(!$user = User::findById($this->request->id))
       return $this->_answerModelNotFoundById('User', $this->request->id);
