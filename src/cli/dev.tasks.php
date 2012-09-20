@@ -456,7 +456,7 @@ function task_od_siege_log()
   foreach($users as $user)
   {
     $user->save();
-    fwrite($fp, lmb_env_get('HOST_URL').'auth/login?token='.$user->getFacebookAccessToken().PHP_EOL);
+    fwrite($fp, lmb_env_get('HOST_URL').'auth/login POST token='.$user->getFacebookAccessToken().PHP_EOL);
   }
   fclose($fp);
   echo "Done" . PHP_EOL;
