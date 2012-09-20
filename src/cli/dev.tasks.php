@@ -412,7 +412,7 @@ function task_od_siege_log()
   define('TEST_FOR_USER', 'U');
   define('TEST_FOR_BOTH', 'B');
 
-  $requests_count = 100;
+  $requests_count = 1000;
   $days_count = 20;
   $moments_count = 400;
   $siege_file = lmb_var_dir().'/siege.log';
@@ -487,7 +487,7 @@ function task_od_siege_log()
 
   for ($i = 0; $i < $requests_count; $i++)
   {
-    list($path, $user_type) = $paths[$i];
+    list($path, $user_type) = $paths[$i % count($paths)];
     $url = $path;
 
     if(false !== strpos($url, ':string:'))
