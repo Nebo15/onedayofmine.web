@@ -102,6 +102,9 @@ class DaysController extends BaseJsonController
       return $this->_answerModelNotFoundById('Day', $this->request->id);
 
     $user = $this->_getUser();
+    if($day->getUser()->getId() != $user->getId())
+      return $this->_answerNotOwner();
+
     if($current_day = $user->getCurrentDay()) {
       if($day->getId() == $current_day->getId()) {
         $user->setCurrentDay(null);

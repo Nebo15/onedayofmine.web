@@ -196,7 +196,7 @@ abstract class BaseJsonController extends lmbController
 
   protected function _answerNotFound($message = 'Not Found')
   {
-    return $this->_answer($message, array(), $message, 404);
+    return $this->_answerWithError([$message], null, 404);
   }
 
   protected function _answerModelNotFoundById($model_name, $id)
