@@ -17,47 +17,42 @@ class DaysGuestControllerTest extends odControllerTestCase
    */
   function testItem()
   {
-    $this->main_user->save();
+    $day = $this->generator->dayWithMomentsAndComments();
 
-    $day = $this->generator->day(null, true);
-    // $day->attachImage($this->generator->image());
-    $moment1 = $this->generator->moment($day, true);
-    $moment2 = $this->generator->moment($day, true);
-    $day->addToMoments($moment1);
-    $day->addToMoments($moment2);
-    $day->save();
-    $day->attachImage($this->generator->image());
-    $day->save();
+    $this->assertEqual(0, $day->getViewsCount());
 
-    $response = $this->get('item', array(), $day->getId());
+    $response = $this->get('item', [], $day->getId());
     if($this->assertResponse(200))
     {
-      $loaded_day = $response->result;
-      $this->assertValidDayJson($day, $loaded_day);
+      $response_day = $response->result;
+      $this->assertJsonDay($response_day);
+      $this->assertEqualPropertyValues($response_day, $day->exportForApi());
 
-      $this->assertEqual($day->getComments()->count(), $loaded_day->comments_count);
-      $this->assertEqual(lmbToolkit::instance()->getConf('common')->default_comments_count, count($loaded_day->comments));
-      $this->assertEqual($day->getComments()->at(0)->getId(), $loaded_day->comments[0]->id);
-      $this->assertEqual($day->getMoments()->at(0)->getComments()->count(), $loaded_day->moments[0]->comments_count);
-      $this->assertEqual($day->getMoments()->count(), count($loaded_day->moments));
-      $this->assertEqual(1, $loaded_day->views_count);
+      $this->assertEqual($day->getComments()->count(), $response_day->comments_count);
+      $this->assertEqual(lmbToolkit::instance()->getConf('common')->default_comments_count, count($response_day->comments));
+      $this->assertEqual($day->getComments()->at(0)->getId(), $response_day->comments[0]->id);
+      $this->assertEqual($day->getMoments()->at(0)->getComments()->count(), $response_day->moments[0]->comments_count);
+      $this->assertEqual($day->getMoments()->count(), count($response_day->moments));
+      $this->assertEqual(1, $response_day->views_count);
     }
   }
 
   function testItem_NotFound()
   {
-    $this->get('item', array(), 100500);
+    $days = Day::find();
+    $this->assertEqual(0, $days->count());
+
+    $this->get('item', [], $this->generator->integer());
     $this->assertResponse(404);
   }
 
   function testItem_DeletedDay()
   {
     $day = $this->generator->day();
-    $day->getUser()->save();
     $day->setIsDeleted(1);
     $day->save();
 
-    $this->get('item', array(), $day->getId());
+    $this->get('item', [], $day->getId());
     $this->assertResponse(404);
   }
 
@@ -68,76 +63,85 @@ class DaysGuestControllerTest extends odControllerTestCase
   {
     $this->additional_user->save();
 
-    $day1 = $this->generator->day($this->additional_user);
-    $day1->setTitle('fooA');
+    $day1 = $this->generator->day($this->additional_user, 'fooA');
     $day1->save();
-    $day2 = $this->generator->day($this->additional_user);
-    $day2->setTitle('Afoo');
+    $day2 = $this->generator->day($this->additional_user, 'Afoo');
     $day2->save();
-    $day3 = $this->generator->day($this->additional_user);
-    $day3->setTitle('AfooA');
+    $day3 = $this->generator->day($this->additional_user, 'AfooA');
     $day3->save();
-    $day4 = $this->generator->day($this->additional_user);
-    $day4->setTitle('foo');
+    $day4 = $this->generator->day($this->additional_user, 'foo');
     $day4->save();
-    $day5 = $this->generator->day($this->additional_user);
-    $day5->setTitle('bar');
+    $day5 = $this->generator->day($this->additional_user, 'bar');
     $day5->save();
-    $day6 = $this->generator->day($this->additional_user);
-    $day6->setTitle('foo');
+    $day6 = $this->generator->day($this->additional_user, 'foo');
     $day6->setIsDeleted(1);
     $day6->save();
 
-    $this->main_user->getFavouriteDays()->add($day1);
-    $this->main_user->getFavouriteDays()->add($day2);
-    $this->main_user->getFavouriteDays()->add($day3);
-    $this->main_user->getFavouriteDays()->add($day4);
-    $this->main_user->getFavouriteDays()->add($day5);
-    $this->main_user->getFavouriteDays()->add($day6);
+    $this->main_user->addToFavouriteDays($day1);
+    $this->main_user->addToFavouriteDays($day2);
+    $this->main_user->addToFavouriteDays($day3);
+    $this->main_user->addToFavouriteDays($day4);
+    $this->main_user->addToFavouriteDays($day5);
+    $this->main_user->addToFavouriteDays($day6);
     $this->main_user->save();
 
-    $days = $this->get('search', array('query' => 'foo'))->result;
+    $response = $this->get('search', [
+      'query' => 'foo'
+    ]);
     if($this->assertResponse(200))
     {
+      $days = $response->result;
       $this->assertEqual(4, count($days));
+      $this->assertJsonDayItems($days);
+
       $this->assertEqual($day4->getId(), $days[0]->id);
       $this->assertEqual($day3->getId(), $days[1]->id);
       $this->assertEqual($day2->getId(), $days[2]->id);
       $this->assertEqual($day1->getId(), $days[3]->id);
     }
 
-    $days = $this->get('search', array('query' => 'foo', 'from' => $day4->getId()))->result;
+    $response_with_from = $this->get('search', [
+      'query' => 'foo',
+      'from'  => $day4->getId(),
+    ]);
     if($this->assertResponse(200))
     {
+      $days = $response_with_from->result;
       $this->assertEqual(3, count($days));
+      $this->assertJsonDayItems($days);
+
       $this->assertEqual($day3->getId(), $days[0]->id);
       $this->assertEqual($day2->getId(), $days[1]->id);
       $this->assertEqual($day1->getId(), $days[2]->id);
     }
 
-    $days = $this
-      ->get('search', array(
+    $response_with_range = $this->get('search', [
       'query' => 'foo',
-      'from' => $day4->getId(),
-      'to' => $day1->getId()))
-      ->result;
+      'from'  => $day4->getId(),
+      'to'    => $day1->getId(),
+    ]);
     if($this->assertResponse(200))
     {
+      $days = $response_with_range->result;
       $this->assertEqual(2, count($days));
+      $this->assertJsonDayItems($days);
+
       $this->assertEqual($day3->getId(), $days[0]->id);
       $this->assertEqual($day2->getId(), $days[1]->id);
     }
 
-    $days = $this
-      ->get('search', array(
+    $response_with_limit = $this->get('search', [
       'query' => 'foo',
-      'from' => $day4->getId(),
-      'to' => $day1->getId(),
-      'limit' => 1))
-      ->result;
+      'from'  => $day4->getId(),
+      'to'    => $day1->getId(),
+      'limit' => 1,
+    ]);
     if($this->assertResponse(200))
     {
+      $days = $response_with_limit->result;
       $this->assertEqual(1, count($days));
+      $this->assertJsonDayItems($days);
+
       $this->assertEqual($day3->getId(), $days[0]->id);
     }
   }
@@ -154,55 +158,69 @@ class DaysGuestControllerTest extends odControllerTestCase
     $this->main_user->save();
     $this->additional_user->save();
 
-    $day1 = $this->generator->day($this->additional_user);
+    $day1 = $this->generator->dayWithMoments($this->additional_user);
     $day1->save();
-    $day2 = $this->generator->day($this->main_user);
+    $day2 = $this->generator->dayWithMoments($this->main_user);
     $day2->save();
-    $day3 = $this->generator->day($this->main_user);
+    $day3 = $this->generator->dayWithMoments($this->main_user);
     $day3->setIsDeleted(1);
     $day3->save();
-    $day4 = $this->generator->day($this->main_user);
+    $day4 = $this->generator->dayWithMoments($this->main_user);
     $day4->save();
-    $day4->attachImage($this->generator->image());
-    $day4->save();
-    $day5 = $this->generator->day($this->main_user);
+    $day5 = $this->generator->dayWithMoments($this->main_user);
     $day5->save();
 
-    $result = $this->get('new')->result;
-    $this->assertResponse(200);
-    $this->assertEqual(4, count($result));
-    $this->assertEqual($day5->getId(), $result[0]->id);
-    $this->assertEqual($day4->getId(), $result[1]->id);
-    $this->assertEqual($day2->getId(), $result[2]->id);
-    $this->assertEqual($day1->getId(), $result[3]->id);
+    $response = $this->get('new');
+    if($this->assertResponse(200)) {
+      $days = $response->result;
+      $this->assertEqual(4, count($days));
+      $this->assertJsonDayItems($days, true);
 
-    $result = $this->get('new', array('from' => $day5->getId()))->result;
-    $this->assertResponse(200);
-    $this->assertEqual(3, count($result));
-    $this->assertEqual($day4->getId(), $result[0]->id);
-    $this->assertEqual($day2->getId(), $result[1]->id);
-    $this->assertEqual($day1->getId(), $result[2]->id);
+      $this->assertEqual($day5->getId(), $days[0]->id);
+      $this->assertEqual($day4->getId(), $days[1]->id);
+      $this->assertEqual($day2->getId(), $days[2]->id);
+      $this->assertEqual($day1->getId(), $days[3]->id);
+    }
 
-    $result = $this
-      ->get('new', array(
+    $response_with_from = $this->get('new', [
       'from' => $day5->getId(),
-      'to' => $day1->getId()))
-      ->result;
-    $this->assertResponse(200);
-    $this->assertEqual(2, count($result));
-    $this->assertEqual($day4->getId(), $result[0]->id);
-    $this->assertEqual($day2->getId(), $result[1]->id);
-
-    $result = $this
-      ->get('new', array(
-      'from' => $day5->getId(),
-      'to' => $day1->getId(),
-      'limit' => 1))
-      ->result;
+    ]);
     if($this->assertResponse(200))
     {
-      $this->assertEqual(1, count($result));
-      $this->assertValidDayJson($day4, $result[0]);
+      $days = $response_with_from->result;
+      $this->assertEqual(3, count($days));
+      $this->assertJsonDayItems($days, true);
+
+      $this->assertEqual($day4->getId(), $days[0]->id);
+      $this->assertEqual($day2->getId(), $days[1]->id);
+      $this->assertEqual($day1->getId(), $days[2]->id);
+    }
+
+    $response_with_range = $this->get('new', [
+      'from' => $day5->getId(),
+      'to'   => $day1->getId(),
+    ]);
+    if($this->assertResponse(200))
+    {
+      $days = $response_with_range->result;
+      $this->assertEqual(2, count($days));
+      $this->assertJsonDayItems($days, true);
+
+      $this->assertEqual($day4->getId(), $days[0]->id);
+      $this->assertEqual($day2->getId(), $days[1]->id);
+    }
+
+    $response_with_limit = $this->get('new', [
+      'from'  => $day5->getId(),
+      'to'    => $day1->getId(),
+      'limit' => 1,
+    ]);
+    if($this->assertResponse(200))
+    {
+      $days = $response_with_limit->result;
+      $this->assertEqual(1, count($days));
+      $this->assertJsonDayItems($days, true);
+      $this->assertEqual($day4->getId(), $days[0]->id);
     }
   }
 
@@ -221,70 +239,84 @@ class DaysGuestControllerTest extends odControllerTestCase
     $time = time();
     $day = 86400;
 
-    $day1 = $this->generator->day($this->additional_user);
+    $day1 = $this->generator->dayWithMoments($this->additional_user);
     $this->generator->dayLikes($day1, 4);
     $day1->setCtime($time - $day);
     $day1->save();
-    $day2 = $this->generator->day($this->main_user);
+    $day2 = $this->generator->dayWithMoments($this->main_user);
     $this->generator->dayLikes($day2, 3);
     $day2->setCtime($time - $day);
     $day2->save();
-    $day2->attachImage($this->generator->image());
-    $day2->save();
-    $day3 = $this->generator->day($this->additional_user);
+    $day3 = $this->generator->dayWithMoments($this->additional_user);
     $this->generator->dayLikes($day3, 2);
     $day3->setCtime($time - $day);
     $day3->save();
-    $day4 = $this->generator->day($this->main_user);
+    $day4 = $this->generator->dayWithMoments($this->main_user);
     $this->generator->dayLikes($day4, 4);
     $day4->setCtime($time - 5 * $day);
     $day4->save();
-    $day5 = $this->generator->day($this->additional_user);
+    $day5 = $this->generator->dayWithMoments($this->additional_user);
     $this->generator->dayLikes($day5, 100);
     $day5->setCtime($time - $day);
     $day5->setIsDeleted(1);
     $day5->save();
 
-    (new InterestCalculator())->reset();
-    (new InterestCalculator())->fillRating();
+    $interests_calculator = new InterestCalculator();
 
-    $result = $this->get('interesting')->result;
-    $this->assertResponse(200);
-    $this->assertEqual(4, count($result));
-    $this->assertEqual($day1->getId(), $result[0]->id);
-    $this->assertEqual($day2->getId(), $result[1]->id);
-    $this->assertEqual($day4->getId(), $result[2]->id);
-    $this->assertEqual($day3->getId(), $result[3]->id);
+    $interests_calculator->reset();
+    $interests_calculator->fillRating();
 
-    $result = $this
-      ->get('interesting', array('from' => $day1->getId()))
-      ->result;
-    $this->assertResponse(200);
-    $this->assertEqual(3, count($result));
-    $this->assertEqual($day2->getId(), $result[0]->id);
-    $this->assertEqual($day4->getId(), $result[1]->id);
-    $this->assertEqual($day3->getId(), $result[2]->id);
-
-    $result = $this
-      ->get('interesting', array(
-      'from' => $day1->getId(),
-      'to'   => $day3->getId()))
-      ->result;
-    $this->assertResponse(200);
-    $this->assertEqual(2, count($result));
-    $this->assertEqual($day2->getId(), $result[0]->id);
-    $this->assertEqual($day4->getId(), $result[1]->id);
-
-    $result = $this
-      ->get('interesting', array(
-      'from'  => $day1->getId(),
-      'to'    => $day4->getId(),
-      'limit' => 1))
-      ->result;
+    $response = $this->get('interesting');
     if($this->assertResponse(200))
     {
-      $this->assertEqual(1, count($result));
-      $this->assertValidDayJson($day2, $result[0]);
+      $days = $response->result;
+      $this->assertEqual(4, count($days));
+      $this->assertJsonDayItems($days, true);
+
+      $this->assertEqual($day1->getId(), $days[0]->id);
+      $this->assertEqual($day2->getId(), $days[1]->id);
+      $this->assertEqual($day4->getId(), $days[2]->id);
+      $this->assertEqual($day3->getId(), $days[3]->id);
+    }
+
+    $response_with_from = $this->get('interesting', [
+      'from' => $day1->getId(),
+    ]);
+    if($this->assertResponse(200))
+    {
+      $days = $response_with_from->result;
+      $this->assertEqual(3, count($days));
+      $this->assertJsonDayItems($days, true);
+
+      $this->assertEqual($day2->getId(), $days[0]->id);
+      $this->assertEqual($day4->getId(), $days[1]->id);
+      $this->assertEqual($day3->getId(), $days[2]->id);
+    }
+
+    $response_with_range = $this->get('interesting', [
+      'from' => $day1->getId(),
+      'to'   => $day3->getId(),
+    ]);
+    if($this->assertResponse(200))
+    {
+      $days = $response_with_range->result;
+      $this->assertEqual(2, count($days));
+      $this->assertJsonDayItems($days, true);
+
+      $this->assertEqual($day2->getId(), $days[0]->id);
+      $this->assertEqual($day4->getId(), $days[1]->id);
+    }
+
+    $response_with_limit = $this->get('interesting', [
+      'from'  => $day1->getId(),
+      'to'    => $day4->getId(),
+      'limit' => 1,
+    ]);
+    if($this->assertResponse(200))
+    {
+      $days = $response_with_limit->result;
+      $this->assertEqual(1, count($days));
+      $this->assertJsonDayItems($days, true);
     }
   }
 
@@ -293,81 +325,64 @@ class DaysGuestControllerTest extends odControllerTestCase
    */
   function testTypes()
   {
-    $types = $this->get('types')->result;
-    $this->assertResponse(200);
-    $this->assertEqual($types, Day::getTypes());
-  }
-
-  /**
-   * @api input param int id ID of abused comment
-   * @api input param string text Abuse description message
-   * @api result int day_id
-   * @api result string text
-   * @api result int ctime Creation time, unix timestamp
-   * @api result int id Complaint ID
-   */
-  function testCreateComplaint()
-  {
-    $day = $this->generator->day();
-    $day->save();
-
-    lmbToolkit::instance()->setUser($this->main_user);
-    $res = $this->post('create_complaint',
-      array('text' => $text = $this->generator->string()),
-      $day->getId()
-    );
-    $this->assertResponse(200);
-
-    $loaded_complaint = Complaint::find()->at(0);
-    $this->assertProperty($res->result, 'id');
-    $this->assertEqual($loaded_complaint->getId(), $res->result->id);
-    $this->assertEqual($loaded_complaint->getDayId(), $res->result->day_id);
-    $this->assertEqual($loaded_complaint->getText(), $text);
+    $response = $this->get('types');
+    if($this->assertResponse(200))
+    {
+      $types = $response->result;
+      $this->assertEqual($types, Day::getTypes());
+    }
   }
 
   function testComments()
   {
-    $day = $this->generator->day(null, true);
+    $day = $this->generator->dayWithComments();
     $day->save();
 
-    $res = $this->get('comments', array(), $day->getId())->result;
-    $this->assertResponse(200);
-    $this->assertEqual(4, count($res));
-    $this->assertEqual($day->getComments()->at(0)->id, $res[0]->id);
-    $this->assertEqual($day->getComments()->at(0)->text, $res[0]->text);
-    $this->assertEqual(lmbToolkit::instance()->getExportHelper()->exportUserSubentity($day->getComments()->at(0)->user), $res[0]->user);
-    $this->assertEqual($day->getComments()->at(1)->id, $res[1]->id);
-    $this->assertEqual($day->getComments()->at(2)->id, $res[2]->id);
-    $this->assertEqual($day->getComments()->at(3)->id, $res[3]->id);
+    $response = $this->get('comments', [], $day->getId())->result;
+    if($this->assertResponse(200))
+    {
+      $comments = $response->result;
+      $this->assertEqual(4, count($comments));
+      $this->assertJsonDayCommentItems($comments);
 
-    $res = $this
-      ->get('comments', array(
-        'from' => $day->getComments()->at(0)->id
-      ), $day->getId())->result;
-    $this->assertResponse(200);
-    $this->assertEqual(3, count($res));
-    $this->assertEqual($day->getComments()->at(1)->id, $res[0]->id);
+      $this->assertEqual($day->getComments()->at(0)->id, $comments[0]->id);
+      $this->assertEqual($day->getComments()->at(0)->text, $comments[0]->text);
+      $this->assertEqual(lmbToolkit::instance()->getExportHelper()->exportUserSubentity($day->getComments()->at(0)->user), $comments[0]->user);
+      $this->assertEqual($day->getComments()->at(1)->id, $comments[1]->id);
+      $this->assertEqual($day->getComments()->at(2)->id, $comments[2]->id);
+      $this->assertEqual($day->getComments()->at(3)->id, $comments[3]->id);
+    }
+
+    $response_with_from = $this->get('comments', [
+      'from' => $day->getComments()->at(0)->id
+    ], $day->getId());
+    if($this->assertResponse(200))
+    {
+      $this->assertEqual(3, count($res));
+      $this->assertEqual($day->getComments()->at(1)->id, $res[0]->id);
     $this->assertEqual($day->getComments()->at(2)->id, $res[1]->id);
     $this->assertEqual($day->getComments()->at(3)->id, $res[2]->id);
 
-    $res = $this
-      ->get('comments', array(
+    $response_with_range = $this->get('comments', [
       'from' => $day->getComments()->at(0)->id,
       'to' => $day->getComments()->at(3)->id,
-    ), $day->getId())->result;
-    $this->assertResponse(200);
-    $this->assertEqual(2, count($res));
-    $this->assertEqual($day->getComments()->at(1)->id, $res[0]->id);
-    $this->assertEqual($day->getComments()->at(2)->id, $res[1]->id);
+    ], $day->getId());
+    if($this->assertResponse(200))
+    {
+      $this->assertEqual(2, count($res));
+      $this->assertEqual($day->getComments()->at(1)->id, $res[0]->id);
+      $this->assertEqual($day->getComments()->at(2)->id, $res[1]->id);
+    }
 
-    $res = $this
-      ->get('comments', array(
+    $response_with_limit = $this->get('comments', [
       'from' => $day->getComments()->at(0)->id,
       'to' => $day->getComments()->at(3)->id,
       'limit' => 1
-    ), $day->getId())->result;
-    $this->assertResponse(200);
-    $this->assertEqual(1, count($res));
-    $this->assertEqual($day->getComments()->at(1)->id, $res[0]->id);
+    ], $day->getId());
+    if($this->assertResponse(200))
+    {
+      $this->assertEqual(1, count($res));
+      $this->assertEqual($day->getComments()->at(1)->id, $res[0]->id);
+    }
   }
 }

@@ -18,11 +18,13 @@ class SocialControllerTest extends odControllerTestCase
   {
     $this->main_user->save();
     lmbToolkit::instance()->setUser($this->main_user);
-    $this->post('facebook_invite', array('uid' => $this->additional_user->getFacebookUid()));
+    $this->post('facebook_invite', [
+      'uid' => $this->additional_user->getFacebookUid()
+    ]);
     $this->assertResponse(200);
   }
 
-  function testFacebookInvite_registeredUser()
+  function testFacebookInvite_RegisteredUser()
   {
     $this->additional_user->save();
     $this->main_user->save();

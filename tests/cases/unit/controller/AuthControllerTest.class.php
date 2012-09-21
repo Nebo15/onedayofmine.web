@@ -25,32 +25,52 @@ class AuthControllerTest extends odControllerTestCase
     $this->additional_user->save();
     $this->main_user->save();
 
-    $following = $this->main_user->getFollowing();
-    $following->add($this->additional_user);
-    $following->save();
-
-    $followers = $this->main_user->getFollowers();
-    $followers->add($this->additional_user);
-    $followers->save();
-
     $this->toolkit->getFacebook($this->additional_user)
       ->setReturnValue('getUid', $this->additional_user->getFacebookUid());
 
-    $res = $this->post('login', array(
-      'token' => $this->additional_user->getFacebookAccessToken(),
+    $response = $this->post('login', array(
+      'token'        => $this->additional_user->getFacebookAccessToken(),
       'device_token' => $device_token = $this->generator->string(64)
-    ))->result;
+    ));
+
+    $user = $response->result;
 
     if($this->assertResponse(200))
     {
-      $loaded_user = User::findById($res->id);
-      $this->assertValidUserJson($loaded_user, $res);
-      $this->assertEqual($loaded_user->getFavouriteDays()->count(), $res->favourites_count);
-      $this->assertEqual($loaded_user->getEmail(), $res->email);
+      $this->assertJsonUser($user);
+
+      $loaded_user = User::findById($user->id);
+      $this->assertEqual($loaded_user->getFacebookAccessToken(), $this->additional_user->getFacebookAccessToken());
 
       $tokens = $loaded_user->getDeviceTokens();
       $this->assertEqual(1, count($tokens));
       $this->assertEqual($device_token, $tokens->at(0)->token);
+    }
+  }
+
+  function testLogin_WithoutDeviceToken()
+  {
+    $this->additional_user->save();
+    $this->main_user->save();
+
+    $this->toolkit->getFacebook($this->additional_user)
+      ->setReturnValue('getUid', $this->additional_user->getFacebookUid());
+
+    $response = $this->post('login', array(
+      'token'        => $this->additional_user->getFacebookAccessToken(),
+    ));
+
+    $user = $response->result;
+
+    if($this->assertResponse(200))
+    {
+      $this->assertJsonUser($user);
+
+      $loaded_user = User::findById($user->id);
+      $this->assertEqual($loaded_user->getFacebookAccessToken(), $this->additional_user->getFacebookAccessToken());
+
+      $tokens = $loaded_user->getDeviceTokens();
+      $this->assertEqual(0, count($tokens));
     }
   }
 
@@ -61,14 +81,16 @@ class AuthControllerTest extends odControllerTestCase
       ->setReturnValue('getUid', $this->main_user->getFacebookUid());
 
     $this->post('login', [
-      'token' => $this->main_user->getFacebookAccessToken(),
-      'device_token' => $device_token = $this->generator->string(64)
+      'token'        => $this->main_user->getFacebookAccessToken(),
+      'device_token' => $this->generator->string(64)
     ]);
-    $res = $this->get('is_logged_in', [
+    $this->assertResponse(200);
+
+    $response = $this->get('is_logged_in', [
       'token' => $this->main_user->getFacebookAccessToken()
     ]);
     $this->assertResponse(200);
-    $this->assertTrue($res->result);
+    $this->assertTrue($response->result);
   }
 
   function testLogin_Session_ByGetParam()
@@ -78,12 +100,16 @@ class AuthControllerTest extends odControllerTestCase
       ->setReturnValue('getUid', $this->main_user->getFacebookUid());
 
     $this->post('login', [
-      'token' => $this->main_user->getFacebookAccessToken(),
-      'device_token' => $device_token = $this->generator->string(64)
+      'token'        => $this->main_user->getFacebookAccessToken(),
+      'device_token' => $this->generator->string(64)
     ]);
-    $res = $this->get('is_logged_in', array('token' => $this->main_user->getFacebookAccessToken()));
     $this->assertResponse(200);
-    $this->assertTrue($res->result);
+
+    $response = $this->get('is_logged_in', [
+      'token' => $this->main_user->getFacebookAccessToken()
+    ]);
+    $this->assertResponse(200);
+    $this->assertTrue($response->result);
   }
 
   function testLogin_Session_ByPostParam()
@@ -93,15 +119,19 @@ class AuthControllerTest extends odControllerTestCase
       ->setReturnValue('getUid', $this->main_user->getFacebookUid());
 
     $this->post('login', [
-      'token' => $this->main_user->getFacebookAccessToken(),
-      'device_token' => $device_token = $this->generator->string(64)
+      'token'        => $this->main_user->getFacebookAccessToken(),
+      'device_token' => $this->generator->string(64)
     ]);
-    $res = $this->get('is_logged_in', array('token' => $this->main_user->getFacebookAccessToken()));
     $this->assertResponse(200);
-    $this->assertTrue($res->result);
+
+    $response = $this->get('is_logged_in', [
+      'token' => $this->main_user->getFacebookAccessToken()
+    ]);
+    $this->assertResponse(200);
+    $this->assertTrue($response->result);
   }
 
-  function testLogin_firstCallCreateNewUser()
+  function testLogin_FirstCallCreateNewUser()
   {
     $users = User::find();
     $this->assertEqual(0, count($users));
@@ -109,30 +139,29 @@ class AuthControllerTest extends odControllerTestCase
     $this->toolkit->getFacebook($this->main_user)
       ->setReturnValue('getUid', $this->main_user->getFacebookUid());
 
+    $info = $this->generator->facebookInfo($this->main_user->facebook_uid);
+
     $profile = $this->toolkit->getFacebookProfile($this->main_user);
-    $profile->setReturnValue('getInfo', $info = $this->generator->facebookInfo($this->main_user->facebook_uid));
+    $profile->setReturnValue('getInfo', $info);
     $profile->setReturnValue('getRegisteredFriends', array());
 
     $this->post('login', [
-      'token' => $this->main_user->getFacebookAccessToken(),
-      'device_token' => $device_token = $this->generator->string(64)
+      'token'        => $this->main_user->getFacebookAccessToken(),
+      'device_token' => $this->generator->string(64)
     ]);
 
     $users = User::find();
     $this->assertEqual(1, count($users));
 
     $this->post('login', [
-      'token' => $this->main_user->getFacebookAccessToken(),
-      'device_token' => $device_token = $this->generator->string(64)
+      'token'        => $this->main_user->getFacebookAccessToken(),
+      'device_token' => $this->generator->string(64)
     ]);
 
     $users = User::find();
-    if($this->assertEqual(1, count($users)))
-    {
-      $user = $users->at(0)->exportForApi();
-      $this->assertTrue($user->image_36);
-      $this->assertTrue($user->image_72);
-    }
+    $this->assertEqual(1, count($users));
+    $user = $this->toolkit->getExportHelper()->exportUser($users->at(0));
+    $this->assertJsonUser($user);
   }
 
   /**
@@ -141,39 +170,42 @@ class AuthControllerTest extends odControllerTestCase
   function testLogin_WrongAccessToken()
   {
     $this->cookies = array();
-    $result = $this->post('login', [
-      'token' => 'Wrong_access_token',
-      'device_token' => $device_token = $this->generator->string(64)
+    $response = $this->post('login', [
+      'token'        => 'wrong_access_token',
+      'device_token' => $this->generator->string(64)
     ]);
-    $errors = $result->errors;
     $this->assertResponse(403);
-    $this->assertEqual(1, count($errors));
-    $this->assertEqual('Invalid OAuth access token.', $errors[0]);
+    $errors = $response->errors;
+    if($this->assertEqual(1, count($errors)))
+      $this->assertEqual('Invalid OAuth access token.', $errors[0]);
   }
-
 
   function testLogin_AccessTokenNotGiven()
   {
     $this->cookies = array();
-    $errors = $this->post('login', ['device_token' => $this->generator->string(64)])->errors;
+    $response = $this->post('login', [
+      'device_token' => $this->generator->string(64)
+    ]);
     $this->assertResponse(412);
-    $this->assertEqual(1, count($errors));
-    $this->assertEqual('Token not given', $errors[0]);
+
+    $errors = $response->errors;
+    if($this->assertEqual(1, count($errors)))
+      $this->assertEqual('Token not given', $errors[0]);
   }
 
-  function testLogin_AddSecondDeviceToken()
+  function testLogin_FromSeveralDevices()
   {
     $this->main_user->save();
     $this->toolkit->getFacebook($this->main_user)
       ->setReturnValue('getUid', $this->main_user->getFacebookUid());
 
     $this->post('login', array(
-      'token' => $this->main_user->getFacebookAccessToken(),
+      'token'        => $this->main_user->getFacebookAccessToken(),
       'device_token' => $device_token_1 = $this->generator->string(64)
     ))->result;
 
     $this->post('login', array(
-      'token' => $this->main_user->getFacebookAccessToken(),
+      'token'        => $this->main_user->getFacebookAccessToken(),
       'device_token' => $device_token_2 = $this->generator->string(64)
     ))->result;
 
@@ -185,7 +217,7 @@ class AuthControllerTest extends odControllerTestCase
     }
   }
 
-  function testLogin_ReplaceTokenUser()
+  function testLogin_DeviceOwnerChanged()
   {
     $this->main_user->save();
     $this->toolkit->getFacebook($this->main_user)
@@ -195,27 +227,27 @@ class AuthControllerTest extends odControllerTestCase
     $this->toolkit->getFacebook($this->additional_user)
       ->setReturnValue('getUid', $this->additional_user->getFacebookUid());
 
-    $this->post('login', array(
-      'token' => $this->main_user->getFacebookAccessToken(),
-      'device_token' => $device_token = $this->generator->string(64)
-    ))->result;
+    $device_token = $this->generator->string(64);
 
     $this->post('login', array(
-      'token' => $this->additional_user->getFacebookAccessToken(),
+      'token'        => $this->main_user->getFacebookAccessToken(),
       'device_token' => $device_token
-    ))->result;
+    ));
+
+    $this->post('login', array(
+      'token'        => $this->additional_user->getFacebookAccessToken(),
+      'device_token' => $device_token
+    ));
 
     $tokens = $this->main_user->getDeviceTokens();
     $this->assertEqual(0, count($tokens));
 
     $tokens = $this->additional_user->getDeviceTokens();
     if($this->assertEqual(1, count($tokens)))
-    {
       $this->assertEqual($device_token, $tokens->at(0)->token);
-    }
   }
 
-  function testLogin_firstCallCreateNewUserWithDefaultAvatar()
+  function testLogin_FirstCallCreateNewUserWithDefaultAvatar()
   {
     $this->toolkit->getFacebook($this->additional_user)
       ->setReturnValue('getUid', $this->additional_user->getFacebookUid());
@@ -227,38 +259,36 @@ class AuthControllerTest extends odControllerTestCase
     $profile->setReturnValue('getRegisteredFriends', array());
 
     $this->post('login', [
-      'token' => $this->additional_user->getFacebookAccessToken(),
-      'device_token' => $device_token = $this->generator->string(64)
+      'token'        => $this->additional_user->getFacebookAccessToken(),
+      'device_token' => $this->generator->string(64)
     ]);
 
     $users = User::find();
     if($this->assertEqual(1, count($users)))
-    {
-      $user = $users->at(0)->exportForApi();
-      $this->assertEqual($user->image_36, lmbToolkit::instance()->getStaticUrl("default_image_36.png"));
-      $this->assertEqual($user->image_72, lmbToolkit::instance()->getStaticUrl("default_image_72.png"));
-      $this->assertEqual($user->image_96, lmbToolkit::instance()->getStaticUrl("default_image_96.png"));
-      $this->assertEqual($user->image_192, lmbToolkit::instance()->getStaticUrl("default_image_192.png"));
-    }
+      $this->assertJsonUser($this->toolkit->getExportHelper()->exportUser($users->at(0)));
   }
 
   function testLogin_TokenLengthGreaterThan128()
   {
-    $this->get('is_logged_in', array('token' => str_repeat('A', 150)));
+    $this->get('is_logged_in', [
+      'token' => $this->generator->string(200)
+    ]);
     $this->assertResponse(200);
   }
 
-  function testLogout_ClearSession()
+  function testLogout()
   {
     lmbToolkit::instance()->setUser($this->main_user);
 
     $this->post('logout', [
-      'token' => $this->main_user->getFacebookAccessToken(),
-      'device_token' => $device_token = $this->generator->string()
+      'token'        => $this->main_user->getFacebookAccessToken(),
+      'device_token' => $this->generator->string()
     ]);
     $this->assertResponse(200);
 
-    $res = $this->get('is_logged_in', ['token' => $this->main_user->getFacebookAccessToken()], false);
+    $res = $this->get('is_logged_in', [
+      'token' => $this->main_user->getFacebookAccessToken()
+    ]);
     $this->assertResponse(200);
     $this->assertFalse($res->result);
   }
@@ -273,7 +303,7 @@ class AuthControllerTest extends odControllerTestCase
     lmbToolkit::instance()->setUser($this->main_user);
 
     $this->post('logout', [
-      'token' => $this->main_user->getFacebookAccessToken(),
+      'token'        => $this->main_user->getFacebookAccessToken(),
       'device_token' => $device_token
     ]);
     $this->assertResponse(200);

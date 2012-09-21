@@ -42,13 +42,11 @@ class Day extends BaseModel
     $export = new stdClass();
     $export->id = $this->getId();
     $export->user_id = $this->getUser()->getId();
-    $this->showImages($export);
-    $export->title = $this->getTitle();
-    // $export->occupation = $this->getOccupation();
-    // $export->location = $this->getLocation();
-    $export->final_description = $this->getFinalDescription();
     $export->type = $this->getType();
-    $export->views_count = $this->views_count;
+    $export->title = $this->getTitle();
+    $this->showImages($export);
+    $export->final_description = $this->getFinalDescription();
+    $export->views_count = $this->views_count ?: 0;
 
     return $export;
   }

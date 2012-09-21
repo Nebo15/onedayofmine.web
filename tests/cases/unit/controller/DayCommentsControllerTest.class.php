@@ -10,14 +10,19 @@ class DayCommentsControllerTest extends odControllerTestCase
   {
     $user = $this->generator->user();
     $user->save();
-    $comment = $this->generator->dayComment(null, $user);
+    $day = $this->generator->day();
+    $comment = $this->generator->dayComment($day, $user);
     $comment->save();
 
+    $comments = DayComment::find();
+    $this->assertEqual(1, $comments->count());
+
     lmbToolkit::instance()->setUser($user);
-    $this->post('delete', array(), $comment->getId());
+    $this->post('delete', [], $comment->getId());
 
     $this->assertResponse(200);
-    $this->assertFalse(DayComment::findById($comment->id));
+    $comments = DayComment::find();
+    $this->assertEqual(0, $comments->count());
   }
 
   function testDelete_WrongMethod()
@@ -27,7 +32,7 @@ class DayCommentsControllerTest extends odControllerTestCase
 
     lmbToolkit::instance()->setUser($comment->getUser());
 
-    $this->get('delete', array(), $comment->id);
+    $this->get('delete', [], $comment->id);
     $this->assertResponse(405);
   }
 
@@ -35,7 +40,10 @@ class DayCommentsControllerTest extends odControllerTestCase
   {
     lmbToolkit::instance()->setUser($this->main_user);
 
-    $this->post('delete', array(), 100500);
+    $comments = DayComment::find();
+    $this->assertEqual(0, $comments->count());
+
+    $this->post('delete', [], $this->generator->integer());
     $this->assertResponse(404);
   }
 
@@ -46,7 +54,7 @@ class DayCommentsControllerTest extends odControllerTestCase
 
     lmbToolkit::instance()->setUser($this->main_user);
 
-    $this->post('delete', array(), $comment->id);
+    $this->post('delete', [], $comment->id);
     $this->assertResponse(401);
   }
 }

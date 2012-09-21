@@ -378,11 +378,13 @@ class DaysController extends BaseJsonController
     if(!$this->request->isPost())
       return $this->_answerNotPost();
 
-    if(!Day::findById($this->request->id))
-      return $this->_answerModelNotFoundById('Day', $this->request->id);
+    $day_id = $this->request->get('day_id');
+
+    if(!Day::findById($day_id))
+      return $this->_answerModelNotFoundById('Day', $day_id);
 
     $complaint = new Complaint();
-    $complaint->setDayId($this->request->get('day_id'));
+    $complaint->setDayId($day_id);
     $complaint->setText($this->request->get('text'));
 
     $complaint->validate($this->error_list);
