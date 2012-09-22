@@ -233,6 +233,8 @@ class MomentsControllerTest extends odControllerTestCase
     $this->assertEqual(Moment::findOne()->getLikes()->count(), 1);
   }
 
+  function testLike_TwoTimes() {}
+
   function testLike_OwnDay() {
     $day = $this->generator->day($this->additional_user);
     $moment = $this->generator->moment($day);

@@ -111,6 +111,9 @@ class MomentsController extends BaseJsonController
     if(!$moment = Moment::findById($this->request->id))
       return $this->_answerModelNotFoundById('Moment', $this->request->id);
 
+    if(DayLike::findByMomentIdAndUserId($moment->getId(), $this->_getUser()->getId()))
+      return $this->_answerConflict();
+
     $like = new MomentLike;
     $like->setMoment($moment);
     $like->setUser($this->_getUser());
