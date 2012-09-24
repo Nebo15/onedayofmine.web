@@ -9,7 +9,6 @@ lmb_require('src/model/traits/Imageable.trait.php');
 class Day extends BaseModel
 {
   use Imageable;
-  use Likeable;
 
   protected $_default_sort_params = array('id'=>'desc');
 
@@ -77,14 +76,7 @@ class Day extends BaseModel
 
   static function getTypes()
   {
-    $sql = "SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'day' AND COLUMN_NAME = 'type'";
-    $stmt = lmbToolkit::instance()->getDefaultDbConnection()->newStatement($sql);
-    $stmt->execute(); // выполнит запрос.
-    if(preg_match('/^enum\((.*)\)$/', $stmt->getOneRecord()->get('COLUMN_TYPE'), $matches) === 1) {
-      return str_getcsv($matches[1], ',', "'");
-    } else {
-      throw new lmbException("Can't allocate day types.", array('query_result' => $stmt->getOneRecord()->get('COLUMN_TYPE'), 'preg_matches' => $matches));
-    }
+    return ['Working day', 'Day off', 'Holiday', 'Trip'];
   }
 
   /**

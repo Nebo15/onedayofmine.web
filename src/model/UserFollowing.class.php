@@ -6,7 +6,7 @@ class UserFollowing extends BaseModel
   protected $_default_sort_params = array('ctime'=>'asc');
 
   public static function isUserFollowUser(User $follower_user, User $followed_user) {
-    return !is_null(lmbActiveRecord::findOne('UserFollowing', array('follower_user_id=? AND user_id=?', $follower_user->getId(), $followed_user->getId())));
+    return !is_null(lmbActiveRecord::findOne('UserFollowing', ['follower_user_id=? AND user_id=?', $follower_user->getId(), $followed_user->getId()]));
   }
 
   public static function isUsersFollowUser(lmbCollectionInterface $follower_users, User $followed_user) {

@@ -73,7 +73,7 @@ class odObjectMother
 
   function dayWithLikes(User $user, $count)
   {
-    $day = $this->day($user, $title);
+    $day = $this->day($user);
     $this->dayLikes($day, $count);
     return $day;
   }
@@ -144,12 +144,16 @@ class odObjectMother
     return $moment;
   }
 
-  function momentWithImage(Day $day = null)
+  function momentWithImage(Day $day = null, $likes_count = 0)
   {
     $moment = $this->moment($day);
     $moment->save();
     $moment->attachImage($this->image());
     $moment->save();
+
+    for($i = 0; $i < $likes_count; $i++)
+      $moment->addToLikes($this->momentLike($moment));
+
     return $moment;
   }
 

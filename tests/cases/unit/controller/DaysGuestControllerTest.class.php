@@ -1,6 +1,6 @@
 <?php
-lmb_require('tests/cases/unit/controller/odControllerTestCase.class.php');
-lmb_require('src/controller/DaysController.class.php');
+  lmb_require('tests/cases/unit/controller/odControllerTestCase.class.php');
+  lmb_require('src/controller/DaysController.class.php');
 
 class DaysGuestControllerTest extends odControllerTestCase
 {
@@ -22,8 +22,7 @@ class DaysGuestControllerTest extends odControllerTestCase
     $this->assertEqual(0, $day->getViewsCount());
 
     $response = $this->get('item', [], $day->getId());
-    if($this->assertResponse(200))
-    {
+    if ($this->assertResponse(200)) {
       $response_day = $response->result;
       $this->assertJsonDay($response_day);
       $this->assertEqualPropertyValues($response_day, $day->exportForApi());
@@ -88,8 +87,7 @@ class DaysGuestControllerTest extends odControllerTestCase
     $response = $this->get('search', [
       'query' => 'foo'
     ]);
-    if($this->assertResponse(200))
-    {
+    if ($this->assertResponse(200)) {
       $days = $response->result;
       $this->assertEqual(4, count($days));
       $this->assertJsonDayItems($days);
@@ -102,10 +100,9 @@ class DaysGuestControllerTest extends odControllerTestCase
 
     $response_with_from = $this->get('search', [
       'query' => 'foo',
-      'from'  => $day4->getId(),
+      'from' => $day4->getId(),
     ]);
-    if($this->assertResponse(200))
-    {
+    if ($this->assertResponse(200)) {
       $days = $response_with_from->result;
       $this->assertEqual(3, count($days));
       $this->assertJsonDayItems($days);
@@ -117,11 +114,10 @@ class DaysGuestControllerTest extends odControllerTestCase
 
     $response_with_range = $this->get('search', [
       'query' => 'foo',
-      'from'  => $day4->getId(),
-      'to'    => $day1->getId(),
+      'from' => $day4->getId(),
+      'to' => $day1->getId(),
     ]);
-    if($this->assertResponse(200))
-    {
+    if ($this->assertResponse(200)) {
       $days = $response_with_range->result;
       $this->assertEqual(2, count($days));
       $this->assertJsonDayItems($days);
@@ -132,12 +128,11 @@ class DaysGuestControllerTest extends odControllerTestCase
 
     $response_with_limit = $this->get('search', [
       'query' => 'foo',
-      'from'  => $day4->getId(),
-      'to'    => $day1->getId(),
+      'from' => $day4->getId(),
+      'to' => $day1->getId(),
       'limit' => 1,
     ]);
-    if($this->assertResponse(200))
-    {
+    if ($this->assertResponse(200)) {
       $days = $response_with_limit->result;
       $this->assertEqual(1, count($days));
       $this->assertJsonDayItems($days);
@@ -171,7 +166,7 @@ class DaysGuestControllerTest extends odControllerTestCase
     $day5->save();
 
     $response = $this->get('new');
-    if($this->assertResponse(200)) {
+    if ($this->assertResponse(200)) {
       $days = $response->result;
       $this->assertEqual(4, count($days));
       $this->assertJsonDayItems($days, true);
@@ -185,8 +180,7 @@ class DaysGuestControllerTest extends odControllerTestCase
     $response_with_from = $this->get('new', [
       'from' => $day5->getId(),
     ]);
-    if($this->assertResponse(200))
-    {
+    if ($this->assertResponse(200)) {
       $days = $response_with_from->result;
       $this->assertEqual(3, count($days));
       $this->assertJsonDayItems($days, true);
@@ -198,10 +192,9 @@ class DaysGuestControllerTest extends odControllerTestCase
 
     $response_with_range = $this->get('new', [
       'from' => $day5->getId(),
-      'to'   => $day1->getId(),
+      'to' => $day1->getId(),
     ]);
-    if($this->assertResponse(200))
-    {
+    if ($this->assertResponse(200)) {
       $days = $response_with_range->result;
       $this->assertEqual(2, count($days));
       $this->assertJsonDayItems($days, true);
@@ -211,12 +204,11 @@ class DaysGuestControllerTest extends odControllerTestCase
     }
 
     $response_with_limit = $this->get('new', [
-      'from'  => $day5->getId(),
-      'to'    => $day1->getId(),
+      'from' => $day5->getId(),
+      'to' => $day1->getId(),
       'limit' => 1,
     ]);
-    if($this->assertResponse(200))
-    {
+    if ($this->assertResponse(200)) {
       $days = $response_with_limit->result;
       $this->assertEqual(1, count($days));
       $this->assertJsonDayItems($days, true);
@@ -267,8 +259,7 @@ class DaysGuestControllerTest extends odControllerTestCase
     $interests_calculator->fillRating();
 
     $response = $this->get('interesting');
-    if($this->assertResponse(200))
-    {
+    if ($this->assertResponse(200)) {
       $days = $response->result;
       $this->assertEqual(4, count($days));
       $this->assertJsonDayItems($days, true);
@@ -282,8 +273,7 @@ class DaysGuestControllerTest extends odControllerTestCase
     $response_with_from = $this->get('interesting', [
       'from' => $day1->getId(),
     ]);
-    if($this->assertResponse(200))
-    {
+    if ($this->assertResponse(200)) {
       $days = $response_with_from->result;
       $this->assertEqual(3, count($days));
       $this->assertJsonDayItems($days, true);
@@ -295,10 +285,9 @@ class DaysGuestControllerTest extends odControllerTestCase
 
     $response_with_range = $this->get('interesting', [
       'from' => $day1->getId(),
-      'to'   => $day3->getId(),
+      'to' => $day3->getId(),
     ]);
-    if($this->assertResponse(200))
-    {
+    if ($this->assertResponse(200)) {
       $days = $response_with_range->result;
       $this->assertEqual(2, count($days));
       $this->assertJsonDayItems($days, true);
@@ -308,12 +297,11 @@ class DaysGuestControllerTest extends odControllerTestCase
     }
 
     $response_with_limit = $this->get('interesting', [
-      'from'  => $day1->getId(),
-      'to'    => $day4->getId(),
+      'from' => $day1->getId(),
+      'to' => $day4->getId(),
       'limit' => 1,
     ]);
-    if($this->assertResponse(200))
-    {
+    if ($this->assertResponse(200)) {
       $days = $response_with_limit->result;
       $this->assertEqual(1, count($days));
       $this->assertJsonDayItems($days, true);
@@ -326,8 +314,7 @@ class DaysGuestControllerTest extends odControllerTestCase
   function testTypes()
   {
     $response = $this->get('types');
-    if($this->assertResponse(200))
-    {
+    if ($this->assertResponse(200)) {
       $types = $response->result;
       $this->assertEqual($types, Day::getTypes());
     }
@@ -339,8 +326,7 @@ class DaysGuestControllerTest extends odControllerTestCase
     $day->save();
 
     $response = $this->get('comments', [], $day->getId())->result;
-    if($this->assertResponse(200))
-    {
+    if ($this->assertResponse(200)) {
       $comments = $response->result;
       $this->assertEqual(4, count($comments));
       $this->assertJsonDayCommentItems($comments);
@@ -356,33 +342,30 @@ class DaysGuestControllerTest extends odControllerTestCase
     $response_with_from = $this->get('comments', [
       'from' => $day->getComments()->at(0)->id
     ], $day->getId());
-    if($this->assertResponse(200))
-    {
+    if ($this->assertResponse(200)) {
       $this->assertEqual(3, count($res));
       $this->assertEqual($day->getComments()->at(1)->id, $res[0]->id);
-    $this->assertEqual($day->getComments()->at(2)->id, $res[1]->id);
-    $this->assertEqual($day->getComments()->at(3)->id, $res[2]->id);
-
-    $response_with_range = $this->get('comments', [
-      'from' => $day->getComments()->at(0)->id,
-      'to' => $day->getComments()->at(3)->id,
-    ], $day->getId());
-    if($this->assertResponse(200))
-    {
-      $this->assertEqual(2, count($res));
-      $this->assertEqual($day->getComments()->at(1)->id, $res[0]->id);
       $this->assertEqual($day->getComments()->at(2)->id, $res[1]->id);
-    }
+      $this->assertEqual($day->getComments()->at(3)->id, $res[2]->id);
 
-    $response_with_limit = $this->get('comments', [
-      'from' => $day->getComments()->at(0)->id,
-      'to' => $day->getComments()->at(3)->id,
-      'limit' => 1
-    ], $day->getId());
-    if($this->assertResponse(200))
-    {
-      $this->assertEqual(1, count($res));
-      $this->assertEqual($day->getComments()->at(1)->id, $res[0]->id);
+      $response_with_range = $this->get('comments', [
+        'from' => $day->getComments()->at(0)->id,
+        'to' => $day->getComments()->at(3)->id,
+      ], $day->getId());
+      if ($this->assertResponse(200)) {
+        $this->assertEqual(2, count($res));
+        $this->assertEqual($day->getComments()->at(1)->id, $res[0]->id);
+        $this->assertEqual($day->getComments()->at(2)->id, $res[1]->id);
+      }
+
+      $response_with_limit = $this->get('comments', [
+        'from' => $day->getComments()->at(0)->id,
+        'to' => $day->getComments()->at(3)->id,
+        'limit' => 1
+      ], $day->getId());
+      if ($this->assertResponse(200)) {
+        $this->assertEqual(1, count($res));
+        $this->assertEqual($day->getComments()->at(1)->id, $res[0]->id);
+      }
     }
   }
-}

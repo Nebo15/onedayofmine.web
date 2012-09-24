@@ -104,7 +104,7 @@ class odTools extends lmbAbstractTools
     static $export_helper;
 
     if(!$export_helper)
-      $export_helper = new odExportHelper();
+      $export_helper = new odExportHelper($this->getUser());
 
     return $export_helper;
   }
