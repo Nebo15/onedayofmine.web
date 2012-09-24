@@ -133,6 +133,35 @@ class odExportHelper
     unset($exported->user_id);
   }
 
+  ############### > FacebookUser ###############
+  function exportFacebookUserItem(array $facebook_user)
+  {
+    $exported            = new stdClass;
+    $exported->uid       = $facebook_user['facebook_uid'];
+    $exported->name      = $facebook_user['name'];
+    $exported->image_50  = $facebook_user['pic'];
+    $exported->image_150 = $facebook_user['pic_big'];
+
+    if($user = User::findByFacebookUid($exported->uid))
+    {
+      $exported->user = $user->exportForApi();
+      $exported->user->following = UserFollowing::isUserFollowUser(lmbToolkit::instance()->getUser(), $user);
+    }
+    else
+      $exported->user = null;
+
+    return $exported;
+  }
+
+  function exportFacebookUserItems(array $facebook_users)
+  {
+    $exported = [];
+    foreach($facebook_users as $facebook_user) {
+      $exported[] = $this->exportFacebookUserItem($facebook_user);
+    }
+    return $exported;
+  }
+
   ############### Moment ###############
   function exportMoment(Moment $moment)
   {

@@ -218,6 +218,40 @@ class odExportHelperTest extends odUnitTestCase
     $this->assertJsonUserItems($exported);
   }
 
+  function testExportFacebookUserItem_forGuest()
+  {
+    $exported = $this->export_helper->exportFacebookUserItem($this->generator->facebookInfo());
+    $this->assertJsonFacebookUserListItem($exported);
+  }
+
+  function testExportFacebookUserItem_forUser()
+  {
+    $this->main_user->save();
+    $this->additional_user->save();
+
+    $following = $this->main_user->getFollowing();
+    $following->add($this->additional_user);
+    $following->save();
+
+    lmbToolkit::instance()->setUser($this->main_user);
+
+    $exported = $this->export_helper->exportFacebookUserItem($this->generator->facebookInfo($this->additional_user->getFacebookUid()));
+    $this->assertJsonFacebookUserListItem($exported);
+    $this->assertTrue($exported->user);
+    $this->assertTrue($exported->user->following);
+  }
+
+  function testExportFacebookUserItems()
+  {
+    $users = [$this->generator->facebookInfo()];
+    for($i = 0; $i < $this->generator->integer(2); $i++) {
+      $users[] = $this->generator->facebookInfo();
+    }
+
+    $exported = $this->export_helper->exportFacebookUserItems($users);
+    $this->assertJsonFacebookUserItems($exported);
+  }
+
   function testExportMoment()
   {
     $moment = $this->generator->momentWithImage();

@@ -22,10 +22,12 @@ class UsersControllerTest extends odControllerTestCase
     $this->toolkit->setUser($this->additional_user);
 
     $days = $this->get('days', array(), $this->main_user->getId())->result;
-    $this->assertResponse(200);
-    $this->assertEqual(2, count($days));
-    $this->assertEqual($day2->getId(), $days[0]->id);
-    $this->assertEqual($day1->getId(), $days[1]->id);
+    if($this->assertResponse(200))
+    {
+      $this->assertEqual(2, count($days));
+      $this->assertEqual($day2->getId(), $days[0]->id);
+      $this->assertEqual($day1->getId(), $days[1]->id);
+    }
   }
 
   /**

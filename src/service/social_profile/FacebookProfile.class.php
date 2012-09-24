@@ -31,13 +31,13 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
    */
   public function __construct(User $user)
   {
-    $access_token   = $user->getFacebookAccessToken();
+    $access_token    = $user->getFacebookAccessToken();
 
     lmb_assert_true($user, 'Facebook profile user not specified.');
     lmb_assert_true($access_token, 'Facebook access token not specified.');
 
-    $this->provider = lmbToolkit::instance()->getFacebook($access_token);
-    $this->user     = $user;
+    $this->provider  = lmbToolkit::instance()->getFacebook($access_token);
+    $this->user      = $user;
     $this->namespace = lmbToolkit::instance()->getConf('facebook')->namespace;
   }
 
@@ -75,13 +75,15 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
   {
     $fields = implode(',', self::_getUserFacebookFieldsMap());
     $fql_result = $this->provider->makeQuery("SELECT {$fields} FROM user WHERE is_app_user AND uid IN (SELECT uid2 FROM friend WHERE uid1 = me())");
-    $friends = [];
 
     if($fql_result)
+    {
+      $friends = [];
       foreach($fql_result as $raw_info)
       {
         $friends[] = $this->_mapFacebookInfo($raw_info);
       }
+    }
 
     return $friends;
   }
@@ -91,11 +93,8 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
     $results = array();
     foreach($this->getFriends() as $info)
     {
-      if(!$user = User::findByFacebookUid($info['facebook_uid']))
-        continue;
-
-      // $user->setUserInfo($info);
-      $results[] = $user;
+      if($user = User::findByFacebookUid($info['facebook_uid']))
+        $results[] = $user;
     }
     return $results;
   }

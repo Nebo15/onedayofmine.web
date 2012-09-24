@@ -49,14 +49,16 @@ abstract class odUnitTestCase extends UnitTestCase
 
   protected function assertPropertys(stdClass $obj, array $propertys, $message = "Property '%s' not found")
   {
-    foreach ($propertys as $property) {
+    foreach ($propertys as $property)
+    {
       $this->assertProperty($obj, $property, $message);
     }
   }
 
   public function assertEqualPropertyValues(stdClass $main_object, stdClass $updated_object, $verbose = false)
   {
-    foreach ($main_object as $key => $value) {
+    foreach ($main_object as $key => $value)
+    {
       if(property_exists($updated_object, $key))
         $this->assertEqual($main_object->$key, $value);
       elseif($verbose)
@@ -66,7 +68,7 @@ abstract class odUnitTestCase extends UnitTestCase
 
   protected function assertImageUrl($url, $message = "Invalid image url '%s'")
   {
-    $this->assertTrue($url, sprintf($message, $url));
+    $this->assertTrue($url, sprintf('Empty image url', $url));
 
     $images_conf = lmbToolkit::instance()->getConf('images');
     $rel_path = str_replace(lmbToolkit::instance()->getConf('common')['static_host'], '', $url);
@@ -80,7 +82,8 @@ abstract class odUnitTestCase extends UnitTestCase
 
   protected function assertImageUrls(array $urls)
   {
-    foreach ($urls as $url) {
+    foreach ($urls as $url)
+    {
       $this->assertImageUrl($url);
     }
   }
@@ -104,7 +107,8 @@ abstract class odUnitTestCase extends UnitTestCase
     $this->assertFalse(is_null($user->favourites_count), "Favourites count can't be null");
     $this->assertFalse(is_null($user->days_count), "Days count can't be null");
 
-    if(lmbToolkit::instance()->getUser()) {
+    if(lmbToolkit::instance()->getUser())
+    {
       if(lmbToolkit::instance()->getUser()->getId() == $user->id)
         $this->assertProperty($user, 'email');
       else
@@ -116,7 +120,8 @@ abstract class odUnitTestCase extends UnitTestCase
   {
     $this->assertJsonUserSubentity($user);
 
-    if(lmbToolkit::instance()->getUser() && lmbToolkit::instance()->getUser()->getId() != $user->id) {
+    if(lmbToolkit::instance()->getUser() && lmbToolkit::instance()->getUser()->getId() != $user->id)
+    {
       $this->assertProperty($user, 'following');
     }
   }
@@ -154,8 +159,46 @@ abstract class odUnitTestCase extends UnitTestCase
 
   protected function assertJsonUserItems(array $users)
   {
-    foreach ($users as $user) {
+    foreach ($users as $user)
+    {
       $this->assertJsonUserListItem($user);
+    }
+  }
+
+  ########### > FacebookUser ###########
+  protected function assertJsonFacebookUserListItem(stdClass $facebook_user, $validate_images = false)
+  {
+    $this->assertPropertys($facebook_user, [
+      "uid",
+      "name",
+      "image_50",
+      "image_150",
+      "user",
+    ]);
+
+    $this->assertTrue($facebook_user->uid, "User ID not set");
+    $this->assertTrue($facebook_user->name, "User name can't be empty");
+
+    if($validate_images)
+      $this->assertImageUrls([
+        $facebook_user->image_50,
+        $facebook_user->image_150,
+      ]);
+    else
+    {
+      $this->assertTrue($facebook_user->image_50);
+      $this->assertTrue($facebook_user->image_150);
+    }
+
+    if(!is_null($facebook_user->user))
+      $this->assertJsonUserSubentity($facebook_user->user);
+  }
+
+  protected function assertJsonFacebookUserItems(array $facebook_users, $validate_images = false)
+  {
+    foreach ($facebook_users as $facebook_user)
+    {
+      $this->assertJsonFacebookUserListItem($facebook_user, $validate_images);
     }
   }
 
@@ -190,7 +233,10 @@ abstract class odUnitTestCase extends UnitTestCase
   {
     $this->assertJsonDayListItem($day, $validate_images);
 
-    if($day->comments_count > 0) {
+    $this->assertProperty($day, "final_description");
+
+    if($day->comments_count > 0)
+    {
       $this->assertTrue(
         count($day->comments) <= lmbToolkit::instance()->getConf('common')->default_comments_count,
         'Expected max ' . lmbToolkit::instance()->getConf('common')->default_comments_count . ' preloaded comments, got ' . count($day->comments)
@@ -215,7 +261,8 @@ abstract class odUnitTestCase extends UnitTestCase
       "views_count",
     ]);
 
-    if(lmbToolkit::instance()->getUser()) {
+    if(lmbToolkit::instance()->getUser())
+    {
       if(lmbToolkit::instance()->getUser()->getId() == $day->user->id)
         $this->assertProperty($day, 'is_deleted');
 
@@ -263,7 +310,8 @@ abstract class odUnitTestCase extends UnitTestCase
 
   protected function assertJsonDayItems(array $days, $validate_images = false)
   {
-    foreach ($days as $day) {
+    foreach ($days as $day)
+    {
       $this->assertJsonDayListItem($day, $validate_images);
     }
   }
@@ -305,7 +353,8 @@ abstract class odUnitTestCase extends UnitTestCase
 
   protected function assertJsonMomentItems(array $moments, $validate_images = false)
   {
-    foreach ($moments as $moment) {
+    foreach ($moments as $moment)
+    {
       $this->assertJsonMomentListItem($moment, $validate_images);
     }
   }
@@ -337,7 +386,8 @@ abstract class odUnitTestCase extends UnitTestCase
 
   protected function assertJsonDayCommentItems(array $comments)
   {
-    foreach ($comments as $comment) {
+    foreach ($comments as $comment)
+    {
       $this->assertJsonDayCommentListItem($comment);
     }
   }
@@ -369,7 +419,8 @@ abstract class odUnitTestCase extends UnitTestCase
 
   protected function assertJsonMomentCommentItems(array $comments)
   {
-    foreach ($comments as $comment) {
+    foreach ($comments as $comment)
+    {
       $this->assertJsonMomentCommentListItem($comment);
     }
   }
@@ -400,7 +451,8 @@ abstract class odUnitTestCase extends UnitTestCase
 
   protected function assertJsonComplaintItems(array $complaints)
   {
-    foreach ($complaints as $complaint) {
+    foreach ($complaints as $complaint)
+    {
       $this->assertJsonComplaintListItem($complaint);
     }
   }
@@ -433,7 +485,8 @@ abstract class odUnitTestCase extends UnitTestCase
 
   protected function assertJsonNewsItems(array $news)
   {
-    foreach ($news as $news_item) {
+    foreach ($news as $news_item)
+    {
       $this->assertJsonNewsListItem($news_item);
     }
   }

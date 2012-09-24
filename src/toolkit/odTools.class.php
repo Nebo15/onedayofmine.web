@@ -195,7 +195,7 @@ class odTools extends lmbAbstractTools
         // var_dump($value);
         $user->setFacebookUid($value['id']);
         $user->setFacebookAccessToken($value['access_token']);
-        $user->import((new FacebookProfile($user))->getInfo());
+        $user->import($this->getFacebookProfile($user)->getInfo());
         $users['data'][$key]['email'] = $user->getEmail();
       }
       $this->tests_users = $users['data'];
