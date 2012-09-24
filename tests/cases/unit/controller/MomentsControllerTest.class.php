@@ -310,7 +310,7 @@ class MomentsControllerTest extends odControllerTestCase
     }
 
     $response = $this->post('like', [], $moment->getId());
-    if($this->assertResponse(409))
+    if($this->assertResponse(200))
     {
       $this->assertTrue(is_null($response->result));
       $this->assertEqual($response->errors[0], 'Entity already exists');

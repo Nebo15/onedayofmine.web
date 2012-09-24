@@ -211,7 +211,7 @@ abstract class BaseJsonController extends lmbController
 
   protected function _answerConflict()
   {
-    return $this->_answerWithError("Entity already exists", null, 409);
+    return $this->_answerWithError("Entity already exists", null, 200);
   }
 
   protected function _answerNotPost($message = 'Not a POST request')
