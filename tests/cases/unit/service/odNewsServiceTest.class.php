@@ -563,53 +563,53 @@ class odNewsServiceTest extends odUnitTestCase
     $this->assertNoNews($day_owner);
   }
 
-  function testOnDayFavourite_UserContent()
+  function testOnDayFavorite_UserContent()
   {
-    $user_who_favourite = $this->generator->user();
-    $user_who_favourite->save();
+    $user_who_favorite = $this->generator->user();
+    $user_who_favorite->save();
     $user_day_owner = $this->generator->user();
     $user_day_owner->save();
     $day = $this->generator->day($user_day_owner);
     $day->save();
 
-    (new odNewsService($user_who_favourite))->onDayFavourite($day);
+    (new odNewsService($user_who_favorite))->onDayFavorite($day);
 
     $this->assertEqual(1, count($user_day_owner->getNews()));
     $news = $user_day_owner->getNews()->at(0);
-    $this->assertNewsUsers($news, $user_day_owner, $user_who_favourite);
-    $this->assertNewsText($news, odNewsService::MSG_DAY_FAVOURITE, $user_who_favourite->name, $day->title);
+    $this->assertNewsUsers($news, $user_day_owner, $user_who_favorite);
+    $this->assertNewsText($news, odNewsService::MSG_DAY_Favorite, $user_who_favorite->name, $day->title);
     $this->assertEqual($day->id, $news->day_id);
   }
 
-  function testOnDayFavourite_UserContent_DisabledInSettings()
+  function testOnDayFavorite_UserContent_DisabledInSettings()
   {
-    $user_who_favourite = $this->generator->user();
-    $user_who_favourite->save();
+    $user_who_favorite = $this->generator->user();
+    $user_who_favorite->save();
     $day_owner = $this->_createUserWithDisabledNotification('related_activity');
     $day_owner->save();
     $day = $this->generator->day($day_owner);
     $day->save();
 
-    (new odNewsService($user_who_favourite))->onDayFavourite($day);
+    (new odNewsService($user_who_favorite))->onDayFavorite($day);
 
     $this->assertNoNews($day_owner);
   }
 
-  function testOnDayFavourite_Followers()
+  function testOnDayFavorite_Followers()
   {
     $day = $this->generator->day();
     $day->save();
 
-    $this->sender_observer->onDayFavourite($day);
+    $this->sender_observer->onDayFavorite($day);
 
     $this->assertEqual(1, count($this->follower->getNews()));
     $news = $this->follower->getNews()->at(0);
     $this->assertNewsUsers($news, $this->follower, $this->sender);
-    $this->assertNewsText($news, odNewsService::MSG_DAY_FAVOURITE, $this->sender->name, $day->title);
+    $this->assertNewsText($news, odNewsService::MSG_DAY_Favorite, $this->sender->name, $day->title);
     $this->assertEqual($day->id, $news->day_id);
   }
 
-  function testOnDayFavourite_Followers_DisabledInSettings()
+  function testOnDayFavorite_Followers_DisabledInSettings()
   {
     $this->follower->disableNotification('related_activity');
     $this->follower->save();
@@ -617,7 +617,7 @@ class odNewsServiceTest extends odUnitTestCase
     $day = $this->generator->day();
     $day->save();
 
-    $this->sender_observer->onDayFavourite($day);
+    $this->sender_observer->onDayFavorite($day);
 
     $this->assertNoNews($this->follower);
   }

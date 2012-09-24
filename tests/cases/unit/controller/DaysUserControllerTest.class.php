@@ -13,7 +13,7 @@ class DaysUserControllerTest extends odControllerTestCase
    * @api result int comments_count
    * @api result DayComment[0-3] comments Few first comments
    * @api result Moment[] moments All day moments
-   * @api result bool is_favourite
+   * @api result bool is_favorite
    */
   function testItem()
   {
@@ -22,7 +22,7 @@ class DaysUserControllerTest extends odControllerTestCase
     $day = $this->generator->dayWithMomentsAndComments();
     $day->save();
 
-    $favorite = $this->main_user->getFavouriteDays();
+    $favorite = $this->main_user->getFavoriteDays();
     $favorite->add($day);
     $favorite->save();
 
@@ -204,13 +204,13 @@ class DaysUserControllerTest extends odControllerTestCase
   }
 
   /**
-   * @api description Returns favourite based on <a href="#range-request">range-request</a>.
+   * @api description Returns favorite based on <a href="#range-request">range-request</a>.
    * @api input option int from
    * @api input option int to
    * @api input option int limit
    * @api result Day[] day
    */
-  function testGetFavouriteDays()
+  function testGetFavoriteDays()
   {
     $this->additional_user->save();
 
@@ -226,16 +226,16 @@ class DaysUserControllerTest extends odControllerTestCase
     $day5->setIsDeleted(1);
     $day5->save();
 
-    $this->main_user->addToFavouriteDays($day1);
-    $this->main_user->addToFavouriteDays($day2);
-    $this->main_user->addToFavouriteDays($day3);
-    $this->main_user->addToFavouriteDays($day4);
-    $this->main_user->addToFavouriteDays($day5);
+    $this->main_user->addToFavoriteDays($day1);
+    $this->main_user->addToFavoriteDays($day2);
+    $this->main_user->addToFavoriteDays($day3);
+    $this->main_user->addToFavoriteDays($day4);
+    $this->main_user->addToFavoriteDays($day5);
     $this->main_user->save();
 
     lmbToolkit::instance()->setUser($this->main_user);
 
-    $response = $this->get('favourite');
+    $response = $this->get('favorite');
     if($this->assertResponse(200))
     {
       $days = $response->result;
@@ -248,7 +248,7 @@ class DaysUserControllerTest extends odControllerTestCase
       $this->assertEqual($day1->getId(), $days[3]->id);
     }
 
-    $response_with_from = $this->get('favourite', [
+    $response_with_from = $this->get('favorite', [
       'from' => $day4->getId(),
     ]);
     if($this->assertResponse(200))
@@ -262,7 +262,7 @@ class DaysUserControllerTest extends odControllerTestCase
       $this->assertEqual($day1->getId(), $days[2]->id);
     }
 
-    $response_with_range = $this->get('favourite', [
+    $response_with_range = $this->get('favorite', [
       'from' => $day4->getId(),
       'to' => $day1->getId(),
     ]);
@@ -276,7 +276,7 @@ class DaysUserControllerTest extends odControllerTestCase
       $this->assertEqual($day2->getId(), $days[1]->id);
     }
 
-    $response_with_limit = $this->get('favourite', [
+    $response_with_limit = $this->get('favorite', [
       'from' => $day4->getId(),
       'to' => $day1->getId(),
       'limit' => 1,
@@ -294,46 +294,46 @@ class DaysUserControllerTest extends odControllerTestCase
   /**
    * @api
    */
-  function testMarkFavourite()
+  function testMarkFavorite()
   {
     $this->main_user->save();
     $this->additional_user->save();
     $day = $this->generator->day($this->additional_user);
     $day->save();
 
-    $this->assertEqual(0, $this->main_user->getFavouriteDays()->count());
+    $this->assertEqual(0, $this->main_user->getFavoriteDays()->count());
 
     lmbToolkit::instance()->setUser($this->main_user);
 
-    $response = $this->post('mark_favourite', [], $day->getId());
+    $response = $this->post('mark_favorite', [], $day->getId());
     if($this->assertResponse(200))
     {
       $this->assertTrue(is_null($response->result));
-      $this->assertEqual(1, $this->main_user->getFavouriteDays()->count());
-      $this->assertEqual($day->getId(), $this->main_user->getFavouriteDays()->at(0)->getId());
+      $this->assertEqual(1, $this->main_user->getFavoriteDays()->count());
+      $this->assertEqual($day->getId(), $this->main_user->getFavoriteDays()->at(0)->getId());
     }
   }
 
-  function testMarkFavourite_TwoTimes()
+  function testMarkFavorite_TwoTimes()
   {
     $this->main_user->save();
     $this->additional_user->save();
     $day = $this->generator->day($this->additional_user);
     $day->save();
 
-    $this->assertEqual(0, $this->main_user->getFavouriteDays()->count());
+    $this->assertEqual(0, $this->main_user->getFavoriteDays()->count());
 
     lmbToolkit::instance()->setUser($this->main_user);
 
-    $response = $this->post('mark_favourite', [], $day->getId());
+    $response = $this->post('mark_favorite', [], $day->getId());
     if($this->assertResponse(200))
     {
       $this->assertTrue(is_null($response->result));
-      $this->assertEqual(1, $this->main_user->getFavouriteDays()->count());
-      $this->assertEqual($day->getId(), $this->main_user->getFavouriteDays()->at(0)->getId());
+      $this->assertEqual(1, $this->main_user->getFavoriteDays()->count());
+      $this->assertEqual($day->getId(), $this->main_user->getFavoriteDays()->at(0)->getId());
     }
 
-    $response = $this->post('mark_favourite', [], $day->getId());
+    $response = $this->post('mark_favorite', [], $day->getId());
     if($this->assertResponse(409)) {
       $this->assertTrue(is_null($response->result));
       $this->assertEqual($response->status, 'Like not found');
@@ -343,7 +343,7 @@ class DaysUserControllerTest extends odControllerTestCase
   /**
    * @api
    */
-  function testUnmarkFavourite()
+  function testUnmarkFavorite()
   {
     $this->main_user->save();
     $this->additional_user->save();
@@ -351,19 +351,19 @@ class DaysUserControllerTest extends odControllerTestCase
     $day = $this->generator->day($this->additional_user);
     $day->save();
 
-    $this->main_user->getFavouriteDays()->add($day);
+    $this->main_user->getFavoriteDays()->add($day);
     $this->main_user->save();
 
     lmbToolkit::instance()->setUser($this->main_user);
 
-    $response = $this->post('unmark_favourite', [], $day->getId());
+    $response = $this->post('unmark_favorite', [], $day->getId());
     if($this->assertResponse(200)) {
       $this->assertTrue(is_null($response->result));
-      $this->assertEqual(0, $this->main_user->getFavouriteDays()->count());
+      $this->assertEqual(0, $this->main_user->getFavoriteDays()->count());
     }
   }
 
-  function testUnmarkFavourite_TwoTimes()
+  function testUnmarkFavorite_TwoTimes()
   {
     $this->main_user->save();
     $this->additional_user->save();
@@ -371,22 +371,22 @@ class DaysUserControllerTest extends odControllerTestCase
     $day = $this->generator->day($this->additional_user);
     $day->save();
 
-    $this->main_user->getFavouriteDays()->add($day);
+    $this->main_user->getFavoriteDays()->add($day);
     $this->main_user->save();
 
     lmbToolkit::instance()->setUser($this->main_user);
 
-    $response = $this->post('unmark_favourite', [], $day->getId());
+    $response = $this->post('unmark_favorite', [], $day->getId());
     if($this->assertResponse(200)) {
       $this->assertTrue(is_null($response->result));
-      $this->assertEqual(0, $this->main_user->getFavouriteDays()->count());
+      $this->assertEqual(0, $this->main_user->getFavoriteDays()->count());
     }
 
-    $response = $this->post('unmark_favourite', [], $day->getId());
+    $response = $this->post('unmark_favorite', [], $day->getId());
     if($this->assertResponse(200)) {
       $this->assertTrue(is_null($response->result));
-      $this->assertEqual(0, $this->main_user->getFavouriteDays()->count());
-      $this->assertEqual($response->status, 'Favourite not found');
+      $this->assertEqual(0, $this->main_user->getFavoriteDays()->count());
+      $this->assertEqual($response->status, 'Favorite not found');
     }
   }
 

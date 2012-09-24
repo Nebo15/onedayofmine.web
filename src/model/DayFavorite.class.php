@@ -1,13 +1,13 @@
 <?php
 lmb_require('src/model/base/BaseModel.class.php');
 
-class DayFavourite extends BaseModel
+class DayFavorite extends BaseModel
 {
   protected $_default_sort_params = array('ctime'=>'asc');
 
-  static function isFavourited(User $user, Day $day)
+  static function isFavorited(User $user, Day $day)
   {
-    return (bool) DayFavourite::find(
+    return (bool) DayFavorite::find(
       lmbSQLCriteria::equal('user_id', $user->getId())
         ->addAnd(lmbSQLCriteria::equal('day_id', $day->getId()))
     )->count();

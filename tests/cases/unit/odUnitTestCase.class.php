@@ -97,14 +97,14 @@ abstract class odUnitTestCase extends UnitTestCase
       "birthday",
       "followers_count",
       "following_count",
-      "favourites_count",
+      "favorites_count",
       "days_count",
     ]);
 
     $this->assertTrue($user->birthday, "Birthday can't be empty");
     $this->assertFalse(is_null($user->followers_count), "Followers count can't be null");
     $this->assertFalse(is_null($user->following_count), "Following count can't be null");
-    $this->assertFalse(is_null($user->favourites_count), "Favourites count can't be null");
+    $this->assertFalse(is_null($user->favorites_count), "Favorites count can't be null");
     $this->assertFalse(is_null($user->days_count), "Days count can't be null");
 
     if(lmbToolkit::instance()->getUser())

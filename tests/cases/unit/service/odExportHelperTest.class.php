@@ -31,7 +31,7 @@ class odExportHelperTest extends odUnitTestCase
     $this->assertJsonDay($exported, true);
     $this->assertFalse($exported->is_favorite);
 
-    $favorites = $this->main_user->getFavouriteDays();
+    $favorites = $this->main_user->getFavoriteDays();
     $favorites->add($day);
     $this->main_user->save();
 
@@ -74,7 +74,7 @@ class odExportHelperTest extends odUnitTestCase
     $this->assertJsonDayListItem($exported, true);
     $this->assertFalse($exported->is_favorite);
 
-    $favorites = $this->main_user->getFavouriteDays();
+    $favorites = $this->main_user->getFavoriteDays();
     $favorites->add($day);
     $this->main_user->save();
 

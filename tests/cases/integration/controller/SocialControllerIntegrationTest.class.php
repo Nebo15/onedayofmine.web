@@ -21,13 +21,14 @@ class SocialControllerIntegrationTest extends odAcceptanceTestCase
 
     $this->_loginAndSetCookie($this->main_user);
 
-    $result = $this->get('social/facebook_friends');
-    $friends = $result->result;
-    $this->assertResponse(200);
-    $this->assertTrue(is_array($friends));
-    $this->assertEqual(1, count($friends));
-    $this->assertEqual($friends[0]->facebook_uid, $this->additional_user->getFacebookUid());
-    $this->assertProperty($friends[0], 'user');
+    $response = $this->get('social/facebook_friends');
+    if($this->assertResponse(200))
+    {
+      $friends = $response->result;
+      $this->assertTrue(is_array($friends));
+      $this->assertEqual(1, count($friends));
+      $this->assertEqual($friends[0]->uid, $this->additional_user->getFacebookUid());
+    }
   }
 
   function testFacebookFiends_following()
@@ -41,13 +42,15 @@ class SocialControllerIntegrationTest extends odAcceptanceTestCase
 
     $this->_loginAndSetCookie($this->main_user);
 
-    $result = $this->get('social/facebook_friends');
-    $friends = $result->result;
-    $this->assertResponse(200);
-    $this->assertTrue(is_array($friends));
-    $this->assertEqual(1, count($friends));
-    $this->assertEqual($friends[0]->facebook_uid, $this->additional_user->getFacebookUid());
-    $this->assertProperty($friends[0], 'user');
+    $response = $this->get('social/facebook_friends');
+    if($this->assertResponse(200))
+    {
+      $friends = $response->result;
+      $this->assertTrue(is_array($friends));
+      $this->assertEqual(1, count($friends));
+      $this->assertEqual($friends[0]->uid, $this->additional_user->getFacebookUid());
+      $this->assertTrue($friends[0]->user->following);
+    }
   }
 
   function testFacebookFiends_notRegisteredUser(){}
@@ -84,13 +87,15 @@ class SocialControllerIntegrationTest extends odAcceptanceTestCase
   {
     $this->main_user->save();
     $this->_loginAndSetCookie($this->main_user);
-    $result = $this->post('social/twitter_connect', array(
+    $response = $this->post('social/twitter_connect', array(
       'access_token'         => 'Wrong twitter access token',
       'access_token_secret'  => 'Wrong twitter access token secret'
     ));
+    var_dump($response);
     if($this->assertResponse(400)) {
       $this->assertEqual($result->errors[0]->message, 'Twitter API exception: Invalid / expired Token.');
     }
+    exit;
   }
 
   function testTwitterConnect_withNoField()

@@ -159,9 +159,6 @@ class lmbHttpResponse
 
   function getStatus()
   {
-    if($this->http_status)
-      return $this->http_status;
-
     $status = null;
     foreach ($this->headers as $header) {
       if (preg_match('~^HTTP/1.\d[^\d]+(\d+)[^\d]*~i', $header, $matches))
@@ -170,6 +167,9 @@ class lmbHttpResponse
 
     if ($status)
       return $status;
+
+    if($this->http_status)
+      return $this->http_status;
 
     if($this->http_code)
     {

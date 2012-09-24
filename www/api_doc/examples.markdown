@@ -14,9 +14,9 @@
 1. <a href='#89a0b01318b6883686fc6f070ce39541'>ShareDay</a>
 1. <a href='#7909b87d9e336ea904b4f6d6062a3aae'>Like</a>
 1. <a href='#09f10c6db22580edd1ebac5ba800cc23'>Search</a>
-1. <a href='#f1f72ef4a12473ea2e0cd48d0d4ef5c0'>GetFavouriteDays</a>
-1. <a href='#01d0334471f8a9bbb3332f77e21f16e5'>AddToFavourites</a>
-1. <a href='#7b298b175cefed37340b7bf1756d044a'>RemoveFromFavourites</a>
+1. <a href='#f1f72ef4a12473ea2e0cd48d0d4ef5c0'>GetFavoriteDays</a>
+1. <a href='#01d0334471f8a9bbb3332f77e21f16e5'>AddToFavorites</a>
+1. <a href='#7b298b175cefed37340b7bf1756d044a'>RemoveFromFavorites</a>
 1. <a href='#1c5e784108f8a36beb283dc7a3e34030'>GetFollowingUsersDays</a>
 1. <a href='#ed1af553a9d8b9117548d9a3996ebab5'>GetNewDays</a>
 1. <a href='#58c74019b980810ae9e042bb65573a7a'>GetInterestingDays</a>
@@ -48,9 +48,9 @@
 1. <a href='#bf8832407ababc96c5c5b876840dd207'>CommentCreate</a>
 1. <a href='#93a693c37c388332a44e35f5c62da757'>ShareDay</a>
 1. <a href='#d3f6dd0ff0ba68e1ce2be2ab6eff4d92'>Like</a>
-1. <a href='#f1f72ef4a12473ea2e0cd48d0d4ef5c0'>GetFavouriteDays</a>
-1. <a href='#dcbd00ff2fe5b52f68e2abdd0ad671f2'>AddToFavourites</a>
-1. <a href='#7656b02e72fc60aa6ad8c5080474cb7a'>RemoveFromFavourites</a>
+1. <a href='#f1f72ef4a12473ea2e0cd48d0d4ef5c0'>GetFavoriteDays</a>
+1. <a href='#dcbd00ff2fe5b52f68e2abdd0ad671f2'>AddToFavorites</a>
+1. <a href='#7656b02e72fc60aa6ad8c5080474cb7a'>RemoveFromFavorites</a>
 1. <a href='#1c5e784108f8a36beb283dc7a3e34030'>GetFollowingUsersDays</a>
 1. <a href='#f2c5afe4a024dc21f1c43ff206afb8f1'>CurrentUserDays</a>
 
@@ -214,7 +214,7 @@ Authorizes and returns User.
 <tr><td>[type]</td><td>followers_count</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>following_count</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>days_count</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>favourites_count</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>favorites_count</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>email</td><td>[description]</td></tr>
 
 </table>
@@ -235,7 +235,7 @@ Authorizes and returns User.
       "followers_count":1,
       "following_count":1,
       "days_count":0,
-      "favourites_count":0,
+      "favorites_count":0,
       "email":"foo_mczsniz_foo@tfbnw.net"
     }
 
@@ -307,7 +307,7 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
 <tr><td>int</td><td>comments_count</td><td></td></tr>
 <tr><td><a href='#Entity:DayComment[0-3]'>DayComment[0-3]</a></td><td>comments</td><td>Few first comments</td></tr>
 <tr><td><a href='#Entity:Moment'>Moment[]</a></td><td>moments</td><td>All day moments</td></tr>
-<tr><td>bool</td><td>is_favourite</td><td></td></tr>
+<tr><td>bool</td><td>is_favorite</td><td></td></tr>
 <tr><td>[type]</td><td>id</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>facebook_uid</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>image_266</td><td>[description]</td></tr>
@@ -351,7 +351,7 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
         "following_count":0,
         "days_count":1
       },
-      "is_favourite":true,
+      "is_favorite":true,
       "comments_count":4,
       "comments":[
         {
@@ -520,7 +520,7 @@ Get few days in one request.
           "following_count":0,
           "days_count":1
         },
-        "is_favourite":false,
+        "is_favorite":false,
         "comments_count":0,
         "comments":[
 
@@ -567,7 +567,7 @@ Get few days in one request.
           "following_count":0,
           "days_count":1
         },
-        "is_favourite":false,
+        "is_favorite":false,
         "comments_count":0,
         "comments":[
 
@@ -702,7 +702,7 @@ Share a day
 <tr><td>[type]</td><td>ctime</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>utime</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>user</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>is_favourite</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>is_favorite</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>comments_count</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>comments</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>moments</td><td>[description]</td></tr>
@@ -738,7 +738,7 @@ Share a day
         "following_count":0,
         "days_count":1
       },
-      "is_favourite":false,
+      "is_favorite":false,
       "comments_count":0,
       "comments":[
 
@@ -832,11 +832,11 @@ Share a day
 <a href="#toc">^ back to Table of conetens</a>
 
 * * *
-#### GetFavouriteDays ####
+#### GetFavoriteDays ####
 <a name="f1f72ef4a12473ea2e0cd48d0d4ef5c0"></a>
-Returns favourite based on <a href="#range-request">range-request</a>.
+Returns favorite based on <a href="#range-request">range-request</a>.
 
-`GET days/favourite`
+`GET days/favorite`
 
 ##### Request: #####
 ###### Params: ######
@@ -903,7 +903,7 @@ Returns favourite based on <a href="#range-request">range-request</a>.
           "following_count":0,
           "days_count":4
         },
-        "is_favourite":true
+        "is_favorite":true
       }
     ]
 
@@ -911,11 +911,11 @@ Returns favourite based on <a href="#range-request">range-request</a>.
 <a href="#toc">^ back to Table of conetens</a>
 
 * * *
-#### AddToFavourites ####
+#### AddToFavorites ####
 <a name="01d0334471f8a9bbb3332f77e21f16e5"></a>
 
 
-`POST /days/2181/mark_favourite`
+`POST /days/2181/mark_favorite`
 
 
 
@@ -923,11 +923,11 @@ Returns favourite based on <a href="#range-request">range-request</a>.
 <a href="#toc">^ back to Table of conetens</a>
 
 * * *
-#### RemoveFromFavourites ####
+#### RemoveFromFavorites ####
 <a name="7b298b175cefed37340b7bf1756d044a"></a>
 
 
-`POST /days/2182/unmark_favourite`
+`POST /days/2182/unmark_favorite`
 
 
 
@@ -1006,7 +1006,7 @@ Returns following users days based on <a href="#range-request">range-request</a>
           "following_count":0,
           "days_count":4
         },
-        "is_favourite":false
+        "is_favorite":false
       }
     ]
 
@@ -1241,7 +1241,7 @@ Returns current user days based on <a href="#range-request">range-request</a>.
           "following_count":0,
           "days_count":3
         },
-        "is_favourite":false,
+        "is_favorite":false,
         "is_deleted":0
       }
     ]
@@ -1373,7 +1373,7 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
 <tr><td>int</td><td>comments_count</td><td></td></tr>
 <tr><td><a href='#Entity:DayComment[0-3]'>DayComment[0-3]</a></td><td>comments</td><td>Few first comments</td></tr>
 <tr><td><a href='#Entity:Moment'>Moment[]</a></td><td>moments</td><td>All day moments</td></tr>
-<tr><td>bool</td><td>is_favourite <span class='label label-important'>Removed</span></td><td></td></tr>
+<tr><td>bool</td><td>is_favorite <span class='label label-important'>Removed</span></td><td></td></tr>
 <tr><td>[type]</td><td>id</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>facebook_uid</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>image_266</td><td>[description]</td></tr>
@@ -2033,7 +2033,7 @@ Starts a day, returns created <a href="#Entity:Day">day</a>.
 <tr><td>[type]</td><td>ctime</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>utime</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>user</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>is_favourite</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>is_favorite</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>comments_count</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>comments</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>moments</td><td>[description]</td></tr>
@@ -2069,7 +2069,7 @@ Starts a day, returns created <a href="#Entity:Day">day</a>.
         "following_count":0,
         "days_count":1
       },
-      "is_favourite":false,
+      "is_favorite":false,
       "comments_count":0,
       "comments":[
 
@@ -2200,7 +2200,7 @@ Updates information about current <a href="#Entity:Day">day</a> and returns it. 
 <tr><td>[type]</td><td>ctime</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>utime</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>user</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>is_favourite</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>is_favorite</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>comments_count</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>comments</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>moments</td><td>[description]</td></tr>
@@ -2236,7 +2236,7 @@ Updates information about current <a href="#Entity:Day">day</a> and returns it. 
         "following_count":0,
         "days_count":1
       },
-      "is_favourite":false,
+      "is_favorite":false,
       "comments_count":0,
       "comments":[
 
@@ -2278,7 +2278,7 @@ Get current day.
 <tr><td>[type]</td><td>ctime</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>utime</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>user</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>is_favourite</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>is_favorite</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>comments_count</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>comments</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>moments</td><td>[description]</td></tr>
@@ -2314,7 +2314,7 @@ Get current day.
         "following_count":0,
         "days_count":1
       },
-      "is_favourite":false,
+      "is_favorite":false,
       "comments_count":0,
       "comments":[
 
@@ -2399,7 +2399,7 @@ Finish current day.
 <tr><td>[type]</td><td>ctime</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>utime</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>user</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>is_favourite</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>is_favorite</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>comments_count</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>comments</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>moments</td><td>[description]</td></tr>
@@ -2435,7 +2435,7 @@ Finish current day.
         "following_count":0,
         "days_count":1
       },
-      "is_favourite":false,
+      "is_favorite":false,
       "comments_count":1,
       "comments":[
         {
@@ -2555,7 +2555,7 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
 <tr><td>int</td><td>comments_count</td><td></td></tr>
 <tr><td><a href='#Entity:DayComment[0-3]'>DayComment[0-3]</a></td><td>comments</td><td>Few first comments</td></tr>
 <tr><td><a href='#Entity:Moment'>Moment[]</a></td><td>moments</td><td>All day moments</td></tr>
-<tr><td>bool</td><td>is_favourite</td><td></td></tr>
+<tr><td>bool</td><td>is_favorite</td><td></td></tr>
 <tr><td>[type]</td><td>id</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>facebook_uid</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>image_266</td><td>[description]</td></tr>
@@ -2599,7 +2599,7 @@ Returns <a href="#Entity:Day">Day</a> entity by given Day ID. Addtitional fields
         "following_count":0,
         "days_count":1
       },
-      "is_favourite":true,
+      "is_favorite":true,
       "comments_count":4,
       "comments":[
         {
@@ -2794,7 +2794,7 @@ Share a day
 <tr><td>[type]</td><td>ctime</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>utime</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>user</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>is_favourite</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>is_favorite</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>comments_count</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>comments</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>moments</td><td>[description]</td></tr>
@@ -2830,7 +2830,7 @@ Share a day
         "following_count":0,
         "days_count":1
       },
-      "is_favourite":false,
+      "is_favorite":false,
       "comments_count":0,
       "comments":[
 
@@ -2844,11 +2844,11 @@ Share a day
 <a href="#toc">^ back to Table of conetens</a>
 
 * * *
-#### GetFavouriteDays ####
+#### GetFavoriteDays ####
 <a name="f1f72ef4a12473ea2e0cd48d0d4ef5c0"></a>
-Returns favourite based on <a href="#range-request">range-request</a>.
+Returns favorite based on <a href="#range-request">range-request</a>.
 
-`GET days/favourite`
+`GET days/favorite`
 
 ##### Request: #####
 ###### Params: ######
@@ -2915,7 +2915,7 @@ Returns favourite based on <a href="#range-request">range-request</a>.
           "following_count":0,
           "days_count":4
         },
-        "is_favourite":true
+        "is_favorite":true
       }
     ]
 
@@ -2923,11 +2923,11 @@ Returns favourite based on <a href="#range-request">range-request</a>.
 <a href="#toc">^ back to Table of conetens</a>
 
 * * *
-#### AddToFavourites ####
+#### AddToFavorites ####
 <a name="dcbd00ff2fe5b52f68e2abdd0ad671f2"></a>
 
 
-`POST /days/2254/mark_favourite`
+`POST /days/2254/mark_favorite`
 
 
 
@@ -2935,11 +2935,11 @@ Returns favourite based on <a href="#range-request">range-request</a>.
 <a href="#toc">^ back to Table of conetens</a>
 
 * * *
-#### RemoveFromFavourites ####
+#### RemoveFromFavorites ####
 <a name="7656b02e72fc60aa6ad8c5080474cb7a"></a>
 
 
-`POST /days/2255/unmark_favourite`
+`POST /days/2255/unmark_favorite`
 
 
 
@@ -3018,7 +3018,7 @@ Returns following users days based on <a href="#range-request">range-request</a>
           "following_count":0,
           "days_count":4
         },
-        "is_favourite":false
+        "is_favorite":false
       }
     ]
 
@@ -3097,7 +3097,7 @@ Returns current user days based on <a href="#range-request">range-request</a>.
           "following_count":0,
           "days_count":3
         },
-        "is_favourite":false,
+        "is_favorite":false,
         "is_deleted":0
       }
     ]
@@ -3362,7 +3362,7 @@ Returns <a href="#Entity:User">profile</a> of current logged in user.
 <tr><td>[type]</td><td>followers_count</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>following_count</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>days_count</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>favourites_count</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>favorites_count</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>email</td><td>[description]</td></tr>
 
 </table>
@@ -3383,7 +3383,7 @@ Returns <a href="#Entity:User">profile</a> of current logged in user.
       "followers_count":0,
       "following_count":0,
       "days_count":0,
-      "favourites_count":0,
+      "favorites_count":0,
       "email":"bar_gayttkq_bar@tfbnw.net"
     }
 
@@ -3451,7 +3451,7 @@ Changes fields of current user <a href="#Entity:User">profile</a> and returns th
 <tr><td>[type]</td><td>followers_count</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>following_count</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>days_count</td><td>[description]</td></tr>
-<tr><td>[type]</td><td>favourites_count</td><td>[description]</td></tr>
+<tr><td>[type]</td><td>favorites_count</td><td>[description]</td></tr>
 <tr><td>[type]</td><td>email</td><td>[description]</td></tr>
 
 </table>
@@ -3472,7 +3472,7 @@ Changes fields of current user <a href="#Entity:User">profile</a> and returns th
       "followers_count":0,
       "following_count":0,
       "days_count":0,
-      "favourites_count":0,
+      "favorites_count":0,
       "email":"foobarfoobarfoobarfo@odm.com"
     }
 
@@ -3878,7 +3878,7 @@ Returns days of specified user
           "following_count":0,
           "days_count":2
         },
-        "is_favourite":false
+        "is_favorite":false
       },
       {
         "id":2280,
@@ -3909,7 +3909,7 @@ Returns days of specified user
           "following_count":0,
           "days_count":2
         },
-        "is_favourite":false
+        "is_favorite":false
       }
     ]
 

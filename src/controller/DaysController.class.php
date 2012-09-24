@@ -261,15 +261,15 @@ class DaysController extends BaseJsonController
     return $this->_answerOk($this->toolkit->getExportHelper()->exportDayInterestingItems($days_ratings));
   }
 
-  function doFavourite()
+  function doFavorite()
   {
     list($from, $to, $limit) = $this->_getFromToLimitations();
-    $days = $this->_getUser()->getFavouriteDaysWithLimitations($from, $to, $limit);
+    $days = $this->_getUser()->getFavoriteDaysWithLimitations($from, $to, $limit);
 
     return $this->_answerOk($this->toolkit->getExportHelper()->exportDayItems($days));
   }
 
-  function doMarkFavourite()
+  function doMarkFavorite()
   {
     if(!$this->request->isPost())
       return $this->_answerNotPost();
@@ -277,17 +277,17 @@ class DaysController extends BaseJsonController
     if(!$day = Day::findById($this->request->id))
       return $this->_answerModelNotFoundById('Day', $this->request->id);
 
-    if(DayFavourite::isFavourited($this->_getUser(), $day))
+    if(DayFavorite::isFavorited($this->_getUser(), $day))
       return $this->_answerConflict();
 
-    $favourites = $this->_getUser()->getFavouriteDays();
-    $favourites->add($day);
-    $favourites->save();
+    $favorites = $this->_getUser()->getFavoriteDays();
+    $favorites->add($day);
+    $favorites->save();
 
     return $this->_answerOk();
   }
 
-  function doUnmarkFavourite()
+  function doUnmarkFavorite()
   {
     if(!$this->request->isPost())
       return $this->_answerNotPost();
@@ -295,12 +295,12 @@ class DaysController extends BaseJsonController
     if(!$day = Day::findById($this->request->id))
       return $this->_answerModelNotFoundById('Day', $this->request->id);
 
-    if(!DayFavourite::findByDayIdAndUserId($day->getId(), $this->_getUser()->getId()))
-      return $this->_answerOk(null, "Favourite not found");
+    if(!DayFavorite::findByDayIdAndUserId($day->getId(), $this->_getUser()->getId()))
+      return $this->_answerOk(null, "Favorite not found");
 
-    $favourites = $this->_getUser()->getFavouriteDays();
-    $favourites->remove($day);
-    $favourites->save();
+    $favorites = $this->_getUser()->getFavoriteDays();
+    $favorites->remove($day);
+    $favorites->save();
 
     return $this->_answerOk();
   }

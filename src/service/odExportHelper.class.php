@@ -22,7 +22,7 @@ class odExportHelper
     $exported = $this->exportDaySubentity($day);
 
     if($current_user = lmbToolkit::instance()->getUser()) {
-      $exported->is_favorite = (bool) DayFavourite::isFavourited($current_user, $day);
+      $exported->is_favorite = (bool) DayFavorite::isFavorited($current_user, $day);
 
       if($current_user->getId() == $day->getUser()->getId())
         $exported->is_deleted = (bool) $day->getIsDeleted();
@@ -74,7 +74,7 @@ class odExportHelper
     $exported = $user->exportForApi();
 
     $exported->days_count       = (int) $user->getDays()->count();
-    $exported->favourites_count = (int) $user->getFavouriteDays()->count();
+    $exported->favorites_count = (int) $user->getFavoriteDays()->count();
     $exported->followers_count  = (int) $user->getFollowers()->count();
     $exported->following_count  = (int) $user->getFollowing()->count();
 

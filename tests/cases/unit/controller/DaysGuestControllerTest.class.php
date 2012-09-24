@@ -13,7 +13,7 @@ class DaysGuestControllerTest extends odControllerTestCase
    * @api result int comments_count
    * @api result DayComment[0-3] comments Few first comments
    * @api result Moment[] moments All day moments
-   * @api result bool is_favourite
+   * @api result bool is_favorite
    */
   function testItem()
   {
@@ -89,12 +89,12 @@ class DaysGuestControllerTest extends odControllerTestCase
     $day6->setIsDeleted(1);
     $day6->save();
 
-    $this->main_user->addToFavouriteDays($day1);
-    $this->main_user->addToFavouriteDays($day2);
-    $this->main_user->addToFavouriteDays($day3);
-    $this->main_user->addToFavouriteDays($day4);
-    $this->main_user->addToFavouriteDays($day5);
-    $this->main_user->addToFavouriteDays($day6);
+    $this->main_user->addToFavoriteDays($day1);
+    $this->main_user->addToFavoriteDays($day2);
+    $this->main_user->addToFavoriteDays($day3);
+    $this->main_user->addToFavoriteDays($day4);
+    $this->main_user->addToFavoriteDays($day5);
+    $this->main_user->addToFavoriteDays($day6);
     $this->main_user->save();
 
     $response = $this->get('search', [
