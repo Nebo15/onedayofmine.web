@@ -105,12 +105,7 @@ class odTools extends lmbAbstractTools
    */
   function getExportHelper()
   {
-    static $export_helper;
-
-    if(!$export_helper)
-      $export_helper = new odExportHelper();
-
-    return $export_helper;
+    return  new odExportHelper($this->getUser());
   }
 
   /**
@@ -199,7 +194,7 @@ class odTools extends lmbAbstractTools
         // var_dump($value);
         $user->setFacebookUid($value['id']);
         $user->setFacebookAccessToken($value['access_token']);
-        $user->import((new FacebookProfile($user))->getInfo());
+        $user->import($this->getFacebookProfile($user)->getInfo());
         $users['data'][$key]['email'] = $user->getEmail();
       }
       $this->tests_users = $users['data'];

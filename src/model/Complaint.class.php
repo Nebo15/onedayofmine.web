@@ -21,8 +21,8 @@ class Complaint extends BaseModel
 
   function exportForApi(array $properties = null)
   {
-    $exported = $this->export($properties);
-    unset($exported['cip']);
-    return (object) $exported;
+    return parent::exportForApi(array(
+      'id', 'text', 'day_id', 'ctime'
+    ));
   }
 }

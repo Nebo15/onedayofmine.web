@@ -209,6 +209,14 @@ class lmbArrayHelper
 
     return $array;
   }
+
+  static function makeKeysFromColumnValues($column_name, $array)
+  {
+    $result = array();
+    foreach($array as $item)
+      $result[$item[$column_name]] = $item;
+    return $result;
+  }
 }
 
 

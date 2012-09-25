@@ -27,6 +27,10 @@ class lmbCriteriaQuery extends lmbTemplateQuery
     return $this;
   }
 
+  /**
+   * @param $criteria
+   * @return lmbCriteriaQuery
+   */
   function where($criteria)
   {
     return $this->addCriteria($criteria);

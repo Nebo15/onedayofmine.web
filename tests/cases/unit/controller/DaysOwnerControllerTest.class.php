@@ -9,15 +9,26 @@ class DaysOwnerControllerTest extends odControllerTestCase
   function testStart_Negative()
   {
     $this->main_user->save();
+
     lmbToolkit::instance()->setUser($this->main_user);
 
-    $this->get('start');
-    $this->assertResponse(405);
+    $response = $this->get('start');
+    if($this->assertResponse(405))
+    {
+      $this->assertTrue(is_null($response->result));
 
-    $errors = $this->post('start')->errors;
-    $this->assertResponse(400);
-    $this->assertEqual('array', gettype($errors));
-    $this->assertTrue(0 < count($errors));
+      $this->assertEqual(count($response->errors), 1);
+      $this->assertEqual($response->errors[0], 'Not a POST request');
+    }
+
+    $response = $this->post('start');
+    if($this->assertResponse(400))
+    {
+      $errors = $response->errors;
+      $this->assertTrue(is_array($errors));
+      $this->assertTrue(count($errors));
+      $this->assertEqual(count($errors), 2);
+    }
   }
 
   /**
@@ -36,21 +47,20 @@ class DaysOwnerControllerTest extends odControllerTestCase
     $day = $this->generator->day($this->main_user);
     $params = $day->exportForApi();
 
-    $response = $this->post('start', array(
+    $response = $this->post('start', [
       'title' => $params->title,
-      'type' => $params->type,
-    ));
+      'type'  => $params->type,
+    ]);
     if($this->assertResponse(200))
     {
-      if($this->assertProperty($response->result, 'user'))
-        $this->assertValidUserJson($day->getUser(), $response->result->user);
-      $this->assertEqual($day->title, $response->result->title);
-      $this->assertEqual($day->type, $response->result->type);
+      $response_day = $response->result;
+      $this->assertJsonDay($response_day);
+      $this->assertEqualPropertyValues($response_day, $params);
       $this->assertEqual(0, $response->result->likes_count);
     }
   }
 
-  function testStart_ExpiredToken()
+  function testStart_TokenIsExpired()
   {
     $this->main_user->save();
 
@@ -60,13 +70,19 @@ class DaysOwnerControllerTest extends odControllerTestCase
     $day = $this->generator->day($this->main_user);
     $params = $day->exportForApi();
 
-    $this->post('start', array(
+    $response = $this->post('start', array(
       'title' => $params->title,
-      'type' => $params->type,
+      'type'  => $params->type,
       'token' => 'wrong-token'
     ));
 
-    $this->assertResponse(401);
+    if($this->assertResponse(401))
+    {
+      $this->assertTrue(is_null($response->result));
+
+      $this->assertEqual(1, count($response->errors));
+      $this->assertEqual($response->errors[0], 'Token expired');
+    }
   }
 
   /**
@@ -77,72 +93,85 @@ class DaysOwnerControllerTest extends odControllerTestCase
    */
   function testAddMoment()
   {
+    $this->main_user->save();
+
     $day = $this->generator->day($this->main_user);
     $day->save();
 
     lmbToolkit::instance()->setUser($this->main_user);
-    $res = $this->post('add_moment',
-      array(
-        'description' => $description = $this->generator->string(200),
-        'image_content' => base64_encode($this->generator->image()),
-        'time' => $time = '2005-08-09T18:31:42+03:00',),
-      $day->getId()
-    )->result;
+
+    $response = $this->post('add_moment', [
+        'description'   => $description = $this->generator->string(200),
+        'time'          => $time        = '2005-08-09T18:31:42+03:00',
+        'image_content' => $image       = base64_encode($this->generator->image()),
+    ], $day->getId());
 
     if($this->assertResponse(200))
     {
-      $this->assertEqual($day->getMoments()->at(0)->getId(), $res->id);
+      $moment = $response->result;
+      $this->assertJsonMoment($moment, true);
       $this->assertEqual($day->getId(), Moment::findOne()->getDay()->getId());
-      $this->assertProperty($res, 'image_266');
-      $this->assertProperty($res, 'image_532');
-      $this->assertEqual(0, $res->likes_count);
-      $this->assertEqual($res->time, $time);
+      $this->assertEqual($this->main_user->getId(), Moment::findOne()->getDay()->getUser()->getId());
+
+      $this->assertEqual($moment->likes_count, 0);
+      $this->assertEqual($moment->time, $time);
     }
   }
 
-  function testAddMoment_withGPS()
+  function testAddMoment_WithGPS()
   {
+    $this->main_user->setTimezone($this->generator->integer(3));
+    $this->main_user->save();
+
     $day = $this->generator->day($this->main_user);
     $day->save();
 
     lmbToolkit::instance()->setUser($this->main_user);
-    $res = $this->post('add_moment',
-      array(
-        'description' => $description = $this->generator->string(200),
-        'image_content' => base64_encode(file_get_contents(lmb_env_get('APP_DIR').'/tests/init/image_with_exif.jpeg'))),
-      $day->getId()
-    )->result;
+    $response = $this->post('add_moment', [
+        'description'   => $description = $this->generator->string(200),
+        'time'          => $time        = '2005-08-09T18:31:42+03:00',
+        'image_content' => $image       = base64_encode(file_get_contents(lmb_env_get('APP_DIR').'/tests/init/image_with_exif.jpeg'))
+    ], $day->getId());
 
     if($this->assertResponse(200))
     {
-      $this->assertEqual($day->getMoments()->at(0)->getId(), $res->id);
-      $this->assertEqual($day->getId(), Moment::findOne()->getDay()->getId());
+      $moment = $response->result;
+      $this->assertJsonMoment($moment, true);
+      $this->assertEqual($day->getMoments()->at(0)->getId(), $moment->id);
+      $this->assertEqual($time, $moment->time);
 
-      $moment = Moment::findOne();
-      $this->assertEqual($moment->getLocationLatitude(), '50.5062');
-      $this->assertEqual($moment->getLocationLongitude(), '30.6177');
-      // http://maps.googleapis.com/maps/api/geocode/json?latlng=50.5062,30.6177&sensor=true
+      $loaded_moments = Moment::find();
+      if($this->assertEqual($loaded_moments->count(), 1))
+      {
+        $loaded_moment  = $loaded_moments->at(0);
+        $this->assertEqual($loaded_moment->getDay()->getId(), $day->getId());
+        $this->assertEqual($loaded_moment->getLocationLatitude(), '50.5062');
+        $this->assertEqual($loaded_moment->getLocationLongitude(), '30.6177');
+        // http://maps.googleapis.com/maps/api/geocode/json?latlng=50.5062,30.6177&sensor=true
+      }
     }
   }
 
-  function testAddMoment_withoutTime()
+  function testAddMoment_WithoutTime()
   {
+    $this->main_user->setTimezone($this->generator->integer(3));
+    $this->main_user->save();
+
     $day = $this->generator->day($this->main_user);
     $day->save();
 
     lmbToolkit::instance()->setUser($this->main_user);
-    $res = $this->post('add_moment',
-      array(
-        'description' => $description = $this->generator->string(200),
-        'image_content' => base64_encode(file_get_contents(lmb_env_get('APP_DIR').'/tests/init/image_with_exif.jpeg'))),
-      $day->getId()
-    )->result;
+    $response = $this->post('add_moment', [
+        'description'   => $description = $this->generator->string(200),
+        'image_content' => $image       = base64_encode(file_get_contents(lmb_env_get('APP_DIR').'/tests/init/image_with_exif.jpeg'))
+    ], $day->getId());
 
     if($this->assertResponse(200))
     {
-      $this->assertEqual($day->getMoments()->at(0)->getId(), $res->id);
-      $this->assertEqual($day->getId(), Moment::findOne()->getDay()->getId());
-      $this->assertEqual($res->time, Moment::stampToIso('1330600003', $this->main_user->getTimezone()));
+      $moment = $response->result;
+      $this->assertJsonMoment($moment, true);
+      $this->assertEqual($day->getMoments()->at(0)->getId(), $moment->id);
+      $this->assertEqual($moment->time, Moment::stampToIso('1330600003', $this->main_user->getTimezone()));
     }
   }
 
@@ -152,19 +181,21 @@ class DaysOwnerControllerTest extends odControllerTestCase
     $day->save();
 
     lmbToolkit::instance()->setUser($this->main_user);
-    $this->post('add_moment',
-      array(
-        'description' => $description = $this->generator->string(200),
-        'image_content' => base64_encode($this->generator->image()),
-        'time' => $time = '2005-08-09T18:31:42+03:00'),
-      $day->getId()
-    )->result;
+
+    $response = $this->post('add_moment', [
+        'description'   => $description = $this->generator->string(200),
+        'time'          => $time        = '2005-08-09T18:31:42+03:00',
+        'image_content' => $image       = base64_encode($this->generator->image()),
+    ], $day->getId());
 
     if($this->assertResponse(200))
     {
-      $loaded_day = Day::findById($day->getId())->exportForApi();
-      $this->assertValidImageUrl($loaded_day->image_266);
-      $this->assertValidImageUrl($loaded_day->image_532);
+      $response_moment = $response->result;
+      $this->assertJsonMoment($response_moment, true);
+
+      $loaded_day = Day::findById($day->getId());
+      $exported   = $this->toolkit->getExportHelper()->exportDay($loaded_day);
+      $this->assertJsonDay($exported, true);
     }
   }
 
@@ -182,18 +213,22 @@ class DaysOwnerControllerTest extends odControllerTestCase
 
     lmbToolkit::instance()->setUser($this->main_user);
 
-    $response = $this->post('update',
-      array(
-        'title' => $title = $this->generator->string(),
-        'type' => $type = 'Working day',
-        'cover_content' => base64_encode($this->generator->image())),
-      $day->getId()
-    )->result;
+    $response = $this->post('update', $params = [
+      'title'         => $this->generator->string(),
+      'type'          => 'Working day',
+      'cover_content' => base64_encode($this->generator->image())
+    ], $day->getId());
 
     if($this->assertResponse(200))
     {
+      $response_day = $response->result;
+      $this->assertJsonDay($response_day);
+      $this->assertEqualPropertyValues($response_day, (object) $params);
+
       $loaded_day = Day::findById($day->getId());
-      $this->assertValidDayJson($loaded_day, $response);
+      $exported   = $this->toolkit->getExportHelper()->exportDay($loaded_day);
+      $this->assertJsonDay($exported, true);
+      $this->assertEqualPropertyValues($exported, (object) $params);
     }
   }
 
@@ -201,12 +236,21 @@ class DaysOwnerControllerTest extends odControllerTestCase
   {
     lmbToolkit::instance()->setUser($this->main_user);
 
-    $this->post('days/100500/update', array(
-      'title' => $title = $this->generator->string(),
-      'type' => $type = 'Working',
-      'cover' => $this->generator->image(),
-    ));
-    $this->assertResponse(404);
+    $days = Day::find();
+    if($this->assertEqual($days->count(), 0)) {
+      $response = $this->post('update', [
+        'title' => $title = $this->generator->string(),
+        'type'  => $type  = 'Working day',
+        'cover' => $image = $this->generator->image(),
+      ],           $id    = $this->generator->integer());
+
+      if($this->assertResponse(404)) {
+        $this->assertTrue(is_null($response->result));
+
+        $this->assertEqual(1, count($response->errors));
+        $this->assertEqual("Day with id='$id' not found", $response->errors[0]);
+      }
+    }
   }
 
   function testUpdate_WrongUser()
@@ -216,14 +260,18 @@ class DaysOwnerControllerTest extends odControllerTestCase
 
     $this->toolkit->setUser($this->additional_user);
 
-    $this->post('update',
-      array(
+    $response = $this->post('update', [
         'title' => $title = $this->generator->string(),
-        'type' => $type = 'Working',
-        'cover' => $this->generator->image(),
-      ),
-      $day->getId());
-    $this->assertResponse(401);
+        'type'  => $type  = 'Working day',
+        'cover' => $image = $this->generator->image(),
+    ], $day->getId());
+
+    if($this->assertResponse(401)) {
+      $this->assertTrue(is_null($response->result));
+
+      $this->assertEqual(1, count($response->errors));
+      $this->assertEqual("Current user don't have permission to perform this action", $response->errors[0]);
+    }
   }
 
   /**
@@ -238,26 +286,33 @@ class DaysOwnerControllerTest extends odControllerTestCase
     $this->main_user->save();
 
     lmbToolkit::instance()->setUser($this->main_user);
+
     $response = $this->get('current');
 
     if($this->assertResponse(200))
     {
       $loaded_day = $response->result;
+      $this->assertJsonDay($loaded_day);
       $this->assertEqual($day->getId(), $loaded_day->id);
-      $this->assertEqual($day->getTitle(), $loaded_day->title);
-      $this->assertEqual($day->getLikes()->count(), $loaded_day->likes_count);
     }
   }
 
-  function testCurrent_notSet()
+  function testCurrent_CurrentDayNotSet()
   {
     $day = $this->generator->day($this->main_user);
     $day->save();
 
     lmbToolkit::instance()->setUser($this->main_user);
-    $this->get('days/current');
 
-    $this->assertResponse(404);
+    $response = $this->get('current');
+
+    if($this->assertResponse(404))
+    {
+      $this->assertTrue(is_null($response->result));
+
+      $this->assertEqual(1, count($response->errors));
+      $this->assertEqual("Current day not set", $response->errors[0]);
+    }
   }
 
   /**
@@ -270,24 +325,33 @@ class DaysOwnerControllerTest extends odControllerTestCase
     $day->save();
 
     lmbToolkit::instance()->setUser($this->main_user);
-    $response = $this->post('mark_current', array(), $day->getId());
 
-    $this->assertResponse(200);
-    $this->assertFalse($response->result);
+    $response = $this->post('mark_current', [], $day->getId());
 
-    $user = User::findById($this->main_user->getId());
-    $this->assertEqual($user->getCurrentDay()->getId(), $day->getId());
+    if($this->assertResponse(200))
+    {
+      $this->assertTrue(is_null($response->result));
+
+      $user = User::findById($this->main_user->getId());
+      $this->assertEqual($user->getCurrentDay()->getId(), $day->getId());
+    }
   }
 
-  function testMarkCurrent_notFound()
+  function testMarkCurrent_DayNotFound()
   {
-    $day = $this->generator->day($this->main_user);
-    $day->save();
-
     lmbToolkit::instance()->setUser($this->main_user);
-    $this->post('days/1337/mark_current');
 
-    $this->assertResponse(404);
+    $days = Day::find();
+    if($this->assertEqual($days->count(), 0)) {
+      $response = $this->post('mark_current', [], $id = $this->generator->integer());
+
+      if($this->assertResponse(404)) {
+        $this->assertTrue(is_null($response->result));
+
+        $this->assertEqual(1, count($response->errors));
+        $this->assertEqual("Day with id='$id' not found", $response->errors[0]);
+      }
+    }
   }
 
   /**
@@ -303,54 +367,46 @@ class DaysOwnerControllerTest extends odControllerTestCase
     $this->main_user->save();
 
     lmbToolkit::instance()->setUser($this->main_user);
-    $response = $this->post('finish',
-      array(
-        'image_content' => $image_content = base64_encode($this->generator->image()),
-        'final_description' => $comment_text = $this->generator->string()
-      ),
-      $day->getId()
-    );
+
+    $response = $this->post('finish', [
+      'image_content'     => $image_content = base64_encode($this->generator->image()),
+      'final_description' => $comment_text  = $this->generator->string()
+    ], $day->getId());
 
     if($this->assertResponse(200))
     {
-      $loaded_day = $response->result;
-      $this->assertEqual($day->getId(), $loaded_day->id);
-      $this->assertEqual($day->getTitle(), $loaded_day->title);
-      $this->assertEqual($day->getLikes()->count(), $loaded_day->likes_count);
+      $response_day = $response->result;
+      $this->assertJsonDay($response_day, true);
+      $this->assertEqual($day->getId(), $response_day->id);
+      $this->assertTrue($response_day->final_description);
 
-      $db_day = Day::findOne();
-      $this->assertProperty($loaded_day, 'final_description');
-      $this->assertTrue($loaded_day->final_description);
-      $this->assertEqual(count($db_day->getComments()), 0);
-      $this->assertTrue($db_day->getFinalDescription());
-      $this->assertEqual($db_day->getFinalDescription(), $comment_text);
-
-      $this->assertValidImageUrl($loaded_day->image_266);
-      $this->assertValidImageUrl($loaded_day->image_532);
+      $loaded_day = Day::findOne();
+      $this->assertEqual(count($loaded_day->getComments()), 0);
+      $this->assertTrue($loaded_day->getFinalDescription());
+      $this->assertEqual($loaded_day->getFinalDescription(), $comment_text);
 
       $user = User::findById($this->main_user->getId());
       $this->assertFalse($user->getCurrentDay());
     }
   }
 
-  function testFinish_noCurrentDay()
+  function testFinish_CurrentDayNotSet()
   {
-    $day = $this->generator->day($this->main_user);
+    $day = $this->generator->dayWithMoments($this->main_user);
     $day->save();
 
     lmbToolkit::instance()->setUser($this->main_user);
-    $response = $this->post('finish', array(), $day->getId());
+    $response = $this->post('finish', [], $day->getId());
 
     if($this->assertResponse(200))
     {
       $loaded_day = $response->result;
+      $this->assertJsonDay($loaded_day, true);
       $this->assertEqual($day->getId(), $loaded_day->id);
-      $this->assertEqual($day->getTitle(), $loaded_day->title);
-      $this->assertEqual($day->getLikes()->count(), $loaded_day->likes_count);
     }
   }
 
-  function testFinish_notCurrentDay()
+  function testFinish_NotCurrentDayId()
   {
     $day = $this->generator->day($this->main_user);
     $day->save();
@@ -362,63 +418,115 @@ class DaysOwnerControllerTest extends odControllerTestCase
     $this->main_user->save();
 
     lmbToolkit::instance()->setUser($this->main_user);
-    $response = $this->post('finish', array(), $day->getId());
+
+    $response = $this->post('finish', [], $day->getId());
 
     if($this->assertResponse(200))
     {
       $loaded_day = $response->result;
+      $this->assertJsonDay($loaded_day);
       $this->assertEqual($day->getId(), $loaded_day->id);
-      $this->assertEqual($day->getTitle(), $loaded_day->title);
-      $this->assertEqual($day->getLikes()->count(), $loaded_day->likes_count);
 
       $user = User::findById($this->main_user->getId());
       $this->assertEqual($user->getCurrentDay()->getId(), $day2->getId());
     }
   }
 
-  function testFinish_NotFound()
+  function testFinish_DayNotFound()
   {
     lmbToolkit::instance()->setUser($this->main_user);
-    $this->post('finish', array(), 100500);
 
-    $this->assertResponse(404);
+    $days = Day::find();
+    if($this->assertEqual($days->count(), 0)) {
+      $response = $this->post('finish', [], $id = $this->generator->integer());
+
+      if($this->assertResponse(404))
+      {
+        $this->assertTrue(is_null($response->result));
+
+        $this->assertEqual(1, count($response->errors));
+        $this->assertEqual("Day with id='$id' not found", $response->errors[0]);
+      }
+    }
+  }
+
+  function testFinish_ForNotOwner()
+  {
+    $day = $this->generator->day($this->main_user);
+    $day->save();
+
+    $this->main_user->setCurrentDay($day);
+    $this->main_user->save();
+
+    lmbToolkit::instance()->setUser($this->additional_user);
+
+    $response = $this->post('finish', [
+      'image_content'     => $image_content = base64_encode($this->generator->image()),
+      'final_description' => $comment_text  = $this->generator->string()
+    ], $day->getId());
+
+    if($this->assertResponse(401))
+    {
+      $this->assertTrue(is_null($response->result));
+
+      $this->assertEqual(1, count($response->errors));
+      $this->assertEqual("Current user don't have permission to perform this action", $response->errors[0]);
+    }
   }
 
   /**
    * @api description Deletes a day
    * @api input param int day_id
    */
-  function testDeleteDay()
+  function testDelete()
   {
     $day = $this->generator->day($this->main_user);
     $day->save();
 
     lmbToolkit::instance()->setUser($this->main_user);
-    $this->post('delete', array(), $day->getId());
 
-    $this->assertResponse(200);
+    $response = $this->post('delete', [], $day->getId());
 
-    $loaded_day = Day::findById($day->getId());
-    $this->assertEqual(1, $loaded_day->getIsDeleted());
+    if($this->assertResponse(200))
+    {
+      $this->assertTrue(is_null($response->result));
+
+      $loaded_day = Day::findById($day->getId());
+      $this->assertEqual(1, $loaded_day->getIsDeleted());
+    }
   }
 
-  function testDelete_NotFound()
+  function testDelete_DayNotFound()
   {
     lmbToolkit::instance()->setUser($this->main_user);
-    $this->post('delete', array(), 100500);
 
-    $this->assertResponse(404);
+    $response = $this->post('delete', [], $id = $this->generator->integer());
+
+    if($this->assertResponse(404))
+    {
+      $this->assertTrue(is_null($response->result));
+
+      $this->assertEqual(1, count($response->errors));
+      $this->assertEqual("Day with id='$id' not found", $response->errors[0]);
+    }
   }
 
-  function testDelete_WrongUser()
+  function testDelete_ForNotOwner()
   {
     $day = $this->generator->day($this->main_user);
     $day->save();
 
     $this->toolkit->setUser($this->additional_user);
-    $this->post('delete', array(), $day->getId())->result;
 
-    $this->assertResponse(401);
+    $response = $this->post('delete', [], $day->getId());
+
+    if($this->assertResponse(401))
+    {
+      $this->assertTrue(is_null($response->result));
+
+      $this->assertEqual(1, count($response->errors));
+      $this->assertEqual("Current user don't have permission to perform this action", $response->errors[0]);
+    }
   }
 
   /**
@@ -432,20 +540,31 @@ class DaysOwnerControllerTest extends odControllerTestCase
     $day->save();
 
     lmbToolkit::instance()->setUser($this->main_user);
-    $this->post('restore', array(), $day->getId())->result;
 
-    $this->assertResponse(200);
+    $response = $this->post('restore', [], $day->getId());
 
-    $loaded_day = Day::findById($day->getId());
-    $this->assertEqual(0, $loaded_day->getIsDeleted());
+    if($this->assertResponse(200))
+    {
+      $this->assertTrue(is_null($response->result));
+
+      $loaded_day = Day::findById($day->getId());
+      $this->assertEqual(0, $loaded_day->getIsDeleted());
+    }
   }
 
   function testRestoreDay_NotFound()
   {
     lmbToolkit::instance()->setUser($this->main_user);
-    $this->post('delete', array(), 100500)->result;
 
-    $this->assertResponse(404);
+    $response = $this->post('delete', [], $id = $this->generator->integer());
+
+    if($this->assertResponse(404))
+    {
+      $this->assertTrue(is_null($response->result));
+
+      $this->assertEqual(1, count($response->errors));
+      $this->assertEqual("Day with id='$id' not found", $response->errors[0]);
+    }
   }
 
   function testRestoreDay_WrongUser()
@@ -454,9 +573,16 @@ class DaysOwnerControllerTest extends odControllerTestCase
     $day->save();
 
     $this->toolkit->setUser($this->additional_user);
-    $this->post('restore', array(), $day->getId())->result;
 
-    $this->assertResponse(401);
+    $response = $this->post('restore', [], $day->getId());
+
+    if($this->assertResponse(401))
+    {
+      $this->assertTrue(is_null($response->result));
+
+      $this->assertEqual(1, count($response->errors));
+      $this->assertEqual("Current user don't have permission to perform this action", $response->errors[0]);
+    }
   }
 }
 

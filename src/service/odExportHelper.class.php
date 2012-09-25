@@ -1,10 +1,17 @@
 <?php
 class odExportHelper
 {
+  protected $current_user;
+
+  function __construct(User $current_user = null)
+  {
+    $this->current_user = $current_user;
+  }
+
   ############### Day ###############
   function exportDay(Day $day)
   {
-    $exported = $this->exportDayItem($day);
+    $exported = $this->exportDayItems([$day])[0];
 
     $exported->moments  = $this->exportMomentItems($day->getMoments());
 
@@ -12,22 +19,7 @@ class odExportHelper
     $comments->paginate(0, lmbToolkit::instance()->getConf('common')->default_comments_count);
     $exported->comments = $this->exportDayCommentItems($comments);
 
-    return $exported;
-  }
-
-  function exportDayItem(Day $day)
-  {
-    $exported = $this->exportDaySubentity($day);
-
-    if($current_user = lmbToolkit::instance()->getUser()) {
-      $exported->is_favourite = DayFavourite::isFavourited($current_user, $day);
-
-      if($current_user->getId() == $day->getUser()->getId())
-        $exported->is_deleted = $day->getIsDeleted();
-    }
-
-    $exported->likes_count    = $day->getLikes()->count();
-    $exported->comments_count = $day->getComments()->count();
+    $exported->final_description = $day->getFinalDescription();
 
     return $exported;
   }
@@ -35,38 +27,72 @@ class odExportHelper
   function exportDaySubentity(Day $day)
   {
     $exported = $day->exportForApi();
+    unset($exported->final_description);
 
     $this->attachUserSubentityToExport($day->getUser(), $exported);
 
     return $exported;
   }
 
-  function exportDayItems(lmbCollectionInterface $days)
+  function exportDayItems($days)
   {
-    $exported = [];
-    foreach ($days as $day) {
-      $exported[] = $this->exportDayItem($day);
+    if(!count($days))
+      return [];
+
+    $days_ids = lmbArrayHelper::getColumnValues('id', $days);
+
+    $likes_count = lmbDBAL::selectQuery('day_like')
+      ->addField('day_id')
+      ->addRawField('COUNT(id)', 'count')
+      ->addGroupBy('day_id')
+      ->addCriteria(lmbSQLCriteria::in('day_id', $days_ids))
+      ->fetch()->toFlatArray();
+    $likes_count = lmbArrayHelper::makeKeysFromColumnValues('day_id', $likes_count);
+
+    $comments_count = lmbDBAL::selectQuery('day_comment')
+      ->addField('day_id')
+      ->addRawField('COUNT(id)', 'count')
+      ->addGroupBy('day_id')
+      ->addCriteria(lmbSQLCriteria::in('day_id', $days_ids))
+      ->fetch()->toFlatArray();
+    $comments_count = lmbArrayHelper::makeKeysFromColumnValues('day_id', $comments_count);
+
+    $day_users_ids = lmbArrayHelper::getColumnValues('user_id', $days);
+    $day_users = User::findByIds($day_users_ids);
+    $day_users = lmbArrayHelper::makeKeysFromColumnValues('id', $day_users);
+
+    if($this->current_user)
+    {
+      lmb_assert_true($this->current_user->id);
+      $favorite_days_ids = lmbDBAL::selectQuery('day_favorite')
+        ->addField('day_id')
+        ->addCriteria(lmbSQLCriteria::equal('user_id', $this->current_user->id))
+        ->fetch()->toFlatArray();
+      $favorite_days_ids = lmbArrayHelper::getColumnValues('day_id', $favorite_days_ids);
     }
-    return $exported;
-  }
 
-  function exportDayItems_forOwner(lmbCollectionInterface $days)
-  {
-    return $this->exportDayItems($days);
-  }
-
-  ############### > Interesting ###############
-  function exportDayInterestingItem(DayInterestRecord $day_rating)
-  {
-    return $this->exportDayItem($day_rating->getDay());
-  }
-
-  function exportDayInterestingItems($day_ratings)
-  {
     $exported = [];
-    foreach ($day_ratings as $day_rating) {
-      $exported[] = $this->exportDayInterestingItem($day_rating);
+    foreach ($days as $day)
+    {
+      $exported_day = $day->exportForApi();
+      $exported_day->user = $day_users[$day->user_id]->exportForApi();
+
+      if($this->current_user)
+      {
+        $exported_day->is_favorite = in_array($day->id, $favorite_days_ids);
+
+        if($this->current_user->id == $day->getUser()->id)
+          $exported_day->is_deleted = (bool) $day->getIsDeleted();
+      }
+
+      $exported_day->likes_count =
+        isset($likes_count[$day->id]) ? $likes_count[$day->id]['count'] : 0;
+      $exported_day->comments_count =
+        isset($comments_count[$day->id]) ? $comments_count[$day->id]['count'] : 0;
+
+      $exported[] = $exported_day;
     }
+
     return $exported;
   }
 
@@ -75,17 +101,45 @@ class odExportHelper
   {
     $exported = $user->exportForApi();
 
-    $exported->days_count       = $user->getDays()->count();
-    $exported->favourites_count = $user->getFavouriteDays()->count();
-    $exported->followers_count  = $user->getFollowers()->count();
-    $exported->following_count  = $user->getFollowing()->count();
+    $exported->days_count = (int) $user->getDays()->count();
 
-    if($current_user = lmbToolkit::instance()->getUser()) {
-      if($current_user->getId() == $user->getId())
-        $exported->email        = $user->getEmail();
-      else
-        $exported->following = UserFollowing::isUserFollowUser($user, $current_user);
+    $favorite_days_count = lmbDBAL::selectQuery('day_favorite')
+      ->addRawField('COUNT(*)', 'count')
+      ->addCriteria(lmbSQLCriteria::equal('user_id', $user->id))
+      ->fetch()->toFlatArray();
+
+    $exported->favorites_count = (int) $favorite_days_count[0]['count'];
+
+    $following_and_followers = lmbDBAL::selectQuery('user_following')
+      ->addField('user_id')
+      ->addField('follower_user_id')
+      ->addCriteria(
+          lmbSQLCriteria::equal('user_id', $user->id)
+            ->addOr(lmbSQLCriteria::equal('follower_user_id', $user->id))
+      )
+      ->fetch()->toFlatArray();
+
+    $exported->followers_count = 0;
+    $exported->following_count = 0;
+    $exported->following = false;
+
+    $is_owner = $this->current_user && $this->current_user->id == $user->id;
+
+    foreach($following_and_followers as $ff)
+    {
+      if($user->id == $ff['user_id'])
+        $exported->followers_count++;
+
+      if($user->id == $ff['follower_user_id'])
+        $exported->following_count++;
+
+      if($this->current_user && !$is_owner && !$exported->following)
+        if($user->id == $ff['follower_user_id'] && $this->current_user->id == $ff['user_id'])
+          $exported->following = true;
     }
+
+    if($is_owner)
+      $exported->email = $user->getEmail();
 
     return $exported;
   }
@@ -94,8 +148,8 @@ class odExportHelper
   {
     $exported = $this->exportUserSubentity($user);
 
-    if(lmbToolkit::instance()->getUser())
-      $exported->following = UserFollowing::isUserFollowUser($user, lmbToolkit::instance()->getUser());
+    if($this->current_user && $this->current_user->getId() != $user->getId())
+      $exported->following = (bool) UserFollowing::isUserFollowUser($user, $this->current_user);
 
     return $exported;
   }
@@ -109,18 +163,19 @@ class odExportHelper
     return $exported;
   }
 
-  function exportUserItems(lmbCollectionInterface $users)
+  function exportUserItems($users)
   {
     $following = [];
-    if($me = lmbToolkit::instance()->getUser())
+    if($me = $this->current_user)
       $following = UserFollowing::isUsersFollowUser($users, $me);
 
     $exported = [];
-    foreach($users as $followed) {
+    foreach($users as $followed)
+    {
       $export = $this->exportUserItem($followed);
 
       if(count($following))
-        $export->following = $following[$followed->getId()];
+        $export->following = (bool) $following[$followed->getId()];
 
       $exported[] = $export;
     }
@@ -130,14 +185,43 @@ class odExportHelper
 
   function attachUserSubentityToExport(User $user, stdClass $exported)
   {
-    $exported->user = $this->exportUserItem($user);
+    $exported->user = $this->exportUserItems([$user])[0];
     unset($exported->user_id);
+  }
+
+  function exportFacebookUserItems(array $facebook_users)
+  {
+    $exported_list = [];
+    $users = User::findByFacebookUid(lmbArrayHelper::getColumnValues('facebook_uid', $facebook_users));
+    $users = lmbArrayHelper::makeKeysFromColumnValues('facebook_uid', $users);
+
+    foreach($facebook_users as $facebook_user)
+    {
+      $exported            = new stdClass;
+      $exported->uid       = $facebook_user['facebook_uid'];
+      $exported->name      = $facebook_user['name'];
+      $exported->image_50  = $facebook_user['pic'];
+      $exported->image_150 = $facebook_user['pic_big'];
+
+      if(isset($users[$exported->uid]))
+      {
+        $user = $users[$exported->uid];
+        $exported->user = $user->exportForApi();
+        if($this->current_user)
+          $exported->user->following = UserFollowing::isUserFollowUser($this->current_user, $user);
+      }
+      else
+        $exported->user = null;
+
+      $exported_list[] = $exported;
+    }
+    return $exported_list;
   }
 
   ############### Moment ###############
   function exportMoment(Moment $moment)
   {
-    return $this->exportMomentItem($moment);
+    return $this->exportMomentSubentity($moment);
   }
 
   function exportMomentItem(Moment $moment)
@@ -151,19 +235,47 @@ class odExportHelper
 
     unset($exported->day_id);
 
-    $exported->likes_count    = $moment->getLikes()->count();
-    $exported->comments_count = $moment->getComments()->count();
+    $exported->likes_count    = (int) $moment->getLikes()->count();
+    $exported->comments_count = (int) $moment->getComments()->count();
 
     return $exported;
   }
 
-  function exportMomentItems(lmbCollectionInterface $moments)
+  function exportMomentItems($moments)
   {
-    $exported = [];
-    foreach($moments as $moment) {
-      $exported[] = $this->exportMomentItem($moment);
+    if(!count($moments))
+      return [];
+
+    $moments_ids = lmbArrayHelper::getColumnValues('id', $moments);
+
+    $likes_count = lmbDBAL::selectQuery('moment_like')
+      ->addField('moment_id')
+      ->addRawField('COUNT(id)', 'count')
+      ->addGroupBy('moment_id')
+      ->addCriteria(lmbSQLCriteria::in('moment_id', $moments_ids))
+      ->fetch()->toFlatArray();
+    $likes_count = lmbArrayHelper::makeKeysFromColumnValues('moment_id', $likes_count);
+
+    $comments_count = lmbDBAL::selectQuery('moment_comment')
+      ->addField('moment_id')
+      ->addRawField('COUNT(id)', 'count')
+      ->addGroupBy('moment_id')
+      ->addCriteria(lmbSQLCriteria::in('moment_id', $moments_ids))
+      ->fetch()->toFlatArray();
+    $comments_count = lmbArrayHelper::makeKeysFromColumnValues('moment_id', $comments_count);
+
+    $result = [];
+    foreach($moments as $moment)
+    {
+      $exported_moment = $moment->exportForApi();
+      unset($exported_moment->day_id);
+      $exported_moment->likes_count = isset($likes_count[$moment->id]) ? $likes_count[$moment->id]['count'] : 0;
+      $exported_moment->comments_count = isset($comments_count[$moment->id]) ? $comments_count[$moment->id]['count'] : 0;
+
+      $result[] = $exported_moment;
     }
-    return $exported;
+
+    return $result;
   }
 
   ############### Comments ###############
@@ -196,7 +308,7 @@ class odExportHelper
     return $exported;
   }
 
-  function exportDayCommentItems(lmbCollectionInterface $comments)
+  function exportDayCommentItems($comments)
   {
     $exported = [];
     foreach ($comments as $comment) {
@@ -225,7 +337,7 @@ class odExportHelper
     return $exported;
   }
 
-  function exportMomentCommentItems(lmbCollectionInterface $comments)
+  function exportMomentCommentItems($comments)
   {
     $exported = [];
     foreach ($comments as $comment) {
@@ -236,23 +348,23 @@ class odExportHelper
 
   ############### News ###############
   ################ > News ###############
-  function exportNewsItem(News $news)
+  function exportNewsListItem(News $news)
   {
     $exported = $news->exportForApi();
 
     if ($news->getSender())
       $this->attachUserSubentityToExport($news->getSender(), $exported);
 
-    if($news->getDay())
-      $exported->day    = $this->exportDaySubentity($news->getDay());
-    elseif($news->getMoment()) {
-      $exported->day    = $this->exportDaySubentity($news->getMoment()->getDay());
-      $exported->moment = $this->exportMomentSubentity($news->getMoment());
-      unset($exported->moment->day_id);
-    }
+    // if($news->getDay())
+    //   $exported->day    = $this->exportDaySubentity($news->getDay());
+    // elseif($news->getMoment()) {
+    //   $exported->day    = $this->exportDaySubentity($news->getMoment()->getDay());
+    //   $exported->moment = $this->exportMomentSubentity($news->getMoment());
+    //   unset($exported->moment->day_id);
+    // }
 
-    unset($exported->day_id);
-    unset($exported->moment_id);
+    // unset($exported->day_id);
+    // unset($exported->moment_id);
     // unset($exported->day_comment_id);
     // unset($exported->moment_comment_id);
     // unset($exported->day_like_id);
@@ -265,22 +377,22 @@ class odExportHelper
   {
     $exported = [];
     foreach ($news as $news_item) {
-      $exported[] = $this->exportNewsItem($news_item);
+      $exported[] = $this->exportNewsListItem($news_item);
     }
     return $exported;
   }
 
   ################ > Activity ###############
-  function exportActivityItem(News $activity)
+  function exportActivityListItem(News $activity)
   {
-    return $activity->exportForApi();
+    return $this->exportNewsListItem($activity);
   }
 
   function exportActivityItems($activities)
   {
     $exported = [];
     foreach ($activities as $activity) {
-      $exported[] = $this->exportActivityItem($activity);
+      $exported[] = $this->exportActivityListItem($activity);
     }
     return $exported;
   }
@@ -288,6 +400,25 @@ class odExportHelper
   ############### Complain ###############
   function exportComplaint(Complaint $complaint)
   {
+    return $this->exportComplaintSubentity($complaint);
+  }
+
+  function exportComplaintListItem(Complaint $complaint)
+  {
+    return $this->exportComplaintSubentity($complaint);
+  }
+
+  function exportComplaintSubentity(Complaint $complaint)
+  {
     return $complaint->exportForApi();
+  }
+
+  function exportComplaintItems($complaints)
+  {
+    $exported = [];
+    foreach ($complaints as $complaint) {
+      $exported[] = $this->exportComplaintListItem($complaint);
+    }
+    return $exported;
   }
 }

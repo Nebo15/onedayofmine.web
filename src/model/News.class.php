@@ -41,10 +41,14 @@ class News extends BaseModel
 
   function exportForApi(array $properties = null)
   {
-    return parent::exportForApi(array(
+    $exported = parent::exportForApi(array(
       'id', 'sender_id', 'text', 'user_id', 'day_id', 'day_comment_id', 'moment_id', 'moment_comment_id',
       'link'
     ));
+
+    $exported->time = $this->getCtime();
+
+    return $exported;
   }
 
   /**

@@ -80,13 +80,13 @@ CREATE TABLE `day_comment` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Table structure for table `day_favourite`
+-- Table structure for table `day_favorite`
 --
 
-DROP TABLE IF EXISTS `day_favourite`;
+DROP TABLE IF EXISTS `day_favorite`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `day_favourite` (
+CREATE TABLE `day_favorite` (
   `user_id` int(11) unsigned NOT NULL,
   `day_id` int(11) unsigned NOT NULL,
   `ctime` int(10) unsigned NOT NULL,

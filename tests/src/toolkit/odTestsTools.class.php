@@ -139,4 +139,18 @@ class odTestsTools extends lmbAbstractTools
       fclose($fp);
     }
   }
+
+  /**
+   * @return lmbAuditDbConnection
+   */
+  function wrapDefaultDbConnectionWithProfiler()
+  {
+    $connection = lmbToolkit::instance()->getDefaultDbConnection();
+    if('lmbAuditDbConnection' != get_class($connection))
+    {
+      $connection = new lmbAuditDbConnection($connection);
+      lmbToolkit::instance()->setDefaultDbConnection($connection);
+    }
+    return $connection;
+  }
 }

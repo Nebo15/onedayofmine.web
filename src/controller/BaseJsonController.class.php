@@ -196,7 +196,7 @@ abstract class BaseJsonController extends lmbController
 
   protected function _answerNotFound($message = 'Not Found')
   {
-    return $this->_answer($message, array(), $message, 404);
+    return $this->_answerWithError([$message], null, 404);
   }
 
   protected function _answerModelNotFoundById($model_name, $id)
@@ -207,6 +207,11 @@ abstract class BaseJsonController extends lmbController
   protected function _answerNotOwner()
   {
     return $this->_answerWithError("Current user don't have permission to perform this action", null, 401);
+  }
+
+  protected function _answerConflict()
+  {
+    return $this->_answerWithError("Entity already exists", null, 200);
   }
 
   protected function _answerNotPost($message = 'Not a POST request')

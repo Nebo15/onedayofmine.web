@@ -5,15 +5,17 @@ class UserFollowing extends BaseModel
 {
   protected $_default_sort_params = array('ctime'=>'asc');
 
-  public static function isUserFollowUser(User $follower_user, User $followed_user) {
-    return !is_null(lmbActiveRecord::findOne('UserFollowing', array('follower_user_id=? AND user_id=?', $follower_user->getId(), $followed_user->getId())));
+  public static function isUserFollowUser(User $follower_user, User $followed_user)
+  {
+    return !is_null(lmbActiveRecord::findOne('UserFollowing', ['follower_user_id=? AND user_id=?', $follower_user->getId(), $followed_user->getId()]));
   }
 
-  public static function isUsersFollowUser(lmbCollectionInterface $follower_users, User $followed_user) {
+  public static function isUsersFollowUser($follower_users, User $followed_user)
+  {
     if(!$followed_user->getId())
       throw new lmbException("Can't retrieve user id");
 
-    if(!$follower_users->count())
+    if(!count($follower_users))
       return [];
 
     $following_ids = [];
@@ -34,7 +36,8 @@ class UserFollowing extends BaseModel
     return $following_ids;
   }
 
-  public static function isUserFollowUsers(User $follower_user, lmbCollectionInterface $followed_users) {
+  public static function isUserFollowUsers(User $follower_user, lmbCollectionInterface $followed_users)
+  {
     if(!$follower_user->getId())
       throw new lmbException("Can't retrieve user id");
 

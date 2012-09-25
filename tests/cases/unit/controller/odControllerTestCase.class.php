@@ -33,9 +33,11 @@ abstract class odControllerTestCase extends odUnitTestCase
     $this->toolkit->setFacebook(new FacebookMock, $this->main_user->getFacebookAccessToken());
     $this->toolkit->setTwitter(new TwitterMock(), $this->main_user->getTwitterAccessToken());
     $this->toolkit->setFacebookProfile($this->main_user, new FacebookProfileMock);
+
     $this->toolkit->setFacebook(new FacebookMock, $this->additional_user->getFacebookAccessToken());
     $this->toolkit->setTwitter(new TwitterMock(), $this->additional_user->getTwitterAccessToken());
     $this->toolkit->setFacebookProfile($this->additional_user, new FacebookProfileMock);
+
     $this->toolkit->setPostingService(new PostingServiceMock);
   }
 
@@ -86,61 +88,6 @@ abstract class odControllerTestCase extends odUnitTestCase
       ));
     }
     return $decoded_body;
-  }
-
-  function assertJsonField(array $fields)
-  {
-
-  }
-
-  function assertJsonUser(){}
-  function assertJsonUserList(){}
-  function assertJsonUserSubentity(){}
-
-  function assertJsonDay(){}
-  function assertJsonDayList(){}
-  function assertJsonDaySubentity(){}
-
-  function assertJsonMoment(){}
-  function assertJsonMomentList(){}
-  function assertJsonMomentSubentity(){}
-
-  function assertValidUserJson(User $valid_user, stdClass $user_from_response)
-  {
-    $this->assertEqual($valid_user->id,
-      $user_from_response->id);
-    $this->assertEqual($valid_user->name, $user_from_response->name);
-    if($user_from_response->image_36)
-      $this->assertValidImageUrl($user_from_response->image_36);
-    if($user_from_response->image_72)
-      $this->assertValidImageUrl($user_from_response->image_72);
-    if($user_from_response->image_96)
-      $this->assertValidImageUrl($user_from_response->image_96);
-    if($user_from_response->image_192)
-      $this->assertValidImageUrl($user_from_response->image_192);
-    $this->assertEqual($valid_user->sex, $user_from_response->sex);
-    // $this->assertEqual($valid_user->birthday, $user_from_response->birthday);
-    $this->assertEqual($valid_user->occupation, $user_from_response->occupation);
-    $this->assertEqual($valid_user->location, $user_from_response->location);
-    // $this->assertEqual($valid_user->getFollowers()->count(), $user_from_response->followers_count);
-    // $this->assertEqual($valid_user->getFollowing()->count(), $user_from_response->following_count);
-    // $this->assertEqual($valid_user->getDays()->count(), $user_from_response->days_count);
-  }
-
-  function assertValidDayJson(Day $valid_day, stdClass $day_from_response)
-  {
-    $this->assertEqual($valid_day->getId(), $day_from_response->id);
-    if($this->assertProperty($day_from_response, 'user'))
-      $this->assertValidUserJson($valid_day->getUser(), $day_from_response->user);
-    $this->assertTrue($day_from_response->image_266);
-    $this->assertTrue($day_from_response->image_532);
-    $this->assertValidImageUrl($day_from_response->image_266);
-    $this->assertValidImageUrl($day_from_response->image_532);
-    $this->assertEqual($valid_day->title, $day_from_response->title);
-    // $this->assertEqual($valid_day->occupation, $day_from_response->occupation);
-    // $this->assertEqual($valid_day->location, $day_from_response->location);
-    $this->assertEqual($valid_day->type, $day_from_response->type);
-    $this->assertProperty($day_from_response, 'likes_count');
   }
 
   function assertResponse($responses)

@@ -980,7 +980,7 @@ class lmbActiveRecord extends lmbObject
   protected function _doSave($need_validation)
   {
     if($this->_is_being_saved)
-      return;
+      return $this;
 
     try
     {
@@ -1074,7 +1074,7 @@ class lmbActiveRecord extends lmbObject
       throw $e;
     }
 
-    return $this->getId();
+    return $this;
   }
 
   protected function _updateDbRecord($values)

@@ -10,14 +10,21 @@ class DayCommentsControllerTest extends odControllerTestCase
   {
     $user = $this->generator->user();
     $user->save();
-    $comment = $this->generator->dayComment(null, $user);
+    $day = $this->generator->day();
+    $comment = $this->generator->dayComment($day, $user);
     $comment->save();
 
-    lmbToolkit::instance()->setUser($user);
-    $this->post('delete', array(), $comment->getId());
+    $comments = DayComment::find();
+    $this->assertEqual(1, $comments->count());
 
-    $this->assertResponse(200);
-    $this->assertFalse(DayComment::findById($comment->id));
+    lmbToolkit::instance()->setUser($user);
+    $this->post('delete', [], $comment->getId());
+
+    if($this->assertResponse(200))
+    {
+      $comments = DayComment::find();
+      $this->assertEqual(0, $comments->count());
+    }
   }
 
   function testDelete_WrongMethod()
@@ -27,16 +34,31 @@ class DayCommentsControllerTest extends odControllerTestCase
 
     lmbToolkit::instance()->setUser($comment->getUser());
 
-    $this->get('delete', array(), $comment->id);
-    $this->assertResponse(405);
+    $response = $this->get('delete', [], $comment->id);
+    if($this->assertResponse(405))
+    {
+      $this->assertTrue(is_null($response->result));
+
+      $this->assertEqual(count($response->errors), 1);
+      $this->assertEqual($response->errors[0], 'Not a POST request');
+    }
   }
 
   function testDelete_NotFound()
   {
     lmbToolkit::instance()->setUser($this->main_user);
 
-    $this->post('delete', array(), 100500);
-    $this->assertResponse(404);
+    $comments = DayComment::find();
+    $this->assertEqual(0, $comments->count());
+
+    $response = $this->post('delete', [], $id = $this->generator->integer());
+    if($this->assertResponse(404))
+    {
+      $this->assertTrue(is_null($response->result));
+
+      $this->assertEqual(count($response->errors), 1);
+      $this->assertEqual($response->errors[0], "Day comment with id='{$id}' not found");
+    }
   }
 
   function testDelete_WrongUser()
@@ -46,7 +68,13 @@ class DayCommentsControllerTest extends odControllerTestCase
 
     lmbToolkit::instance()->setUser($this->main_user);
 
-    $this->post('delete', array(), $comment->id);
-    $this->assertResponse(401);
+    $response = $this->post('delete', [], $comment->id);
+    if($this->assertResponse(401))
+    {
+      $this->assertTrue(is_null($response->result));
+
+      $this->assertEqual(count($response->errors), 1);
+      $this->assertEqual($response->errors[0], "Current user don't have permission to perform this action");
+    }
   }
 }

@@ -43,12 +43,12 @@ LOCK TABLES `day_comment` WRITE;
 UNLOCK TABLES;
 
 --
--- Dumping data for table `day_favourite`
+-- Dumping data for table `day_favorite`
 --
 
-LOCK TABLES `day_favourite` WRITE;
-/*!40000 ALTER TABLE `day_favourite` DISABLE KEYS */;
-/*!40000 ALTER TABLE `day_favourite` ENABLE KEYS */;
+LOCK TABLES `day_favorite` WRITE;
+/*!40000 ALTER TABLE `day_favorite` DISABLE KEYS */;
+/*!40000 ALTER TABLE `day_favorite` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
