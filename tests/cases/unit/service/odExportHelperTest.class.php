@@ -2,7 +2,6 @@
 lmb_require('tests/cases/unit/odUnitTestCase.class.php');
 lmb_require('src/service/odExportHelper.class.php');
 lmb_require('src/service/InterestCalculator.class.php');
-lmb_require('limb/dbal/src/drivers/lmbAuditDbConnection.class.php');
 
 class odExportHelperTest extends odUnitTestCase
 {
@@ -87,16 +86,15 @@ class odExportHelperTest extends odUnitTestCase
 
   function testExportDayItems_forGuest()
   {
-    $day1 = $this->generator->dayWithMomentsAndComments();
-    $day2 = $this->generator->dayWithMomentsAndComments();
+    $days = [];
+    foreach(range(0, 10) as $i)
+      $days[] = $this->generator->dayWithMomentsAndComments();
 
     $this->db_connection->resetStats();
-
-    $exported = $this->export_helper->exportDayItems([$day1, $day2]);
-    $this->assertJsonDayListItem($exported[0], true);
-    $this->assertJsonDayListItem($exported[1], true);
-
+    $exported_days = $this->export_helper->exportDayItems($days);
     $this->assertEqual(3, count($this->db_connection->getQueries()));
+    foreach($exported_days as $exported_day)
+      $this->assertJsonDayListItem($exported_day, true);
   }
 
   function testExportDayItems_forUser()
