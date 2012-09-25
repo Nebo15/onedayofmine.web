@@ -16,7 +16,7 @@ class DaysGuestControllerTest extends odControllerTestCase
    * @api result Moment[] moments All day moments
    * @api result bool is_favorite
    */
-  function estItem()
+  function testItem()
   {
     $day = $this->generator->dayWithMomentsAndComments();
 
@@ -38,7 +38,7 @@ class DaysGuestControllerTest extends odControllerTestCase
     }
   }
 
-  function estItem_NotFound()
+  function testItem_NotFound()
   {
     $days = Day::find();
     $this->assertEqual(0, $days->count());
@@ -53,7 +53,7 @@ class DaysGuestControllerTest extends odControllerTestCase
     }
   }
 
-  function estItem_DeletedDay()
+  function testItem_DeletedDay()
   {
     $day = $this->generator->day();
     $day->setIsDeleted(1);
@@ -72,7 +72,7 @@ class DaysGuestControllerTest extends odControllerTestCase
   /**
    * @api
    */
-  function estSearch()
+  function testSearch()
   {
     $this->additional_user->save();
 
@@ -166,8 +166,12 @@ class DaysGuestControllerTest extends odControllerTestCase
    * @api input option int limit
    * @api result Day[] day
    */
-  function estGetNewDays()
+  function testGetNewDays()
   {
+    $this->db_connection = $this->toolkit->wrapDefaultDbConnectionWithProfiler();
+    $this->toolkit->enableDbInfoCache();
+    $warmup_cache = $this->toolkit->getDbInfo($this->db_connection);
+
     $this->main_user->save();
     $this->additional_user->save();
 
@@ -183,7 +187,10 @@ class DaysGuestControllerTest extends odControllerTestCase
     $day5 = $this->generator->dayWithMoments($this->main_user);
     $day5->save();
 
+    $this->db_connection->resetStats();
     $response = $this->get('new');
+    $this->assertEqual(4, count($this->db_connection->getQueries()));
+    var_dump($this->db_connection->getStats()); die();
     if($this->assertResponse(200))
     {
       $days = $response->result;
@@ -337,7 +344,7 @@ class DaysGuestControllerTest extends odControllerTestCase
   /**
    * @api description Returns list of acceptable types.
    */
-  function estTypes()
+  function testTypes()
   {
     $response = $this->get('types');
     if($this->assertResponse(200))
@@ -347,7 +354,7 @@ class DaysGuestControllerTest extends odControllerTestCase
     }
   }
 
-  function estComments()
+  function testComments()
   {
     $day = $this->generator->dayWithComments();
     $day->save();
