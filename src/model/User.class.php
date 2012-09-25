@@ -51,10 +51,10 @@ class User extends BaseModel
       'device_tokens'      => array ('field' => 'user_id', 'class' => 'DeviceToken'),
     );
     $this->_has_many_to_many = array(
-      'favourite_days' => array(
+      'favorite_days' => array(
         'field' => 'user_id',
         'foreign_field' => 'day_id',
-        'table' => 'day_favourite',
+        'table' => 'day_favorite',
         'class' => 'Day',
         'criteria' => '`day`.`is_deleted` = 0'),
       'followers' => array(
@@ -141,7 +141,7 @@ class User extends BaseModel
     ))->paginate(0, $limit);
   }
 
-  function getFavouriteDaysWithLimitations($from_id = null, $to_id = null, $limit = null)
+  function getFavoriteDaysWithLimitations($from_id = null, $to_id = null, $limit = null)
   {
     $criteria = new lmbSQLCriteria();
     if($from_id)
@@ -150,7 +150,7 @@ class User extends BaseModel
       $criteria->add(lmbSQLCriteria::greater('id', $to_id));
     if(!$limit || $limit > 100)
       $limit = 100;
-    return $this->getFavouriteDays()->find(array(
+    return $this->getFavoriteDays()->find(array(
       'criteria' => $criteria,
       'sort' => array('id' => 'DESC'),
     ))->paginate(0, $limit);
@@ -176,9 +176,12 @@ class User extends BaseModel
     return User::findOne(array('facebook_access_token = ?', $facebook_access_token));
   }
 
-  static function findByFacebookUid($facebook_uid)
+  static function findByFacebookUid($facebook_uids_or_uid)
   {
-    return User::findOne(array('facebook_uid = ?', $facebook_uid));
+    if(is_array($facebook_uids_or_uid))
+      return User::find(['criteria' => lmbSQLCriteria::in('facebook_uid', $facebook_uids_or_uid)]);
+    else
+      return User::findOne(array('facebook_uid = ?', $facebook_uids_or_uid));
   }
 
   static function findByTwitterUid($twitter_uid)

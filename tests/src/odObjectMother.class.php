@@ -157,6 +157,16 @@ class odObjectMother
     return $moment;
   }
 
+  function momentWithImageAndComments(Day $day = null, Moment $moment = null)
+  {
+    $moment = $moment ?: $this->moment($day);
+
+    $day = $this->momentWithImage($user, null, $day);
+    $day = $this->dayWithComments($user, null, $day);
+
+    return $day;
+  }
+
   /**
    * @param Moment|null $moment
    * @param null|User $user
@@ -246,7 +256,10 @@ class odObjectMother
 
   function image()
   {
-    return file_get_contents(__DIR__.'/../init/image_800x800.jpg');
+    static $contents;
+    if(!$contents)
+      $contents = file_get_contents(__DIR__.'/../init/image_128x128.jpg');
+    return $contents;
   }
 
   function image_name()
@@ -285,13 +298,14 @@ class odObjectMother
   function facebookInfo($uid = null)
   {
     return array(
-     'facebook_uid'      => $uid ?: $this->string(5),
+      'facebook_uid'      => $uid ?: $this->integer(20),
       'email'            => $this->email(),
       'name'             => $this->string(10),
       'sex'              => User::SEX_MALE,
       'timezone'         => $this->integer(1),
       'facebook_profile_utime' => $this->integer(11),
-      'pic'              => $this->string(),
+      'pic'              => 'http://fbcdn.com/'.$this->image_name(),
+      'pic_big'          => 'http://fbcdn.com/'.$this->image_name(),
       'occupation'       => $this->string(),
       'current_location' => $this->string(),
       'birthday'         => $this->date_sql()

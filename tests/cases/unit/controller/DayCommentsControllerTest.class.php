@@ -20,9 +20,11 @@ class DayCommentsControllerTest extends odControllerTestCase
     lmbToolkit::instance()->setUser($user);
     $this->post('delete', [], $comment->getId());
 
-    $this->assertResponse(200);
-    $comments = DayComment::find();
-    $this->assertEqual(0, $comments->count());
+    if($this->assertResponse(200))
+    {
+      $comments = DayComment::find();
+      $this->assertEqual(0, $comments->count());
+    }
   }
 
   function testDelete_WrongMethod()
@@ -32,8 +34,14 @@ class DayCommentsControllerTest extends odControllerTestCase
 
     lmbToolkit::instance()->setUser($comment->getUser());
 
-    $this->get('delete', [], $comment->id);
-    $this->assertResponse(405);
+    $response = $this->get('delete', [], $comment->id);
+    if($this->assertResponse(405))
+    {
+      $this->assertTrue(is_null($response->result));
+
+      $this->assertEqual(count($response->errors), 1);
+      $this->assertEqual($response->errors[0], 'Not a POST request');
+    }
   }
 
   function testDelete_NotFound()
@@ -43,8 +51,14 @@ class DayCommentsControllerTest extends odControllerTestCase
     $comments = DayComment::find();
     $this->assertEqual(0, $comments->count());
 
-    $this->post('delete', [], $this->generator->integer());
-    $this->assertResponse(404);
+    $response = $this->post('delete', [], $id = $this->generator->integer());
+    if($this->assertResponse(404))
+    {
+      $this->assertTrue(is_null($response->result));
+
+      $this->assertEqual(count($response->errors), 1);
+      $this->assertEqual($response->errors[0], "Day comment with id='{$id}' not found");
+    }
   }
 
   function testDelete_WrongUser()
@@ -54,7 +68,13 @@ class DayCommentsControllerTest extends odControllerTestCase
 
     lmbToolkit::instance()->setUser($this->main_user);
 
-    $this->post('delete', [], $comment->id);
-    $this->assertResponse(401);
+    $response = $this->post('delete', [], $comment->id);
+    if($this->assertResponse(401))
+    {
+      $this->assertTrue(is_null($response->result));
+
+      $this->assertEqual(count($response->errors), 1);
+      $this->assertEqual($response->errors[0], "Current user don't have permission to perform this action");
+    }
   }
 }

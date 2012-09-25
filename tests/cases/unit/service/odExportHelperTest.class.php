@@ -33,48 +33,46 @@ class odExportHelperTest extends odUnitTestCase
     lmbToolkit::instance()->disableDbInfoCache();
   }
 
-  function estExportDay_forGuest_withRealImages()
+  function testExportDay_forGuest_withRealImages()
   {
     $day = $this->generator->dayWithMomentsAndComments();
 
     $this->db_connection->resetStats();
-
     $exported = $this->export_helper->exportDay($day);
+    $this->assertEqual(13, count($this->db_connection->getQueries()));
 
     $this->assertJsonDay($exported, true);
-
-    $this->assertEqual(5, count($this->db_connection->getQueries()));
-
-    die();
   }
 
-  function estExportDay_forUser()
+  function testExportDay_forUser()
   {
+    $this->main_user->save();
     $day = $this->generator->dayWithMomentsAndComments();
 
-    lmbToolkit::instance()->setUser($this->main_user);
+    $helper = new odExportHelper($this->main_user);
 
-    $exported = $this->export_helper->exportDay($day);
+    $exported = $helper->exportDay($day);
     $this->assertJsonDay($exported, true);
     $this->assertFalse($exported->is_favorite);
 
-    $favorites = $this->main_user->getFavouriteDays();
+    $favorites = $this->main_user->getFavoriteDays();
     $favorites->add($day);
     $this->main_user->save();
 
     $this->db_connection->resetStats();
 
-    $exported = $this->export_helper->exportDay($day);
+    $exported = $helper->exportDay($day);
     $this->assertTrue($exported->is_favorite);
   }
 
-  function estExportDay_forOwner()
+  function testExportDay_forOwner()
   {
+    $this->main_user->save();
     $day = $this->generator->dayWithMomentsAndComments($this->main_user);
 
-    lmbToolkit::instance()->setUser($this->main_user);
+    $helper = new odExportHelper($this->main_user);
 
-    $exported = $this->export_helper->exportDay($day);
+    $exported = $helper->exportDay($day);
     $this->assertJsonDay($exported, true);
     $this->assertFalse($exported->is_deleted);
 
@@ -83,7 +81,7 @@ class odExportHelperTest extends odUnitTestCase
 
     $this->db_connection->resetStats();
 
-    $exported = $this->export_helper->exportDay($day);
+    $exported = $helper->exportDay($day);
     $this->assertTrue($exported->is_deleted);
   }
 
@@ -113,7 +111,7 @@ class odExportHelperTest extends odUnitTestCase
     $this->assertJsonDayListItem($exported[0], true);
     $this->assertFalse($exported[0]->is_favorite);
 
-    $favorites = $this->main_user->getFavouriteDays();
+    $favorites = $this->main_user->getFavoriteDays();
     $favorites->add($day1);
     $this->main_user->save();
 
@@ -288,6 +286,39 @@ class odExportHelperTest extends odUnitTestCase
     $this->assertJsonUserItems($exported);
 
     $this->assertEqual(0, count($this->db_connection->getQueries()));
+  }
+
+function testExportFacebookUserItems_forGuest()
+  {
+    $info1 = $this->generator->facebookInfo();
+    $info2 = $this->generator->facebookInfo();
+
+    $this->db_connection->resetStats();
+
+    $exported = $this->export_helper->exportFacebookUserItems([$info1, $info2]);
+
+    $this->assertEqual(1, count($this->db_connection->getQueries()));
+
+    $this->assertJsonFacebookUserListItem($exported[0]);
+    $this->assertJsonFacebookUserListItem($exported[1]);
+  }
+
+  function testExportFacebookUserItems_forUser()
+  {
+    $this->main_user->save();
+    $this->additional_user->save();
+
+    $following = $this->main_user->getFollowing();
+    $following->add($this->additional_user);
+    $following->save();
+
+    $helper = new odExportHelper($this->main_user);
+
+    $facebook_user = $this->generator->facebookInfo($this->additional_user->getFacebookUid());
+    $exported = $helper->exportFacebookUserItems([$facebook_user]);
+    $this->assertJsonFacebookUserListItem($exported[0]);
+    $this->assertTrue($exported[0]->user);
+    $this->assertTrue($exported[0]->user->following);
   }
 
   function testExportMoment()

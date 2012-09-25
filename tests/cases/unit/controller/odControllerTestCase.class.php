@@ -33,9 +33,11 @@ abstract class odControllerTestCase extends odUnitTestCase
     $this->toolkit->setFacebook(new FacebookMock, $this->main_user->getFacebookAccessToken());
     $this->toolkit->setTwitter(new TwitterMock(), $this->main_user->getTwitterAccessToken());
     $this->toolkit->setFacebookProfile($this->main_user, new FacebookProfileMock);
+
     $this->toolkit->setFacebook(new FacebookMock, $this->additional_user->getFacebookAccessToken());
     $this->toolkit->setTwitter(new TwitterMock(), $this->additional_user->getTwitterAccessToken());
     $this->toolkit->setFacebookProfile($this->additional_user, new FacebookProfileMock);
+
     $this->toolkit->setPostingService(new PostingServiceMock);
   }
 

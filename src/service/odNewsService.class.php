@@ -19,7 +19,7 @@ class odNewsService
   const MSG_DAY_COMMENT         = "%s has responded you in day %s";
   const MSG_DAY_LIKED           = "%s liked day %s";
   const MSG_DAY_SHARE           = "%s share day %s";
-  const MSG_DAY_FAVOURITE       = "%s added the day %s to favorites";
+  const MSG_DAY_Favorite       = "%s added the day %s to favorites";
 
   ## Moment ##
   const MSG_MOMENT_CREATED      = "%s created moment in day %s";
@@ -103,7 +103,7 @@ class odNewsService
     $this->send($news, self::MSG_DAY_SHARE, array($this->sender->name, $day->title));
   }
 
-  function onDayFavourite(Day $day)
+  function onDayFavorite(Day $day)
   {
     lmb_assert_true($day->id);
     $news = new News(array('day_id' => $day->id));
@@ -115,7 +115,7 @@ class odNewsService
       if(1 == $follower->getSettings()->getNotificationsRelatedActivity())
         $this->addRecipient($follower);
 
-    $this->send($news, self::MSG_DAY_FAVOURITE, array($this->sender->name, $day->title));
+    $this->send($news, self::MSG_DAY_Favorite, array($this->sender->name, $day->title));
   }
 
   /**
