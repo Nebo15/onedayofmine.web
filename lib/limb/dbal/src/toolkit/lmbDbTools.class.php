@@ -225,7 +225,7 @@ class lmbDbTools extends lmbAbstractTools
       return $this->db_info[$id];
 
     if($this->isDbInfoCacheEnabled())
-      $db_info = new lmbDbCachedInfo($conn, lmb_env_get('LIMB_VAR_DIR'));
+      $db_info = new lmbDbCachedInfo($conn, $this->toolkit->getCache('db_info'));
     else
       $db_info = $conn->getDatabaseInfo();
 
