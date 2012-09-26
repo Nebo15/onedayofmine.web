@@ -84,9 +84,6 @@ class DaysController extends BaseJsonController
 
   function doCurrent()
   {
-    if(!$this->request->isPost())
-      return $this->_answerNotPost();
-
     if(!$day = $this->_getUser()->getCurrentDay())
       return $this->_answerNotFound('Current day not set');
 
@@ -240,6 +237,9 @@ class DaysController extends BaseJsonController
     list($from, $to, $limit) = $this->_getFromToLimitations();
     $users_ids = lmbArrayHelper::getColumnValues('id', $this->_getUser()->getFollowing());
 
+    if(!count($users_ids))
+      return $this->_answerOk([]);
+
     $days = Day::findByUsersIds($users_ids, $from, $to, $limit);
 
     return $this->_answerOk($this->toolkit->getExportHelper()->exportDayItems($days));
@@ -312,7 +312,7 @@ class DaysController extends BaseJsonController
   function doMy()
   {
     list($from, $to, $limit) = $this->_getFromToLimitations();
-    $days = $this->_getUser()->getDaysWithLimitations($from, $to, $limit);
+    $days = $this->_getUser()->getDaysWithLimitations($from, $to, $limit, true);
 
     return $this->_answerOk($this->toolkit->getExportHelper()->exportDayItems($days));
   }

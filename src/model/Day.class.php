@@ -40,7 +40,7 @@ class Day extends BaseModel
   {
     $export = new stdClass();
     $export->id = $this->getId();
-    $export->user_id = $this->getUser()->getId();
+    $export->user_id = $this->user_id;
     $export->type = $this->getType();
     $export->title = $this->getTitle();
     $this->showImages($export);
@@ -52,11 +52,7 @@ class Day extends BaseModel
 
   protected function _getAdditionalPlaceholders(&$placeholders)
   {
-    if(!$this->getUser() || !$this->getUser()->getId())
-      throw new Exception("Can't create image path, because entity have no corresponding User.", array('class' => get_called_class()));
-
-    $placeholders[':user_id'] = $this->getUser()->getId();
-    $placeholders[':hash']    = sha1('s0l7&p3pp$r'.$this->getUser()->getId().$this->getId());
+    $placeholders[':hash'] = sha1('s0l7&p3pp$r'.$this->id);
   }
 
   function getCommentsWithLimitation($from_id = null, $to_id = null, $limit = null)

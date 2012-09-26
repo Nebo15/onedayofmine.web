@@ -42,7 +42,8 @@ class odTools extends lmbAbstractTools
   function setUser($user)
   {
     $this->user = $user;
-    lmbToolkit::instance()->getSession()->set('user_id', $user->getId());
+
+    $this->getSessionStorage()->set($this->getSessidFromRequest(), $user->getId());
   }
 
   /**
@@ -53,10 +54,12 @@ class odTools extends lmbAbstractTools
     if(null != $this->user)
       return $this->user;
 
-    if(!lmbToolkit :: instance()->getSession()->get('user_id'))
+    $user_id = $this->getSessionStorage()->get($this->getSessidFromRequest());
+
+    if(!$user_id)
       return null;
 
-    $this->user = User::findById(lmbToolkit :: instance()->getSession()->get('user_id'));
+    $this->user = User::findById($user_id);
 
     return $this->user;
   }
@@ -64,7 +67,8 @@ class odTools extends lmbAbstractTools
   function resetUser()
   {
     $this->user = null;
-    lmbToolkit :: instance()->getSession()->destroy('user_id');
+
+    $this->getSessionStorage()->delete($this->getSessidFromRequest());
   }
 
   /**
@@ -297,5 +301,10 @@ class odTools extends lmbAbstractTools
       $this->apns = new Zend_Mobile_Push_Apns();
     }
     return $this->apns;
+  }
+
+  function getSessionStorage()
+  {
+    return lmbToolkit::instance()->getCache('session');
   }
 }

@@ -1,7 +1,7 @@
 <?php
-lmb_require('tests/cases/integration/odAcceptanceTestCase.class.php');
+lmb_require('tests/cases/integration/odIntegrationTestCase.class.php');
 
-class SocialControllerIntegrationTest extends odAcceptanceTestCase
+class SocialControllerIntegrationTest extends odIntegrationTestCase
 {
   protected $controller_class = 'SocialController';
 

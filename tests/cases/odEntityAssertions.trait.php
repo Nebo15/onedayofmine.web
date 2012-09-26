@@ -1,7 +1,7 @@
 <?php
 trait odEntityAssertions
 {
-  protected function assertProperty($obj, $property, $message = "Property '%s' not found")
+ protected function assertProperty($obj, $property, $message = "Property '%s' not found")
   {
     if(!is_object($obj))
       return $this->fail("Expected a object but '".gettype($obj)."' given");
@@ -31,18 +31,22 @@ trait odEntityAssertions
     }
   }
 
-  protected function assertImageUrl($url, $message = "Invalid image url '%s'")
+  protected function assert404Url($url)
   {
-    $this->assertTrue($url, sprintf('Empty image url', $url));
+    return $this->assertFalse($this->_isUrlExists($url), "Image exists '{$url}'");
+  }
 
+  protected function _isUrlExists($url)
+  {
     $images_conf = lmbToolkit::instance()->getConf('images');
     $rel_path = str_replace(lmbToolkit::instance()->getConf('common')['static_host'], '', $url);
     $abs_path = lmb_env_get('APP_DIR').'/'.$images_conf['save_path'].'/'.$rel_path;
+    return file_exists($abs_path);
+  }
 
-    return $this->assertTrue(
-      file_exists($abs_path),
-      sprintf($message, $abs_path)
-    );
+  protected function assertImageUrl($url, $message = "Invalid image url '%s'")
+  {
+    return $this->assertTrue($this->_isUrlExists($url), sprintf($message, $url));
   }
 
   protected function assertImageUrls(array $urls)
@@ -445,7 +449,7 @@ trait odEntityAssertions
     $this->assertTrue($news->id, 'News ID not set');
     $this->assertTrue($news->time);
     $this->assertTrue($news->text);
-    // $this->assertTrue($news->main_object);
+    // $this->assertTrue($news->main_object); TODO
   }
 
   protected function assertJsonNewsItems(array $news)

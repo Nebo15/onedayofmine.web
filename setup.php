@@ -37,16 +37,18 @@ lmbToolkit :: merge(new odTools());
 lmb_require('limb/dbal/src/toolkit/lmbDbTools.class.php');
 lmbToolkit :: merge(new lmbDbTools());
 
+lmb_require('limb/core/src/lmbSys.class.php');
+
 if(extension_loaded('newrelic'))
 {
-  newrelic_set_appname('ODOM-stage');
+  newrelic_set_appname(lmb_app_mode());
   newrelic_name_transaction(isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : 'CLI');
-  lmbErrorGuard :: registerFatalErrorHandler('newrelic_notice_error');
-
-  function processException($e)
+  lmbErrorGuard :: registerExceptionHandler(function($e)
   {
-    newrelic_notice_error($e->getOriginalMessage(), $e);
-  }
-
-  lmbErrorGuard :: registerExceptionHandler('processException');
+    $message = ($e instanceof lmbException) ? $e->getOriginalMessage() : $e->getMessage();
+    $string = ($e instanceof lmbException) ? $e->toNiceString() : (string) $e;
+    newrelic_notice_error($message, $e);
+    if(lmbSys::isCli())
+      print($string);
+  });
 }

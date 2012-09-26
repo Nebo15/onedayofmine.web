@@ -160,7 +160,7 @@ class MyControllerTest extends odControllerTestCase
    * @api input param int limit
    * @api result News[] - List of news. If you use the "from" option (wthout "to") and returned list is empty, than additionally HTTP 304 status code can be returned.
    */
-  function testGetNewNews()
+  function testGetMyNews()
   {
     $this->main_user->save();
     $this->toolkit->setUser($this->main_user);
@@ -181,7 +181,7 @@ class MyControllerTest extends odControllerTestCase
     $moment->save();
     $news3->setMoment($moment);
     $news3->save();
-    $news4 = $this->generator->news(null, $this->main_user);
+    $news4 = $this->generator->news($this->additional_user, $this->main_user);
     $news4->save();
 
     $response = $this->get('news');

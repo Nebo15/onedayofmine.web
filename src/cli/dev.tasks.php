@@ -276,9 +276,18 @@ function task_od_parse_lj($argv)
       }
 
       $img_url = $moment_data['img'];
-      if(!$cache->get(md5($img_url)))
-        $cache->add(md5($img_url), file_get_contents($img_url));
-      $moment->attachImage($cache->get(md5($img_url)));
+      $img_key = md5($img_url);
+      if(!$cache->get($img_key))
+      {
+        if(!$img_content = od_download_image($img_url, 10))
+        {
+          echo '-';
+          continue;
+        }
+        $cache->add($img_key, $img_content);
+      }
+
+      $moment->attachImage($cache->get($img_key));
       $moment->save();
 
       $moment_comments_count = rand(-10, 3);
@@ -304,6 +313,18 @@ function task_od_parse_lj($argv)
   }
 }
 
+function od_download_image($url, $attempts)
+{
+  if(!$attempts)
+    return '';
+
+  $ctx = stream_context_create(['http' => ['timeout' => 1]]);
+  if(!$content = @file_get_contents($url, 0, $ctx))
+    return od_download_image($url, $attempts - 1);
+  else
+    return $content;
+}
+
 /**
  * @desc Register tests users
  * @mods devel,testing
@@ -326,7 +347,7 @@ function task_od_tests_users()
     $response = $request->send();
     if(200 != $response->getResponseCode())
     {
-      var_dump($response);
+      var_dump($request->getUrl(), $response);
       exit(1);
     }
     else
@@ -377,4 +398,118 @@ function task_od_delete_facebook_objects()
     recursive_delete($fb, "/me/one-day-of-mine:begin");
     recursive_delete($fb, "/me/one-day-of-mine:end");
 //  }
+}
+
+/**
+ * @mods devel,testing
+ */
+function task_od_siege_log()
+{
+  lmb_require('tests/src/toolkit/odTestsTools.class.php');
+  lmbToolkit :: merge(new odTestsTools());
+
+  define('TEST_FOR_GUEST', 'G');
+  define('TEST_FOR_USER', 'U');
+  define('TEST_FOR_BOTH', 'B');
+
+  $requests_count = 1000;
+  $days_count = 20;
+  $moments_count = 400;
+  $siege_file = lmb_var_dir().'/siege.log';
+
+  $paths = [
+    ['auth/parameters', TEST_FOR_GUEST],
+    ['days/search?query=:string:', TEST_FOR_GUEST],
+    ['days/following', TEST_FOR_USER],
+    ['days/my', TEST_FOR_USER],
+    ['days/favourite', TEST_FOR_USER],
+    ['days/types', TEST_FOR_BOTH],
+    ['moments/:moment_id:/comments/', TEST_FOR_BOTH],
+    ['my/profile', TEST_FOR_USER],
+    ['my/settings', TEST_FOR_USER],
+    ['users/search?query=:string:', TEST_FOR_GUEST],
+    ['users/:user_id:', TEST_FOR_BOTH],
+    ['users/:user_id:/days', TEST_FOR_BOTH],
+    ['users/:user_id:/followers', TEST_FOR_BOTH],
+    ['users/:user_id:/following', TEST_FOR_BOTH],
+    ['users/:user_id:/activity', TEST_FOR_BOTH],
+  ];
+
+  $paths = array_merge($paths, array_fill(0, 19, ['days/new', TEST_FOR_BOTH]));
+  $paths = array_merge($paths, array_fill(0, 19, ['days/interesting', TEST_FOR_BOTH]));
+  $paths = array_merge($paths, array_fill(0, 39, ['days/:day_id:', TEST_FOR_BOTH]));
+  $paths = array_merge($paths, array_fill(0, 5, ['my/news', TEST_FOR_USER]));
+  $paths = array_merge($paths, array_fill(0, 3, ['days/:day_id:/comments', TEST_FOR_BOTH]));
+
+  if(file_exists($siege_file))
+    unlink($siege_file);
+
+  echo "Clean up db...";
+  lmbToolkit::instance()->truncateDb();
+  echo "Done" . PHP_EOL;
+
+  $om = new odObjectMother();
+
+  echo "Create users...";
+  $users = lmbToolkit::instance()->getTestsUsers();
+  $fp = fopen($siege_file, "a");
+  foreach($users as $user)
+  {
+    $user->save();
+    fwrite($fp, lmb_env_get('HOST_URL').'auth/login POST token='.$user->getFacebookAccessToken().PHP_EOL);
+  }
+  fclose($fp);
+  echo "Done" . PHP_EOL;
+
+  echo "Create days...";
+  $days_ids = [];
+  for ($i = 0; $i < $days_count; $i++) {
+    $day = $om->day();
+    $day->day_id = $users[array_rand($users)]->id;
+    $day->save();
+    $days_ids[] = $day->id;
+  }
+  echo "Done" . PHP_EOL;
+
+  echo "Create moments...";
+  $moments_ids = [];
+  for ($i = 0; $i < $moments_count; $i++) {
+    $moment = $om->moment();
+    $moment->day_id = $days_ids[array_rand($days_ids)];
+    $moment->save();
+    $moments_ids[] = $moment->id;
+  }
+  echo "Done" . PHP_EOL;
+
+  shuffle($paths);
+
+  $fp = fopen($siege_file, "a");
+
+  for ($i = 0; $i < $requests_count; $i++)
+  {
+    list($path, $user_type) = $paths[$i % count($paths)];
+    $url = $path;
+
+    if(false !== strpos($url, ':string:'))
+      $url = str_replace(':string:', md5($i), $url);
+    if(false !== strpos($url, ':user_id:'))
+      $url = str_replace(':user_id:', $users[array_rand($users)]->id, $url);
+    if(false !== strpos($url, ':day_id:'))
+      $url = str_replace(':day_id:', $days_ids[array_rand($days_ids)], $url);
+    if(false !== strpos($url, ':moment_id:'))
+      $url = str_replace(':moment_id:', $moments_ids[array_rand($moments_ids)], $url);
+
+    if(TEST_FOR_BOTH == $user_type)
+      $user_type = rand(0, 1) ? TEST_FOR_GUEST : TEST_FOR_USER;
+
+    if(TEST_FOR_USER == $user_type)
+      $url .= '?token='.$users[array_rand($users)]->getFacebookAccessToken();
+
+    $url = lmb_env_get('HOST_URL').$url;
+
+    fwrite($fp, $url.PHP_EOL);
+
+    echo '.';
+  }
+  fclose($fp);
 }

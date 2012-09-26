@@ -4,7 +4,7 @@ lmb_require('lib/DocCommentParser/*.class.php');
 lmb_require('facebook-proxy/src/Client.php');
 lmb_require('tests/cases/odEntityAssertions.trait.php');
 
-abstract class odAcceptanceTestCase extends WebTestCase
+abstract class odIntegrationTestCase extends WebTestCase
 {
   use odEntityAssertions;
 
@@ -102,21 +102,19 @@ abstract class odAcceptanceTestCase extends WebTestCase
 
   }
 
-  protected function _loginAndSetCookie(User $user, $disable_sharing = true)
+  protected function _loginAndSetCookie(User $user)
   {
-    $res = $this->_login($user, $disable_sharing);
+    $res = $this->_login($user);
     $this->setCookie('token', $user->getFacebookAccessToken());
     return $res;
   }
 
-  protected function _login(User $user, $disable_sharing = true)
+  protected function _login(User $user)
   {
     $params = array(
       'token' => $user->getFacebookAccessToken(),
       'device_token' => $this->generator->string(64)
     );
-    if($disable_sharing)
-      $params['disable_sharing'] = 1;
     $res = $this->post('auth/login/', $params);
     $this->assertResponse(200);
     $this->assertProperty($res->result, 'name');
@@ -149,6 +147,15 @@ abstract class odAcceptanceTestCase extends WebTestCase
     }
   }
 
+  function assertResponse($responses, $message = '%s')
+  {
+    $responses = (is_array($responses) ? $responses : array($responses));
+    $code = $this->getBrowser()->getResponseCode();
+    $message = sprintf('%s', "Expecting response in [" .
+      implode(", ", $responses) . "] got [$code] in response:".($this->getBrowser()->getContent()));
+    return $this->assertTrue(in_array($code, $responses), $message);
+  }
+
   protected function assertImageUrl($url, $message = "Invalid image url '%s'")
   {
     $this->assertTrue($url, sprintf('Empty image url', $url));
@@ -167,5 +174,16 @@ abstract class odAcceptanceTestCase extends WebTestCase
       $connectable,
       sprintf($message, $url)
     );
+  }
+
+  protected function assert404Url($url)
+  {
+    $r = new HttpRequest($url, HttpRequest::METH_GET);
+    try {
+      $r->send();
+      $this->assertEqual(404, $r->getResponseCode());
+    } catch (HttpException $ex) {
+      $this->fail($ex->getMessage());
+    }
   }
 }

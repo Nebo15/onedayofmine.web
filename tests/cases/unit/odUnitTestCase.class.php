@@ -1,5 +1,6 @@
 <?php
 lmb_require('tests/cases/odEntityAssertions.trait.php');
+lmb_require('limb/dbal/src/drivers/lmbAuditDbConnection.class.php');
 
 abstract class odUnitTestCase extends UnitTestCase
 {

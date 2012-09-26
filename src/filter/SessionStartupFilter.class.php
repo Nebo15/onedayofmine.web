@@ -7,9 +7,8 @@ class SessionStartupFilter implements lmbInterceptingFilter
 {
   function run($filter_chain)
   {
-    $sessid = lmbToolkit::instance()->getSessidFromRequest();
-    if($sessid)
-      lmbToolkit :: instance()->getSession()->start($sessid);
+//    $sessid = lmbToolkit::instance()->getSessidFromRequest();
+
     $filter_chain->next();
   }
 }

@@ -2,9 +2,9 @@
 /*
  * Limb PHP Framework
  *
- * @link http://limb-project.com 
+ * @link http://limb-project.com
  * @copyright  Copyright &copy; 2004-2009 BIT(http://bit-creative.com)
- * @license    LGPL http://www.gnu.org/copyleft/lesser.html 
+ * @license    LGPL http://www.gnu.org/copyleft/lesser.html
  */
 lmb_require('limb/dbal/src/drivers/lmbDbConnection.interface.php');
 lmb_require('limb/core/src/lmbBacktrace.class.php');
@@ -21,7 +21,7 @@ lmbDecorator :: generate('lmbDbConnection', 'lmbDbConnectionDecorator');
 class lmbAuditDbConnection extends lmbDbConnectionDecorator
 {
   protected $stats = array();
-  
+
   function execute($sql)
   {
     $info = array('query' => $sql);
@@ -32,7 +32,7 @@ class lmbAuditDbConnection extends lmbDbConnectionDecorator
     $this->stats[] = $info;
     return $res;
   }
-  
+
   function executeStatement($stmt)
   {
     $info = array('query' => $stmt->getSQL());
@@ -43,24 +43,24 @@ class lmbAuditDbConnection extends lmbDbConnectionDecorator
     $this->stats[] = $info;
     return $res;
   }
-  
+
   function newStatement($sql)
   {
     $statement = parent :: newStatement($sql);
     $statement->setConnection($this);
     return $statement;
   }
-  
+
   function countQueries()
   {
     return sizeof($this->stats);
   }
-  
+
   function resetStats()
   {
     $this->stats = array();
   }
-  
+
   function getQueries($reg_exp = '')
   {
     $res = array();
@@ -73,22 +73,22 @@ class lmbAuditDbConnection extends lmbDbConnectionDecorator
 
     return $res;
   }
-  
-  function getTrace() 
+
+  function getTrace()
   {
-  	$trace_length = 8;
+  	$trace_length = 10;
   	$offset = 4; // getting rid of useless trace elements
-  	
+
   	$trace = new lmbBacktrace($trace_length, $offset);
   	return $trace->toString();
   }
-  
+
   function getStats()
   {
-    return $this->stats; 
+    return $this->stats;
   }
-  
-  
+
+
 }
 
 
