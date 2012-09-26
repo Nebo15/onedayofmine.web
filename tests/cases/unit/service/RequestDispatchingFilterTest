@@ -1,0 +1,258 @@
+<?php
+class RequestDispatchingFilterTest
+{
+  function testAuth_Parameters()
+  {
+    $this->assertDispatchedWithParams("/auth/parameters", []);
+  }
+
+  function testAuth_IsLoggedIn()
+  {
+    $this->assertDispatchedWithParams("/auth/is_logged_in", []);
+  }
+
+  function testAuth_Login()
+  {
+    $this->assertDispatchedWithParams("/auth/login", []);
+  }
+
+  function testAuth_Logout()
+  {
+    $this->assertDispatchedWithParams("/auth/logout", []);
+  }
+
+  function testDays_Interesting()
+  {
+    $this->assertDispatchedWithParams("/days/interesting", []);
+  }
+
+  function testDays_New()
+  {
+    $this->assertDispatchedWithParams("/days/new", []);
+  }
+
+  function testDays_Search()
+  {
+    $this->assertDispatchedWithParams("/days/search", []);
+  }
+
+  function testDays_Following()
+  {
+    $this->assertDispatchedWithParams("/days/following", []);
+  }
+
+  function testDays_My()
+  {
+    $this->assertDispatchedWithParams("/days/my", []);
+  }
+
+  function testDays_Favourite()
+  {
+    $this->assertDispatchedWithParams("/days/favourite", []);
+  }
+
+  function testDays_ById()
+  {
+    $this->assertDispatchedWithParams("/days/1922", []);
+  }
+
+  function testDays_Current()
+  {
+    $this->assertDispatchedWithParams("/days/current", []);
+  }
+
+  function testDays_ByIdComment()
+  {
+    $this->assertDispatchedWithParams("/days/1926/comment", []);
+  }
+
+  function testDays_ByIdComments()
+  {
+    $this->assertDispatchedWithParams("/days/1926/comments", []);
+  }
+
+  function testDays_ByIdShare()
+  {
+    $this->assertDispatchedWithParams("/days/1927/share", []);
+  }
+
+  function testDays_ByIdLike()
+  {
+    $this->assertDispatchedWithParams("/days/1928/like", []);
+  }
+
+  function testDays_ByIdUnlike()
+  {
+    $this->assertDispatchedWithParams("/days/1928/unlike", []);
+  }
+
+  function testDays_Start()
+  {
+    $this->assertDispatchedWithParams("/days/start", []);
+  }
+
+  function testDays_ByIdAddMoment()
+  {
+    $this->assertDispatchedWithParams("/days/1942/add_moment", []);
+  }
+
+  function testDays_ByIdFinish()
+  {
+    $this->assertDispatchedWithParams("/days/1942/finish", []);
+  }
+
+  function testDays_ByIdUpdate()
+  {
+    $this->assertDispatchedWithParams("/days/1929/update", []);
+  }
+
+  function testDays_ByIdDelete()
+  {
+    $this->assertDispatchedWithParams("/days/1930/delete", []);
+  }
+
+  function testDays_ByIdRestore()
+  {
+    $this->assertDispatchedWithParams("/days/1932/restore", []);
+  }
+
+  function testDays_ByIdMarkCurrent()
+  {
+    $this->assertDispatchedWithParams("/days/1932/mark_current", []);
+  }
+
+  function testDays_ByIdMarkFavourite()
+  {
+    $this->assertDispatchedWithParams("/days/1939/mark_favourite", []);
+  }
+
+  function testDays_ByIdUnmarkFavourite()
+  {
+    $this->assertDispatchedWithParams("/days/1940/unmark_favourite", []);
+  }
+
+  function testDays_ByIdComplain()
+  {
+    $this->assertDispatchedWithParams("/days/1960/complain", []);
+  }
+
+  function testDays_Types()
+  {
+    $this->assertDispatchedWithParams("/days/types", []);
+  }
+
+  function testMoments_ByIdLike()
+  {
+    $this->assertDispatchedWithParams("/moments/600/like", []);
+  }
+
+  function testMoments_ByIdUnlike()
+  {
+    $this->assertDispatchedWithParams("/moments/600/unlike", []);
+  }
+
+  function testMoments_ByIdComment()
+  {
+    $this->assertDispatchedWithParams("/moments/600/comment", []);
+  }
+
+  function testMoments_ByIdComments()
+  {
+    $this->assertDispatchedWithParams("/moments/1926/comments", []);
+  }
+
+  function testMoments_ByIdUpdate()
+  {
+    $this->assertDispatchedWithParams("/moments/598/update", []);
+  }
+
+  function testMoments_ByIdDelete()
+  {
+    $this->assertDispatchedWithParams("/moments/599/delete", []);
+  }
+
+  function testDayComments_ByIdDelete()
+  {
+    $this->assertDispatchedWithParams("/day_comments/169/delete", []);
+  }
+
+  function testMomentComments_ByIdDelete()
+  {
+    $this->assertDispatchedWithParams("/moment_comments/170/delete", []);
+  }
+
+  function testMy_Profile()
+  {
+    $this->assertDispatchedWithParams("/my/profile", []);
+  }
+
+  function testMy_Settings()
+  {
+    $this->assertDispatchedWithParams("/my/settings", []);
+  }
+
+  function testMy_News()
+  {
+    $this->assertDispatchedWithParams("/my/news", []);
+  }
+
+  function testUsers_Search()
+  {
+    $this->assertDispatchedWithParams("/users/search", []);
+  }
+
+  function testUsers_ById()
+  {
+    $this->assertDispatchedWithParams("/users/4162", []);
+  }
+
+  function testUsers_ByIdDays()
+  {
+    $this->assertDispatchedWithParams("/users/4160/days/", []);
+  }
+
+  function testUsers_ByIdFollowers()
+  {
+    $this->assertDispatchedWithParams("/users/4168/followers", []);
+  }
+
+  function testUsers_ByIdFollowing()
+  {
+    $this->assertDispatchedWithParams("/users/4168/following", []);
+  }
+
+  function testUsers_ByIdFollow()
+  {
+    $this->assertDispatchedWithParams("/users/4175/follow", []);
+  }
+
+  function testUsers_ByIdUnfollow()
+  {
+    $this->assertDispatchedWithParams("/users/4177/unfollow", []);
+  }
+
+  function testUsers_ByIdActivity()
+  {
+    $this->assertDispatchedWithParams("/users/4177/activity", []);
+  }
+
+  function testSocial_FacebookFriends()
+  {
+    $this->assertDispatchedWithParams("/social/facebook/friends", []);
+  }
+
+  function testSocial_FacebookInvite()
+  {
+    $this->assertDispatchedWithParams("/social/facebook/invite", []);
+  }
+
+  function testSocial_TwitterConnect()
+  {
+    $this->assertDispatchedWithParams("/social/twitter/connect", []);
+  }
+
+  function testSocial_EmailInvite()
+  {
+    $this->assertDispatchedWithParams("/social/email/invite", []);
+  }
+}
