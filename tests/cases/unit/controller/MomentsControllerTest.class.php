@@ -203,7 +203,7 @@ class MomentsControllerTest extends odControllerTestCase
     $day = $this->generator->dayWithComments();
     $day->save();
 
-    $moment = $this->generator->momentWithComments($day);
+    $moment = $this->generator->moment($day, true);
     $moment->save();
 
     $loaded_comments = $moment->getComments();

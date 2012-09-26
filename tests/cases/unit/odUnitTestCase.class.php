@@ -32,8 +32,8 @@ abstract class odUnitTestCase extends UnitTestCase
     $this->toolkit->truncateDb();
     $this->toolkit->resetUser();
 
-    $this->main_user = $this->generator->user();
-    $this->additional_user = $this->generator->user();
+    $this->main_user = $this->generator->user('main_user');
+    $this->additional_user = $this->generator->user('additional_user');
   }
 
   protected function assertProperty($obj, $property, $message = "Property '%s' not found")

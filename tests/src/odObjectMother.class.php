@@ -73,7 +73,7 @@ class odObjectMother
 
   function dayWithLikes(User $user, $count)
   {
-    $day = $this->day($user, $title);
+    $day = $this->day($user);
     $this->dayLikes($day, $count);
     return $day;
   }
@@ -127,34 +127,32 @@ class odObjectMother
    * @param Day|null $day
    * @return Moment
    */
-  function moment(Day $day = null)
+  function moment(Day $day = null, $with_comments = false)
   {
     $moment = new Moment();
     $moment->setDescription('description '.$this->string(125));
     $moment->setDay($day ?: $this->day());
 
+    if($with_comments)
+    {
+      for($i = 0; $i < lmbToolkit::instance()->getConf('common')->default_comments_count+1; $i++)
+      {
+        $moment->addToComments($this->momentComment($moment, $moment->getDay()->getUser()));
+      }
+    }
+
     return $moment;
   }
 
-  function momentWithImage(Day $day = null, Moment $moment = null)
+  function momentWithImage(Day $day = null, $likes_count = 0)
   {
-    $moment = $moment ?: $this->moment($day);
-
+    $moment = $this->moment($day);
     $moment->save();
     $moment->attachImage($this->image());
     $moment->save();
 
-    return $moment;
-  }
-
-  function momentWithComments(Day $day = null, Moment $moment = null)
-  {
-    $moment = $moment ?: $this->moment($day);
-
-    for($i = 0; $i < lmbToolkit::instance()->getConf('common')->default_comments_count+1; $i++)
-    {
-      $moment->addToComments($this->momentComment($moment, $moment->getDay()->getUser()));
-    }
+    for($i = 0; $i < $likes_count; $i++)
+      $moment->addToLikes($this->momentLike($moment));
 
     return $moment;
   }
@@ -300,7 +298,7 @@ class odObjectMother
   function facebookInfo($uid = null)
   {
     return array(
-     'facebook_uid'      => $uid ?: $this->integer(20),
+      'facebook_uid'      => $uid ?: $this->integer(20),
       'email'            => $this->email(),
       'name'             => $this->string(10),
       'sex'              => User::SEX_MALE,

@@ -14,6 +14,7 @@ class UsersControllerTest extends odControllerTestCase
   function testUserDays()
   {
     $this->main_user->save();
+    $this->additional_user->save();
     $day1 = $this->generator->day($this->main_user);
     $day1->save();
     $day2 = $this->generator->day($this->main_user);

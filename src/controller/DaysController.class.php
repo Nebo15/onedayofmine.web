@@ -258,7 +258,11 @@ class DaysController extends BaseJsonController
     list($from, $to, $limit) = $this->_getFromToLimitations();
     $days_ratings = (new InterestCalculator())->getDaysRatings($from, $to, $limit);
 
-    return $this->_answerOk($this->toolkit->getExportHelper()->exportDayInterestingItems($days_ratings));
+    $days = [];
+    foreach($days_ratings as $day_rating)
+      $days[] = $day_rating->getDay();
+
+    return $this->_answerOk($this->toolkit->getExportHelper()->exportDayItems($days));
   }
 
   function doFavorite()

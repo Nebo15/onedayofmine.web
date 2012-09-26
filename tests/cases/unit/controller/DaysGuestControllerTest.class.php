@@ -1,6 +1,7 @@
 <?php
 lmb_require('tests/cases/unit/controller/odControllerTestCase.class.php');
 lmb_require('src/controller/DaysController.class.php');
+lmb_require('src/service/InterestCalculator.class.php');
 
 class DaysGuestControllerTest extends odControllerTestCase
 {
@@ -15,7 +16,7 @@ class DaysGuestControllerTest extends odControllerTestCase
    * @api result Moment[] moments All day moments
    * @api result bool is_favorite
    */
-  function testItem()
+  function estItem()
   {
     $day = $this->generator->dayWithMomentsAndComments();
 
@@ -37,7 +38,7 @@ class DaysGuestControllerTest extends odControllerTestCase
     }
   }
 
-  function testItem_NotFound()
+  function estItem_NotFound()
   {
     $days = Day::find();
     $this->assertEqual(0, $days->count());
@@ -52,7 +53,7 @@ class DaysGuestControllerTest extends odControllerTestCase
     }
   }
 
-  function testItem_DeletedDay()
+  function estItem_DeletedDay()
   {
     $day = $this->generator->day();
     $day->setIsDeleted(1);
@@ -71,7 +72,7 @@ class DaysGuestControllerTest extends odControllerTestCase
   /**
    * @api
    */
-  function testSearch()
+  function estSearch()
   {
     $this->additional_user->save();
 
@@ -165,7 +166,7 @@ class DaysGuestControllerTest extends odControllerTestCase
    * @api input option int limit
    * @api result Day[] day
    */
-  function testGetNewDays()
+  function estGetNewDays()
   {
     $this->main_user->save();
     $this->additional_user->save();
@@ -336,7 +337,7 @@ class DaysGuestControllerTest extends odControllerTestCase
   /**
    * @api description Returns list of acceptable types.
    */
-  function testTypes()
+  function estTypes()
   {
     $response = $this->get('types');
     if($this->assertResponse(200))
@@ -346,7 +347,7 @@ class DaysGuestControllerTest extends odControllerTestCase
     }
   }
 
-  function testComments()
+  function estComments()
   {
     $day = $this->generator->dayWithComments();
     $day->save();

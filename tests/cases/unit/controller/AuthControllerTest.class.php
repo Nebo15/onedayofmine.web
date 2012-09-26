@@ -50,13 +50,12 @@ class AuthControllerTest extends odControllerTestCase
   function testLogin_WithoutDeviceToken()
   {
     $this->additional_user->save();
-    $this->main_user->save();
 
     $this->toolkit->getFacebook($this->additional_user)
       ->setReturnValue('getUid', $this->additional_user->getFacebookUid());
 
     $response = $this->post('login', array(
-      'token'        => $this->additional_user->getFacebookAccessToken(),
+      'token' => $this->additional_user->getFacebookAccessToken(),
     ));
 
     if($this->assertResponse(200))

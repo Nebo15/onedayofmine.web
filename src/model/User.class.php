@@ -176,9 +176,12 @@ class User extends BaseModel
     return User::findOne(array('facebook_access_token = ?', $facebook_access_token));
   }
 
-  static function findByFacebookUid($facebook_uid)
+  static function findByFacebookUid($facebook_uids_or_uid)
   {
-    return User::findOne(array('facebook_uid = ?', $facebook_uid));
+    if(is_array($facebook_uids_or_uid))
+      return User::find(['criteria' => lmbSQLCriteria::in('facebook_uid', $facebook_uids_or_uid)]);
+    else
+      return User::findOne(array('facebook_uid = ?', $facebook_uids_or_uid));
   }
 
   static function findByTwitterUid($twitter_uid)
