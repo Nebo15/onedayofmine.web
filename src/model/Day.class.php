@@ -52,11 +52,7 @@ class Day extends BaseModel
 
   protected function _getAdditionalPlaceholders(&$placeholders)
   {
-    if(!$this->user_id)
-      throw new Exception("Can't create image path, because entity have no corresponding User.", array('class' => get_called_class()));
-
-    $placeholders[':user_id'] = $this->user_id;
-    $placeholders[':hash']    = sha1('s0l7&p3pp$r'.$this->user_id.$this->id);
+    $placeholders[':hash'] = sha1('s0l7&p3pp$r'.$this->id);
   }
 
   function getCommentsWithLimitation($from_id = null, $to_id = null, $limit = null)

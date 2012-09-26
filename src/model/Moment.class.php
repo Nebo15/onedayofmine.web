@@ -68,11 +68,10 @@ class Moment extends BaseModel
 
   protected function _getAdditionalPlaceholders(&$placeholders)
   {
-    if(!$this->getDay()->user_id)
+    if(!$this->day_id)
       throw new Exception("Can't create image path, because entity have no corresponding User.", array('class' => get_called_class()));
 
-    $placeholders[':user_id'] = $this->getDay()->user_id;
     $placeholders[':day_id']  = $this->day_id;
-    $placeholders[':hash']    = sha1('s0l7&p3pp$r'.$this->getDay()->user_id.$this->getId().$this->day_id);
+    $placeholders[':hash']    = sha1('s0l7&p3pp$r'.$this->id.$this->day_id);
   }
 }
