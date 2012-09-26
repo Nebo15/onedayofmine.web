@@ -12,7 +12,7 @@ class ImageableTest extends odAcceptanceTestCase
     $model->attachImage($this->generator->image());
 
     $url = lmbToolkit::instance()->getStaticUrl($model->getImage());
-    $this->assertValidImageUrl($url);
+    $this->assertImageUrl($url);
   }
 
   function testAttachImage_s3()
@@ -22,7 +22,7 @@ class ImageableTest extends odAcceptanceTestCase
     $model->attachImage($this->generator->image());
 
     $url = lmbToolkit::instance()->getStaticUrl($model->getImage());
-    $this->assertValidImageUrl($url);
+    $this->assertImageUrl($url);
   }
 }
 

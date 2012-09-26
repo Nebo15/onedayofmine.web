@@ -2,9 +2,12 @@
 lmb_require('limb/tests_runner/lib/simpletest/web_tester.php');
 lmb_require('lib/DocCommentParser/*.class.php');
 lmb_require('facebook-proxy/src/Client.php');
+lmb_require('tests/cases/odEntityAssertions.trait.php');
 
 abstract class odAcceptanceTestCase extends WebTestCase
 {
+  use odEntityAssertions;
+
   /**
    * @var OdObjectMother
    */
@@ -146,69 +149,23 @@ abstract class odAcceptanceTestCase extends WebTestCase
     }
   }
 
-  function assertValidUserJson(User $valid_user, stdClass $user_from_response)
+  protected function assertImageUrl($url, $message = "Invalid image url '%s'")
   {
-    $this->assertEqual($valid_user->id,
-      $user_from_response->id);
-    $this->assertEqual($valid_user->name, $user_from_response->name);
-    if($user_from_response->image_36)
-      $this->assertValidImageUrl($user_from_response->image_36);
-    if($user_from_response->image_72)
-      $this->assertValidImageUrl($user_from_response->image_72);
-    if($user_from_response->image_96)
-      $this->assertValidImageUrl($user_from_response->image_96);
-    if($user_from_response->image_192)
-      $this->assertValidImageUrl($user_from_response->image_192);
-    $this->assertEqual($valid_user->sex, $user_from_response->sex);
-    $this->assertEqual($valid_user->birthday, $user_from_response->birthday);
-    $this->assertEqual($valid_user->occupation, $user_from_response->occupation);
-    $this->assertEqual($valid_user->location, $user_from_response->location);
-    $this->assertEqual($valid_user->getFollowers()->count(), $user_from_response->followers_count);
-    $this->assertEqual($valid_user->getFollowing()->count(), $user_from_response->following_count);
-    $this->assertEqual($valid_user->getDays()->count(), $user_from_response->days_count);
-  }
+    $this->assertTrue($url, sprintf('Empty image url', $url));
 
-  function assertValidDayJson(Day $valid_day, stdClass $day_from_response)
-  {
-    $this->assertEqual($valid_day->getId(), $day_from_response->id);
-    if($this->assertProperty($day_from_response, 'user'))
-      $this->assertValidUserJson($valid_day->getUser(), $day_from_response->user);
-    $this->assertTrue($day_from_response->image_266);
-    $this->assertTrue($day_from_response->image_532);
-    $this->assertValidImageUrl($day_from_response->image_266);
-    $this->assertValidImageUrl($day_from_response->image_532);
-    $this->assertEqual($valid_day->title, $day_from_response->title);
-    $this->assertEqual($valid_day->occupation, $day_from_response->occupation);
-    $this->assertEqual($valid_day->location, $day_from_response->location);
-    $this->assertEqual($valid_day->type, $day_from_response->type);
-    $this->assertEqual($valid_day->likes_count, $day_from_response->likes_count);
-  }
+    $handle = curl_init($url);
+    $this->assertTrue($handle, "Can't init cURL");
 
-  function assertResponse($responses, $message = '%s')
-  {
-    $responses = (is_array($responses) ? $responses : array($responses));
-    $code = $this->browser->getResponseCode();
-    $message = sprintf('%s', "Expecting response in [" .
-      implode(", ", $responses) . "] got [$code] in response:".($this->browser->getContent()));
-    return $this->assertTrue(in_array($code, $responses), $message);
-  }
+    curl_setopt($handle, CURLOPT_HEADER, false);
+    curl_setopt($handle, CURLOPT_FAILONERROR, true);  // this works
+    curl_setopt($handle, CURLOPT_NOBODY, true);
+    curl_setopt($handle, CURLOPT_RETURNTRANSFER, false);
+    $connectable = curl_exec($handle);
+    curl_close($handle);
 
-  protected function assertProperty($obj, $property, $message = "Property '%s' not found")
-  {
-    if(!is_object($obj))
-      return $this->fail("Expected a object but '".gettype($obj)."' given");
     return $this->assertTrue(
-      property_exists($obj, $property),
-      sprintf($message, $property)
-    );
-  }
-
-  protected function assertValidImageUrl($url)
-  {
-    $content = @file_get_contents($url);
-    return $this->assertTrue(
-      strlen($content),
-      "Invalid image url '{$url}'"
+      $connectable,
+      sprintf($message, $url)
     );
   }
 }
