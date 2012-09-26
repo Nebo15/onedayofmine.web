@@ -102,6 +102,9 @@ class DaysController extends BaseJsonController
       return $this->_answerModelNotFoundById('Day', $this->request->id);
 
     $user = $this->_getUser();
+    if($day->getUser()->getId() != $user->getId())
+      return $this->_answerNotOwner();
+
     if($current_day = $user->getCurrentDay()) {
       if($day->getId() == $current_day->getId()) {
         $user->setCurrentDay(null);
@@ -161,6 +164,9 @@ class DaysController extends BaseJsonController
     if(!$day = Day::findById($this->request->id))
       return $this->_answerModelNotFoundById('Day', $this->request->id);
 
+    if(DayLike::findByDayIdAndUserId($day->getId(), $this->_getUser()->getId()))
+      return $this->_answerConflict();
+
     $like = new DayLike;
     $like->setDay($day);
     $like->setUser($this->_getUser());
@@ -181,7 +187,7 @@ class DaysController extends BaseJsonController
       return $this->_answerModelNotFoundById('Day', $this->request->id);
 
     if(!$like = DayLike::findByDayIdAndUserId($day->getId(), $this->_getUser()->getId()))
-      return $this->_answerOk("Like not found");
+      return $this->_answerOk(null, "Like not found");
 
     $this->toolkit->getPostingService()->shareDayUnlike($day, $like);
     $this->toolkit->getNewsObserver()->onDayUnlike($day, $like);
@@ -252,18 +258,22 @@ class DaysController extends BaseJsonController
     list($from, $to, $limit) = $this->_getFromToLimitations();
     $days_ratings = (new InterestCalculator())->getDaysRatings($from, $to, $limit);
 
-    return $this->_answerOk($this->toolkit->getExportHelper()->exportDayInterestingItems($days_ratings));
-  }
-
-  function doFavourite()
-  {
-    list($from, $to, $limit) = $this->_getFromToLimitations();
-    $days = $this->_getUser()->getFavouriteDaysWithLimitations($from, $to, $limit);
+    $days = [];
+    foreach($days_ratings as $day_rating)
+      $days[] = $day_rating->getDay();
 
     return $this->_answerOk($this->toolkit->getExportHelper()->exportDayItems($days));
   }
 
-  function doMarkFavourite()
+  function doFavorite()
+  {
+    list($from, $to, $limit) = $this->_getFromToLimitations();
+    $days = $this->_getUser()->getFavoriteDaysWithLimitations($from, $to, $limit);
+
+    return $this->_answerOk($this->toolkit->getExportHelper()->exportDayItems($days));
+  }
+
+  function doMarkFavorite()
   {
     if(!$this->request->isPost())
       return $this->_answerNotPost();
@@ -271,14 +281,17 @@ class DaysController extends BaseJsonController
     if(!$day = Day::findById($this->request->id))
       return $this->_answerModelNotFoundById('Day', $this->request->id);
 
-    $favourites = $this->_getUser()->getFavouriteDays();
-    $favourites->add($day);
-    $favourites->save();
+    if(DayFavorite::isFavorited($this->_getUser(), $day))
+      return $this->_answerConflict();
+
+    $favorites = $this->_getUser()->getFavoriteDays();
+    $favorites->add($day);
+    $favorites->save();
 
     return $this->_answerOk();
   }
 
-  function doUnmarkFavourite()
+  function doUnmarkFavorite()
   {
     if(!$this->request->isPost())
       return $this->_answerNotPost();
@@ -286,9 +299,12 @@ class DaysController extends BaseJsonController
     if(!$day = Day::findById($this->request->id))
       return $this->_answerModelNotFoundById('Day', $this->request->id);
 
-    $favourites = $this->_getUser()->getFavouriteDays();
-    $favourites->remove($day);
-    $favourites->save();
+    if(!DayFavorite::findByDayIdAndUserId($day->getId(), $this->_getUser()->getId()))
+      return $this->_answerOk(null, "Favorite not found");
+
+    $favorites = $this->_getUser()->getFavoriteDays();
+    $favorites->remove($day);
+    $favorites->save();
 
     return $this->_answerOk();
   }
@@ -296,9 +312,9 @@ class DaysController extends BaseJsonController
   function doMy()
   {
     list($from, $to, $limit) = $this->_getFromToLimitations();
-    $days = $this->_getUser()->getDaysWithLimitations($from, $to, $limit, true);
+    $days = $this->_getUser()->getDaysWithLimitations($from, $to, $limit);
 
-    return $this->_answerOk($this->toolkit->getExportHelper()->exportDayItems_forOwner($day));
+    return $this->_answerOk($this->toolkit->getExportHelper()->exportDayItems($days));
   }
 
   function doAddMoment()
@@ -355,10 +371,13 @@ class DaysController extends BaseJsonController
     if(!$this->request->isPost())
       return $this->_answerNotPost();
 
+    if(!$day = Day::findById($this->request->id))
+      return $this->_answerModelNotFoundById('Day', $this->request->id);
+
     $comment = new DayComment();
     $comment->setText($this->request->get('text'));
-    $comment->setDay(Day::findById($this->request->id));
-    $comment->setUser($this->toolkit->getUser());
+    $comment->setDay($day);
+    $comment->setUser($this->_getUser());
     $comment->validate($this->error_list);
 
     if($this->error_list->isEmpty())
@@ -373,16 +392,16 @@ class DaysController extends BaseJsonController
       return $this->_answerWithError($this->error_list->export());
   }
 
-  function doCreateComplaint()
+  function doComplain()
   {
     if(!$this->request->isPost())
       return $this->_answerNotPost();
 
-    if(!Day::findById($this->request->id))
+    if(!$day = Day::findById($this->request->id))
       return $this->_answerModelNotFoundById('Day', $this->request->id);
 
     $complaint = new Complaint();
-    $complaint->setDayId($this->request->get('day_id'));
+    $complaint->setDay($day);
     $complaint->setText($this->request->get('text'));
 
     $complaint->validate($this->error_list);

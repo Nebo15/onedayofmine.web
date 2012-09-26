@@ -61,6 +61,11 @@ abstract class lmbDbBaseRecordSet implements lmbDbRecordSet
     return $flat_array;
   }
 
+  function toFlatArray()
+  {
+    return $this->getFlatArray();
+  }
+
   //ArrayAccess interface
   function offsetExists($offset)
   {

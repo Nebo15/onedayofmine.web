@@ -16,44 +16,42 @@ class MomentsControllerTest extends odControllerTestCase
     $day = $this->generator->day($this->main_user);
     $day->save();
 
-    $moment = $this->generator->moment($day, true);
+    $moment = $this->generator->momentWithImage($day);
     $moment->save();
 
     lmbToolkit::instance()->setUser($this->main_user);
-    $res = $this->post('update',
-      array(
-        'description' => $desc = $this->generator->string(255),
-        'time' => $time = "2005-08-09T18:31:42+03:00",
-        'image_content' => base64_encode($this->generator->image()),
-      ),
-      $moment->getId()
-    )->result;
-    $this->assertResponse(200);
 
-    $this->assertEqual($res->id, $moment->id);
-    $this->assertEqual($res->time, $time);
-    $this->assertEqual($res->description, $desc);
-    $this->assertValidImageUrl($res->image_266);
-    $this->assertValidImageUrl($res->image_532);
-    $this->assertEqual($res->likes_count, 0);
-    $this->assertEqual($res->comments_count, $moment->getComments()->count());
+    $response = $this->post('update', [
+        'description'   => $description = $this->generator->string(255),
+        'time'          => $time        = "2005-08-09T18:31:42+03:00",
+        'image_content' => $image       = base64_encode($this->generator->image()),
+    ], $moment->getId());
+    if($this->assertResponse(200))
+    {
+      $response_moment = $response->result;
+      $this->assertJsonMoment($response_moment, true);
 
-    $loaded_moment = Moment::findById($moment->getId());
-    $this->assertEqual($loaded_moment->getDescription(), $desc);
+      $loaded_moment = Moment::findById($moment->getId());
+      $this->assertEqual($loaded_moment->getDescription(), $description);
+    }
   }
 
   function testUpdate_MomentNotFound()
   {
     lmbToolkit::instance()->setUser($this->main_user);
-    $this->post('update',
-      array(
+
+    $response = $this->post('update', [
         'description' => $this->generator->string(255),
         'time' => "2005-08-09T18:31:42+03:00",
         'image_content' => base64_encode($this->generator->image()),
-      ),
-      100500
-    );
-    $this->assertResponse(404);
+    ], $id = $this->generator->integer());
+    if($this->assertResponse(404))
+    {
+      $this->assertTrue(is_null($response->result));
+
+      $this->assertEqual(count($response->errors), 1);
+      $this->assertEqual($response->errors[0], "Moment with id='{$id}' not found");
+    }
   }
 
   function testUpdate_WrongUser()
@@ -65,15 +63,19 @@ class MomentsControllerTest extends odControllerTestCase
     $moment->save();
 
     lmbToolkit::instance()->setUser($this->additional_user);
-    $res = $this->post('update',
-      array(
+
+    $response = $this->post('update', [
         'description' => $desc = $this->generator->string(255),
         'time' => $time = "2005-08-09T18:31:42+03:00",
         'image_content' => base64_encode($this->generator->image()),
-      ),
-      $moment->getId()
-    )->result;
-    $this->assertResponse(401);
+    ], $moment->getId());
+    if($this->assertResponse(401))
+    {
+      $this->assertTrue(is_null($response->result));
+
+      $this->assertEqual(count($response->errors), 1);
+      $this->assertEqual($response->errors[0], "Current user don't have permission to perform this action");
+    }
   }
 
   /**
@@ -88,10 +90,13 @@ class MomentsControllerTest extends odControllerTestCase
     $moment->save();
 
     lmbToolkit::instance()->setUser($this->main_user);
-    $this->post('delete', array(), $moment->getId());
 
-    $this->assertResponse(200);
-    $this->assertEqual($day->getMoments()->count(), 0);
+    $response = $this->post('delete', [], $moment->getId());
+    if($this->assertResponse(200))
+    {
+      $this->assertTrue(is_null($response->result));
+      $this->assertEqual($day->getMoments()->count(), 0);
+    }
   }
 
   function testDelete_WrongUser()
@@ -100,36 +105,52 @@ class MomentsControllerTest extends odControllerTestCase
     $moment->save();
 
     lmbToolkit::instance()->setUser($this->main_user);
-    $this->post('delete', array(), $moment->getId());
 
-    $this->assertResponse(401);
+    $response = $this->post('delete', [], $moment->getId());
+    if($this->assertResponse(401))
+    {
+      $this->assertTrue(is_null($response->result));
+
+      $this->assertEqual(count($response->errors), 1);
+      $this->assertEqual($response->errors[0], "Current user don't have permission to perform this action");
+    }
   }
 
   function testDelete_MomentNotFound()
   {
     lmbToolkit::instance()->setUser($this->main_user);
-    $this->post('delete', array(), 100500);
-    $this->assertResponse(404);
+
+    $response = $this->post('delete', [], $id = $this->generator->integer());
+    if($this->assertResponse(200))
+    {
+      $this->assertTrue(is_null($response->result));
+      $this->assertEqual(count($response->errors), 0);
+    }
   }
 
-  // function testRestore()
-  // {
-  //   $day = $this->generator->day($this->main_user);
-  //   $day->save();
+  function testRestore()
+  {
+    $day = $this->generator->day($this->main_user);
+    $day->save();
 
-  //   $moment = $this->generator->moment($day);
-  //   $moment->setIsDeleted(1);
-  //   $moment->save();
+    $moment = $this->generator->moment($day);
+    $moment->setIsDeleted(1);
+    $moment->save();
 
-  //   lmbToolkit::instance()->setUser($this->main_user);
-  //   $this->post('restore', array(), $moment->getId())->result;
+    lmbToolkit::instance()->setUser($this->main_user);
 
-  //   $this->assertResponse(200);
+    $loaded_moment = Moment::findOne();
+    $this->assertEqual(1, $loaded_moment->getIsDeleted());
+    $this->assertEqual($day->getMoments()->count(), 0);
 
-  //   $loaded_moment = Moment::findById($day->getId());
-  //   $this->assertEqual(0, $loaded_moment->getIsDeleted());
-  //   $this->assertEqual($day->getMoments()->count(), 1);
-  // }
+    $response = $this->post('restore', [], $moment->getId())->result;
+    if($this->assertResponse(200))
+    {
+      $loaded_moment = Moment::findOne();
+      $this->assertEqual(0, $loaded_moment->getIsDeleted());
+      $this->assertEqual($day->getMoments()->count(), 1);
+    }
+  }
 
   function testComment()
   {
@@ -140,25 +161,37 @@ class MomentsControllerTest extends odControllerTestCase
     $moment->save();
 
     lmbToolkit::instance()->setUser($this->additional_user);
-    $res = $this
-      ->post('comment', array('text' => $text = $this->generator->string(50)), $moment->getId())
-      ->result;
 
-    $this->assertResponse(200);
-    $new_comment = MomentComment::findOne();
-    $this->assertEqual($new_comment->id, $res->id);
-    $this->assertEqual($text, $res->text);
-    $this->assertEqual(lmbToolkit::instance()->getExportHelper()->exportUserItem($this->additional_user), $res->user);
-    $this->assertEqual($text, $new_comment->text);
+    $response = $this->post('comment', [
+      'text' => $text = $this->generator->string(50)
+    ], $moment->getId());
+    if($this->assertResponse(200))
+    {
+      $response_comment = $response->result;
+      $this->assertJsonMomentComment($response_comment);
+
+      $loaded_comment = MomentComment::findOne();
+      $exported   = $this->toolkit->getExportHelper()->exportMomentComment($loaded_comment);
+      $this->assertJsonMomentComment($exported);
+
+      $this->assertEqualPropertyValues($exported, $response_comment);
+    }
   }
 
-  function testComment_NotFound()
+  function testComment_MomentNotFound()
   {
     lmbToolkit::instance()->setUser($this->additional_user);
-    $this
-      ->post('comment', array('text' => $text = $this->generator->string(50)), 100500)
-      ->result;
-    $this->assertResponse(404);
+
+    $response = $this->post('comment', [
+      'text' => $text = $this->generator->string(50),
+    ], $id = $this->generator->integer());
+    if($this->assertResponse(404))
+    {
+      $this->assertTrue(is_null($response->result));
+
+      $this->assertEqual(count($response->errors), 1);
+      $this->assertEqual($response->errors[0], "Moment with id='$id' not found");
+    }
   }
 
   /**
@@ -167,87 +200,147 @@ class MomentsControllerTest extends odControllerTestCase
    */
   function testComments()
   {
-    $day = $this->generator->day(null, true);
+    $day = $this->generator->dayWithComments();
     $day->save();
+
     $moment = $this->generator->moment($day, true);
     $moment->save();
 
-    $res = $this->get('comments', array(), $moment->getId())->result;
-    $this->assertResponse(200);
-    $this->assertEqual(4, count($res));
-    $this->assertEqual($moment->getComments()->at(0)->id, $res[0]->id);
-    $this->assertEqual($moment->getComments()->at(0)->text, $res[0]->text);
-    $this->assertEqual(lmbToolkit::instance()->getExportHelper()->exportUserItem($moment->getComments()->at(0)->user), $res[0]->user);
-    $this->assertEqual($moment->getComments()->at(1)->id, $res[1]->id);
-    $this->assertEqual($moment->getComments()->at(2)->id, $res[2]->id);
-    $this->assertEqual($moment->getComments()->at(3)->id, $res[3]->id);
+    $loaded_comments = $moment->getComments();
 
-    $res = $this
-      ->get('comments', array(
-      'from' => $moment->getComments()->at(0)->id
-    ), $moment->getId())->result;
-    $this->assertResponse(200);
-    $this->assertEqual(3, count($res));
-    $this->assertEqual($moment->getComments()->at(1)->id, $res[0]->id);
-    $this->assertEqual($moment->getComments()->at(2)->id, $res[1]->id);
-    $this->assertEqual($moment->getComments()->at(3)->id, $res[2]->id);
+    $response = $this->get('comments', [], $moment->getId());
+    if($this->assertResponse(200))
+    {
+      $response_comments = $response->result;
+      $this->assertEqual(4, count($response_comments));
+      $this->assertJsonDayCommentItems($response_comments);
 
-    $res = $this
-      ->get('comments', array(
-      'from' => $moment->getComments()->at(0)->id,
-      'to' => $moment->getComments()->at(3)->id,
-    ), $moment->getId())->result;
-    $this->assertResponse(200);
-    $this->assertEqual(2, count($res));
-    $this->assertEqual($moment->getComments()->at(1)->id, $res[0]->id);
-    $this->assertEqual($moment->getComments()->at(2)->id, $res[1]->id);
+      for($i = 0; $i < count($response_comments); $i++)
+      {
+        $this->assertEqual($loaded_comments->at($i)->id,   $response_comments[$i]->id);
+        $this->assertEqual($loaded_comments->at($i)->text, $response_comments[$i]->text);
+      }
+    }
 
-    $res = $this
-      ->get('comments', array(
-      'from' => $moment->getComments()->at(0)->id,
-      'to' => $moment->getComments()->at(3)->id,
-      'limit' => 1
-    ), $moment->getId())->result;
-    $this->assertResponse(200);
-    $this->assertEqual(1, count($res));
-    $this->assertEqual($moment->getComments()->at(1)->id, $res[0]->id);
+    $response_with_from = $this->get('comments', [
+      'from' => $loaded_comments->at(0)->id,
+    ], $moment->getId());
+    if($this->assertResponse(200))
+    {
+      $response_comments = $response_with_from->result;
+      $this->assertEqual(3, count($response_comments));
+      $this->assertJsonDayCommentItems($response_comments);
+
+      for($i = 0; $i < count($response_comments); $i++)
+      {
+        $this->assertEqual($loaded_comments->at($i+1)->id,   $response_comments[$i]->id);
+        $this->assertEqual($loaded_comments->at($i+1)->text, $response_comments[$i]->text);
+      }
+    }
+
+    $response_with_range = $this->get('comments', [
+      'from' => $loaded_comments->at(0)->id,
+      'to'   => $loaded_comments->at(3)->id,
+    ], $moment->getId());
+    if($this->assertResponse(200))
+    {
+      $response_comments = $response_with_range->result;
+      $this->assertEqual(2, count($response_comments));
+      $this->assertJsonDayCommentItems($response_comments);
+
+      for($i = 0; $i < count($response_comments); $i++)
+      {
+        $this->assertEqual($loaded_comments->at($i+1)->id,   $response_comments[$i]->id);
+        $this->assertEqual($loaded_comments->at($i+1)->text, $response_comments[$i]->text);
+      }
+    }
+
+    $response_with_limit = $this->get('comments', [
+      'from'  => $moment->getComments()->at(0)->id,
+      'to'    => $moment->getComments()->at(3)->id,
+      'limit' => 1,
+    ], $moment->getId());
+    if($this->assertResponse(200))
+    {
+      $response_comments = $response_with_limit->result;
+      $this->assertEqual(1, count($response_comments));
+      $this->assertJsonDayCommentItems($response_comments);
+
+      $this->assertEqual($loaded_comments->at(1)->id,   $response_comments[0]->id);
+      $this->assertEqual($loaded_comments->at(1)->text, $response_comments[0]->text);
+    }
   }
-
-  // TODO
-  function testComment_MomentNotFound() {}
 
   /**
    * @api
    */
-  function testLike() {
+  function testLike()
+  {
     $moment = $this->generator->moment();
     $moment->save();
 
     $this->assertEqual(MomentLike::find()->count(), 0);
 
     lmbToolkit::instance()->setUser($this->main_user);
-    $this->post('like', array(), $moment->getId());
 
-    $this->assertResponse(200);
-    $this->assertEqual(MomentLike::find()->count(), 1);
-    $this->assertEqual(Moment::findOne()->getLikes()->count(), 1);
+    $response = $this->post('like', [], $moment->getId());
+    if($this->assertResponse(200))
+    {
+      $this->assertTrue(is_null($response->result));
+      $this->assertEqual(MomentLike::find()->count(), 1);
+      $this->assertEqual(Moment::findOne()->getLikes()->count(), 1);
+    }
   }
 
-  function testLike_OwnDay() {
+  function testLike_TwoTimes()
+  {
+    $moment = $this->generator->moment();
+    $moment->save();
+
+    $this->assertEqual(MomentLike::find()->count(), 0);
+
+    lmbToolkit::instance()->setUser($this->main_user);
+
+    $response = $this->post('like', [], $moment->getId());
+    if($this->assertResponse(200))
+    {
+      $this->assertTrue(is_null($response->result));
+      $this->assertEqual(MomentLike::find()->count(), 1);
+      $this->assertEqual(Moment::findOne()->getLikes()->count(), 1);
+    }
+
+    $response = $this->post('like', [], $moment->getId());
+    if($this->assertResponse(200))
+    {
+      $this->assertTrue(is_null($response->result));
+      $this->assertEqual($response->errors[0], 'Entity already exists');
+    }
+  }
+
+  function testLike_OwnDay()
+  {
     $day = $this->generator->day($this->additional_user);
+    $day->save();
+
     $moment = $this->generator->moment($day);
     $moment->save();
 
     lmbToolkit::instance()->setUser($this->additional_user);
-    $this->post('like', array(), $moment->getId());
 
-    $this->assertResponse(200);
+    $response = $this->post('like', [], $moment->getId());
+    if($this->assertResponse(200))
+    {
+      $this->assertTrue(is_null($response->result));
+      $this->assertEqual(MomentLike::find()->count(), 1);
+      $this->assertEqual(Moment::findOne()->getLikes()->count(), 1);
+    }
   }
 
   /**
    * @api
    */
-  function testUnlike() {
+  function testUnlike()
+  {
     $moment = $this->generator->moment();
     $moment->save();
 
@@ -257,9 +350,12 @@ class MomentsControllerTest extends odControllerTestCase
     $this->assertEqual(MomentLike::find()->count(), 1);
 
     lmbToolkit::instance()->setUser($this->additional_user);
-    $this->post('unlike', array(), $moment->getId());
 
-    $this->assertResponse(200);
-    $this->assertEqual(MomentLike::find()->count(), 0);
+    $response = $this->post('unlike', [], $moment->getId());
+    if($this->assertResponse(200))
+    {
+      $this->assertTrue(is_null($response->result));
+      $this->assertEqual(MomentLike::find()->count(), 0);
+    }
   }
 }

@@ -166,6 +166,9 @@ class lmbHttpResponse
     if ($status)
       return $status;
 
+    if($this->http_status)
+      return $this->http_status;
+
     if($this->http_code)
     {
       if(isset(self::$http_default_statuses[$this->http_code]))

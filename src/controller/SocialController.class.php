@@ -6,31 +6,9 @@ class SocialController extends BaseJsonController
 {
   function doFacebookFriends()
   {
-    if(!$this->_getUser())
-      $this->_answerUnauthorized();
+    $friends = $this->toolkit->getFacebookProfile($this->_getUser())->getFriends();
 
-    $profile = new FacebookProfile($this->_getUser());
-    $friends = array();
-    foreach($profile->getFriends() as $friend) {
-      $friend = (object) $friend;
-      unset($friend->email);
-      unset($friend->timezone);
-      unset($friend->facebook_profile_utime);
-      unset($friend->work);
-      unset($friend->current_location);
-
-      if($user = User::findByFacebookUid($friend->facebook_uid)) {
-        $friend->user = $user->exportForApi();
-        $friend->user->following = UserFollowing::isUserFollowUser($this->_getUser(), $user);
-      }
-      else
-        $friend->user = null;
-
-
-      $friends[] = $friend;
-    }
-
-    return $this->_answerOk($friends);
+    return $this->_answerOk($this->toolkit->getExportHelper()->exportFacebookUserItems($friends));
   }
 
   function doFacebookInvite()
@@ -38,14 +16,13 @@ class SocialController extends BaseJsonController
     if(!$this->request->isPost())
       return $this->_answerNotPost();
 
-    $uid = $this->request->getPost('uid');
-    if(!$uid)
+    if(!$uid = $this->request->getPost('uid'))
       return $this->_answerWithError('You need to specify facebook user uid');
 
     if($user = User::findByFacebookUid($uid))
       return $this->_answerOk('User is already registered');
 
-    $profile = new FacebookProfile($this->_getUser());
+    $profile = $this->toolkit->getFacebookProfile($this->_getUser());
     $profile->shareInvitation($uid);
 
     return $this->_answerOk();
@@ -65,9 +42,8 @@ class SocialController extends BaseJsonController
 
       $provider = $this->toolkit->getTwitter($access_token, $access_token_secret);
 
-      if(!$uid = $provider->getUid($this->error_list)) {
+      if(!$uid = $provider->getUid($this->error_list))
         return $this->_answerWithError($this->error_list->export());
-      }
 
       $user = $this->toolkit->getUser();
       $user->setTwitterUid($uid);
@@ -76,7 +52,7 @@ class SocialController extends BaseJsonController
       $user->getSettings()->setSocialShareTwitter(1);
       $user->save();
 
-      return $this->_answerOk($this->toolkit->getUser());
+      return $this->_answerOk();
     }
     else
       return $this->_answerWithError($this->error_list->export());

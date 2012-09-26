@@ -112,7 +112,7 @@ function task_od_remove_db_data()
   lmbToolkit::merge(new odTestsTools());
   lmbToolkit::instance()->truncateTablesOf(
     'Complaint',
-    'Day', 'DayComment', 'DayFavourite', 'DayInterestRecord',
+    'Day', 'DayComment', 'DayFavorite', 'DayInterestRecord',
     'Moment',  'MomentComment',
     'News',
     'User', 'UserFollowing', 'UserSettings');
@@ -378,5 +378,3 @@ function task_od_delete_facebook_objects()
     recursive_delete($fb, "/me/one-day-of-mine:end");
 //  }
 }
-
-

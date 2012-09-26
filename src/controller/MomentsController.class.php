@@ -71,7 +71,7 @@ class MomentsController extends BaseJsonController
       return $this->_answerNotPost();
 
     if(!$moment = Moment::findById($this->request->id))
-      return $this->_answerModelNotFoundById('Moment', $this->request->id);
+      return $this->_answerOk(null, 'Already deleted');
 
     if($moment->getDay()->getUser()->getId() != $this->_getUser()->getId())
       return $this->_answerNotOwner();
@@ -111,6 +111,9 @@ class MomentsController extends BaseJsonController
     if(!$moment = Moment::findById($this->request->id))
       return $this->_answerModelNotFoundById('Moment', $this->request->id);
 
+    if(MomentLike::findByMomentIdAndUserId($moment->getId(), $this->_getUser()->getId()))
+      return $this->_answerConflict();
+
     $like = new MomentLike;
     $like->setMoment($moment);
     $like->setUser($this->_getUser());
@@ -131,7 +134,7 @@ class MomentsController extends BaseJsonController
       return $this->_answerModelNotFoundById('Moment', $this->request->id);
 
     if(!$like = MomentLike::findByMomentIdAndUserId($moment->getId(), $this->_getUser()->getId()))
-      return $this->_answerOk("Like not found");
+      return $this->_answerOk(null, "Like not found");
 
     $this->toolkit->getPostingService()->shareMomentUnlike($moment, $like);
     $this->toolkit->getNewsObserver()->onMomentUnlike($moment, $like);
