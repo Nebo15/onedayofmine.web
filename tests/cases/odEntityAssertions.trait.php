@@ -443,13 +443,13 @@ trait odEntityAssertions
       "id",
       "time",
       "text",
-      // "main_object",
+      "link",
     ]);
 
     $this->assertTrue($news->id, 'News ID not set');
     $this->assertTrue($news->time);
     $this->assertTrue($news->text);
-    // $this->assertTrue($news->main_object); TODO
+    $this->assertTrue($news->link);
   }
 
   protected function assertJsonNewsItems(array $news)

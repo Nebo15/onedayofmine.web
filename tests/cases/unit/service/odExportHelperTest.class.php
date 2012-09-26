@@ -286,7 +286,7 @@ class odExportHelperTest extends odUnitTestCase
     $this->assertEqual(0, count($this->db_connection->getQueries()));
   }
 
-function testExportFacebookUserItems_forGuest()
+  function testExportFacebookUserItems_forGuest()
   {
     $info1 = $this->generator->facebookInfo();
     $info2 = $this->generator->facebookInfo();
