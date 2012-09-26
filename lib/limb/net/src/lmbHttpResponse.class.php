@@ -127,8 +127,6 @@ class lmbHttpResponse
 
   function reset()
   {
-    $this->http_code = null;
-    $this->http_status = null;
     $this->response_string = '';
     $this->response_file_path = '';
     $this->headers = array();
