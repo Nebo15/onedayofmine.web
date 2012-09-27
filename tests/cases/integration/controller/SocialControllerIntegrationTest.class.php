@@ -11,6 +11,7 @@ class SocialControllerIntegrationTest extends odIntegrationTestCase
     $this->main_user->getSettings()->setSocialShareFacebook(1);
     $this->additional_user->getSettings()->setSocialShareFacebook(1);
   }
+
   /**
    * @api
    */
@@ -28,6 +29,7 @@ class SocialControllerIntegrationTest extends odIntegrationTestCase
       $this->assertTrue(is_array($friends));
       $this->assertEqual(1, count($friends));
       $this->assertEqual($friends[0]->uid, $this->additional_user->getFacebookUid());
+      // $this->assertJsonFacebookUserItems($friends, true);
     }
   }
 
@@ -50,16 +52,42 @@ class SocialControllerIntegrationTest extends odIntegrationTestCase
       $this->assertEqual(1, count($friends));
       $this->assertEqual($friends[0]->uid, $this->additional_user->getFacebookUid());
       $this->assertTrue($friends[0]->user->following);
+      $this->assertJsonFacebookUserItems($friends, true);
     }
   }
 
-  function testFacebookFiends_notRegisteredUser(){}
+  function testFacebookFiends_notRegisteredUser()
+  {
+    $this->main_user->save();
 
-  /**
-   * example
-   * TODO
-   */
-  function testFacebookInvite() {}
+    $this->_loginAndSetCookie($this->main_user);
+
+    $response = $this->get('social/facebook_friends');
+    if($this->assertResponse(200))
+    {
+      $friends = $response->result;
+      $this->assertTrue(is_array($friends));
+      $this->assertEqual(1, count($friends));
+      $this->assertEqual($friends[0]->uid, $this->additional_user->getFacebookUid());
+      $this->assertTrue(is_null($friends[0]->user));
+      $this->assertJsonFacebookUserItems($friends, true);
+    }
+  }
+
+  function testFacebookInvite()
+  {
+    $this->main_user->save();
+
+    $this->_loginAndSetCookie($this->main_user);
+
+    $response = $this->post('social/facebook_invite', [
+      'uid' => $this->additional_user->getFacebookUid(),
+    ]);
+    if($this->assertResponse(200))
+    {
+      $this->assertTrue(is_null($response->result));
+    }
+  }
 
   /**
    * @api
@@ -75,7 +103,6 @@ class SocialControllerIntegrationTest extends odIntegrationTestCase
     ));
     $user = User::findById($this->main_user->id);
     if($this->assertResponse(200)) {
-      // $this->assertEqual($result->result->twitter_uid, $user->getTwitterUid());
       $this->assertEqual($user->getTwitterUid(), $this->generator->twitter_credentials()[0]['uid']);
       $this->assertEqual($user->getTwitterAccessToken(), $this->generator->twitter_credentials()[0]['access_token']);
       $this->assertEqual($user->getTwitterAccessTokenSecret(), $this->generator->twitter_credentials()[0]['access_token_secret']);
@@ -86,29 +113,40 @@ class SocialControllerIntegrationTest extends odIntegrationTestCase
   function testTwitterConnect_withUnvalidCredentials()
   {
     $this->main_user->save();
+
     $this->_loginAndSetCookie($this->main_user);
+
     $response = $this->post('social/twitter_connect', array(
       'access_token'         => 'Wrong twitter access token',
       'access_token_secret'  => 'Wrong twitter access token secret'
     ));
     if($this->assertResponse(400)) {
-      $this->assertEqual($response->result->errors[0]->message, 'Twitter API exception: Invalid / expired Token.');
+      $this->assertTrue(is_null($response->result));
+
+      $this->assertEqual(count($response->errors), 1);
+      $this->assertEqual($response->errors[0]->message, 'Twitter API exception: Invalid / expired Token.');
     }
-    exit;
   }
 
-  function testTwitterConnect_withNoField()
+  function testTwitterConnect_WithNoField()
   {
     $this->main_user->save();
+
     $this->_loginAndSetCookie($this->main_user);
-    $this->post('social/twitter_connect', array(
-      'access_token'         => $this->generator->twitter_credentials()[0]['access_token']
+
+    $response = $this->post('social/twitter_connect', array(
+      'access_token' => $this->generator->twitter_credentials()[0]['access_token']
     ));
-    $this->assertResponse(400);
+    if($this->assertResponse(400))
+    {
+      $this->assertTrue(is_null($response->result));
+
+      $this->assertEqual(count($response->errors), 1);
+      $this->assertEqual($response->errors[0]->message, "Property 'access_token_secret' not found in request");
+    }
   }
 
   /**
-   * example
    * TODO
    */
   function testEmailInvite() {}

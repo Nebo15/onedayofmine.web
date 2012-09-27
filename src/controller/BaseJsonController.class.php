@@ -223,17 +223,17 @@ abstract class BaseJsonController extends lmbController
   {
     if($code)
       $this->response->setCode($code);
+
     if($status)
       $this->response->setStatus($status);
 
     $this->response->setContentType('application/json');
 
-    return Json::indent(json_encode(
-      array(
-        'code' => $code,
+    return Json::indent(json_encode([
+        'code'   => $code,
         'status' => $this->response->getStatus(),
         'result' => $result,
-        'errors' => $errors)
-    ));
+        'errors' => $errors
+    ]));
   }
 }

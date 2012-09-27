@@ -43,9 +43,7 @@ class SocialController extends BaseJsonController
       $provider = $this->toolkit->getTwitter($access_token, $access_token_secret);
 
       if(!$uid = $provider->getUid($this->error_list))
-      {
         return $this->_answerWithError($this->error_list->export());
-      }
 
       $user = $this->toolkit->getUser();
       $user->setTwitterUid($uid);

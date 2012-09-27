@@ -12,7 +12,7 @@ class ImageableTest extends odUnitTestCase
     $model->attachImage($this->generator->image());
 
     $url = lmbToolkit::instance()->getStaticUrl($model->getImage());
-    $this->assertValidImageUrl($url);
+    $this->assertImageUrl($url);
   }
 
   function testDestroy_local()
