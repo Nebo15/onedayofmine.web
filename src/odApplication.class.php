@@ -5,8 +5,8 @@ lmb_require('src/filter/InputOutputLogWritterFilter.class.php');
 lmb_require('limb/dbal/src/filter/lmbAutoDbTransactionFilter.class.php');
 lmb_require('limb/profile/src/filter/lmbProfileReportingFilter.class.php');
 lmb_require('src/filter/SessionStartupFilter.class.php');
-lmb_require('src/filter/RequestDispatchingFilter.class.php');
-lmb_require('limb/web_app/src/request/lmbRoutesRequestDispatcher.class.php');
+lmb_require('limb/web_app/src/filter/lmbRequestDispatchingFilter.class.php');
+lmb_require('src/request/RoutesRequestDispatcher.class.php');
 lmb_require('limb/web_app/src/filter/lmbResponseTransactionFilter.class.php');
 lmb_require('limb/web_app/src/filter/lmbActionPerformingFilter.class.php');
 lmb_require('limb/web_app/src/filter/lmbViewRenderingFilter.class.php');
@@ -24,7 +24,7 @@ class odApplication extends lmbWebApplication
 
     $this->registerFilter(new SessionStartupFilter());
 
-    $this->registerFilter(new RequestDispatchingFilter(new lmbRoutesRequestDispatcher()));
+    $this->registerFilter(new lmbRequestDispatchingFilter(new RoutesRequestDispatcher()));
     $this->registerFilter(new lmbResponseTransactionFilter());
 
     $this->registerFilter(new lmbActionPerformingFilter());
