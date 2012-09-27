@@ -24,9 +24,9 @@ class ErrorHandlingFilter extends lmbErrorHandlingFilter
     header('Content-Type: application/json');
 
     echo json_encode(array(
-      'result' => null,
       'code' => 500,
       'status' => 'Internal error',
+      'result' => null,
       'errors' => array('Critical error occurred.'),
     ));
   }
