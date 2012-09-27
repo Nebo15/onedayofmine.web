@@ -42,7 +42,6 @@ class odTools extends lmbAbstractTools
   function setUser($user)
   {
     $this->user = $user;
-
     $this->getSessionStorage()->set($this->getSessidFromRequest(), $user->getId());
   }
 
@@ -54,9 +53,7 @@ class odTools extends lmbAbstractTools
     if(null != $this->user)
       return $this->user;
 
-    $user_id = $this->getSessionStorage()->get($this->getSessidFromRequest());
-
-    if(!$user_id)
+    if(!$user_id = $this->getSessionStorage()->get($this->getSessidFromRequest()))
       return null;
 
     $this->user = User::findById($user_id);
@@ -67,7 +64,6 @@ class odTools extends lmbAbstractTools
   function resetUser()
   {
     $this->user = null;
-
     $this->getSessionStorage()->delete($this->getSessidFromRequest());
   }
 
@@ -126,14 +122,24 @@ class odTools extends lmbAbstractTools
    */
   function getSessidFromRequest()
   {
+    if($token = $this->getTokenFromRequest())
+      return sha1($token);
+    else
+      return null;
+  }
+
+  function getTokenFromRequest()
+  {
     $request = $this->toolkit->getRequest();
+
     if($request->getPost('token'))
-      return sha1($request->getPost('token'));
-    if($request->getGet('token'))
-      return sha1($request->getGet('token'));
-    if($request->getCookie('token'))
-      return sha1($request->getCookie('token'));
-    return null;
+      return $request->getPost('token');
+    elseif($request->getGet('token'))
+      return $request->getGet('token');
+    elseif($request->getCookie('token'))
+      return $request->getCookie('token');
+    else
+      return null;
   }
 
   function getSiteUrl($path = '')
