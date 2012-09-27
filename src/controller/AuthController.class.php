@@ -23,7 +23,7 @@ class AuthController extends BaseJsonController
     if(!$this->request->isPost())
       return $this->_answerNotPost();
 
-    if(!$facebook_access_token = $this->request->get('token'))
+    if(!$facebook_access_token = $this->toolkit->getTokenFromRequest())
       return $this->_answerWithError('Token not given', null, 412);
 
     if(!$uid = $this->toolkit->getFacebook($facebook_access_token)->getUid($this->error_list))
@@ -47,6 +47,8 @@ class AuthController extends BaseJsonController
       $this->toolkit->getNewsObserver()->onUserRegister($user);
 
     $this->_processDeviceToken($user);
+
+    $this->response->setCookie('token', $facebook_access_token, time()+60*60*24*31);
 
     return $this->_answerOk($this->toolkit->getExportHelper()->exportUser($user));
   }
@@ -101,7 +103,7 @@ class AuthController extends BaseJsonController
 
   function doGuestIsLoggedIn()
   {
-    if(!$this->request->get('token'))
+    if(!$this->toolkit->getTokenFromRequest())
       return $this->_answerWithError('Token not given', null, 412);
 
     return $this->_answerOk($this->_isLoggedUser());
@@ -114,12 +116,11 @@ class AuthController extends BaseJsonController
 
     $this->toolkit->resetUser();
 
-    if(!$device_token = $this->request->get('device_token'))
-      return $this->_answerWithError('APNS token not given', null, 412);
+    $this->response->removeCookie('token');
 
-    $token_obj = DeviceToken::findOneByToken($device_token);
-    if($token_obj)
-      $token_obj->destroy();
+    if($device_token = $this->request->get('device_token'))
+      if($token_obj = DeviceToken::findOneByToken($device_token))
+        $token_obj->destroy();
 
     return $this->_answerOk();
   }

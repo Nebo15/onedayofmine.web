@@ -22,14 +22,14 @@ class AuthControllerTest extends odControllerTestCase
    */
   function testLogin()
   {
-    $this->additional_user->save();
     $this->main_user->save();
+    $this->additional_user->save();
 
     $this->toolkit->getFacebook($this->additional_user)
       ->setReturnValue('getUid', $this->additional_user->getFacebookUid());
 
     $response = $this->post('login', array(
-      'token'        => $this->additional_user->getFacebookAccessToken(),
+      'token'        => $access_token = $this->additional_user->getFacebookAccessToken(),
       'device_token' => $device_token = $this->generator->string(64)
     ));
 
@@ -39,11 +39,16 @@ class AuthControllerTest extends odControllerTestCase
       $this->assertJsonUser($user);
 
       $loaded_user = User::findById($user->id);
-      $this->assertEqual($loaded_user->getFacebookAccessToken(), $this->additional_user->getFacebookAccessToken());
+      $this->assertEqual($loaded_user->getFacebookAccessToken(), $access_token);
 
       $tokens = $loaded_user->getDeviceTokens();
       $this->assertEqual(1, count($tokens));
       $this->assertEqual($device_token, $tokens->at(0)->token);
+
+      $cookies = $this->toolkit->getResponse()->getCookies();
+      $this->assertTrue(array_key_exists('token', $cookies));
+      $this->assertEqual($cookies['token']['value'], $access_token);
+      $this->assertTrue($cookies['token']['expire'] > time());
     }
   }
 
@@ -313,6 +318,11 @@ class AuthControllerTest extends odControllerTestCase
 
       if($this->assertResponse(200))
         $this->assertFalse($response->result);
+
+      $cookies = $this->toolkit->getResponse()->getCookies();
+      $this->assertTrue(array_key_exists('token', $cookies));
+      $this->assertEqual($cookies['token']['value'], '');
+      $this->assertEqual($cookies['token']['expire'], 1);
     }
   }
 
