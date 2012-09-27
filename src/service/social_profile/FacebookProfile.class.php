@@ -76,9 +76,9 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
     $fields = implode(',', self::_getUserFacebookFieldsMap());
     $fql_result = $this->provider->makeQuery("SELECT {$fields} FROM user WHERE is_app_user AND uid IN (SELECT uid2 FROM friend WHERE uid1 = me())");
 
+    $friends = [];
     if($fql_result)
     {
-      $friends = [];
       foreach($fql_result as $raw_info)
       {
         $friends[] = $this->_mapFacebookInfo($raw_info);

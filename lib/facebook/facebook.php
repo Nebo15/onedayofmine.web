@@ -54,8 +54,7 @@ class Facebook extends BaseFacebook
       return;
     }
 
-    $session_var_name = $this->constructSessionVariableName($key);
-    $_SESSION[$session_var_name] = $value;
+    lmbToolkit::instance()->getSessionStorage()->set($this->constructSessionVariableName($key), $value);
   }
 
   protected function getPersistentData($key, $default = false) {
@@ -64,9 +63,7 @@ class Facebook extends BaseFacebook
       return $default;
     }
 
-    $session_var_name = $this->constructSessionVariableName($key);
-    return isset($_SESSION[$session_var_name]) ?
-      $_SESSION[$session_var_name] : $default;
+    return lmbToolkit::instance()->getSessionStorage()->get($this->constructSessionVariableName($key)) ?: $default;
   }
 
   protected function clearPersistentData($key) {
@@ -75,8 +72,7 @@ class Facebook extends BaseFacebook
       return;
     }
 
-    $session_var_name = $this->constructSessionVariableName($key);
-    unset($_SESSION[$session_var_name]);
+    lmbToolkit::instance()->getSessionStorage()->delete($this->constructSessionVariableName($key));
   }
 
   protected function clearAllPersistentData() {
