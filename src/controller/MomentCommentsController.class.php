@@ -1,5 +1,6 @@
 <?php
 lmb_require('src/controller/BaseJsonController.class.php');
+lmb_require('src/model/Day.class.php');
 lmb_require('src/model/MomentComment.class.php');
 
 class MomentCommentsController extends BaseJsonController

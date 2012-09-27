@@ -1,5 +1,6 @@
 <?php
 lmb_require('src/model/base/BaseModel.class.php');
+lmb_require('src/model/DeviceNotification.class.php');
 
 class DeviceToken extends BaseModel
 {

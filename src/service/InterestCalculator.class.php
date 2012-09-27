@@ -3,6 +3,7 @@ lmb_require('limb/core/src/lmbArrayHelper.class.php');
 lmb_require('limb/dbal/src/query/lmbSelectQuery.class.php');
 lmb_require('limb/dbal/src/query/lmbDeleteQuery.class.php');
 lmb_require('limb/dbal/src/query/lmbInsertQuery.class.php');
+lmb_require('src/model/DayInterestRecord.class.php');
 
 class InterestCalculator
 {

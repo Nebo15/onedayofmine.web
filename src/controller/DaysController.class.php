@@ -1,12 +1,11 @@
 <?php
 lmb_require('src/controller/BaseJsonController.class.php');
-lmb_require('src/model/DayTest.class.php');
 lmb_require('src/service/InterestCalculator.class.php');
+lmb_require('src/model/Day.class.php');
+lmb_require('src/model/DayFavorite.class.php');
 
 class DaysController extends BaseJsonController
 {
-  protected $_object_class_name = 'User';
-
   function doGuestItem()
   {
     if(!$day = Day::findById($this->request->id))

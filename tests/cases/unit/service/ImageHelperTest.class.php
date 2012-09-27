@@ -3,6 +3,7 @@ lmb_require('limb/fs/src/lmbFs.class.php');
 lmb_require('limb/fs/src/exception/lmbFileNotFoundException.class.php');
 lmb_require('tests/cases/unit/odUnitTestCase.class.php');
 lmb_require('src/service/ImageHelper.class.php');
+lmb_require('src/model/User.class.php');
 
 class ImageHelperTest extends odUnitTestCase
 {

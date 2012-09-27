@@ -1,4 +1,5 @@
 <?php
+lmb_require('src/model/Day.class.php');
 lmb_require('tests/cases/unit/controller/odControllerTestCase.class.php');
 lmb_require('src/controller/MomentCommentsController.class.php');
 

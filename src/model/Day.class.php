@@ -1,6 +1,11 @@
 <?php
 lmb_require('src/model/base/BaseModel.class.php');
 lmb_require('src/model/traits/Imageable.trait.php');
+lmb_require('src/model/Moment.class.php');
+lmb_require('src/model/User.class.php');
+lmb_require('src/model/DayComment.class.php');
+lmb_require('src/model/MomentComment.class.php');
+lmb_require('src/model/DayLike.class.php');
 
 /**
  * @api field int id User ID

@@ -1,4 +1,6 @@
 <?php
+lmb_require('src/model/User.class.php');
+
 class odExportHelper
 {
   protected $current_user;

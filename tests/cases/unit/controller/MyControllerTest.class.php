@@ -1,6 +1,7 @@
 <?php
 lmb_require('tests/cases/unit/controller/odControllerTestCase.class.php');
 lmb_require('src/controller/MyController.class.php');
+lmb_require('src/model/Day.class.php');
 
 class MyControllerTest extends odControllerTestCase
 {

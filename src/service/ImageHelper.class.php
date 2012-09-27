@@ -1,7 +1,8 @@
 <?php
 lmb_require('limb/fs/src/exception/lmbFileNotFoundException.class.php');
 
-class ImageHelper {
+class ImageHelper
+{
   function getExifInfo($path)
   {
     if(!is_file($path))

@@ -2,6 +2,9 @@
 lmb_require('tests/cases/unit/odUnitTestCase.class.php');
 lmb_require('src/service/odExportHelper.class.php');
 lmb_require('src/service/InterestCalculator.class.php');
+lmb_require('src/model/User.class.php');
+lmb_require('src/model/News.class.php');
+lmb_require('src/model/Complaint.class.php');
 
 class odExportHelperTest extends odUnitTestCase
 {

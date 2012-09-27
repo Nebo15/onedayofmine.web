@@ -1,6 +1,8 @@
 <?php
 lmb_require('src/controller/BaseJsonController.class.php');
-lmb_require('src/model/DayTest.class.php');
+lmb_require('src/model/Day.class.php');
+lmb_require('src/model/DeviceToken.class.php');
+lmb_require('src/model/Day.class.php');
 
 class AuthController extends BaseJsonController
 {

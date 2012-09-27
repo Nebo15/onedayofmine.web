@@ -3,6 +3,9 @@ lmb_require('src/model/base/BaseModel.class.php');
 lmb_require('src/model/traits/Imageable.trait.php');
 lmb_require('limb/imagekit/src/lmbConvertImageHelper.class.php');
 lmb_require('limb/validation/src/rule/lmbValidValueRule.class.php');
+lmb_require('src/model/UserFollowing.class.php');
+lmb_require('src/model/Day.class.php');
+lmb_require('src/model/UserSettings.class.php');
 
 /**
  * @api

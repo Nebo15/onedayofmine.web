@@ -1,9 +1,11 @@
 <?php
 lmb_require('tests/cases/unit/odUnitTestCase.class.php');
 lmb_require('src/service/odPostingService.class.php');
+lmb_require('src/model/Day.class.php');
 
 Mock::generate('FacebookProfile');
 Mock::generate('TwitterProfile');
+
 class odPostingServiceMock extends odPostingService
 {
   public function __construct($unit_test)

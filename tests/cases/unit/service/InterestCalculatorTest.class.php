@@ -1,6 +1,8 @@
 <?php
 lmb_require('tests/cases/unit/odUnitTestCase.class.php');
 lmb_require('src/service/InterestCalculator.class.php');
+lmb_require('src/model/Day.class.php');
+lmb_require('src/model/User.class.php');
 
 class InterestCalculatorTest extends odUnitTestCase
 {

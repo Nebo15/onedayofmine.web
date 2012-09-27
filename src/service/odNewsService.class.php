@@ -1,4 +1,6 @@
 <?php
+lmb_require('src/model/DeviceToken.class.php');
+lmb_require('src/model/News.class.php');
 lmb_require('src/model/Day.class.php');
 lmb_require('src/model/Moment.class.php');
 lmb_require('src/model/DayComment.class.php');

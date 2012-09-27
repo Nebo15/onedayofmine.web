@@ -1,6 +1,7 @@
 <?php
 lmb_require('tests/cases/unit/odUnitTestCase.class.php');
 lmb_require('src/model/base/BaseModel.class.php');
+lmb_require('src/model/User.class.php');
 lmb_require('src/model/traits/Imageable.trait.php');
 
 class ImageableTest extends odUnitTestCase
