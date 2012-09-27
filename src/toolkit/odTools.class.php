@@ -9,6 +9,7 @@ lmb_require('src/service/ImageHelper.class.php');
 lmb_require('src/service/odPostingService.class.php');
 lmb_require('src/service/odExportHelper.class.php');
 lmb_require('src/service/odRequestsLog.class.php');
+lmb_require('src/model/User.class.php');
 require_once('amazon-sdk/sdk.class.php');
 
 class odTools extends lmbAbstractTools
