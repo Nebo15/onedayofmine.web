@@ -42,16 +42,6 @@ abstract class odIntegrationTestCase extends WebTestCase
     list($this->main_user, $this->additional_user) = $this->toolkit->getTestsUsers($quiet = false);
   }
 
-  protected function assertResponseClass(stdClass $response, $message = "Wrong response structure")
-  {
-    $this->assertPropertys($response, [
-      'result',
-      'errors',
-      'status',
-      'code',
-    ], $message);
-  }
-
   function assertResponse($code, $message = 'Expecting response in [%s] got [%s] in response: %s')
   {
     $response_code = $this->getBrowser()->getResponseCode();

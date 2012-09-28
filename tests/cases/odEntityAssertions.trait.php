@@ -1,7 +1,17 @@
 <?php
 trait odEntityAssertions
 {
- protected function assertProperty($obj, $property, $message = "Property '%s' not found")
+  protected function assertResponseClass(stdClass $response, $message = "Wrong response structure")
+  {
+    $this->assertPropertys($response, [
+      'result',
+      'errors',
+      'status',
+      'code',
+    ], $message);
+  }
+
+  protected function assertProperty($obj, $property, $message = "Property '%s' not found")
   {
     if(!is_object($obj))
       return $this->fail("Expected a object but '".gettype($obj)."' given");

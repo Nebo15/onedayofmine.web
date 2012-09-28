@@ -71,13 +71,9 @@ abstract class odControllerTestCase extends odUnitTestCase
     $controller->setCurrentAction($action);
     $this->last_response_raw = $controller->performAction();
     $this->last_response = $this->_decodeResponse($this->last_response_raw);
-    if(
-      !property_exists($this->last_response, 'result') ||
-      !property_exists($this->last_response, 'errors') ||
-      !property_exists($this->last_response, 'status') ||
-      !property_exists($this->last_response, 'code')
-    )
-      $this->fail('Wrong response structure:'.PHP_EOL.$this->last_response_raw);
+
+    $this->assertResponseClass($this->last_response, "Wrong response structure: {$this->last_response_raw}.");
+
     return clone $this->last_response;
   }
 
