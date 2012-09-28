@@ -85,16 +85,6 @@ function lmb_require($file_path, $class = '')
   else
     $_ENV['LIMB_LAZY_TRIED'][$file_path . $class] = true;
 
-  if(strpos($file_path, '*') !== false)
-  {
-    $file_paths = lmb_glob($file_path);
-    if(is_array($file_paths))
-      foreach($file_paths as $path)
-        lmb_require($path);
-
-    return;
-  }
-
   if(!$class)
   {
     //autoguessing class or interface name by file
@@ -331,7 +321,5 @@ function lmb_app_mode($new_value = null)
 }
 
 spl_autoload_register('lmb_autoload');
-new lmbException('ugly hack');
-new lmbPHPFileNotFoundException('ugly hack');
 
 lmbErrorGuard::registerErrorHandler('lmbErrorGuard', 'convertErrorsToExceptions');
