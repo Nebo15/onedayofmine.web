@@ -34,6 +34,7 @@ lmb_require('limb/dbal/src/toolkit/lmbDbTools.class.php');
 lmbToolkit :: merge(new lmbDbTools());
 
 lmb_require('limb/core/src/lmbSys.class.php');
+lmb_require('src/model/base/BaseModel.class.php');
 
 if(extension_loaded('newrelic'))
 {
