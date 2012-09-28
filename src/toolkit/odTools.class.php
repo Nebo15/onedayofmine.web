@@ -59,6 +59,7 @@ class odTools extends lmbAbstractTools
 
     $this->user = User::findById($user_id);
 
+
     return $this->user;
   }
 
@@ -312,6 +313,14 @@ class odTools extends lmbAbstractTools
 
   function getSessionStorage()
   {
-    return lmbToolkit::instance()->getCache('session');
+    if(lmbToolkit::instance()->getConf('cache')['cache_enabled'])
+      return lmbToolkit::instance()->getCache('session');
+    else
+    {
+      $session = lmbToolkit::instance()->getSession();
+      if(!$session->isStarted())
+        $session->start();
+      return $session;
+    }
   }
 }
