@@ -2,6 +2,8 @@
 lmb_require('limb/web_app/src/controller/lmbController.class.php');
 lmb_require('src/odStaticObjectMother.class.php');
 lmb_require('src/Json.class.php');
+lmb_require('src/model/Day.class.php');
+lmb_require('src/model/Moment.class.php');
 
 class PagesController extends lmbController
 {
