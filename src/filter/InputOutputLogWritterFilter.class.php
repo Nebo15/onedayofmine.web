@@ -10,13 +10,14 @@ class InputOutputLogWritterFilter implements lmbInterceptingFilter
     $log = new odRequestsLog();
 
     $is_admin_page = '/admin' === substr($_SERVER['REQUEST_URI'], 0, 6);
+    $is_enabled = (bool) $toolkit->getConf('common')->requests_log_enabled;
 
-    if(!$is_admin_page)
+    if(!$is_admin_page && $is_enabled)
       $log->addRequestRecord($toolkit->getRequest());
 
     $filter_chain->next();
 
-    if(!$is_admin_page)
+    if(!$is_admin_page && $is_enabled)
       $log->addResponseRecord($toolkit->getResponse());
   }
 }
