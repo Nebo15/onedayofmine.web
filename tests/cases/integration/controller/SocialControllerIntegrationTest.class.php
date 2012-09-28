@@ -29,7 +29,7 @@ class SocialControllerIntegrationTest extends odIntegrationTestCase
       $this->assertTrue(is_array($friends));
       $this->assertEqual(1, count($friends));
       $this->assertEqual($friends[0]->uid, $this->additional_user->getFacebookUid());
-      // $this->assertJsonFacebookUserItems($friends, true);
+      $this->assertJsonFacebookUserItems($friends, true);
     }
   }
 
