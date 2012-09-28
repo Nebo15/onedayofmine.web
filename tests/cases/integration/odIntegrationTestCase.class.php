@@ -122,11 +122,6 @@ abstract class odIntegrationTestCase extends WebTestCase
     return $response;
   }
 
-  protected function _loginAndSetCookie(User $user)
-  {
-    return $this->_login($user);
-  }
-
   protected function _login(User $user)
   {
     $response = $this->post('auth/login/', [

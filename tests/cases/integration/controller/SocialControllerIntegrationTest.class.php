@@ -18,7 +18,7 @@ class SocialControllerIntegrationTest extends odIntegrationTestCase
     $this->main_user->save();
     $this->additional_user->save();
 
-    $this->_loginAndSetCookie($this->main_user);
+    $this->_login($this->main_user);
 
     $response = $this->get('social/facebook_friends');
     if($this->assertResponse(200))
@@ -40,7 +40,7 @@ class SocialControllerIntegrationTest extends odIntegrationTestCase
     $following->add($this->additional_user);
     $following->save();
 
-    $this->_loginAndSetCookie($this->main_user);
+    $this->_login($this->main_user);
 
     $response = $this->get('social/facebook_friends');
     if($this->assertResponse(200))
@@ -58,7 +58,7 @@ class SocialControllerIntegrationTest extends odIntegrationTestCase
   {
     $this->main_user->save();
 
-    $this->_loginAndSetCookie($this->main_user);
+    $this->_login($this->main_user);
 
     $response = $this->get('social/facebook_friends');
     if($this->assertResponse(200))
@@ -76,7 +76,7 @@ class SocialControllerIntegrationTest extends odIntegrationTestCase
   {
     $this->main_user->save();
 
-    $this->_loginAndSetCookie($this->main_user);
+    $this->_login($this->main_user);
 
     $response = $this->post('social/facebook_invite', [
       'uid' => $this->additional_user->getFacebookUid(),
@@ -94,7 +94,7 @@ class SocialControllerIntegrationTest extends odIntegrationTestCase
   {
     $this->main_user->getSettings()->setSocialShareTwitter(1);
     $this->main_user->save();
-    $this->_loginAndSetCookie($this->main_user);
+    $this->_login($this->main_user);
     $result = $this->post('social/twitter_connect', array(
       'access_token'         => $this->generator->twitter_credentials()[0]['access_token'],
       'access_token_secret'  => $this->generator->twitter_credentials()[0]['access_token_secret']
@@ -112,7 +112,7 @@ class SocialControllerIntegrationTest extends odIntegrationTestCase
   {
     $this->main_user->save();
 
-    $this->_loginAndSetCookie($this->main_user);
+    $this->_login($this->main_user);
 
     $response = $this->post('social/twitter_connect', array(
       'access_token'         => 'Wrong twitter access token',
@@ -130,7 +130,7 @@ class SocialControllerIntegrationTest extends odIntegrationTestCase
   {
     $this->main_user->save();
 
-    $this->_loginAndSetCookie($this->main_user);
+    $this->_login($this->main_user);
 
     $response = $this->post('social/twitter_connect', array(
       'access_token' => $this->generator->twitter_credentials()[0]['access_token']
