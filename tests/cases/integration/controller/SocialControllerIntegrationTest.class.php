@@ -3,8 +3,6 @@ lmb_require('tests/cases/integration/odIntegrationTestCase.class.php');
 
 class SocialControllerIntegrationTest extends odIntegrationTestCase
 {
-  protected $controller_class = 'SocialController';
-
   function setUp()
   {
     parent::setUp();
