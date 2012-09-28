@@ -1,5 +1,5 @@
 <?php
-lmb_require('lib/tmhOAuth/*.php');
+lmb_require('lib/tmhOAuth/tmhOAuth.php');
 lmb_require('src/service/social_provider/odSocialServicesProviderInterface.class.php');
 lmb_require('src/service/social_provider/odTwitterException.class.php');
 
