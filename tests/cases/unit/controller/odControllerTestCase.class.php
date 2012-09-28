@@ -3,6 +3,7 @@
 lmb_require('lib/DocCommentParser/*.class.php');
 lmb_require('lib/limb/net/src/lmbHttpRequest.class.php');
 lmb_require('tests/cases/unit/odUnitTestCase.class.php');
+lmb_require('limb/net/src/lmbHttpResponse.class.php');
 
 Mock::generate('odPostingService', 'PostingServiceMock');
 Mock::generate('odFacebook', 'FacebookMock');
@@ -63,6 +64,7 @@ abstract class odControllerTestCase extends odUnitTestCase
 
   function request($controller_class, $action, lmbHttpRequest $request)
   {
+    $this->toolkit->setResponse(null);
     $this->toolkit->setRequest($request);
 
     $request->setCookies($this->cookies);
