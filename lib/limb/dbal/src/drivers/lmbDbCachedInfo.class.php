@@ -55,9 +55,8 @@ class lmbDbCachedInfo extends lmbProxy
 
   protected function _readFromCache()
   {
-    $container = unserialize($this->cache->get(self::CACHE_KEY));
-    $db_info = $container->getSubject();
-    return $db_info;
+    if($container = unserialize($this->cache->get(self::CACHE_KEY)))
+      return $container->getSubject();
   }
 
   protected function _writeToCache($db_info)
