@@ -53,9 +53,6 @@ abstract class BaseJsonController extends lmbController
 
   protected function _runMethod($method)
   {
-    if($template_path = $this->findTemplateForAction($this->current_action))
-      $this->setTemplate($template_path);
-
     $method_response = $this->$method();
 
     $this->_passLocalAttributesToView();
