@@ -9,6 +9,8 @@
 lmb_require('limb/toolkit/src/lmbAbstractTools.class.php');
 lmb_require('limb/net/src/lmbCurlRequest.class.php');
 lmb_require('limb/net/src/lmbInputStreamParser.class.php');
+lmb_require('limb/net/src/lmbHttpResponse.class.php');
+lmb_require('limb/net/src/lmbHttpRequest.class.php');
 
 /**
  * class lmbNetTools.
@@ -28,7 +30,6 @@ class lmbNetTools extends lmbAbstractTools
     if(is_object($this->request))
       return $this->request;
 
-    lmb_require('limb/net/src/lmbHttpRequest.class.php');
     $this->request = new lmbHttpRequest();
 
     return $this->request;
@@ -44,7 +45,6 @@ class lmbNetTools extends lmbAbstractTools
     if(is_object($this->response))
       return $this->response;
 
-    lmb_require('limb/net/src/lmbHttpResponse.class.php');
     $this->response = new lmbHttpResponse();
 
     return $this->response;
