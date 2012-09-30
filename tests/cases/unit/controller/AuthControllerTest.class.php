@@ -311,6 +311,13 @@ class AuthControllerTest extends odControllerTestCase
       'device_token' => $this->generator->string()
     ]);
 
+    $cookies = $this->toolkit->getResponse()->getCookies();
+    if($this->assertTrue(array_key_exists('token', $cookies)))
+    {
+      $this->assertEqual($cookies['token']['value'], '');
+      $this->assertEqual($cookies['token']['expire'], 1);
+    }
+
     if($this->assertResponse(200))
     {
       $response = $this->get('is_logged_in', [
@@ -319,11 +326,6 @@ class AuthControllerTest extends odControllerTestCase
 
       if($this->assertResponse(200))
         $this->assertFalse($response->result);
-
-      $cookies = $this->toolkit->getResponse()->getCookies();
-      $this->assertTrue(array_key_exists('token', $cookies));
-      $this->assertEqual($cookies['token']['value'], '');
-      $this->assertEqual($cookies['token']['expire'], 1);
     }
   }
 
