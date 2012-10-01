@@ -314,7 +314,7 @@ class MomentsControllerTest extends odControllerTestCase
     if($this->assertResponse(200))
     {
       $this->assertTrue(is_null($response->result));
-      $this->assertEqual($response->errors[0], 'Entity already exists');
+      $this->assertEqual($response->status, 'Entity already exists');
     }
   }
 

@@ -49,22 +49,28 @@ class odExportHelperTest extends odUnitTestCase
   function testExportDay_forUser()
   {
     $this->main_user->save();
-    $day = $this->generator->dayWithMomentsAndComments();
+    $day = $this->generator->dayWithMomentsAndComments()->save();
 
     $helper = new odExportHelper($this->main_user);
 
     $exported = $helper->exportDay($day);
     $this->assertJsonDay($exported, true);
     $this->assertFalse($exported->is_favorite);
+    $this->assertFalse($exported->is_liked);
 
     $favorites = $this->main_user->getFavoriteDays();
     $favorites->add($day);
+    $day_likes = $this->main_user->getDayLikes();
+    $day_likes->add(new DayLike(['day_id' => $day->id, 'user_id' => $this->main_user->id]));
     $this->main_user->save();
 
     $this->db_connection->resetStats();
 
     $exported = $helper->exportDay($day);
-    $this->assertTrue($exported->is_favorite);
+    if($this->assertTrue(property_exists($exported, 'is_favorite')))
+      $this->assertTrue($exported->is_favorite);
+    if($this->assertTrue(property_exists($exported, 'is_liked')))
+      $this->assertTrue($exported->is_liked);
   }
 
   function testExportDay_forOwner()

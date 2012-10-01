@@ -132,6 +132,8 @@ class lmbHttpResponse
     $this->headers = array();
     $this->is_redirected = false;
     $this->transaction_started = false;
+    $this->http_code = null;
+    $this->http_status = null;
   }
 
   function start()
@@ -150,6 +152,11 @@ class lmbHttpResponse
     $this->http_code = (integer) $code;
   }
 
+  function getCode()
+  {
+    return $this->http_code ? $this->http_code : 200;
+  }
+
   function setStatus($status)
   {
     $this->http_status = $status;
@@ -157,25 +164,10 @@ class lmbHttpResponse
 
   function getStatus()
   {
-    $status = null;
-    foreach ($this->headers as $header) {
-      if (preg_match('~^HTTP/1.\d[^\d]+(\d+)[^\d]*~i', $header, $matches))
-        $status = (int)$matches[1];
-    }
-
-    if ($status)
-      return $status;
-
     if($this->http_status)
       return $this->http_status;
 
-    if($this->http_code)
-    {
-      if(isset(self::$http_default_statuses[$this->http_code]))
-        return self::$http_default_statuses[$this->http_code];
-    }
-
-    return 200;
+    return self::$http_default_statuses[$this->getCode()];
   }
 
   function setDirective($directive_name, $value)
@@ -229,13 +221,13 @@ class lmbHttpResponse
 
   function isEmpty()
   {
-    $status = $this->getStatus();
+    $code = $this->getCode();
 
     return (
       !$this->is_redirected &&
         empty($this->response_string) &&
         empty($this->response_file_path) &&
-        ($status != 304 && $status != 412));
+        ($code != 304 && $code != 412));
     //???
   }
 
@@ -283,7 +275,13 @@ class lmbHttpResponse
   {
     $this->_ensureTransactionStarted();
 
-    $this->headers[] = $header;
+    if (preg_match('~^HTTP/1.\d[^\d]+(\d+)\s*(.+)$~i', $header, $matches))
+    {
+      $this->http_code = $matches[0];
+      $this->http_status = $matches[1];
+    }
+    else
+      $this->headers[] = $header;
   }
 
   /**
@@ -353,17 +351,7 @@ class lmbHttpResponse
   {
     $this->_ensureTransactionStarted();
 
-    if($this->http_code)
-    {
-      if($this->http_status)
-        $header = 'HTTP/1.1 ' . $this->http_code . ' ' . $this->http_status;
-      else
-      {
-        lmb_assert_array_with_key(self::$http_default_statuses, $this->http_code);
-        $header = 'HTTP/1.1 ' . $this->http_code . ' ' . self::$http_default_statuses[$this->http_code];
-      }
-      $this->headers[] = $header;
-    }
+    $this->headers[] = 'HTTP/1.1 ' . $this->getCode() . ' ' . $this->getStatus();
 
     foreach ($this->headers as $header)
       $this->_sendHeader($header);

@@ -207,9 +207,9 @@ abstract class BaseJsonController extends lmbController
     return $this->_answerWithError("Current user don't have permission to perform this action", null, 401);
   }
 
-  protected function _answerConflict()
+  protected function _answerConflict($result = null)
   {
-    return $this->_answerWithError("Entity already exists", null, 200);
+    return $this->_answerOk($result, "Entity already exists", 200);
   }
 
   protected function _answerNotPost($message = 'Not a POST request')

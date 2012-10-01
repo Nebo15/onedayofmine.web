@@ -147,7 +147,7 @@ class DaysUserControllerTest extends odControllerTestCase
     $response = $this->post('like', [], $day->getId());
     if ($this->assertResponse(200)) {
       $this->assertTrue(is_null($response->result));
-      $this->assertEqual($response->errors[0], 'Entity already exists');
+      $this->assertEqual($response->status, 'Entity already exists');
     }
   }
 
@@ -331,7 +331,7 @@ class DaysUserControllerTest extends odControllerTestCase
     $response = $this->post('mark_favorite', [], $day->getId());
     if ($this->assertResponse(200)) {
       $this->assertTrue(is_null($response->result));
-      $this->assertEqual($response->status, 'Like not found');
+      $this->assertEqual($response->status, 'Entity already exists');
     }
   }
 

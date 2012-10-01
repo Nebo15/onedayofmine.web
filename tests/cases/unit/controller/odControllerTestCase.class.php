@@ -64,7 +64,7 @@ abstract class odControllerTestCase extends odUnitTestCase
 
   function request($controller_class, $action, lmbHttpRequest $request)
   {
-    $this->toolkit->setResponse(null);
+    $this->toolkit->getResponse()->start();
     $this->toolkit->setRequest($request);
 
     $request->setCookies($this->cookies);

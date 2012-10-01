@@ -13,17 +13,29 @@ class odExportHelper
   ############### Day ###############
   function exportDay(Day $day)
   {
-    $exported = $this->exportDayItems([$day])[0];
+    $exported_day = $this->exportDayItems([$day])[0];
+    $is_owner = $this->current_user && $this->current_user->id && $this->current_user->id == $day->user_id;
 
-    $exported->moments  = $this->exportMomentItems($day->getMoments());
+    $exported_day->moments  = $this->exportMomentItems($day->getMoments());
 
     $comments = $day->getComments();
     $comments->paginate(0, lmbToolkit::instance()->getConf('common')->default_comments_count);
-    $exported->comments = $this->exportDayCommentItems($comments);
+    $exported_day->comments = $this->exportDayCommentItems($comments);
 
-    $exported->final_description = $day->getFinalDescription();
+    $exported_day->final_description = $day->getFinalDescription();
 
-    return $exported;
+    if($this->current_user && !$is_owner)
+    {
+      $liked_day = lmbDBAL::selectQuery('day_like')
+      ->addField('day_id')
+      ->addCriteria(lmbSQLCriteria::equal('user_id', $this->current_user->id))
+      ->addCriteria(lmbSQLCriteria::equal('day_id', $day->id))
+      ->fetch()->toFlatArray();
+      $liked_day = lmbArrayHelper::getColumnValues('day_id', $liked_day);
+      $exported_day->is_liked = in_array($day->id, $liked_day);
+    }
+
+    return $exported_day;
   }
 
   function exportDaySubentity(Day $day)
