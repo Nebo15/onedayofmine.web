@@ -15,9 +15,8 @@ if(!isset($_ENV['LIMB_LAZY_CLASS_PATHS']))
   $_ENV['LIMB_LAZY_CLASS_PATHS'] = array();
 if(!isset($_ENV['LIMB_LAZY_TRIED']))
   $_ENV['LIMB_LAZY_TRIED'] = array();
+
 define('LIMB_UNDEFINED', 'undefined' . microtime());
-define('LIMB_PACKAGES_DIR', dirname(__FILE__) . '/../');
-define('LIMB_DUMP_MAX_DEPTH', 7);
 define('LIMB_APP_DEVELOPMENT', 'devel');
 define('LIMB_APP_PRODUCTION', 'production');
 
@@ -329,6 +328,9 @@ function lmb_app_mode($new_value = null)
   else
     return lmb_env_get('LIMB_APP_MODE', LIMB_APP_PRODUCTION);
 }
+
+lmb_env_set('LIMB_PACKAGES_DIR', dirname(__FILE__) . '/../');
+lmb_env_set('LIMB_DUMP_MAX_DEPTH', 7);
 
 spl_autoload_register('lmb_autoload');
 new lmbException('ugly hack');
