@@ -228,7 +228,7 @@ abstract class BaseJsonController extends lmbController
     $this->response->setContentType('application/json');
 
     return json_encode([
-        'code'   => $code,
+        'code'   => $this->response->getCode(),
         'status' => $this->response->getStatus(),
         'result' => $result,
         'errors' => $errors
