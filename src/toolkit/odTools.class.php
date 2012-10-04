@@ -9,6 +9,7 @@ lmb_require('src/service/ImageHelper.class.php');
 lmb_require('src/service/odPostingService.class.php');
 lmb_require('src/service/odExportHelper.class.php');
 lmb_require('src/service/odRequestsLog.class.php');
+lmb_require('src/service/odSearchService.class.php');
 lmb_require('src/model/User.class.php');
 require_once('amazon-sdk/sdk.class.php');
 
@@ -29,11 +30,16 @@ class odTools extends lmbAbstractTools
    */
   protected $posting_service;
 
-  protected $facebook_instances = array();
+  protected $facebook_instances = [];
 
-  protected $twitter_instances = array();
+  protected $twitter_instances = [];
 
-  protected $facebook_profiles = array();
+  protected $facebook_profiles = [];
+
+  /**
+   * @var array odSearchService
+   */
+  protected $search_clients = [];
 
   /**
    * @var Zend_Mobile_Push_Apns
@@ -86,6 +92,29 @@ class odTools extends lmbAbstractTools
   }
 
   /**
+   * @return odSearchService
+   */
+  function getSearchService($conf_name)
+  {
+    if(!array_key_exists($conf_name, $this->search_clients)) {
+      $config = lmbToolkit::instance()->getConf('sphinx');
+
+      lmb_assert_true(array_key_exists($conf_name, $config), "Sphinx configuration not found for '{$conf_name}'");
+
+      $index_conf         = $config[$conf_name];
+      if(!array_key_exists('host', $index_conf))
+        $index_conf['host'] = $config['host'];
+
+      if(!array_key_exists('port', $index_conf))
+        $index_conf['port'] = $config['port'];
+
+      $this->search_clients[$conf_name] = new odSearchService($index_conf);
+    }
+
+    return $this->search_clients[$conf_name];
+  }
+
+  /**
    * @return odNewsService
    */
   function getNewsObserver()
@@ -103,7 +132,7 @@ class odTools extends lmbAbstractTools
    */
   function getExportHelper()
   {
-    return  new odExportHelper($this->getUser());
+    return new odExportHelper($this->getUser());
   }
 
   /**
@@ -194,7 +223,7 @@ class odTools extends lmbAbstractTools
 
       if(!$users['data'])
       {
-        return array();
+        return [];
       }
 
       foreach ($users['data'] as $key => $value) {
