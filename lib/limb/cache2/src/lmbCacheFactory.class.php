@@ -56,10 +56,7 @@ class lmbCacheFactory
     $class = 'lmbCache' . ucfirst($driver) . 'Connection';
     if(!class_exists($class))
     {
-      $file = DIRNAME(__FILE__).'/drivers/' . $class . '.class.php';
-      if(!file_exists($file))
-        throw new lmbException("Cache driver '$driver' file not found for DSN '" . $dsn->toString() . "'!");
-
+      $file = 'limb/cache2/src/drivers/' . $class . '.class.php';
       lmb_require($file);
     }
 

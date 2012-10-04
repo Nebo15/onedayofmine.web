@@ -8,9 +8,9 @@
  */
 lmb_require('limb/toolkit/src/lmbAbstractTools.class.php');
 lmb_require('limb/cache2/src/lmbCacheFactory.class.php');
-lmb_require('limb/cache2/src/lmbMintCache.class.php');
-lmb_require('limb/cache2/src/lmbLoggedCache.class.php');
-lmb_require('limb/cache2/src/lmbTaggableCache.class.php');
+lmb_require('limb/cache2/src/wrappers/lmbMintCacheWrapper.class.php');
+lmb_require('limb/cache2/src/wrappers/lmbLoggedCacheWrapper.class.php');
+lmb_require('limb/cache2/src/wrappers/lmbTaggableCacheWrapper.class.php');
 lmb_require('limb/net/src/lmbUri.class.php');
 
 /**
