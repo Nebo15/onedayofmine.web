@@ -1,0 +1,35 @@
+DROP TABLE IF EXISTS `test_one_table_object`;
+CREATE TABLE `test_one_table_object` (
+  `id` int(11) NOT NULL auto_increment,
+  `title` varchar(50),
+  `content` text,
+  `priority` int(11) NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8; /* transactions needed */
+
+DROP TABLE IF EXISTS `test_one_table_object_with_times`;
+CREATE TABLE `test_one_table_object_with_times` (
+  `id` int(11) NOT NULL auto_increment,
+  `priority` int(11) NULL,
+  `ctime` int(11) NULL,
+  `utime` int(11) NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8; /* transactions needed */
+
+
+DROP TABLE IF EXISTS `test_one_table_object_with_reverse_id`;
+CREATE TABLE `test_one_table_object_with_reverse_id` (
+  `id` int(11) NOT NULL auto_increment,
+  `priority` int(11) NULL,
+  `reverse_id` int(11) NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8; /* transactions needed */
+
+DROP TABLE IF EXISTS `test_one_table_object_composite_pk`;
+CREATE TABLE `test_one_table_object_composite_pk` (
+  `user_id` int(11) NOT NULL,
+  `stuff_id` int(11) NOT NULL,
+  `title` varchar(50),
+  PRIMARY KEY  (`user_id`, `stuff_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8; /* transactions needed */
+
