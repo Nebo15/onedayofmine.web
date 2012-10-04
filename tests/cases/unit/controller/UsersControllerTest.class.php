@@ -334,66 +334,94 @@ class UsersControllerTest extends odControllerTestCase
   function testSearch()
   {
     $user1 = $this->generator->user();
-    $user1->setName('foo');
+    $user1->setName('John Doe');
     $user1->save();
     $user2 = $this->generator->user();
-    $user2->setName('fooA');
+    $user2->setName('John Watson');
     $user2->save();
     $user3 = $this->generator->user();
-    $user3->setName('AfooA');
+    $user3->setName('Johnnie Cheeze');
     $user3->save();
     $user4 = $this->generator->user();
-    $user4->setName('foofoo');
+    $user4->setName('John John');
     $user4->save();
     $user5 = $this->generator->user();
-    $user5->setName('bar');
+    $user5->setName('Mike Jameson');
     $user5->save();
 
-    $users = $this->get('search', array('query' => 'foo'))->result;
+    $sphinx_config = lmbToolkit::instance()->getConf('sphinx');
+    lmb_assert_true(array_key_exists('config_file_path', $sphinx_config), 'Sphinx config file not set. Check config.');
+    lmb_assert_true($sphinx_config['config_file_path'], 'Sphinx config file path is emprty. Check config.');
+    lmb_assert_true(file_exists($sphinx_config['config_file_path']), "Sphinx config file '{$sphinx_config['config_file_path']}' not found. Check config.");
+
+    if($result = exec("indexer --config {$sphinx_config['config_file_path']} --rotate users --quiet"))
+    {
+      echo 'Indexer returned errors or/and warnings:';
+      echo '<pre>';
+      var_dump($result);
+      echo '</pre>';
+      exit;
+    }
+    sleep(1);
+
+    $response = $this->get('search', [
+      'query' => 'John*'
+    ]);
     if($this->assertResponse(200))
     {
-      $this->assertEqual(4, count($users));
-      $this->assertEqual($user1->getId(), $users[0]->id);
-      $this->assertEqual($user2->getId(), $users[1]->id);
-      $this->assertEqual($user3->getId(), $users[2]->id);
-      $this->assertEqual($user4->getId(), $users[3]->id);
+      $response_users = $response->result;
+      $this->assertEqual(4, count($response_users));
+      $this->assertJsonUserItems($response_users);
+
+      $this->assertEqual($user1->getId(), $response_users[0]->id);
+      $this->assertEqual($user2->getId(), $response_users[1]->id);
+      $this->assertEqual($user3->getId(), $response_users[2]->id);
+      $this->assertEqual($user4->getId(), $response_users[3]->id);
     }
 
-    $users = $this
-      ->get('search', array('query' => 'foo', 'from' => $user1->getId()))
-      ->result;
+    $response_with_from = $this->get('search', [
+      'query' => 'John*',
+      'from'  => $user1->getId(),
+    ]);
     if($this->assertResponse(200))
     {
-      $this->assertEqual(3, count($users));
-      $this->assertEqual($user2->getId(), $users[0]->id);
-      $this->assertEqual($user3->getId(), $users[1]->id);
-      $this->assertEqual($user4->getId(), $users[2]->id);
+      $response_users = $response_with_from->result;
+      $this->assertEqual(3, count($response_users));
+      $this->assertJsonUserItems($response_users);
+
+      $this->assertEqual($user2->getId(), $response_users[0]->id);
+      $this->assertEqual($user3->getId(), $response_users[1]->id);
+      $this->assertEqual($user4->getId(), $response_users[2]->id);
     }
 
-    $users = $this
-      ->get('search', array(
-        'query' => 'foo',
-        'from'  => $user1->getId(),
-        'to'    => $user4->getId()))
-      ->result;
-    if($this->assertResponse(200))
-    {
-      $this->assertEqual(2, count($users));
-      $this->assertEqual($user2->getId(), $users[0]->id);
-      $this->assertEqual($user3->getId(), $users[1]->id);
-    }
-
-    $users = $this
-      ->get('search', array(
-      'query' => 'foo',
+    $response_with_range = $this->get('search', [
+      'query' => 'John*',
       'from'  => $user1->getId(),
       'to'    => $user4->getId(),
-      'limit' => 1))
-      ->result;
+    ]);
     if($this->assertResponse(200))
     {
-      $this->assertEqual(1, count($users));
-      $this->assertEqual($user2->getId(), $users[0]->id);
+      $response_users = $response_with_range->result;
+      $this->assertEqual(2, count($response_users));
+      $this->assertJsonUserItems($response_users);
+
+      $this->assertEqual($user2->getId(), $response_users[0]->id);
+      $this->assertEqual($user3->getId(), $response_users[1]->id);
+    }
+
+    $response_with_limit = $this->get('search', [
+      'query' => 'John*',
+      'from'  => $user1->getId(),
+      'to'    => $user4->getId(),
+      'limit' => 1,
+    ]);
+    if($this->assertResponse(200))
+    {
+      $response_users = $response_with_limit->result;
+      $this->assertEqual(1, count($response_users));
+      $this->assertJsonUserItems($response_users);
+
+      $this->assertEqual($user2->getId(), $response_users[0]->id);
     }
   }
 }

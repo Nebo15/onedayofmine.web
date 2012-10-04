@@ -194,17 +194,8 @@ class User extends BaseModel
 
   static function findByString($query, $from_id = null, $to_id = null, $limit = null)
   {
-    $criteria = lmbSQLCriteria::like('name', '%'.$query.'%');
-    if($from_id)
-      $criteria->add(lmbSQLCriteria::greater('id', $from_id));
-    if($to_id)
-      $criteria->add(lmbSQLCriteria::less('id', $to_id));
-
-    return User::find(array(
-      'criteria' => $criteria,
-      'limit' => (!$limit || $limit > 100) ? 100 : $limit,
-      'sort' => array('id' => 'ASC')
-    ));
+    $ids = lmbToolkit::instance()->getSearchService('users')->find($query, $from_id, $to_id, $limit);
+    return self::findByIds($ids);
   }
 
   static function findUsersWithOldDays()
