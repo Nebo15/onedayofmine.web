@@ -42,8 +42,36 @@ class odSearchService extends SphinxClient
         ->getLog()
         ->error("Sphinx query returned warning: ".$this->GetLastWarning());
       elseif(array_key_exists('matches', $result))
-        return $result['matches'];
+        return $this->applyLimitation(array_keys($result['matches']), $from_id, $to_id, $limit);
 
     return null;
+  }
+
+  public function applyLimitation(array $ids, $from_id = null, $to_id = null, $limit = null)
+  {
+    $limit = abs($limit);
+    $limit = (!$limit || $limit > 100) ? 100 : $limit;
+
+    $result = [];
+    $stated = ! (bool) $from_id;
+    foreach ($ids as $id)
+    {
+      if($id == $to_id)
+        break;
+
+      if($stated)
+      {
+        if($limit < 1)
+          break;
+        else
+          $limit--;
+
+        $result[] = $id;
+      }
+      elseif($id == $from_id)
+        $stated = true;
+    }
+
+    return $result;
   }
 }
