@@ -1,6 +1,6 @@
 <?php
 lmb_require('limb/web_app/src/controller/lmbController.class.php');
-lmb_require('src/odStaticObjectMother.class.php');
+lmb_require('tests/src/odStaticObjectMother.class.php');
 lmb_require('src/Json.class.php');
 lmb_require('src/service/social_provider/odFacebookApiExpiredTokenException.class.php');
 lmb_require('src/model/User.class.php');

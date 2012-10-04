@@ -1,8 +1,8 @@
 <?php
+lmb_require('src/model/odLightAR.class.php');
 lmb_require('src/model/base/BaseModel.class.php');
 lmb_require('src/model/traits/Imageable.trait.php');
 lmb_require('src/model/Moment.class.php');
-lmb_require('src/model/User.class.php');
 lmb_require('src/model/DayComment.class.php');
 lmb_require('src/model/MomentComment.class.php');
 lmb_require('src/model/DayLike.class.php');
@@ -11,30 +11,28 @@ lmb_require('src/model/DayLike.class.php');
  * @api field int id User ID
  * @static Day findById()
  */
-class Day extends BaseModel
+class Day extends odLightAR
 {
   use Imageable;
 
+  protected $_db_table_name = 'day';
   protected $_default_sort_params = array('id'=>'desc');
 
-  protected function _defineRelations()
-  {
-    $this->_many_belongs_to = array(
-      'user' => array( 'field' => 'user_id', 'class' => 'User'),
-    );
-
-    $this->_has_many = array(
-      'moments'  => array( 'field' => 'day_id', 'class' => 'Moment', 'criteria' => '`moment`.`is_deleted` = 0'),
-      'comments' => array( 'field' => 'day_id', 'class' => 'DayComment'),
-      'likes'    => array( 'field' => 'day_id', 'class' => 'DayLike'),
-    );
-  }
+  /**
+   * @var User
+   */
+  protected $user;
+  public $user_id;
+  public $type;
+  public $title;
+  public $final_description;
+  public $views_count;
+  public $is_deleted;
 
   protected function _createValidator()
   {
     $validator = new lmbValidator();
-    $validator->addRequiredRule('user');
-    $validator->addRequiredObjectRule('user', 'User');
+    $validator->addRequiredRule('user_id');
     $validator->addRequiredRule('title');
     $validator->addRequiredRule('type');
     $validator->addRule(new lmbValidValueRule('type', self::getTypes()));
@@ -44,15 +42,30 @@ class Day extends BaseModel
   function exportForApi(array $properties = null)
   {
     $export = new stdClass();
-    $export->id = $this->getId();
+    $export->id = $this->id;
     $export->user_id = $this->user_id;
-    $export->type = $this->getType();
-    $export->title = $this->getTitle();
+    $export->type = $this->type;
+    $export->title = $this->title;
     $this->showImages($export);
-    $export->final_description = $this->getFinalDescription();
+    $export->final_description = $this->final_description;
     $export->views_count = $this->views_count ?: 0;
 
     return $export;
+  }
+
+  function setUser(User $user)
+  {
+    $this->user_id = $user->id;
+  }
+
+  function getMoments()
+  {
+    return Moment::find(lmbSQLCriteria::equal('day_id', $this->id));
+  }
+
+  function getComments()
+  {
+    return DayComment::find(lmbSQLCriteria::equal('day_id', $this->id));
   }
 
   protected function _getAdditionalPlaceholders(&$placeholders)
@@ -108,11 +121,17 @@ class Day extends BaseModel
       $criteria->add(lmbSQLCriteria::less('id', $from_id));
     if($to_id)
       $criteria->add(lmbSQLCriteria::greater('id', $to_id));
-    return Day::find(array(
+
+//    return Day::find(
+//      lmbToolkit::instance()->getDefaultDbConnection(),
+//      $criteria,
+//      array('id' => 'DESC')
+//    )->paginate(0, (!$limit || $limit > 100) ? 100 : $limit);
+
+    return Day::find([
       'criteria' => $criteria,
-      'limit' => (!$limit || $limit > 100) ? 100 : $limit,
-      'sort' => array('id' => 'DESC')
-    ));
+      'sort' => array('id' => 'DESC')]
+    )->paginate(0, (!$limit || $limit > 100) ? 100 : $limit);
   }
 
   static function findByString($query, $from_id = null, $to_id = null, $limit = null)

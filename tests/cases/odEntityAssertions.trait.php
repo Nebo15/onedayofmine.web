@@ -88,7 +88,7 @@ trait odEntityAssertions
 
     if(lmbToolkit::instance()->getUser())
     {
-      if(lmbToolkit::instance()->getUser()->getId() == $user->id)
+      if(lmbToolkit::instance()->getUser()->id == $user->id)
         $this->assertProperty($user, 'email');
       else
         $this->assertProperty($user, 'following');
@@ -99,7 +99,7 @@ trait odEntityAssertions
   {
     $this->assertJsonUserSubentity($user);
 
-    if(lmbToolkit::instance()->getUser() && lmbToolkit::instance()->getUser()->getId() != $user->id)
+    if(lmbToolkit::instance()->getUser() && lmbToolkit::instance()->getUser()->id != $user->id)
     {
       $this->assertProperty($user, 'following');
     }
@@ -242,7 +242,7 @@ trait odEntityAssertions
 
     if(lmbToolkit::instance()->getUser())
     {
-      if(lmbToolkit::instance()->getUser()->getId() == $day->user->id)
+      if(lmbToolkit::instance()->getUser()->id == $day->user->id)
         $this->assertProperty($day, 'is_deleted');
 
       $this->assertProperty($day, 'is_favorite');

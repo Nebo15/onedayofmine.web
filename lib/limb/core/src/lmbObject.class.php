@@ -85,6 +85,11 @@ class lmbObject implements lmbSetInterface
 
     if($properties)
       $this->import($properties);
+
+    if(!isset($_ENV['o']))
+      $_ENV['o'] = 1;
+    else
+      $_ENV['o']++;
   }
 
   protected function _registerPredefinedVariables()

@@ -14,23 +14,7 @@ lmb_require('src/model/User.class.php');
 class News extends BaseModel
 {
   protected $_default_sort_params = array('id'=>'desc');
-
-  protected function _defineRelations()
-  {
-    $this->_many_belongs_to = array (
-      'sender'           => array ('field' => 'sender_id',    'class' => 'User'),
-      'user'             => array ('field' => 'user_id',      'class' => 'User'),
-      'day'              => array ('field' => 'day_id',       'class' => 'Day',    'can_be_null' => true),
-      'moment'           => array ('field' => 'moment_id',    'class' => 'Moment', 'can_be_null' => true),
-    );
-    $this->_has_many_to_many = array(
-      'recipients' => array(
-        'field' => 'news_id',
-        'foreign_field' => 'user_id',
-        'table' => 'news_recipient',
-        'class' => 'User'),
-    );
-  }
+  protected $_db_table_name = 'news';
 
   protected function _createValidator()
   {

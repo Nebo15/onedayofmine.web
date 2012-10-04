@@ -8,7 +8,7 @@
  */
 
 lmb_require('limb/dbal/src/drivers/lmbDbManipulationStatement.interface.php');
-lmb_require(dirname(__FILE__) . '/lmbMysqliStatement.class.php');
+lmb_require('limb/dbal/src/drivers/mysqli/lmbMysqliStatement.class.php');
 
 /**
  * class lmbMysqliManipulationStatement.

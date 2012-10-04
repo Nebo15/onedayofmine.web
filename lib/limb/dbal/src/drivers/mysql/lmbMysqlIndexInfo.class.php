@@ -7,7 +7,7 @@
  * @license    LGPL http://www.gnu.org/copyleft/lesser.html
  */
 lmb_require('limb/dbal/src/drivers/lmbDbIndexInfo.class.php');
-lmb_require(dirname(__FILE__) . '/lmbMysqlTypeInfo.class.php');
+lmb_require('limb/dbal/src/drivers/mysql/lmbMysqlTypeInfo.class.php');
 
 /**
  * class lmbMysqlIndexInfo.

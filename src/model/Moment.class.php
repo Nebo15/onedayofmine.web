@@ -18,39 +18,40 @@ class Moment extends BaseModel
 {
   use Imageable;
 
-  protected $_default_sort_params = array('time' => 'ASC');
+  public $day_id;
+  public $description;
+  public $time;
+  public $timezone;
+  public $is_deleted;
 
-  protected function _defineRelations()
-  {
-    $this->_has_many = array (
-      'comments' => array ('field' => 'moment_id', 'class' => 'MomentComment'),
-      'likes'    => array( 'field' => 'moment_id', 'class' => 'MomentLike'),
-    );
-    $this->_many_belongs_to = array (
-      'day' => array ('field' => 'day_id', 'class' => 'Day')
-    );
-  }
+  protected $_default_sort_params = array('time' => 'ASC');
+  protected $_db_table_name = 'moment';
 
   protected function _createValidator()
   {
     $validator = new lmbValidator();
-    $validator->addRequiredObjectRule('day', 'Day');
+    $validator->addRequiredRule('day_id');
     return $validator;
   }
 
   function exportForApi(array $properties = null)
   {
     $moment = new stdClass();
-    $moment->id = $this->getId();
-    $moment->day_id = $this->getDayId();
-    $moment->description = $this->getDescription();
+    $moment->id = $this->id;
+    $moment->day_id = $this->day_id;
+    $moment->description = $this->description;
     $this->showImages($moment);
-    $moment->time = self::stampToIso($this->getTime(), $this->getTimezone());
+    $moment->time = BaseModel::stampToIso($this->time, $this->timezone);
 
-    if($this->getIsDeleted())
+    if($this->is_deleted)
       $moment->is_deleted = true;
 
     return $moment;
+  }
+
+  function setDay(Day $day)
+  {
+    $this->day_id = $day->id;
   }
 
   function getCommentsWithLimitation($from_id = null, $to_id = null, $limit = null)

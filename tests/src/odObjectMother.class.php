@@ -10,19 +10,16 @@ class odObjectMother
   function user($name = null)
   {
     $user = new User();
-    $user->setFacebookUid($this->string(5));
-    $user->setFacebookAccessToken($this->string(50));
-    $user->setEmail($this->email());
-    $user->setFacebookProfileUtime($this->integer(11));
-    $user->setFacebookPicBig($this->string(50));
-    $user->setFacebookPicSquare($this->string(50));
-    $user->setFacebookPicSmall($this->string(50));
-    $user->setName($name ?: $this->string(100));
-    $user->setTimezone($this->integer(1));
-    $user->setSex('female');
-    $user->setOccupation($this->string(50));
-    $user->setBirthday($this->date_sql());
-
+    $user->facebook_uid = $this->string(5);
+    $user->facebook_access_token = $this->string(50);
+    $user->email = $this->email();
+    $user->facebook_profile_utime = $this->integer(11);
+    $user->name = $name ?: $this->string(100);
+    $user->timezone = $this->integer(1);
+    $user->sex = 'female';
+    $user->occupation = $this->string(50);
+    $user->birthday = $this->date_sql();
+    $user->save();
     return $user;
   }
 
@@ -34,17 +31,18 @@ class odObjectMother
   {
     $day = new Day();
 
-    $day->setTitle($title ?: $this->string(25));
+    $day->title = $title ?: $this->string(25);
     $day->setUser($user ?: $this->user());
-    $day->setTimezone(0);
 
     $types = Day::getTypes();
     if(!$this->generate_random)
-      $day->setType($types[0]);
+      $day->type = $types[0];
     else
-      $day->setType($types[array_rand($types)]);
+      $day->type = $types[array_rand($types)];
 
     $day->views_count = rand(0, 100);
+
+    $day->save();
 
     return $day;
   }
@@ -98,9 +96,10 @@ class odObjectMother
   function dayComment(Day $day = null, User $user = null)
   {
     $comment = new DayComment();
-    $comment->setDay($day ?: $this->day());
-    $comment->setUser($user ?: $this->user());
-    $comment->setText($this->string(255));
+    $comment->setDay($day ?: $this->day()->save());
+    $comment->setUser($user ?: $this->user()->save());
+    $comment->text = $this->string(255);
+    $comment->save();
     return $comment;
   }
 
@@ -132,9 +131,8 @@ class odObjectMother
   function moment(Day $day = null, $with_comments = false)
   {
     $moment = new Moment();
-    $moment->setDescription('description '.$this->string(125));
+    $moment->description = 'description '.$this->string(125);
     $moment->setDay($day ?: $this->day());
-
     if($with_comments)
     {
       for($i = 0; $i < lmbToolkit::instance()->getConf('common')->default_comments_count+1; $i++)
@@ -142,7 +140,7 @@ class odObjectMother
         $moment->addToComments($this->momentComment($moment, $moment->getDay()->getUser()));
       }
     }
-
+    $moment->save();
     return $moment;
   }
 
@@ -178,8 +176,9 @@ class odObjectMother
   {
     $comment = new MomentComment();
     $comment->setMoment($moment ?: $this->moment());
-    $comment->setText($this->string(255));
+    $comment->text = $this->string(255);
     $comment->setUser($user ?: $this->user());
+    $comment->save();
     return $comment;
   }
 
@@ -211,8 +210,8 @@ class odObjectMother
     $news = new News();
     $news->setRecipients(array($recipient));
     $news->setSender($creator);
-    $news->setText($creator->name . ' likes ' . $recipient->name);
-    $news->setLink($this->string());
+    $news->text = $creator->name . ' likes ' . $recipient->name;
+    $news->link = $this->string();
     return $news;
   }
 

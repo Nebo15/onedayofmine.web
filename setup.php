@@ -8,12 +8,15 @@ set_include_path(implode(PATH_SEPARATOR,
   array($app_dir, $libs_dir, get_include_path())
 ));
 
+if(!defined('LIMB_PACKAGES_DIR'))
+  define('LIMB_PACKAGES_DIR', dirname(__FILE__) . '/lib/limb');
+
 require_once('limb/core/common.inc.php');
 
 if(file_exists(dirname(__FILE__) . '/setup.override.php'))
   require_once(dirname(__FILE__) . '/setup.override.php');
 
-lmb_package_require('cms');
+lmb_package_require('web_app');
 lmb_package_require('cache2');
 lmb_package_require('profile');
 lmb_package_require('mail');
@@ -35,17 +38,3 @@ lmbToolkit :: merge(new lmbDbTools());
 
 lmb_require('limb/core/src/lmbSys.class.php');
 lmb_require('src/model/base/BaseModel.class.php');
-
-if(extension_loaded('newrelic'))
-{
-  newrelic_set_appname(lmb_app_mode());
-  newrelic_name_transaction(isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : 'CLI');
-  lmbErrorGuard :: registerExceptionHandler(function($e)
-  {
-    $message = ($e instanceof lmbException) ? $e->getOriginalMessage() : $e->getMessage();
-    $string = ($e instanceof lmbException) ? $e->toNiceString() : (string) $e;
-    newrelic_notice_error($message, $e);
-    if(lmbSys::isCli())
-      print($string);
-  });
-}

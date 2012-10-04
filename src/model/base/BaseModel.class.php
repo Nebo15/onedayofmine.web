@@ -1,7 +1,8 @@
 <?php
+lmb_require('src/model/odLightAR.class.php');
 lmb_require('limb/net/src/lmbIp.class.php');
 
-abstract class BaseModel extends lmbActiveRecord
+abstract class BaseModel extends odLightAR
 {
   protected $_default_sort_params = array('id'=>'asc');
 
@@ -10,8 +11,8 @@ abstract class BaseModel extends lmbActiveRecord
     $export = array();
     foreach($properties ?: $this->getPropertiesNames() as $property)
     {
-      if(!is_object($this->get($property)))
-        $export[$property] = $this->get($property);
+      if(!is_object($this->$property))
+        $export[$property] = $this->$property;
     }
     return (object) $export;
   }

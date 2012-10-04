@@ -147,3 +147,32 @@ function od_apns_connect($apns, $attempts)
     exit(1);
   }
 }
+
+function task_od_bundle()
+{
+  set_time_limit(0);
+
+  lmb_require('limb/bundle/src/lmbBundler.class.php');
+
+  $bundler = new lmbBundler(get_include_path(), true);
+
+  $files = json_decode(file_get_contents(lmb_env_get('HOST_URL').'main_page/bundle_files'))->result;
+
+  foreach($files as $file)
+    $bundler->add($file);
+
+  $result = $bundler->makeBundle(true);
+
+  $lines_arr = preg_split('/\n|\r/', $result);
+  $num_newlines = count($lines_arr);
+
+  $setup_file_content = file_get_contents(taskman_prop('PROJECT_DIR').'setup.php');
+
+  $result = str_replace("require_once('limb/core/common.inc.php');", $result, $setup_file_content);
+
+  file_put_contents(taskman_prop('PROJECT_DIR').'/bundle.php', $result);
+
+  echo "Bundled $num_newlines lines".PHP_EOL;
+
+//  var_dump($bundler->getIncludes());
+}

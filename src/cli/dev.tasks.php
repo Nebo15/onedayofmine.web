@@ -464,7 +464,7 @@ function task_od_siege_log()
   echo "Create days...";
   $days_ids = [];
   for ($i = 0; $i < $days_count; $i++) {
-    $day = $om->day();
+    $day = $om->dayWithMomentsAndComments();
     $day->day_id = $users[array_rand($users)]->id;
     $day->save();
     $days_ids[] = $day->id;

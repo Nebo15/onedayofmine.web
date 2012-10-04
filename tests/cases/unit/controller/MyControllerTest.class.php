@@ -194,21 +194,21 @@ class MyControllerTest extends odControllerTestCase
 
       $this->assertJsonNewsItems($json_news);
 
-      $this->assertEqual($news4->getId(), $json_news[0]->id);
-      $this->assertEqual($news3->getId(), $json_news[1]->id);
-      $this->assertEqual($news2->getId(), $json_news[2]->id);
-      $this->assertEqual($news1->getId(), $json_news[3]->id);
+      $this->assertEqual($news4->id, $json_news[0]->id);
+      $this->assertEqual($news3->id, $json_news[1]->id);
+      $this->assertEqual($news2->id, $json_news[2]->id);
+      $this->assertEqual($news1->id, $json_news[3]->id);
     }
 
     // If there are no new news return shoud be empty with HTTP 304 status code
     $response = $this->get('news', [
-      'from' => $news1->getId()
+      'from' => $news1->id
     ]);
     if($this->assertResponse(304))
       $this->assertEqual(0, count($response->result));
 
     $response = $this->get('news', [
-      'from' => $news4->getId()
+      'from' => $news4->id
     ]);
     if($this->assertResponse(200))
     {
@@ -218,14 +218,14 @@ class MyControllerTest extends odControllerTestCase
 
       $this->assertJsonNewsItems($json_news);
 
-      $this->assertEqual($news3->getId(), $json_news[0]->id);
-      $this->assertEqual($news2->getId(), $json_news[1]->id);
-      $this->assertEqual($news1->getId(), $json_news[2]->id);
+      $this->assertEqual($news3->id, $json_news[0]->id);
+      $this->assertEqual($news2->id, $json_news[1]->id);
+      $this->assertEqual($news1->id, $json_news[2]->id);
     }
 
     $response = $this->get('news', array(
-      'from' => $news4->getId(),
-      'to' => $news1->getId(),
+      'from' => $news4->id,
+      'to' => $news1->id,
     ));
     if($this->assertResponse(200))
     {
@@ -235,13 +235,13 @@ class MyControllerTest extends odControllerTestCase
 
       $this->assertJsonNewsItems($json_news);
 
-      $this->assertEqual($news3->getId(), $json_news[0]->id);
-      $this->assertEqual($news2->getId(), $json_news[1]->id);
+      $this->assertEqual($news3->id, $json_news[0]->id);
+      $this->assertEqual($news2->id, $json_news[1]->id);
     }
 
     $response = $this->get('news', array(
-      'from' => $news4->getId(),
-      'to' => $news1->getId(),
+      'from' => $news4->id,
+      'to' => $news1->id,
       'limit' => 1
     ));
     if($this->assertResponse(200))
@@ -252,7 +252,7 @@ class MyControllerTest extends odControllerTestCase
 
       $this->assertJsonNewsItems($json_news);
 
-      $this->assertEqual($news3->getId(), $response->result[0]->id);
+      $this->assertEqual($news3->id, $response->result[0]->id);
     }
   }
 }

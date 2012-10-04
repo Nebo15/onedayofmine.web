@@ -23,12 +23,12 @@ class UsersControllerTest extends odControllerTestCase
 
     $this->toolkit->setUser($this->additional_user);
 
-    $days = $this->get('days', array(), $this->main_user->getId())->result;
+    $days = $this->get('days', array(), $this->main_user->id)->result;
     if($this->assertResponse(200))
     {
       $this->assertEqual(2, count($days));
-      $this->assertEqual($day2->getId(), $days[0]->id);
-      $this->assertEqual($day1->getId(), $days[1]->id);
+      $this->assertEqual($day2->id, $days[0]->id);
+      $this->assertEqual($day1->id, $days[1]->id);
     }
   }
 
@@ -65,11 +65,11 @@ class UsersControllerTest extends odControllerTestCase
 
     $this->toolkit->setUser($this->additional_user);
 
-    $res = (array) $this->get('item', array(), $this->main_user->getId())->result;
+    $res = (array) $this->get('item', array(), $this->main_user->id)->result;
 
     if($this->assertResponse(200))
     {
-      $user = (array) User::findById($this->main_user->getId())->exportForApi();
+      $user = (array) User::findById($this->main_user->id)->exportForApi();
       $this->assertEqual($user['id'], $res['id']);
       foreach ($res as $key => $value) {
         if(array_key_exists($key, $user))
@@ -85,7 +85,7 @@ class UsersControllerTest extends odControllerTestCase
 
     lmbToolkit::instance()->setUser($this->main_user);
 
-    $response = $this->get('followers', array(), $this->main_user->getId());
+    $response = $this->get('followers', array(), $this->main_user->id);
     $followers = $response->result;
     $this->assertResponse(200);
     $this->assertEqual(0, count($followers));
@@ -105,7 +105,7 @@ class UsersControllerTest extends odControllerTestCase
 
     $this->toolkit->setUser($this->additional_user);
 
-    $followers = $this->get('followers', array(), $this->main_user->getId())->result;
+    $followers = $this->get('followers', array(), $this->main_user->id)->result;
     $this->assertResponse(200);
     $this->assertEqual(0, count($followers));
 
@@ -116,15 +116,15 @@ class UsersControllerTest extends odControllerTestCase
 
     lmbToolkit::instance()->setUser($this->main_user);
 
-    $followers = $this->get('followers', array(), $this->main_user->getId())->result;
+    $followers = $this->get('followers', array(), $this->main_user->id)->result;
 
     $this->assertResponse(200);
     $this->assertEqual(2, count($followers));
-    $this->assertEqual($this->additional_user->getId(), $followers[0]->id);
+    $this->assertEqual($this->additional_user->id, $followers[0]->id);
     $this->assertTrue($followers[0]->following);
     $this->assertTrue($followers[1]->following);
-    $this->assertEqual($this->additional_user->getId(), $followers[0]->id);
-    $this->assertEqual($third_user->getId(), $followers[1]->id);
+    $this->assertEqual($this->additional_user->id, $followers[0]->id);
+    $this->assertEqual($third_user->id, $followers[1]->id);
   }
 
   function testFollowers_anotherUser()
@@ -136,7 +136,7 @@ class UsersControllerTest extends odControllerTestCase
 
     $this->toolkit->setUser($this->additional_user);
 
-    $followers = $this->get('followers', array(), $this->main_user->getId())->result;
+    $followers = $this->get('followers', array(), $this->main_user->id)->result;
     $this->assertResponse(200);
     $this->assertEqual(0, count($followers));
 
@@ -151,13 +151,13 @@ class UsersControllerTest extends odControllerTestCase
 
     lmbToolkit::instance()->setUser($this->main_user);
 
-    $followers = $this->get('followers', array(), $this->additional_user->getId())->result;
+    $followers = $this->get('followers', array(), $this->additional_user->id)->result;
     $this->assertResponse(200);
     $this->assertEqual(2, count($followers));
     $this->assertFalse($followers[0]->following);
     $this->assertTrue($followers[1]->following);
-    $this->assertEqual($this->main_user->getId(), $followers[0]->id);
-    $this->assertEqual($third_user->getId(), $followers[1]->id);
+    $this->assertEqual($this->main_user->id, $followers[0]->id);
+    $this->assertEqual($third_user->id, $followers[1]->id);
   }
 
   /**
@@ -174,7 +174,7 @@ class UsersControllerTest extends odControllerTestCase
 
     $this->toolkit->setUser($this->additional_user);
 
-    $following = $this->get('following', array(), $this->main_user->getId())->result;
+    $following = $this->get('following', array(), $this->main_user->id)->result;
     $this->assertResponse(200);
     $this->assertEqual(0, count($following));
 
@@ -189,10 +189,10 @@ class UsersControllerTest extends odControllerTestCase
 
     lmbToolkit::instance()->setUser($this->main_user);
 
-    $following = $this->get('following', array(), $this->main_user->getId())->result;
+    $following = $this->get('following', array(), $this->main_user->id)->result;
     $this->assertResponse(200);
     $this->assertEqual(2, count($following));
-    $this->assertEqual($this->additional_user->getId(), $following[0]->id);
+    $this->assertEqual($this->additional_user->id, $following[0]->id);
     $this->assertTrue($following[0]->following);
     $this->assertFalse($following[1]->following);
   }
@@ -206,7 +206,7 @@ class UsersControllerTest extends odControllerTestCase
 
     $this->toolkit->setUser($this->additional_user);
 
-    $following = $this->get('following', array(), $this->main_user->getId())->result;
+    $following = $this->get('following', array(), $this->main_user->id)->result;
     $this->assertResponse(200);
     $this->assertEqual(0, count($following));
 
@@ -221,10 +221,10 @@ class UsersControllerTest extends odControllerTestCase
 
     lmbToolkit::instance()->setUser($this->main_user);
 
-    $following = $this->get('following', array(), $this->additional_user->getId())->result;
+    $following = $this->get('following', array(), $this->additional_user->id)->result;
     $this->assertResponse(200);
     $this->assertEqual(1, count($following));
-    $this->assertEqual($this->main_user->getId(), $following[0]->id);
+    $this->assertEqual($this->main_user->id, $following[0]->id);
     $this->assertFalse($following[0]->following);
   }
 
@@ -240,7 +240,7 @@ class UsersControllerTest extends odControllerTestCase
     $this->assertEqual(0, $this->main_user->getFollowing()->count());
 
     lmbToolkit::instance()->setUser($this->main_user);
-    $this->post('follow', array(), $this->additional_user->getId());
+    $this->post('follow', array(), $this->additional_user->id);
     $this->assertResponse(200);
 
     $this->assertEqual(1, $this->main_user->getFollowing()->count());
@@ -260,7 +260,7 @@ class UsersControllerTest extends odControllerTestCase
     $following->save();
 
     lmbToolkit::instance()->setUser($this->main_user);
-    $this->post('unfollow', array(), $this->additional_user->getId());
+    $this->post('unfollow', array(), $this->additional_user->id);
     $this->assertResponse(200);
 
     $this->assertEqual(0, $this->main_user->getFollowing()->count());
@@ -353,47 +353,47 @@ class UsersControllerTest extends odControllerTestCase
     if($this->assertResponse(200))
     {
       $this->assertEqual(4, count($users));
-      $this->assertEqual($user1->getId(), $users[0]->id);
-      $this->assertEqual($user2->getId(), $users[1]->id);
-      $this->assertEqual($user3->getId(), $users[2]->id);
-      $this->assertEqual($user4->getId(), $users[3]->id);
+      $this->assertEqual($user1->id, $users[0]->id);
+      $this->assertEqual($user2->id, $users[1]->id);
+      $this->assertEqual($user3->id, $users[2]->id);
+      $this->assertEqual($user4->id, $users[3]->id);
     }
 
     $users = $this
-      ->get('search', array('query' => 'foo', 'from' => $user1->getId()))
+      ->get('search', array('query' => 'foo', 'from' => $user1->id))
       ->result;
     if($this->assertResponse(200))
     {
       $this->assertEqual(3, count($users));
-      $this->assertEqual($user2->getId(), $users[0]->id);
-      $this->assertEqual($user3->getId(), $users[1]->id);
-      $this->assertEqual($user4->getId(), $users[2]->id);
+      $this->assertEqual($user2->id, $users[0]->id);
+      $this->assertEqual($user3->id, $users[1]->id);
+      $this->assertEqual($user4->id, $users[2]->id);
     }
 
     $users = $this
       ->get('search', array(
         'query' => 'foo',
-        'from'  => $user1->getId(),
-        'to'    => $user4->getId()))
+        'from'  => $user1->id,
+        'to'    => $user4->id))
       ->result;
     if($this->assertResponse(200))
     {
       $this->assertEqual(2, count($users));
-      $this->assertEqual($user2->getId(), $users[0]->id);
-      $this->assertEqual($user3->getId(), $users[1]->id);
+      $this->assertEqual($user2->id, $users[0]->id);
+      $this->assertEqual($user3->id, $users[1]->id);
     }
 
     $users = $this
       ->get('search', array(
       'query' => 'foo',
-      'from'  => $user1->getId(),
-      'to'    => $user4->getId(),
+      'from'  => $user1->id,
+      'to'    => $user4->id,
       'limit' => 1))
       ->result;
     if($this->assertResponse(200))
     {
       $this->assertEqual(1, count($users));
-      $this->assertEqual($user2->getId(), $users[0]->id);
+      $this->assertEqual($user2->id, $users[0]->id);
     }
   }
 }

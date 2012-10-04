@@ -22,7 +22,7 @@ class odExportHelper
     $comments->paginate(0, lmbToolkit::instance()->getConf('common')->default_comments_count);
     $exported_day->comments = $this->exportDayCommentItems($comments);
 
-    $exported_day->final_description = $day->getFinalDescription();
+    $exported_day->final_description = $day->final_description;
 
     if($this->current_user && !$is_owner)
     {
@@ -293,11 +293,11 @@ class odExportHelper
   }
 
   ############### Comments ###############
-  protected function exportComment(BaseComment $comment)
+  protected function exportComment($comment)
   {
     $exported = $comment->exportForApi();
 
-    $this->attachUserSubentityToExport($comment->getUser(), $exported);
+    $this->attachUserSubentityToExport(User::findById($comment->user_id), $exported);
 
     return $exported;
   }

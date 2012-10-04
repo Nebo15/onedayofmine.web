@@ -44,7 +44,7 @@ class FacebookProfileTest extends odIntegrationTestCase
 
     $friends = (new FacebookProfile($this->main_user))->getRegisteredFriends();
     $this->assertEqual(count($friends), 1);
-    $this->assertEqual($friends[0]->getId(), $this->additional_user->getId());
+    $this->assertEqual($friends[0]->id, $this->additional_user->id);
   }
 
   function testGetPictures()

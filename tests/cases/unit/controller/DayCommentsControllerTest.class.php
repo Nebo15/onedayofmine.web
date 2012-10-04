@@ -19,7 +19,7 @@ class DayCommentsControllerTest extends odControllerTestCase
     $this->assertEqual(1, $comments->count());
 
     lmbToolkit::instance()->setUser($user);
-    $this->post('delete', [], $comment->getId());
+    $this->post('delete', [], $comment->id);
 
     if($this->assertResponse(200))
     {

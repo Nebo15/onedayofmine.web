@@ -23,12 +23,19 @@ abstract class odUnitTestCase extends UnitTestCase
    */
   protected $additional_user;
 
+  /**
+   * @var lmbDbConnection
+   */
+  protected $db_conn;
+
   function setUp()
   {
     $this->toolkit = lmbToolkit::instance();
     $this->toolkit->setConfIncludePath('tests/cases/unit/settings;tests/settings;settings');
     $this->toolkit->resetConfs();
     $this->toolkit->resetFileLocators();
+
+    $this->db_conn = $this->toolkit->getDefaultDbConnection();
 
     $this->generator = new odObjectMother();
 
@@ -38,5 +45,6 @@ abstract class odUnitTestCase extends UnitTestCase
 
     $this->main_user = $this->generator->user('main_user');
     $this->additional_user = $this->generator->user('additional_user');
+
   }
 }

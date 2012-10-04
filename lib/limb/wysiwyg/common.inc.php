@@ -10,7 +10,6 @@
 /**
  * @package wysiwyg
  */
-require_once('limb/core/common.inc.php');
 lmb_package_require('config');
 lmb_package_require('macro');
 

@@ -15,6 +15,7 @@ lmb_require('src/model/UserSettings.class.php');
  * @method void setFacebookAccessToken(string $facebook_access_token)
  * @method string getTwitterUid()
  * @method string getTwitterAccessToken()
+ * @static User findById(int $id)
  * @method void
  */
 class User extends BaseModel
@@ -24,59 +25,18 @@ class User extends BaseModel
   const SEX_MALE = 'male';
   const SEX_FEMALE = 'female';
 
-  protected function _defineRelations()
-  {
-    $this->_has_one = array (
-      'user_settings' => array (
-        'field' => 'user_settings_id',
-        'class' => 'UserSettings',
-        'can_be_null' => true,
-        'cascade_delete' => false
-      ),
-      'current_day' => array (
-        'field' => 'current_day_id',
-        'class' => 'Day',
-        'can_be_null' => true,
-        'cascade_delete' => false
-      )
-    );
-    $this->_has_many = array (
-      'days' => array (
-        'field' => 'user_id',
-        'class' => 'Day',
-      ),
-      'days_comments'    => array ('field' => 'user_id', 'class' => 'DayComment'),
-      'moments_comments' => array ('field' => 'user_id', 'class' => 'MomentComment'),
-      'activities'       => array ('field' => 'sender_id', 'class' => 'News'),
-      'created_news'     => array ('field' => 'sender_id', 'class' => 'News'),
-      'day_likes'        => array ('field' => 'user_id', 'class' => 'DayLike'),
-      'moment_likes'     => array ('field' => 'user_id', 'class' => 'MomentLike'),
-      'device_tokens'      => array ('field' => 'user_id', 'class' => 'DeviceToken'),
-    );
-    $this->_has_many_to_many = array(
-      'favorite_days' => array(
-        'field' => 'user_id',
-        'foreign_field' => 'day_id',
-        'table' => 'day_favorite',
-        'class' => 'Day',
-        'criteria' => '`day`.`is_deleted` = 0'),
-      'followers' => array(
-        'field' => 'user_id',
-        'foreign_field' => 'follower_user_id',
-        'table' => 'user_following',
-        'class' => 'User'),
-      'following' => array(
-        'field' => 'follower_user_id',
-        'foreign_field' => 'user_id',
-        'table' => 'user_following',
-        'class' => 'User'),
-      'news' => array(
-        'field' => 'user_id',
-        'foreign_field' => 'news_id',
-        'table' => 'news_recipient',
-        'class' => 'News'),
-    );
-  }
+  protected $_db_table_name = 'user';
+
+  public $name;
+  public $sex;
+  public $birthday;
+  public $occupation;
+  public $location;
+  public $email;
+  public $timezone;
+  public $facebook_uid;
+  public $facebook_access_token;
+  public $facebook_profile_utime;
 
   protected function _createValidator()
   {
@@ -119,6 +79,21 @@ class User extends BaseModel
       $item = UserSettings::createDefault($this);
     }
     return $item;
+  }
+
+  function getDays()
+  {
+    return Day::find(lmbSQLCriteria::equal('user_id', $this->id), array('id' => 'DESC'));
+  }
+
+  function getDaysComments()
+  {
+    return DayComment::find(lmbSQLCriteria::equal('user_id', $this->id));
+  }
+
+  function getMomentsComments()
+  {
+    return MomentComment::find(lmbSQLCriteria::equal('user_id', $this->id));
   }
 
   static function getSexTypes()

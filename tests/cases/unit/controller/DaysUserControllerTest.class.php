@@ -31,7 +31,7 @@ class DaysUserControllerTest extends odControllerTestCase
 
     $this->assertEqual(0, $day->getViewsCount());
 
-    $response = $this->get('item', [], $day->getId());
+    $response = $this->get('item', [], $day->id);
     if ($this->assertResponse(200)) {
       $response_day = $response->result;
       $this->assertJsonDay($response_day);
@@ -40,7 +40,7 @@ class DaysUserControllerTest extends odControllerTestCase
 
       $this->assertEqual($day->getComments()->count(), $response_day->comments_count);
       $this->assertEqual(lmbToolkit::instance()->getConf('common')->default_comments_count, count($response_day->comments));
-      $this->assertEqual($day->getComments()->at(0)->getId(), $response_day->comments[0]->id);
+      $this->assertEqual($day->getComments()->at(0)->id, $response_day->comments[0]->id);
       $this->assertEqual($day->getMoments()->at(0)->getComments()->count(), $response_day->moments[0]->comments_count);
       $this->assertEqual($day->getMoments()->count(), count($response_day->moments));
       $this->assertEqual(1, $response_day->views_count);
@@ -61,12 +61,12 @@ class DaysUserControllerTest extends odControllerTestCase
 
     $response = $this->post('comment', [
       'text' => $text = $this->generator->string(255)
-    ], $day->getId());
+    ], $day->id);
     if ($this->assertResponse(200)) {
       $response_comment = $response->result;
       $this->assertJsonDayComment($response_comment);
 
-      $this->assertEqual($response_comment->id, $day->getComments()->at(0)->getId());
+      $this->assertEqual($response_comment->id, $day->getComments()->at(0)->id);
       $this->assertEqual($response_comment->text, $text);
     }
   }
@@ -103,7 +103,7 @@ class DaysUserControllerTest extends odControllerTestCase
 
     lmbToolkit::instance()->setUser($this->main_user);
 
-    $response = $this->post('share', [], $day->getId());
+    $response = $this->post('share', [], $day->id);
     if ($this->assertResponse(200))
       $this->assertTrue(is_null($response->result));
   }
@@ -120,7 +120,7 @@ class DaysUserControllerTest extends odControllerTestCase
 
     lmbToolkit::instance()->setUser($this->main_user);
 
-    $response = $this->post('like', [], $day->getId());
+    $response = $this->post('like', [], $day->id);
     if ($this->assertResponse(200)) {
       $this->assertTrue(is_null($response->result));
       $this->assertEqual(DayLike::find()->count(), 1);
@@ -137,14 +137,14 @@ class DaysUserControllerTest extends odControllerTestCase
 
     lmbToolkit::instance()->setUser($this->main_user);
 
-    $response = $this->post('like', [], $day->getId());
+    $response = $this->post('like', [], $day->id);
     if ($this->assertResponse(200)) {
       $this->assertTrue(is_null($response->result));
       $this->assertEqual(DayLike::find()->count(), 1);
       $this->assertEqual(Day::findOne()->getLikes()->count(), 1);
     }
 
-    $response = $this->post('like', [], $day->getId());
+    $response = $this->post('like', [], $day->id);
     if ($this->assertResponse(200)) {
       $this->assertTrue(is_null($response->result));
       $this->assertEqual($response->status, 'Entity already exists');
@@ -158,7 +158,7 @@ class DaysUserControllerTest extends odControllerTestCase
 
     lmbToolkit::instance()->setUser($this->additional_user);
 
-    $response = $this->post('like', [], $day->getId());
+    $response = $this->post('like', [], $day->id);
     if ($this->assertResponse(200)) {
       $this->assertTrue(is_null($response->result));
       $this->assertEqual(DayLike::find()->count(), 1);
@@ -180,7 +180,7 @@ class DaysUserControllerTest extends odControllerTestCase
 
     lmbToolkit::instance()->setUser($this->additional_user);
 
-    $response = $this->post('unlike', [], $day->getId());
+    $response = $this->post('unlike', [], $day->id);
     if ($this->assertResponse(200)) {
       $this->assertTrue(is_null($response->result));
       $this->assertEqual(DayLike::find()->count(), 0);
@@ -196,7 +196,7 @@ class DaysUserControllerTest extends odControllerTestCase
 
     lmbToolkit::instance()->setUser($this->additional_user);
 
-    $response = $this->post('unlike', [], $day->getId());
+    $response = $this->post('unlike', [], $day->id);
     if ($this->assertResponse(200)) {
       $this->assertTrue(is_null($response->result));
       $this->assertEqual(DayLike::find()->count(), 0);
@@ -242,41 +242,41 @@ class DaysUserControllerTest extends odControllerTestCase
       $this->assertEqual(4, count($days));
       $this->assertJsonDayItems($days);
 
-      $this->assertEqual($day4->getId(), $days[0]->id);
-      $this->assertEqual($day3->getId(), $days[1]->id);
-      $this->assertEqual($day2->getId(), $days[2]->id);
-      $this->assertEqual($day1->getId(), $days[3]->id);
+      $this->assertEqual($day4->id, $days[0]->id);
+      $this->assertEqual($day3->id, $days[1]->id);
+      $this->assertEqual($day2->id, $days[2]->id);
+      $this->assertEqual($day1->id, $days[3]->id);
     }
 
     $response_with_from = $this->get('favorite', [
-      'from' => $day4->getId(),
+      'from' => $day4->id,
     ]);
     if ($this->assertResponse(200)) {
       $days = $response_with_from->result;
       $this->assertEqual(3, count($days));
       $this->assertJsonDayItems($days);
 
-      $this->assertEqual($day3->getId(), $days[0]->id);
-      $this->assertEqual($day2->getId(), $days[1]->id);
-      $this->assertEqual($day1->getId(), $days[2]->id);
+      $this->assertEqual($day3->id, $days[0]->id);
+      $this->assertEqual($day2->id, $days[1]->id);
+      $this->assertEqual($day1->id, $days[2]->id);
     }
 
     $response_with_range = $this->get('favorite', [
-      'from' => $day4->getId(),
-      'to' => $day1->getId(),
+      'from' => $day4->id,
+      'to' => $day1->id,
     ]);
     if ($this->assertResponse(200)) {
       $days = $response_with_range->result;
       $this->assertEqual(2, count($days));
       $this->assertJsonDayItems($days);
 
-      $this->assertEqual($day3->getId(), $days[0]->id);
-      $this->assertEqual($day2->getId(), $days[1]->id);
+      $this->assertEqual($day3->id, $days[0]->id);
+      $this->assertEqual($day2->id, $days[1]->id);
     }
 
     $response_with_limit = $this->get('favorite', [
-      'from' => $day4->getId(),
-      'to' => $day1->getId(),
+      'from' => $day4->id,
+      'to' => $day1->id,
       'limit' => 1,
     ]);
     if ($this->assertResponse(200)) {
@@ -284,7 +284,7 @@ class DaysUserControllerTest extends odControllerTestCase
       $this->assertEqual(1, count($days));
       $this->assertJsonDayItems($days);
 
-      $this->assertEqual($day3->getId(), $days[0]->id);
+      $this->assertEqual($day3->id, $days[0]->id);
     }
   }
 
@@ -302,11 +302,11 @@ class DaysUserControllerTest extends odControllerTestCase
 
     lmbToolkit::instance()->setUser($this->main_user);
 
-    $response = $this->post('mark_favorite', [], $day->getId());
+    $response = $this->post('mark_favorite', [], $day->id);
     if ($this->assertResponse(200)) {
       $this->assertTrue(is_null($response->result));
       $this->assertEqual(1, $this->main_user->getFavoriteDays()->count());
-      $this->assertEqual($day->getId(), $this->main_user->getFavoriteDays()->at(0)->getId());
+      $this->assertEqual($day->id, $this->main_user->getFavoriteDays()->at(0)->id);
     }
   }
 
@@ -321,14 +321,14 @@ class DaysUserControllerTest extends odControllerTestCase
 
     lmbToolkit::instance()->setUser($this->main_user);
 
-    $response = $this->post('mark_favorite', [], $day->getId());
+    $response = $this->post('mark_favorite', [], $day->id);
     if ($this->assertResponse(200)) {
       $this->assertTrue(is_null($response->result));
       $this->assertEqual(1, $this->main_user->getFavoriteDays()->count());
-      $this->assertEqual($day->getId(), $this->main_user->getFavoriteDays()->at(0)->getId());
+      $this->assertEqual($day->id, $this->main_user->getFavoriteDays()->at(0)->id);
     }
 
-    $response = $this->post('mark_favorite', [], $day->getId());
+    $response = $this->post('mark_favorite', [], $day->id);
     if ($this->assertResponse(200)) {
       $this->assertTrue(is_null($response->result));
       $this->assertEqual($response->status, 'Entity already exists');
@@ -351,7 +351,7 @@ class DaysUserControllerTest extends odControllerTestCase
 
     lmbToolkit::instance()->setUser($this->main_user);
 
-    $response = $this->post('unmark_favorite', [], $day->getId());
+    $response = $this->post('unmark_favorite', [], $day->id);
     if ($this->assertResponse(200)) {
       $this->assertTrue(is_null($response->result));
       $this->assertEqual(0, $this->main_user->getFavoriteDays()->count());
@@ -371,13 +371,13 @@ class DaysUserControllerTest extends odControllerTestCase
 
     lmbToolkit::instance()->setUser($this->main_user);
 
-    $response = $this->post('unmark_favorite', [], $day->getId());
+    $response = $this->post('unmark_favorite', [], $day->id);
     if ($this->assertResponse(200)) {
       $this->assertTrue(is_null($response->result));
       $this->assertEqual(0, $this->main_user->getFavoriteDays()->count());
     }
 
-    $response = $this->post('unmark_favorite', [], $day->getId());
+    $response = $this->post('unmark_favorite', [], $day->id);
     if ($this->assertResponse(200)) {
       $this->assertTrue(is_null($response->result));
       $this->assertEqual(0, $this->main_user->getFavoriteDays()->count());
@@ -418,32 +418,32 @@ class DaysUserControllerTest extends odControllerTestCase
       $this->assertEqual(4, count($days));
       $this->assertJsonDayItems($days, true);
 
-      $days = $this->get('following', array('from' => $day4->getId()))->result;
+      $days = $this->get('following', array('from' => $day4->id))->result;
       $this->assertResponse(200);
       $this->assertEqual(3, count($days));
-      $this->assertEqual($day3->getId(), $days[0]->id);
-      $this->assertEqual($day2->getId(), $days[1]->id);
-      $this->assertEqual($day1->getId(), $days[2]->id);
+      $this->assertEqual($day3->id, $days[0]->id);
+      $this->assertEqual($day2->id, $days[1]->id);
+      $this->assertEqual($day1->id, $days[2]->id);
 
       $days = $this
         ->get('following', array(
-        'from' => $day4->getId(),
-        'to' => $day1->getId()))
+        'from' => $day4->id,
+        'to' => $day1->id))
         ->result;
       $this->assertResponse(200);
       $this->assertEqual(2, count($days));
-      $this->assertEqual($day3->getId(), $days[0]->id);
-      $this->assertEqual($day2->getId(), $days[1]->id);
+      $this->assertEqual($day3->id, $days[0]->id);
+      $this->assertEqual($day2->id, $days[1]->id);
 
       $days = $this
         ->get('following', array(
-        'from' => $day4->getId(),
-        'to' => $day1->getId(),
+        'from' => $day4->id,
+        'to' => $day1->id,
         'limit' => 1))
         ->result;
       $this->assertResponse(200);
       $this->assertEqual(1, count($days));
-      $this->assertEqual($day3->getId(), $days[0]->id);
+      $this->assertEqual($day3->id, $days[0]->id);
       $this->assertJsonDayItems($days);
     }
 
@@ -488,51 +488,51 @@ class DaysUserControllerTest extends odControllerTestCase
         $this->assertEqual(4, count($days));
         $this->assertJsonDayItems($days, true);
 
-        $this->assertEqual($day4->getId(), $days[0]->id);
-        $this->assertEqual($day3->getId(), $days[1]->id);
-        $this->assertEqual($day2->getId(), $days[2]->id);
+        $this->assertEqual($day4->id, $days[0]->id);
+        $this->assertEqual($day3->id, $days[1]->id);
+        $this->assertEqual($day2->id, $days[2]->id);
         $this->assertTrue($days[2]->is_deleted);
-        $this->assertEqual($day1->getId(), $days[3]->id);
+        $this->assertEqual($day1->id, $days[3]->id);
       }
 
       $response_with_from = $this->get('my', [
-        'from' => $day4->getId(),
+        'from' => $day4->id,
       ]);
       if ($this->assertResponse(200)) {
         $days = $response_with_from->result;
         $this->assertEqual(3, count($days));
         $this->assertJsonDayItems($days, true);
 
-        $this->assertEqual($day3->getId(), $days[0]->id);
-        $this->assertEqual($day2->getId(), $days[1]->id);
+        $this->assertEqual($day3->id, $days[0]->id);
+        $this->assertEqual($day2->id, $days[1]->id);
         $this->assertTrue($days[1]->is_deleted);
-        $this->assertEqual($day1->getId(), $days[2]->id);
+        $this->assertEqual($day1->id, $days[2]->id);
       }
 
       $response_with_range = $this->get('my', [
-        'from' => $day4->getId(),
-        'to' => $day1->getId(),
+        'from' => $day4->id,
+        'to' => $day1->id,
       ]);
       if ($this->assertResponse(200)) {
         $days = $response_with_range->result;
         $this->assertEqual(2, count($days));
         $this->assertJsonDayItems($days, true);
 
-        $this->assertEqual($day3->getId(), $days[0]->id);
-        $this->assertEqual($day2->getId(), $days[1]->id);
+        $this->assertEqual($day3->id, $days[0]->id);
+        $this->assertEqual($day2->id, $days[1]->id);
         $this->assertTrue($days[1]->is_deleted);
       }
 
       $response_with_limit = $this->get('my', [
-        'from' => $day4->getId(),
-        'to' => $day1->getId(),
+        'from' => $day4->id,
+        'to' => $day1->id,
         'limit' => 1,
       ]);
       if ($this->assertResponse(200)) {
         $days = $response_with_limit->result;
         $this->assertEqual(1, count($days));
         $this->assertJsonDayItems($days, true);
-        $this->assertEqual($day3->getId(), $days[0]->id);
+        $this->assertEqual($day3->id, $days[0]->id);
       }
     }
 
@@ -553,7 +553,7 @@ class DaysUserControllerTest extends odControllerTestCase
 
       $response = $this->post('complain', [
         'text' => $text = $this->generator->string()
-      ], $day->getId());
+      ], $day->id);
       if ($this->assertResponse(200)) {
         $response_complaint = $response->result;
         $this->assertEqual($response_complaint->text, $text);
@@ -562,7 +562,7 @@ class DaysUserControllerTest extends odControllerTestCase
         $this->assertEqual($complaints->count(), 1);
 
         $loaded_complaint = $complaints->at(0);
-        $this->assertEqual($loaded_complaint->getId(), $response_complaint->id);
+        $this->assertEqual($loaded_complaint->id, $response_complaint->id);
         $this->assertEqual($loaded_complaint->getDayId(), $response_complaint->day_id);
         $this->assertEqual($loaded_complaint->getText(), $text);
       }

@@ -11,7 +11,6 @@
  * @package active_record
  * @version $Id: common.inc.php 8048 2010-01-19 22:12:02Z korchasa $
  */
-require_once('limb/core/common.inc.php');
 lmb_package_require('validation');
 lmb_package_require('dbal');
 

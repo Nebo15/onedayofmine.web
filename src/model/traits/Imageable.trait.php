@@ -1,10 +1,12 @@
 <?php
 trait Imageable
 {
+  public $image_ext;
+
   function attachImage($content)
   {
     $extension = lmbToolkit::instance()->getImageHelper()->getImageExtensionByImageContent($content);
-    $this->setImageExt($extension);
+    $this->image_ext = $extension;
 
     lmbFs::safeWrite($this->_getSavePath(), $content);
 
@@ -122,16 +124,16 @@ trait Imageable
 
   function getImage(array $size = null)
   {
-    if(!$this->getImageExt())
+    if(!$this->image_ext)
       return null;
 
-    if(!$this->getId())
+    if(!$this->id)
       throw new lmbException("Can't create image path, because entity have no ID.", array('class' => get_called_class()));
 
     $placeholders = [
-      ':id'             => $this->getId(),
-      ':hash'           => sha1('s0l7&p3pp$r'.$this->getId()),
-      ':file_extension' => $this->getImageExt(),
+      ':id'             => $this->id,
+      ':hash'           => sha1('s0l7&p3pp$r'.$this->id),
+      ':file_extension' => $this->image_ext,
       ':image_width'    => count($size) ? $size['width'] : 'orig',
     ];
 

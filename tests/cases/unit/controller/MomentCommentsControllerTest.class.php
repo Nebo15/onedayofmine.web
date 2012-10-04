@@ -21,14 +21,14 @@ class MomentCommentsControllerTest extends odControllerTestCase
 
     $response = $this->post('update', [
       'text' => $new_comment_text = $this->generator->string(8)
-    ], $comment->getId());
+    ], $comment->id);
 
     if($this->assertResponse(200))
     {
       $response_comment = $response->result;
       $this->assertJsonMomentComment($response_comment);
 
-      $loaded_comment = MomentComment::findById($comment->getId());
+      $loaded_comment = MomentComment::findById($comment->id);
       $this->assertEqual($new_comment_text, $loaded_comment->text);
     }
   }
@@ -44,7 +44,7 @@ class MomentCommentsControllerTest extends odControllerTestCase
 
     $response = $this->post('update', [
       'text' => $new_comment_text = $this->generator->string(8)
-    ], $comment->getId());
+    ], $comment->id);
 
     if($this->assertResponse(401))
     {
@@ -64,12 +64,12 @@ class MomentCommentsControllerTest extends odControllerTestCase
 
     $this->toolkit->setUser($this->main_user);
 
-    $response = $this->post('delete', [], $comment->getId());
+    $response = $this->post('delete', [], $comment->id);
     if($this->assertResponse(200))
     {
       $this->assertTrue(is_null($response->result));
 
-      $loaded_comment = MomentComment::findById($comment->getId());
+      $loaded_comment = MomentComment::findById($comment->id);
       $this->assertFalse($loaded_comment);
     }
   }
@@ -81,7 +81,7 @@ class MomentCommentsControllerTest extends odControllerTestCase
 
     $this->toolkit->setUser($this->main_user);
 
-    $response = $this->get('delete', [], $comment->getId());
+    $response = $this->get('delete', [], $comment->id);
     if($this->assertResponse(405))
     {
       $this->assertTrue(is_null($response->result));
@@ -100,7 +100,7 @@ class MomentCommentsControllerTest extends odControllerTestCase
 
     $this->toolkit->setUser($this->additional_user);
 
-    $response = $this->post('delete', [], $comment->getId());
+    $response = $this->post('delete', [], $comment->id);
     if($this->assertResponse(401))
     {
       $this->assertTrue(is_null($response->result));
