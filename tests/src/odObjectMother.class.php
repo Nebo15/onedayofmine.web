@@ -44,7 +44,7 @@ class odObjectMother
     else
       $day->setType($types[array_rand($types)]);
 
-    $day->views_count = rand(0, 100);
+    $day->views_count = 0;
 
     return $day;
   }
