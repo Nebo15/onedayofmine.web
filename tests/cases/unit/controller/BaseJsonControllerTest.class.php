@@ -7,74 +7,91 @@ class BaseJsonControllerTest extends odUnitTestCase
   function testPerformAction_GuestMethod()
   {
     lmbToolkit::instance()->resetUser();
+
     $controller = new BaseJsonControllerForTest();
     $controller->setCurrentAction('foo');
     $controller->performAction();
-    $this->assertResponseCode(200);
-    $this->assertResponse('foo');
+
+    if($this->assertResponseCode(200))
+      $this->assertResponse('foo');
   }
 
   function testPerformAction_GuestMethodByUser()
   {
     lmbToolkit::instance()->setUser(new User());
+
     $controller = new BaseJsonControllerForTest();
     $controller->setCurrentAction('foo');
     $controller->performAction();
-    $this->assertResponseCode(200);
-    $this->assertResponse('foo');
+
+    if($this->assertResponseCode(200))
+      $this->assertResponse('foo');
   }
 
   function testPerformAction_UserMethod_Unauthorized()
   {
     lmbToolkit::instance()->resetUser();
+
     $controller = new BaseJsonControllerForTest();
+
     $controller->setCurrentAction('baz');
-    $controller->performAction();
+    $result = $controller->performAction();
+
     $this->assertResponseCode(401);
   }
 
   function testPerformAction_UserMethod()
   {
     lmbToolkit::instance()->setUser(new User());
+
     $controller = new BaseJsonControllerForTest();
     $controller->setCurrentAction('baz');
     $controller->performAction();
-    $this->assertResponseCode(200);
-    $this->assertResponse('baz');
+
+    if($this->assertResponseCode(200))
+      $this->assertResponse('baz');
   }
 
   function testPerformAction_UserAsDefault()
   {
     lmbToolkit::instance()->resetUser();
+
     $controller = new BaseJsonControllerForTest();
     $controller->setCurrentAction('bar');
     $controller->performAction();
+
     $this->assertResponseCode(401);
   }
 
   function testPerformAction_BothMethods()
   {
     lmbToolkit::instance()->resetUser();
+
     $controller = new BaseJsonControllerForTest();
     $controller->setCurrentAction('zoo');
     $controller->performAction();
-    $this->assertResponseCode(200);
-    $this->assertResponse('guest_zoo');
+
+    if($this->assertResponseCode(200))
+      $this->assertResponse('guest_zoo');
 
     lmbToolkit::instance()->setUser(new User());
+
     $controller = new BaseJsonControllerForTest();
     $controller->setCurrentAction('zoo');
     $controller->performAction();
-    $this->assertResponseCode(200);
-    $this->assertResponse('user_zoo');
+
+    if($this->assertResponseCode(200))
+      $this->assertResponse('user_zoo');
   }
 
   function testPerformAction_UnfoundedAction()
   {
     lmbToolkit::instance()->resetUser();
+
     $controller = new BaseJsonControllerForTest();
     $controller->setCurrentAction('wrong');
     $controller->performAction();
+
     $this->assertResponseCode(404);
   }
 
