@@ -16,7 +16,7 @@ class DayCommentsController extends BaseJsonController
     if($comment->getUser()->getId() != $this->toolkit->getUser()->getId())
       return $this->_answerNotOwner();
 
-    $this->toolkit->getNewsObserver()->onDayCommentDelete($comment);
+    $this->toolkit->doAsync('dayCommentDelete', $comment->id);
 
     $comment->destroy();
 

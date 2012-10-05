@@ -85,9 +85,6 @@ class TasksTest extends odUnitTestCase
 
   protected function _setUpApns()
   {
-    set_include_path(implode(PATH_SEPARATOR,
-      array('lib/Zend_Mobile/library', get_include_path())
-    ));
     lmb_require('Zend/Mobile/Push/Apns.php');
     lmb_require('Zend/Mobile/Push/Message/Apns.php');
     lmb_require('Zend/Mobile/Push/Exception/InvalidToken.php');

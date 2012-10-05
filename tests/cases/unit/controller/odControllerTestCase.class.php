@@ -4,12 +4,16 @@ lmb_require('lib/DocCommentParser/*.class.php');
 lmb_require('lib/limb/net/src/lmbHttpRequest.class.php');
 lmb_require('tests/cases/unit/odUnitTestCase.class.php');
 lmb_require('limb/net/src/lmbHttpResponse.class.php');
+lmb_require('tests/src/service/odJobQueueClientForTests.class.php');
 
 Mock::generate('odPostingService', 'PostingServiceMock');
 Mock::generate('odFacebook', 'FacebookMock');
 Mock::generate('odTwitter', 'TwitterMock');
 Mock::generate('FacebookProfile', 'FacebookProfileMock');
 
+/**
+ * @property odTools $toolkit
+ */
 abstract class odControllerTestCase extends odUnitTestCase
 {
   /**
@@ -40,6 +44,8 @@ abstract class odControllerTestCase extends odUnitTestCase
     $this->toolkit->setFacebookProfile($this->additional_user, new FacebookProfileMock);
 
     $this->toolkit->setPostingService(new PostingServiceMock);
+
+    $this->toolkit->setJobQueueClient(new odJobQueueClientForTests());
   }
 
   function get($action, $params = array(), $id = null)

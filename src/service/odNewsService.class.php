@@ -322,6 +322,7 @@ class odNewsService
    */
   protected function addRecipients($recipients)
   {
+    lmb_assert_type($recipients, 'array');
     foreach($recipients as $recipient) {
       $this->addRecipient($recipient);
     }

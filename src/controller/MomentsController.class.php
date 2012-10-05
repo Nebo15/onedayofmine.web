@@ -56,9 +56,7 @@ class MomentsController extends BaseJsonController
     if($this->error_list->isEmpty())
     {
       $comment->saveSkipValidation();
-
-      $this->toolkit->getNewsObserver()->onMomentComment($comment);
-
+      $this->toolkit->doAsync('momentCommentCreate', $comment->id);
       return $this->_answerOk($this->toolkit->getExportHelper()->exportMomentComment($comment));
     }
     else
@@ -79,7 +77,7 @@ class MomentsController extends BaseJsonController
     $moment->setIsDeleted(1);
     $moment->save();
 
-    $this->toolkit->getNewsObserver()->onMomentDelete($moment);
+    $this->toolkit->doAsync('momentDelete', $moment->id);
 
     return $this->_answerOk();
   }
@@ -98,7 +96,7 @@ class MomentsController extends BaseJsonController
     $moment->setIsDeleted(0);
     $moment->save();
 
-    $this->toolkit->getNewsObserver()->onMomentRestore($moment);
+    $this->toolkit->doAsync('momentRestore', $moment->id);
 
     return $this->_answerOk();
   }
@@ -119,8 +117,7 @@ class MomentsController extends BaseJsonController
     $like->setUser($this->_getUser());
     $like->save();
 
-    $this->toolkit->getPostingService()->shareMomentLike($moment, $like);
-    $this->toolkit->getNewsObserver()->onMomentLike($moment, $like);
+    $this->toolkit->doAsync('momentLike', $moment->id, $like->id);
 
     return $this->_answerOk();
   }
@@ -136,8 +133,7 @@ class MomentsController extends BaseJsonController
     if(!$like = MomentLike::findByMomentIdAndUserId($moment->getId(), $this->_getUser()->getId()))
       return $this->_answerOk(null, "Like not found");
 
-    $this->toolkit->getPostingService()->shareMomentUnlike($moment, $like);
-    $this->toolkit->getNewsObserver()->onMomentUnlike($moment, $like);
+    $this->toolkit->doAsync('momentUnlike', $moment->id, $like->id);
 
     $like->destroy();
 
