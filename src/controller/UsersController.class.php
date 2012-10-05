@@ -57,7 +57,7 @@ class UsersController extends BaseJsonController
     $following->add($user);
     $following->save();
 
-    $this->toolkit->getNewsObserver()->onFollow($user);
+    $this->toolkit->doAsync('userFollow', $user->id);
 
     return $this->_answerOk();
   }

@@ -147,3 +147,16 @@ function od_apns_connect($apns, $attempts)
     exit(1);
   }
 }
+
+function task_od_job_worker()
+{
+  lmb_require('src/service/odAsyncJobs.class.php');
+
+  $worker= new GearmanWorker();
+  $worker->addServer();
+  foreach(get_class_methods('odAsyncJobs') as $function)
+  {
+    $worker->addFunction($function, array("odAsyncJobs", $function));
+  }
+  while($worker->work());
+}

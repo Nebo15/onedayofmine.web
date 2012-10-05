@@ -46,7 +46,7 @@ class AuthController extends BaseJsonController
     $this->toolkit->setUser($user);
 
     if($is_new_user)
-      $this->toolkit->getNewsObserver()->onUserRegister($user);
+      $this->toolkit->doAsync('userCreate', $user->id);
 
     $this->_processDeviceToken($user);
 
