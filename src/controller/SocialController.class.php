@@ -33,27 +33,25 @@ class SocialController extends BaseJsonController
 
     $this->_checkPropertiesInRequest(array('access_token', 'access_token_secret'));
 
-    if($this->error_list->isEmpty())
-    {
-      $access_token        = $this->request->getPost('access_token');
-      $access_token_secret = $this->request->getPost('access_token_secret');
-
-      $provider = $this->toolkit->getTwitter($access_token, $access_token_secret);
-
-      if(!$uid = $provider->getUid($this->error_list))
-        return $this->_answerWithError($this->error_list->export());
-
-      $user = $this->toolkit->getUser();
-      $user->setTwitterUid($uid);
-      $user->setTwitterAccessToken($access_token);
-      $user->setTwitterAccessTokenSecret($access_token_secret);
-      $user->getSettings()->setSocialShareTwitter(1);
-      $user->save();
-
-      return $this->_answerOk();
-    }
-    else
+    if(!$this->error_list->isEmpty())
       return $this->_answerWithError($this->error_list->export());
+
+    $access_token        = $this->request->getPost('access_token');
+    $access_token_secret = $this->request->getPost('access_token_secret');
+
+    $provider = $this->toolkit->getTwitter($access_token, $access_token_secret);
+
+    if(!$uid = $provider->getUid($this->error_list))
+      return $this->_answerWithError($this->error_list->export());
+
+    $user = $this->toolkit->getUser();
+    $user->setTwitterUid($uid);
+    $user->setTwitterAccessToken($access_token);
+    $user->setTwitterAccessTokenSecret($access_token_secret);
+    $user->getSettings()->setSocialShareTwitter(1);
+    $user->save();
+
+    return $this->_answerOk();
   }
 
   function doUserEmail()
