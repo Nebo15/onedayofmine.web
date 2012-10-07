@@ -401,14 +401,10 @@ class UsersControllerTest extends odControllerTestCase
     lmb_assert_true(array_key_exists('config_file_path', $sphinx_config), 'Sphinx config file not set. Check config.');
     lmb_assert_true($sphinx_config['config_file_path'], 'Sphinx config file path is emprty. Check config.');
     lmb_assert_true(file_exists($sphinx_config['config_file_path']), "Sphinx config file '{$sphinx_config['config_file_path']}' not found. Check config.");
-
     if($result = exec("indexer --config {$sphinx_config['config_file_path']} --rotate users --quiet"))
     {
-      echo 'Indexer returned errors or/and warnings:';
-      echo '<pre>';
-      var_dump($result);
-      echo '</pre>';
-      exit;
+      $this->fail("Indexer returned errors or/and warnings: {$result}");
+      return;
     }
     sleep(1);
 
@@ -486,11 +482,8 @@ class UsersControllerTest extends odControllerTestCase
 
     if($result = exec("indexer --config {$sphinx_config['config_file_path']} --rotate users --quiet"))
     {
-      echo 'Indexer returned errors or/and warnings:';
-      echo '<pre>';
-      var_dump($result);
-      echo '</pre>';
-      exit;
+      $this->fail("Indexer returned errors or/and warnings: {$result}");
+      return;
     }
     sleep(1);
 
@@ -509,20 +502,15 @@ class UsersControllerTest extends odControllerTestCase
 
     if($result = exec("indexer --config {$sphinx_config['config_file_path']} --rotate users_delta --quiet"))
     {
-      echo 'Indexer returned errors or/and warnings:';
-      echo '<pre>';
-      var_dump($result);
-      echo '</pre>';
-      exit;
+      $this->fail("Indexer returned errors or/and warnings: {$result}");
+      return;
     }
+    sleep(1);
 
     if($result = exec("indexer --config {$sphinx_config['config_file_path']} --rotate --quiet --merge users users_delta"))
     {
-      echo 'Indexer returned errors or/and warnings:';
-      echo '<pre>';
-      var_dump($result);
-      echo '</pre>';
-      exit;
+      $this->fail("Indexer returned errors or/and warnings: {$result}");
+      return;
     }
     sleep(1);
 
