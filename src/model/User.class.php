@@ -195,7 +195,9 @@ class User extends BaseModel
   static function findByString($query, $from_id = null, $to_id = null, $limit = null)
   {
     $ids = lmbToolkit::instance()->getSearchService('users')->find($query, $from_id, $to_id, $limit);
-    return self::findByIds($ids);
+    $users = self::findByIds($ids);
+    $users = self::sortByIds($users, $ids);
+    return $users;
   }
 
   static function findUsersWithOldDays()

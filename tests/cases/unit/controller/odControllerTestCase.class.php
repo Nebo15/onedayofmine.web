@@ -4,6 +4,7 @@ lmb_require('lib/DocCommentParser/*.class.php');
 lmb_require('lib/limb/net/src/lmbHttpRequest.class.php');
 lmb_require('tests/cases/unit/odUnitTestCase.class.php');
 lmb_require('limb/net/src/lmbHttpResponse.class.php');
+lmb_require('src/model/Day.class.php');
 
 Mock::generate('odPostingService', 'PostingServiceMock');
 Mock::generate('odFacebook', 'FacebookMock');

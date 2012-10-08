@@ -467,6 +467,25 @@ class UsersControllerTest extends odControllerTestCase
 
       $this->assertEqual($user2->getId(), $response_users[0]->id);
     }
+
+    $empty_response = $this->get('search', [
+      'query' => 'James'
+    ]);
+    if($this->assertResponse(200))
+    {
+      $response_users = $empty_response->result;
+      $this->assertEqual(0, count($response_users));
+    }
+
+    $response_wtihout_star = $this->get('search', [
+      'query' => 'James*'
+    ]);
+    if($this->assertResponse(200))
+    {
+      $response_users = $response_wtihout_star->result;
+      $this->assertEqual(1, count($response_users));
+      $this->assertJsonUserItems($response_users);
+    }
   }
 
   function testSearch_IndexUpdatedFromDeltaIndex()
@@ -513,6 +532,27 @@ class UsersControllerTest extends odControllerTestCase
       return;
     }
     sleep(1);
+
+    $response = $this->get('search', [
+      'query' => 'John*'
+    ]);
+    if($this->assertResponse(200))
+    {
+      $this->assertEqual(2, count($response->result));
+      $this->assertJsonUserItems($response->result);
+    }
+
+    if($result = exec("indexer --config {$sphinx_config['config_file_path']} --rotate users_delta --quiet"))
+    {
+      $this->fail("Indexer returned errors or/and warnings: {$result}");
+      return;
+    }
+
+    if($result = exec("indexer --config {$sphinx_config['config_file_path']} --rotate --quiet --merge users users_delta"))
+    {
+      $this->fail("Indexer returned errors or/and warnings: {$result}");
+      return;
+    }
 
     $response = $this->get('search', [
       'query' => 'John*'
