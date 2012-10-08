@@ -338,7 +338,7 @@
                 }
             }
 
-            array_multisort($altCoverageData, SORT_STRING);
+            array_multisort($altCoverageData, SORT_ASC);
             return $altCoverageData;
         }
 

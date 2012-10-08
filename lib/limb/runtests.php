@@ -140,6 +140,7 @@ foreach($tests as $test)
     else
     {
       $runner = new lmbTestRunner();
+      $runner->useCoverage('/www/onedayofmine/src', '', '/tmp/aaa');
       if(!$runner->run(new lmbTestTreeFilePathNode($test)))
         $res = false;
     }
