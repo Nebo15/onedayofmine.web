@@ -4,7 +4,7 @@ lmb_require('src/model/Day.class.php');
 lmb_require('src/model/DeviceToken.class.php');
 lmb_require('src/model/Day.class.php');
 
-class AuthController extends BaseJsonController
+class   AuthController extends BaseJsonController
 {
   function doGuestParameters()
   {
@@ -46,7 +46,7 @@ class AuthController extends BaseJsonController
     $this->toolkit->setUser($user);
 
     if($is_new_user)
-      $this->toolkit->getNewsObserver()->onUserRegister($user);
+      $this->toolkit->doAsync('userCreate', $user->id);
 
     $this->_processDeviceToken($user);
 

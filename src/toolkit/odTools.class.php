@@ -10,6 +10,7 @@ lmb_require('src/service/odPostingService.class.php');
 lmb_require('src/service/odExportHelper.class.php');
 lmb_require('src/service/odRequestsLog.class.php');
 lmb_require('src/service/odSearchService.class.php');
+lmb_require('src/service/odAsyncJobs.class.php');
 lmb_require('src/model/User.class.php');
 require_once('amazon-sdk/sdk.class.php');
 
@@ -40,6 +41,8 @@ class odTools extends lmbAbstractTools
    * @var array odSearchService
    */
   protected $search_clients = [];
+
+  protected $job_queue_client;
 
   /**
    * @var Zend_Mobile_Push_Apns
@@ -330,11 +333,8 @@ class odTools extends lmbAbstractTools
   {
     if(!$this->apns)
     {
-      set_include_path(implode(PATH_SEPARATOR,
-        array('lib/Zend_Mobile/library', get_include_path())
-      ));
-      lmb_require('Zend_Mobile/library/Zend/Mobile/Push/Apns.php');
-      lmb_require('Zend_Mobile/library/Zend/Mobile/Push/Message/Apns.php');
+      lmb_require('Zend/Mobile/Push/Apns.php');
+      lmb_require('Zend/Mobile/Push/Message/Apns.php');
       $this->apns = new Zend_Mobile_Push_Apns();
     }
     return $this->apns;
@@ -351,5 +351,27 @@ class odTools extends lmbAbstractTools
         $session->start();
       return $session;
     }
+  }
+
+  function setJobQueueClient($client)
+  {
+    $this->job_queue_client = $client;
+  }
+
+  function getJobQueueClient()
+  {
+    if(!$this->job_queue_client)
+    {
+      $client = new GearmanClient();
+      $client->addServer();
+      $this->job_queue_client = $client;
+    }
+    return $this->job_queue_client;
+  }
+
+  function doAsync($function_name, $param1)
+  {
+    return $this->getJobQueueClient()
+      ->doBackground($function_name, odAsyncJobs::encodeWorkload(array_slice(func_get_args(), 1)));
   }
 }

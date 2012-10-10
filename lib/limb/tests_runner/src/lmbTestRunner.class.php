@@ -105,7 +105,7 @@ class lmbTestRunner
     if(!$this->coverage_include)
       return;
 
-    @define('__PHPCOVERAGE_HOME', dirname(__FILE__) . '/../lib/spikephpcoverage/src/');
+    define('__PHPCOVERAGE_HOME', dirname(__FILE__) . '/../lib/spikephpcoverage/src/');
     require_once(__PHPCOVERAGE_HOME . '/CoverageRecorder.php');
 
     if($this->coverage_report_dir)
