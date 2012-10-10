@@ -16,7 +16,7 @@ lmb_require('limb/core/src/lmbDelegate.class.php');
  */
 class lmbErrorGuard
 {
-  static protected $exceptions_delegates;
+  static protected $exceptions_delegates = array();
   static protected $fatal_error_delegate;
 
   static function registerExceptionHandler()
