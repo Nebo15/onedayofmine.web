@@ -24,26 +24,34 @@ class odTools extends lmbAbstractTools
    * @var odRequestsLog
    */
   protected $requests_log;
-
+  /**
+   * @var array
+   */
   protected $tests_users;
   /**
    * @var odPostingService
    */
   protected $posting_service;
-
+  /**
+   * @var array
+   */
   protected $facebook_instances = [];
-
+  /**
+   * @var array
+   */
   protected $twitter_instances = [];
-
+  /**
+   * @var array
+   */
   protected $facebook_profiles = [];
-
   /**
    * @var array odSearchService
    */
   protected $search_clients = [];
-
+  /**
+   * @var GearmanClient
+   */
   protected $job_queue_client;
-
   /**
    * @var Zend_Mobile_Push_Apns
    */
@@ -67,7 +75,6 @@ class odTools extends lmbAbstractTools
       return null;
 
     $this->user = User::findById($user_id);
-
 
     return $this->user;
   }
@@ -180,6 +187,7 @@ class odTools extends lmbAbstractTools
   {
     if(null === $path)
       return null;
+
     return lmb_env_get('HOST_URL').$path;
   }
 
@@ -231,7 +239,6 @@ class odTools extends lmbAbstractTools
 
       foreach ($users['data'] as $key => $value) {
         $user = new User();
-        // var_dump($value);
         $user->setFacebookUid($value['id']);
         $user->setFacebookAccessToken($value['access_token']);
         $user->import($this->getFacebookProfile($user)->getInfo());
