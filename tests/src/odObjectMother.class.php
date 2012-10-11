@@ -14,13 +14,27 @@ class odObjectMother
     $user->setFacebookAccessToken($this->string(50));
     $user->setEmail($this->email());
     $user->setFacebookProfileUtime($this->integer(11));
-    $user->setFacebookPicBig($this->string(50));
-    $user->setFacebookPicSquare($this->string(50));
-    $user->setFacebookPicSmall($this->string(50));
-    $user->setName($name ?: $this->string(100));
+    $user->setName($name ?: $this->userName());
     $user->setTimezone($this->integer(1));
-    $user->setSex('female');
-    $user->setOccupation($this->string(50));
+
+    $genders = ['male', 'female'];
+    if(!$this->generate_random)
+      $user->setSex($genders[0]);
+    else
+      $user->setSex($genders[array_rand($genders)]);
+
+    $occupations = ['Engineer', 'Doctor', 'Scientist'];
+    if(!$this->generate_random)
+      $user->setOccupation($occupations[0]);
+    else
+      $user->setOccupation($occupations[array_rand($occupations)]);
+
+    $locations = ['Kiev, Ukraine', 'London, GB', 'LA, CA', 'NY', 'Washington, DC'];
+    if(!$this->generate_random)
+      $user->setLocation($locations[0]);
+    else
+      $user->setLocation($locations[array_rand($locations)]);
+
     $user->setBirthday($this->date_sql());
 
     return $user;
@@ -303,7 +317,7 @@ class odObjectMother
     return array(
       'facebook_uid'      => $uid ?: $this->integer(20),
       'email'            => $this->email(),
-      'name'             => $this->string(10),
+      'name'             => $this->userName(),
       'sex'              => User::SEX_MALE,
       'timezone'         => $this->integer(1),
       'facebook_profile_utime' => $this->integer(11),
@@ -313,5 +327,20 @@ class odObjectMother
       'current_location' => $this->string(),
       'birthday'         => $this->date_sql()
     );
+  }
+
+  function userName()
+  {
+    $names = [
+      'Matt', 'Stew', 'Andrew', 'Mike', 'Josh', 'Joe', 'Drew'
+    ];
+    $surnames = [
+      'Romanova', 'Steinheart', 'Johnson', 'Williams', 'Smith', 'Brown', 'Davis', 'Moore'
+    ];
+
+    if($this->generate_random)
+      return $names[array_rand($names)] . ' ' . $surnames[array_rand($surnames)];
+    else
+      return $names[0] . ' ' . $surnames[0];
   }
 }

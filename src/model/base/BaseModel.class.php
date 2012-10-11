@@ -42,4 +42,26 @@ abstract class BaseModel extends lmbActiveRecord
     $minutes = $timezone - $hours * 60;
     return sprintf('%s%s%02u:%02d', $date_time, $sign, $hours, $minutes);
   }
+
+  static function sortByIds($data, $ids)
+  {
+    if(!is_array($ids) || !count($ids))
+      return $data;
+
+    $result = [];
+
+    foreach ($ids as $id)
+    {
+      foreach ($data as $item)
+      {
+        if($item->id == $id)
+        {
+          $result[] = $item;
+          break;
+        }
+      }
+    }
+
+    return $result;
+  }
 }

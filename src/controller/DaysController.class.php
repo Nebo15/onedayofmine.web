@@ -2,6 +2,7 @@
 lmb_require('src/controller/BaseJsonController.class.php');
 lmb_require('src/service/InterestCalculator.class.php');
 lmb_require('src/model/Day.class.php');
+lmb_require('src/model/Complaint.class.php');
 lmb_require('src/model/DayFavorite.class.php');
 
 class DaysController extends BaseJsonController

@@ -154,7 +154,7 @@ class lmbHttpResponse
 
   function getCode()
   {
-    return $this->http_code ? $this->http_code : 200;
+    return $this->http_code ?: 200;
   }
 
   function setStatus($status)
