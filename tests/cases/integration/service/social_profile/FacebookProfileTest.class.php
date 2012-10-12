@@ -18,21 +18,21 @@ class FacebookProfileTest extends odIntegrationTestCase
   {
     $info = (new FacebookProfile($this->main_user))->getInfo_Raw();
     $this->assertTrue(count($info));
-    $this->assertEqual($info['uid'], $this->main_user->getFacebookUid());
+    $this->assertEqual($info['uid'], $this->main_user->facebook_uid);
   }
 
   function testGetInfo()
   {
     $info = (new FacebookProfile($this->main_user))->getInfo();
     $this->assertTrue(count($info));
-    $this->assertEqual($info['facebook_uid'], $this->main_user->getFacebookUid());
+    $this->assertEqual($info['facebook_uid'], $this->main_user->facebook_uid);
   }
 
   function testGetFriends()
   {
     $friends = (new FacebookProfile($this->additional_user))->getFriends();
     $this->assertEqual(count($friends), 1);
-    $this->assertEqual($friends[0]['facebook_uid'], $this->main_user->getFacebookUid());
+    $this->assertEqual($friends[0]['facebook_uid'], $this->main_user->facebook_uid);
   }
 
   function testGetRegisteredFriends()
@@ -72,7 +72,7 @@ class FacebookProfileTest extends odIntegrationTestCase
 
   function testShareInvitation()
   {
-    $facebook_id = (new FacebookProfileForTests($this->main_user))->shareInvitation($this->additional_user->getFacebookUid());
+    $facebook_id = (new FacebookProfileForTests($this->main_user))->shareInvitation($this->additional_user->facebook_uid);
     $this->assertTrue($facebook_id);
   }
 

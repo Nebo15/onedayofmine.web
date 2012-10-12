@@ -14,7 +14,7 @@ class AuthControllerIntegrationTest extends odIntegrationTestCase
     if($this->assertResponse(200))
     {
       $this->assertCookie('token');
-      $this->assertEqual($this->getCookie('token'), $this->main_user->getFacebookAccessToken());
+      $this->assertEqual($this->getCookie('token'), $this->main_user->facebook_access_token);
       $this->assertJsonUser($response->result);
     }
 

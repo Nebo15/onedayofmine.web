@@ -31,7 +31,7 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
    */
   public function __construct(User $user)
   {
-    $access_token    = $user->getFacebookAccessToken();
+    $access_token    = $user->facebook_access_token;
 
     lmb_assert_true($user, 'Facebook profile user not specified.');
     lmb_assert_true($access_token, 'Facebook access token not specified.');

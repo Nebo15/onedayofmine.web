@@ -7,12 +7,12 @@ class UserFollowing extends BaseModel
 
   public static function isUserFollowUser(User $follower_user, User $followed_user)
   {
-    return !is_null(lmbActiveRecord::findOne('UserFollowing', ['follower_user_id=? AND user_id=?', $follower_user->getId(), $followed_user->getId()]));
+    return !is_null(lmbActiveRecord::findFirst('UserFollowing', ['follower_user_id=? AND user_id=?', $follower_user->id, $followed_user->id]));
   }
 
   public static function isUsersFollowUser($follower_users, User $followed_user)
   {
-    if(!$followed_user->getId())
+    if(!$followed_user->id)
       throw new lmbException("Can't retrieve user id");
 
     if(!count($follower_users))
@@ -20,11 +20,11 @@ class UserFollowing extends BaseModel
 
     $following_ids = [];
     foreach ($follower_users as $user) {
-      $following_ids[$user->getId()] = false;
+      $following_ids[$user->id] = false;
     }
 
     $criteria = lmbSQLCriteria::in('follower_user_id', array_keys($following_ids));
-    $criteria->add(lmbSQLCriteria::equal('user_id', $followed_user->getId()));
+    $criteria->add(lmbSQLCriteria::equal('user_id', $followed_user->id));
     $following = UserFollowing::find(array(
       'criteria' => $criteria
     ));
@@ -38,7 +38,7 @@ class UserFollowing extends BaseModel
 
   public static function isUserFollowUsers(User $follower_user, lmbCollectionInterface $followed_users)
   {
-    if(!$follower_user->getId())
+    if(!$follower_user->id)
       throw new lmbException("Can't retrieve user id");
 
     if(!$followed_users->count())
@@ -46,14 +46,14 @@ class UserFollowing extends BaseModel
 
     $following_ids = [];
     foreach ($followed_users as $user) {
-      if(!$user->getId())
+      if(!$user->id)
         throw new lmbException("Can't retrieve user id");
 
-      $following_ids[$user->getId()] = false;
+      $following_ids[$user->id] = false;
     }
 
     $criteria = lmbSQLCriteria::in('user_id', array_keys($following_ids));
-    $criteria->add(lmbSQLCriteria::equal('follower_user_id', $follower_user->getId()));
+    $criteria->add(lmbSQLCriteria::equal('follower_user_id', $follower_user->id));
     $following = UserFollowing::find(array(
       'criteria' => $criteria
     ));

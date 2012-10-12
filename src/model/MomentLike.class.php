@@ -11,11 +11,11 @@ class MomentLike extends BaseLike
 
   static function findByMomentId($moment_id)
   {
-    return self::findOne(array('moment_id = ?', $moment_id));
+    return self::findFirst(array('moment_id = ?', $moment_id));
   }
 
   static function findByMomentIdAndUserId($moment_id, $user_id)
   {
-    return self::findOne(array('moment_id = ? AND user_id = ?', $moment_id, $user_id));
+    return self::findFirst(array('moment_id = ? AND user_id = ?', $moment_id, $user_id));
   }
 }

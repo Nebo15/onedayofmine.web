@@ -14,7 +14,7 @@ class MomentsController extends BaseJsonController
     if(!$moment = Moment::findById($this->request->id))
       return $this->_answerModelNotFoundById('Moment', $this->request->id);
 
-    if($moment->getDay()->getUser()->getId() != $this->_getUser()->getId())
+    if($moment->getDay()->getUser()->id != $this->_getUser()->id)
       return $this->_answerNotOwner();
 
     if($this->request->has('image_content'))
@@ -71,7 +71,7 @@ class MomentsController extends BaseJsonController
     if(!$moment = Moment::findById($this->request->id))
       return $this->_answerOk(null, 'Already deleted');
 
-    if($moment->getDay()->getUser()->getId() != $this->_getUser()->getId())
+    if($moment->getDay()->getUser()->id != $this->_getUser()->id)
       return $this->_answerNotOwner();
 
     $moment->setIsDeleted(1);
@@ -90,7 +90,7 @@ class MomentsController extends BaseJsonController
     if(!$moment = Moment::findById($this->request->id))
       return $this->_answerModelNotFoundById('Moment', $this->request->id);
 
-    if($moment->getDay()->getUser()->getId() != $this->_getUser()->getId())
+    if($moment->getDay()->getUser()->id != $this->_getUser()->id)
       return $this->_answerNotOwner();
 
     $moment->setIsDeleted(0);
@@ -109,7 +109,7 @@ class MomentsController extends BaseJsonController
     if(!$moment = Moment::findById($this->request->id))
       return $this->_answerModelNotFoundById('Moment', $this->request->id);
 
-    if(MomentLike::findByMomentIdAndUserId($moment->getId(), $this->_getUser()->getId()))
+    if(MomentLike::findByMomentIdAndUserId($moment->id, $this->_getUser()->id))
       return $this->_answerConflict();
 
     $like = new MomentLike;
@@ -130,7 +130,7 @@ class MomentsController extends BaseJsonController
     if(!$moment = Moment::findById($this->request->id))
       return $this->_answerModelNotFoundById('Moment', $this->request->id);
 
-    if(!$like = MomentLike::findByMomentIdAndUserId($moment->getId(), $this->_getUser()->getId()))
+    if(!$like = MomentLike::findByMomentIdAndUserId($moment->id, $this->_getUser()->id))
       return $this->_answerOk(null, "Like not found");
 
     $this->toolkit->doAsync('momentUnlike', $moment->id, $like->id);

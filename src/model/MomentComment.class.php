@@ -25,7 +25,7 @@ class MomentComment extends BaseComment
   function exportForApi(array $properties = null)
   {
     $export = parent::exportForApi($properties);
-    $export->moment_id = $this->getMoment()->getId();
+    $export->moment_id = $this->getMoment()->id;
     return $export;
   }
 

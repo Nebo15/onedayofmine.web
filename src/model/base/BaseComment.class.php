@@ -6,7 +6,7 @@ class BaseComment extends BaseModel
   function exportForApi(array $properties = null)
   {
     $export = new stdClass();
-    $export->id = $this->getId();
+    $export->id = $this->id;
     $export->text = $this->getText();
     return $export;
   }

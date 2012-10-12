@@ -20,7 +20,7 @@ class SocialControllerTest extends odControllerTestCase
 
     $profile = $this->toolkit->getFacebookProfile($this->main_user);
     $profile->expectOnce('getFriends');
-    $profile->setReturnValue('getFriends', [$this->generator->facebookInfo($this->additional_user->getFacebookUid()), $this->generator->facebookInfo()]);
+    $profile->setReturnValue('getFriends', [$this->generator->facebookInfo($this->additional_user->facebook_uid), $this->generator->facebookInfo()]);
 
     $response = $this->get('facebook_friends');
     if($this->assertResponse(200))
@@ -43,7 +43,7 @@ class SocialControllerTest extends odControllerTestCase
     $profile->expectOnce('shareInvitation');
 
     $response = $this->post('facebook_invite', [
-      'uid' => $this->additional_user->getFacebookUid()
+      'uid' => $this->additional_user->facebook_uid
     ]);
 
     if($this->assertResponse(200))
@@ -61,7 +61,7 @@ class SocialControllerTest extends odControllerTestCase
     $profile->expectNever('shareInvitation');
 
     $response = $this->post('facebook_invite', [
-      'uid' => $this->additional_user->getFacebookUid()
+      'uid' => $this->additional_user->facebook_uid
     ]);
     if($this->assertResponse(200))
       $this->assertEqual($response->result, 'User is already registered');

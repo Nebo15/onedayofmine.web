@@ -69,7 +69,7 @@ class odNewsService
   {
     foreach($this->sender->getFollowers() as $recipient)
     {
-      if($recipient->getId() != $followed_user->getId())
+      if($recipient->id != $followed_user->id)
         if(1 == $recipient->getSettings()->getNotificationsRelatedActivity())
           $this->addRecipient($recipient);
     }
@@ -101,7 +101,7 @@ class odNewsService
   function onDayDelete(Day $day)
   {
     lmb_assert_true($day->id);
-    News::delete('day_id='.$day->getId());
+    News::delete('day_id='.$day->id);
   }
 
   // TODO
@@ -156,7 +156,7 @@ class odNewsService
   function onMomentDelete(Moment $moment)
   {
     lmb_assert_true($moment->id);
-    lmbActiveRecord :: delete('News', 'moment_id='.$moment->getId());
+    lmbActiveRecord :: delete('News', 'moment_id='.$moment->id);
   }
 
   // TODO
@@ -185,7 +185,7 @@ class odNewsService
   function onDayUnlike(Day $day, DayLike $like)
   {
     lmb_assert_true($like->id);
-    News::delete('day_like_id='.$like->getId());
+    News::delete('day_like_id='.$like->id);
   }
 
   function onMomentLike(Moment $moment, MomentLike $like)
@@ -212,7 +212,7 @@ class odNewsService
   function onMomentUnlike(Moment $moment, MomentLike $like)
   {
     lmb_assert_true($like->id);
-    News::delete('moment_like_id='.$like->getId());
+    News::delete('moment_like_id='.$like->id);
   }
 
   function onDayComment(DayComment $comment)
@@ -231,7 +231,7 @@ class odNewsService
     foreach ($day->getComments() as $day_comment)
     {
       $comment_author = $day_comment->getUser();
-      if($this->sender->getId() != $comment_author->getId())
+      if($this->sender->id != $comment_author->id)
         if(1 == $comment_author->getSettings()->getNotificationsNewReplays())
           $this->addRecipient($comment_author);
     }
@@ -242,7 +242,7 @@ class odNewsService
   function onDayCommentDelete(DayComment $comment)
   {
     lmb_assert_true($comment->id);
-    News::delete('day_comment_id='.$comment->getId());
+    News::delete('day_comment_id='.$comment->id);
   }
 
   function onMomentComment(MomentComment $comment)
@@ -263,7 +263,7 @@ class odNewsService
     foreach ($moment->getComments() as $moment_comment)
     {
       $comment_author = $moment_comment->getUser();
-      if($this->sender->getId() != $comment_author->getId())
+      if($this->sender->id != $comment_author->id)
         if(1 == $comment_author->getSettings()->getNotificationsNewReplays())
           $this->addRecipient($comment_author);
     }
@@ -274,7 +274,7 @@ class odNewsService
   function onMomentCommentDelete(MomentComment $comment)
   {
     lmb_assert_true($comment->id);
-    News::delete('moment_comment_id='.$comment->getId());
+    News::delete('moment_comment_id='.$comment->id);
   }
 
   /**
@@ -336,11 +336,11 @@ class odNewsService
    */
   protected function addRecipient(User $recipient)
   {
-    lmb_assert_true($recipient->getId(), 'Recipient have no id');
-    lmb_assert_true($this->sender->getId(), 'Sender have no id');
-    if($recipient->getId() == $this->sender->getId())
+    lmb_assert_true($recipient->id, 'Recipient have no id');
+    lmb_assert_true($this->sender->id, 'Sender have no id');
+    if($recipient->id == $this->sender->id)
       return;
-    $this->recipients[$recipient->getId()] = $recipient;
+    $this->recipients[$recipient->id] = $recipient;
   }
 
   protected function send(News $news, $type, array $params = array())

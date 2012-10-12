@@ -26,7 +26,7 @@ class SocialControllerIntegrationTest extends odIntegrationTestCase
       $friends = $response->result;
       $this->assertTrue(is_array($friends));
       $this->assertEqual(1, count($friends));
-      $this->assertEqual($friends[0]->uid, $this->additional_user->getFacebookUid());
+      $this->assertEqual($friends[0]->uid, $this->additional_user->facebook_uid);
       $this->assertJsonFacebookUserItems($friends, true);
     }
   }
@@ -48,7 +48,7 @@ class SocialControllerIntegrationTest extends odIntegrationTestCase
       $friends = $response->result;
       $this->assertTrue(is_array($friends));
       $this->assertEqual(1, count($friends));
-      $this->assertEqual($friends[0]->uid, $this->additional_user->getFacebookUid());
+      $this->assertEqual($friends[0]->uid, $this->additional_user->facebook_uid);
       $this->assertTrue($friends[0]->user->following);
       $this->assertJsonFacebookUserItems($friends, true);
     }
@@ -66,7 +66,7 @@ class SocialControllerIntegrationTest extends odIntegrationTestCase
       $friends = $response->result;
       $this->assertTrue(is_array($friends));
       $this->assertEqual(1, count($friends));
-      $this->assertEqual($friends[0]->uid, $this->additional_user->getFacebookUid());
+      $this->assertEqual($friends[0]->uid, $this->additional_user->facebook_uid);
       $this->assertTrue(is_null($friends[0]->user));
       $this->assertJsonFacebookUserItems($friends, true);
     }
@@ -79,7 +79,7 @@ class SocialControllerIntegrationTest extends odIntegrationTestCase
     $this->_login($this->main_user);
 
     $response = $this->post('social/facebook_invite', [
-      'uid' => $this->additional_user->getFacebookUid(),
+      'uid' => $this->additional_user->facebook_uid,
     ]);
     if($this->assertResponse(200))
     {

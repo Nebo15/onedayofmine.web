@@ -42,7 +42,7 @@ class News extends BaseModel
   {
     $query = new lmbSelectQuery('news_recipient');
     $query->addField('news_id');
-    $query->addCriteria(lmbSQLCriteria::equal('user_id', $user->getId()));
+    $query->addCriteria(lmbSQLCriteria::equal('user_id', $user->id));
 
     $result = $query->fetch();
     $ids = lmbArrayHelper::getColumnValues('news_id', $result);

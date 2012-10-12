@@ -57,7 +57,7 @@ class DaysController extends BaseJsonController
     if(!$day = Day::findById($this->request->id))
       return $this->_answerModelNotFoundById('Day', $this->request->id);
 
-    if($this->_getUser()->getId() != $day->getUser()->getId())
+    if($this->_getUser()->id != $day->getUser()->id)
       return $this->_answerNotOwner();
 
     if($this->request->get('cover_content')) {
@@ -87,11 +87,11 @@ class DaysController extends BaseJsonController
       return $this->_answerModelNotFoundById('Day', $this->request->id);
 
     $user = $this->_getUser();
-    if($day->getUser()->getId() != $user->getId())
+    if($day->getUser()->id != $user->id)
       return $this->_answerNotOwner();
 
     if($current_day = $user->getCurrentDay()) {
-      if($day->getId() == $current_day->getId()) {
+      if($day->id == $current_day->id) {
         $user->setCurrentDay(null);
         $user->save();
       }
@@ -148,7 +148,7 @@ class DaysController extends BaseJsonController
     if(!$day = Day::findById($this->request->id))
       return $this->_answerModelNotFoundById('Day', $this->request->id);
 
-    if(DayLike::findByDayIdAndUserId($day->getId(), $this->_getUser()->getId()))
+    if(DayLike::findByDayIdAndUserId($day->id, $this->_getUser()->id))
       return $this->_answerConflict();
 
     $like = new DayLike;
@@ -169,7 +169,7 @@ class DaysController extends BaseJsonController
     if(!$day = Day::findById($this->request->id))
       return $this->_answerModelNotFoundById('Day', $this->request->id);
 
-    if(!$like = DayLike::findByDayIdAndUserId($day->getId(), $this->_getUser()->getId()))
+    if(!$like = DayLike::findByDayIdAndUserId($day->id, $this->_getUser()->id))
       return $this->_answerOk(null, "Like not found");
 
     $this->toolkit->doAsync('dayUnlike', $day->id, $like->id);
@@ -187,7 +187,7 @@ class DaysController extends BaseJsonController
     if(!$day = Day::findById($this->request->id))
       return $this->_answerModelNotFoundById('Day', $this->request->id);
 
-    if($day->getUserId() != $this->_getUser()->getId())
+    if($day->getUserId() != $this->_getUser()->id)
       return $this->_answerNotOwner();
 
     $day->setIsDeleted(1);
@@ -206,7 +206,7 @@ class DaysController extends BaseJsonController
     if(!$day = Day::findById($this->request->id))
       return $this->_answerModelNotFoundById('Day', $this->request->id);
 
-    if($day->getUserId() != $this->_getUser()->getId())
+    if($day->getUserId() != $this->_getUser()->id)
       return $this->_answerNotOwner();
 
     $day->setIsDeleted(0);
@@ -284,7 +284,7 @@ class DaysController extends BaseJsonController
     if(!$day = Day::findById($this->request->id))
       return $this->_answerModelNotFoundById('Day', $this->request->id);
 
-    if(!DayFavorite::findByDayIdAndUserId($day->getId(), $this->_getUser()->getId()))
+    if(!DayFavorite::findByDayIdAndUserId($day->id, $this->_getUser()->id))
       return $this->_answerOk(null, "Favorite not found");
 
     $favorites = $this->_getUser()->getFavoriteDays();

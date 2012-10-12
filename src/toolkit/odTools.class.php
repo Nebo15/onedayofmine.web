@@ -61,7 +61,7 @@ class odTools extends lmbAbstractTools
   function setUser($user)
   {
     $this->user = $user;
-    $this->getSessionStorage()->set($this->getSessidFromRequest(), $user->getId());
+    $this->getSessionStorage()->set($this->getSessidFromRequest(), $user->id);
   }
 
   /**
@@ -202,13 +202,13 @@ class odTools extends lmbAbstractTools
 
   function getPagePath($object)
   {
-    if(!$object->getId())
+    if(!$object->id)
       throw new lmbException("Can't get object ID.");
 
     if('Day' == get_class($object))
-      return '/pages/'.$object->getId().'/day';
+      return '/pages/'.$object->id.'/day';
     if('Moment' == get_class($object))
-      return '/pages/'.$object->getId().'/moment';
+      return '/pages/'.$object->id.'/moment';
     throw new lmbException('Unknown object class');
   }
 
@@ -286,7 +286,7 @@ class odTools extends lmbAbstractTools
    */
   public function getFacebook($access_token_or_user = null)
   {
-    $access_token = is_object($access_token_or_user) ? $access_token_or_user->getFacebookAccessToken() : $access_token_or_user;
+    $access_token = is_object($access_token_or_user) ? $access_token_or_user->facebook_access_token : $access_token_or_user;
     if(!array_key_exists($access_token, $this->facebook_instances)) {
       $instance = new odFacebook(odFacebook::getConfig());
 
@@ -306,15 +306,15 @@ class odTools extends lmbAbstractTools
 
   public function getFacebookProfile(User $user)
   {
-    if(!array_key_exists($user->getFacebookAccessToken(), $this->facebook_profiles)) {
-      $this->facebook_profiles[$user->getFacebookAccessToken()] = new FacebookProfile($user);
+    if(!array_key_exists($user->facebook_access_token, $this->facebook_profiles)) {
+      $this->facebook_profiles[$user->facebook_access_token] = new FacebookProfile($user);
     }
-    return $this->facebook_profiles[$user->getFacebookAccessToken()];
+    return $this->facebook_profiles[$user->facebook_access_token];
   }
 
   function setFacebookProfile(User $user, $profile)
   {
-    $this->facebook_profiles[$user->getFacebookAccessToken()] = $profile;
+    $this->facebook_profiles[$user->facebook_access_token] = $profile;
   }
 
   public function getConcreteAmazonServiceConfig($name)

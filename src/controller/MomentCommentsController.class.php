@@ -13,7 +13,7 @@ class MomentCommentsController extends BaseJsonController
     if(!$comment = MomentComment::findById($this->request->id))
       return $this->_answerModelNotFoundById('Moment comment', $this->request->id);
 
-    if($comment->getUserId() != $this->_getUser()->getId())
+    if($comment->getUserId() != $this->_getUser()->id)
       return $this->_answerNotOwner();
 
     $comment->setText($this->request->get('text'));
@@ -30,7 +30,7 @@ class MomentCommentsController extends BaseJsonController
     if(!$comment = MomentComment::findById($this->request->id))
       return $this->_answerModelNotFoundById('Moment comment', $this->request->id);
 
-    if($comment->getUserId() != $this->_getUser()->getId())
+    if($comment->getUserId() != $this->_getUser()->id)
       return $this->_answerNotOwner();
 
     $this->toolkit->doAsync('momentCommentDelete', $comment->id);

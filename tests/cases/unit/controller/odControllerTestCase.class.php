@@ -36,12 +36,12 @@ abstract class odControllerTestCase extends odUnitTestCase
     lmb_require('src/controller/'.$this->controller_class.'.class.php');
 
     parent::setUp();
-    $this->toolkit->setFacebook(new FacebookMock, $this->main_user->getFacebookAccessToken());
-    $this->toolkit->setTwitter(new TwitterMock(), $this->main_user->getTwitterAccessToken());
+    $this->toolkit->setFacebook(new FacebookMock, $this->main_user->facebook_access_token);
+    $this->toolkit->setTwitter(new TwitterMock(), $this->main_user->twitter_access_token);
     $this->toolkit->setFacebookProfile($this->main_user, new FacebookProfileMock);
 
-    $this->toolkit->setFacebook(new FacebookMock, $this->additional_user->getFacebookAccessToken());
-    $this->toolkit->setTwitter(new TwitterMock(), $this->additional_user->getTwitterAccessToken());
+    $this->toolkit->setFacebook(new FacebookMock, $this->additional_user->facebook_access_token);
+    $this->toolkit->setTwitter(new TwitterMock(), $this->additional_user->twitter_access_token);
     $this->toolkit->setFacebookProfile($this->additional_user, new FacebookProfileMock);
 
     $this->toolkit->setPostingService(new PostingServiceMock);

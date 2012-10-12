@@ -6,9 +6,9 @@ lmb_require('src/model/MomentLike.class.php');
 
 /**
  * @api
- * @method string getFacebookUid()
+ * @method string facebook_uid
  * @method void setFacebookUid(string $facebook_user_id)
- * @method string getFacebookAccessToken()
+ * @method string facebook_access_token
  * @method string getDay()
  * @method string getDayId()
  * @method string getDescription()

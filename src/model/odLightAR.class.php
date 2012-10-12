@@ -418,12 +418,12 @@ abstract class odLightAR extends gmeDirtableObject implements ArrayAccess
     }
 
     if($throw_exception)
-      throw new lmbException("LightAR '{$class_name}' with id '{$id}' not found in dsn: '" . $conn->getDsnString() . "'");
+      throw new lmbException("LightAR '{$class_name}' with id '{$id}' not found");
   }
 
-  public static function findByIds(lmbDbConnection $conn, array $ids, $order = null, $with_lazy_attributes = false)
+  public static function findByIds(array $ids, $order = null, $with_lazy_attributes = false)
   {
-    return self::find($conn, lmbSQLCriteria::in('id', $ids), $order, $with_lazy_attributes);
+    return self::find(lmbSQLCriteria::in('id', $ids), $order, $with_lazy_attributes);
   }
 
   /**

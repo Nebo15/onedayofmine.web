@@ -9,9 +9,9 @@ lmb_require('src/model/UserSettings.class.php');
 
 /**
  * @api
- * @method string getFacebookUid()
+ * @method string facebook_uid
  * @method void setFacebookUid(string $facebook_user_id)
- * @method string getFacebookAccessToken()
+ * @method string facebook_access_token
  * @method void setFacebookAccessToken(string $facebook_access_token)
  * @method string getTwitterUid()
  * @method string getTwitterAccessToken()
@@ -37,6 +37,7 @@ class User extends BaseModel
   public $facebook_uid;
   public $facebook_access_token;
   public $facebook_profile_utime;
+  public $twitter_access_token;
 
   protected function _createValidator()
   {
@@ -96,6 +97,11 @@ class User extends BaseModel
     return MomentComment::find(lmbSQLCriteria::equal('user_id', $this->id));
   }
 
+  function getDeviceTokens()
+  {
+    return DeviceToken::find(lmbSQLCriteria::equal('user_id', $this->id));
+  }
+
   static function getSexTypes()
   {
     return array(
@@ -151,20 +157,24 @@ class User extends BaseModel
 
   static function findByFacebookAccessToken($facebook_access_token)
   {
-    return User::findOne(array('facebook_access_token = ?', $facebook_access_token));
+    return User::findFirst(array('facebook_access_token = ?', $facebook_access_token));
   }
 
+  /**
+   * @param $facebook_uids_or_uid
+   * @return User
+   */
   static function findByFacebookUid($facebook_uids_or_uid)
   {
     if(is_array($facebook_uids_or_uid))
       return User::find(['criteria' => lmbSQLCriteria::in('facebook_uid', $facebook_uids_or_uid)]);
     else
-      return User::findOne(array('facebook_uid = ?', $facebook_uids_or_uid));
+      return User::findFirst(array('facebook_uid = ?', $facebook_uids_or_uid));
   }
 
   static function findByTwitterUid($twitter_uid)
   {
-    return User::findOne(array('twitter_uid = ?', $twitter_uid));
+    return User::findFirst(array('twitter_uid = ?', $twitter_uid));
   }
 
   static function findByString($query, $from_id = null, $to_id = null, $limit = null)

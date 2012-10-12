@@ -321,7 +321,7 @@ class odExportHelperTest extends odUnitTestCase
 
     $helper = new odExportHelper($this->main_user);
 
-    $facebook_user = $this->generator->facebookInfo($this->additional_user->getFacebookUid());
+    $facebook_user = $this->generator->facebookInfo($this->additional_user->facebook_uid);
     $exported = $helper->exportFacebookUserItems([$facebook_user]);
     $this->assertJsonFacebookUserListItem($exported[0]);
     $this->assertTrue($exported[0]->user);

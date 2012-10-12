@@ -154,7 +154,7 @@ class odExportHelper
     }
 
     if($is_owner)
-      $exported->email = $user->getEmail();
+      $exported->email = $user->email;
 
     return $exported;
   }
@@ -163,7 +163,7 @@ class odExportHelper
   {
     $exported = $this->exportUserSubentity($user);
 
-    if($this->current_user && $this->current_user->getId() != $user->getId())
+    if($this->current_user && $this->current_user->id != $user->id)
       $exported->following = (bool) UserFollowing::isUserFollowUser($user, $this->current_user);
 
     return $exported;
@@ -190,7 +190,7 @@ class odExportHelper
       $export = $this->exportUserItem($followed);
 
       if(count($following))
-        $export->following = (bool) $following[$followed->getId()];
+        $export->following = (bool) $following[$followed->id];
 
       $exported[] = $export;
     }
