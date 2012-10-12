@@ -49,6 +49,7 @@ abstract class BaseJsonController extends lmbController
     }
 
     return $this->_runMethod($method);
+
   }
 
   protected function _runMethod($method)
@@ -219,16 +220,12 @@ abstract class BaseJsonController extends lmbController
 
   protected function _answer($result, array $errors, $status, $code)
   {
-    if($code)
-      $this->response->setCode($code);
-
-    if($status)
-      $this->response->setStatus($status);
-
+    $this->response->setCode($code);
+    $this->response->setStatus($status);
     $this->response->setContentType('application/json');
 
     return json_encode([
-        'code'   => $code,
+        'code'   => $this->response->getCode(),
         'status' => $this->response->getStatus(),
         'result' => $result,
         'errors' => $errors

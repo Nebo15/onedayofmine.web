@@ -136,17 +136,9 @@ class Day extends odLightAR
 
   static function findByString($query, $from_id = null, $to_id = null, $limit = null)
   {
-    $criteria = lmbSQLCriteria::equal('is_deleted', 0);
-    if($from_id)
-      $criteria->add(lmbSQLCriteria::less('id', $from_id));
-    if($to_id)
-      $criteria->add(lmbSQLCriteria::greater('id', $to_id));
-    $criteria->add(lmbSQLCriteria::like('title', '%'.$query.'%'));
-
-    return Day::find(array(
-      'criteria' => $criteria,
-      'limit' => (!$limit || $limit > 100) ? 100 : $limit,
-      'sort' => array('id' => 'DESC')
-    ));
+    $ids  = lmbToolkit::instance()->getSearchService('days')->find($query, $from_id, $to_id, $limit);
+    $days = self::findByIds($ids);
+    $days = self::sortByIds($days, $ids);
+    return $days;
   }
 }

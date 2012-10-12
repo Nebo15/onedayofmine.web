@@ -133,6 +133,7 @@ class odObjectMother
     $moment = new Moment();
     $moment->description = 'description '.$this->string(125);
     $moment->setDay($day ?: $this->day());
+
     if($with_comments)
     {
       for($i = 0; $i < lmbToolkit::instance()->getConf('common')->default_comments_count+1; $i++)
@@ -302,7 +303,7 @@ class odObjectMother
     return array(
       'facebook_uid'      => $uid ?: $this->integer(20),
       'email'            => $this->email(),
-      'name'             => $this->string(10),
+      'name'             => $this->userName(),
       'sex'              => User::SEX_MALE,
       'timezone'         => $this->integer(1),
       'facebook_profile_utime' => $this->integer(11),
@@ -312,5 +313,20 @@ class odObjectMother
       'current_location' => $this->string(),
       'birthday'         => $this->date_sql()
     );
+  }
+
+  function userName()
+  {
+    $names = [
+      'Matt', 'Stew', 'Andrew', 'Mike', 'Josh', 'Joe', 'Drew'
+    ];
+    $surnames = [
+      'Romanova', 'Steinheart', 'Johnson', 'Williams', 'Smith', 'Brown', 'Davis', 'Moore'
+    ];
+
+    if($this->generate_random)
+      return $names[array_rand($names)] . ' ' . $surnames[array_rand($surnames)];
+    else
+      return $names[0] . ' ' . $surnames[0];
   }
 }

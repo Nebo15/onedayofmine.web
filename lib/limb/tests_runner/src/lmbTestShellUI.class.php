@@ -55,6 +55,8 @@ class lmbTestShellUI
     $version = $this->_getVersion();
 
     $usage = <<<EOD
+Version:
+  $version
 Usage:
   limb_unit [OPTIONS] <file|dir> [<file1|dir1>, ... <fileN|dirN>]
   Advanced SimpleTest unit tests runner. Finds and executes unit tests within filesystem.
@@ -81,8 +83,6 @@ Options:
   --cover-exclude='path1;path2'     Sets paths delimitered with ';' which should be excluded
                                     from coverage analysis
 
-$version
-
 EOD;
     return $usage;
   }
@@ -103,19 +103,13 @@ EOD;
 
   protected function _version()
   {
-    echo $this->_getVersion() . "\n";
+    echo 'Version: '.$this->_getVersion() . "\n";
     exit();
   }
 
   protected function _getVersion()
   {
-    list(, $number, $status) = explode('-', trim(file_get_contents(dirname(__FILE__) . '/../VERSION')));
-    $version = "limb_unit-$number-$status";
-
-    if(is_dir(dirname(__FILE__) . '/.svn'))
-      $version .= "-dev";
-
-    return $version;
+    return tests_runner_version;
   }
 
   static function getShortOpts()
@@ -226,6 +220,7 @@ EOD;
       if(!$php = @file_get_contents(realpath($config_file)))
         $this->_error("Could not read configuration file '$config_file'\n");
 
+      $error = '';
       if(!$this->_phpLint($php, $error))
         $this->_error("Configuration file '$config_file' is invalid(check syntax)\n$error");
 

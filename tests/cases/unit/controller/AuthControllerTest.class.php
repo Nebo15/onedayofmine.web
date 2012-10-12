@@ -26,8 +26,7 @@ class AuthControllerTest extends odControllerTestCase
     $this->main_user->save();
     $this->additional_user->save();
 
-    $this->toolkit->getFacebook($this->additional_user)
-      ->setReturnValue('getUid', $this->additional_user->getFacebookUid());
+    $this->toolkit->getFacebook($this->additional_user)->setReturnValue('getUid', $this->additional_user->getFacebookUid());
 
     $response = $this->post('login', array(
       'token'        => $access_token = $this->additional_user->getFacebookAccessToken(),
@@ -57,8 +56,7 @@ class AuthControllerTest extends odControllerTestCase
   {
     $this->additional_user->save();
 
-    $this->toolkit->getFacebook($this->additional_user)
-      ->setReturnValue('getUid', $this->additional_user->getFacebookUid());
+    $this->toolkit->getFacebook($this->additional_user)->setReturnValue('getUid', $this->additional_user->getFacebookUid());
 
     $response = $this->post('login', array(
       'token' => $this->additional_user->getFacebookAccessToken(),
@@ -80,8 +78,7 @@ class AuthControllerTest extends odControllerTestCase
   function testLogin_AndSetCookie()
   {
     $this->main_user->save();
-    $this->toolkit->getFacebook($this->main_user)
-      ->setReturnValue('getUid', $this->main_user->getFacebookUid());
+    $this->toolkit->getFacebook($this->main_user)->setReturnValue('getUid', $this->main_user->getFacebookUid());
 
     $this->post('login', [
       'token'        => $this->main_user->getFacebookAccessToken(),
@@ -102,8 +99,7 @@ class AuthControllerTest extends odControllerTestCase
   function testLogin_Session_ByGetParam()
   {
     $this->main_user->save();
-    $this->toolkit->getFacebook($this->main_user)
-      ->setReturnValue('getUid', $this->main_user->getFacebookUid());
+    $this->toolkit->getFacebook($this->main_user)->setReturnValue('getUid', $this->main_user->getFacebookUid());
 
     $this->post('login', [
       'token'        => $this->main_user->getFacebookAccessToken(),
@@ -124,8 +120,7 @@ class AuthControllerTest extends odControllerTestCase
   function testLogin_Session_ByPostParam()
   {
     $this->main_user->save();
-    $this->toolkit->getFacebook($this->main_user)
-      ->setReturnValue('getUid', $this->main_user->getFacebookUid());
+    $this->toolkit->getFacebook($this->main_user)->setReturnValue('getUid', $this->main_user->getFacebookUid());
 
     $this->post('login', [
       'token'        => $this->main_user->getFacebookAccessToken(),
@@ -148,8 +143,7 @@ class AuthControllerTest extends odControllerTestCase
     $users = User::find();
     $this->assertEqual(0, count($users));
 
-    $this->toolkit->getFacebook($this->main_user)
-      ->setReturnValue('getUid', $this->main_user->getFacebookUid());
+    $this->toolkit->getFacebook($this->main_user)->setReturnValue('getUid', $this->main_user->getFacebookUid());
 
     $info = $this->generator->facebookInfo($this->main_user->facebook_uid);
 
@@ -222,8 +216,7 @@ class AuthControllerTest extends odControllerTestCase
   function testLogin_FromSeveralDevices()
   {
     $this->main_user->save();
-    $this->toolkit->getFacebook($this->main_user)
-      ->setReturnValue('getUid', $this->main_user->getFacebookUid());
+    $this->toolkit->getFacebook($this->main_user)->setReturnValue('getUid', $this->main_user->getFacebookUid());
 
     $this->post('login', array(
       'token'        => $this->main_user->getFacebookAccessToken(),
@@ -246,12 +239,10 @@ class AuthControllerTest extends odControllerTestCase
   function testLogin_DeviceOwnerChanged()
   {
     $this->main_user->save();
-    $this->toolkit->getFacebook($this->main_user)
-      ->setReturnValue('getUid', $this->main_user->getFacebookUid());
+    $this->toolkit->getFacebook($this->main_user)->setReturnValue('getUid', $this->main_user->getFacebookUid());
 
     $this->additional_user->save();
-    $this->toolkit->getFacebook($this->additional_user)
-      ->setReturnValue('getUid', $this->additional_user->getFacebookUid());
+    $this->toolkit->getFacebook($this->additional_user)->setReturnValue('getUid', $this->additional_user->getFacebookUid());
 
     $device_token = $this->generator->string(64);
 
@@ -275,8 +266,7 @@ class AuthControllerTest extends odControllerTestCase
 
   function testLogin_FirstCallCreateNewUserWithDefaultAvatar()
   {
-    $this->toolkit->getFacebook($this->additional_user)
-      ->setReturnValue('getUid', $this->additional_user->getFacebookUid());
+    $this->toolkit->getFacebook($this->additional_user)->setReturnValue('getUid', $this->additional_user->getFacebookUid());
 
     $profile = $this->toolkit->getFacebookProfile($this->additional_user);
     $facebook_info = $this->generator->facebookInfo($this->additional_user->facebook_uid);

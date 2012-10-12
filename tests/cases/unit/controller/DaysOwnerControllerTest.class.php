@@ -61,31 +61,6 @@ class DaysOwnerControllerTest extends odControllerTestCase
     }
   }
 
-  function testStart_TokenIsExpired()
-  {
-    $this->main_user->save();
-
-    $this->toolkit->setUser($this->main_user);
-    $this->toolkit->setPostingService(new PostingServiceWithExpiredToken());
-
-    $day = $this->generator->day($this->main_user);
-    $params = $day->exportForApi();
-
-    $response = $this->post('start', array(
-      'title' => $params->title,
-      'type'  => $params->type,
-      'token' => 'wrong-token'
-    ));
-
-    if($this->assertResponse(401))
-    {
-      $this->assertTrue(is_null($response->result));
-
-      $this->assertEqual(1, count($response->errors));
-      $this->assertEqual($response->errors[0], 'Token expired');
-    }
-  }
-
   /**
    * @api description Creates <a href="#Entity:Moment">moment</a> in current active day and returns it.
    * @api input param string description

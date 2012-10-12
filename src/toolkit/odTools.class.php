@@ -9,6 +9,8 @@ lmb_require('src/service/ImageHelper.class.php');
 lmb_require('src/service/odPostingService.class.php');
 lmb_require('src/service/odExportHelper.class.php');
 lmb_require('src/service/odRequestsLog.class.php');
+lmb_require('src/service/odSearchService.class.php');
+lmb_require('src/service/odAsyncJobs.class.php');
 lmb_require('src/model/User.class.php');
 
 if(!class_exists('CFRuntime')) require_once('amazon-sdk/sdk.class.php');
@@ -23,19 +25,34 @@ class odTools extends lmbAbstractTools
    * @var odRequestsLog
    */
   protected $requests_log;
-
+  /**
+   * @var array
+   */
   protected $tests_users;
   /**
    * @var odPostingService
    */
   protected $posting_service;
-
-  protected $facebook_instances = array();
-
-  protected $twitter_instances = array();
-
-  protected $facebook_profiles = array();
-
+  /**
+   * @var array
+   */
+  protected $facebook_instances = [];
+  /**
+   * @var array
+   */
+  protected $twitter_instances = [];
+  /**
+   * @var array
+   */
+  protected $facebook_profiles = [];
+  /**
+   * @var array odSearchService
+   */
+  protected $search_clients = [];
+  /**
+   * @var GearmanClient
+   */
+  protected $job_queue_client;
   /**
    * @var Zend_Mobile_Push_Apns
    */
@@ -59,7 +76,6 @@ class odTools extends lmbAbstractTools
       return null;
 
     $this->user = User::findById($user_id);
-
 
     return $this->user;
   }
@@ -87,6 +103,29 @@ class odTools extends lmbAbstractTools
   }
 
   /**
+   * @return odSearchService
+   */
+  function getSearchService($conf_name)
+  {
+    if(!array_key_exists($conf_name, $this->search_clients)) {
+      $config = lmbToolkit::instance()->getConf('sphinx');
+
+      lmb_assert_true(array_key_exists($conf_name, $config), "Sphinx configuration not found for '{$conf_name}'");
+
+      $index_conf         = $config[$conf_name];
+      if(!array_key_exists('host', $index_conf))
+        $index_conf['host'] = $config['host'];
+
+      if(!array_key_exists('port', $index_conf))
+        $index_conf['port'] = $config['port'];
+
+      $this->search_clients[$conf_name] = new odSearchService($index_conf);
+    }
+
+    return $this->search_clients[$conf_name];
+  }
+
+  /**
    * @return odNewsService
    */
   function getNewsObserver()
@@ -104,7 +143,7 @@ class odTools extends lmbAbstractTools
    */
   function getExportHelper()
   {
-    return  new odExportHelper($this->getUser());
+    return new odExportHelper($this->getUser());
   }
 
   /**
@@ -149,6 +188,7 @@ class odTools extends lmbAbstractTools
   {
     if(null === $path)
       return null;
+
     return lmb_env_get('HOST_URL').$path;
   }
 
@@ -195,12 +235,11 @@ class odTools extends lmbAbstractTools
 
       if(!$users['data'])
       {
-        return array();
+        return [];
       }
 
       foreach ($users['data'] as $key => $value) {
         $user = new User();
-        // var_dump($value);
         $user->setFacebookUid($value['id']);
         $user->setFacebookAccessToken($value['access_token']);
         $user->import($this->getFacebookProfile($user)->getInfo());
@@ -302,11 +341,8 @@ class odTools extends lmbAbstractTools
   {
     if(!$this->apns)
     {
-      set_include_path(implode(PATH_SEPARATOR,
-        array('lib/Zend_Mobile/library', get_include_path())
-      ));
-      lmb_require('Zend_Mobile/library/Zend/Mobile/Push/Apns.php');
-      lmb_require('Zend_Mobile/library/Zend/Mobile/Push/Message/Apns.php');
+      lmb_require('Zend/Mobile/Push/Apns.php');
+      lmb_require('Zend/Mobile/Push/Message/Apns.php');
       $this->apns = new Zend_Mobile_Push_Apns();
     }
     return $this->apns;
@@ -323,5 +359,27 @@ class odTools extends lmbAbstractTools
         $session->start();
       return $session;
     }
+  }
+
+  function setJobQueueClient($client)
+  {
+    $this->job_queue_client = $client;
+  }
+
+  function getJobQueueClient()
+  {
+    if(!$this->job_queue_client)
+    {
+      $client = new GearmanClient();
+      $client->addServer();
+      $this->job_queue_client = $client;
+    }
+    return $this->job_queue_client;
+  }
+
+  function doAsync($function_name, $param1)
+  {
+    return $this->getJobQueueClient()
+      ->doBackground($function_name, odAsyncJobs::encodeWorkload(array_slice(func_get_args(), 1)));
   }
 }

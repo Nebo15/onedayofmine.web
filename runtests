@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 if [ $# -eq 0 ];
 then
-  php ./lib/limb/runtests.php tests
+  php ./lib/limb/tests_runner/bin/limb_unit.php -C ./src tests
 else
-  php ./lib/limb/runtests.php $*
+  php ./lib/limb/tests_runner/bin/limb_unit.php $*
 fi

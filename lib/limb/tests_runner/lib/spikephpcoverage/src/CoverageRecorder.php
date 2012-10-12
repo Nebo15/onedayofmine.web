@@ -338,7 +338,7 @@
                 }
             }
 
-            array_multisort($altCoverageData, SORT_STRING);
+            array_multisort($altCoverageData, SORT_ASC);
             return $altCoverageData;
         }
 
@@ -354,9 +354,10 @@
         protected function unixifyCoverageData() {
             global $util;
             $tmpCoverageData = array();
-            foreach($this->coverageData as $file => &$lines) {
-                $tmpCoverageData[$util->replaceBackslashes(realpath($file))] = $lines;
-            }
+            if(is_array($this->coverageData))
+                foreach($this->coverageData as $file => &$lines) {
+                    $tmpCoverageData[$util->replaceBackslashes(realpath($file))] = $lines;
+                }
             $this->coverageData = $tmpCoverageData;
         }
 

@@ -1,9 +1,6 @@
 <?php
 lmb_require(taskman_prop('PROJECT_DIR').'setup.php');
 
-if(extension_loaded('newrelic'))
-  newrelic_background_job(true);
-
 lmb_require('src/model/User.class.php');
 lmb_require('src/model/DeviceToken.class.php');
 lmb_require('src/model/DeviceNotification.class.php');
@@ -146,6 +143,19 @@ function od_apns_connect($apns, $attempts)
     taskman_sysmsg('APNS Connection Error:' . $e->getMessage());
     exit(1);
   }
+}
+
+function task_od_job_worker()
+{
+  lmb_require('src/service/odAsyncJobs.class.php');
+
+  $worker= new GearmanWorker();
+  $worker->addServer();
+  foreach(get_class_methods('odAsyncJobs') as $function)
+  {
+    $worker->addFunction($function, array("odAsyncJobs", $function));
+  }
+  while($worker->work());
 }
 
 function task_od_bundle()

@@ -90,6 +90,7 @@ class odExportHelper
     {
       $exported_day = $day->exportForApi();
       $exported_day->user = $day_users[$day->user_id]->exportForApi();
+      unset($exported_day->user_id);
 
       if($this->current_user)
       {

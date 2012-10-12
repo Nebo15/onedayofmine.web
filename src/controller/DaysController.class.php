@@ -2,6 +2,7 @@
 lmb_require('src/controller/BaseJsonController.class.php');
 lmb_require('src/service/InterestCalculator.class.php');
 lmb_require('src/model/Day.class.php');
+lmb_require('src/model/Complaint.class.php');
 lmb_require('src/model/DayFavorite.class.php');
 
 class DaysController extends BaseJsonController
@@ -43,21 +44,7 @@ class DaysController extends BaseJsonController
 
     $day->getDefaultConnection()->commitTransaction();
 
-    $this->toolkit->getNewsObserver()->onDay($day);
-
-    try
-    {
-      $this->toolkit->getPostingService()->shareDayBegin($day);
-    }
-    catch(odFacebookApiExpiredTokenException $e)
-    {
-      $day->destroy();
-      return $this->_answerUnauthorized('Token expired');
-    }
-    catch(FacebookApiException $e)
-    {
-      lmbToolkit::instance()->getLog()->warn($e->getMessage());
-    }
+    $this->toolkit->doAsync('shareDayStart', $day->id);
 
     return $this->_answerOk($this->toolkit->getExportHelper()->exportDay($day));
   }
@@ -120,7 +107,7 @@ class DaysController extends BaseJsonController
       $day->save();
     }
 
-    $this->toolkit->getPostingService()->shareDayEnd($day);
+    $this->toolkit->doAsync('shareDayEnd', $day->id);
 
     return $this->_answerOk($this->toolkit->getExportHelper()->exportDay($day));
   }
@@ -148,8 +135,7 @@ class DaysController extends BaseJsonController
     if(!$day = Day::findById($this->request->id))
       return $this->_answerModelNotFoundById('Day', $this->request->id);
 
-    $this->toolkit->getPostingService()->shareDay($day);
-    $this->toolkit->getNewsObserver()->onDayShare($day);
+    $this->toolkit->doAsync('shareDay', $day->id);
 
     return $this->_answerOk();
   }
@@ -170,8 +156,7 @@ class DaysController extends BaseJsonController
     $like->setUser($this->_getUser());
     $like->save();
 
-    $this->toolkit->getPostingService()->shareDayLike($day, $like);
-    $this->toolkit->getNewsObserver()->onDayLike($day, $like);
+    $this->toolkit->doAsync('dayLike', $day->id, $like->id);
 
     return $this->_answerOk();
   }
@@ -187,8 +172,7 @@ class DaysController extends BaseJsonController
     if(!$like = DayLike::findByDayIdAndUserId($day->getId(), $this->_getUser()->getId()))
       return $this->_answerOk(null, "Like not found");
 
-    $this->toolkit->getPostingService()->shareDayUnlike($day, $like);
-    $this->toolkit->getNewsObserver()->onDayUnlike($day, $like);
+    $this->toolkit->doAsync('dayUnlike', $day->id, $like->id);
 
     $like->destroy();
 
@@ -209,7 +193,7 @@ class DaysController extends BaseJsonController
     $day->setIsDeleted(1);
     $day->save();
 
-    $this->toolkit->getNewsObserver()->onDayDelete($day);
+    $this->toolkit->doAsync('dayDelete', $day->id);
 
     return $this->_answerOk();
   }
@@ -228,7 +212,7 @@ class DaysController extends BaseJsonController
     $day->setIsDeleted(0);
     $day->save();
 
-    $this->toolkit->getNewsObserver()->onDayRestore($day);
+    $this->toolkit->doAsync('dayRestore', $day->id);
 
     return $this->_answerOk();
   }
@@ -359,8 +343,7 @@ class DaysController extends BaseJsonController
 
     if($this->error_list->isEmpty())
     {
-      $this->toolkit->getNewsObserver()->onMoment($moment);
-
+      $this->toolkit->doAsync('momentCreate', $moment->id);
       return $this->_answerOk($this->toolkit->getExportHelper()->exportMoment($moment));
     }
     else
@@ -384,9 +367,7 @@ class DaysController extends BaseJsonController
     if($this->error_list->isEmpty())
     {
       $comment->saveSkipValidation();
-
-      $this->toolkit->getNewsObserver()->onDayComment($comment);
-
+      $this->toolkit->doAsync('dayCommentCreate', $comment->id);
       return $this->_answerOk($this->toolkit->getExportHelper()->exportDayComment($comment));
     }
     else
@@ -409,7 +390,6 @@ class DaysController extends BaseJsonController
     if($this->error_list->isValid())
     {
       $complaint->saveSkipValidation();
-
       return $this->_answerOk($this->toolkit->getExportHelper()->exportComplaint($complaint));
     }
     else
