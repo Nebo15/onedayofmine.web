@@ -33,7 +33,7 @@ class DayCommentsControllerTest extends odControllerTestCase
     $comment = $this->generator->dayComment();
     $comment->save();
 
-    lmbToolkit::instance()->setUser($comment->getUser());
+    lmbToolkit::instance()->setUser(User::findById($comment->user_id));
 
     $response = $this->get('delete', [], $comment->id);
     if($this->assertResponse(405))
