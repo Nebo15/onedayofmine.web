@@ -1,5 +1,5 @@
 <?php
-lmb_require('src/model/odLightAR.class.php');
+lmb_require('src/model/base/odLightAR.class.php');
 lmb_require('limb/net/src/lmbIp.class.php');
 
 abstract class BaseModel extends odLightAR

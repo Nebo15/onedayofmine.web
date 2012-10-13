@@ -59,7 +59,7 @@ class Day extends BaseModel
 
   function getMoments()
   {
-    return Moment::find(lmbSQLCriteria::equal('day_id', $this->id));
+    return Moment::find(lmbSQLCriteria::equal('day_id', $this->id), ['id' => 'DESC']);
   }
 
   function getComments()
