@@ -43,7 +43,10 @@ function lmb_tests_setup_db($prefix)
 {
   $type = lmbToolkit :: instance()->getDefaultDbConnection()->getType();
   if(!file_exists($prefix.$type))
+  {
+    echo "Fixture file \"{$prefix}{$type}\" not found".PHP_EOL;
     return;
+  }
 
   $file = realpath($prefix.$type);
   lmb_require('limb/dbal/src/lmbDbDump.class.php');

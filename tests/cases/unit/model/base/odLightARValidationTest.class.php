@@ -25,7 +25,7 @@ class TestLightARWithMockValidators extends TestLightAR
   }
 }
 
-class LightARValidationTest extends BaseLightARTest
+class odLightARValidationTest extends BaseLightARTest
 {
   protected $tables_to_cleanup = array('test_one_table_object');
 
@@ -34,7 +34,7 @@ class LightARValidationTest extends BaseLightARTest
    */
   protected function initSampleValidatedAR()
   {
-    $object = new TestLightARWithMockValidators($this->connection);
+    $object = new TestLightARWithMockValidators();
     $object->title = "Some title" . rand(0, 100);
     $object->content = "Some text" . rand(0, 100);
     $object->priority = rand(0, 10000);
@@ -69,8 +69,8 @@ class LightARValidationTest extends BaseLightARTest
 
     $object->set('title', 'blah-blah');
 
-    $insert_validator->expectOnce('setErrorList', array($error_list));
-    $insert_validator->expectOnce('validate', array(new ReferenceExpectation($object)));
+    $insert_validator->expectOnce('setErrorList', [$error_list]);
+    $insert_validator->expectOnce('validate', [$object]);
     $insert_validator->setReturnValue('validate', true);
 
     $update_validator->expectNever('setErrorList');
@@ -88,7 +88,7 @@ class LightARValidationTest extends BaseLightARTest
     $insert_validator->setReturnValue('validate', true);
     $object->validate($error_list);
 
-    $this->assertReference($object->getErrorList(), $error_list);
+    $this->assertReference($error_list, $error_list);
   }
 
   function testValidateNewFailed()
@@ -100,7 +100,7 @@ class LightARValidationTest extends BaseLightARTest
     $object->insert_validator = $insert_validator;
 
     $insert_validator->expectOnce('setErrorList', array($error_list));
-    $insert_validator->expectOnce('validate', array(new ReferenceExpectation($object)));
+    $insert_validator->expectOnce('validate', [$object]);
     $error_list->addError('foo');//simulating validation error
 
     $this->assertFalse($object->validate($error_list));
@@ -117,7 +117,7 @@ class LightARValidationTest extends BaseLightARTest
     $object->update_validator = $update_validator;
 
     $update_validator->expectOnce('setErrorList', array($error_list));
-    $update_validator->expectOnce('validate', array(new ReferenceExpectation($object)));
+    $update_validator->expectOnce('validate', [$object]);
     $update_validator->setReturnValue('validate', true);
 
     $insert_validator->expectNever('setErrorList');
@@ -135,7 +135,7 @@ class LightARValidationTest extends BaseLightARTest
     $object->update_validator = $update_validator;
 
     $update_validator->expectOnce('setErrorList', array($error_list));
-    $update_validator->expectOnce('validate', array(new ReferenceExpectation($object)));
+    $update_validator->expectOnce('validate', [$object]);
     $error_list->addError('foo');//simulating validation error
 
     $this->assertFalse($object->validate($error_list));
@@ -152,7 +152,7 @@ class LightARValidationTest extends BaseLightARTest
     $object->insert_validator = $validator;
 
     $validator->expectOnce('setErrorList', array($error_list));
-    $validator->expectOnce('validate', array(new ReferenceExpectation($object)));
+    $validator->expectOnce('validate', [$object]);
     $error_list->addError('foo');//simulating validation error
 
     try
@@ -178,7 +178,7 @@ class LightARValidationTest extends BaseLightARTest
     $object->insert_validator = $validator;
 
     $validator->expectOnce('setErrorList', array($error_list));
-    $validator->expectOnce('validate', array(new ReferenceExpectation($object)));
+    $validator->expectOnce('validate', [$object]);
 
     $object->save($error_list);
 
@@ -195,7 +195,7 @@ class LightARValidationTest extends BaseLightARTest
     $error_list = new MockErrorList();
     $error_list->setReturnValueAt(0, 'isValid', false);
     $error_list->setReturnValueAt(1, 'isValid', true);
-    
+
     try
     {
       $object->save($error_list);
@@ -207,12 +207,12 @@ class LightARValidationTest extends BaseLightARTest
     }
 
     $this->assertEqual($this->db->count('test_one_table_object'), 0);
-    
+
     $object->save($error_list);
 
     $this->assertEqual($this->db->count('test_one_table_object'), 1);
   }
-  
+
   function testDontUpdateOnValidationError()
   {
     $object = $this->createSampleValidatedAR();
@@ -226,7 +226,7 @@ class LightARValidationTest extends BaseLightARTest
     $object->set('content', $content = 'New content ' . time());
 
     $validator->expectOnce('setErrorList', array($error_list));
-    $validator->expectOnce('validate', array(new ReferenceExpectation($object)));
+    $validator->expectOnce('validate', [$object]);
     $error_list->addError('foo');//simulating validation error
 
     try
@@ -255,7 +255,7 @@ class LightARValidationTest extends BaseLightARTest
     $object->set('title', $title = 'New title ' . time());
 
     $validator->expectOnce('setErrorList', array($error_list));
-    $validator->expectOnce('validate', array(new ReferenceExpectation($object)));
+    $validator->expectOnce('validate', [$object]);
     $validator->setReturnValue('validate', true);
 
     $object->save($error_list);
@@ -263,7 +263,7 @@ class LightARValidationTest extends BaseLightARTest
     $record = $this->db->selectRecord('test_one_table_object');
     $this->assertEqual($record->get('title'), $title);
   }
-  
+
   function testDoubleUpdate_FirstSaveValidationError_But_SecondSaveIsOk()
   {
     $object = $this->createSampleValidatedAR();
@@ -276,7 +276,7 @@ class LightARValidationTest extends BaseLightARTest
     $error_list = new MockErrorList();
     $error_list->setReturnValueAt(0, 'isValid', false);
     $error_list->setReturnValueAt(1, 'isValid', true);
-    
+
     try
     {
       $object->save($error_list);
@@ -289,12 +289,12 @@ class LightARValidationTest extends BaseLightARTest
 
     $record = $this->db->selectRecord('test_one_table_object');
     $this->assertNotEqual($record->get('title'), $title);
-    
+
     $object->save($error_list);
 
     $record = $this->db->selectRecord('test_one_table_object');
     $this->assertEqual($record->get('title'), $title);
-  }  
+  }
 
   function testSaveSkipValidation()
   {

@@ -1,18 +1,20 @@
 <?php
+lmb_require('src/model/base/odLightAR.class.php');
 lmb_require('limb/dbal/src/criteria/lmbSQLRawCriteria.class.php');
+lmb_require('tests/cases/unit/odUnitTestCase.class.php');
 
-class TestLightAR extends LightAR
+class TestLightAR extends odLightAR
 {
   protected $_db_table_name = 'test_one_table_object';
   protected $_non_db_fields = array('extra_info');
-  
+
   public $priority;
   public $title;
   public $content;
   public $extra_info;
 }
 
-class TestLightARWithTimes extends LightAR
+class TestLightARWithTimes extends odLightAR
 {
   protected $_db_table_name = 'test_one_table_object_with_times';
 
@@ -21,7 +23,7 @@ class TestLightARWithTimes extends LightAR
   public $utime;
 }
 
-class TestLightARWithReverseId extends LightAR
+class TestLightARWithReverseId extends odLightAR
 {
   protected $_db_table_name = 'test_one_table_object_with_reverse_id';
 
@@ -71,7 +73,7 @@ class TestLightARWithOrder extends TestLightAR
   protected $_default_sort_params = array('priority' => 'desc');
 }
 
-abstract class BaseLightARTest extends DomovoyTestCase
+abstract class BaseLightARTest extends odUnitTestCase
 {
   protected $tables_to_cleanup = array('test_one_table_object');
 
@@ -80,7 +82,7 @@ abstract class BaseLightARTest extends DomovoyTestCase
    */
   public function initSampleAR()
   {
-    $object = new TestLightAR($this->connection);
+    $object = new TestLightAR();
     $object->title = "Some title" . rand(0, 100);
     $object->content = "Some text" . rand(0, 100);
     $object->priority = rand(0, 10000);

@@ -1,15 +1,15 @@
 <?php
 
-class gmeStrictPropsObject
+class odStrictPropsObject
 {
   function getPropertiesNames()
   {
-    return gme_get_public_props_names($this);
+    return od_get_public_props_names($this);
   }
 
   function getTextPropsList()
   {
-    return implode(", ", gme_get_public_props_names($this));
+    return implode(", ", od_get_public_props_names($this));
   }
 
   function __get($name)
@@ -25,7 +25,7 @@ class gmeStrictPropsObject
   }
 }
 
-class gmeDirtableObject extends gmeStrictPropsObject
+class odDirtableObject extends odStrictPropsObject
 {
   private $__dirty_props = array();
 
@@ -72,15 +72,13 @@ class gmeDirtableObject extends gmeStrictPropsObject
   }
 }
 
-function gme_q($str)
+function od_q($str)
 {
   return $str ? '"'.$str.'"' : $str;
 }
 
-function gme_get_public_props_names($obj)
+function od_get_public_props_names($obj)
 {
-  //TODO: asserts are quite slow at the moment
-  //ASSERT_OBJ($obj);
   static $cache = array();
   $klass = is_string($obj) ? $obj : get_class($obj);
   if(!isset($cache[$klass]))
@@ -88,24 +86,19 @@ function gme_get_public_props_names($obj)
   return $cache[$klass];
 }
 
-function gme_get_public_props($obj)
+function od_get_public_props($obj)
 {
-  //TODO: asserts are quite slow at the moment
-  //ASSERT_OBJ($obj);
   return get_object_vars($obj);
 }
 
-function gme_copy_public_props($src, $dst)
+function od_copy_public_props($src, $dst)
 {
-  //TODO: asserts are quite slow at the moment
-  //ASSERT_OBJ($src);
-  //ASSERT_OBJ($dst);
-  $props = gme_get_public_props_names($src);
+  $props = od_get_public_props_names($src);
   foreach($props as $p)
     $dst->$p = $src->$p;
 }
 
-function gme_props_arr2flat_arr(array $arr, array $order_props)
+function od_props_arr2flat_arr(array $arr, array $order_props)
 {
   $flat = array();
   foreach($order_props as $p)
@@ -113,7 +106,7 @@ function gme_props_arr2flat_arr(array $arr, array $order_props)
   return $flat;
 }
 
-function gme_field_extract_value(&$arr, $name, $asis, $default = null)
+function od_field_extract_value(&$arr, $name, $asis, $default = null)
 {
   if($asis)
     return $arr;
@@ -137,7 +130,7 @@ function gme_field_extract_value(&$arr, $name, $asis, $default = null)
   return $val;
 }
 
-function gme_field_set_value(&$arr, $name, $value)
+function od_field_set_value(&$arr, $name, $value)
 {
   if($name)
     $arr[$name] = $value;
@@ -145,9 +138,9 @@ function gme_field_set_value(&$arr, $name, $value)
     $arr[] = $value;
 }
 
-function gme_field_get_number(&$arr, $name, $asis = false, $default = null)
+function od_field_get_number(&$arr, $name, $asis = false, $default = null)
 {
-  $item = gme_field_extract_value($arr, $name, $asis, $default);
+  $item = od_field_extract_value($arr, $name, $asis, $default);
 
   if(!is_numeric($item))
     throw new Exception("Bad item, not a number(" . serialize($item) . ")");
@@ -155,15 +148,15 @@ function gme_field_get_number(&$arr, $name, $asis = false, $default = null)
   return 1*$item;
 }
 
-function gme_field_get_strnumber(&$arr, $name, $asis = false, $default = null)
+function od_field_get_strnumber(&$arr, $name, $asis = false, $default = null)
 {
-  $item = gme_field_extract_value($arr, $name, $asis, $default);
+  $item = od_field_extract_value($arr, $name, $asis, $default);
 
   if(is_string($item))
   {
     if(strlen($item) === 0)
       throw new Exception("Bad item, string empty, crc28 can't be generated");
-    $item = gme_crc28($item);
+    $item = od_crc28($item);
   }
 
   if(!is_numeric($item))
@@ -172,9 +165,9 @@ function gme_field_get_strnumber(&$arr, $name, $asis = false, $default = null)
   return 1*$item;
 }
 
-function gme_field_get_string(&$arr, $name, $asis = false, $default = null)
+function od_field_get_string(&$arr, $name, $asis = false, $default = null)
 {
-  $item = gme_field_extract_value($arr, $name, $asis, $default);
+  $item = od_field_extract_value($arr, $name, $asis, $default);
 
   //special case for empty strings
   if(is_bool($item) && $item === false)
@@ -185,47 +178,12 @@ function gme_field_get_string(&$arr, $name, $asis = false, $default = null)
   return $item;
 }
 
-function gme_field_get_array(&$arr, $name, $asis = false, $default = null)
+function od_field_get_array(&$arr, $name, $asis = false, $default = null)
 {
-  $item = gme_field_extract_value($arr, $name, $asis, $default);
+  $item = od_field_extract_value($arr, $name, $asis, $default);
 
   if(!is_array($item))
     throw new Exception("Bad item, not a array(" . serialize($item) . ")");
 
   return $item;
-}
-
-function gme_json2array($js)
-{
-  $arr = json_decode($js, true);
-  if($arr === null)
-  {
-    if(function_exists('json_last_error'))
-    {
-      switch(json_last_error())
-      {
-        case JSON_ERROR_DEPTH:
-          throw new Exception('Maximum stack depth exceeded');
-        case JSON_ERROR_CTRL_CHAR:
-          throw new Exception('Unexpected control character found');
-        case JSON_ERROR_SYNTAX:
-          throw new Exception('Syntax error, malformed JSON');
-      }
-    }
-    else
-     throw new Exception("Could not parse json string with error. JSON: " . $js);
-  }
-  return $arr;
-}
-
-function gme_json2array_safe($js)
-{
-  try
-  {
-    return gme_json2array($js);
-  }
-  catch(Exception $e)
-  {
-    return array();
-  }
 }

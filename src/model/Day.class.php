@@ -1,5 +1,4 @@
 <?php
-lmb_require('src/model/odLightAR.class.php');
 lmb_require('src/model/base/BaseModel.class.php');
 lmb_require('src/model/traits/Imageable.trait.php');
 lmb_require('src/model/Moment.class.php');
@@ -11,7 +10,7 @@ lmb_require('src/model/DayLike.class.php');
  * @api field int id User ID
  * @static Day findById()
  */
-class Day extends odLightAR
+class Day extends BaseModel
 {
   use Imageable;
 

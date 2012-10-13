@@ -36,6 +36,7 @@ abstract class odUnitTestCase extends UnitTestCase
     $this->toolkit->resetFileLocators();
 
     $this->db_conn = $this->toolkit->getDefaultDbConnection();
+    $this->db = new lmbSimpleDb($this->db_conn);
 
     $this->generator = new odObjectMother();
 

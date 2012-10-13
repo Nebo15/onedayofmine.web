@@ -1,11 +1,11 @@
 <?php
 require_once('BaseLightARTest.class.php');
 
-class LightARAutoReverseIdTest extends BaseLightARTest
+class odLightARAutoReverseIdTest extends BaseLightARTest
 {
   function testSetReverseIdAutomaticallyOnCreate()
   {
-    $object = new TestLightARWithReverseId($this->connection);
+    $object = new TestLightARWithReverseId();
     $object->priority = rand(1, 10000);
     $object->save();
 

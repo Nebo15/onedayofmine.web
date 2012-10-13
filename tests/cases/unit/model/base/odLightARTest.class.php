@@ -1,11 +1,11 @@
 <?php
 require_once('BaseLightARTest.class.php');
 
-class LightARTest extends BaseLightARTest
+class odLightARTest extends BaseLightARTest
 {
   function testHasAttribute()
   {
-    $object = new TestLightAR($this->connection);
+    $object = new TestLightAR();
     $this->assertTrue($object->has('id'));
     $this->assertTrue($object->has('title'));
     $this->assertFalse($object->has('no_such_field'));
@@ -13,7 +13,7 @@ class LightARTest extends BaseLightARTest
 
   function testLoadAndExport()
   {
-    $object = new TestLightAR($this->connection);
+    $object = new TestLightAR();
     $data = array('id' => 1, 'title' => "Some title", 'content' => 'Some text', 'priority' => 10);
     $object->forceLoad($data);
 
@@ -31,7 +31,7 @@ class LightARTest extends BaseLightARTest
 
   function testSaveNewRecord()
   {
-    $object = new TestLightAR($this->connection);
+    $object = new TestLightAR();
     $object->set('title', $title = 'Super title');
     $object->set('content', $content = 'Super content');
     $object->set('priority', $priority = 100);
@@ -59,7 +59,7 @@ class LightARTest extends BaseLightARTest
     $object->set('priority', 999);
     $object->save();
 
-    $loaded_object = TestLightAR :: findById($object->getDbConnection(), $object->id);
+    $loaded_object = TestLightAR :: findById($object->id);
     $this->assertEqual(999, $loaded_object->priority);
   }
 
@@ -108,7 +108,7 @@ class LightARTest extends BaseLightARTest
 
   function testProperOrderOfSaveHooksCalls()
   {
-    $object = new TestLightARWithHooks($this->connection);
+    $object = new TestLightARWithHooks();
     $object->set('content', 'whatever');
 
     ob_start();
@@ -128,7 +128,7 @@ class LightARTest extends BaseLightARTest
 
   function testProperOrderOfDestroyHooksCalls()
   {
-    $object = new TestLightARWithHooks($this->connection);
+    $object = new TestLightARWithHooks();
     $object->set('content', 'whatever');
     ob_start();
     $object->save();
@@ -164,7 +164,7 @@ class LightARTest extends BaseLightARTest
     $object1 = $this->createSampleAR();
     $object2 = $this->createSampleAR();
 
-    $found = TestLightAR :: findById($this->connection, $object2->id);
+    $found = TestLightAR :: findById($object2->id);
     $this->assertEqual($found->export(), $object2->export());
   }
 
@@ -172,7 +172,7 @@ class LightARTest extends BaseLightARTest
   {
     try
     {
-      TestLightAR :: findById($this->connection, -1000, true);
+      TestLightAR :: findById(-1000, true);
       $this->assertTrue(false);
     }
     catch(lmbException $e)
@@ -183,7 +183,7 @@ class LightARTest extends BaseLightARTest
 
   function testFindByIdReturnsNullIfNotFound()
   {
-    $this->assertNull(TestLightAR :: findById($this->connection, -1000));
+    $this->assertNull(TestLightAR :: findById(-1000));
   }
 
   function testFindFirst()
@@ -192,11 +192,11 @@ class LightARTest extends BaseLightARTest
     $object2 = $this->createSampleAR();
     $this->assertFalse($object2->isNew());
 
-    $found = TestLightAR :: findFirst($this->connection, 'id = ' . $object1->id);
+    $found = TestLightAR :: findFirst('id = ' . $object1->id);
     $this->assertEqual($found->id, $object1->id);
     $this->assertEqual($found->title, $object1->title);
 
-    $found2 = TestLightAR :: findFirst($this->connection, lmbSQLCriteria :: equal('id', $object2->id));
+    $found2 = TestLightAR :: findFirst(lmbSQLCriteria :: equal('id', $object2->id));
     $this->assertEqual($found2->id, $object2->id);
     $this->assertEqual($found2->title, $object2->title);
   }
@@ -206,10 +206,10 @@ class LightARTest extends BaseLightARTest
     $object1 = $this->createSampleAR();
     $object2 = $this->createSampleAR();
 
-    $found1 = TestLightAR :: findFirst($this->connection, null, array('id' => 'DESC'));
+    $found1 = TestLightAR :: findFirst(null, array('id' => 'DESC'));
     $this->assertEqual($found1->id, $object2->id);
 
-    $found2 = TestLightAR :: findFirst($this->connection, null, array('id' => 'ASC'));
+    $found2 = TestLightAR :: findFirst(null, array('id' => 'ASC'));
     $this->assertEqual($found2->id, $object1->id);
   }
 
@@ -218,8 +218,8 @@ class LightARTest extends BaseLightARTest
     $object1 = $this->createSampleAR();
     $object2 = $this->createSampleAR();
 
-    $rs = TestLightAR :: find($this->connection);
-    $this->assertTrue($rs instanceof LightARRecordSetDecorator);
+    $rs = TestLightAR :: find();
+    $this->assertTrue($rs instanceof odLightARRecordSetDecorator);
     $rs->rewind();
     $this->assertEqual($object1->id, $rs->current()->id);
     $rs->next();
@@ -231,7 +231,7 @@ class LightARTest extends BaseLightARTest
     $object1 = $this->createSampleAR();
     $object2 = $this->createSampleAR();
 
-    $rs = TestLightAR :: find($this->connection, 'id = ' . $object2->id);
+    $rs = TestLightAR :: find('id = ' . $object2->id);
     $rs->rewind();
     $this->assertEqual($object2->id, $rs->current()->id);
     $rs->next();
@@ -243,12 +243,12 @@ class LightARTest extends BaseLightARTest
     $object1 = $this->createSampleAR();
     $object2 = $this->createSampleAR();
 
-    $rs = TestLightAR :: find($this->connection, null, array('id' => 'DESC'));
+    $rs = TestLightAR :: find(null, array('id' => 'DESC'));
     $arr = $rs->getArray();
     $this->assertEqual($arr[0]->id, $object2->id);
     $this->assertEqual($arr[1]->id, $object1->id);
 
-    $rs = TestLightAR :: find($this->connection, null, array('id' => 'ASC'));
+    $rs = TestLightAR :: find(null, array('id' => 'ASC'));
     $arr = $rs->getArray();
     $this->assertEqual($arr[0]->id, $object1->id);
     $this->assertEqual($arr[1]->id, $object2->id);
@@ -259,7 +259,7 @@ class LightARTest extends BaseLightARTest
     $object1 = $this->createSampleAR();
     $object2 = $this->createSampleAR();
 
-    $rs = TestLightAR :: findBySql($this->connection, 'select * from test_one_table_object order by  id desc');
+    $rs = TestLightAR :: findBySql('select * from test_one_table_object order by  id desc');
     $rs->rewind();
     $this->assertEqual($object2->id, $rs->current()->id);
     $rs->next();
@@ -273,7 +273,7 @@ class LightARTest extends BaseLightARTest
     $object1 = $this->createSampleAR();
     $object2 = $this->createSampleAR();
 
-    $object = TestLightAR :: findFirstBySql($this->connection, 'select * from test_one_table_object order by  id desc');
+    $object = TestLightAR :: findFirstBySql('select * from test_one_table_object order by  id desc');
     $this->assertEqual($object2->id, $object->id);
   }
 
@@ -289,7 +289,7 @@ class LightARTest extends BaseLightARTest
     $object3->set('priority', 40);
     $object3->save();
 
-    $rs = TestLightARWithOrder :: find($this->connection);
+    $rs = TestLightARWithOrder :: find();
     $arr = $rs->getArray();
     $this->assertEqual($object2->id, $arr[0]->id);
     $this->assertEqual($object3->id, $arr[1]->id);
@@ -303,7 +303,7 @@ class LightARTest extends BaseLightARTest
     $object2 = $this->createSampleAR();
 
     ob_start();
-    TestLightARWithCustomDestroy :: delete($this->connection);
+    TestLightARWithCustomDestroy :: delete();
     $contents = ob_get_contents();
     ob_end_clean();
 
@@ -317,11 +317,11 @@ class LightARTest extends BaseLightARTest
     $object2 = $this->createSampleAR();
 
     $criteria = new lmbSQLFieldCriteria('id', $object2->id);
-    TestLightAR :: delete($this->connection, $criteria);
+    TestLightAR :: delete($criteria);
 
     $this->assertEqual($this->db->count('test_one_table_object'), 1);
 
-    $found = TestLightAR :: findById($this->connection, $object1->id);
+    $found = TestLightAR :: findById($object1->id);
     $this->assertEqual($found->content, $object1->content);
   }
 
@@ -331,7 +331,7 @@ class LightARTest extends BaseLightARTest
     $object2 = $this->createSampleAR();
 
     ob_start();
-    TestLightARWithCustomDestroy :: deleteRaw($this->connection);
+    TestLightARWithCustomDestroy :: deleteRaw();
     $contents = ob_get_contents();
     ob_end_clean();
 
@@ -345,11 +345,11 @@ class LightARTest extends BaseLightARTest
     $object2 = $this->createSampleAR();
 
     $criteria = new lmbSQLFieldCriteria('id', $object2->id);
-    TestLightAR :: deleteRaw($this->connection, $criteria);
+    TestLightAR :: deleteRaw($criteria);
 
     $this->assertEqual($this->db->count('test_one_table_object'), 1);
 
-    $found = TestLightAR :: findById($this->connection, $object1->id);
+    $found = TestLightAR :: findById($object1->id);
     $this->assertEqual($found->content, $object1->content);
   }
 }

@@ -1,11 +1,11 @@
 <?php
-require_once('utils.inc.php');
-require_once('odLightARRecordSetDecorator.class.php');
+require_once('src/model/base/utils.inc.php');
+require_once('src/model/base/odLightARRecordSetDecorator.class.php');
 require_once('limb/validation/src/lmbValidator.class.php');
 require_once('limb/validation/src/lmbErrorList.class.php');
 require_once('limb/dbal/src/query/lmbSelectQuery.class.php');
 
-abstract class odLightAR extends gmeDirtableObject implements ArrayAccess
+abstract class odLightAR extends odDirtableObject implements ArrayAccess
 {
   public $id = null;
 
@@ -68,7 +68,7 @@ abstract class odLightAR extends gmeDirtableObject implements ArrayAccess
 
   private function _fillFields()
   {
-    $props = gme_get_public_props($this);
+    $props = od_get_public_props($this);
     if($this->_exclude_id)
       unset($props["id"]);
     $this->_fields = array_keys($props);
@@ -131,7 +131,7 @@ abstract class odLightAR extends gmeDirtableObject implements ArrayAccess
 
   function export()
   {
-    $all_props = gme_get_public_props($this);
+    $all_props = od_get_public_props($this);
 
     $result = array();
     foreach($all_props as $key => $value)

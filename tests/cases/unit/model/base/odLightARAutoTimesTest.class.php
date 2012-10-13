@@ -1,14 +1,14 @@
 <?php
 require_once('BaseLightARTest.class.php');
 
-class LightARAutoTimesTest extends BaseLightARTest
+class odLightARAutoTimesTest extends BaseLightARTest
 {
   /**
    * @return TestLightARWithTimes
    */
   protected function initSampleARWithTimes()
   {
-    $object = new TestLightARWithTimes($this->connection);
+    $object = new TestLightARWithTimes();
     $object->priority = rand(1, 10000);
     return $object;
   }
@@ -32,7 +32,7 @@ class LightARAutoTimesTest extends BaseLightARTest
     $object->save();
 
     /** @var $object2 TestLightARWithTimes */
-    $object2 = TestLightARWithTimes :: findById($this->connection, $object->id);
+    $object2 = TestLightARWithTimes :: findById($object->id);
     $this->assertTrue($object2->utime >= $time);
     $this->assertTrue($object2->ctime >= $time);
 
@@ -49,7 +49,7 @@ class LightARAutoTimesTest extends BaseLightARTest
     $id = $object->save();
 
     /** @var $object2 TestLightARWithTimes */
-    $object2 = TestLightARWithTimes :: findById($this->connection, $object->id);
+    $object2 = TestLightARWithTimes :: findById($object->id);
     $this->assertTrue($object2->utime >= $time);
     $this->assertTrue($object2->ctime == $ctime);
   }

@@ -1,7 +1,7 @@
 <?php
 require_once('BaseLightARTest.class.php');
 
-class TestLightCompositePKAR extends LightAR
+class TestLightCompositePKAR extends odLightAR
 {
   protected $_db_table_name = 'test_one_table_object_composite_pk';
   protected $_primary_key_fields = array("user_id", "stuff_id");
@@ -13,14 +13,14 @@ class TestLightCompositePKAR extends LightAR
   public $title;
 }
 
-class LightARMultipleFieldPrimaryKeyTest extends DomovoyTestCase
+class odLightARMultipleFieldPrimaryKeyTest extends odUnitTestCase
 {
   protected $tables_to_cleanup = array('test_one_table_object_composite_pk');
 
   private function initSampleAR()
   {
     static $stuff_id = 100;
-    $object = new TestLightCompositePKAR($this->connection);
+    $object = new TestLightCompositePKAR();
     $data = array('user_id' => 1, 'stuff_id' => $stuff_id++, 'title' => 'Some text');
     $object->import($data);
     return $object;
@@ -35,7 +35,7 @@ class LightARMultipleFieldPrimaryKeyTest extends DomovoyTestCase
 
   function testForceLoad()
   {
-    $object = new TestLightCompositePKAR($this->connection);
+    $object = new TestLightCompositePKAR();
     $data = array('user_id' => 1, 'stuff_id' => 100, 'title' => 'Some text');
     $object->forceLoad($data);
 
@@ -46,7 +46,7 @@ class LightARMultipleFieldPrimaryKeyTest extends DomovoyTestCase
 
   function testSaveNewRecord()
   {
-    $object = new TestLightCompositePKAR($this->connection);
+    $object = new TestLightCompositePKAR();
     $object->set('user_id', $user_id = 1);
     $object->set('stuff_id', $stuff_id = 100);
     $object->set('title', $title = 'Super title');
@@ -54,7 +54,7 @@ class LightARMultipleFieldPrimaryKeyTest extends DomovoyTestCase
     $this->assertTrue($object->isNew());
 
     $this->assertTrue($object->save());
-    
+
     $this->assertFalse($object->isDirty());
     $this->assertFalse($object->isNew());
     $this->assertNull($object->id);
@@ -71,9 +71,10 @@ class LightARMultipleFieldPrimaryKeyTest extends DomovoyTestCase
   {
     $object = $this->initSampleAR();
 
-    $this->assertTrue($object->save());
-    $this->assertFalse($object->save());
-
+    $this->assertEqual($this->db->count('test_one_table_object_composite_pk'), 0);
+    $object->save();
+    $this->assertEqual($this->db->count('test_one_table_object_composite_pk'), 1);
+    $object->save();
     $this->assertEqual($this->db->count('test_one_table_object_composite_pk'), 1);
   }
 
@@ -118,7 +119,7 @@ class LightARMultipleFieldPrimaryKeyTest extends DomovoyTestCase
   {
     try
     {
-      TestLightCompositePKAR :: findById($this->connection, $any_id = 1000, true);
+      TestLightCompositePKAR :: findById($any_id = 1000, true);
       $this->assertTrue(false);
     }
     catch(lmbException $e)
@@ -133,7 +134,7 @@ class LightARMultipleFieldPrimaryKeyTest extends DomovoyTestCase
     $object2 = $this->createSampleAR();
     $this->assertFalse($object2->isNew());
 
-    $found = TestLightCompositePKAR :: findFirst($this->connection, 'user_id = ' . $object1->user_id);
+    $found = TestLightCompositePKAR :: findFirst('user_id = ' . $object1->user_id);
     $this->assertEqual($found->user_id, $object1->user_id);
     $this->assertEqual($found->stuff_id, $object1->stuff_id);
     $this->assertEqual($found->title, $object1->title);
@@ -144,7 +145,7 @@ class LightARMultipleFieldPrimaryKeyTest extends DomovoyTestCase
     $object1 = $this->createSampleAR();
     $object2 = $this->createSampleAR();
 
-    $rs = TestLightCompositePKAR :: find($this->connection, 'user_id = ' . $object2->user_id . ' AND stuff_id = ' . $object2->stuff_id);
+    $rs = TestLightCompositePKAR :: find('user_id = ' . $object2->user_id . ' AND stuff_id = ' . $object2->stuff_id);
     $rs->rewind();
     $this->assertEqual($object2->id, $rs->current()->id);
     $rs->next();
@@ -172,11 +173,11 @@ class LightARMultipleFieldPrimaryKeyTest extends DomovoyTestCase
     $object2 = $this->createSampleAR();
 
     $criteria = new lmbSQLFieldCriteria('stuff_id', $object2->stuff_id);
-    TestLightCompositePKAR :: delete($this->connection, $criteria);
+    TestLightCompositePKAR :: delete($criteria);
 
     $this->assertEqual($this->db->count('test_one_table_object_composite_pk'), 1);
 
-    $found = TestLightCompositePKAR :: findFirst($this->connection, "stuff_id = " . $object1->stuff_id);
+    $found = TestLightCompositePKAR :: findFirst("stuff_id = " . $object1->stuff_id);
     $this->assertEqual($found->title, $object1->title);
   }
 }
