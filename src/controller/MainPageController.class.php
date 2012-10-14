@@ -16,4 +16,9 @@ class MainPageController extends BaseJsonController
   {
     return $this->_answerOk();
   }
+
+  function doGuestException()
+  {
+    throw new lmbException('Some exception', array('foo' => 1, 'bar' => 2));
+  }
 }

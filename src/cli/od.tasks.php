@@ -1,9 +1,6 @@
 <?php
 lmb_require(taskman_prop('PROJECT_DIR').'setup.php');
 
-if(extension_loaded('newrelic'))
-  newrelic_background_job(true);
-
 lmb_require('src/model/User.class.php');
 lmb_require('src/model/DeviceToken.class.php');
 lmb_require('src/model/DeviceNotification.class.php');

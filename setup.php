@@ -36,16 +36,6 @@ lmbToolkit :: merge(new lmbDbTools());
 lmb_require('limb/core/src/lmbSys.class.php');
 lmb_require('src/model/base/BaseModel.class.php');
 
-if(extension_loaded('newrelic'))
-{
-  newrelic_set_appname(lmb_app_mode());
-  newrelic_name_transaction(isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : 'CLI');
-  lmbErrorGuard :: registerExceptionHandler(function($e)
-  {
-    $message = ($e instanceof lmbException) ? $e->getOriginalMessage() : $e->getMessage();
-    $string = ($e instanceof lmbException) ? $e->toNiceString() : (string) $e;
-    newrelic_notice_error($message, $e);
-    if(lmbSys::isCli())
-      print($string);
-  });
-}
+lmb_env_set('AIRBRAKE_KEY', '5593098eb4afcadead3f0e02014baa52');
+lmb_require('src/service/AirBrakeErrorHandler.class.php');
+lmbErrorGuard::registerExceptionHandler(array('AirBrakeErrorHandler', 'onException'));
