@@ -124,6 +124,11 @@ class odTools extends lmbAbstractTools
     return $this->search_clients[$conf_name];
   }
 
+  function setSearchService($conf_name, $obj)
+  {
+    $this->search_clients[$conf_name] = $obj;
+  }
+
   /**
    * @return odNewsService
    */
