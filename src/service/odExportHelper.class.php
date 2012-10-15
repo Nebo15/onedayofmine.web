@@ -96,8 +96,8 @@ class odExportHelper
       {
         $exported_day->is_favorite = in_array($day->id, $favorite_days_ids);
 
-        if($this->current_user->id == $day->getUser()->id)
-          $exported_day->is_deleted = (bool) $day->getIsDeleted();
+        if($this->current_user->id == $day->user_id)
+          $exported_day->is_deleted = (bool) $day->is_deleted;
       }
 
       $exported_day->likes_count =
@@ -250,8 +250,8 @@ class odExportHelper
 
     unset($exported->day_id);
 
-    $exported->likes_count    = (int) $moment->getLikes()->count();
-    $exported->comments_count = (int) $moment->getComments()->count();
+    $exported->likes_count    = (int) MomentLike::find(lmbSQLCriteria::equal('moment_id', $moment->id))->count();
+    $exported->comments_count = (int) MomentComment::find(lmbSQLCriteria::equal('moment_id', $moment->id))->count();
 
     return $exported;
   }

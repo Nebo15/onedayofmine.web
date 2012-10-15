@@ -94,16 +94,16 @@ trait Imageable
     if(!$exif = $helper->getExifInfo($image_file))
       return;
 
-    if(array_key_exists('GPS', $exif)) {
+    if(property_exists($this, 'location_latitude') && array_key_exists('GPS', $exif)) {
       $cords = $helper->exifGPSToDecemicalCords($exif);
-      $this->setLocationLatitude($cords['latitude']);
-      $this->setLocationLongitude($cords['longitude']);
+      $this->location_latitude = $cords['latitude'];
+      $this->location_longitude = $cords['longitude'];
     }
 
     if(array_key_exists('IFD0', $exif) && array_key_exists('DateTime', $exif['IFD0']))
-      $this->setTime(strtotime($exif['IFD0']['DateTime']));
+      $this->time = strtotime($exif['IFD0']['DateTime']);
     elseif(array_key_exists('EXIF', $exif) && array_key_exists('DateTimeOriginal', $exif['EXIF']))
-      $this->setTime(strtotime($exif['EXIF']['DateTimeOriginal']));
+      $this->time = strtotime($exif['EXIF']['DateTimeOriginal']);
   }
 
   function showImages(stdClass $export)

@@ -79,7 +79,7 @@ class FacebookProfileTest extends odIntegrationTestCase
   function testShareBeginDay()
   {
     $day = $this->generator->day();
-    $day->setTitle('testShareBeginDay');
+    $day->title ='testShareBeginDay';
     $day->save();
 
     $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($day));
@@ -91,7 +91,7 @@ class FacebookProfileTest extends odIntegrationTestCase
   function testShareDayLike()
   {
     $day = $this->generator->day();
-    $day->setTitle('testShareLikeDay');
+    $day->title ='testShareLikeDay';
     $day->save();
 
     $like = $this->generator->dayLike($day);
@@ -106,7 +106,7 @@ class FacebookProfileTest extends odIntegrationTestCase
   function testShareAddMoment()
   {
     $day = $this->generator->day();
-    $day->setTitle('testShareAddMoment - Day');
+    $day->title ='testShareAddMoment - Day';
     $day->save();
 
     $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($day));
@@ -139,7 +139,7 @@ class FacebookProfileTest extends odIntegrationTestCase
   function testShareMomentLike()
   {
     $day = $this->generator->day();
-    $day->setTitle('testShareMomentLike - Day');
+    $day->title ='testShareMomentLike - Day';
     $day->save();
 
     $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($day));
@@ -169,7 +169,7 @@ class FacebookProfileTest extends odIntegrationTestCase
   function testShareDay()
   {
     $day = $this->generator->day();
-    $day->setTitle('shareDay - Day');
+    $day->title ='shareDay - Day';
     $day->save();
 
     $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($day));
@@ -180,7 +180,7 @@ class FacebookProfileTest extends odIntegrationTestCase
   function testShareEndDay()
   {
     $day = $this->generator->day();
-    $day->setTitle('testShareEndDay - Day');
+    $day->title ='testShareEndDay - Day';
     $day->save();
 
     $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($day));

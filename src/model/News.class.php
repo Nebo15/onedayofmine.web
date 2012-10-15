@@ -16,12 +16,29 @@ class News extends BaseModel
   protected $_default_sort_params = array('id'=>'desc');
   protected $_db_table_name = 'news';
 
+  public $sender_id;
+  public $user_id;
+  public $link;
+  public $text;
+  public $day_id;
+  public $moment_id;
+  public $day_comment_id;
+  public $moment_comment_id;
+  public $day_like_id;
+  public $moment_like_id;
+  public $ctime;
+
   protected function _createValidator()
   {
     $validator = new lmbValidator();
     $validator->addRequiredRule('sender_id');
     $validator->addRequiredRule('text');
     return $validator;
+  }
+
+  function setSender(User $user)
+  {
+    $this->user_id = $user->id;
   }
 
   function exportForApi(array $properties = null)

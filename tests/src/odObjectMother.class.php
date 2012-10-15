@@ -51,9 +51,8 @@ class odObjectMother
   {
     $day = $day ?: $this->day($user, $title);
 
-    $day->addToMoments($this->momentWithImage($day));
-    $day->addToMoments($this->momentWithImage($day));
-    $day->save();
+    $moment = $this->moment($day);
+
 
     $day->attachImage($this->image());
     $day->save();
@@ -66,7 +65,9 @@ class odObjectMother
     $day = $day ?: $this->day($user, $title);
 
     for($i = 0; $i < lmbToolkit::instance()->getConf('common')->default_comments_count + 1; $i++)
-      $day->addToComments($this->dayComment($day, $day->getUser()));
+    {
+      $this->dayComment($day, User::findById($day->user_id));
+    }
 
     return $day;
   }
@@ -130,15 +131,16 @@ class odObjectMother
    */
   function moment(Day $day = null, $with_comments = false)
   {
+    $day = $day ? $day : $this->day();
     $moment = new Moment();
     $moment->description = 'description '.$this->string(125);
-    $moment->setDay($day ?: $this->day());
+    $moment->setDay($day);
 
     if($with_comments)
     {
       for($i = 0; $i < lmbToolkit::instance()->getConf('common')->default_comments_count+1; $i++)
       {
-        $moment->addToComments($this->momentComment($moment, $moment->getDay()->getUser()));
+        $this->momentComment($moment, User::findById($day->user_id));
       }
     }
     $moment->save();
@@ -209,10 +211,16 @@ class odObjectMother
     $recipient = $recipient ?: $this->user();
 
     $news = new News();
-    $news->setRecipients(array($recipient));
     $news->setSender($creator);
     $news->text = $creator->name . ' likes ' . $recipient->name;
     $news->link = $this->string();
+    $news->save();
+
+    $recipient = new NewsRecipient();
+    $recipient->setNews($news);
+    $recipient->setUser($recipient);
+    $recipient->save();
+
     return $news;
   }
 

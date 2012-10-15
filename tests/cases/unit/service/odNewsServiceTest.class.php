@@ -180,7 +180,7 @@ class odNewsServiceTest extends odUnitTestCase
     $moment->save();
     $this->sender_observer->onMoment($moment);
 
-    $news = News::findOne();
+    $news = News::findFirst();
     $this->assertNewsUsers($news, $this->follower,$this->sender);
     $this->assertNewsText($news, odNewsService::MSG_MOMENT_CREATED, $this->sender->name, $day->title);
     $this->assertEqual($day->id, $news->day_id);

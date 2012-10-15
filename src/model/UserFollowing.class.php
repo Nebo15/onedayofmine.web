@@ -5,6 +5,20 @@ class UserFollowing extends BaseModel
 {
   protected $_default_sort_params = array('ctime'=>'asc');
 
+  public $user_id;
+  public $follower_user_id;
+  public $ctime;
+
+  function setUser(User $user)
+  {
+    $this->user_id = $user->id;
+  }
+
+  function setFollowerUser(User $user)
+  {
+    $this->follower_user_id = $user->id;
+  }
+
   public static function isUserFollowUser(User $follower_user, User $followed_user)
   {
     return !is_null(lmbActiveRecord::findFirst('UserFollowing', ['follower_user_id=? AND user_id=?', $follower_user->id, $followed_user->id]));

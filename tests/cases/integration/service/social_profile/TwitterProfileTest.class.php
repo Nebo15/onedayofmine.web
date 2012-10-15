@@ -87,7 +87,7 @@ class TwitterProfileTest extends odIntegrationTestCase
   function testShareBeginDay()
   {
     $day = $this->generator->day();
-    $day->setTitle('testShareBeginDay');
+    $day->title ='testShareBeginDay');
     $day->save();
 
     $provider = (new TwitterProfile($this->main_user));
@@ -100,7 +100,7 @@ class TwitterProfileTest extends odIntegrationTestCase
   function testShareDayLike()
   {
     $day = $this->generator->day();
-    $day->setTitle('testShareLikeDay');
+    $day->title ='testShareLikeDay');
     $day->save();
 
     $tweet = (new TwitterProfile($this->main_user))->shareDayBegin($day);
@@ -120,7 +120,7 @@ class TwitterProfileTest extends odIntegrationTestCase
   function testShareMomentAdd()
   {
     $day = $this->generator->day();
-    $day->setTitle('testShareAddMoment - Day');
+    $day->title ='testShareAddMoment - Day');
     $day->save();
 
     (new TwitterProfile($this->main_user))->shareDayBegin($day);
@@ -144,7 +144,7 @@ class TwitterProfileTest extends odIntegrationTestCase
   function testShareMomentLike()
   {
     $day = $this->generator->day();
-    $day->setTitle('testShareMomentLike - Day');
+    $day->title ='testShareMomentLike - Day');
     $day->save();
     $tweet = (new TwitterProfile($this->main_user))->shareDayBegin($day);
     $day->save();
@@ -169,7 +169,7 @@ class TwitterProfileTest extends odIntegrationTestCase
   function testShareDayEnd()
   {
     $day = $this->generator->day();
-    $day->setTitle('testShareEndDay - Day');
+    $day->title ='testShareEndDay - Day');
     $day->save();
 
     $tweet = (new TwitterProfile($this->main_user))->shareDayBegin($day);
@@ -185,7 +185,7 @@ class TwitterProfileTest extends odIntegrationTestCase
   function testShareDay()
   {
     $day = $this->generator->day();
-    $day->setTitle('shareDay - Day');
+    $day->title ='shareDay - Day');
     $day->save();
 
     $tweet = (new TwitterProfile($this->main_user))->shareDay($day);

@@ -135,20 +135,20 @@ class MomentsControllerTest extends odControllerTestCase
     $day->save();
 
     $moment = $this->generator->moment($day);
-    $moment->setIsDeleted(1);
+    $moment->is_deleted = 1;
     $moment->save();
 
     lmbToolkit::instance()->setUser($this->main_user);
 
-    $loaded_moment = Moment::findOne();
-    $this->assertEqual(1, $loaded_moment->getIsDeleted());
+    $loaded_moment = Moment::findFirst();
+    $this->assertEqual(1, $loaded_moment->is_deleted);
     $this->assertEqual($day->getMoments()->count(), 0);
 
     $response = $this->post('restore', [], $moment->id)->result;
     if($this->assertResponse(200))
     {
-      $loaded_moment = Moment::findOne();
-      $this->assertEqual(0, $loaded_moment->getIsDeleted());
+      $loaded_moment = Moment::findFirst();
+      $this->assertEqual(0, $loaded_moment->is_deleted);
       $this->assertEqual($day->getMoments()->count(), 1);
     }
   }
@@ -171,7 +171,7 @@ class MomentsControllerTest extends odControllerTestCase
       $response_comment = $response->result;
       $this->assertJsonMomentComment($response_comment);
 
-      $loaded_comment = MomentComment::findOne();
+      $loaded_comment = MomentComment::findFirst();
       $exported   = $this->toolkit->getExportHelper()->exportMomentComment($loaded_comment);
       $this->assertJsonMomentComment($exported);
 
@@ -289,7 +289,7 @@ class MomentsControllerTest extends odControllerTestCase
     {
       $this->assertTrue(is_null($response->result));
       $this->assertEqual(MomentLike::find()->count(), 1);
-      $this->assertEqual(Moment::findOne()->getLikes()->count(), 1);
+      $this->assertEqual(Moment::findFirst()->getLikes()->count(), 1);
     }
   }
 
@@ -307,7 +307,7 @@ class MomentsControllerTest extends odControllerTestCase
     {
       $this->assertTrue(is_null($response->result));
       $this->assertEqual(MomentLike::find()->count(), 1);
-      $this->assertEqual(Moment::findOne()->getLikes()->count(), 1);
+      $this->assertEqual(Moment::findFirst()->getLikes()->count(), 1);
     }
 
     $response = $this->post('like', [], $moment->id);
@@ -333,7 +333,7 @@ class MomentsControllerTest extends odControllerTestCase
     {
       $this->assertTrue(is_null($response->result));
       $this->assertEqual(MomentLike::find()->count(), 1);
-      $this->assertEqual(Moment::findOne()->getLikes()->count(), 1);
+      $this->assertEqual(Moment::findFirst()->getLikes()->count(), 1);
     }
   }
 

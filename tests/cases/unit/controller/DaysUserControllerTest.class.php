@@ -23,9 +23,10 @@ class DaysUserControllerTest extends odControllerTestCase
     $day = $this->generator->dayWithMomentsAndComments();
     $day->save();
 
-    $favorite = $this->main_user->getFavoriteDays();
-    $favorite->add($day);
-    $favorite->save();
+    $favorite_day = new DayFavorite();
+    $favorite_day->setUser($this->main_user);
+    $favorite_day->setDay($day);
+    $favorite_day->save();
 
     lmbToolkit::instance()->setUser($this->main_user);
 
@@ -124,7 +125,7 @@ class DaysUserControllerTest extends odControllerTestCase
     if ($this->assertResponse(200)) {
       $this->assertTrue(is_null($response->result));
       $this->assertEqual(DayLike::find()->count(), 1);
-      $this->assertEqual(Day::findOne()->getLikes()->count(), 1);
+      $this->assertEqual(Day::findFirst()->getLikes()->count(), 1);
     }
   }
 
@@ -141,7 +142,7 @@ class DaysUserControllerTest extends odControllerTestCase
     if ($this->assertResponse(200)) {
       $this->assertTrue(is_null($response->result));
       $this->assertEqual(DayLike::find()->count(), 1);
-      $this->assertEqual(Day::findOne()->getLikes()->count(), 1);
+      $this->assertEqual(Day::findFirst()->getLikes()->count(), 1);
     }
 
     $response = $this->post('like', [], $day->id);
@@ -162,7 +163,7 @@ class DaysUserControllerTest extends odControllerTestCase
     if ($this->assertResponse(200)) {
       $this->assertTrue(is_null($response->result));
       $this->assertEqual(DayLike::find()->count(), 1);
-      $this->assertEqual(Day::findOne()->getLikes()->count(), 1);
+      $this->assertEqual(Day::findFirst()->getLikes()->count(), 1);
     }
   }
 
@@ -224,15 +225,16 @@ class DaysUserControllerTest extends odControllerTestCase
     $day4 = $this->generator->day($this->additional_user);
     $day4->save();
     $day5 = $this->generator->day($this->additional_user);
-    $day5->setIsDeleted(1);
+    $day5->is_deleted = 1;
     $day5->save();
 
-    $this->main_user->addToFavoriteDays($day1);
-    $this->main_user->addToFavoriteDays($day2);
-    $this->main_user->addToFavoriteDays($day3);
-    $this->main_user->addToFavoriteDays($day4);
-    $this->main_user->addToFavoriteDays($day5);
-    $this->main_user->save();
+    foreach([$day1, $day2, $day3, $day4, $day5] as $day)
+    {
+      $favorite = new DayFavorite();
+      $favorite->setDay($day);
+      $favorite->setUser($this->main_user);
+      $favorite->save();
+    }
 
     lmbToolkit::instance()->setUser($this->main_user);
 
@@ -346,8 +348,10 @@ class DaysUserControllerTest extends odControllerTestCase
     $day = $this->generator->day($this->additional_user);
     $day->save();
 
-    $this->main_user->getFavoriteDays()->add($day);
-    $this->main_user->save();
+    $favorite = new DayFavorite();
+    $favorite->setDay($day);
+    $favorite->setUser($this->main_user);
+    $favorite->save();
 
     lmbToolkit::instance()->setUser($this->main_user);
 
@@ -366,8 +370,10 @@ class DaysUserControllerTest extends odControllerTestCase
     $day = $this->generator->day($this->additional_user);
     $day->save();
 
-    $this->main_user->getFavoriteDays()->add($day);
-    $this->main_user->save();
+    $favorite = new DayFavorite();
+    $favorite->setDay($day);
+    $favorite->setUser($this->main_user);
+    $favorite->save();
 
     lmbToolkit::instance()->setUser($this->main_user);
 
@@ -395,8 +401,11 @@ class DaysUserControllerTest extends odControllerTestCase
   function testGetFollowingUsersDays()
   {
     $this->main_user->save();
-    $this->additional_user->addToFollowers($this->main_user);
-    $this->additional_user->save();
+
+    $link = new UserFollowing();
+    $link->setFollowerUser($this->main_user);
+    $link->setUser($this->additional_user);
+    $link->save();
 
     $day1 = $this->generator->dayWithMoments($this->additional_user);
     $day1->save();
@@ -478,7 +487,7 @@ class DaysUserControllerTest extends odControllerTestCase
     $day1 = $this->generator->dayWithMoments($this->main_user);
     $day1->save();
     $day2 = $this->generator->dayWithMoments($this->main_user);
-    $day2->setIsDeleted(1);
+    $day2->is_deleted = 1;
     $day2->save();
     $day3 = $this->generator->dayWithMoments($this->main_user);
     $day3->save();
@@ -568,8 +577,8 @@ class DaysUserControllerTest extends odControllerTestCase
 
       $loaded_complaint = $complaints->at(0);
       $this->assertEqual($loaded_complaint->id, $response_complaint->id);
-      $this->assertEqual($loaded_complaint->getDayId(), $response_complaint->day_id);
-      $this->assertEqual($loaded_complaint->getText(), $text);
+      $this->assertEqual($loaded_complaint->day_id, $response_complaint->day_id);
+      $this->assertEqual($loaded_complaint->text, $text);
     }
   }
 }

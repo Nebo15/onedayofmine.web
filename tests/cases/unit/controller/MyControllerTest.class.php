@@ -43,7 +43,7 @@ class MyControllerTest extends odControllerTestCase
       $updated_profile = $response->result;
       $this->assertEqualPropertyValues($updated_profile, $update);
 
-      $loaded_profile = User::findOne()->exportForApi();
+      $loaded_profile = User::findFirst()->exportForApi();
       $this->assertEqualPropertyValues($loaded_profile, $update);
     }
   }
@@ -64,7 +64,7 @@ class MyControllerTest extends odControllerTestCase
       $updated_profile = $response->result;
       $this->assertEqualPropertyValues($updated_profile, $update);
 
-      $loaded_profile = User::findOne()->exportForApi();
+      $loaded_profile = User::findFirst()->exportForApi();
       $this->assertEqualPropertyValues($loaded_profile, $update);
     }
   }

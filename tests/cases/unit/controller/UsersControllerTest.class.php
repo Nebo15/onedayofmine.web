@@ -56,11 +56,11 @@ class UsersControllerTest extends odControllerTestCase
     $this->main_user->save();
     $this->additional_user->save();
 
-    $following = $this->additional_user->getFollowing();
+    $following = $this->additional_user->getFollowingUsers();
     $following->add($this->main_user);
     $following->save();
 
-    $followers = $this->additional_user->getFollowers();
+    $followers = $this->additional_user->getFollowersUsers();
     $followers->add($this->main_user);
     $followers->save();
 

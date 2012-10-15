@@ -30,7 +30,7 @@ class UsersController extends BaseJsonController
     if(!$user = User::findById($this->request->id))
       return $this->_answerModelNotFoundById('User', $this->request->id);
 
-    $followers = $user->getFollowers();
+    $followers = $user->getFollowersUsers();
 
     return $this->_answerOk($this->toolkit->getExportHelper()->exportUserItems($followers));
   }
@@ -40,7 +40,7 @@ class UsersController extends BaseJsonController
     if(!$user = User::findById($this->request->id))
       return $this->_answerModelNotFoundById('User', $this->request->id);
 
-    $followed_users = $user->getFollowing();
+    $followed_users = $user->getFollowingUsers();
 
     return $this->_answerOk($this->toolkit->getExportHelper()->exportUserItems($followed_users));
   }
@@ -53,7 +53,7 @@ class UsersController extends BaseJsonController
     if(!$user = User::findById($this->request->id))
       return $this->_answerModelNotFoundById('User', $this->request->id);
 
-    $following = $this->_getUser()->getFollowing();
+    $following = $this->_getUser()->getFollowingUsers();
     $following->add($user);
     $following->save();
 
@@ -70,7 +70,7 @@ class UsersController extends BaseJsonController
     if(!$user = User::findById($this->request->id))
       return $this->_answerModelNotFoundById('User', $this->request->id);
 
-    $following = $this->_getUser()->getFollowing();
+    $following = $this->_getUser()->getFollowingUsers();
     $following->remove($user);
     $following->save();
 

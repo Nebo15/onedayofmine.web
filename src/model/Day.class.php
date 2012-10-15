@@ -17,16 +17,15 @@ class Day extends BaseModel
   protected $_db_table_name = 'day';
   protected $_default_sort_params = array('id'=>'desc');
 
-  /**
-   * @var User
-   */
-  protected $user;
   public $user_id;
   public $type;
   public $title;
   public $final_description;
   public $views_count;
   public $is_deleted;
+
+  public $ctime;
+  public $utime;
 
   protected function _createValidator()
   {
@@ -74,17 +73,14 @@ class Day extends BaseModel
 
   function getCommentsWithLimitation($from_id = null, $to_id = null, $limit = null)
   {
-    $criteria = new lmbSQLCriteria();
+    $criteria = lmbSQLCriteria::equal('day_id', $this->id);
     if($from_id)
       $criteria->add(lmbSQLCriteria::greater('id', $from_id));
     if($to_id)
       $criteria->add(lmbSQLCriteria::less('id', $to_id));
     if(!$limit || $limit > 100)
       $limit = 100;
-    return $this->getComments()->find(array(
-      'criteria' => $criteria,
-      'sort' => array('id' => 'ASC')
-    ))->paginate(0, $limit);
+    return DayComment::find($criteria, ['id' => 'ASC'])->paginate(0, $limit);
   }
 
   static function getTypes()

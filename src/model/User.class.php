@@ -38,6 +38,8 @@ class User extends BaseModel
   public $facebook_access_token;
   public $facebook_profile_utime;
   public $twitter_access_token;
+  public $current_day_id;
+  public $user_settings_id;
 
   protected function _createValidator()
   {
@@ -75,14 +77,27 @@ class User extends BaseModel
 
   function getSettings()
   {
-    if(!$item = $this->getUserSettings())
+    if(!$item = UserSettings::findById($this->user_settings_id))
     {
       $item = UserSettings::createDefault($this);
     }
     return $item;
   }
 
+  /**
+   * @param $current_day Day
+   */
+  function setCurrentDay($current_day)
+  {
+    $this->current_day_id = $current_day->id;
+  }
+
   function getDays()
+  {
+    return Day::find(lmbSQLCriteria::equal('user_id', $this->id), array('id' => 'DESC'));
+  }
+
+  function getFavoriteDays()
   {
     return Day::find(lmbSQLCriteria::equal('user_id', $this->id), array('id' => 'DESC'));
   }
@@ -102,6 +117,20 @@ class User extends BaseModel
     return DeviceToken::find(lmbSQLCriteria::equal('user_id', $this->id));
   }
 
+  function getFollowingUsers()
+  {
+    $following = UserFollowing::find(lmbSQLCriteria::equal('user_id', $this->id));
+    $users_ids = lmbArrayHelper::getColumnValues('id', $following);
+    return self::findByIds($users_ids);
+  }
+
+  function getFollowersUsers()
+  {
+    $followers = UserFollowing::find(lmbSQLCriteria::equal('follower_user_id', $this->id));
+    $users_ids = lmbArrayHelper::getColumnValues('id', $followers);
+    return self::findByIds($users_ids);
+  }
+
   static function getSexTypes()
   {
     return array(
@@ -112,17 +141,14 @@ class User extends BaseModel
 
   function getDaysWithLimitations($from_id = null, $to_id = null, $limit = null)
   {
-    $criteria = new lmbSQLCriteria();
+    $criteria = lmbSQLCriteria::equal('user_id', $this->id);
     if($from_id)
       $criteria->add(lmbSQLCriteria::less('id', $from_id));
     if($to_id)
       $criteria->add(lmbSQLCriteria::greater('id', $to_id));
     if(!$limit || $limit > 100)
       $limit = 100;
-    return $this->getDays()->find(array(
-      'criteria' => $criteria,
-      'sort' => array('id' => 'DESC')
-    ))->paginate(0, $limit);
+    return Day::find($criteria, ['id' => 'DESC'])->paginate(0, $limit);
   }
 
   function getFavoriteDaysWithLimitations($from_id = null, $to_id = null, $limit = null)

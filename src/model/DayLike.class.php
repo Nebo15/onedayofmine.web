@@ -3,10 +3,19 @@ lmb_require('src/model/base/BaseLike.class.php');
 
 class DayLike extends BaseLike
 {
-  protected function _defineRelations()
+  protected $_db_table_name = 'day_like';
+
+  public $day_id;
+  public $user_id;
+
+  function setDay(Day $day)
   {
-    parent::_defineRelations();
-    $this->_many_belongs_to['day'] = array ('field' => 'day_id', 'class' => 'Day');
+    $this->day_id = $day->id;
+  }
+
+  function setUser(User $user)
+  {
+    $this->user_id = $user->id;
   }
 
   static function findByDayId($day_id)

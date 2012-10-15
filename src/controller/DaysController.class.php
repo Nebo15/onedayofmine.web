@@ -34,15 +34,15 @@ class DaysController extends BaseJsonController
 
     $day = new Day();
     $day->setUser($this->_getUser());
-    $day->setTitle($this->request->getPost('title'));
-    $day->setType($this->request->getPost('type'));
+    $day->title =$this->request->getPost('title');
+    $day->type = $this->request->getPost('type');
     $day->save();
 
     $user = $this->_getUser();
     $user->setCurrentDay($day);
     $user->save();
 
-    $day->getDefaultConnection()->commitTransaction();
+    $day->getDbConnection()->commitTransaction();
 
     $this->toolkit->doAsync('shareDayStart', $day->id);
 
@@ -57,7 +57,7 @@ class DaysController extends BaseJsonController
     if(!$day = Day::findById($this->request->id))
       return $this->_answerModelNotFoundById('Day', $this->request->id);
 
-    if($this->_getUser()->id != $day->getUser()->id)
+    if($this->_getUser()->id != $day->user_id)
       return $this->_answerNotOwner();
 
     if($this->request->get('cover_content')) {
@@ -72,7 +72,7 @@ class DaysController extends BaseJsonController
 
   function doCurrent()
   {
-    if(!$day = $this->_getUser()->getCurrentDay())
+    if(!$day = Day::findById($this->_getUser()->current_day_id))
       return $this->_answerNotFound('Current day not set');
 
     return $this->_answerOk($this->toolkit->getExportHelper()->exportDay($day));
@@ -87,14 +87,12 @@ class DaysController extends BaseJsonController
       return $this->_answerModelNotFoundById('Day', $this->request->id);
 
     $user = $this->_getUser();
-    if($day->getUser()->id != $user->id)
+    if($day->user_id != $user->id)
       return $this->_answerNotOwner();
 
-    if($current_day = $user->getCurrentDay()) {
-      if($day->id == $current_day->id) {
-        $user->setCurrentDay(null);
-        $user->save();
-      }
+    if($day->id == $user->current_day_id) {
+      $user->current_day_id = null;
+      $user->save();
     }
 
     if($this->request->get('image_content')) {
@@ -103,7 +101,7 @@ class DaysController extends BaseJsonController
     }
 
     if($this->request->get('final_description')) {
-      $day->setFinalDescription($this->request->get('final_description'));
+      $day->final_description = $this->request->get('final_description');
       $day->save();
     }
 
@@ -187,10 +185,10 @@ class DaysController extends BaseJsonController
     if(!$day = Day::findById($this->request->id))
       return $this->_answerModelNotFoundById('Day', $this->request->id);
 
-    if($day->getUserId() != $this->_getUser()->id)
+    if($day->user_id != $this->_getUser()->id)
       return $this->_answerNotOwner();
 
-    $day->setIsDeleted(1);
+    $day->is_deleted = 1;
     $day->save();
 
     $this->toolkit->doAsync('dayDelete', $day->id);
@@ -206,10 +204,10 @@ class DaysController extends BaseJsonController
     if(!$day = Day::findById($this->request->id))
       return $this->_answerModelNotFoundById('Day', $this->request->id);
 
-    if($day->getUserId() != $this->_getUser()->id)
+    if($day->user_id != $this->_getUser()->id)
       return $this->_answerNotOwner();
 
-    $day->setIsDeleted(0);
+    $day->is_deleted = 0;
     $day->save();
 
     $this->toolkit->doAsync('dayRestore', $day->id);
@@ -220,7 +218,7 @@ class DaysController extends BaseJsonController
   function doFollowing()
   {
     list($from, $to, $limit) = $this->_getFromToLimitations();
-    $users_ids = lmbArrayHelper::getColumnValues('id', $this->_getUser()->getFollowing());
+    $users_ids = lmbArrayHelper::getColumnValues('id', $this->_getUser()->getFollowingUsers());
 
     if(!count($users_ids))
       return $this->_answerOk([]);
@@ -323,7 +321,7 @@ class DaysController extends BaseJsonController
 
     $moment = new Moment();
     $moment->setDay($day);
-    $moment->setDescription($this->request->get('description'));
+    $moment->description = $this->request->get('description');
     $moment->save();
 
     $moment->attachImage($image_content);
@@ -332,12 +330,12 @@ class DaysController extends BaseJsonController
     if($this->request->get('time'))
     {
       list($time, $timezone) = Moment::isoToStamp($this->request->get('time'));
-      $moment->setTime($time);
-      $moment->setTimezone($timezone);
+      $moment->time = $time;
+      $moment->timezone = $timezone;
     }
     else
     {
-      $moment->setTimezone($this->toolkit->getUser()->getTimezone());
+      $moment->timezone = $this->toolkit->getUser()->timezone;
     }
     $moment->save();
 
@@ -359,7 +357,7 @@ class DaysController extends BaseJsonController
       return $this->_answerModelNotFoundById('Day', $this->request->id);
 
     $comment = new DayComment();
-    $comment->setText($this->request->get('text'));
+    $comment->text = $this->request->get('text');
     $comment->setDay($day);
     $comment->setUser($this->_getUser());
     $comment->validate($this->error_list);
@@ -384,7 +382,7 @@ class DaysController extends BaseJsonController
 
     $complaint = new Complaint();
     $complaint->setDay($day);
-    $complaint->setText($this->request->get('text'));
+    $complaint->text = $this->request->get('text');
 
     $complaint->validate($this->error_list);
     if($this->error_list->isValid())

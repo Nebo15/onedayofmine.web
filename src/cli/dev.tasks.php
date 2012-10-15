@@ -213,7 +213,7 @@ function task_od_parse_lj($argv)
     echo $posts_remain.'. Creating day "'.$post->getTitle().'":'.PHP_EOL;
 
     $day = new Day();
-    $day->setTitle($post->getTitle().' '.$posts_remain);
+    $day->title =$post->getTitle().' '.$posts_remain;
     $day->setUser($tests_users[array_rand($tests_users)]);
     $day->setOccupation($occupations[array_rand($occupations)]);
     $day->setTimezone(0);
@@ -301,7 +301,7 @@ function task_od_parse_lj($argv)
     }
 
     if(rand(0, 3) < 3)
-      $day->setFinalDescription($day_comments[array_rand($day_comments)]);
+      $day->final_description = $day_comments[array_rand($day_comments)];
 
     echo PHP_EOL;
     echo 'Added '. count($day->getMoments()) .' moments.'.PHP_EOL;

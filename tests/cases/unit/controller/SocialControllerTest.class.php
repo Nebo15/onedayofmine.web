@@ -12,7 +12,7 @@ class SocialControllerTest extends odControllerTestCase
     $this->main_user->save();
     $this->additional_user->save();
 
-    $following = $this->main_user->getFollowing();
+    $following = $this->main_user->getFollowingUsers();
     $following->add($this->additional_user);
     $following->save();
 

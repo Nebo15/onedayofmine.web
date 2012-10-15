@@ -7,7 +7,7 @@ class BaseComment extends BaseModel
   {
     $export = new stdClass();
     $export->id = $this->id;
-    $export->text = $this->getText();
+    $export->text = $this->text;
     return $export;
   }
 }

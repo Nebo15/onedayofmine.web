@@ -19,6 +19,8 @@ class Moment extends BaseModel
   use Imageable;
 
   public $day_id;
+  public $location_latitude;
+  public $location_longitude;
   public $description;
   public $time;
   public $timezone;
@@ -52,6 +54,11 @@ class Moment extends BaseModel
   function setDay(Day $day)
   {
     $this->day_id = $day->id;
+  }
+
+  function getComments()
+  {
+    return MomentComment::find(lmbSQLCriteria::equal('moment_id', $this->id));
   }
 
   function getCommentsWithLimitation($from_id = null, $to_id = null, $limit = null)

@@ -86,8 +86,8 @@ class DaysOwnerControllerTest extends odControllerTestCase
     {
       $moment = $response->result;
       $this->assertJsonMoment($moment, true);
-      $this->assertEqual($day->id, Moment::findOne()->getDay()->id);
-      $this->assertEqual($this->main_user->id, Moment::findOne()->getDay()->getUser()->id);
+      $this->assertEqual($day->id, Moment::findFirst()->getDay()->id);
+      $this->assertEqual($this->main_user->id, Moment::findFirst()->getDay()->getUser()->id);
 
       $this->assertEqual($moment->likes_count, 0);
       $this->assertEqual($moment->time, $time);
@@ -96,7 +96,7 @@ class DaysOwnerControllerTest extends odControllerTestCase
 
   function testAddMoment_WithGPS()
   {
-    $this->main_user->setTimezone($this->generator->integer(3));
+    $this->main_user->timezone = $this->generator->integer(3);
     $this->main_user->save();
 
     $day = $this->generator->day($this->main_user);
@@ -130,7 +130,7 @@ class DaysOwnerControllerTest extends odControllerTestCase
 
   function testAddMoment_WithoutTime()
   {
-    $this->main_user->setTimezone($this->generator->integer(3));
+    $this->main_user->timezone = $this->generator->integer(3);
     $this->main_user->save();
 
     $day = $this->generator->day($this->main_user);
@@ -309,7 +309,7 @@ class DaysOwnerControllerTest extends odControllerTestCase
       $this->assertTrue(is_null($response->result));
 
       $user = User::findById($this->main_user->id);
-      $this->assertEqual($user->getCurrentDay()->id, $day->id);
+      $this->assertEqual($user->current_day_id, $day->id);
     }
   }
 
@@ -356,13 +356,13 @@ class DaysOwnerControllerTest extends odControllerTestCase
       $this->assertEqual($day->id, $response_day->id);
       $this->assertTrue($response_day->final_description);
 
-      $loaded_day = Day::findOne();
+      $loaded_day = Day::findFirst();
       $this->assertEqual(count($loaded_day->getComments()), 0);
-      $this->assertTrue($loaded_day->getFinalDescription());
-      $this->assertEqual($loaded_day->getFinalDescription(), $comment_text);
+      $this->assertTrue($loaded_day->final_description);
+      $this->assertEqual($loaded_day->final_description, $comment_text);
 
       $user = User::findById($this->main_user->id);
-      $this->assertFalse($user->getCurrentDay());
+      $this->assertNull($user->current_day_id);
     }
   }
 
@@ -404,7 +404,7 @@ class DaysOwnerControllerTest extends odControllerTestCase
       $this->assertEqual($day->id, $loaded_day->id);
 
       $user = User::findById($this->main_user->id);
-      $this->assertEqual($user->getCurrentDay()->id, $day2->id);
+      $this->assertEqual($user->current_day_id, $day2->id);
     }
   }
 
@@ -468,7 +468,7 @@ class DaysOwnerControllerTest extends odControllerTestCase
       $this->assertTrue(is_null($response->result));
 
       $loaded_day = Day::findById($day->id);
-      $this->assertEqual(1, $loaded_day->getIsDeleted());
+      $this->assertEqual(1, $loaded_day->is_deleted);
     }
   }
 
@@ -512,7 +512,7 @@ class DaysOwnerControllerTest extends odControllerTestCase
   function testRestoreDay()
   {
     $day = $this->generator->day($this->main_user);
-    $day->setIsDeleted(1);
+    $day->is_deleted = 1;
     $day->save();
 
     lmbToolkit::instance()->setUser($this->main_user);
@@ -524,7 +524,7 @@ class DaysOwnerControllerTest extends odControllerTestCase
       $this->assertTrue(is_null($response->result));
 
       $loaded_day = Day::findById($day->id);
-      $this->assertEqual(0, $loaded_day->getIsDeleted());
+      $this->assertEqual(0, $loaded_day->is_deleted);
     }
   }
 

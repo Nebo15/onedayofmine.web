@@ -14,7 +14,8 @@ class MomentsController extends BaseJsonController
     if(!$moment = Moment::findById($this->request->id))
       return $this->_answerModelNotFoundById('Moment', $this->request->id);
 
-    if($moment->getDay()->getUser()->id != $this->_getUser()->id)
+    $day = Day::findById($moment->day_id);
+    if($day->user_id != $this->_getUser()->id)
       return $this->_answerNotOwner();
 
     if($this->request->has('image_content'))
@@ -23,12 +24,12 @@ class MomentsController extends BaseJsonController
     if($this->request->get('time'))
     {
       list($stamp, $zone) = Moment::isoToStamp($this->request->get('time'));
-      $moment->setTime($stamp);
-      $moment->setTimezone($zone);
+      $moment->time = $stamp;
+      $moment->timezone = $zone;
     }
 
     if($this->request->get('description'))
-      $moment->setDescription($this->request->get('description'));
+      $moment->description = $this->request->get('description');
 
     if($this->error_list->isEmpty())
     {
@@ -48,7 +49,7 @@ class MomentsController extends BaseJsonController
       return $this->_answerModelNotFoundById('Moment', $this->request->id);
 
     $comment = new MomentComment();
-    $comment->setText($this->request->get('text'));
+    $comment->text = $this->request->get('text');
     $comment->setMoment($moment);
     $comment->setUser($this->toolkit->getUser());
     $comment->validate($this->error_list);
@@ -71,10 +72,11 @@ class MomentsController extends BaseJsonController
     if(!$moment = Moment::findById($this->request->id))
       return $this->_answerOk(null, 'Already deleted');
 
-    if($moment->getDay()->getUser()->id != $this->_getUser()->id)
+    $day = Day::findById($moment->day_id);
+    if($day->user_id != $this->_getUser()->id)
       return $this->_answerNotOwner();
 
-    $moment->setIsDeleted(1);
+    $moment->is_deleted = 1;
     $moment->save();
 
     $this->toolkit->doAsync('momentDelete', $moment->id);
@@ -90,10 +92,11 @@ class MomentsController extends BaseJsonController
     if(!$moment = Moment::findById($this->request->id))
       return $this->_answerModelNotFoundById('Moment', $this->request->id);
 
-    if($moment->getDay()->getUser()->id != $this->_getUser()->id)
+    $day = Day::findById($moment->day_id);
+    if($day->user_id != $this->_getUser()->id)
       return $this->_answerNotOwner();
 
-    $moment->setIsDeleted(0);
+    $moment->is_deleted = 0;
     $moment->save();
 
     $this->toolkit->doAsync('momentRestore', $moment->id);

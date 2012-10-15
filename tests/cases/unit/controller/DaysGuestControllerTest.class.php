@@ -20,7 +20,7 @@ class DaysGuestControllerTest extends odControllerTestCase
   {
     $day = $this->generator->dayWithMomentsAndComments();
 
-    $this->assertEqual(0, $day->getViewsCount());
+    $this->assertEqual(0, $day->views_count);
 
     $response = $this->get('item', [], $day->id);
     if($this->assertResponse(200))
@@ -56,7 +56,7 @@ class DaysGuestControllerTest extends odControllerTestCase
   function testItem_DeletedDay()
   {
     $day = $this->generator->day();
-    $day->setIsDeleted(1);
+    $day->is_deleted = 1;
     $day->save();
 
     $response = $this->get('item', [], $id = $day->id);
@@ -90,7 +90,7 @@ class DaysGuestControllerTest extends odControllerTestCase
     $day2 = $this->generator->dayWithMoments($this->main_user);
     $day2->save();
     $day3 = $this->generator->dayWithMoments($this->main_user);
-    $day3->setIsDeleted(1);
+    $day3->is_deleted = 1;
     $day3->save();
     $day4 = $this->generator->dayWithMoments($this->main_user);
     $day4->save();
@@ -172,24 +172,24 @@ class DaysGuestControllerTest extends odControllerTestCase
 
     $day1 = $this->generator->dayWithMoments($this->additional_user);
     $this->generator->dayLikes($day1, 4);
-    $day1->setCtime($time - $day);
+    $day1->ctime = $time - $day;
     $day1->save();
     $day2 = $this->generator->dayWithMoments($this->main_user);
     $this->generator->dayLikes($day2, 3);
-    $day2->setCtime($time - $day);
+    $day2->ctime = $time - $day;
     $day2->save();
     $day3 = $this->generator->dayWithMoments($this->additional_user);
     $this->generator->dayLikes($day3, 2);
-    $day3->setCtime($time - $day);
+    $day3->ctime = $time - $day;
     $day3->save();
     $day4 = $this->generator->dayWithMoments($this->main_user);
     $this->generator->dayLikes($day4, 4);
-    $day4->setCtime($time - 5 * $day);
+    $day4->ctime = $time - 5 * $day;
     $day4->save();
     $day5 = $this->generator->dayWithMoments($this->additional_user);
     $this->generator->dayLikes($day5, 100);
-    $day5->setCtime($time - $day);
-    $day5->setIsDeleted(1);
+    $day5->ctime = $time - $day;
+    $day5->is_deleted = 1;
     $day5->save();
 
     $interests_calculator = new InterestCalculator();
@@ -340,19 +340,19 @@ class DaysGuestControllerTest extends odControllerTestCase
     $day1 = $this->generator->dayWithMoments(null, 'My insane day');
     $day1->save();
     $day2 = $this->generator->dayWithMoments(null, 'Weird weekend');
-    $day2->setFinalDescription('Insanely comments here');
+    $day2->final_description = 'Insanely comments here';
     $day2->save();
     $day3 = $this->generator->dayWithMoments(null, 'Insane insane day');
     $day3->save();
     $day4 = $this->generator->dayWithMoments(null, 'Paranormal day');
     $moment = $this->generator->momentWithImage($day4);
-    $moment->setDescription('Insane photo');
+    $moment->description = 'Insane photo';
     $moment->save();
     $day4->save();
     $day5 = $this->generator->dayWithMoments(null, 'Something unusual');
     $day5->save();
     $day6 = $this->generator->dayWithMoments(null, 'Insane insenity');
-    $day6->setIsDeleted(1);
+    $day6->is_deleted = 1;
     $day6->save();
 
     if($result = exec("indexer --config {$sphinx_config['config_file_path']} --rotate days --quiet"))
@@ -450,7 +450,7 @@ class DaysGuestControllerTest extends odControllerTestCase
     }
 
     $day2 = $this->generator->dayWithMoments(null, 'Weird weekend');
-    $day2->setFinalDescription('Insanely comments here');
+    $day2->final_description = 'Insanely comments here';
     $day2->save();
 
     if($result = exec("indexer --config {$sphinx_config['config_file_path']} --rotate days_delta --quiet"))

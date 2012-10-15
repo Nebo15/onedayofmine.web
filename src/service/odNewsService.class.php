@@ -156,7 +156,7 @@ class odNewsService
   function onMomentDelete(Moment $moment)
   {
     lmb_assert_true($moment->id);
-    lmbActiveRecord :: delete('News', 'moment_id='.$moment->id);
+    News::delete('moment_id='.((int) $moment->id));
   }
 
   // TODO
@@ -218,15 +218,16 @@ class odNewsService
   function onDayComment(DayComment $comment)
   {
     lmb_assert_true($comment->id);
-    $day = $comment->getDay();
+    $day = Day::findById($comment->day_id);
 
     $news = new News;
     $news->day_comment_id = $comment->id;
-    $news->day_id = $day->id;
-    $news->link = "odom://day/{$day->id}/comment/{$comment->id}";
+    $news->day_id = $comment->day_id;
+    $news->link = "odom://day/{$comment->day_id}/comment/{$comment->id}";
 
-    if(1 == $day->getUser()->getSettings()->getNotificationsNewComments())
-      $this->addRecipient($day->getUser());
+    $user = User::findById($day->user_id);
+    if(1 == $user->getSettings()->getNotificationsNewComments())
+      $this->addRecipient($user);
 
     foreach ($day->getComments() as $day_comment)
     {
@@ -248,8 +249,8 @@ class odNewsService
   function onMomentComment(MomentComment $comment)
   {
     lmb_assert_true($comment->id);
-    $moment = $comment->getMoment();
-    $day    = $moment->getDay();
+    $moment = Moment::findById($comment->moment_id);
+    $day    = Day::findById($moment->day_id);
 
     $news = new News;
     $news->moment_id = $moment->id;
@@ -257,7 +258,8 @@ class odNewsService
     $news->day_id = $day->id;
     $news->link = "odom://moment/{$moment->id}/comment/{$comment->id}";
 
-    if(1 == $day->getUser()->getSettings()->getNotificationsNewComments())
+    $day_owner = User::findById($day->user_id);
+    if(1 == $day_owner->getSettings()->getNotificationsNewComments())
       $this->addRecipient($day->getUser());
 
     foreach ($moment->getComments() as $moment_comment)
