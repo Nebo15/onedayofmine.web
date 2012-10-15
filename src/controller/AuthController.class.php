@@ -4,7 +4,7 @@ lmb_require('src/model/Day.class.php');
 lmb_require('src/model/DeviceToken.class.php');
 lmb_require('src/model/Day.class.php');
 
-class   AuthController extends BaseJsonController
+class AuthController extends BaseJsonController
 {
   function doGuestParameters()
   {
@@ -127,5 +127,3 @@ class   AuthController extends BaseJsonController
     return $this->_answerOk();
   }
 }
-
-
