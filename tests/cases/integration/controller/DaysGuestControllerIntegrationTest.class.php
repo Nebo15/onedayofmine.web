@@ -130,7 +130,7 @@ class DaysGuestControllerIntegrationTest extends odIntegrationTestCase
     $day2->setFinalDescription('Insanely comments here');
     $day2->save();
 
-    if($result = exec("indexer --config {$sphinx_config['config_file_path']} --rotate days_delta --quiet"))
+    if($result = exec("indexer --config {$sphinx_config['config_file_path']} --rotate --quiet days_delta"))
     {
       $this->fail("Indexer returned errors or/and warnings: {$result}");
       return;
@@ -153,7 +153,7 @@ class DaysGuestControllerIntegrationTest extends odIntegrationTestCase
       $this->assertJsonDayItems($response->result);
     }
 
-    if($result = exec("indexer --config {$sphinx_config['config_file_path']} --rotate days_delta --quiet"))
+    if($result = exec("indexer --config {$sphinx_config['config_file_path']} --rotate --quiet days_delta"))
     {
       $this->fail("Indexer returned errors or/and warnings: {$result}");
       return;
