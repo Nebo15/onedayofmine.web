@@ -23,7 +23,8 @@ class Day extends BaseModel
   public $final_description;
   public $views_count;
   public $is_deleted;
-
+  public $facebook_id;
+  public $twitter_id;
   public $ctime;
   public $utime;
 

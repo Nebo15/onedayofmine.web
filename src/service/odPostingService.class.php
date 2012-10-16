@@ -13,6 +13,7 @@ class odPostingService implements SharesInterface
    */
   protected function share($name, $args)
   {
+    /** @var $user User */
     $user = lmbToolkit::instance()->getUser();
     lmb_assert_true($user, 'User is not logged in!');
     $settings = $user->getSettings();
@@ -20,7 +21,7 @@ class odPostingService implements SharesInterface
     $result = [];
 
     // Facebook
-    if($settings->getSocialShareFacebook())
+    if($settings->social_share_facebook)
     {
       $this->facebook_profile = $this->facebook_profile ?: new FacebookProfile($user);
 
@@ -29,7 +30,7 @@ class odPostingService implements SharesInterface
     }
 
     // Twitter
-    if($settings->getSocialShareTwitter() && $user->getTwitterAccessToken() && $user->getTwitterAccessTokenSecret())
+    if($settings->social_share_twitter && $user->twitter_access_token && $user->twitter_access_token_secret)
     {
         $this->twitter_profile = $this->twitter_profile ?: new TwitterProfile($user);
 
@@ -95,11 +96,11 @@ class odPostingService implements SharesInterface
     return $result;
   }
 
-  protected function setObjectIds(lmbActiveRecord $object, array $result)
+  protected function setObjectIds(odLightAR $object, array $result)
   {
     foreach ($result as $key => $value) {
-      $method_name = 'set'.ucfirst($key).'Id';
-      $object->$method_name($value);
+      $property_name = $key.'_id';
+      $object->$property_name = $value;
     }
     $object->save();
   }

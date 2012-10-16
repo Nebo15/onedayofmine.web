@@ -7,6 +7,8 @@ class DayLike extends BaseLike
 
   public $day_id;
   public $user_id;
+  public $facebook_id;
+  public $twitter_id;
 
   function setDay(Day $day)
   {

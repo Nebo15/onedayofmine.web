@@ -44,13 +44,13 @@ class odPostingServiceTest extends odUnitTestCase
     parent::setUp();
 
     $settings = $this->main_user->getSettings();
-    $settings->setSocialShareFacebook(1);
-    $settings->setSocialShareTwitter(1);
+    $settings->social_share_facebook = 1;
+    $settings->social_share_twitter = 1;
     $settings->save();
 
-    $this->main_user->setFacebookAccessToken('Foo token');
-    $this->main_user->setTwitterAccessToken('Foo token');
-    $this->main_user->setTwitterAccessTokenSecret('Foo token');
+    $this->main_user->facebook_access_token = 'Foo token';
+    $this->main_user->twitter_access_token = 'Foo token';
+    $this->main_user->twitter_access_token_secret = 'Foo token';
     $this->main_user->save();
 
     lmbToolkit::instance()->setUser($this->main_user);
@@ -70,8 +70,8 @@ class odPostingServiceTest extends odUnitTestCase
   public function testShareDayBegin_onlyFacebook()
   {
     $settings = $this->main_user->getSettings();
-    $settings->setSocialShareFacebook(1);
-    $settings->setSocialShareTwitter(0);
+    $settings->social_share_facebook = 1;
+    $settings->social_share_twitter = 0;
     $settings->save();
 
     $day = $this->generator->day();
@@ -82,15 +82,15 @@ class odPostingServiceTest extends odUnitTestCase
 
     $mock->shareDayBegin($day);
 
-    $this->assertEqual($day->getFacebookId(), 'dummy_social_id');
-    $this->assertFalse($day->getTwitterId());
+    $this->assertEqual($day->facebook_id, 'dummy_social_id');
+    $this->assertFalse($day->twitter_id);
   }
 
   public function testShareDayBegin_onlyTwitter()
   {
     $settings = $this->main_user->getSettings();
-    $settings->setSocialShareFacebook(0);
-    $settings->setSocialShareTwitter(1);
+    $settings->social_share_facebook = 0;
+    $settings->social_share_twitter = 1;
     $settings->save();
 
     $day = $this->generator->day();
@@ -101,15 +101,15 @@ class odPostingServiceTest extends odUnitTestCase
 
     $mock->shareDayBegin($day);
 
-    $this->assertFalse($day->getFacebookId());
-    $this->assertEqual($day->getTwitterId(), 'dummy_social_id');
+    $this->assertFalse($day->facebook_id);
+    $this->assertEqual($day->twitter_id, 'dummy_social_id');
   }
 
   public function testShareDayBegin_dontShare()
   {
     $settings = $this->main_user->getSettings();
-    $settings->setSocialShareFacebook(0);
-    $settings->setSocialShareTwitter(0);
+    $settings->social_share_facebook = 0;
+    $settings->social_share_twitter = 0;
     $settings->save();
 
     $day = $this->generator->day();
@@ -121,8 +121,8 @@ class odPostingServiceTest extends odUnitTestCase
 
     $mock->shareDayBegin($day);
 
-    $this->assertFalse($day->getFacebookId());
-    $this->assertFalse($day->getTwitterId());
+    $this->assertFalse($day->facebook_id);
+    $this->assertFalse($day->twitter_id);
   }
 
   function testShareDayLike()
@@ -136,8 +136,8 @@ class odPostingServiceTest extends odUnitTestCase
 
     $mock->shareDayLike($day, $like);
 
-    $this->assertEqual($like->getFacebookId(), 'dummy_social_id');
-    $this->assertEqual($like->getTwitterId(), 'dummy_social_id');
+    $this->assertEqual($like->facebook_id, 'dummy_social_id');
+    $this->assertEqual($like->twitter_id, 'dummy_social_id');
   }
 
   function testShareDayUnlike()
@@ -163,8 +163,8 @@ class odPostingServiceTest extends odUnitTestCase
 
     $mock->shareMomentAdd($day, $moment);
 
-    $this->assertEqual($moment->getFacebookId(), 'dummy_social_id');
-    $this->assertEqual($moment->getTwitterId(), 'dummy_social_id');
+    $this->assertEqual($moment->facebook_id, 'dummy_social_id');
+    $this->assertEqual($moment->twitter_id, 'dummy_social_id');
   }
 
   function testShareMomentLike()
@@ -179,8 +179,8 @@ class odPostingServiceTest extends odUnitTestCase
 
     $mock->shareMomentLike($moment, $like);
 
-    $this->assertEqual($like->getFacebookId(), 'dummy_social_id');
-    $this->assertEqual($like->getTwitterId(), 'dummy_social_id');
+    $this->assertEqual($like->facebook_id, 'dummy_social_id');
+    $this->assertEqual($like->twitter_id, 'dummy_social_id');
   }
 
   function testShareMomentUnlike()

@@ -40,6 +40,7 @@ class User extends BaseModel
   public $facebook_access_token;
   public $facebook_profile_utime;
   public $twitter_access_token;
+  public $twitter_access_token_secret;
   public $current_day_id;
   public $user_settings_id;
 
@@ -82,6 +83,9 @@ class User extends BaseModel
     if(!$item = UserSettings::findById($this->user_settings_id))
     {
       $item = UserSettings::createDefault($this);
+      $item->save();
+      $this->user_settings_id = $item->id;
+      $this->save();
     }
     return $item;
   }

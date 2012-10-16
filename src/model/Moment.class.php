@@ -26,6 +26,9 @@ class Moment extends BaseModel
   public $timezone;
   public $is_deleted;
 
+  public $facebook_id;
+  public $twitter_id;
+
   protected $_default_sort_params = array('time' => 'ASC');
   protected $_db_table_name = 'moment';
 

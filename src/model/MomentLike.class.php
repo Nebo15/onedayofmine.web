@@ -7,6 +7,8 @@ class MomentLike extends BaseLike
 
   public $moment_id;
   public $user_id;
+  public $facebook_id;
+  public $twitter_id;
 
   function setMoment($moment)
   {
