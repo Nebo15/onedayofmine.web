@@ -3,6 +3,7 @@ lmb_require('src/model/base/BaseModel.class.php');
 
 class UserFollowing extends BaseModel
 {
+  protected $_db_table_name = 'user_following';
   protected $_default_sort_params = array('ctime'=>'asc');
 
   public $user_id;
@@ -21,7 +22,7 @@ class UserFollowing extends BaseModel
 
   public static function isUserFollowUser(User $follower_user, User $followed_user)
   {
-    return !is_null(lmbActiveRecord::findFirst('UserFollowing', ['follower_user_id=? AND user_id=?', $follower_user->id, $followed_user->id]));
+    return !is_null(UserFollowing::findFirst(['follower_user_id=? AND user_id=?', $follower_user->id, $followed_user->id]));
   }
 
   public static function isUsersFollowUser($follower_users, User $followed_user)

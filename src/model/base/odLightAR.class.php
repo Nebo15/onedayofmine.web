@@ -427,7 +427,7 @@ abstract class odLightAR extends odDirtableObject implements ArrayAccess
   }
 
   /**
-   * @return LightAR|null
+   * @return odLightAR|null
    */
   public static function findFirst($criteria = null, $order = null, $with_lazy_attributes = false)
   {

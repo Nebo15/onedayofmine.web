@@ -2,8 +2,8 @@
 lmb_require('src/controller/BaseJsonController.class.php');
 lmb_require('src/service/InterestCalculator.class.php');
 lmb_require('src/model/Day.class.php');
-lmb_require('src/model/Complaint.class.php');
 lmb_require('src/model/DayFavorite.class.php');
+lmb_require('src/model/Complaint.class.php');
 
 class DaysController extends BaseJsonController
 {
@@ -267,9 +267,10 @@ class DaysController extends BaseJsonController
     if(DayFavorite::isFavorited($this->_getUser(), $day))
       return $this->_answerConflict();
 
-    $favorites = $this->_getUser()->getFavoriteDays();
-    $favorites->add($day);
-    $favorites->save();
+    $link = new DayFavorite();
+    $link->setUser($this->_getUser());
+    $link->setDay($day);
+    $link->save();
 
     return $this->_answerOk();
   }

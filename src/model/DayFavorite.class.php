@@ -3,6 +3,7 @@ lmb_require('src/model/base/BaseModel.class.php');
 
 class DayFavorite extends BaseModel
 {
+  protected $_db_table_name = 'day_favorite';
   protected $_default_sort_params = array('ctime'=>'asc');
 
   public $day_id;

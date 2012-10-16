@@ -43,7 +43,7 @@ class odExportHelper
     $exported = $day->exportForApi();
     unset($exported->final_description);
 
-    $this->attachUserSubentityToExport($day->getUser(), $exported);
+    $this->attachUserSubentityToExport(User::findById($day->user_id), $exported);
 
     return $exported;
   }
@@ -367,8 +367,8 @@ class odExportHelper
   {
     $exported = $news->exportForApi();
 
-    if ($news->getSender())
-      $this->attachUserSubentityToExport($news->getSender(), $exported);
+    if ($news->sender_id)
+      $this->attachUserSubentityToExport(User::findById($news->sender_id), $exported);
 
     // if($news->getDay())
     //   $exported->day    = $this->exportDaySubentity($news->getDay());

@@ -12,6 +12,10 @@ Mock::generate('odFacebook', 'FacebookMock');
 Mock::generate('odTwitter', 'TwitterMock');
 Mock::generate('FacebookProfile', 'FacebookProfileMock');
 
+// Cheaty, but sphinxapi.php can't be mocked (errors occured).
+class odSearchServiceForMock{ public function find(){} }
+Mock::generate('odSearchServiceForMock', 'SearchServiceMock');
+
 /**
  * @property odTools $toolkit
  */
@@ -47,6 +51,9 @@ abstract class odControllerTestCase extends odUnitTestCase
     $this->toolkit->setPostingService(new PostingServiceMock);
 
     $this->toolkit->setJobQueueClient(new odJobQueueClientForTests());
+
+    $this->toolkit->setSearchService('users', new SearchServiceMock);
+    $this->toolkit->setSearchService('days', new SearchServiceMock);
   }
 
   function get($action, $params = array(), $id = null)

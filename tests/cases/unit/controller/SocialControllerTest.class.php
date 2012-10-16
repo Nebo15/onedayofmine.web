@@ -12,9 +12,10 @@ class SocialControllerTest extends odControllerTestCase
     $this->main_user->save();
     $this->additional_user->save();
 
-    $following = $this->main_user->getFollowingUsers();
-    $following->add($this->additional_user);
-    $following->save();
+    $link = new UserFollowing();
+    $link->setFollowerUser($this->main_user);
+    $link->setUser($this->additional_user);
+    $link->save();
 
     lmbToolkit::instance()->setUser($this->main_user);
 

@@ -36,9 +36,28 @@ class News extends BaseModel
     return $validator;
   }
 
-  function setSender(User $user)
+  function setSender($user)
   {
+    lmb_assert_type($user, 'User');
+    $this->sender_id = $user->id;
+  }
+
+  function setUser($user)
+  {
+    lmb_assert_type($user, 'User');
     $this->user_id = $user->id;
+  }
+
+  function setMoment($moment)
+  {
+    lmb_assert_type($moment, 'Moment');
+    $this->moment_id = $moment->id;
+  }
+
+  function setDay($day)
+  {
+    lmb_assert_type($day, 'Day');
+    $this->day_id = $day->id;
   }
 
   function exportForApi(array $properties = null)
@@ -47,7 +66,7 @@ class News extends BaseModel
       'id', 'sender_id', 'text', 'user_id', 'day_id', 'day_comment_id', 'moment_id', 'moment_comment_id', 'link',
     ));
 
-    $exported->time = $this->getCtime();
+    $exported->time = $this->ctime;
 
     return $exported;
   }

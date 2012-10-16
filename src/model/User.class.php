@@ -6,6 +6,8 @@ lmb_require('limb/validation/src/rule/lmbValidValueRule.class.php');
 lmb_require('src/model/UserFollowing.class.php');
 lmb_require('src/model/Day.class.php');
 lmb_require('src/model/UserSettings.class.php');
+lmb_require('src/model/News.class.php');
+lmb_require('src/model/NewsRecipient.class.php');
 
 /**
  * @api
@@ -160,25 +162,24 @@ class User extends BaseModel
       $criteria->add(lmbSQLCriteria::greater('id', $to_id));
     if(!$limit || $limit > 100)
       $limit = 100;
-    return $this->getFavoriteDays()->find(array(
-      'criteria' => $criteria,
-      'sort' => array('id' => 'DESC'),
-    ))->paginate(0, $limit);
+    return Day::find($criteria)->paginate(0, $limit);
   }
 
-  function getActivitiesWithLimitation($from_id = null, $to_id = null, $limit = null)
+  function getNews()
   {
-    $criteria = new lmbSQLCriteria();
+    return News::find(lmbSQLCriteria::equal('recipient_id', $this->id));
+  }
+
+  function getNewsWithLimitation($from_id = null, $to_id = null, $limit = null)
+  {
+    $criteria = lmbSQLCriteria::equal('recipient_id', $this->id);
     if($from_id)
       $criteria->add(lmbSQLCriteria::less('id', $from_id));
     if($to_id)
       $criteria->add(lmbSQLCriteria::greater('id', $to_id));
     if(!$limit || $limit > 100)
       $limit = 100;
-    return $this->getActivities()->find(array(
-      'criteria' => $criteria,
-      'sort' => array('id' => 'DESC'),
-    ))->paginate(0, $limit);
+    return News::find($criteria, ['id' => 'DESC'])->paginate(0, $limit);
   }
 
   static function findByFacebookAccessToken($facebook_access_token)
@@ -215,6 +216,8 @@ class User extends BaseModel
   {
     $criteria = lmbSQLCriteria::less('day.ctime', time() - 24 * 60 * 60);
     $criteria->add(lmbSQLCriteria::isNotNull('current_day_id'));
+
+    return User::find();
 
     $query = lmbARQuery :: create('Day')->eagerJoin('user')->addCriteria($criteria);
 

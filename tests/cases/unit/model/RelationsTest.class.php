@@ -9,16 +9,9 @@ class RelationsTest extends odUnitTestCase
   function testUserToDayRelation()
   {
     $user = $this->generator->user();
-    $user->save();
-
     $day1 = $this->generator->day($user);
-    $day1->save();
-
     $day2 = $this->generator->day($user);
-    $day2->save();
-
     $day3 = $this->generator->day();
-    $day3->save();
 
     $loaded_user = User::findById($user->id);
     $this->assertEqual(2, $loaded_user->getDays()->count());
@@ -81,7 +74,9 @@ class RelationsTest extends odUnitTestCase
     $this->assertEqual($day->id, $loaded_moment->day_id);
   }
 
-  function testUserWithNewsRelations() { // With is used because im testing relation in both sides
+  function testUserWithNewsRelations()
+  {
+    // With is used because im testing relation in both sides
     $creator = $this->generator->user();
     $creator->save();
 
@@ -101,7 +96,8 @@ class RelationsTest extends odUnitTestCase
     $this->assertEqual($news->getRecipients()->at(0)->id, $recipient->id);
   }
 
-  function testNewsToDayRelations() {
+  function testNewsToDayRelations()
+  {
     $day = $this->generator->day();
     $day->save();
 
@@ -109,21 +105,17 @@ class RelationsTest extends odUnitTestCase
     $news->setDay($day);
     $news->save();
 
-    $this->assertEqual($news->getDay()->id, $day->id);
+    $this->assertEqual($news->day_id, $day->id);
   }
 
-  function testNewsToMomentRelations() {
+  function testNewsToMomentRelations()
+  {
     $day = $this->generator->day();
-    $day->save();
-
     $moment = $this->generator->moment();
-    $moment->save();
-
     $news = $this->generator->news();
     //$news->setDay($day);
     $news->setMoment($moment);
-    $news->save();
 
-    $this->assertEqual($news->getMoment()->id, $moment->id);
+    $this->assertEqual($news->moment_id, $moment->id);
   }
 }

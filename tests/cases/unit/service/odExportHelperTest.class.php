@@ -3,6 +3,7 @@ lmb_require('tests/cases/unit/odUnitTestCase.class.php');
 lmb_require('src/service/odExportHelper.class.php');
 lmb_require('src/service/InterestCalculator.class.php');
 lmb_require('src/model/User.class.php');
+lmb_require('src/model/DayFavorite.class.php');
 lmb_require('src/model/News.class.php');
 lmb_require('src/model/Complaint.class.php');
 
@@ -84,7 +85,7 @@ class odExportHelperTest extends odUnitTestCase
     $this->assertJsonDay($exported, true);
     $this->assertFalse($exported->is_deleted);
 
-    $day->setIsDeleted(1);
+    $day->is_deleted = 1;
     $day->save();
 
     $this->db_connection->resetStats();
@@ -118,9 +119,7 @@ class odExportHelperTest extends odUnitTestCase
     $this->assertJsonDayListItem($exported[0], true);
     $this->assertFalse($exported[0]->is_favorite);
 
-    $favorites = $this->main_user->getFavoriteDays();
-    $favorites->add($day1);
-    $this->main_user->save();
+    $this->generator->favorite($day1, $this->main_user);
 
     $this->db_connection->resetStats();
 
@@ -145,7 +144,7 @@ class odExportHelperTest extends odUnitTestCase
     $this->assertJsonDayListItem($exported[0], true);
     $this->assertFalse($exported[0]->is_deleted);
 
-    $day1->setIsDeleted(1);
+    $day1->is_deleted = 1;
     $day1->save();
 
     $this->db_connection->resetStats();
@@ -191,9 +190,7 @@ class odExportHelperTest extends odUnitTestCase
     $this->assertJsonUser($exported);
     $this->assertFalse($exported->following);
 
-    $following = $this->main_user->getFollowing();
-    $following->add($this->additional_user);
-    $following->save();
+    $this->generator->follow($this->additional_user, $this->main_user);
 
     $this->db_connection->resetStats();
 
@@ -243,9 +240,7 @@ class odExportHelperTest extends odUnitTestCase
     $this->assertFalse($exported->following);
     $this->assertEqual(1, count($this->db_connection->getQueries()));
 
-
-    $user_to_export->addToFollowing($current_user);
-    $user_to_export->save();
+    $this->generator->follow($current_user, $user_to_export);
 
     $this->db_connection->resetStats();
     $exported = $export_helper->exportUserItem($user_to_export);
@@ -315,9 +310,7 @@ class odExportHelperTest extends odUnitTestCase
     $this->main_user->save();
     $this->additional_user->save();
 
-    $following = $this->main_user->getFollowing();
-    $following->add($this->additional_user);
-    $following->save();
+    $this->generator->follow($this->additional_user, $this->main_user);
 
     $helper = new odExportHelper($this->main_user);
 

@@ -30,7 +30,7 @@ class DaysUserControllerTest extends odControllerTestCase
 
     lmbToolkit::instance()->setUser($this->main_user);
 
-    $views_count = $day->getViewsCount();
+    $views_count = $day->views_count;
 
     $response = $this->get('item', [], $day->id);
     if ($this->assertResponse(200)) {
@@ -408,15 +408,11 @@ class DaysUserControllerTest extends odControllerTestCase
     $link->save();
 
     $day1 = $this->generator->dayWithMoments($this->additional_user);
-    $day1->save();
     $day2 = $this->generator->dayWithMoments($this->additional_user);
-    $day2->save();
     $day3 = $this->generator->dayWithMoments($this->additional_user);
-    $day3->save();
     $day4 = $this->generator->dayWithMoments($this->additional_user);
-    $day4->save();
     $day5 = $this->generator->dayWithMoments($this->additional_user);
-    $day5->setIsDeleted(1);
+    $day5->is_deleted = 1;
     $day5->save();
 
     lmbToolkit::instance()->setUser($this->main_user);

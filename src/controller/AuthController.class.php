@@ -122,5 +122,3 @@ class AuthController extends BaseJsonController
     return $this->_answerOk();
   }
 }
-
-

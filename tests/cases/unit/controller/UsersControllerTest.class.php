@@ -56,13 +56,15 @@ class UsersControllerTest extends odControllerTestCase
     $this->main_user->save();
     $this->additional_user->save();
 
-    $following = $this->additional_user->getFollowingUsers();
-    $following->add($this->main_user);
-    $following->save();
+    $link = new UserFollowing();
+    $link->setUser($this->additional_user);
+    $link->setFollowerUser($this->main_user);
+    $link->save();
 
-    $followers = $this->additional_user->getFollowersUsers();
-    $followers->add($this->main_user);
-    $followers->save();
+    $link = new UserFollowing();
+    $link->setUser($this->main);
+    $link->setFollowerUser($this->additional_user);
+    $link->save();
 
     $this->toolkit->setUser($this->additional_user);
 
@@ -239,18 +241,16 @@ class UsersControllerTest extends odControllerTestCase
   {
     $this->main_user->save();
     $this->additional_user->save();
-    $this->assertEqual(0, $this->main_user->getFollowing()->count());
+    $this->assertEqual(0, $this->main_user->getFollowingUsers()->count());
 
     lmbToolkit::instance()->setUser($this->main_user);
-    $this->post('follow', array(), $this->additional_user->id);
-    $this->assertResponse(200);
 
     $response = $this->post('follow', [], $this->additional_user->id);
     if($this->assertResponse(200))
     {
       $this->assertTrue(is_null($response->result));
 
-      $this->assertEqual(1, $this->main_user->getFollowing()->count());
+      $this->assertEqual(1, $this->main_user->getFollowingUsers()->count());
     }
   }
 
@@ -263,37 +263,28 @@ class UsersControllerTest extends odControllerTestCase
     $this->main_user->save();
     $this->additional_user->save();
 
-    $following = $this->main_user->getFollowing();
-    $following->add($this->additional_user);
-    $following->save();
+    $link = new UserFollowing();
+    $link->setUser($this->additional_user);
+    $link->setFollowerUser($this->main_user);
+    $link->save();
 
     lmbToolkit::instance()->setUser($this->main_user);
-    $this->post('unfollow', array(), $this->additional_user->id);
-    $this->assertResponse(200);
-
-    $response = $this->post('unfollow', [], $this->additional_user->id);
+    $response = $this->post('unfollow', array(), $this->additional_user->id)->response;
     if($this->assertResponse(200))
     {
       $this->assertTrue(is_null($response->result));
-
-      $this->assertEqual(0, $this->main_user->getFollowing()->count());
+      $this->assertEqual(0, $this->main_user->getFollowingUsers()->count());
     }
   }
 
   function testActivity()
   {
     $user = $this->generator->user();
-    $user->save();
     $news1 = $this->generator->news($user);
-    $news1->save();
     $news2 = $this->generator->news($user);
-    $news2->save();
     $news3 = $this->generator->news($user);
-    $news3->save();
     $news4 = $this->generator->news($user);
-    $news4->save();
     $another_user_news = $this->generator->news();
-    $another_user_news->save();
 
     lmbToolkit::instance()->setUser($this->main_user);
 
@@ -359,78 +350,40 @@ class UsersControllerTest extends odControllerTestCase
   function testSearch()
   {
     $user1 = $this->generator->user();
-    $user1->setName('John Doe');
+    $user1->name = 'John Doe';
     $user1->save();
     $user2 = $this->generator->user();
-    $user2->setName('John Watson');
+    $user2->name = 'John Watson';
     $user2->save();
     $user3 = $this->generator->user();
-    $user3->setName('Johnnie Cheeze');
+    $user3->name = 'Johnnie Cheeze';
     $user3->save();
     $user4 = $this->generator->user();
-    $user4->setName('John John');
+    $user4->name = 'John John';
     $user4->save();
     $user5 = $this->generator->user();
-    $user5->setName('Mike Jameson');
+    $user5->name = 'Mike Jameson';
     $user5->save();
 
-    $sphinx_config = lmbToolkit::instance()->getConf('sphinx');
-    lmb_assert_true(array_key_exists('config_file_path', $sphinx_config), 'Sphinx config file not set. Check config.');
-    lmb_assert_true($sphinx_config['config_file_path'], 'Sphinx config file path is emprty. Check config.');
-    lmb_assert_true(file_exists($sphinx_config['config_file_path']), "Sphinx config file '{$sphinx_config['config_file_path']}' not found. Check config.");
-    if($result = exec("indexer --config {$sphinx_config['config_file_path']} --rotate users --quiet"))
-    {
-      $this->fail("Indexer returned errors or/and warnings: {$result}");
-      return;
-    }
-    sleep(1);
+    $this->toolkit->getSearchService('users')->setReturnValue('find', [
+      $user1->id,
+      $user2->id,
+      $user3->id,
+      $user4->id
+    ]);
 
     $response = $this->get('search', [
       'query' => 'John*'
     ]);
     if($this->assertResponse(200))
     {
-      $this->assertEqual(4, count($users));
-      $this->assertEqual($user1->id, $users[0]->id);
-      $this->assertEqual($user2->id, $users[1]->id);
-      $this->assertEqual($user3->id, $users[2]->id);
-      $this->assertEqual($user4->id, $users[3]->id);
-    }
-
-    $users = $this
-      ->get('search', array('query' => 'foo', 'from' => $user1->id))
-      ->result;
-    if($this->assertResponse(200))
-    {
-      $this->assertEqual(3, count($users));
-      $this->assertEqual($user2->id, $users[0]->id);
-      $this->assertEqual($user3->id, $users[1]->id);
-      $this->assertEqual($user4->id, $users[2]->id);
-    }
-
-    $users = $this
-      ->get('search', array(
-        'query' => 'foo',
-        'from'  => $user1->id,
-        'to'    => $user4->id))
-      ->result;
-    if($this->assertResponse(200))
-    {
-      $this->assertEqual(2, count($users));
-      $this->assertEqual($user2->id, $users[0]->id);
-      $this->assertEqual($user3->id, $users[1]->id);
-    }
-
-    $response_with_limit = $this->get('search', [
-      'query' => 'John*',
-      'from'  => $user1->id,
-      'to'    => $user4->id,
-      'limit' => 1,
-    ]);
-    if($this->assertResponse(200))
-    {
-      $this->assertEqual(1, count($users));
-      $this->assertEqual($user2->id, $users[0]->id);
+      $response_users = $response->result;
+      $this->assertEqual(4, count($response_users));
+      $this->assertJsonUserItems($response_users);
+      $this->assertEqual($user1->id, $response_users[0]->id);
+      $this->assertEqual($user2->id, $response_users[1]->id);
+      $this->assertEqual($user3->id, $response_users[2]->id);
+      $this->assertEqual($user4->id, $response_users[3]->id);
     }
   }
 }

@@ -33,7 +33,7 @@ class MomentsControllerTest extends odControllerTestCase
       $this->assertJsonMoment($response_moment, true);
 
       $loaded_moment = Moment::findById($moment->id);
-      $this->assertEqual($loaded_moment->getDescription(), $description);
+      $this->assertEqual($loaded_moment->description, $description);
     }
   }
 

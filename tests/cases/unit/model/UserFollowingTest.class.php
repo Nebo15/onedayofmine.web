@@ -10,9 +10,10 @@ class UserFollowingTest extends odUnitTestCase
     $this->main_user->save(); // Bar
     $this->additional_user->save(); // Foo
 
-    $following = $this->main_user->getFollowing(); // Bar follow Foo
-    $following->add($this->additional_user);
-    $following->save();
+    $link = new UserFollowing();
+    $link->setUser($this->additional_user);
+    $link->setFollowerUser($this->main_user);
+    $link->save();
 
     $this->assertTrue(UserFollowing::isUserFollowUser($this->main_user, $this->additional_user));
     $this->assertFalse(UserFollowing::isUserFollowUser($this->additional_user, $this->main_user));
@@ -25,19 +26,14 @@ class UserFollowingTest extends odUnitTestCase
     $third_user = $this->generator->user(); // Dum
     $third_user->save();
 
-    $following = $this->main_user->getFollowing(); // Bar follow Foo
-    $following->add($this->additional_user);
-    $following->save();
-
-    $following = $this->main_user->getFollowing(); // Bar follow Dum
-    $following->add($third_user);
-    $following->save();
+    $this->generator->follow($this->main_user, $this->additional_user);
+    $this->generator->follow($this->main_user, $third_user);
 
     $collection = new lmbCollection(null. null);
     $collection->add($this->additional_user);
     $collection->add($third_user);
 
-    $this->main_user->getDefaultConnection()->commitTransaction();
+    $this->main_user->getDbConnection()->commitTransaction();
 
     $result = UserFollowing::isUserFollowUsers($this->main_user, $collection);
 
@@ -59,7 +55,7 @@ class UserFollowingTest extends odUnitTestCase
     $third_user = $this->generator->user(); // Dum
     $third_user->save();
 
-    $this->main_user->getDefaultConnection()->commitTransaction();
+    $this->main_user->getDbConnection()->commitTransaction();
 
     $collection = new lmbCollection(null. null);
     $collection->add($this->additional_user);
@@ -78,12 +74,10 @@ class UserFollowingTest extends odUnitTestCase
     $third_user = $this->generator->user(); // Dum
     $third_user->save();
 
-    $following = $this->main_user->getFollowers(); // Foo and Dum follow Bar
-    $following->add($this->additional_user);
-    $following->add($third_user);
-    $following->save();
+    $this->generator->follow($this->main_user, $this->additional_user);
+    $this->generator->follow($this->main_user, $third_user);
 
-    $this->main_user->getDefaultConnection()->commitTransaction();
+    $this->main_user->getDbConnection()->commitTransaction();
 
     $collection = new lmbCollection(null. null);
     $collection->add($this->additional_user);
@@ -109,7 +103,7 @@ class UserFollowingTest extends odUnitTestCase
     $third_user = $this->generator->user(); // Dum
     $third_user->save();
 
-    $this->main_user->getDefaultConnection()->commitTransaction();
+    $this->main_user->getDbConnection()->commitTransaction();
 
     $collection = new lmbCollection(null. null);
     $collection->add($this->additional_user);

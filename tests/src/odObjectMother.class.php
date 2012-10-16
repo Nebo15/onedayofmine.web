@@ -23,6 +23,14 @@ class odObjectMother
     return $user;
   }
 
+  function follow(User $user, User $follower)
+  {
+    $link = new UserFollowing();
+    $link->setUser($user);
+    $link->setFollowerUser($follower);
+    return $link->save();
+  }
+
   /**
    * @param null|User $user
    * @return Day
@@ -50,10 +58,7 @@ class odObjectMother
   function dayWithMoments(User $user = null, $title = null, Day $day = null)
   {
     $day = $day ?: $this->day($user, $title);
-
-    $moment = $this->moment($day);
-
-
+    $this->moment($day);
     $day->attachImage($this->image());
     $day->save();
 
@@ -68,7 +73,6 @@ class odObjectMother
     {
       $this->dayComment($day, User::findById($day->user_id));
     }
-
     return $day;
   }
 
@@ -87,6 +91,14 @@ class odObjectMother
     $day = $this->dayWithComments($user, null, $day);
 
     return $day;
+  }
+
+  function favorite(Day $day, User $user)
+  {
+    $link = new DayFavorite();
+    $link->setDay($day);
+    $link->setUser($user);
+    return $link->save();
   }
 
   /**
@@ -155,7 +167,7 @@ class odObjectMother
     $moment->save();
 
     for($i = 0; $i < $likes_count; $i++)
-      $moment->addToLikes($this->momentLike($moment));
+      $this->momentLike($moment);
 
     return $moment;
   }
@@ -195,6 +207,7 @@ class odObjectMother
     $like = new MomentLike();
     $like->setMoment($moment);
     $like->setUser($user ?: $this->user());
+    $like->save();
     return $like;
   }
 
@@ -202,7 +215,7 @@ class odObjectMother
   {
     $complaint = new Complaint();
     $complaint->setDay($day ?: $this->day());
-    $complaint->setText($this->string(522));
+    $complaint->text = $this->string(522);
     return $complaint;
   }
 
@@ -216,10 +229,10 @@ class odObjectMother
     $news->link = $this->string();
     $news->save();
 
-    $recipient = new NewsRecipient();
-    $recipient->setNews($news);
-    $recipient->setUser($recipient);
-    $recipient->save();
+    $reception = new NewsRecipient();
+    $reception->setNews($news);
+    $reception->setUser($recipient);
+    $reception->save();
 
     return $news;
   }
