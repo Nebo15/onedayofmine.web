@@ -74,28 +74,6 @@ class RelationsTest extends odUnitTestCase
     $this->assertEqual($day->id, $loaded_moment->day_id);
   }
 
-  function testUserWithNewsRelations()
-  {
-    // With is used because im testing relation in both sides
-    $creator = $this->generator->user();
-    $creator->save();
-
-    $recipient = $this->generator->user();
-    $recipient->save();
-
-    $news = $this->generator->news($creator, $recipient);
-    $news->save();
-
-    // User to News
-    $this->assertEqual(count($recipient->getNews()), 1);
-    $this->assertEqual(count($creator->getCreatedNews()), 1);
-    $this->assertEqual($creator->getCreatedNews()->at(0)->id, $news->id);
-    $this->assertEqual($creator->getCreatedNews()->at(0)->id, $recipient->getNews()->at(0)->id);
-
-    // News to User
-    $this->assertEqual($news->getRecipients()->at(0)->id, $recipient->id);
-  }
-
   function testNewsToDayRelations()
   {
     $day = $this->generator->day();

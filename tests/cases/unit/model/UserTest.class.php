@@ -26,6 +26,26 @@ class UserTest extends odUnitTestCase
     $users = User::findUsersWithOldDays();
     if($this->assertEqual(1, count($users)))
       $this->assertEqual($user_with_old_day->id, $users[0]->id);
+  }
 
+  function testGetNews()
+  {
+    // With is used because im testing relation in both sides
+    $creator = $this->generator->user();
+    $creator->save();
+
+    $recipient = $this->generator->user();
+    $recipient->save();
+
+    $news = $this->generator->news($creator, $recipient);
+    $news->save();
+
+    // User to News
+    $this->assertEqual(count($recipient->getNews()), 1);
+    $this->assertEqual(count($recipient->getNews()), 1);
+    $this->assertEqual($recipient->getNews()->at(0)->id, $news->id);
+
+    // News to User
+    $this->assertEqual($news->getRecipients()->at(0)->id, $recipient->id);
   }
 }

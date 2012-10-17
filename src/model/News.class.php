@@ -13,7 +13,7 @@ lmb_require('src/model/User.class.php');
  */
 class News extends BaseModel
 {
-  protected $_default_sort_params = array('id'=>'desc');
+  protected $_default_sort_params = array('id' => 'desc');
   protected $_db_table_name = 'news';
 
   public $sender_id;
@@ -60,6 +60,13 @@ class News extends BaseModel
     $this->day_id = $day->id;
   }
 
+  function getRecipients()
+  {
+    $news_recipients = NewsRecipient::find(lmbSQLCriteria::equal('news_id', $this->id));
+    $recipients_ids = lmbArrayHelper::getColumnValues('user_id', $news_recipients);
+    return User::findByIds($recipients_ids);
+  }
+
   function exportForApi(array $properties = null)
   {
     $exported = parent::exportForApi(array(
@@ -69,34 +76,5 @@ class News extends BaseModel
     $exported->time = $this->ctime;
 
     return $exported;
-  }
-
-  /**
-   * @return lmbCollectionInterface
-   */
-  static function findNewsForUser(User $user, $from_id = null, $to_id = null, $limit = null)
-  {
-    $query = new lmbSelectQuery('news_recipient');
-    $query->addField('news_id');
-    $query->addCriteria(lmbSQLCriteria::equal('user_id', $user->id));
-
-    $result = $query->fetch();
-    $ids = lmbArrayHelper::getColumnValues('news_id', $result);
-    if(!count($ids))
-      return array();
-
-    $criteria = lmbSQLCriteria::in('id', $ids);
-    if($from_id)
-      $criteria->add(lmbSQLCriteria::less('id', $from_id));
-    if($to_id)
-      $criteria->add(lmbSQLCriteria::greater('id', $to_id));
-
-    $params = array(
-      'sort' => array('id' => 'DESC'),
-      'criteria' => $criteria,
-      'limit' => (!$limit || $limit > 100) ? 100 : $limit,
-    );
-
-    return News::find($params);
   }
 }

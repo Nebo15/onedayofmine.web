@@ -92,7 +92,7 @@ class odTools extends lmbAbstractTools
   function getPostingService()
   {
     if(!$this->posting_service)
-      $this->posting_service = new odPostingService();
+      $this->posting_service = new odPostingService($this->getUser());
 
     return $this->posting_service;
   }

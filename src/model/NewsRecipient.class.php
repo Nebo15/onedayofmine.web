@@ -7,7 +7,7 @@ class NewsRecipient extends BaseModel
 
   public $news_id;
   public $user_id;
-  public $is_published;
+  public $is_pushed;
 
   function setNews(News $news)
   {

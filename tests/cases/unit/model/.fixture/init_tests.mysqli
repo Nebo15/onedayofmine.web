@@ -33,3 +33,11 @@ CREATE TABLE `test_one_table_object_composite_pk` (
   PRIMARY KEY  (`user_id`, `stuff_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8; /* transactions needed */
 
+DROP TABLE IF EXISTS `test_imageable`;
+CREATE TABLE `test_imageable` (
+  `id` int(11) NOT NULL auto_increment,
+  `title` varchar(50),
+  `image_ext` varchar(5),
+  PRIMARY KEY  (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+

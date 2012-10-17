@@ -10,7 +10,7 @@ class odNewsServiceTest extends odUnitTestCase
   /**
    * @var odNewsService
    */
-  protected $sender_observer;
+  protected $sender_service;
 
   /**
    * @var UserForSettingsTests
@@ -24,10 +24,10 @@ class odNewsServiceTest extends odUnitTestCase
   function setUp()
   {
     parent::setUp();
-    $this->sender = new UserForSettingsTests($this->generator->user('sender'));
+    $this->sender = new UserForSettingsTests();
     $this->sender->save();
-    $this->sender_observer = new odNewsService($this->sender);
-    $this->follower = new UserForSettingsTests($this->generator->user());
+    $this->sender_service = new odNewsService($this->sender);
+    $this->follower = new UserForSettingsTests();
     $this->follower->save();
     $this->sender->addToFollowers($this->follower);
     $this->sender->save();
@@ -38,7 +38,7 @@ class odNewsServiceTest extends odUnitTestCase
     $day = $this->generator->day($this->sender, false, 'testOnDay');
     $day->save();
 
-    $this->sender_observer->onDay($day);
+    $this->sender_service->onDay($day);
 
     $news = $this->follower->getNews()->at(0);
     $this->assertNewsUsers($news, $this->follower, $this->sender);
@@ -55,7 +55,7 @@ class odNewsServiceTest extends odUnitTestCase
     $day = $this->generator->day($this->sender, false, 'testOnDay');
     $day->save();
 
-    $this->sender_observer->onDay($day);
+    $this->sender_service->onDay($day);
 
     $this->assertNoNews($this->follower);
   }
@@ -66,9 +66,9 @@ class odNewsServiceTest extends odUnitTestCase
     $day->save();
     $day_to_delete = $this->generator->day($this->sender);
     $day_to_delete->save();
-    $this->sender_observer->onDay($day);
-    $this->sender_observer->onDay($day_to_delete);
-    $this->sender_observer->onDayDelete($day_to_delete);
+    $this->sender_service->onDay($day);
+    $this->sender_service->onDay($day_to_delete);
+    $this->sender_service->onDayDelete($day_to_delete);
 
     $this->assertEqual(1, $this->follower->getNews()->count());
   }
@@ -178,7 +178,7 @@ class odNewsServiceTest extends odUnitTestCase
     $day = $this->generator->day();
     $moment = $this->generator->moment($day);
     $moment->save();
-    $this->sender_observer->onMoment($moment);
+    $this->sender_service->onMoment($moment);
 
     $news = News::findFirst();
     $this->assertNewsUsers($news, $this->follower,$this->sender);
@@ -195,7 +195,7 @@ class odNewsServiceTest extends odUnitTestCase
     $day = $this->generator->day();
     $moment = $this->generator->moment($day);
     $moment->save();
-    $this->sender_observer->onMoment($moment);
+    $this->sender_service->onMoment($moment);
 
     $this->assertNoNews($this->follower);
   }
@@ -204,8 +204,8 @@ class odNewsServiceTest extends odUnitTestCase
   {
     $moment = $this->generator->moment();
     $moment->save();
-    $this->sender_observer->onMoment($moment);
-    $this->sender_observer->onMomentDelete($moment);
+    $this->sender_service->onMoment($moment);
+    $this->sender_service->onMomentDelete($moment);
 
     $this->assertNoNews($this->follower);
   }
@@ -386,7 +386,7 @@ class odNewsServiceTest extends odUnitTestCase
     $like = $this->generator->dayLike($day);
     $like->save();
 
-    $this->sender_observer->onDayLike($day, $like);
+    $this->sender_service->onDayLike($day, $like);
 
     $news = $day_owner->getNews()->at(0);
     $this->assertNewsUsers($news, $day_owner, $this->sender);
@@ -404,7 +404,7 @@ class odNewsServiceTest extends odUnitTestCase
     $like = $this->generator->dayLike($day);
     $like->save();
 
-    $this->sender_observer->onDayLike($day, $like);
+    $this->sender_service->onDayLike($day, $like);
 
     $this->assertNoNews($day_owner);
   }
@@ -417,7 +417,7 @@ class odNewsServiceTest extends odUnitTestCase
     $like = $this->generator->dayLike($day);
     $like->save();
 
-    $this->sender_observer->onDayLike($day, $like);
+    $this->sender_service->onDayLike($day, $like);
 
     $news = $this->follower->getNews()->at(0);
     $this->assertNewsUsers($news, $this->follower, $this->sender);
@@ -437,7 +437,7 @@ class odNewsServiceTest extends odUnitTestCase
     $like = $this->generator->dayLike($day);
     $like->save();
 
-    $this->sender_observer->onDayLike($day, $like);
+    $this->sender_service->onDayLike($day, $like);
 
     $this->assertNoNews($this->follower);
   }
@@ -450,9 +450,9 @@ class odNewsServiceTest extends odUnitTestCase
     $like = $this->generator->dayLike($day);
     $like->save();
 
-    $this->sender_observer->onDayLike($day, $like);
+    $this->sender_service->onDayLike($day, $like);
     $this->assertEqual(News::find()->count(), 1);
-    $this->sender_observer->onDayUnlike($day, $like);
+    $this->sender_service->onDayUnlike($day, $like);
     $this->assertEqual(News::find()->count(), 0);
   }
 
@@ -466,7 +466,7 @@ class odNewsServiceTest extends odUnitTestCase
     $like = $this->generator->momentLike($moment);
     $like->save();
 
-    $this->sender_observer->onMomentLike($moment, $like);
+    $this->sender_service->onMomentLike($moment, $like);
 
     $news = $day_owner->getNews()->at(0);
     $this->assertNewsUsers($news, $day_owner, $this->sender);
@@ -486,7 +486,7 @@ class odNewsServiceTest extends odUnitTestCase
     $like = $this->generator->momentLike($moment);
     $like->save();
 
-    $this->sender_observer->onMomentLike($moment, $like);
+    $this->sender_service->onMomentLike($moment, $like);
 
     $this->assertNoNews($day_owner);
   }
@@ -501,7 +501,7 @@ class odNewsServiceTest extends odUnitTestCase
     $like = $this->generator->momentLike($moment);
     $like->save();
 
-    $this->sender_observer->onMomentLike($moment, $like);
+    $this->sender_service->onMomentLike($moment, $like);
 
     $news = $this->follower->getNews()->at(0);
     $this->assertNewsUsers($news, $this->follower, $this->sender);
@@ -523,7 +523,7 @@ class odNewsServiceTest extends odUnitTestCase
     $like = $this->generator->momentLike($moment);
     $like->save();
 
-    $this->sender_observer->onMomentLike($moment, $like);
+    $this->sender_service->onMomentLike($moment, $like);
 
     $this->assertNoNews($this->follower);
   }
@@ -538,9 +538,9 @@ class odNewsServiceTest extends odUnitTestCase
     $like = $this->generator->momentLike($moment);
     $like->save();
 
-    $this->sender_observer->onMomentLike($moment, $like);
+    $this->sender_service->onMomentLike($moment, $like);
     $this->assertEqual(News::find()->count(), 1);
-    $this->sender_observer->onMomentUnlike($moment, $like);
+    $this->sender_service->onMomentUnlike($moment, $like);
     $this->assertEqual(News::find()->count(), 0);
   }
 
@@ -615,7 +615,7 @@ class odNewsServiceTest extends odUnitTestCase
     $day = $this->generator->day();
     $day->save();
 
-    $this->sender_observer->onDayFavorite($day);
+    $this->sender_service->onDayFavorite($day);
 
     $this->assertEqual(1, count($this->follower->getNews()));
     $news = $this->follower->getNews()->at(0);
@@ -633,7 +633,7 @@ class odNewsServiceTest extends odUnitTestCase
     $day = $this->generator->day();
     $day->save();
 
-    $this->sender_observer->onDayFavorite($day);
+    $this->sender_service->onDayFavorite($day);
 
     $this->assertNoNews($this->follower);
   }
@@ -648,7 +648,7 @@ class odNewsServiceTest extends odUnitTestCase
 
     $day = $this->generator->day($this->sender, false, 'testOnDay');
     $day->save();
-    $this->sender_observer->onDay($day);
+    $this->sender_service->onDay($day);
 
     $notifications = lmbDBAL::selectQuery('device_notification')->fetch()->getFlatArray();
     if($this->assertEqual(1, count($notifications)))

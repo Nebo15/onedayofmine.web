@@ -75,14 +75,14 @@ class User extends BaseModel
 
   function setSettings(UserSettings $settings)
   {
-    $this->setUserSettings($settings);
+    $this->user_settings_id = $settings->id;
   }
 
   function getSettings()
   {
     if(!$item = UserSettings::findById($this->user_settings_id))
     {
-      $item = UserSettings::createDefault($this);
+      $item = UserSettings::createDefault();
       $item->save();
       $this->user_settings_id = $item->id;
       $this->save();
@@ -169,21 +169,30 @@ class User extends BaseModel
     return Day::find($criteria)->paginate(0, $limit);
   }
 
-  function getNews()
+  function getNews($from_id = null, $to_id = null, $limit = null)
   {
-    return News::find(lmbSQLCriteria::equal('recipient_id', $this->id));
-  }
+    $query = new lmbSelectQuery('news_recipient');
+    $query->addField('news_id');
+    $query->addCriteria(lmbSQLCriteria::equal('user_id', $this->id));
 
-  function getNewsWithLimitation($from_id = null, $to_id = null, $limit = null)
-  {
-    $criteria = lmbSQLCriteria::equal('recipient_id', $this->id);
+    $result = $query->fetch();
+    $ids = lmbArrayHelper::getColumnValues('news_id', $result);
+    if(!count($ids))
+      return array();
+
+    $criteria = lmbSQLCriteria::in('id', $ids);
     if($from_id)
       $criteria->add(lmbSQLCriteria::less('id', $from_id));
     if($to_id)
       $criteria->add(lmbSQLCriteria::greater('id', $to_id));
-    if(!$limit || $limit > 100)
-      $limit = 100;
-    return News::find($criteria, ['id' => 'DESC'])->paginate(0, $limit);
+
+    return News::find($criteria, ['id' => 'DESC'])->paginate(0, !$limit ?: 100);
+  }
+
+  function getCreatedNews()
+  {
+    $criteria = lmbSQLCriteria::equal('sender_id', $this->id);
+    return News::find($criteria, ['id' => 'DESC']);
   }
 
   static function findByFacebookAccessToken($facebook_access_token)

@@ -22,7 +22,10 @@ class UserFollowing extends BaseModel
 
   public static function isUserFollowUser(User $follower_user, User $followed_user)
   {
-    return !is_null(UserFollowing::findFirst(['follower_user_id=? AND user_id=?', $follower_user->id, $followed_user->id]));
+    $criteria = lmbSQLCriteria::create()
+      ->add(lmbSQLCriteria::equal('follower_user_id', $follower_user->id))
+      ->add(lmbSQLCriteria::equal('user_id', $followed_user->id));
+    return !is_null(UserFollowing::findFirst($criteria));
   }
 
   public static function isUsersFollowUser($follower_users, User $followed_user)
@@ -40,12 +43,10 @@ class UserFollowing extends BaseModel
 
     $criteria = lmbSQLCriteria::in('follower_user_id', array_keys($following_ids));
     $criteria->add(lmbSQLCriteria::equal('user_id', $followed_user->id));
-    $following = UserFollowing::find(array(
-      'criteria' => $criteria
-    ));
+    $following = UserFollowing::find($criteria);
 
     foreach ($following as $following_item) {
-      $following_ids[$following_item->getFollowerUserId()] = true;
+      $following_ids[$following_item->follower_user_id] = true;
     }
 
     return $following_ids;
@@ -69,12 +70,10 @@ class UserFollowing extends BaseModel
 
     $criteria = lmbSQLCriteria::in('user_id', array_keys($following_ids));
     $criteria->add(lmbSQLCriteria::equal('follower_user_id', $follower_user->id));
-    $following = UserFollowing::find(array(
-      'criteria' => $criteria
-    ));
+    $following = UserFollowing::find($criteria);
 
     foreach ($following as $following_item) {
-      $following_ids[$following_item->getUserId()] = true;
+      $following_ids[$following_item->user_id] = true;
     }
 
     return $following_ids;

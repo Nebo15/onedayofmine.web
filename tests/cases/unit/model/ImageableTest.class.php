@@ -9,6 +9,7 @@ class ImageableTest extends odUnitTestCase
   function testAttachImage_local()
   {
     $model = new ImageableForTests();
+    $model->title = 'testAttachImage_local';
     $model->save();
     $model->attachImage($this->generator->image());
 
@@ -19,11 +20,14 @@ class ImageableTest extends odUnitTestCase
   function testDestroy_local()
   {
     $model = new ImageableForTests();
+    $model->title = 'testDestroy_local';
     $model->save();
     $model->attachImage($this->generator->image());
-    $model->destroy();
 
     $url = lmbToolkit::instance()->getStaticUrl($model->getImage());
+
+    $model->destroy();
+
     $this->assert404Url($url);
   }
 }
@@ -32,5 +36,7 @@ class ImageableForTests extends BaseModel
 {
   use Imageable;
 
-  protected $_db_table_name = 'day';
+  public $title;
+
+  protected $_db_table_name = 'test_imageable';
 }

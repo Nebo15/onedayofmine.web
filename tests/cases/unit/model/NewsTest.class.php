@@ -6,7 +6,8 @@ lmb_require('tests/cases/unit/odUnitTestCase.class.php');
 class NewsTest extends odUnitTestCase
 {
 
-  function testCreatedCorrectly() {
+  function testCreatedCorrectly()
+  {
     $creator = $this->generator->user();
     $creator->save();
 
