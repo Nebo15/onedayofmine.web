@@ -2,9 +2,9 @@
 /*
  * Limb PHP Framework
  *
- * @link http://limb-project.com 
+ * @link http://limb-project.com
  * @copyright  Copyright &copy; 2004-2009 BIT(http://bit-creative.com)
- * @license    LGPL http://www.gnu.org/copyleft/lesser.html 
+ * @license    LGPL http://www.gnu.org/copyleft/lesser.html
  */
 lmb_require('limb/dbal/src/drivers/lmbDbBaseRecordSet.class.php');
 lmb_require('limb/dbal/src/drivers/mysqli/lmbMysqliRecord.class.php');
@@ -29,11 +29,11 @@ class lmbMysqliRecordSet extends lmbDbBaseRecordSet
     $this->connection = $connection;
     $this->query = $queryString;
   }
-  
+
   protected function _is_resource($res)
   {
     return ('mysqli_result' === get_class($res));
-    
+
   }
 
   function freeQuery()
@@ -140,7 +140,7 @@ class lmbMysqliRecordSet extends lmbDbBaseRecordSet
 
   function count()
   {
-    if(!(preg_match("/^\s*SELECT\s+DISTINCT/is", $this->query) || preg_match('/\s+GROUP\s+BY\s+/is', $this->query)) && 
+    if(!(preg_match("/^\s*SELECT\s+DISTINCT/is", $this->query) || preg_match('/\s+GROUP\s+BY\s+/is', $this->query)) &&
        preg_match("/^\s*SELECT\s+.+\s+FROM\s+/Uis", $this->query))
     {
       //optimization for non paginated queries

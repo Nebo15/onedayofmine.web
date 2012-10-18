@@ -185,7 +185,7 @@ class lmbMysqliConnection extends lmbDbBaseConnection
   function escape($string)
   {
     lmb_assert_true(!is_object($string));
-    return mysqli_escape_string($this->getConnectionId(), $string);
+    return mysqli_real_escape_string($this->getConnectionId(), $string);
   }
 
   function getSequenceValue($table, $colname)
