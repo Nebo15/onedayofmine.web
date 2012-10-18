@@ -60,22 +60,18 @@ class UserFollowing extends BaseModel
     if(!$followed_users->count())
       return [];
 
-    $following_ids = [];
-    foreach ($followed_users as $user) {
-      if(!$user->id)
-        throw new lmbException("Can't retrieve user id");
+    $following_ids = lmbArrayHelper::getColumnValues('id', $followed_users);
 
-      $following_ids[$user->id] = false;
-    }
+    $result = array_fill_keys($following_ids, false);
 
-    $criteria = lmbSQLCriteria::in('user_id', array_keys($following_ids));
+    $criteria = lmbSQLCriteria::in('user_id', $following_ids);
     $criteria->add(lmbSQLCriteria::equal('follower_user_id', $follower_user->id));
     $following = UserFollowing::find($criteria);
 
     foreach ($following as $following_item) {
-      $following_ids[$following_item->user_id] = true;
+      $result[$following_item->user_id] = true;
     }
 
-    return $following_ids;
+    return $result;
   }
 }

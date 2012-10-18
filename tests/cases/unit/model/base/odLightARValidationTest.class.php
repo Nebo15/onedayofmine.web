@@ -328,7 +328,11 @@ class odLightARValidationTest extends BaseLightARTest
 
     $error_list->addError('whatever');//actually it's a dirty simulation but that's how it works really
 
-    $object->save($error_list);
+    try
+    {
+      $object->save($error_list);
+    }
+    catch(lmbException $e) {}
     $this->assertFalse($object->isValid());
   }
 }

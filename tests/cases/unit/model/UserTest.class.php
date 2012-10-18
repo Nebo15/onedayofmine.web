@@ -13,14 +13,16 @@ class UserTest extends odUnitTestCase
     $user_with_old_day->save();
     $old_day = $this->generator->day($user_with_old_day);
     $old_day->ctime = $time_day_ago;
+    $old_day->save();
     $user_with_old_day->setCurrentDay($old_day);
     $user_with_old_day->save();
 
     $user_with_new_day = $this->generator->user();
     $user_with_new_day->save();
-    $old_day = $this->generator->day($user_with_new_day);
-    $old_day->ctime = $time_current;
-    $user_with_new_day->setCurrentDay($old_day);
+    $new_day = $this->generator->day($user_with_new_day);
+    $new_day->ctime = $time_current;
+    $new_day->save();
+    $user_with_new_day->setCurrentDay($new_day);
     $user_with_new_day->save();
 
     $users = User::findUsersWithOldDays();

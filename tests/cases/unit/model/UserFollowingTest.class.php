@@ -26,8 +26,8 @@ class UserFollowingTest extends odUnitTestCase
     $third_user = $this->generator->user(); // Dum
     $third_user->save();
 
-    $this->generator->follow($this->main_user, $this->additional_user);
-    $this->generator->follow($this->main_user, $third_user);
+    $this->generator->follow($this->additional_user, $this->main_user);
+    $this->generator->follow($third_user, $this->main_user);
 
     $collection = new lmbCollection(null. null);
     $collection->add($this->additional_user);
@@ -35,17 +35,21 @@ class UserFollowingTest extends odUnitTestCase
 
     $this->main_user->getDbConnection()->commitTransaction();
 
-    $result = UserFollowing::isUserFollowUsers($this->main_user, $collection);
+    $this->assertEqual(
+      [
+        $this->additional_user->id => true,
+        $third_user->id => true
+      ],
+      UserFollowing::isUserFollowUsers($this->main_user, $collection)
+    );
 
-    foreach ($result as $value) {
-      $this->assertTrue($value);
-    }
-
-    $result = UserFollowing::isUsersFollowUser($collection, $this->main_user);
-
-    foreach ($result as $value) {
-      $this->assertFalse($value);
-    }
+    $this->assertEqual(
+      [
+        $this->additional_user->id => false,
+        $third_user->id => false
+      ],
+      UserFollowing::isUsersFollowUser($collection, $this->main_user)
+    );
   }
 
   function testUserFollowUsers_empty()
@@ -83,17 +87,21 @@ class UserFollowingTest extends odUnitTestCase
     $collection->add($this->additional_user);
     $collection->add($third_user);
 
-    $result = UserFollowing::isUserFollowUsers($this->main_user, $collection);
+    $this->assertEqual(
+      [
+        $this->additional_user->id => false,
+        $third_user->id => false
+      ],
+      UserFollowing::isUserFollowUsers($this->main_user, $collection)
+    );
 
-    foreach ($result as $value) {
-      $this->assertFalse($value);
-    }
-
-    $result = UserFollowing::isUsersFollowUser($collection, $this->main_user);
-
-    foreach ($result as $value) {
-      $this->assertTrue($value);
-    }
+    $this->assertEqual(
+      [
+        $this->additional_user->id => true,
+        $third_user->id => true
+      ],
+      UserFollowing::isUsersFollowUser($collection, $this->main_user)
+    );
   }
 
   function testUsersFollowUser_empty()

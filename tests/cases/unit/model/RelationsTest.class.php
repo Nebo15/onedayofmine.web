@@ -68,7 +68,8 @@ class RelationsTest extends odUnitTestCase
     /** @var $loaded_day Day */
     $loaded_day = Day::findById($day->id);
     $this->assertEqual(2, $loaded_day->getMoments()->count());
-    $this->assertEqual($moment1->id, $loaded_day->getMoments()->at(0)->id);
+    $this->assertEqual($moment2->id, $loaded_day->getMoments()->at(0)->id);
+    $this->assertEqual($moment1->id, $loaded_day->getMoments()->at(1)->id);
 
     $loaded_moment = Moment::findById($moment1->id);
     $this->assertEqual($day->id, $loaded_moment->day_id);

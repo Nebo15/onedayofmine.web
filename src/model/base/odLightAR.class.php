@@ -172,11 +172,11 @@ abstract class odLightAR extends odDirtableObject implements ArrayAccess
 
     $this->_onBeforeSave();
 
-    if($this->isLoaded() && !$this->isDirty())
-    {
-      $this->_onAfterSave();
-      return false;
-    }
+//    if($this->isLoaded() && !$this->isDirty())
+//    {
+//      $this->_onAfterSave();
+//      return false;
+//    }
 
     $this->_setAutoTimes();
 
@@ -320,10 +320,10 @@ abstract class odLightAR extends odDirtableObject implements ArrayAccess
 
   private function getDataForSave()
   {
-    if($this->isLoaded())
-      $fields = array_intersect($this->_fields, array_keys($this->getDirtyProps()));
-    else
-      $fields = $this->_fields;
+//    if($this->isLoaded())
+//      $fields = array_intersect($this->_fields, array_keys($this->getDirtyProps()));
+//    else
+    $fields = $this->_fields;
 
     $fields = array_diff($fields, $this->_non_db_fields);
 
@@ -458,7 +458,13 @@ abstract class odLightAR extends odDirtableObject implements ArrayAccess
     return new odLightARRecordSetDecorator($object->fetchRecords($criteria, $order, $with_lazy_attributes), $class_name);
   }
 
-  public static function findBySql($sql)
+  static function findByQuery(lmbSelectQuery $query)
+  {
+    $class_name = get_called_class();
+    return $class_name::findBySql($query->getStatement()->getSQL());
+  }
+
+  static function findBySql($sql)
   {
     $class_name = get_called_class();
     return new odLightARRecordSetDecorator(lmbDBAL :: fetch($sql), $class_name);

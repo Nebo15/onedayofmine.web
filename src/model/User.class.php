@@ -39,10 +39,14 @@ class User extends BaseModel
   public $facebook_uid;
   public $facebook_access_token;
   public $facebook_profile_utime;
+  public $twitter_uid;
   public $twitter_access_token;
   public $twitter_access_token_secret;
   public $current_day_id;
   public $user_settings_id;
+  public $ctime;
+  public $utime;
+  public $cip;
 
   protected function _createValidator()
   {
@@ -228,16 +232,14 @@ class User extends BaseModel
   static function findUsersWithOldDays()
   {
     $criteria = lmbSQLCriteria::less('day.ctime', time() - 24 * 60 * 60);
-    $criteria->add(lmbSQLCriteria::isNotNull('current_day_id'));
+    $criteria->add(lmbSQLCriteria::notEqual('user.current_day_id', '0'));
 
-    return User::find();
+    $query = new lmbSelectQuery('day');
+    $query
+      ->addLeftJoin('user', 'id', 'day', 'user_id')
+      ->addField('user.*')
+      ->where($criteria);
 
-    $query = lmbARQuery :: create('Day')->eagerJoin('user')->addCriteria($criteria);
-
-    $users = array();
-    foreach($query->fetch() as $day)
-      $users[] = $day->getUser();
-
-    return new lmbCollection($users);
+    return User::findByQuery($query);
   }
 }
