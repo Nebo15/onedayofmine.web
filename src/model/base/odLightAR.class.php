@@ -127,6 +127,7 @@ abstract class odLightAR extends odDirtableObject implements ArrayAccess
   {
     foreach($props as $key => $value)
       $this->set($key, $value);
+    return $this;
   }
 
   function export()
@@ -323,22 +324,12 @@ abstract class odLightAR extends odDirtableObject implements ArrayAccess
 //    if($this->isLoaded())
 //      $fields = array_intersect($this->_fields, array_keys($this->getDirtyProps()));
 //    else
-    $fields = $this->_fields;
-
-    $fields = array_diff($fields, $this->_non_db_fields);
+    $fields = array_diff($this->_fields, $this->_non_db_fields);
 
     $data = array();
     foreach($fields as $field)
-    {
       if(isset($this->$field))
-      {
-        if(in_array($field, $this->_unescape_fields))
           $data[$field] = $this->$field;
-        else
-          $data[$field] = $this->_db_conn->escape($this->$field);
-      }
-    }
-
     return $data;
   }
 
@@ -433,7 +424,7 @@ abstract class odLightAR extends odDirtableObject implements ArrayAccess
   {
     $class_name = get_called_class();
 
-    /** @var $object LightAR */
+    /** @var $object odLightAR */
     $object = new $class_name();
     $rs = $object->fetchRecords($criteria, $order, $with_lazy_attributes);
     $rs->rewind();
@@ -453,7 +444,7 @@ abstract class odLightAR extends odDirtableObject implements ArrayAccess
   public static function find($criteria = null, $order = null, $with_lazy_attributes = false)
   {
     $class_name = get_called_class();
-    /** @var $object LightAR */
+    /** @var $object odLightAR */
     $object = new $class_name();
     return new odLightARRecordSetDecorator($object->fetchRecords($criteria, $order, $with_lazy_attributes), $class_name);
   }
@@ -473,7 +464,7 @@ abstract class odLightAR extends odDirtableObject implements ArrayAccess
   public static function findFirstBySql($sql)
   {
     $class_name = get_called_class();
-    /** @var $object LightAR */
+    /** @var $object odLightAR */
     $object = new $class_name();
     $rs = $class_name :: findBySql($sql);
     $rs->rewind();
@@ -490,7 +481,7 @@ abstract class odLightAR extends odDirtableObject implements ArrayAccess
   public static function delete($criteria = null)
   {
     $class_name = get_called_class();
-    /** @var $object LightAR */
+    /** @var $object odLightAR */
     $object = new $class_name();
     $rs = new odLightARRecordSetDecorator($object->fetchRecords($criteria), $class_name);
     foreach($rs as $ar)
@@ -500,7 +491,7 @@ abstract class odLightAR extends odDirtableObject implements ArrayAccess
   public static function deleteRaw($criteria = null)
   {
     $class_name = get_called_class();
-    /** @var $object LightAR */
+    /** @var $object odLightAR */
     $object = new $class_name();
     $query = new lmbDeleteQuery($object->getDbTableName());
     if($criteria)

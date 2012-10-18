@@ -59,11 +59,7 @@ class odExportHelperTest extends odUnitTestCase
     $this->assertFalse($exported->is_favorite);
     $this->assertFalse($exported->is_liked);
 
-    $favorites = $this->main_user->getFavoriteDays();
-    $favorites->add($day);
-    $day_likes = $this->main_user->getDayLikes();
-    $day_likes->add(new DayLike(['day_id' => $day->id, 'user_id' => $this->main_user->id]));
-    $this->main_user->save();
+    $this->generator->favorite($day, $this->main_user);
 
     $this->db_connection->resetStats();
 

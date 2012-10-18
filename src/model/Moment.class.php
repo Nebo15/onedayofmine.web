@@ -9,7 +9,6 @@ lmb_require('src/model/MomentLike.class.php');
  * @method string facebook_uid
  * @method void setFacebookUid(string $facebook_user_id)
  * @method string facebook_access_token
- * @method string getDay()
  * @method string getDayId()
  * @method string getDescription()
  * @method void setFacebookAccessToken(string $facebook_access_token)
@@ -57,6 +56,14 @@ class Moment extends BaseModel
   function setDay(Day $day)
   {
     $this->day_id = $day->id;
+  }
+
+  /**
+   * @return Day
+   */
+  function getDay()
+  {
+    return Day::findById($this->day_id);
   }
 
   function getComments()

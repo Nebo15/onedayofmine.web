@@ -82,6 +82,9 @@ class User extends BaseModel
     $this->user_settings_id = $settings->id;
   }
 
+  /**
+   * @return UserSettings
+   */
   function getSettings()
   {
     if(!$item = UserSettings::findById($this->user_settings_id))
@@ -117,6 +120,11 @@ class User extends BaseModel
     return DayComment::find(lmbSQLCriteria::equal('user_id', $this->id));
   }
 
+  function getDayLikes()
+  {
+    return DayLike::find(lmbSQLCriteria::equal('user_id', $this->id), array('id' => 'DESC'));
+  }
+
   function getMomentsComments()
   {
     return MomentComment::find(lmbSQLCriteria::equal('user_id', $this->id));
@@ -129,15 +137,19 @@ class User extends BaseModel
 
   function getFollowingUsers()
   {
-    $following = UserFollowing::find(lmbSQLCriteria::equal('user_id', $this->id));
-    $users_ids = lmbArrayHelper::getColumnValues('id', $following);
+    $following = UserFollowing::find(lmbSQLCriteria::equal('follower_user_id', $this->id));
+    $users_ids = lmbArrayHelper::getColumnValues('user_id', $following);
+    if(!$users_ids)
+      return new lmbCollection();
     return self::findByIds($users_ids);
   }
 
   function getFollowersUsers()
   {
-    $followers = UserFollowing::find(lmbSQLCriteria::equal('follower_user_id', $this->id));
-    $users_ids = lmbArrayHelper::getColumnValues('id', $followers);
+    $followers = UserFollowing::find(lmbSQLCriteria::equal('user_id', $this->id));
+    $users_ids = lmbArrayHelper::getColumnValues('follower_user_id', $followers);
+    if(!$users_ids)
+      return new lmbCollection();
     return self::findByIds($users_ids);
   }
 
@@ -182,7 +194,7 @@ class User extends BaseModel
     $result = $query->fetch();
     $ids = lmbArrayHelper::getColumnValues('news_id', $result);
     if(!count($ids))
-      return array();
+      return new lmbCollection();
 
     $criteria = lmbSQLCriteria::in('id', $ids);
     if($from_id)
@@ -190,7 +202,7 @@ class User extends BaseModel
     if($to_id)
       $criteria->add(lmbSQLCriteria::greater('id', $to_id));
 
-    return News::find($criteria, ['id' => 'DESC'])->paginate(0, !$limit ?: 100);
+    return News::find($criteria, ['id' => 'DESC'])->paginate(0, $limit ?: 100);
   }
 
   function getCreatedNews()

@@ -84,6 +84,11 @@ class Day extends BaseModel
     return DayComment::find($criteria, ['id' => 'ASC'])->paginate(0, $limit);
   }
 
+  function getUser()
+  {
+    return User::findById($this->user_id);
+  }
+
   static function getTypes()
   {
     return ['Working day', 'Day off', 'Holiday', 'Trip'];
