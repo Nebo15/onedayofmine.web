@@ -18,7 +18,8 @@ class AirBrakeErrorHandler
         $method .= $trace['class'].'::';
       if(isset($trace['function']))
         $method .= $trace['function']."()";
-      $backtrace .= "<line method=\"{$method}\" file=\"{$trace['file']}\" number=\"{$trace['line']}\"/>".PHP_EOL;
+      if(isset($trace['file'], $trace['line']))
+        $backtrace .= "<line method=\"{$method}\" file=\"{$trace['file']}\" number=\"{$trace['line']}\"/>".PHP_EOL;
     }
 
     $server_data = '';
