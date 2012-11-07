@@ -11,6 +11,7 @@ Mock::generate('odPostingService', 'PostingServiceMock');
 Mock::generate('odFacebook', 'FacebookMock');
 Mock::generate('odTwitter', 'TwitterMock');
 Mock::generate('FacebookProfile', 'FacebookProfileMock');
+Mock::generate('TwitterProfile', 'TwitterProfileMock');
 
 // Cheaty, but sphinxapi.php can't be mocked (errors occured).
 class odSearchServiceForMock{ public function find(){} }
@@ -43,12 +44,12 @@ abstract class odControllerTestCase extends odUnitTestCase
     $this->toolkit->setFacebook(new FacebookMock, $this->main_user->facebook_access_token);
     $this->toolkit->setTwitter(new TwitterMock(), $this->main_user->twitter_access_token);
     $this->toolkit->setFacebookProfile($this->main_user, new FacebookProfileMock);
+    $this->toolkit->setTwitterProfile($this->main_user, new TwitterProfileMock);
 
     $this->toolkit->setFacebook(new FacebookMock, $this->additional_user->facebook_access_token);
     $this->toolkit->setTwitter(new TwitterMock(), $this->additional_user->twitter_access_token);
     $this->toolkit->setFacebookProfile($this->additional_user, new FacebookProfileMock);
-
-    $this->toolkit->setPostingService(new PostingServiceMock);
+    $this->toolkit->setTwitterProfile($this->additional_user, new TwitterProfileMock);
 
     $this->toolkit->setJobQueueClient(new odJobQueueClientForTests());
 

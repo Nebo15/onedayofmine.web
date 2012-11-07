@@ -85,6 +85,9 @@ class InterestCalculator
     $ids = array_slice($ids, $from_key, $to_key);
     $ids = array_slice($ids, 0, $limit);
 
+    if(!count($ids))
+      return new lmbCollection();
+
     $days_with_rating = array();
     foreach(Day::findByIds($ids) as $day)
     {
@@ -95,7 +98,8 @@ class InterestCalculator
         if($record['day_id'] != $day->id)
           continue;
 
-        $recordObj = new DayInterestRecord($record);
+        $recordObj = new DayInterestRecord();
+        $recordObj->import($record->export());
         $recordObj->setDay($day);
         // $recordObj->setRating(array_search($day->id, $ids)); useless as DayInterestRecord
         $days_with_rating[array_search($day->id, $ids)] = $recordObj;

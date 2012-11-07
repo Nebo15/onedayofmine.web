@@ -36,7 +36,7 @@ class TasksTest extends odUnitTestCase
     $this->_setUpApns();
 
     $notification = $this->generator->deviceNotification();
-    $notification->setCtime(time() - 24 * 60 * 60 - 10);
+    $notification->ctime = time() - 24 * 60 * 60 - 10;
     $notification->save();
 
     $apns = new ApnsMock();

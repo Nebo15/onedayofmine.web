@@ -75,12 +75,12 @@ class MyControllerTest extends odControllerTestCase
   function testSettings()
   {
     $settings = new UserSettings();
-    $settings->setNotificationsNewDays(1);
-    $settings->setNotificationsNewComments(0);
-    $settings->setNotificationsRelatedActivity(1);
-    $settings->setNotificationsShootingPhotos(0);
-    $settings->setPhotosSaveOriginal(1);
-    $settings->setPhotosSaveFiltered(0);
+    $settings->notifications_new_days = 1;
+    $settings->notifications_new_comments = 0;
+    $settings->notifications_related_activity = 1;
+    $settings->notifications_shooting_photos = 0;
+    $settings->photos_save_original = 1;
+    $settings->photos_save_filtered = 0;
 
     $this->main_user->setSettings($settings);
     $this->main_user->save();
@@ -106,15 +106,14 @@ class MyControllerTest extends odControllerTestCase
     $this->toolkit->setUser($this->main_user);
 
     $settings = new UserSettings();
-    $settings->setNotificationsNewDays(1);
-    $settings->setNotificationsNewComments(1);
-    $settings->setNotificationsNewReplays(1);
-    $settings->setNotificationsRelatedActivity(1);
-    $settings->setNotificationsShootingPhotos(1);
-    $settings->setPhotosSaveOriginal(1);
-    $settings->setPhotosSaveFiltered(1);
-    $settings->setSocialShareFacebook(1);
-    $settings->setSocialShareTwitter(1);
+    $settings->notifications_new_days = 1;
+    $settings->notifications_new_comments = 1;
+    $settings->notifications_related_activity = 1;
+    $settings->notifications_shooting_photos = 1;
+    $settings->photos_save_original = 1;
+    $settings->photos_save_filtered = 1;
+    $settings->social_share_facebook = 1;
+    $settings->social_share_twitter = 1;
 
     $response = $this->post("settings", $settings->export());
     if($this->assertResponse(200))
@@ -130,15 +129,14 @@ class MyControllerTest extends odControllerTestCase
     }
 
     $settings = new UserSettings();
-    $settings->setNotificationsNewDays(0);
-    $settings->setNotificationsNewComments(0);
-    $settings->setNotificationsNewReplays(0);
-    $settings->setNotificationsRelatedActivity(0);
-    $settings->setNotificationsShootingPhotos(0);
-    $settings->setPhotosSaveOriginal(0);
-    $settings->setPhotosSaveFiltered(0);
-    $settings->setSocialShareFacebook(0);
-    $settings->setSocialShareTwitter(0);
+    $settings->notifications_new_days = 0;
+    $settings->notifications_new_comments = 0;
+    $settings->notifications_related_activity = 0;
+    $settings->notifications_shooting_photos = 0;
+    $settings->photos_save_original = 0;
+    $settings->photos_save_filtered = 0;
+    $settings->social_share_facebook = 0;
+    $settings->social_share_twitter = 0;
 
     $response = $this->post("settings", $settings->export());
     if($this->assertResponse(200))

@@ -1,7 +1,7 @@
 <?php
 lmb_require('tests/cases/integration/odIntegrationTestCase.class.php');
 lmb_require('src/model/base/BaseModel.class.php');
-lmb_require('src/model/traits/Imageable.trait.php');
+lmb_require('src/model/traits/Imageable.class.php');
 
 class ImageableIntegrationTest extends odIntegrationTestCase
 {

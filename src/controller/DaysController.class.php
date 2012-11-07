@@ -18,8 +18,6 @@ class DaysController extends BaseJsonController
     $day->views_count = $day->views_count + 1;
     $day->save();
 
-
-
     return $this->_answerOk($this->toolkit->getExportHelper()->exportDay($day));
   }
 
@@ -252,7 +250,6 @@ class DaysController extends BaseJsonController
   {
     list($from, $to, $limit) = $this->_getFromToLimitations();
     $days = $this->_getUser()->getFavoriteDaysWithLimitations($from, $to, $limit);
-
     return $this->_answerOk($this->toolkit->getExportHelper()->exportDayItems($days));
   }
 
@@ -283,12 +280,10 @@ class DaysController extends BaseJsonController
     if(!$day = Day::findById($this->request->id))
       return $this->_answerModelNotFoundById('Day', $this->request->id);
 
-    if(!DayFavorite::findByDayIdAndUserId($day->id, $this->_getUser()->id))
+    if(!$favorite = DayFavorite::findByDayIdAndUserId($day->id, $this->_getUser()->id))
       return $this->_answerOk(null, "Favorite not found");
 
-    $favorites = $this->_getUser()->getFavoriteDays();
-    $favorites->remove($day);
-    $favorites->save();
+    $favorite->destroy();
 
     return $this->_answerOk();
   }

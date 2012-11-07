@@ -43,9 +43,9 @@ class UserTest extends odUnitTestCase
     $news->save();
 
     // User to News
-    $this->assertEqual(count($recipient->getNews()), 1);
-    $this->assertEqual(count($recipient->getNews()), 1);
-    $this->assertEqual($recipient->getNews()->at(0)->id, $news->id);
+    $this->assertEqual(count($recipient->getNewsWithLimitation()), 1);
+    $this->assertEqual(count($recipient->getNewsWithLimitation()), 1);
+    $this->assertEqual($recipient->getNewsWithLimitation()->at(0)->id, $news->id);
 
     // News to User
     $this->assertEqual($news->getRecipients()->at(0)->id, $recipient->id);

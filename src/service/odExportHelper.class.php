@@ -43,13 +43,25 @@ class odExportHelper
     $exported = $day->exportForApi();
     unset($exported->final_description);
 
-    $this->attachUserSubentityToExport(User::findById($day->user_id), $exported);
+    $this->attachUserSubentityToExport($day->getUser(), $exported);
 
     return $exported;
   }
 
   function exportDayItems($days)
   {
+    if(is_object($days))
+      $days = $days->getArray();
+
+    foreach($days as $key => $day)
+    {
+      if(!$day->is_deleted)
+        continue;
+      if($this->current_user && $this->current_user->id == $day->user_id)
+        continue;
+      unset($days[$key]);
+    }
+
     if(!count($days))
       return [];
 
@@ -298,7 +310,7 @@ class odExportHelper
   {
     $exported = $comment->exportForApi();
 
-    $this->attachUserSubentityToExport(User::findById($comment->user_id), $exported);
+    $this->attachUserSubentityToExport($comment->getUser(), $exported);
 
     return $exported;
   }

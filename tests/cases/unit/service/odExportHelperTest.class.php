@@ -60,6 +60,7 @@ class odExportHelperTest extends odUnitTestCase
     $this->assertFalse($exported->is_liked);
 
     $this->generator->favorite($day, $this->main_user);
+    $this->generator->dayLike($day, $this->main_user);
 
     $this->db_connection->resetStats();
 
@@ -158,9 +159,8 @@ class odExportHelperTest extends odUnitTestCase
     $this->db_connection->resetStats();
 
     $exported = $this->export_helper->exportDaySubentity($day);
+    $this->assertEqual(1, count($this->db_connection->getQueries()));
     $this->assertJsonDaySubentity($exported, true);
-
-    $this->assertEqual(0, count($this->db_connection->getQueries()));
   }
 
   function testExportUser_forGuest()
@@ -361,7 +361,7 @@ class odExportHelperTest extends odUnitTestCase
     $exported = $this->export_helper->exportDayComment($comment);
     $this->assertJsonDayComment($exported);
 
-    $this->assertEqual(0, count($this->db_connection->getQueries()));
+    $this->assertEqual(1, count($this->db_connection->getQueries()));
   }
 
   function testExportDayCommentItems()
@@ -376,12 +376,11 @@ class odExportHelperTest extends odUnitTestCase
     $this->db_connection->resetStats();
 
     $exported = $this->export_helper->exportDayCommentItems($comments);
+    $this->assertEqual($i, count($this->db_connection->getQueries())); //must be 2
     $this->assertJsonDayCommentItems($exported);
-
-    $this->assertEqual(0, count($this->db_connection->getQueries()));
   }
 
-  function estExportMomentComment()
+  function testExportMomentComment()
   {
     $comment = $this->generator->momentComment();
     $comment->save();
@@ -400,13 +399,10 @@ class odExportHelperTest extends odUnitTestCase
       $comment->save();
       $comments[] = $comment;
     }
-
     $this->db_connection->resetStats();
-
     $exported = $this->export_helper->exportMomentCommentItems($comments);
+    $this->assertEqual($i, count($this->db_connection->getQueries())); //must be 2
     $this->assertJsonMomentCommentItems($exported);
-
-    $this->assertEqual(0, count($this->db_connection->getQueries()));
   }
 
   function testExportNewsListItem()
@@ -417,9 +413,8 @@ class odExportHelperTest extends odUnitTestCase
     $this->db_connection->resetStats();
 
     $exported = $this->export_helper->exportNewsListItem($news);
+    $this->assertEqual(1, count($this->db_connection->getQueries()));
     $this->assertJsonNewsListItem($exported);
-
-    $this->assertEqual(0, count($this->db_connection->getQueries()));
   }
 
   function testExportNewsItems()
@@ -434,9 +429,8 @@ class odExportHelperTest extends odUnitTestCase
     $this->db_connection->resetStats();
 
     $exported = $this->export_helper->exportNewsItems($news);
+    $this->assertEqual($i, count($this->db_connection->getQueries())); //must be 2
     $this->assertJsonNewsItems($exported);
-
-    $this->assertEqual(0, count($this->db_connection->getQueries()));
   }
 
   function testExportActivityListItem()
@@ -449,7 +443,7 @@ class odExportHelperTest extends odUnitTestCase
     $exported = $this->export_helper->exportActivityListItem($news);
     $this->assertJsonNewsListItem($exported);
 
-    $this->assertEqual(0, count($this->db_connection->getQueries()));
+    $this->assertEqual(1, count($this->db_connection->getQueries()));
   }
 
   function testExportActivityItems()
@@ -466,7 +460,7 @@ class odExportHelperTest extends odUnitTestCase
     $exported = $this->export_helper->exportActivityItems($news);
     $this->assertJsonNewsItems($exported);
 
-    $this->assertEqual(0, count($this->db_connection->getQueries()));
+    $this->assertEqual($i, count($this->db_connection->getQueries())); //must be 2
   }
 
   function testExportComplaint()

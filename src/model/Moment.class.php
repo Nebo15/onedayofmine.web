@@ -1,6 +1,6 @@
 <?php
 lmb_require('src/model/base/BaseModel.class.php');
-lmb_require('src/model/traits/Imageable.trait.php');
+lmb_require('src/model/traits/Imageable.class.php');
 lmb_require('src/model/MomentComment.class.php');
 lmb_require('src/model/MomentLike.class.php');
 
@@ -69,6 +69,11 @@ class Moment extends BaseModel
   function getComments()
   {
     return MomentComment::find(lmbSQLCriteria::equal('moment_id', $this->id));
+  }
+
+  function getLikes()
+  {
+    return MomentLike::find(lmbSQLCriteria::equal('moment_id', $this->id));
   }
 
   function getCommentsWithLimitation($from_id = null, $to_id = null, $limit = null)

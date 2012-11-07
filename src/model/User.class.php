@@ -1,6 +1,6 @@
 <?php
 lmb_require('src/model/base/BaseModel.class.php');
-lmb_require('src/model/traits/Imageable.trait.php');
+lmb_require('src/model/traits/Imageable.class.php');
 lmb_require('limb/imagekit/src/lmbConvertImageHelper.class.php');
 lmb_require('limb/validation/src/rule/lmbValidValueRule.class.php');
 lmb_require('src/model/UserFollowing.class.php');
@@ -175,17 +175,57 @@ class User extends BaseModel
 
   function getFavoriteDaysWithLimitations($from_id = null, $to_id = null, $limit = null)
   {
-    $criteria = new lmbSQLCriteria();
+    $query = new lmbSelectQuery('day_favorite');
+    $query->addField('day_id');
+    $query->addCriteria(lmbSQLCriteria::equal('user_id', $this->id));
+    $query->order('ctime', 'DESC');
+    $ids = lmbArrayHelper::getColumnValues('day_id', $query->fetch());
+
     if($from_id)
-      $criteria->add(lmbSQLCriteria::less('id', $from_id));
+      foreach($ids as $i => $id)
+      {
+        unset($ids[$i]);
+        if($id == $from_id) break;
+      }
+
     if($to_id)
-      $criteria->add(lmbSQLCriteria::greater('id', $to_id));
+    {
+      $ids = array_reverse($ids);
+      foreach($ids as $i => $id)
+      {
+        unset($ids[$i]);
+        if($id == $to_id) break;
+      }
+      $ids = array_reverse($ids);
+    }
+
     if(!$limit || $limit > 100)
       $limit = 100;
-    return Day::find($criteria)->paginate(0, $limit);
+    $ids = array_slice($ids, 0, $limit);
+
+    if(!count($ids))
+      return new lmbCollection();
+
+    $criteria = lmbSQLCriteria::in('id', $ids);
+    return Day::find($criteria);
   }
 
-  function getNews($from_id = null, $to_id = null, $limit = null)
+  function getNews()
+  {
+    $query = new lmbSelectQuery('news_recipient');
+    $query->addField('news_id');
+    $query->addCriteria(lmbSQLCriteria::equal('user_id', $this->id));
+
+    $result = $query->fetch();
+    $ids = lmbArrayHelper::getColumnValues('news_id', $result);
+
+    if(!count($ids))
+      return new lmbCollection();
+
+    return News::find(lmbSQLCriteria::in('id', $ids));
+  }
+
+  function getNewsWithLimitation($from_id = null, $to_id = null, $limit = null)
   {
     $query = new lmbSelectQuery('news_recipient');
     $query->addField('news_id');
@@ -223,9 +263,9 @@ class User extends BaseModel
   static function findByFacebookUid($facebook_uids_or_uid)
   {
     if(is_array($facebook_uids_or_uid))
-      return User::find(['criteria' => lmbSQLCriteria::in('facebook_uid', $facebook_uids_or_uid)]);
+      return User::find(lmbSQLCriteria::in('facebook_uid', $facebook_uids_or_uid));
     else
-      return User::findFirst(array('facebook_uid = ?', $facebook_uids_or_uid));
+      return User::findFirst(lmbSQLCriteria::equal('facebook_uid', $facebook_uids_or_uid));
   }
 
   static function findByTwitterUid($twitter_uid)

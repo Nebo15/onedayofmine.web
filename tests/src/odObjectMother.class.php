@@ -70,9 +70,10 @@ class odObjectMother
     $day = $day ?: $this->day($user, $title);
 
     for($i = 0; $i < lmbToolkit::instance()->getConf('common')->default_comments_count + 1; $i++)
-    {
       $this->dayComment($day, User::findById($day->user_id));
-    }
+
+    $day->save();
+
     return $day;
   }
 
@@ -89,6 +90,8 @@ class odObjectMother
 
     $day = $this->dayWithMoments($user, null, $day);
     $day = $this->dayWithComments($user, null, $day);
+
+    $day->save();
 
     return $day;
   }
@@ -126,6 +129,7 @@ class odObjectMother
     $like = new DayLike();
     $like->setDay($day);
     $like->setUser($user ?: $this->user());
+    $like->save();
     return $like;
   }
 

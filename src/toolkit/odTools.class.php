@@ -4,9 +4,9 @@ lmb_require('src/service/social_provider/odFacebook.class.php');
 lmb_require('src/service/social_provider/odTwitter.class.php');
 lmb_require('src/service/social_profile/FacebookProfile.class.php');
 lmb_require('src/service/social_profile/TwitterProfile.class.php');
+lmb_require('src/service/social_profile/FakeProfile.class.php');
 lmb_require('src/service/odNewsService.class.php');
 lmb_require('src/service/ImageHelper.class.php');
-lmb_require('src/service/odPostingService.class.php');
 lmb_require('src/service/odExportHelper.class.php');
 lmb_require('src/service/odRequestsLog.class.php');
 lmb_require('src/service/odSearchService.class.php');
@@ -46,6 +46,10 @@ class odTools extends lmbAbstractTools
    */
   protected $facebook_profiles = [];
   /**
+   * @var array
+   */
+  protected $twitter_profiles = [];
+  /**
    * @var array odSearchService
    */
   protected $search_clients = [];
@@ -84,22 +88,6 @@ class odTools extends lmbAbstractTools
   {
     $this->user = null;
     $this->getSessionStorage()->delete($this->getSessidFromRequest());
-  }
-
-  /**
-   * @return odPostingService
-   */
-  function getPostingService()
-  {
-    if(!$this->posting_service)
-      $this->posting_service = new odPostingService($this->getUser());
-
-    return $this->posting_service;
-  }
-
-  function setPostingService($posting_service)
-  {
-    $this->posting_service = $posting_service;
   }
 
   /**
@@ -309,8 +297,15 @@ class odTools extends lmbAbstractTools
     $this->facebook_instances[$access_token] = $facebook;
   }
 
-  public function getFacebookProfile(User $user)
+  /**
+   * @param User $user
+   * @return FacebookProfile
+   */
+  public function getFacebookProfile(User $user = null)
   {
+    if(!$user)
+      $user = $this->getUser();
+
     if(!array_key_exists($user->facebook_access_token, $this->facebook_profiles)) {
       $this->facebook_profiles[$user->facebook_access_token] = new FacebookProfile($user);
     }
@@ -320,6 +315,27 @@ class odTools extends lmbAbstractTools
   function setFacebookProfile(User $user, $profile)
   {
     $this->facebook_profiles[$user->facebook_access_token] = $profile;
+  }
+
+  /**
+   * @param User $user
+   * @return FacebookProfile
+   */
+  public function getTwitterProfile(User $user = null)
+  {
+    if(!$user)
+      $user = $this->getUser();
+
+    if(!array_key_exists($user->twitter_access_token, $this->twitter_profiles)) {
+      $profile = ($user->twitter_access_token) ? new TwitterProfile($user) : new FakeProfile($user);
+      $this->twitter_profiles[$user->twitter_access_token] = $profile;
+    }
+    return $this->twitter_profiles[$user->twitter_access_token];
+  }
+
+  function setTwitterProfile(User $user, $profile)
+  {
+    $this->twitter_profiles[$user->twitter_access_token] = $profile;
   }
 
   public function getConcreteAmazonServiceConfig($name)

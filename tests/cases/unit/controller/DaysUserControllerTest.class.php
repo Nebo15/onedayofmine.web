@@ -100,9 +100,10 @@ class DaysUserControllerTest extends odControllerTestCase
     $day = $this->generator->day($this->additional_user);
     $day->save();
 
-    $this->toolkit->getPostingService()->expectOnce('shareDay');
-
     lmbToolkit::instance()->setUser($this->main_user);
+
+    $this->toolkit->getFacebookProfile()->expectOnce('shareDay');
+    $this->toolkit->getTwitterProfile()->expectOnce('shareDay');
 
     $response = $this->post('share', [], $day->id);
     if ($this->assertResponse(200))
@@ -228,11 +229,12 @@ class DaysUserControllerTest extends odControllerTestCase
     $day5->is_deleted = 1;
     $day5->save();
 
-    foreach([$day1, $day2, $day3, $day4, $day5] as $day)
+    foreach([$day1, $day2, $day3, $day4, $day5] as $key => $day)
     {
       $favorite = new DayFavorite();
       $favorite->setDay($day);
       $favorite->setUser($this->main_user);
+      $favorite->ctime = $key + 1;
       $favorite->save();
     }
 
@@ -307,8 +309,8 @@ class DaysUserControllerTest extends odControllerTestCase
     $response = $this->post('mark_favorite', [], $day->id);
     if ($this->assertResponse(200)) {
       $this->assertTrue(is_null($response->result));
-      $this->assertEqual(1, $this->main_user->getFavoriteDays()->count());
-      $this->assertEqual($day->id, $this->main_user->getFavoriteDays()->at(0)->id);
+      if($this->assertEqual(1, $this->main_user->getFavoriteDays()->count()))
+        $this->assertEqual($day->id, $this->main_user->getFavoriteDays()->at(0)->id);
     }
   }
 

@@ -53,8 +53,9 @@ class UsersController extends BaseJsonController
     if(!$user = User::findById($this->request->id))
       return $this->_answerModelNotFoundById('User', $this->request->id);
 
-    $following = $this->_getUser()->getFollowingUsers();
-    $following->add($user);
+    $following = new UserFollowing();
+    $following->setUser($user);
+    $following->setFollowerUser($this->_getUser());
     $following->save();
 
     $this->toolkit->doAsync('userFollow', $user->id);

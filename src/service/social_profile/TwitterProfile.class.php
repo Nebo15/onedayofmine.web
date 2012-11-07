@@ -21,8 +21,8 @@ class TwitterProfile implements SocialServicesProfileInterface, SharesInterface
    */
   public function __construct(User $user)
   {
-    $user_token  = $user->getTwitterAccessToken();
-    $user_secret = $user->getTwitterAccessTokenSecret();
+    $user_token  = $user->twitter_access_token;
+    $user_secret = $user->twitter_access_token_secret;
 
     lmb_assert_true($user, 'Twitter profile user not specified.');
     lmb_assert_true($user_token, 'Twitter access token not specified.');

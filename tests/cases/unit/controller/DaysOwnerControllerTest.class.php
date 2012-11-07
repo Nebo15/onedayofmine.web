@@ -121,8 +121,8 @@ class DaysOwnerControllerTest extends odControllerTestCase
       {
         $loaded_moment  = $loaded_moments->at(0);
         $this->assertEqual($loaded_moment->getDay()->id, $day->id);
-        $this->assertEqual($loaded_moment->getLocationLatitude(), '50.5062');
-        $this->assertEqual($loaded_moment->getLocationLongitude(), '30.6177');
+        $this->assertEqual($loaded_moment->location_latitude, '50.5062');
+        $this->assertEqual($loaded_moment->location_longitude, '30.6177');
         // http://maps.googleapis.com/maps/api/geocode/json?latlng=50.5062,30.6177&sensor=true
       }
     }
@@ -147,7 +147,7 @@ class DaysOwnerControllerTest extends odControllerTestCase
       $moment = $response->result;
       $this->assertJsonMoment($moment, true);
       $this->assertEqual($day->getMoments()->at(0)->id, $moment->id);
-      $this->assertEqual($moment->time, Moment::stampToIso('1330600003', $this->main_user->getTimezone()));
+      $this->assertEqual($moment->time, Moment::stampToIso('1330600003', $this->main_user->timezone));
     }
   }
 
@@ -559,13 +559,5 @@ class DaysOwnerControllerTest extends odControllerTestCase
       $this->assertEqual(1, count($response->errors));
       $this->assertEqual("Current user don't have permission to perform this action", $response->errors[0]);
     }
-  }
-}
-
-class PostingServiceWithExpiredToken extends odPostingService
-{
-  function share($name, $args)
-  {
-    throw new odFacebookApiExpiredTokenException('Who are you? Come on, "Goodbye!"');
   }
 }

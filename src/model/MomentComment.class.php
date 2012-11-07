@@ -10,7 +10,6 @@ class MomentComment extends BaseComment
   protected $_db_table_name = 'moment_comment';
 
   public $moment_id;
-  public $user_id;
   public $text;
 
   protected function _createValidator()
@@ -33,11 +32,5 @@ class MomentComment extends BaseComment
   {
     lmb_assert_type($moment, 'Moment');
     $this->moment_id = $moment->id;
-  }
-
-  function setUser($user)
-  {
-    lmb_assert_type($user, 'User');
-    $this->user_id = $user->id;
   }
 }

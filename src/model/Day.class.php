@@ -1,6 +1,6 @@
 <?php
 lmb_require('src/model/base/BaseModel.class.php');
-lmb_require('src/model/traits/Imageable.trait.php');
+lmb_require('src/model/traits/Imageable.class.php');
 lmb_require('src/model/Moment.class.php');
 lmb_require('src/model/DayComment.class.php');
 lmb_require('src/model/MomentComment.class.php');
@@ -67,6 +67,11 @@ class Day extends BaseModel
     return DayComment::find(lmbSQLCriteria::equal('day_id', $this->id));
   }
 
+  function getLikes()
+  {
+    return DayLike::find(lmbSQLCriteria::equal('day_id', $this->id));
+  }
+
   protected function _getAdditionalPlaceholders(&$placeholders)
   {
     $placeholders[':hash'] = sha1('s0l7&p3pp$r'.$this->id);
@@ -105,11 +110,8 @@ class Day extends BaseModel
       $criteria->add(lmbSQLCriteria::less('id', $from_id));
     if($to_id)
       $criteria->add(lmbSQLCriteria::greater('id', $to_id));
-    return Day::find(array(
-      'criteria' => $criteria,
-      'limit' => (!$limit || $limit > 100) ? 100 : $limit,
-      'sort' => array('id' => 'DESC'),
-    ));
+    return Day::find($criteria, array('id' => 'DESC'))
+      ->paginate(0, (!$limit || $limit > 100) ? 100 : $limit);
   }
 
   /**

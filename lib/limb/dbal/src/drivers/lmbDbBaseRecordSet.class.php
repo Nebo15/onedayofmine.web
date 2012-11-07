@@ -78,10 +78,15 @@ abstract class lmbDbBaseRecordSet implements lmbDbRecordSet
       return $this->at((int)$offset);
   }
 
-  function offsetSet($offset, $value){}
+  function offsetSet($offset, $value)
+  {
+    throw new lmbNotYetImplementedException('offsetSet not implemented');
+  }
 
-  function offsetUnset($offset){}
-  //end
+  function offsetUnset($offset)
+  {
+    throw new lmbNotYetImplementedException('offsetUnset not implemented');
+  }
 }
 
 

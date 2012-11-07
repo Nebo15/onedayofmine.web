@@ -56,7 +56,7 @@ class MyController extends BaseJsonController
     $user  = $this->toolkit->getUser();
 
     list($from, $to, $limit) = $this->_getFromToLimitations();
-    $news = News::findNewsForUser($user, $from, $to, $limit);
+    $news = $user->getNewsWithLimitation($from, $to, $limit);
 
     if($from && !$to && !count($news))
       return $this->_answerOk($news, 'Not Modified', 304);
