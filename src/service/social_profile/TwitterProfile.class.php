@@ -133,7 +133,7 @@ class TwitterProfile implements SocialServicesProfileInterface, SharesInterface
       $user = User::findByTwitterUid($friend['id']);
       if(!$user)
         continue;
-      $user->setUserInfo($info);
+      $user->import($info);
       $results[] = $user;
     }
     return $results;
@@ -149,7 +149,7 @@ class TwitterProfile implements SocialServicesProfileInterface, SharesInterface
     if($this->getInfo_Raw()['default_profile_image'])
       return array();
 
-    $uid = $this->user->getTwitterUid();
+    $uid = $this->user->twitter_uid;
     return array(
       '73x73' => 'http://api.twitter.com/1/users/profile_image?user_id='.$uid.'&size=bigger',
       '?x?'   => 'http://api.twitter.com/1/users/profile_image?user_id='.$uid.'&size=original'

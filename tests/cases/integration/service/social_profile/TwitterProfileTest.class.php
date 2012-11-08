@@ -9,45 +9,49 @@ class TwitterProfileTest extends odIntegrationTestCase
   {
     parent::setUp();
 
-    $this->main_user->setTwitterUid($this->generator->twitter_credentials()[0]['uid']);
-    $this->main_user->setTwitterAccessToken($this->generator->twitter_credentials()[0]['access_token']);
-    $this->main_user->setTwitterAccessTokenSecret($this->generator->twitter_credentials()[0]['access_token_secret']);
-    $this->main_user->getSettings()->setSocialShareTwitter(1);
+    $this->main_user->twitter_uid = $this->generator->twitter_credentials()[0]['uid'];
+    $this->main_user->twitter_access_token = $this->generator->twitter_credentials()[0]['access_token'];
+    $this->main_user->twitter_access_token_secret = $this->generator->twitter_credentials()[0]['access_token_secret'];
     $this->main_user->save();
+    $settings = $this->main_user->getSettings();
+    $settings->social_share_twitter = 1;
+    $settings->save();
 
-    $this->additional_user->setTwitterUid($this->generator->twitter_credentials()[1]['uid']);
-    $this->additional_user->setTwitterAccessToken($this->generator->twitter_credentials()[1]['access_token']);
-    $this->additional_user->setTwitterAccessTokenSecret($this->generator->twitter_credentials()[1]['access_token_secret']);
-    $this->additional_user->getSettings()->setSocialShareTwitter(1);
+    $this->additional_user->twitter_uid = $this->generator->twitter_credentials()[1]['uid'];
+    $this->additional_user->twitter_access_token = $this->generator->twitter_credentials()[1]['access_token'];
+    $this->additional_user->twitter_access_token_secret = $this->generator->twitter_credentials()[1]['access_token_secret'];
     $this->additional_user->save();
+    $settings = $this->additional_user->getSettings();
+    $settings->social_share_twitter = 1;
+    $settings->save();
   }
 
   function testGetInfoRaw()
   {
     $info = (new TwitterProfile($this->main_user))->getInfo_Raw();
     $this->assertTrue(count($info));
-    $this->assertEqual($info['id'], $this->main_user->getTwitterUid());
+    $this->assertEqual($info['id'], $this->main_user->twitter_uid);
   }
 
   function testGetInfo()
   {
     $info = (new TwitterProfile($this->main_user))->getInfo();
     $this->assertTrue(count($info));
-    $this->assertEqual($info['twitter_uid'], $this->main_user->getTwitterUid());
+    $this->assertEqual($info['twitter_uid'], $this->main_user->twitter_uid);
   }
 
   function testGetFriendsIds()
   {
     $ids = (new TwitterProfile($this->additional_user))->getFriendsIds();
     $this->assertEqual(count($ids), 1);
-    $this->assertEqual($ids[0], $this->main_user->getTwitterUid());
+    $this->assertEqual($ids[0], $this->main_user->twitter_uid);
   }
 
   function testGetFriends()
   {
     $friends = (new TwitterProfile($this->additional_user))->getFriends();
     $this->assertEqual(count($friends), 1);
-    $this->assertEqual($friends[0]['id'], $this->main_user->getTwitterUid());
+    $this->assertEqual($friends[0]['id'], $this->main_user->twitter_uid);
   }
 
   function testGetRegisteredFriends()
@@ -81,13 +85,13 @@ class TwitterProfileTest extends odIntegrationTestCase
 
   function testShareInvitation()
   {
-    (new TwitterProfile($this->main_user))->shareInvitation($this->additional_user->getTwitterUid());
+    (new TwitterProfile($this->main_user))->shareInvitation($this->additional_user->twitter_uid);
   }
 
   function testShareBeginDay()
   {
     $day = $this->generator->day();
-    $day->title ='testShareBeginDay');
+    $day->title ='testShareBeginDay';
     $day->save();
 
     $provider = (new TwitterProfile($this->main_user));
@@ -100,7 +104,7 @@ class TwitterProfileTest extends odIntegrationTestCase
   function testShareDayLike()
   {
     $day = $this->generator->day();
-    $day->title ='testShareLikeDay');
+    $day->title ='testShareLikeDay';
     $day->save();
 
     $tweet = (new TwitterProfile($this->main_user))->shareDayBegin($day);
@@ -120,7 +124,7 @@ class TwitterProfileTest extends odIntegrationTestCase
   function testShareMomentAdd()
   {
     $day = $this->generator->day();
-    $day->title ='testShareAddMoment - Day');
+    $day->title ='testShareAddMoment - Day';
     $day->save();
 
     (new TwitterProfile($this->main_user))->shareDayBegin($day);
@@ -144,7 +148,7 @@ class TwitterProfileTest extends odIntegrationTestCase
   function testShareMomentLike()
   {
     $day = $this->generator->day();
-    $day->title ='testShareMomentLike - Day');
+    $day->title ='testShareMomentLike - Day';
     $day->save();
     $tweet = (new TwitterProfile($this->main_user))->shareDayBegin($day);
     $day->save();
@@ -169,7 +173,7 @@ class TwitterProfileTest extends odIntegrationTestCase
   function testShareDayEnd()
   {
     $day = $this->generator->day();
-    $day->title ='testShareEndDay - Day');
+    $day->title ='testShareEndDay - Day';
     $day->save();
 
     $tweet = (new TwitterProfile($this->main_user))->shareDayBegin($day);
@@ -185,7 +189,7 @@ class TwitterProfileTest extends odIntegrationTestCase
   function testShareDay()
   {
     $day = $this->generator->day();
-    $day->title ='shareDay - Day');
+    $day->title ='shareDay - Day';
     $day->save();
 
     $tweet = (new TwitterProfile($this->main_user))->shareDay($day);

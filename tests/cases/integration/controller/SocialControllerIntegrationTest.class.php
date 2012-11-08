@@ -6,8 +6,8 @@ class SocialControllerIntegrationTest extends odIntegrationTestCase
   function setUp()
   {
     parent::setUp();
-    $this->main_user->getSettings()->setSocialShareFacebook(1);
-    $this->additional_user->getSettings()->setSocialShareFacebook(1);
+    $this->main_user->getSettings()->social_share_facebook = 1;
+    $this->additional_user->getSettings()->social_share_facebook = 1;
   }
 
   /**
@@ -36,9 +36,7 @@ class SocialControllerIntegrationTest extends odIntegrationTestCase
     $this->main_user->save();
     $this->additional_user->save();
 
-    $following = $this->main_user->getFollowing();
-    $following->add($this->additional_user);
-    $following->save();
+    $this->generator->follow($this->main_user, $this->additional_user);
 
     $this->_login($this->main_user);
 
@@ -92,7 +90,7 @@ class SocialControllerIntegrationTest extends odIntegrationTestCase
    */
   function testTwitterConnect()
   {
-    $this->main_user->getSettings()->setSocialShareTwitter(1);
+    $this->main_user->getSettings()->social_share_twitter = 1;
     $this->main_user->save();
     $this->_login($this->main_user);
     $result = $this->post('social/twitter_connect', array(
@@ -101,10 +99,10 @@ class SocialControllerIntegrationTest extends odIntegrationTestCase
     ));
     $user = User::findById($this->main_user->id);
     if($this->assertResponse(200)) {
-      $this->assertEqual($user->getTwitterUid(), $this->generator->twitter_credentials()[0]['uid']);
-      $this->assertEqual($user->getTwitterAccessToken(), $this->generator->twitter_credentials()[0]['access_token']);
-      $this->assertEqual($user->getTwitterAccessTokenSecret(), $this->generator->twitter_credentials()[0]['access_token_secret']);
-      $this->assertEqual(1, $user->getSettings()->getSocialShareTwitter());
+      $this->assertEqual($user->twitter_uid, $this->generator->twitter_credentials()[0]['uid']);
+      $this->assertEqual($user->twitter_access_token, $this->generator->twitter_credentials()[0]['access_token']);
+      $this->assertEqual($user->twitter_access_token_secret, $this->generator->twitter_credentials()[0]['access_token_secret']);
+      $this->assertEqual(1, $user->getSettings()->social_share_twitter);
     }
   }
 

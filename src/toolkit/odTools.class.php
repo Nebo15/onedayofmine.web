@@ -233,10 +233,20 @@ class odTools extends lmbAbstractTools
 
       foreach ($users['data'] as $key => $value) {
         $user = new User();
-        $user->setFacebookUid($value['id']);
-        $user->setFacebookAccessToken($value['access_token']);
-        $user->import($this->getFacebookProfile($user)->getInfo());
-        $users['data'][$key]['email'] = $user->getEmail();
+        $user->facebook_uid = $value['id'];
+        $user->facebook_access_token = $value['access_token'];
+
+        $info = $this->getFacebookProfile($user)->getInfo();
+        $user->email = $info['email'];
+        $user->name = $info['name'];
+        $user->sex = $info['sex'];
+        $user->timezone = $info['timezone'];
+        $user->facebook_profile_utime = $info['facebook_profile_utime'];
+        $user->occupation = $info['occupation'];
+        $user->location = $info['current_location'];
+        $user->birthday = $info['birthday'];
+
+        $users['data'][$key]['email'] = $user->email;
       }
       $this->tests_users = $users['data'];
     }

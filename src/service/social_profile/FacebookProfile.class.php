@@ -148,7 +148,7 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
   public function shareDay(Day $day)
   {
     return $this->provider->api("/me/feed", "post", array(
-      'name'        => $day->getTitle(),
+      'name'        => $day->title,
       'picture'     => count($day->getMoments()) ? lmbToolkit::instance()->getStaticUrl($day->getImage()) : '',
       'link'        => $this->_getPageUrl($day),
       'description' => 'Visit onedayofmine.com for more info',
