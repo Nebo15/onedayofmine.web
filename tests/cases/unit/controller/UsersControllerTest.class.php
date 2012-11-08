@@ -135,9 +135,9 @@ class UsersControllerTest extends odControllerTestCase
     $this->assertResponse(200);
     $this->assertEqual(0, count($followers));
 
-    $this->generator->follow($this->additional_user, $third_user);
-    $this->generator->follow($this->main_user, $this->additional_user);
     $this->generator->follow($this->main_user, $third_user);
+    $this->generator->follow($this->additional_user, $this->main_user);
+    $this->generator->follow($this->additional_user, $third_user);
 
     lmbToolkit::instance()->setUser($this->main_user);
 
@@ -160,7 +160,6 @@ class UsersControllerTest extends odControllerTestCase
     $this->main_user->save();
     $this->additional_user->save();
     $third_user = $this->generator->user('Dum Dum');
-    $third_user->save();
 
     $this->toolkit->setUser($this->additional_user);
 
@@ -168,9 +167,9 @@ class UsersControllerTest extends odControllerTestCase
     $this->assertResponse(200);
     $this->assertEqual(0, count($following));
 
-    $this->generator->follow($this->main_user, $this->additional_user);
-    $this->generator->follow($this->main_user, $third_user);
     $this->generator->follow($this->additional_user, $this->main_user);
+    $this->generator->follow($third_user, $this->main_user);
+    $this->generator->follow($this->main_user, $this->additional_user);
 
     lmbToolkit::instance()->setUser($this->main_user);
 
@@ -245,7 +244,7 @@ class UsersControllerTest extends odControllerTestCase
     $link->save();
 
     lmbToolkit::instance()->setUser($this->main_user);
-    $response = $this->post('unfollow', array(), $this->additional_user->id)->response;
+    $response = $this->post('unfollow', array(), $this->additional_user->id);
     if($this->assertResponse(200))
     {
       $this->assertTrue(is_null($response->result));

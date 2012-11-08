@@ -245,6 +245,17 @@ class User extends BaseModel
     return News::find($criteria, ['id' => 'DESC'])->paginate(0, $limit ?: 100);
   }
 
+  function getActivityWithLimitation($from_id = null, $to_id = null, $limit = null)
+  {
+    $criteria = lmbSQLCriteria::equal('sender_id', $this->id);
+    if($from_id)
+      $criteria->add(lmbSQLCriteria::less('id', $from_id));
+    if($to_id)
+      $criteria->add(lmbSQLCriteria::greater('id', $to_id));
+
+    return News::find($criteria, ['id' => 'DESC'])->paginate(0, $limit ?: 100);
+  }
+
   function getCreatedNews()
   {
     $criteria = lmbSQLCriteria::equal('sender_id', $this->id);
