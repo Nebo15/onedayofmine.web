@@ -102,12 +102,13 @@ function task_od_apns_push()
     try
     {
       $apns->send($message);
-      $notification->setIsSended(1);
+      $notification->is_sended = 1;
       $notification->save();
     }
     catch (Zend_Mobile_Push_Exception_InvalidToken $e)
     {
       $notification->getDeviceToken()->destroy();
+      $notification->destroy();
     }
     catch (lmbException $e)
     {

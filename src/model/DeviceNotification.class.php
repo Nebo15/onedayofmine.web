@@ -16,6 +16,14 @@ class DeviceNotification extends BaseModel
     $this->device_token_id = $token->id;
   }
 
+  /**
+   * @return DeviceToken
+   */
+  function getDeviceToken()
+  {
+    return DeviceToken::findById($this->device_token_id);
+  }
+
   static function findNotSended()
   {
     $criteria = lmbSQLCriteria::equal('is_sended', 0);

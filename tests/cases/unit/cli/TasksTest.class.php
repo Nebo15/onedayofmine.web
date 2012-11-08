@@ -17,7 +17,6 @@ class TasksTest extends odUnitTestCase
     $this->_setUpApns();
 
     $notification = $this->generator->deviceNotification();
-    $notification->save();
 
     $apns = new ApnsMock();
     $apns->expectOnce('connect');
@@ -28,7 +27,8 @@ class TasksTest extends odUnitTestCase
     task_od_apns_push();
 
     $loaded_notification = DeviceNotification::findById($notification->id);
-    $this->assertEqual(1, $loaded_notification->is_sended);
+    if($this->assertNotNull($loaded_notification))
+      $this->assertEqual(1, $loaded_notification->is_sended);
   }
 
   function testApnsPush_OldNotification()
@@ -53,17 +53,18 @@ class TasksTest extends odUnitTestCase
   {
     $this->_setUpApns();
 
-    $notification = $this->generator->deviceNotification();
-    $notification->save();
+    $this->generator->deviceNotification();
 
     $apns = new ApnsMock();
     $apns->throwOn('send', new Zend_Mobile_Push_Exception_InvalidToken(''));
 
     $this->toolkit->setApns($apns);
 
+    $this->assertEqual(1, count(DeviceNotification::find()));
+    $this->assertEqual(1, count(DeviceToken::find()));
     task_od_apns_push();
-
     $this->assertEqual(0, count(DeviceNotification::find()));
+    $this->assertEqual(0, count(DeviceToken::find()));
   }
 
   function testApnsPush_AnySendError()

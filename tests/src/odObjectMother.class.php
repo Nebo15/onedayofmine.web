@@ -246,7 +246,7 @@ class odObjectMother
     $device_token = new DeviceToken();
     $device_token->token = $this->string(64);
     $device_token->setUser($user ?: $this->user());
-    return $device_token;
+    return $device_token->save();
   }
 
   function deviceNotification(DeviceToken $token = null)
@@ -257,7 +257,7 @@ class odObjectMother
     $notification->icon = $this->integer(1);
     $notification->sound = $this->string();
     $notification->is_sended = 0;
-    return $notification;
+    return $notification->save();
   }
 
   function string($length = 6)
