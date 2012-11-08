@@ -150,6 +150,7 @@ class odObjectMother
     $moment = new Moment();
     $moment->description = 'description '.$this->string(125);
     $moment->setDay($day);
+    $moment->save();
 
     if($with_comments)
     {
@@ -158,7 +159,6 @@ class odObjectMother
         $this->momentComment($moment, User::findById($day->user_id));
       }
     }
-    $moment->save();
     return $moment;
   }
 

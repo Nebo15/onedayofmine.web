@@ -112,7 +112,11 @@ class User extends BaseModel
 
   function getFavoriteDays()
   {
-    return Day::find(lmbSQLCriteria::equal('user_id', $this->id), array('id' => 'DESC'));
+    $favorites = DayFavorite::find(lmbSQLCriteria::equal('user_id', $this->id));
+    $days_ids = lmbArrayHelper::getColumnValues('day_id', $favorites);
+    if(!$days_ids)
+      return new lmbCollection();
+    return Day::findByIds($days_ids);
   }
 
   function getDaysComments()

@@ -362,7 +362,7 @@ class DaysOwnerControllerTest extends odControllerTestCase
       $this->assertEqual($loaded_day->final_description, $comment_text);
 
       $user = User::findById($this->main_user->id);
-      $this->assertNull($user->current_day_id);
+      $this->assertEqual(0, $user->current_day_id);
     }
   }
 

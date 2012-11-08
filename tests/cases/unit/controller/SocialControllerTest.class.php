@@ -36,6 +36,7 @@ class SocialControllerTest extends odControllerTestCase
 
   function testFacebookInvite()
   {
+    User::delete();
     $this->main_user->save();
 
     lmbToolkit::instance()->setUser($this->main_user);
@@ -48,7 +49,7 @@ class SocialControllerTest extends odControllerTestCase
     ]);
 
     if($this->assertResponse(200))
-      $this->assertTrue(is_null($response->result));
+      $this->assertNull($response->result);
   }
 
   function testFacebookInvite_RegisteredUser()

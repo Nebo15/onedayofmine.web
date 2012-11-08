@@ -89,7 +89,7 @@ class DaysController extends BaseJsonController
       return $this->_answerNotOwner();
 
     if($day->id == $user->current_day_id) {
-      $user->current_day_id = null;
+      $user->current_day_id = 0;
       $user->save();
     }
 

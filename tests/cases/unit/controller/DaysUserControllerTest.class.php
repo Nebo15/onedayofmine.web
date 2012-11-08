@@ -308,7 +308,7 @@ class DaysUserControllerTest extends odControllerTestCase
 
     $response = $this->post('mark_favorite', [], $day->id);
     if ($this->assertResponse(200)) {
-      $this->assertTrue(is_null($response->result));
+      $this->assertNull($response->result);
       if($this->assertEqual(1, $this->main_user->getFavoriteDays()->count()))
         $this->assertEqual($day->id, $this->main_user->getFavoriteDays()->at(0)->id);
     }
