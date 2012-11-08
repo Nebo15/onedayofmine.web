@@ -20,6 +20,8 @@ class DaysGuestControllerTest extends odControllerTestCase
   function testItem()
   {
     $day = $this->generator->dayWithMomentsAndComments();
+    $day->views_count = 0;
+    $day->save();
 
     $this->assertEqual(0, $day->views_count);
 
@@ -171,23 +173,23 @@ class DaysGuestControllerTest extends odControllerTestCase
     $time = time();
     $day = 86400;
 
-    $day1 = $this->generator->dayWithMoments($this->additional_user);
+    $day1 = $this->generator->dayWithMoments();
     $this->generator->dayLikes($day1, 4);
     $day1->ctime = $time - $day;
     $day1->save();
-    $day2 = $this->generator->dayWithMoments($this->main_user);
+    $day2 = $this->generator->dayWithMoments();
     $this->generator->dayLikes($day2, 3);
     $day2->ctime = $time - $day;
     $day2->save();
-    $day3 = $this->generator->dayWithMoments($this->additional_user);
+    $day3 = $this->generator->dayWithMoments();
     $this->generator->dayLikes($day3, 2);
     $day3->ctime = $time - $day;
     $day3->save();
-    $day4 = $this->generator->dayWithMoments($this->main_user);
-    $this->generator->dayLikes($day4, 4);
-    $day4->ctime = $time - 5 * $day;
+    $day4 = $this->generator->dayWithMoments();
+    $this->generator->dayLikes($day4, 10);
+    $day4->ctime = $time - 2 * $day;
     $day4->save();
-    $day5 = $this->generator->dayWithMoments($this->additional_user);
+    $day5 = $this->generator->dayWithMoments();
     $this->generator->dayLikes($day5, 100);
     $day5->ctime = $time - $day;
     $day5->is_deleted = 1;
@@ -205,14 +207,14 @@ class DaysGuestControllerTest extends odControllerTestCase
       $this->assertEqual(4, count($days));
       $this->assertJsonDayItems($days, true);
 
-      $this->assertEqual($day1->id, $days[0]->id);
-      $this->assertEqual($day2->id, $days[1]->id);
-      $this->assertEqual($day4->id, $days[2]->id);
+      $this->assertEqual($day4->id, $days[0]->id);
+      $this->assertEqual($day1->id, $days[1]->id);
+      $this->assertEqual($day2->id, $days[2]->id);
       $this->assertEqual($day3->id, $days[3]->id);
     }
 
     $response_with_from = $this->get('interesting', [
-      'from' => $day1->id,
+      'from' => $day4->id,
     ]);
     if($this->assertResponse(200))
     {
@@ -220,13 +222,13 @@ class DaysGuestControllerTest extends odControllerTestCase
       $this->assertEqual(3, count($days));
       $this->assertJsonDayItems($days, true);
 
-      $this->assertEqual($day2->id, $days[0]->id);
-      $this->assertEqual($day4->id, $days[1]->id);
+      $this->assertEqual($day1->id, $days[0]->id);
+      $this->assertEqual($day2->id, $days[1]->id);
       $this->assertEqual($day3->id, $days[2]->id);
     }
 
     $response_with_range = $this->get('interesting', [
-      'from' => $day1->id,
+      'from' => $day4->id,
       'to'   => $day3->id,
     ]);
     if($this->assertResponse(200))
@@ -235,13 +237,13 @@ class DaysGuestControllerTest extends odControllerTestCase
       $this->assertEqual(2, count($days));
       $this->assertJsonDayItems($days, true);
 
-      $this->assertEqual($day2->id, $days[0]->id);
-      $this->assertEqual($day4->id, $days[1]->id);
+      $this->assertEqual($day1->id, $days[0]->id);
+      $this->assertEqual($day2->id, $days[1]->id);
     }
 
     $response_with_limit = $this->get('interesting', [
-      'from'  => $day1->id,
-      'to'    => $day4->id,
+      'from'  => $day4->id,
+      'to'    => $day3->id,
       'limit' => 1,
     ]);
     if($this->assertResponse(200))
@@ -249,6 +251,8 @@ class DaysGuestControllerTest extends odControllerTestCase
       $days = $response_with_limit->result;
       $this->assertEqual(1, count($days));
       $this->assertJsonDayItems($days, true);
+
+      $this->assertEqual($day1->id, $days[0]->id);
     }
   }
 

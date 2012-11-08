@@ -129,8 +129,7 @@ class odObjectMother
     $like = new DayLike();
     $like->setDay($day);
     $like->setUser($user ?: $this->user());
-    $like->save();
-    return $like;
+    return $like->save();
   }
 
   function dayLikes(Day $day, $likes_count)

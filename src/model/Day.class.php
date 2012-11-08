@@ -125,16 +125,8 @@ class Day extends BaseModel
     if($to_id)
       $criteria->add(lmbSQLCriteria::greater('id', $to_id));
 
-//    return Day::find(
-//      lmbToolkit::instance()->getDefaultDbConnection(),
-//      $criteria,
-//      array('id' => 'DESC')
-//    )->paginate(0, (!$limit || $limit > 100) ? 100 : $limit);
-
-    return Day::find([
-      'criteria' => $criteria,
-      'sort' => array('id' => 'DESC')]
-    )->paginate(0, (!$limit || $limit > 100) ? 100 : $limit);
+    return Day::find($criteria, ['id' => 'DESC'])
+      ->paginate(0, (!$limit || $limit > 100) ? 100 : $limit);
   }
 
   static function findByString($query, $from_id = null, $to_id = null, $limit = null)

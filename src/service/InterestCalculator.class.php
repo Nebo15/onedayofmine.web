@@ -106,7 +106,7 @@ class InterestCalculator
       }
     }
 
-    sort($days_with_rating);
+    ksort($days_with_rating);
 
     return $days_with_rating;
   }
