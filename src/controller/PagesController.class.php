@@ -12,7 +12,7 @@ class PagesController extends lmbController
     $id = $this->request->get('id');
 
     $this->day = Day::findById($id);
-    if(!$this->day || $this->day->getIsDeleted())
+    if(!$this->day || $this->day->is_deleted)
       return $this->forward('pages', 'not_found');
   }
 
@@ -21,7 +21,7 @@ class PagesController extends lmbController
     $id = $this->request->get('id');
 
     $this->moment = Moment::findById($id);
-    if(!$this->moment || $this->moment->getDay()->getIsDeleted())
+    if(!$this->moment || $this->moment->getDay()->is_deleted)
       return $this->forward('pages', 'not_found');
   }
 

@@ -127,7 +127,7 @@ class DaysGuestControllerIntegrationTest extends odIntegrationTestCase
     }
 
     $day2 = $this->generator->dayWithMoments(null, 'Weird weekend');
-    $day2->setFinalDescription('Insanely comments here');
+    $day2->final_description = 'Insanely comments here';
     $day2->save();
 
     if($result = exec("indexer --config {$sphinx_config['config_file_path']} --rotate --quiet days_delta"))
