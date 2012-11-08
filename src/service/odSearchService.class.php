@@ -18,7 +18,7 @@ class odSearchService extends SphinxClient
       $this->SetMatchMode($config['match_mode']);
 
     if(array_key_exists('ranking_mode', $config))
-      $this->SetRankingMode($config['ranking_mode']);
+      $this->SetRankingMode($config['ranking_mode'], ''); // 2nd arument bug here
 
     if(array_key_exists('fields_weights', $config)) {
       lmb_assert_true(is_array($config['fields_weights']));
