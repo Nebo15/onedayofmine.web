@@ -8,6 +8,9 @@
  */
 lmb_require('limb/macro/src/compiler/lmbMacroBaseParsingState.class.php');
 lmb_require('limb/macro/src/compiler/lmbMacroTagInfo.class.php');
+lmb_require('limb/macro/src/compiler/lmbMacroTagAttribute.class.php');
+lmb_require('limb/macro/src/compiler/lmbMacroTagAttributeBlockAnalizerListener.class.php');
+lmb_require('limb/macro/src/compiler/lmbMacroBlockAnalizer.class.php');
 
 /**
  * class lmbMacroTagParsingState.

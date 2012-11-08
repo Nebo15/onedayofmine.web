@@ -6,7 +6,8 @@
  * @copyright  Copyright &copy; 2004-2009 BIT(http://bit-creative.com)
  * @license    LGPL http://www.gnu.org/copyleft/lesser.html
  */
-
+lmb_require('limb/macro/src/compiler/lmbMacroOutputExpressionNode.class.php');
+lmb_require('limb/macro/src/compiler/lmbMacroExpressionNode.class.php');
 /**
  * class lmbMacroContentBlockAnalizerListener.
  *
@@ -37,7 +38,7 @@ class lmbMacroContentBlockAnalizerListener implements lmbMacroBlockAnalizerListe
                                              $output_expression,
                                              $this->tree_builder->getFilterDictionary());
     $output_expression->setExpression($expression);
-    
+
     $this->tree_builder->addNode($output_expression);
   }
 }
