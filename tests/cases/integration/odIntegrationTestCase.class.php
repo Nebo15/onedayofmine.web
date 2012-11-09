@@ -115,7 +115,7 @@ abstract class odIntegrationTestCase extends WebTestCase
   protected function _login(User $user)
   {
     $response = $this->post('auth/login/', [
-      'token'        => $user->getFacebookAccessToken(),
+      'token'        => $user->facebook_access_token,
       'device_token' => $this->generator->string(64)
     ]);
 

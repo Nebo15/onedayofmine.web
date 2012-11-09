@@ -12,15 +12,16 @@ class SocialControllerTest extends odControllerTestCase
     $this->main_user->save();
     $this->additional_user->save();
 
-    $following = $this->main_user->getFollowing();
-    $following->add($this->additional_user);
-    $following->save();
+    $link = new UserFollowing();
+    $link->setFollowerUser($this->main_user);
+    $link->setUser($this->additional_user);
+    $link->save();
 
     lmbToolkit::instance()->setUser($this->main_user);
 
     $profile = $this->toolkit->getFacebookProfile($this->main_user);
     $profile->expectOnce('getFriends');
-    $profile->setReturnValue('getFriends', [$this->generator->facebookInfo($this->additional_user->getFacebookUid()), $this->generator->facebookInfo()]);
+    $profile->setReturnValue('getFriends', [$this->generator->facebookInfo($this->additional_user->facebook_uid), $this->generator->facebookInfo()]);
 
     $response = $this->get('facebook_friends');
     if($this->assertResponse(200))
@@ -35,6 +36,7 @@ class SocialControllerTest extends odControllerTestCase
 
   function testFacebookInvite()
   {
+    User::delete();
     $this->main_user->save();
 
     lmbToolkit::instance()->setUser($this->main_user);
@@ -43,11 +45,11 @@ class SocialControllerTest extends odControllerTestCase
     $profile->expectOnce('shareInvitation');
 
     $response = $this->post('facebook_invite', [
-      'uid' => $this->additional_user->getFacebookUid()
+      'uid' => $this->additional_user->facebook_uid
     ]);
 
     if($this->assertResponse(200))
-      $this->assertTrue(is_null($response->result));
+      $this->assertNull($response->result);
   }
 
   function testFacebookInvite_RegisteredUser()
@@ -61,7 +63,7 @@ class SocialControllerTest extends odControllerTestCase
     $profile->expectNever('shareInvitation');
 
     $response = $this->post('facebook_invite', [
-      'uid' => $this->additional_user->getFacebookUid()
+      'uid' => $this->additional_user->facebook_uid
     ]);
     if($this->assertResponse(200))
       $this->assertEqual($response->result, 'User is already registered');

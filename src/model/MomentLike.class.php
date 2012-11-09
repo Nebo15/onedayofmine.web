@@ -3,19 +3,32 @@ lmb_require('src/model/base/BaseLike.class.php');
 
 class MomentLike extends BaseLike
 {
-  protected function _defineRelations()
+  protected $_db_table_name = 'moment_like';
+
+  public $moment_id;
+  public $user_id;
+  public $facebook_id;
+  public $twitter_id;
+
+  function setMoment($moment)
   {
-    parent::_defineRelations();
-    $this->_many_belongs_to['moment'] = array ('field' => 'moment_id', 'class' => 'Moment');
+    lmb_assert_type($moment, 'Moment');
+    $this->moment_id = $moment->id;
+  }
+
+  function setUser($user)
+  {
+    lmb_assert_type($user, 'User');
+    $this->user_id = $user->id;
   }
 
   static function findByMomentId($moment_id)
   {
-    return self::findOne(array('moment_id = ?', $moment_id));
+    return self::findFirst(array('moment_id = ?', $moment_id));
   }
 
   static function findByMomentIdAndUserId($moment_id, $user_id)
   {
-    return self::findOne(array('moment_id = ? AND user_id = ?', $moment_id, $user_id));
+    return self::findFirst(array('moment_id = ? AND user_id = ?', $moment_id, $user_id));
   }
 }

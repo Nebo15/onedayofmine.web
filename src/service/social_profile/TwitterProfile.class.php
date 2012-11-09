@@ -21,8 +21,8 @@ class TwitterProfile implements SocialServicesProfileInterface, SharesInterface
    */
   public function __construct(User $user)
   {
-    $user_token  = $user->getTwitterAccessToken();
-    $user_secret = $user->getTwitterAccessTokenSecret();
+    $user_token  = $user->twitter_access_token;
+    $user_secret = $user->twitter_access_token_secret;
 
     lmb_assert_true($user, 'Twitter profile user not specified.');
     lmb_assert_true($user_token, 'Twitter access token not specified.');
@@ -133,7 +133,7 @@ class TwitterProfile implements SocialServicesProfileInterface, SharesInterface
       $user = User::findByTwitterUid($friend['id']);
       if(!$user)
         continue;
-      $user->setUserInfo($info);
+      $user->import($info);
       $results[] = $user;
     }
     return $results;
@@ -149,7 +149,7 @@ class TwitterProfile implements SocialServicesProfileInterface, SharesInterface
     if($this->getInfo_Raw()['default_profile_image'])
       return array();
 
-    $uid = $this->user->getTwitterUid();
+    $uid = $this->user->twitter_uid;
     return array(
       '73x73' => 'http://api.twitter.com/1/users/profile_image?user_id='.$uid.'&size=bigger',
       '?x?'   => 'http://api.twitter.com/1/users/profile_image?user_id='.$uid.'&size=original'
@@ -225,8 +225,7 @@ class TwitterProfile implements SocialServicesProfileInterface, SharesInterface
         'twitter_uid'      => $user_info['id'],
         'name'             => $user_info['screen_name'],
         'timezone'         => $user_info['utc_offset'],
-        'picture'          => $user_info['profile_image_url'],
-        'current_location' => isset($user_info['location'])
+        'location'         => isset($user_info['location'])
                                   ? $user_info['location']
                                   : ''
     );

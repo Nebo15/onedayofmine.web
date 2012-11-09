@@ -2,8 +2,8 @@
 lmb_require('src/controller/BaseJsonController.class.php');
 lmb_require('src/service/InterestCalculator.class.php');
 lmb_require('src/model/Day.class.php');
-lmb_require('src/model/Complaint.class.php');
 lmb_require('src/model/DayFavorite.class.php');
+lmb_require('src/model/Complaint.class.php');
 
 class DaysController extends BaseJsonController
 {
@@ -12,7 +12,7 @@ class DaysController extends BaseJsonController
     if(!$day = Day::findById($this->request->id))
       return $this->_answerModelNotFoundById('Day', $this->request->id);
 
-    if($day->getIsDeleted())
+    if($day->is_deleted)
       return $this->_answerModelNotFoundById('Day', $this->request->id);
 
     $day->views_count = $day->views_count + 1;
@@ -32,15 +32,15 @@ class DaysController extends BaseJsonController
 
     $day = new Day();
     $day->setUser($this->_getUser());
-    $day->setTitle($this->request->getPost('title'));
-    $day->setType($this->request->getPost('type'));
+    $day->title =$this->request->getPost('title');
+    $day->type = $this->request->getPost('type');
     $day->save();
 
     $user = $this->_getUser();
     $user->setCurrentDay($day);
     $user->save();
 
-    $day->getDefaultConnection()->commitTransaction();
+    $day->getDbConnection()->commitTransaction();
 
     $this->toolkit->doAsync('shareDayStart', $day->id);
 
@@ -55,7 +55,7 @@ class DaysController extends BaseJsonController
     if(!$day = Day::findById($this->request->id))
       return $this->_answerModelNotFoundById('Day', $this->request->id);
 
-    if($this->_getUser()->getId() != $day->getUser()->getId())
+    if($this->_getUser()->id != $day->user_id)
       return $this->_answerNotOwner();
 
     if($this->request->get('cover_content')) {
@@ -70,7 +70,7 @@ class DaysController extends BaseJsonController
 
   function doCurrent()
   {
-    if(!$day = $this->_getUser()->getCurrentDay())
+    if(!$day = Day::findById($this->_getUser()->current_day_id))
       return $this->_answerNotFound('Current day not set');
 
     return $this->_answerOk($this->toolkit->getExportHelper()->exportDay($day));
@@ -85,14 +85,12 @@ class DaysController extends BaseJsonController
       return $this->_answerModelNotFoundById('Day', $this->request->id);
 
     $user = $this->_getUser();
-    if($day->getUser()->getId() != $user->getId())
+    if($day->user_id != $user->id)
       return $this->_answerNotOwner();
 
-    if($current_day = $user->getCurrentDay()) {
-      if($day->getId() == $current_day->getId()) {
-        $user->setCurrentDay(null);
-        $user->save();
-      }
+    if($day->id == $user->current_day_id) {
+      $user->current_day_id = 0;
+      $user->save();
     }
 
     if($this->request->get('image_content')) {
@@ -101,7 +99,7 @@ class DaysController extends BaseJsonController
     }
 
     if($this->request->get('final_description')) {
-      $day->setFinalDescription($this->request->get('final_description'));
+      $day->final_description = $this->request->get('final_description');
       $day->save();
     }
 
@@ -146,7 +144,7 @@ class DaysController extends BaseJsonController
     if(!$day = Day::findById($this->request->id))
       return $this->_answerModelNotFoundById('Day', $this->request->id);
 
-    if(DayLike::findByDayIdAndUserId($day->getId(), $this->_getUser()->getId()))
+    if(DayLike::findByDayIdAndUserId($day->id, $this->_getUser()->id))
       return $this->_answerConflict();
 
     $like = new DayLike;
@@ -167,7 +165,7 @@ class DaysController extends BaseJsonController
     if(!$day = Day::findById($this->request->id))
       return $this->_answerModelNotFoundById('Day', $this->request->id);
 
-    if(!$like = DayLike::findByDayIdAndUserId($day->getId(), $this->_getUser()->getId()))
+    if(!$like = DayLike::findByDayIdAndUserId($day->id, $this->_getUser()->id))
       return $this->_answerOk(null, "Like not found");
 
     $this->toolkit->doAsync('dayUnlike', $day->id, $like->id);
@@ -185,10 +183,10 @@ class DaysController extends BaseJsonController
     if(!$day = Day::findById($this->request->id))
       return $this->_answerModelNotFoundById('Day', $this->request->id);
 
-    if($day->getUserId() != $this->_getUser()->getId())
+    if($day->user_id != $this->_getUser()->id)
       return $this->_answerNotOwner();
 
-    $day->setIsDeleted(1);
+    $day->is_deleted = 1;
     $day->save();
 
     $this->toolkit->doAsync('dayDelete', $day->id);
@@ -204,10 +202,10 @@ class DaysController extends BaseJsonController
     if(!$day = Day::findById($this->request->id))
       return $this->_answerModelNotFoundById('Day', $this->request->id);
 
-    if($day->getUserId() != $this->_getUser()->getId())
+    if($day->user_id != $this->_getUser()->id)
       return $this->_answerNotOwner();
 
-    $day->setIsDeleted(0);
+    $day->is_deleted = 0;
     $day->save();
 
     $this->toolkit->doAsync('dayRestore', $day->id);
@@ -218,7 +216,7 @@ class DaysController extends BaseJsonController
   function doFollowing()
   {
     list($from, $to, $limit) = $this->_getFromToLimitations();
-    $users_ids = lmbArrayHelper::getColumnValues('id', $this->_getUser()->getFollowing());
+    $users_ids = lmbArrayHelper::getColumnValues('id', $this->_getUser()->getFollowingUsers());
 
     if(!count($users_ids))
       return $this->_answerOk([]);
@@ -252,7 +250,6 @@ class DaysController extends BaseJsonController
   {
     list($from, $to, $limit) = $this->_getFromToLimitations();
     $days = $this->_getUser()->getFavoriteDaysWithLimitations($from, $to, $limit);
-
     return $this->_answerOk($this->toolkit->getExportHelper()->exportDayItems($days));
   }
 
@@ -267,9 +264,10 @@ class DaysController extends BaseJsonController
     if(DayFavorite::isFavorited($this->_getUser(), $day))
       return $this->_answerConflict();
 
-    $favorites = $this->_getUser()->getFavoriteDays();
-    $favorites->add($day);
-    $favorites->save();
+    $link = new DayFavorite();
+    $link->setUser($this->_getUser());
+    $link->setDay($day);
+    $link->save();
 
     return $this->_answerOk();
   }
@@ -282,12 +280,10 @@ class DaysController extends BaseJsonController
     if(!$day = Day::findById($this->request->id))
       return $this->_answerModelNotFoundById('Day', $this->request->id);
 
-    if(!DayFavorite::findByDayIdAndUserId($day->getId(), $this->_getUser()->getId()))
+    if(!$favorite = DayFavorite::findByDayIdAndUserId($day->id, $this->_getUser()->id))
       return $this->_answerOk(null, "Favorite not found");
 
-    $favorites = $this->_getUser()->getFavoriteDays();
-    $favorites->remove($day);
-    $favorites->save();
+    $favorite->destroy();
 
     return $this->_answerOk();
   }
@@ -321,7 +317,7 @@ class DaysController extends BaseJsonController
 
     $moment = new Moment();
     $moment->setDay($day);
-    $moment->setDescription($this->request->get('description'));
+    $moment->description = $this->request->get('description');
     $moment->save();
 
     $moment->attachImage($image_content);
@@ -330,12 +326,12 @@ class DaysController extends BaseJsonController
     if($this->request->get('time'))
     {
       list($time, $timezone) = Moment::isoToStamp($this->request->get('time'));
-      $moment->setTime($time);
-      $moment->setTimezone($timezone);
+      $moment->time = $time;
+      $moment->timezone = $timezone;
     }
     else
     {
-      $moment->setTimezone($this->toolkit->getUser()->getTimezone());
+      $moment->timezone = $this->toolkit->getUser()->timezone;
     }
     $moment->save();
 
@@ -357,7 +353,7 @@ class DaysController extends BaseJsonController
       return $this->_answerModelNotFoundById('Day', $this->request->id);
 
     $comment = new DayComment();
-    $comment->setText($this->request->get('text'));
+    $comment->text = $this->request->get('text');
     $comment->setDay($day);
     $comment->setUser($this->_getUser());
     $comment->validate($this->error_list);
@@ -382,7 +378,7 @@ class DaysController extends BaseJsonController
 
     $complaint = new Complaint();
     $complaint->setDay($day);
-    $complaint->setText($this->request->get('text'));
+    $complaint->text = $this->request->get('text');
 
     $complaint->validate($this->error_list);
     if($this->error_list->isValid())

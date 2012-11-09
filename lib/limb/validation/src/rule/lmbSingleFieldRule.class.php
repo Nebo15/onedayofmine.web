@@ -68,7 +68,7 @@ abstract class lmbSingleFieldRule extends lmbBaseValidationRule
   */
   protected function _doValidate($datasource)
   {
-    $value = $datasource->get($this->field_name);
+    $value = $datasource[$this->field_name];
     if(isset($value) && $value !== '')
       $this->check($value);
   }

@@ -44,7 +44,7 @@ class odSearchService extends SphinxClient
       elseif(array_key_exists('matches', $result))
         return $this->applyLimitation(array_keys($result['matches']), $from_id, $to_id, $limit);
 
-    return null;
+    return [];
   }
 
   public function applyLimitation(array $ids, $from_id = null, $to_id = null, $limit = null)

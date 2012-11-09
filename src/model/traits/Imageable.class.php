@@ -1,10 +1,12 @@
 <?php
 trait Imageable
 {
+  public $image_ext;
+
   function attachImage($content)
   {
     $extension = lmbToolkit::instance()->getImageHelper()->getImageExtensionByImageContent($content);
-    $this->setImageExt($extension);
+    $this->image_ext = $extension;
 
     lmbFs::safeWrite($this->_getSavePath(), $content);
 
@@ -92,16 +94,16 @@ trait Imageable
     if(!$exif = $helper->getExifInfo($image_file))
       return;
 
-    if(array_key_exists('GPS', $exif)) {
+    if(property_exists($this, 'location_latitude') && array_key_exists('GPS', $exif)) {
       $cords = $helper->exifGPSToDecemicalCords($exif);
-      $this->setLocationLatitude($cords['latitude']);
-      $this->setLocationLongitude($cords['longitude']);
+      $this->location_latitude = $cords['latitude'];
+      $this->location_longitude = $cords['longitude'];
     }
 
     if(array_key_exists('IFD0', $exif) && array_key_exists('DateTime', $exif['IFD0']))
-      $this->setTime(strtotime($exif['IFD0']['DateTime']));
+      $this->time = strtotime($exif['IFD0']['DateTime']);
     elseif(array_key_exists('EXIF', $exif) && array_key_exists('DateTimeOriginal', $exif['EXIF']))
-      $this->setTime(strtotime($exif['EXIF']['DateTimeOriginal']));
+      $this->time = strtotime($exif['EXIF']['DateTimeOriginal']);
   }
 
   function showImages(stdClass $export)
@@ -122,16 +124,16 @@ trait Imageable
 
   function getImage(array $size = null)
   {
-    if(!$this->getImageExt())
+    if(!$this->image_ext)
       return null;
 
-    if(!$this->getId())
+    if(!$this->id)
       throw new lmbException("Can't create image path, because entity have no ID.", array('class' => get_called_class()));
 
     $placeholders = [
-      ':id'             => $this->getId(),
-      ':hash'           => sha1('s0l7&p3pp$r'.$this->getId()),
-      ':file_extension' => $this->getImageExt(),
+      ':id'             => $this->id,
+      ':hash'           => sha1('s0l7&p3pp$r'.$this->id),
+      ':file_extension' => $this->image_ext,
       ':image_width'    => count($size) ? $size['width'] : 'orig',
     ];
 

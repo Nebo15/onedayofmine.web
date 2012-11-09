@@ -17,19 +17,19 @@ class DaysGuestControllerIntegrationTest extends odIntegrationTestCase
     $day1 = $this->generator->dayWithMoments(null, 'My insane day');
     $day1->save();
     $day2 = $this->generator->dayWithMoments(null, 'Weird weekend');
-    $day2->setFinalDescription('Insanely comments here');
+    $day2->final_description = 'Insanely comments here';
     $day2->save();
     $day3 = $this->generator->dayWithMoments(null, 'Insane insane day');
     $day3->save();
     $day4 = $this->generator->dayWithMoments(null, 'Paranormal day');
     $moment = $this->generator->momentWithImage($day4);
-    $moment->setDescription('Insane photo');
+    $moment->description = 'Insane photo';
     $moment->save();
     $day4->save();
     $day5 = $this->generator->dayWithMoments(null, 'Something unusual');
     $day5->save();
     $day6 = $this->generator->dayWithMoments(null, 'Insane insenity');
-    $day6->setIsDeleted(1);
+    $day6->is_deleted = 1;
     $day6->save();
 
     if($result = exec("indexer --config {$sphinx_config['config_file_path']} --rotate days --quiet"))
@@ -48,15 +48,15 @@ class DaysGuestControllerIntegrationTest extends odIntegrationTestCase
       $this->assertEqual(4, count($days));
       $this->assertJsonDayItems($days);
 
-      $this->assertEqual($day1->getId(), $days[0]->id);
-      $this->assertEqual($day3->getId(), $days[1]->id);
-      $this->assertEqual($day2->getId(), $days[2]->id);
-      $this->assertEqual($day4->getId(), $days[3]->id);
+      $this->assertEqual($day1->id, $days[0]->id);
+      $this->assertEqual($day3->id, $days[1]->id);
+      $this->assertEqual($day2->id, $days[2]->id);
+      $this->assertEqual($day4->id, $days[3]->id);
     }
 
     $response_with_from = $this->get('days/search', [
       'query' => 'Insane',
-      'from'  => $day1->getId(),
+      'from'  => $day1->id,
     ]);
     if($this->assertResponse(200))
     {
@@ -64,15 +64,15 @@ class DaysGuestControllerIntegrationTest extends odIntegrationTestCase
       $this->assertEqual(3, count($days));
       $this->assertJsonDayItems($days);
 
-      $this->assertEqual($day3->getId(), $days[0]->id);
-      $this->assertEqual($day2->getId(), $days[1]->id);
-      $this->assertEqual($day4->getId(), $days[2]->id);
+      $this->assertEqual($day3->id, $days[0]->id);
+      $this->assertEqual($day2->id, $days[1]->id);
+      $this->assertEqual($day4->id, $days[2]->id);
     }
 
     $response_with_range = $this->get('days/search', [
       'query' => 'Insane',
-      'from'  => $day1->getId(),
-      'to'    => $day4->getId(),
+      'from'  => $day1->id,
+      'to'    => $day4->id,
     ]);
     if($this->assertResponse(200))
     {
@@ -80,14 +80,14 @@ class DaysGuestControllerIntegrationTest extends odIntegrationTestCase
       $this->assertEqual(2, count($days));
       $this->assertJsonDayItems($days);
 
-      $this->assertEqual($day3->getId(), $days[0]->id);
-      $this->assertEqual($day2->getId(), $days[1]->id);
+      $this->assertEqual($day3->id, $days[0]->id);
+      $this->assertEqual($day2->id, $days[1]->id);
     }
 
     $response_with_limit = $this->get('days/search', [
       'query' => 'Insane',
-      'from'  => $day1->getId(),
-      'to'    => $day4->getId(),
+      'from'  => $day1->id,
+      'to'    => $day4->id,
       'limit' => 1,
     ]);
     if($this->assertResponse(200))
@@ -96,7 +96,7 @@ class DaysGuestControllerIntegrationTest extends odIntegrationTestCase
       $this->assertEqual(1, count($days));
       $this->assertJsonDayItems($days);
 
-      $this->assertEqual($day3->getId(), $days[0]->id);
+      $this->assertEqual($day3->id, $days[0]->id);
     }
   }
 
@@ -127,7 +127,7 @@ class DaysGuestControllerIntegrationTest extends odIntegrationTestCase
     }
 
     $day2 = $this->generator->dayWithMoments(null, 'Weird weekend');
-    $day2->setFinalDescription('Insanely comments here');
+    $day2->final_description = 'Insanely comments here';
     $day2->save();
 
     if($result = exec("indexer --config {$sphinx_config['config_file_path']} --rotate --quiet days_delta"))

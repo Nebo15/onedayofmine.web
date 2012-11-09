@@ -16,8 +16,13 @@ class FakeProfile implements SocialServicesProfileInterface, SharesInterface
   function shareDayBegin(Day $day) {}
   function shareDayEnd(Day $day) {}
   function shareDay(Day $day) {}
-  function shareDayLike(Day $day) {}
+  function shareDayLike(Day $day, DayLike $like) {}
+  function shareDayUnlike(Day $day, DayLike $like) {}
+  function shareDayDelete(Day $day) {}
   function shareMomentAdd(Day $day, Moment $moment) {}
-  function shareMomentLike(Moment $moment) {}
+  function shareMomentLike(Moment $moment, MomentLike $like) {}
+  function shareMomentUnlike(Moment $moment, MomentLike $like) {}
+  function shareMomentDelete(Day $day, Moment $moment) {}
+  function shareInvitation($social_user_id) {}
   function getFriendsIds() {}
 }

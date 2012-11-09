@@ -1,15 +1,14 @@
 <?php
 lmb_require('src/model/base/BaseModel.class.php');
-lmb_require('src/model/traits/Imageable.trait.php');
+lmb_require('src/model/traits/Imageable.class.php');
 lmb_require('src/model/MomentComment.class.php');
 lmb_require('src/model/MomentLike.class.php');
 
 /**
  * @api
- * @method string getFacebookUid()
+ * @method string facebook_uid
  * @method void setFacebookUid(string $facebook_user_id)
- * @method string getFacebookAccessToken()
- * @method string getDay()
+ * @method string facebook_access_token
  * @method string getDayId()
  * @method string getDescription()
  * @method void setFacebookAccessToken(string $facebook_access_token)
@@ -18,54 +17,75 @@ class Moment extends BaseModel
 {
   use Imageable;
 
-  protected $_default_sort_params = array('time' => 'ASC');
+  public $day_id;
+  public $location_latitude;
+  public $location_longitude;
+  public $description;
+  public $time;
+  public $timezone;
+  public $is_deleted;
 
-  protected function _defineRelations()
-  {
-    $this->_has_many = array (
-      'comments' => array ('field' => 'moment_id', 'class' => 'MomentComment'),
-      'likes'    => array( 'field' => 'moment_id', 'class' => 'MomentLike'),
-    );
-    $this->_many_belongs_to = array (
-      'day' => array ('field' => 'day_id', 'class' => 'Day')
-    );
-  }
+  public $facebook_id;
+  public $twitter_id;
+
+  protected $_default_sort_params = array('time' => 'ASC');
+  protected $_db_table_name = 'moment';
 
   protected function _createValidator()
   {
     $validator = new lmbValidator();
-    $validator->addRequiredObjectRule('day', 'Day');
+    $validator->addRequiredRule('day_id');
     return $validator;
   }
 
   function exportForApi(array $properties = null)
   {
     $moment = new stdClass();
-    $moment->id = $this->getId();
-    $moment->day_id = $this->getDayId();
-    $moment->description = $this->getDescription();
+    $moment->id = $this->id;
+    $moment->day_id = $this->day_id;
+    $moment->description = $this->description;
     $this->showImages($moment);
-    $moment->time = self::stampToIso($this->getTime(), $this->getTimezone());
+    $moment->time = BaseModel::stampToIso($this->time, $this->timezone);
 
-    if($this->getIsDeleted())
+    if($this->is_deleted)
       $moment->is_deleted = true;
 
     return $moment;
   }
 
+  function setDay(Day $day)
+  {
+    $this->day_id = $day->id;
+  }
+
+  /**
+   * @return Day
+   */
+  function getDay()
+  {
+    return Day::findById($this->day_id);
+  }
+
+  function getComments()
+  {
+    return MomentComment::find(lmbSQLCriteria::equal('moment_id', $this->id));
+  }
+
+  function getLikes()
+  {
+    return MomentLike::find(lmbSQLCriteria::equal('moment_id', $this->id));
+  }
+
   function getCommentsWithLimitation($from_id = null, $to_id = null, $limit = null)
   {
-    $criteria = new lmbSQLCriteria();
+    $criteria = lmbSQLCriteria::equal('moment_id', $this->id);
     if($from_id)
       $criteria->add(lmbSQLCriteria::greater('id', $from_id));
     if($to_id)
       $criteria->add(lmbSQLCriteria::less('id', $to_id));
     if(!$limit || $limit > 100)
       $limit = 100;
-    return $this->getComments()->find(array(
-      'criteria' => $criteria,
-      'sort' => array('id' => 'ASC')
-    ))->paginate(0, $limit);
+    return MomentComment::find($criteria, ['id' => 'ASC'])->paginate(0, $limit);
   }
 
   protected function _getAdditionalPlaceholders(&$placeholders)

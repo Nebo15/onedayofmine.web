@@ -22,7 +22,7 @@ class odExportHelper
     $comments->paginate(0, lmbToolkit::instance()->getConf('common')->default_comments_count);
     $exported_day->comments = $this->exportDayCommentItems($comments);
 
-    $exported_day->final_description = $day->getFinalDescription();
+    $exported_day->final_description = $day->final_description;
 
     if($this->current_user && !$is_owner)
     {
@@ -50,6 +50,18 @@ class odExportHelper
 
   function exportDayItems($days)
   {
+    if(is_object($days))
+      $days = $days->getArray();
+
+    foreach($days as $key => $day)
+    {
+      if(!$day->is_deleted)
+        continue;
+      if($this->current_user && $this->current_user->id == $day->user_id)
+        continue;
+      unset($days[$key]);
+    }
+
     if(!count($days))
       return [];
 
@@ -96,8 +108,8 @@ class odExportHelper
       {
         $exported_day->is_favorite = in_array($day->id, $favorite_days_ids);
 
-        if($this->current_user->id == $day->getUser()->id)
-          $exported_day->is_deleted = (bool) $day->getIsDeleted();
+        if($this->current_user->id == $day->user_id)
+          $exported_day->is_deleted = (bool) $day->is_deleted;
       }
 
       $exported_day->likes_count =
@@ -154,7 +166,7 @@ class odExportHelper
     }
 
     if($is_owner)
-      $exported->email = $user->getEmail();
+      $exported->email = $user->email;
 
     return $exported;
   }
@@ -163,7 +175,7 @@ class odExportHelper
   {
     $exported = $this->exportUserSubentity($user);
 
-    if($this->current_user && $this->current_user->getId() != $user->getId())
+    if($this->current_user && $this->current_user->id != $user->id)
       $exported->following = (bool) UserFollowing::isUserFollowUser($user, $this->current_user);
 
     return $exported;
@@ -190,7 +202,7 @@ class odExportHelper
       $export = $this->exportUserItem($followed);
 
       if(count($following))
-        $export->following = (bool) $following[$followed->getId()];
+        $export->following = (bool) $following[$followed->id];
 
       $exported[] = $export;
     }
@@ -250,8 +262,8 @@ class odExportHelper
 
     unset($exported->day_id);
 
-    $exported->likes_count    = (int) $moment->getLikes()->count();
-    $exported->comments_count = (int) $moment->getComments()->count();
+    $exported->likes_count    = (int) MomentLike::find(lmbSQLCriteria::equal('moment_id', $moment->id))->count();
+    $exported->comments_count = (int) MomentComment::find(lmbSQLCriteria::equal('moment_id', $moment->id))->count();
 
     return $exported;
   }
@@ -294,7 +306,7 @@ class odExportHelper
   }
 
   ############### Comments ###############
-  protected function exportComment(BaseComment $comment)
+  protected function exportComment($comment)
   {
     $exported = $comment->exportForApi();
 
@@ -367,8 +379,8 @@ class odExportHelper
   {
     $exported = $news->exportForApi();
 
-    if ($news->getSender())
-      $this->attachUserSubentityToExport($news->getSender(), $exported);
+    if ($news->sender_id)
+      $this->attachUserSubentityToExport(User::findById($news->sender_id), $exported);
 
     // if($news->getDay())
     //   $exported->day    = $this->exportDaySubentity($news->getDay());

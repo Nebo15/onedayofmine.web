@@ -213,7 +213,7 @@ function task_od_parse_lj($argv)
     echo $posts_remain.'. Creating day "'.$post->getTitle().'":'.PHP_EOL;
 
     $day = new Day();
-    $day->setTitle($post->getTitle().' '.$posts_remain);
+    $day->title =$post->getTitle().' '.$posts_remain;
     $day->setUser($tests_users[array_rand($tests_users)]);
     $day->setOccupation($occupations[array_rand($occupations)]);
     $day->setTimezone(0);
@@ -301,7 +301,7 @@ function task_od_parse_lj($argv)
     }
 
     if(rand(0, 3) < 3)
-      $day->setFinalDescription($day_comments[array_rand($day_comments)]);
+      $day->final_description = $day_comments[array_rand($day_comments)];
 
     echo PHP_EOL;
     echo 'Added '. count($day->getMoments()) .' moments.'.PHP_EOL;
@@ -340,7 +340,7 @@ function task_od_tests_users()
     echo "Register '{$test_user->getName()}'...";
     $request = new HttpRequest(lmb_env_get('HOST_URL').'/auth/login');
     $request->setMethod(HTTP_METH_POST);
-    $request->setPostFields(array('token' => $test_user->getFacebookAccessToken()));
+    $request->setPostFields(array('token' => $test_user->facebook_access_token));
     $response = $request->send();
     if(200 != $response->getResponseCode())
     {
@@ -386,7 +386,7 @@ function task_od_delete_facebook_objects()
 //  foreach($tests_users as $test_user)
 //  {
 //    echo "User: ".$test_user->getName().PHP_EOL;
-    $fb = lmbToolkit::instance()->getFacebook($tests_users[6]->getFacebookAccessToken());
+    $fb = lmbToolkit::instance()->getFacebook($tests_users[6]->facebook_access_token);
     recursive_delete($fb, "/me/one-day-of-mine:add_moment/moment");
     recursive_delete($fb, "/me/one-day-of-mine:add_moment/day");
     recursive_delete($fb, "/me/one-day-of-mine:add_moment");
@@ -453,7 +453,7 @@ function task_od_siege_log()
   foreach($users as $user)
   {
     $user->save();
-    fwrite($fp, lmb_env_get('HOST_URL').'auth/login POST token='.$user->getFacebookAccessToken().PHP_EOL);
+    fwrite($fp, lmb_env_get('HOST_URL').'auth/login POST token='.$user->facebook_access_token.PHP_EOL);
   }
   fclose($fp);
   echo "Done" . PHP_EOL;
@@ -461,7 +461,7 @@ function task_od_siege_log()
   echo "Create days...";
   $days_ids = [];
   for ($i = 0; $i < $days_count; $i++) {
-    $day = $om->day();
+    $day = $om->dayWithMomentsAndComments();
     $day->day_id = $users[array_rand($users)]->id;
     $day->save();
     $days_ids[] = $day->id;
@@ -500,7 +500,7 @@ function task_od_siege_log()
       $user_type = rand(0, 1) ? TEST_FOR_GUEST : TEST_FOR_USER;
 
     if(TEST_FOR_USER == $user_type)
-      $url .= '?token='.$users[array_rand($users)]->getFacebookAccessToken();
+      $url .= '?token='.$users[array_rand($users)]->facebook_access_token;
 
     $url = lmb_env_get('HOST_URL').$url;
 

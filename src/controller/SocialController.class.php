@@ -45,11 +45,13 @@ class SocialController extends BaseJsonController
       return $this->_answerWithError($this->error_list->export());
 
     $user = $this->toolkit->getUser();
-    $user->setTwitterUid($uid);
-    $user->setTwitterAccessToken($access_token);
-    $user->setTwitterAccessTokenSecret($access_token_secret);
-    $user->getSettings()->setSocialShareTwitter(1);
+    $user->twitter_uid = $uid;
+    $user->twitter_access_token = $access_token;
+    $user->twitter_access_token_secret = $access_token_secret;
     $user->save();
+    $settings = $user->getSettings();
+    $settings->social_share_twitter = 1;
+    $settings->save();
 
     return $this->_answerOk();
   }

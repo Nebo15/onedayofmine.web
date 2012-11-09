@@ -86,7 +86,7 @@ function task_od_apns_push()
   foreach(DeviceNotification::findNotSended() as $notification)
   {
     $notification_age_in_secs = time() - $notification->ctime;
-    if(!$notification->getDeviceToken() || 24*60*60 < $notification_age_in_secs)
+    if(!$notification->device_token_id || 24*60*60 < $notification_age_in_secs)
     {
       $notification->destroy();
       continue;
@@ -102,12 +102,13 @@ function task_od_apns_push()
     try
     {
       $apns->send($message);
-      $notification->setIsSended(1);
+      $notification->is_sended = 1;
       $notification->save();
     }
     catch (Zend_Mobile_Push_Exception_InvalidToken $e)
     {
       $notification->getDeviceToken()->destroy();
+      $notification->destroy();
     }
     catch (lmbException $e)
     {
@@ -156,4 +157,33 @@ function task_od_job_worker()
     $worker->addFunction($function, array("odAsyncJobs", $function));
   }
   while($worker->work());
+}
+
+function task_od_bundle()
+{
+  set_time_limit(0);
+
+  lmb_require('limb/bundle/src/lmbBundler.class.php');
+
+  $bundler = new lmbBundler(get_include_path(), true);
+
+  $files = json_decode(file_get_contents(lmb_env_get('HOST_URL').'main_page/bundle_files'))->result;
+
+  foreach($files as $file)
+    $bundler->add($file);
+
+  $result = $bundler->makeBundle(true);
+
+  $lines_arr = preg_split('/\n|\r/', $result);
+  $num_newlines = count($lines_arr);
+
+  $setup_file_content = file_get_contents(taskman_prop('PROJECT_DIR').'setup.php');
+
+  $result = str_replace("require_once('limb/core/common.inc.php');", $result, $setup_file_content);
+
+  file_put_contents(taskman_prop('PROJECT_DIR').'/bundle.php', $result);
+
+  echo "Bundled $num_newlines lines".PHP_EOL;
+
+//  var_dump($bundler->getIncludes());
 }

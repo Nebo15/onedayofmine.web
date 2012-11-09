@@ -9,19 +9,19 @@ class DayComment extends BaseComment
   protected $_default_sort_params = array('id'=>'asc');
   protected $_db_table_name = 'day_comment';
 
-  protected function _defineRelations()
+  public $day_id;
+  public $text;
+
+  function setDay(Day $day)
   {
-    $this->_many_belongs_to = array (
-      'user' => array ('field' => 'user_id', 'class' => 'User'),
-      'day' =>  array ('field' => 'day_id', 'class' => 'Day'),
-    );
+    $this->day_id = $day->id;
   }
 
   protected function _createValidator()
   {
     $validator = new lmbValidator();
-    $validator->addRequiredObjectRule('user', 'User', 'User is required');
-    $validator->addRequiredObjectRule('day', 'Day', 'Day is required');
+    $validator->addRequiredRule('user_id');
+    $validator->addRequiredRule('day_id');
     $validator->addRequiredRule('text');
     return $validator;
   }

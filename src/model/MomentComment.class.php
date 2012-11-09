@@ -9,19 +9,14 @@ class MomentComment extends BaseComment
   protected $_default_sort_params = array('id'=>'asc');
   protected $_db_table_name = 'moment_comment';
 
-  protected function _defineRelations()
-  {
-    $this->_many_belongs_to = array (
-      'user' => array ( 'field' => 'user_id', 'class' => 'User'),
-      'moment' => array ( 'field' => 'moment_id', 'class' => 'Moment'),
-    );
-  }
+  public $moment_id;
+  public $text;
 
   protected function _createValidator()
   {
     $validator = new lmbValidator();
-    $validator->addRequiredObjectRule('user', 'User', 'User is required');
-    $validator->addRequiredObjectRule('moment', 'Moment', 'Moment is required');
+    $validator->addRequiredRule('user_id');
+    $validator->addRequiredRule('moment_id');
     $validator->addRequiredRule('text');
     return $validator;
   }
@@ -29,7 +24,13 @@ class MomentComment extends BaseComment
   function exportForApi(array $properties = null)
   {
     $export = parent::exportForApi($properties);
-    $export->moment_id = $this->getMoment()->getId();
+    $export->moment_id = $this->moment_id;
     return $export;
+  }
+
+  function setMoment($moment)
+  {
+    lmb_assert_type($moment, 'Moment');
+    $this->moment_id = $moment->id;
   }
 }

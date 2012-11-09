@@ -1,4 +1,4 @@
-<? $this->title = $this->day->getTitle(); ?>
+<? $this->title = $this->day->title; ?>
 {{wrap with="layout.phtml"}}
   {{into slot="meta"}}
     <meta property="og:type" content="{$#facebook_app_namespace}:day" />
@@ -8,17 +8,17 @@
     <meta property="{$#facebook_app_namespace}:type" content="some type" />
   {{/into}}
   {{into slot="content"}}
-    <h1>Day #{$this->day.id}</h1>
+    <h1>Day #{$#day.id}</h1>
     <ul>
-      <li>id: {$this->day.id}</li>
-      <li>user_id: {$this->day.user_id}</li>
-      <li>title: {$this->day.title}</li>
-      <li>description: {$this->day.description}</li>
-      <li>start_time: {$this->day.start_time}</li>
-      <li>likes_count: {$this->day.likes_count}</li>
-      <li>ctime: {$this->day.ctime}</li>
-      <li>utime: {$this->day.utime}</li>
-      <li>cip: {$this->day.cip}</li>
+      <li>id: {$#day.id}</li>
+      <li>user_id: {$#day.user_id}</li>
+      <li>title: {$#day.title}</li>
+      <li>description: {$#day.description}</li>
+      <li>start_time: {$#day.start_time}</li>
+      <li>likes_count: {$#day.likes_count}</li>
+      <li>ctime: {$#day.ctime}</li>
+      <li>utime: {$#day.utime}</li>
+      <li>cip: {$#day.cip}</li>
     </ul>
   {{/into}}
 {{/wrap}}

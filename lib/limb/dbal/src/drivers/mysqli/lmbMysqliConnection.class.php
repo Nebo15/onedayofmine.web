@@ -8,15 +8,15 @@
  */
 
 lmb_require('limb/dbal/src/drivers/lmbDbBaseConnection.class.php');
-lmb_require(dirname(__FILE__) . '/lmbMysqliDbInfo.class.php');
-lmb_require(dirname(__FILE__) . '/lmbMysqliQueryStatement.class.php');
-lmb_require(dirname(__FILE__) . '/lmbMysqliInsertStatement.class.php');
-lmb_require(dirname(__FILE__) . '/lmbMysqliManipulationStatement.class.php');
-lmb_require(dirname(__FILE__) . '/lmbMysqliStatement.class.php');
-lmb_require(dirname(__FILE__) . '/lmbMysqliTypeInfo.class.php');
-lmb_require(dirname(__FILE__) . '/lmbMysqliTableInfo.class.php');
-lmb_require(dirname(__FILE__) . '/lmbMysqliRecord.class.php');
-lmb_require(dirname(__FILE__) . '/lmbMysqliRecordSet.class.php');
+lmb_require('limb/dbal/src/drivers/mysqli/lmbMysqliDbInfo.class.php');
+lmb_require('limb/dbal/src/drivers/mysqli/lmbMysqliQueryStatement.class.php');
+lmb_require('limb/dbal/src/drivers/mysqli/lmbMysqliInsertStatement.class.php');
+lmb_require('limb/dbal/src/drivers/mysqli/lmbMysqliManipulationStatement.class.php');
+lmb_require('limb/dbal/src/drivers/mysqli/lmbMysqliStatement.class.php');
+lmb_require('limb/dbal/src/drivers/mysqli/lmbMysqliTypeInfo.class.php');
+lmb_require('limb/dbal/src/drivers/mysqli/lmbMysqliTableInfo.class.php');
+lmb_require('limb/dbal/src/drivers/mysqli/lmbMysqliRecord.class.php');
+lmb_require('limb/dbal/src/drivers/mysqli/lmbMysqliRecordSet.class.php');
 
 /**
  * class lmbMysqlConnection.
@@ -184,7 +184,8 @@ class lmbMysqliConnection extends lmbDbBaseConnection
 
   function escape($string)
   {
-    return mysqli_escape_string($this->getConnectionId(), $string);
+    lmb_assert_true(!is_object($string));
+    return mysqli_real_escape_string($this->getConnectionId(), $string);
   }
 
   function getSequenceValue($table, $colname)

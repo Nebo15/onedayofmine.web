@@ -13,24 +13,20 @@ lmb_require('src/model/User.class.php');
  */
 class News extends BaseModel
 {
-  protected $_default_sort_params = array('id'=>'desc');
+  protected $_default_sort_params = array('id' => 'desc');
+  protected $_db_table_name = 'news';
 
-  protected function _defineRelations()
-  {
-    $this->_many_belongs_to = array (
-      'sender'           => array ('field' => 'sender_id',    'class' => 'User'),
-      'user'             => array ('field' => 'user_id',      'class' => 'User'),
-      'day'              => array ('field' => 'day_id',       'class' => 'Day',    'can_be_null' => true),
-      'moment'           => array ('field' => 'moment_id',    'class' => 'Moment', 'can_be_null' => true),
-    );
-    $this->_has_many_to_many = array(
-      'recipients' => array(
-        'field' => 'news_id',
-        'foreign_field' => 'user_id',
-        'table' => 'news_recipient',
-        'class' => 'User'),
-    );
-  }
+  public $sender_id;
+  public $user_id;
+  public $link;
+  public $text;
+  public $day_id;
+  public $moment_id;
+  public $day_comment_id;
+  public $moment_comment_id;
+  public $day_like_id;
+  public $moment_like_id;
+  public $ctime;
 
   protected function _createValidator()
   {
@@ -40,43 +36,45 @@ class News extends BaseModel
     return $validator;
   }
 
+  function setSender($user)
+  {
+    lmb_assert_type($user, 'User');
+    $this->sender_id = $user->id;
+  }
+
+  function setUser($user)
+  {
+    lmb_assert_type($user, 'User');
+    $this->user_id = $user->id;
+  }
+
+  function setMoment($moment)
+  {
+    lmb_assert_type($moment, 'Moment');
+    $this->moment_id = $moment->id;
+  }
+
+  function setDay($day)
+  {
+    lmb_assert_type($day, 'Day');
+    $this->day_id = $day->id;
+  }
+
+  function getRecipients()
+  {
+    $news_recipients = NewsRecipient::find(lmbSQLCriteria::equal('news_id', $this->id));
+    $recipients_ids = lmbArrayHelper::getColumnValues('user_id', $news_recipients);
+    return User::findByIds($recipients_ids);
+  }
+
   function exportForApi(array $properties = null)
   {
     $exported = parent::exportForApi(array(
       'id', 'sender_id', 'text', 'user_id', 'day_id', 'day_comment_id', 'moment_id', 'moment_comment_id', 'link',
     ));
 
-    $exported->time = $this->getCtime();
+    $exported->time = $this->ctime;
 
     return $exported;
-  }
-
-  /**
-   * @return lmbCollectionInterface
-   */
-  static function findNewsForUser(User $user, $from_id = null, $to_id = null, $limit = null)
-  {
-    $query = new lmbSelectQuery('news_recipient');
-    $query->addField('news_id');
-    $query->addCriteria(lmbSQLCriteria::equal('user_id', $user->getId()));
-
-    $result = $query->fetch();
-    $ids = lmbArrayHelper::getColumnValues('news_id', $result);
-    if(!count($ids))
-      return array();
-
-    $criteria = lmbSQLCriteria::in('id', $ids);
-    if($from_id)
-      $criteria->add(lmbSQLCriteria::less('id', $from_id));
-    if($to_id)
-      $criteria->add(lmbSQLCriteria::greater('id', $to_id));
-
-    $params = array(
-      'sort' => array('id' => 'DESC'),
-      'criteria' => $criteria,
-      'limit' => (!$limit || $limit > 100) ? 100 : $limit,
-    );
-
-    return News::find($params);
   }
 }

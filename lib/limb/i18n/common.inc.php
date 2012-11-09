@@ -11,7 +11,6 @@
  * @package i18n
  * @version $Id: common.inc.php 8042 2010-01-19 20:53:10Z korchasa $
  */
-require_once('limb/core/common.inc.php');
 lmb_require('limb/i18n/toolkit.inc.php');
 
 function lmb_i18n($text, $arg1 = null, $arg2 = null)

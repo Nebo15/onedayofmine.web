@@ -6,7 +6,7 @@
  * @copyright  Copyright &copy; 2004-2009 BIT(http://bit-creative.com)
  * @license    LGPL http://www.gnu.org/copyleft/lesser.html
  */
-
+lmb_require('limb/macro/src/compiler/lmbMacroExpressionInterface.interface.php');
 /**
  * Used to store complex expressions like "{$var1}_my_{$var2}" found inside tag attributes
  * @package macro
@@ -30,7 +30,7 @@ class lmbMacroTagAttribute implements lmbMacroExpressionInterface
   {
     return $this->name;
   }
-  
+
   function setName($name)
   {
     $this->name = $name;
@@ -63,7 +63,7 @@ class lmbMacroTagAttribute implements lmbMacroExpressionInterface
     // simple case
     if(!sizeof($this->expressions))
        return $this->raw_string;
-    
+
     if((sizeof($this->expressions) == 1) && ($this->raw_string == "%s"))
     {
       return $this->expressions[0]->getValue();

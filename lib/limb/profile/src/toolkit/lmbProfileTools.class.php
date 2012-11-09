@@ -11,6 +11,7 @@
  * @version $Id$
  */
 lmb_require('limb/toolkit/src/lmbAbstractTools.class.php');
+lmb_require('limb/profile/src/lmbProfileFakeReporter.class.php');
 
 class lmbProfileTools extends lmbAbstractTools
 {
