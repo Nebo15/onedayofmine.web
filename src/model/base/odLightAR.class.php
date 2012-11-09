@@ -217,6 +217,19 @@ abstract class odLightAR extends odDirtableObject implements ArrayAccess
     parent::undirty();
   }
 
+  function copy()
+  {
+    $class_name = get_class($this);
+
+    /** @var $object odLightAR */
+    $object = new $class_name();
+
+    $object->import($this->export());
+    $object->id = null;
+
+    return $object;
+  }
+
 
   function _getRecordCriteria()
   {

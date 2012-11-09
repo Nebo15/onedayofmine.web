@@ -8,6 +8,7 @@
  */
 lmb_require('limb/macro/src/compiler/lmbMacroOutputExpressionNode.class.php');
 lmb_require('limb/macro/src/compiler/lmbMacroExpressionNode.class.php');
+lmb_require('limb/macro/src/compiler/lmbMacroBlockAnalizerListener.interface.php');
 /**
  * class lmbMacroContentBlockAnalizerListener.
  *

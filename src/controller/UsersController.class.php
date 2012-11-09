@@ -84,7 +84,6 @@ class UsersController extends BaseJsonController
     list($from, $to, $limit) = $this->_getFromToLimitations();
     $query = $this->request->getFiltered('query', FILTER_SANITIZE_STRING);
     $users = User::findByString($query, $from, $to, $limit);
-
     return $this->_answerOk($this->toolkit->getExportHelper()->exportUserItems($users));
   }
 

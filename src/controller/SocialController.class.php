@@ -52,7 +52,7 @@ class SocialController extends BaseJsonController
     $settings = $user->getSettings();
     $settings->social_share_twitter = 1;
     $settings->save();
-    
+
     return $this->_answerOk();
   }
 

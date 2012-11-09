@@ -37,14 +37,16 @@ class FacebookProfileTest extends odIntegrationTestCase
 
   function testGetRegisteredFriends()
   {
+    $additional_user = $this->additional_user->copy();
+    $this->additional_user->destroy();
+
     $friends = (new FacebookProfile($this->main_user))->getRegisteredFriends();
     $this->assertEqual(0, count($friends));
 
-    $this->additional_user->save();
-
+    $additional_user->save();
     $friends = (new FacebookProfile($this->main_user))->getRegisteredFriends();
     $this->assertEqual(count($friends), 1);
-    $this->assertEqual($friends[0]->id, $this->additional_user->id);
+    $this->assertEqual($friends[0]->id, $additional_user->id);
   }
 
   function testGetPictures()
@@ -86,6 +88,8 @@ class FacebookProfileTest extends odIntegrationTestCase
 
     $facebook_id = (new FacebookProfileForTests($this->main_user))->shareDayBegin($day);
     $this->assertTrue($facebook_id);
+
+
   }
 
   function testShareDayLike()
@@ -112,11 +116,10 @@ class FacebookProfileTest extends odIntegrationTestCase
     $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($day));
 
     $facebook_id = (new FacebookProfileForTests($this->main_user))->shareDayBegin($day);
-    $day->setFacebookId($facebook_id);
+    $day->facebook_id = $facebook_id;
     $day->save();
 
     $moment = $this->generator->moment($day);
-    $moment->save();
     $moment->attachImage($this->generator->image());
     $moment->save();
 
@@ -126,7 +129,6 @@ class FacebookProfileTest extends odIntegrationTestCase
     $this->assertTrue($facebook_id);
 
     $moment = $this->generator->moment($day);
-    $moment->save();
     $moment->attachImage($this->generator->image());
     $moment->save();
 
@@ -145,13 +147,12 @@ class FacebookProfileTest extends odIntegrationTestCase
     $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($day));
 
     $facebook_id = (new FacebookProfileForTests($this->main_user))->shareDayBegin($day);
-    $day->setFacebookId($facebook_id);
+    $day->facebook_id = $facebook_id;
     $day->save();
 
     $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($day));
 
     $moment = $this->generator->moment($day);
-    $moment->save();
     $moment->attachImage($this->generator->image());
     $moment->save();
 
@@ -161,7 +162,6 @@ class FacebookProfileTest extends odIntegrationTestCase
     $this->assertTrue($facebook_id);
 
     $like = $this->generator->momentLike($moment);
-    $like->save();
 
     (new FacebookProfileForTests($this->main_user))->shareMomentLike($moment, $like);
   }
