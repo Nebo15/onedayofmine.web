@@ -3,7 +3,7 @@ class AirBrakeErrorHandler
 {
   static function onException(Exception $e)
   {
-    $key = lmb_env_get('AIRBRAKE_KEY');
+    $airbrake_key = lmb_env_get('AIRBRAKE_KEY');
     $error_class = get_class($e);
     $error_message = ($e instanceof lmbException) ? $e->getOriginalMessage() : $e->getMessage();
     $uri = isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : 'cli';
@@ -11,7 +11,7 @@ class AirBrakeErrorHandler
     $request_method = $_SERVER['REQUEST_METHOD'];
 
     $backtrace = '';
-    foreach($e->getBacktrace() as $trace)
+    foreach($e->getTrace() as $trace)
     {
       $method = '';
       if(isset($trace['class']))
@@ -26,6 +26,9 @@ class AirBrakeErrorHandler
     foreach($_SERVER as $key => $value)
       $server_data .= "<var key=\"$key\">$value</var>";
 
+    if($server_data != '')
+      $server_data = "<cgi-data>{$server_data}</cgi-data>";
+
     $params = '';
     foreach($_GET as $key => $value)
       $params .= "<var key=\"GET[$key]\">$value</var>";
@@ -34,18 +37,24 @@ class AirBrakeErrorHandler
     foreach($_POST as $key => $value)
       $params .= "<var key=\"POST[$key]\">$value</var>";
 
+    if($params != '')
+      $params = "<params>{$params}</params>";
+
     $session = '';
     if(isset($_SESSION))
       foreach($_SESSION as $key => $value)
         $session .= "<var key=\"$key\">$value</var>";
+
+    if($session != '')
+      $session = "<session>{$session}</session>";
 
 //    if(function_exists('fastcgi_finish_request'))
 //      fastcgi_finish_request();
 
     $text = <<<EOD
 <?xml version="1.0" encoding="UTF-8"?>
-<notice version="2.0">
-  <api-key>$key</api-key>
+<notice version="2.3">
+  <api-key>$airbrake_key</api-key>
   <notifier>
     <name>custom-notifier</name>
     <version>0.0.1</version>
@@ -59,15 +68,16 @@ class AirBrakeErrorHandler
   <request>
     <url>$uri</url>
     <action>$request_method</action>
-    <params>$params</params>
-    <session>$session</session>
-    <cgi-data>$server_data</cgi-data>
+    <component/>
+    $params
+    $session
+    $server_data
   </request>
   <server-environment>
     <project-root>/</project-root>
     <environment-name>$env</environment-name>
   </server-environment>
-</notice>'
+</notice>
 EOD;
     $request = new HttpRequest(
       'http://api.airbrake.io/notifier_api/v2/notices', HttpRequest::METH_POST
