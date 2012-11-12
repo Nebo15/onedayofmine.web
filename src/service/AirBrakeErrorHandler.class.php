@@ -8,7 +8,6 @@ class AirBrakeErrorHandler
     $error_message = ($e instanceof lmbException) ? $e->getOriginalMessage() : $e->getMessage();
     $uri = isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : 'cli';
     $env = lmb_app_mode();
-    $request_method = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'cli';
 
     $backtrace = '';
     foreach($e->getTrace() as $trace)
@@ -37,8 +36,17 @@ class AirBrakeErrorHandler
     else
       $session_xml_variables = '';
 
-    // if(function_exists('fastcgi_finish_request'))
-    //  fastcgi_finish_request();
+    try
+    {
+      $request = lmbToolkit::instance()->getRequest();
+      $controller = '<component>'.$request->controller.'</component>';
+      $action     = '<action>'.$request->action.'</action>';
+    }
+    catch (Exception $e)
+    {
+      $controller = '<component/>';
+      $action     = '<action/>';
+    }
 
     $text = <<<EOD
 <?xml version="1.0" encoding="UTF-8"?>
@@ -56,8 +64,8 @@ class AirBrakeErrorHandler
   </error>
   <request>
     <url>{$uri}</url>
-    <action>{$request_method}</action>
-    <component/>
+    {$action}
+    {$controller}
     {$params_xml_variables}
     {$session_xml_variables}
     {$server_xml_variables}
@@ -73,6 +81,17 @@ EOD;
     );
     $request->setBody($text);
     $request->send();
+
+    if($request->getResponseCode() != 200)
+    {
+      lmbToolkit::instance()
+        ->getLog()
+        ->error("AirBrake returned HTTP ".$request->getResponseCode(), ['response_body' => $request->getResponseBody()]);
+
+      self::showErrorPage('Critical error occurred. If this keeps happening for long perion of time email us at support@onedayofmine.com.');
+    }
+    else
+      self::showErrorPage();
   }
 
   protected static function arrayToXMLVarList(array $array, $key_prefix='')
@@ -89,5 +108,18 @@ EOD;
     }
 
     return $result;
+  }
+
+  protected static function showErrorPage($message = 'Critical error occurred. We recieved notification about it, and we will fix it shortly.')
+  {
+    header('HTTP/1.x 500 Server Error');
+    header('Content-Type: application/json');
+
+    echo json_encode([
+      'code'   => 500,
+      'status' => 'Internal error',
+      'result' => null,
+      'errors' => [$message],
+    ]);
   }
 }
