@@ -186,7 +186,7 @@ class odExportHelperTest extends odUnitTestCase
     $this->assertJsonUser($exported);
     $this->assertFalse($exported->following);
 
-    $this->generator->follow($this->additional_user, $this->main_user);
+    $this->generator->follow($this->main_user, $this->additional_user);
 
     $this->db_connection->resetStats();
 
