@@ -56,7 +56,6 @@ class UsersControllerTest extends odControllerTestCase
     $this->main_user->save();
     $this->additional_user->save();
 
-    $this->generator->follow($this->additional_user, $this->main_user);
     $this->generator->follow($this->main_user, $this->additional_user);
 
     $this->toolkit->setUser($this->additional_user);
