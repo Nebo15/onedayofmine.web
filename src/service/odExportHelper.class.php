@@ -161,7 +161,7 @@ class odExportHelper
         $exported->following_count++;
 
       if($this->current_user && !$is_owner && !$exported->following)
-        if($user->id == $ff['follower_user_id'] && $this->current_user->id == $ff['user_id'])
+        if($user->id == $ff['user_id'] && $this->current_user->id == $ff['follower_user_id'])
           $exported->following = true;
     }
 
