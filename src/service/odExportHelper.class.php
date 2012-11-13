@@ -337,9 +337,20 @@ class odExportHelper
 
   function exportDayCommentItems($comments)
   {
+    if(!count($comments))
+      return [];
+
     $exported = [];
+
+    $comment_users_ids = lmbArrayHelper::getColumnValues('user_id', $comments);
+    $comment_users     = User::findByIds($comment_users_ids);
+    $comment_users     = lmbArrayHelper::makeKeysFromColumnValues('id', $comment_users);
+
     foreach ($comments as $comment) {
-      $exported[] = $this->exportDayCommentItem($comment);
+      $exported_comment = $comment->exportForApi();
+      $exported_comment->user = $this->exportUserSubentity($comment_users[$exported_comment->user_id]);
+      unset($exported_comment->user_id);
+      $exported[] = $exported_comment;
     }
     return $exported;
   }
@@ -366,10 +377,22 @@ class odExportHelper
 
   function exportMomentCommentItems($comments)
   {
+    if(!count($comments))
+      return [];
+
     $exported = [];
+
+    $comment_users_ids = lmbArrayHelper::getColumnValues('user_id', $comments);
+    $comment_users     = User::findByIds($comment_users_ids);
+    $comment_users     = lmbArrayHelper::makeKeysFromColumnValues('id', $comment_users);
+
     foreach ($comments as $comment) {
-      $exported[] = $this->exportMomentCommentItem($comment);
+      $exported_comment = $comment->exportForApi();
+      $exported_comment->user = $this->exportUserSubentity($comment_users[$exported_comment->user_id]);
+      unset($exported_comment->user_id);
+      $exported[] = $exported_comment;
     }
+
     return $exported;
   }
 

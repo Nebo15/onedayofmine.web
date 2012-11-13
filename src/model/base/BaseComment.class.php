@@ -20,6 +20,7 @@ class BaseComment extends BaseModel
     $export = new stdClass();
     $export->id = $this->id;
     $export->text = $this->text;
+    $export->user_id = $this->user_id;
     return $export;
   }
 }

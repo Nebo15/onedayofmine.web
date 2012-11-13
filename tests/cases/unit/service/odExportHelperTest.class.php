@@ -376,7 +376,7 @@ class odExportHelperTest extends odUnitTestCase
     $this->db_connection->resetStats();
 
     $exported = $this->export_helper->exportDayCommentItems($comments);
-    $this->assertEqual($i, count($this->db_connection->getQueries())); //must be 2
+    $this->assertEqual(1, count($this->db_connection->getQueries()));
     $this->assertJsonDayCommentItems($exported);
   }
 
@@ -399,9 +399,11 @@ class odExportHelperTest extends odUnitTestCase
       $comment->save();
       $comments[] = $comment;
     }
+
     $this->db_connection->resetStats();
+
     $exported = $this->export_helper->exportMomentCommentItems($comments);
-    $this->assertEqual($i, count($this->db_connection->getQueries())); //must be 2
+    $this->assertEqual(1, count($this->db_connection->getQueries()));
     $this->assertJsonMomentCommentItems($exported);
   }
 
