@@ -8,7 +8,6 @@ class AirBrakeErrorHandler
     $error_message = ($e instanceof lmbException) ? $e->getOriginalMessage() : $e->getMessage();
     $uri = isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : 'cli';
     $env = lmb_app_mode();
-    $request_method = $_SERVER['REQUEST_METHOD'];
 
     $backtrace = '';
     foreach($e->getTrace() as $trace)
@@ -22,60 +21,58 @@ class AirBrakeErrorHandler
         $backtrace .= "<line method=\"{$method}\" file=\"{$trace['file']}\" number=\"{$trace['line']}\"/>".PHP_EOL;
     }
 
-    $server_data = '';
-    foreach($_SERVER as $key => $value)
-      $server_data .= "<var key=\"$key\">$value</var>";
+    $server_xml_variables  = self::arrayToXMLVarList($_SERVER);
+    $server_xml_variables  = $server_xml_variables ? "<cgi-data>{$server_xml_variables}</cgi-data>" : '';
 
-    if($server_data != '')
-      $server_data = "<cgi-data>{$server_data}</cgi-data>";
+    $get_xml_variables     = self::arrayToXMLVarList($_GET, 'GET');
+    $post_xml_variables    = self::arrayToXMLVarList($_POST, 'POST');
+    $params_xml_variables  = $post_xml_variables ? "<params>{$post_xml_variables}</params>" : '';
 
-    $params = '';
-    foreach($_GET as $key => $value)
-      $params .= "<var key=\"GET[$key]\">$value</var>";
-
-    $params = '';
-    foreach($_POST as $key => $value)
-      $params .= "<var key=\"POST[$key]\">$value</var>";
-
-    if($params != '')
-      $params = "<params>{$params}</params>";
-
-    $session = '';
     if(isset($_SESSION))
-      foreach($_SESSION as $key => $value)
-        $session .= "<var key=\"$key\">$value</var>";
+    {
+      $session_xml_variables = self::arrayToXMLVarList($_SESSION);
+      $session_xml_variables = $session_xml_variables ? "<session>{$session_xml_variables}</session>" : '';
+    }
+    else
+      $session_xml_variables = '';
 
-    if($session != '')
-      $session = "<session>{$session}</session>";
-
-//    if(function_exists('fastcgi_finish_request'))
-//      fastcgi_finish_request();
+    try
+    {
+      $request = lmbToolkit::instance()->getRequest();
+      $controller = '<component>'.$request->controller.'</component>';
+      $action     = '<action>'.$request->action.'</action>';
+    }
+    catch (Exception $e)
+    {
+      $controller = '<component/>';
+      $action     = '<action/>';
+    }
 
     $text = <<<EOD
 <?xml version="1.0" encoding="UTF-8"?>
 <notice version="2.3">
-  <api-key>$airbrake_key</api-key>
+  <api-key>{$airbrake_key}</api-key>
   <notifier>
     <name>custom-notifier</name>
     <version>0.0.1</version>
     <url>http://api.onedayofmine.com</url>
   </notifier>
   <error>
-    <class>$error_class</class>
-    <message>$error_message</message>
-    <backtrace>$backtrace</backtrace>
+    <class>{$error_class}</class>
+    <message>{$error_message}</message>
+    <backtrace>{$backtrace}</backtrace>
   </error>
   <request>
-    <url>$uri</url>
-    <action>$request_method</action>
-    <component/>
-    $params
-    $session
-    $server_data
+    <url>{$uri}</url>
+    {$action}
+    {$controller}
+    {$params_xml_variables}
+    {$session_xml_variables}
+    {$server_xml_variables}
   </request>
   <server-environment>
     <project-root>/</project-root>
-    <environment-name>$env</environment-name>
+    <environment-name>{$env}</environment-name>
   </server-environment>
 </notice>
 EOD;
@@ -84,5 +81,45 @@ EOD;
     );
     $request->setBody($text);
     $request->send();
+
+    if($request->getResponseCode() != 200)
+    {
+      lmbToolkit::instance()
+        ->getLog()
+        ->error("AirBrake returned HTTP ".$request->getResponseCode(), ['response_body' => $request->getResponseBody()]);
+
+      self::showErrorPage('Critical error occurred. If this keeps happening for long perion of time email us at support@onedayofmine.com.');
+    }
+    else
+      self::showErrorPage();
+  }
+
+  protected static function arrayToXMLVarList(array $array, $key_prefix='')
+  {
+    $result = '';
+
+    foreach ($array as $key => $value) {
+      $key = $key_prefix ? "{$key_prefix}[{$key}]" : $key;
+
+      if(is_array($value))
+        $result .= self::arrayToXMLVarList($value, $key);
+      else
+        $result .= "<var key=\"{$key}\">{$value}</var>";
+    }
+
+    return $result;
+  }
+
+  protected static function showErrorPage($message = 'Critical error occurred. We recieved notification about it, and we will fix it shortly.')
+  {
+    header('HTTP/1.x 500 Server Error');
+    header('Content-Type: application/json');
+
+    echo json_encode([
+      'code'   => 500,
+      'status' => 'Internal error',
+      'result' => null,
+      'errors' => [$message],
+    ]);
   }
 }

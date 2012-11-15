@@ -220,6 +220,12 @@ abstract class BaseJsonController extends lmbController
 
   protected function _answer($result, array $errors, $status, $code)
   {
+    if(lmb_app_mode() != 'production')
+    {
+      $this->response->addHeader('Access-Control-Allow-Origin: *');
+      $this->response->addHeader('Access-Control-Allow-Credentials: true');
+    }
+
     $this->response->setCode($code);
     $this->response->setStatus($status);
     $this->response->setContentType('application/json');

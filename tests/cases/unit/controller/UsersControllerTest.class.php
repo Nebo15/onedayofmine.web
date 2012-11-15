@@ -223,8 +223,29 @@ class UsersControllerTest extends odControllerTestCase
     if($this->assertResponse(200))
     {
       $this->assertTrue(is_null($response->result));
-
       $this->assertEqual(1, $this->main_user->getFollowingUsers()->count());
+    }
+  }
+
+  function testFollow_TwoTomes()
+  {
+    $this->main_user->save();
+    $this->additional_user->save();
+    $this->assertEqual(0, $this->main_user->getFollowingUsers()->count());
+
+    lmbToolkit::instance()->setUser($this->main_user);
+
+    $response = $this->post('follow', [], $this->additional_user->id);
+    if($this->assertResponse(200))
+    {
+      $this->assertTrue(is_null($response->result));
+      $this->assertEqual(1, $this->main_user->getFollowingUsers()->count());
+    }
+
+    $response = $this->post('follow', [], $this->additional_user->id);
+    if ($this->assertResponse(200)) {
+      $this->assertTrue(is_null($response->result));
+      $this->assertEqual($response->status, 'Entity already exists');
     }
   }
 
@@ -243,6 +264,33 @@ class UsersControllerTest extends odControllerTestCase
     $link->save();
 
     lmbToolkit::instance()->setUser($this->main_user);
+    $response = $this->post('unfollow', array(), $this->additional_user->id);
+    if($this->assertResponse(200))
+    {
+      $this->assertTrue(is_null($response->result));
+      $this->assertEqual(0, $this->main_user->getFollowingUsers()->count());
+    }
+  }
+
+  function testUnfollow_TwoTimes()
+  {
+    $this->main_user->save();
+    $this->additional_user->save();
+
+    $link = new UserFollowing();
+    $link->setUser($this->additional_user);
+    $link->setFollowerUser($this->main_user);
+    $link->save();
+
+    lmbToolkit::instance()->setUser($this->main_user);
+
+    $response = $this->post('unfollow', array(), $this->additional_user->id);
+    if($this->assertResponse(200))
+    {
+      $this->assertTrue(is_null($response->result));
+      $this->assertEqual(0, $this->main_user->getFollowingUsers()->count());
+    }
+
     $response = $this->post('unfollow', array(), $this->additional_user->id);
     if($this->assertResponse(200))
     {

@@ -53,6 +53,9 @@ class UsersController extends BaseJsonController
     if(!$user = User::findById($this->request->id))
       return $this->_answerModelNotFoundById('User', $this->request->id);
 
+    if(UserFollowing::isUserFollowUser($this->_getUser(), $user))
+      return $this->_answerConflict();
+
     $following = new UserFollowing();
     $following->setUser($user);
     $following->setFollowerUser($this->_getUser());
@@ -74,7 +77,9 @@ class UsersController extends BaseJsonController
     $criteria = lmbSQLCriteria::equal('user_id', $user->id)
       ->add(lmbSQLCriteria::equal('follower_user_id', $this->_getUser()->id));
     $link = UserFollowing::findFirst($criteria);
-    $link->destroy();
+
+    if($link)
+      $link->destroy();
 
     return $this->_answerOk();
   }
