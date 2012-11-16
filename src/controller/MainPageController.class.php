@@ -7,8 +7,7 @@ class MainPageController extends BaseJsonController
 {
   function doGuestDisplay()
   {
-    echo 'Hello from ODOM';
-    die();
+    return $this->_answerOk('Hello from ODOM ('.lmb_app_mode().')');
   }
 
   function doGuestDeploy()
