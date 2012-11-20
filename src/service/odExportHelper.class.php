@@ -193,8 +193,8 @@ class odExportHelper
   function exportUserItems($users)
   {
     $following = [];
-    if($me = $this->current_user)
-      $following = UserFollowing::isUsersFollowUser($users, $me);
+    if($this->current_user)
+      $following = UserFollowing::isUserFollowUsers($this->current_user, $users);
 
     $exported = [];
     foreach($users as $followed)
