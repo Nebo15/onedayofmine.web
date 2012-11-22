@@ -6,7 +6,8 @@ class AirBrakeErrorHandler
     $airbrake_key = lmb_env_get('AIRBRAKE_KEY');
     $error_class = get_class($e);
     $error_message = ($e instanceof lmbException) ? $e->getOriginalMessage() : $e->getMessage();
-    $uri = isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : 'cli';
+    $uri = isset($_SERVER['REQUEST_URI']) ? 'http://'.$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] : 'cli';
+
     $env = lmb_app_mode();
 
     $backtrace = '';
