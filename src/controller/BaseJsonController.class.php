@@ -47,9 +47,7 @@ abstract class BaseJsonController extends lmbController
         return $this->_answerUnauthorized();
       }
     }
-
     return $this->_runMethod($method);
-
   }
 
   protected function _runMethod($method)
