@@ -88,11 +88,7 @@ EOD;
       lmbToolkit::instance()
         ->getLog()
         ->error("AirBrake returned HTTP ".$request->getResponseCode(), ['response_body' => $request->getResponseBody()]);
-
-      self::showErrorPage('Critical error occurred. If this keeps happening for long perion of time email us at support@onedayofmine.com.');
     }
-    else
-      self::showErrorPage();
   }
 
   protected static function arrayToXMLVarList(array $array, $key_prefix='')
@@ -109,18 +105,5 @@ EOD;
     }
 
     return $result;
-  }
-
-  protected static function showErrorPage($message = 'Critical error occurred. We recieved notification about it, and we will fix it shortly.')
-  {
-    header('HTTP/1.x 500 Server Error');
-    header('Content-Type: application/json');
-
-    echo json_encode([
-      'code'   => 500,
-      'status' => 'Internal error',
-      'result' => null,
-      'errors' => [$message],
-    ]);
   }
 }
