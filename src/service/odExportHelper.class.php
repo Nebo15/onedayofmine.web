@@ -275,13 +275,11 @@ class odExportHelper
 
     $moments_ids = lmbArrayHelper::getColumnValues('id', $moments);
 
-    $likes_count = lmbDBAL::selectQuery('moment_like')
+    $likes = lmbDBAL::selectQuery('moment_like')
       ->addField('moment_id')
-      ->addRawField('COUNT(id)', 'count')
-      ->addGroupBy('moment_id')
+      ->addField('user_id')
       ->addCriteria(lmbSQLCriteria::in('moment_id', $moments_ids))
       ->fetch()->toFlatArray();
-    $likes_count = lmbArrayHelper::makeKeysFromColumnValues('moment_id', $likes_count);
 
     $comments_count = lmbDBAL::selectQuery('moment_comment')
       ->addField('moment_id')
@@ -296,9 +294,17 @@ class odExportHelper
     {
       $exported_moment = $moment->exportForApi();
       unset($exported_moment->day_id);
-      $exported_moment->likes_count = isset($likes_count[$moment->id]) ? $likes_count[$moment->id]['count'] : 0;
+      $exported_moment->likes_count = 0;
+      $exported_moment->is_liked = false;
+      foreach($likes as $like)
+      {
+        if($like['moment_id'] != $moment->id)
+          continue;
+        $exported_moment->likes_count++;
+        if($this->current_user && $like['user_id'] == $this->current_user->id)
+          $exported_moment->is_liked = true;
+      }
       $exported_moment->comments_count = isset($comments_count[$moment->id]) ? $comments_count[$moment->id]['count'] : 0;
-
       $result[] = $exported_moment;
     }
 
