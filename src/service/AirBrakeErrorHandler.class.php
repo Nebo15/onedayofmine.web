@@ -95,13 +95,19 @@ EOD;
   {
     $result = '';
 
-    foreach ($array as $key => $value) {
+    foreach ($array as $key => $value)
+    {
+      if(is_object($value))
+        $value = json_encode((array) $value);
+
       $key = $key_prefix ? "{$key_prefix}[{$key}]" : $key;
 
       if(is_array($value))
         $result .= self::arrayToXMLVarList($value, $key);
       else
+      {
         $result .= "<var key=\"{$key}\">{$value}</var>";
+      }
     }
 
     return $result;
