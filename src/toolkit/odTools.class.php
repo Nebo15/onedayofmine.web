@@ -401,8 +401,7 @@ class odTools extends lmbAbstractTools
   {
     if(!$this->job_queue_client)
     {
-      $client = new GearmanClient();
-      $client->addServer();
+      $client = new odJobQueueClientForTests();
       $this->job_queue_client = $client;
     }
     return $this->job_queue_client;
