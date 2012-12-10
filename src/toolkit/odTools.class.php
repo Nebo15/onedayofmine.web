@@ -11,6 +11,7 @@ lmb_require('src/service/odExportHelper.class.php');
 lmb_require('src/service/odRequestsLog.class.php');
 lmb_require('src/service/odSearchService.class.php');
 lmb_require('src/service/odAsyncJobs.class.php');
+lmb_require('tests/src/service/odJobQueueClientForTests.class.php');
 lmb_require('src/model/User.class.php');
 
 if(!class_exists('CFRuntime')) require_once('amazon-sdk/sdk.class.php');
