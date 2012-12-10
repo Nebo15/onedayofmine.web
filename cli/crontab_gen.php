@@ -4,6 +4,7 @@ $dir = realpath(__DIR__.'/..');
 $log_str = " >> $dir/var/logs/cron.log 2>&1\n";
 
 echo "*/5 *	* * *	www-data $dir/limb od_calc_ratings $log_str";
+echo "* *	* * *	www-data $dir/limb od_job_worker $log_str";
 
 # Sphinx
 ## Users
