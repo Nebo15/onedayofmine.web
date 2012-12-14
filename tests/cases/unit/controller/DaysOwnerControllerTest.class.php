@@ -128,6 +128,29 @@ class DaysOwnerControllerTest extends odControllerTestCase
     }
   }
 
+  function testAddMoment_WithoutDescription()
+  {
+    $this->main_user->timezone = $this->generator->integer(3);
+    $this->main_user->save();
+
+    $day = $this->generator->day($this->main_user);
+    $day->save();
+
+    lmbToolkit::instance()->setUser($this->main_user);
+    $response = $this->post('add_moment', [
+        'time'          => $time        = '2005-08-09T18:31:42+03:00',
+        'image_content' => $image       = base64_encode(file_get_contents(lmb_env_get('APP_DIR').'/tests/init/image_with_exif.jpeg'))
+    ], $day->id);
+
+    if($this->assertResponse(200))
+    {
+      $moment = $response->result;
+      $this->assertJsonMoment($moment, true);
+      $this->assertEqual($day->getMoments()->at(0)->id, $moment->id);
+      $this->assertEqual($moment->description, '');
+    }
+  }
+
   function testAddMoment_WithoutTime()
   {
     $this->main_user->timezone = $this->generator->integer(3);
@@ -138,8 +161,8 @@ class DaysOwnerControllerTest extends odControllerTestCase
 
     lmbToolkit::instance()->setUser($this->main_user);
     $response = $this->post('add_moment', [
-        'description'   => $description = $this->generator->string(200),
-        'image_content' => $image       = base64_encode(file_get_contents(lmb_env_get('APP_DIR').'/tests/init/image_with_exif.jpeg'))
+      'description'   => $description = $this->generator->string(200),
+      'image_content' => $image       = base64_encode(file_get_contents(lmb_env_get('APP_DIR').'/tests/init/image_with_exif.jpeg'))
     ], $day->id);
 
     if($this->assertResponse(200))

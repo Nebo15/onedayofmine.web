@@ -301,7 +301,7 @@ class DaysController extends BaseJsonController
     if(!$this->request->isPost())
       return $this->_answerNotPost();
 
-    $errors = $this->_checkPropertiesInRequest(array('description', 'image_content'));
+    $errors = $this->_checkPropertiesInRequest(array('image_content'));
     if(count($errors))
       return $this->_answerWithError($errors);
 
@@ -317,7 +317,7 @@ class DaysController extends BaseJsonController
 
     $moment = new Moment();
     $moment->setDay($day);
-    $moment->description = $this->request->get('description');
+    $moment->description = $this->request->get('description', '');
     $moment->save();
 
     $moment->attachImage($image_content);
