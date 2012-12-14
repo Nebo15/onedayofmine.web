@@ -165,13 +165,8 @@ class DaysOwnerControllerTest extends odControllerTestCase
       'image_content' => $image       = base64_encode(file_get_contents(lmb_env_get('APP_DIR').'/tests/init/image_with_exif.jpeg'))
     ], $day->id);
 
-    if($this->assertResponse(200))
-    {
-      $moment = $response->result;
-      $this->assertJsonMoment($moment, true);
-      $this->assertEqual($day->getMoments()->at(0)->id, $moment->id);
-      $this->assertEqual($moment->time, Moment::stampToIso('1330600003', $this->main_user->timezone));
-    }
+    if($this->assertResponse(400))
+      $this->assertEqual("Property 'time' not found in request", $response->errors[0]);
   }
 
   function testAddMoment_CoverOnFirstMoment()

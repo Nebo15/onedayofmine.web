@@ -301,7 +301,7 @@ class DaysController extends BaseJsonController
     if(!$this->request->isPost())
       return $this->_answerNotPost();
 
-    $errors = $this->_checkPropertiesInRequest(array('image_content'));
+    $errors = $this->_checkPropertiesInRequest(array('time', 'image_content'));
     if(count($errors))
       return $this->_answerWithError($errors);
 
