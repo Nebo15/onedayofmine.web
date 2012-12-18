@@ -454,6 +454,7 @@ trait odEntityAssertions
       "time",
       "text",
       "link",
+      "sender"
     ]);
 
     $this->assertTrue($news->id, 'News ID not set');
@@ -467,6 +468,24 @@ trait odEntityAssertions
     foreach ($news as $news_item)
     {
       $this->assertJsonNewsListItem($news_item);
+    }
+  }
+
+  protected function assertJsonActivitiesListItem(stdClass $activitity)
+  {
+    $this->assertPropertys($activitity, ["id", "time", "text", "link"]);
+
+    $this->assertTrue($activitity->id, 'News ID not set');
+    $this->assertTrue($activitity->time);
+    $this->assertTrue($activitity->text);
+    $this->assertTrue($activitity->link);
+  }
+
+  protected function assertJsonActivitiesList(array $news)
+  {
+    foreach ($news as $news_item)
+    {
+      $this->assertJsonActivitiesListItem($news_item);
     }
   }
 }

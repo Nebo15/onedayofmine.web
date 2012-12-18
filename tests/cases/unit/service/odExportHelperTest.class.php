@@ -446,7 +446,7 @@ class odExportHelperTest extends odUnitTestCase
   function testExportNewsItems()
   {
     $news = [];
-    for($i = 0; $i < $this->generator->integer(2); $i++) {
+    for($i = 0; $i < 5; $i++) {
       $news_item = $this->generator->news();
       $news_item->save();
       $news[] = $news_item;
@@ -455,7 +455,7 @@ class odExportHelperTest extends odUnitTestCase
     $this->db_connection->resetStats();
 
     $exported = $this->export_helper->exportNewsItems($news);
-    $this->assertEqual($i, count($this->db_connection->getQueries())); //must be 2
+    $this->assertEqual(1, count($this->db_connection->getQueries()));
     $this->assertJsonNewsItems($exported);
   }
 
@@ -467,15 +467,15 @@ class odExportHelperTest extends odUnitTestCase
     $this->db_connection->resetStats();
 
     $exported = $this->export_helper->exportActivityListItem($news);
-    $this->assertJsonNewsListItem($exported);
+    $this->assertJsonActivitiesListItem($exported);
 
-    $this->assertEqual(1, count($this->db_connection->getQueries()));
+    $this->assertEqual(0, count($this->db_connection->getQueries()));
   }
 
   function testExportActivityItems()
   {
     $news = [];
-    for($i = 0; $i < $this->generator->integer(2); $i++) {
+    for($i = 0; $i < 5; $i++) {
       $news_item = $this->generator->news();
       $news_item->save();
       $news[] = $news_item;
@@ -484,9 +484,9 @@ class odExportHelperTest extends odUnitTestCase
     $this->db_connection->resetStats();
 
     $exported = $this->export_helper->exportActivityItems($news);
-    $this->assertJsonNewsItems($exported);
+    $this->assertJsonActivitiesList($exported);
 
-    $this->assertEqual($i, count($this->db_connection->getQueries())); //must be 2
+    $this->assertEqual(0, count($this->db_connection->getQueries()));
   }
 
   function testExportComplaint()
