@@ -1,6 +1,7 @@
 <?php
 lmb_require('src/model/base/odLightAR.class.php');
 lmb_require('limb/net/src/lmbIp.class.php');
+lmb_require('limb/validation/src/rule/lmbValidValueRule.class.php');
 
 abstract class BaseModel extends odLightAR
 {
@@ -30,12 +31,15 @@ abstract class BaseModel extends odLightAR
   static function isoToStamp($iso)
   {
     $date = DateTime::createFromFormat(DateTime::ISO8601, $iso);
+    if(!$date)
+      throw new lmbException("Wrong time format '$iso'. Must be a 2005-08-09T18:31:42+03:00");
     return array($date->getTimestamp() + $date->getOffset() * 2, $date->getOffset() / 60);
   }
 
   static function stampToIso($stamp, $timezone)
   {
     $date = DateTime::createFromFormat('U', $stamp - $timezone * 60, new DateTimeZone('UTC'));
+
     $date_time = strstr($date->format(Datetime::ISO8601), '+', true);
     $sign = $timezone < 0 ? '-' : '+';
     $timezone = abs($timezone);

@@ -5,6 +5,11 @@ lmb_require('src/Json.class.php');
 
 class MainPageController extends BaseJsonController
 {
+  function doGuestDisplay()
+  {
+    return $this->_answerOk('Hello from ODOM ('.lmb_app_mode().')');
+  }
+
   function doGuestDeploy()
   {
     echo '<pre>';

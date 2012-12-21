@@ -47,14 +47,19 @@ abstract class BaseJsonController extends lmbController
         return $this->_answerUnauthorized();
       }
     }
-
     return $this->_runMethod($method);
-
   }
 
   protected function _runMethod($method)
   {
-    $method_response = $this->$method();
+    try
+    {
+      $method_response = $this->$method();
+    }
+    catch(odFacebookApiExpiredTokenException $e)
+    {
+      $method_response = $this->_answerUnauthorized();
+    }
 
     $this->_passLocalAttributesToView();
 

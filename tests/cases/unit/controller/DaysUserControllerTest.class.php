@@ -28,6 +28,8 @@ class DaysUserControllerTest extends odControllerTestCase
     $favorite_day->setDay($day);
     $favorite_day->save();
 
+    $this->generator->momentLike($day->getMoments()->at(0), $this->main_user);
+
     lmbToolkit::instance()->setUser($this->main_user);
 
     $views_count = $day->views_count;
@@ -38,13 +40,17 @@ class DaysUserControllerTest extends odControllerTestCase
       $this->assertJsonDay($response_day);
       $this->assertEqualPropertyValues($response_day, $day->exportForApi());
       $this->assertTrue($response_day->is_favorite);
+      $this->assertEqual($views_count + 1, $response_day->views_count);
 
       $this->assertEqual($day->getComments()->count(), $response_day->comments_count);
       $this->assertEqual(lmbToolkit::instance()->getConf('common')->default_comments_count, count($response_day->comments));
       $this->assertEqual($day->getComments()->at(0)->id, $response_day->comments[0]->id);
+
       $this->assertEqual($day->getMoments()->at(0)->getComments()->count(), $response_day->moments[0]->comments_count);
       $this->assertEqual($day->getMoments()->count(), count($response_day->moments));
-      $this->assertEqual($views_count + 1, $response_day->views_count);
+
+      if($this->assertProperty($response_day->moments[0], 'is_liked'))
+        $this->assertTrue($response_day->moments[0]->is_liked);
     }
   }
 

@@ -30,6 +30,18 @@ class odNewsServiceTest extends odUnitTestCase
     $this->generator->follow($this->sender, $this->follower);
   }
 
+  function testGetMessage()
+  {
+    $sender = (object) ['id' => 1, 'name' => 'foo'];
+    $user = (object) ['id' => 2, 'name' => 'bar'];
+    $day = (object) ['id' => 3, 'title' => 'baz'];
+    $params = ['sender' => $sender, 'user' => $user, 'day' => $day];
+    $expected = <<<EOD
+<a href="odom://users/1">foo</a>-<a href="odom://users/2">bar</a>-<a href="odom://days/3">baz</a>
+EOD;
+    $this->assertEqual(odNewsService::getMessage('{sender}-{user}-{day}', $params), $expected);
+  }
+
   function testOnDay()
   {
     $day = $this->generator->day($this->sender, 'testOnDay');
@@ -39,7 +51,7 @@ class odNewsServiceTest extends odUnitTestCase
     $news = $this->follower->getNews()->at(0);
 
     $this->assertNewsUsers($news, $this->follower, $this->sender);
-    $this->assertNewsText($news, odNewsService::MSG_DAY_CREATED, $this->sender->name, $day->title);
+    $this->assertNewsText($news, odNewsService::MSG_DAY_CREATED, ['day' => $day]);
     $this->assertEqual("odom://day/{$day->id}", $news->link);
     $this->assertEqual($day->id, $news->day_id);
   }
@@ -87,7 +99,7 @@ class odNewsServiceTest extends odUnitTestCase
 
     $news = $day_owner->getNews()->at(0);
     $this->assertNewsUsers($news, $day_owner, $commentator);
-    $this->assertNewsText($news, odNewsService::MSG_DAY_COMMENT, $commentator->name, $day->title);
+    $this->assertNewsText($news, odNewsService::MSG_DAY_COMMENT, ['day' => $day], $commentator);
     $this->assertEqual($day->id, $news->day_id);
     $this->assertEqual($comment->id, $news->day_comment_id);
     $this->assertEqual("odom://day/{$day->id}/comment/{$comment->id}", $news->link);
@@ -97,7 +109,7 @@ class odNewsServiceTest extends odUnitTestCase
   {
     $day_owner = $this->generator->user('onwer');
     $day_owner->save();
-    $commentator = $this->generator->user('cmmentator');
+    $commentator = $this->generator->user('commentator');
     $commentator->save();
 
     $day = $this->generator->day($day_owner, false, 'some_day');
@@ -146,7 +158,7 @@ class odNewsServiceTest extends odUnitTestCase
 
     $news = $old_commentator->getNews()->at(0);
     $this->assertNewsUsers($news, $old_commentator, $new_commentator);
-    $this->assertNewsText($news, odNewsService::MSG_DAY_COMMENT, $new_commentator->name, $day->title);
+    $this->assertNewsText($news, odNewsService::MSG_DAY_COMMENT,  ['day' => $day], $new_commentator);
     $this->assertEqual("odom://day/{$day->id}/comment/{$comment->id}", $news->link);
   }
 
@@ -179,7 +191,7 @@ class odNewsServiceTest extends odUnitTestCase
 
     $news = News::findFirst();
     $this->assertNewsUsers($news, $this->follower,$this->sender);
-    $this->assertNewsText($news, odNewsService::MSG_MOMENT_CREATED, $this->sender->name, $day->title);
+    $this->assertNewsText($news, odNewsService::MSG_MOMENT_CREATED, ['day' => $day]);
     $this->assertEqual($day->id, $news->day_id);
     $this->assertEqual($moment->id, $news->moment_id);
   }
@@ -223,7 +235,7 @@ class odNewsServiceTest extends odUnitTestCase
     $user = User::findById($day->user_id);
     $news = $user->getNews()->at(0);
     $this->assertNewsUsers($news, $user, $commentator);
-    $this->assertNewsText($news, odNewsService::MSG_MOMENT_COMMENT, $commentator->name, $day->title);
+    $this->assertNewsText($news, odNewsService::MSG_MOMENT_COMMENT, ['day' => $day]);
     $this->assertEqual($day->id, $news->day_id);
     $this->assertEqual($moment->id, $news->moment_id);
     $this->assertEqual($comment->id, $news->moment_comment_id);
@@ -281,7 +293,7 @@ class odNewsServiceTest extends odUnitTestCase
 
     $news = $old_commentator->getNews()->at(0);
     $this->assertNewsUsers($news, $old_commentator, $new_commentator);
-    $this->assertNewsText($news, odNewsService::MSG_MOMENT_COMMENT, $new_commentator->name, $day->title);
+    $this->assertNewsText($news, odNewsService::MSG_MOMENT_COMMENT, ['day' => $day]);
     $this->assertEqual("odom://moment/{$moment->id}/comment/{$comment->id}", $news->link);
   }
 
@@ -316,7 +328,7 @@ class odNewsServiceTest extends odUnitTestCase
     $this->assertEqual(1, count($foo->getNews()));
     $news = $foo->getNews()->at(0);
     $this->assertNewsUsers($news, $foo, $bar);
-    $this->assertNewsText($news, odNewsService::MSG_FOLLOW, $bar->name, $foo->name);
+    $this->assertNewsText($news, odNewsService::MSG_FOLLOW, ['user' => $foo], $bar);
     $this->assertEqual($foo->id, $news->user_id);
     $this->assertEqual("odom://user/{$foo->id}", $news->link);
   }
@@ -337,7 +349,7 @@ class odNewsServiceTest extends odUnitTestCase
     $this->assertEqual(1, count($dum->getNews()));
     $news = $dum->getNews()->at(0);
     $this->assertNewsUsers($news, $dum, $foo);
-    $this->assertNewsText($news, odNewsService::MSG_FOLLOW, $foo->name, $bar->name);
+    $this->assertNewsText($news, odNewsService::MSG_FOLLOW, ['user' => $bar], $foo);
     $this->assertEqual("odom://user/{$bar->id}", $news->link);
   }
 
@@ -373,7 +385,7 @@ class odNewsServiceTest extends odUnitTestCase
 
     $news = $friend->getNews()->at(0);
     $this->assertNewsUsers($news, $friend, $new_user);
-    $this->assertNewsText($news, odNewsService::MSG_FBFRIEND_REGISTERED, $new_user->name);
+    $this->assertNewsText($news, odNewsService::MSG_FBFRIEND_REGISTERED, [], $new_user);
     $this->assertEqual("odom://user/{$new_user->id}", $news->link);
   }
 
@@ -389,7 +401,7 @@ class odNewsServiceTest extends odUnitTestCase
 
     $news = $day_owner->getNews()->at(0);
     $this->assertNewsUsers($news, $day_owner, $this->sender);
-    $this->assertNewsText($news, odNewsService::MSG_DAY_LIKED, $this->sender->name, $day->title);
+    $this->assertNewsText($news, odNewsService::MSG_DAY_LIKED, ['day' => $day]);
     $this->assertEqual($day->id, $news->day_id);
     $this->assertEqual($like->id, $news->day_like_id);
     $this->assertEqual("odom://day/{$day->id}", $news->link);
@@ -420,7 +432,7 @@ class odNewsServiceTest extends odUnitTestCase
 
     $news = $this->follower->getNews()->at(0);
     $this->assertNewsUsers($news, $this->follower, $this->sender);
-    $this->assertNewsText($news, odNewsService::MSG_DAY_LIKED, $this->sender->name, $day->title);
+    $this->assertNewsText($news, odNewsService::MSG_DAY_LIKED, ['day' => $day]);
     $this->assertEqual($day->id, $news->day_id);
     $this->assertEqual($like->id, $news->day_like_id);
     $this->assertEqual("odom://day/{$day->id}", $news->link);
@@ -470,7 +482,7 @@ class odNewsServiceTest extends odUnitTestCase
 
     $news = $day_owner->getNews()->at(0);
     $this->assertNewsUsers($news, $day_owner, $this->sender);
-    $this->assertNewsText($news, odNewsService::MSG_MOMENT_LIKED, $this->sender->name, $day->title);
+    $this->assertNewsText($news, odNewsService::MSG_MOMENT_LIKED, ['day' => $day]);
     $this->assertEqual($moment->id, $news->moment_id);
     $this->assertEqual($like->id, $news->moment_like_id);
     $this->assertEqual("odom://moment/{$moment->id}", $news->link);
@@ -505,7 +517,7 @@ class odNewsServiceTest extends odUnitTestCase
 
     $news = $this->follower->getNews()->at(0);
     $this->assertNewsUsers($news, $this->follower, $this->sender);
-    $this->assertNewsText($news, odNewsService::MSG_MOMENT_LIKED, $this->sender->name, $day->title);
+    $this->assertNewsText($news, odNewsService::MSG_MOMENT_LIKED, ['day' => $day]);
     $this->assertEqual($moment->id, $news->moment_id);
     $this->assertEqual($like->id, $news->moment_like_id);
     $this->assertEqual("odom://moment/{$moment->id}", $news->link);
@@ -559,7 +571,7 @@ class odNewsServiceTest extends odUnitTestCase
     $this->assertEqual(1, count($user_day_owner->getNews()));
     $news = $user_day_owner->getNews()->at(0);
     $this->assertNewsUsers($news, $user_day_owner, $user_who_share);
-    $this->assertNewsText($news, odNewsService::MSG_DAY_SHARE, $user_who_share->name, $day->title);
+    $this->assertNewsText($news, odNewsService::MSG_DAY_SHARE, ['day' => $day], $user_who_share);
     $this->assertEqual($day->id, $news->day_id);
     $this->assertEqual("odom://day/{$day->id}", $news->link);
   }
@@ -592,7 +604,7 @@ class odNewsServiceTest extends odUnitTestCase
     $this->assertEqual(1, count($user_day_owner->getNews()));
     $news = $user_day_owner->getNews()->at(0);
     $this->assertNewsUsers($news, $user_day_owner, $user_who_favorite);
-    $this->assertNewsText($news, odNewsService::MSG_DAY_Favorite, $user_who_favorite->name, $day->title);
+    $this->assertNewsText($news, odNewsService::MSG_DAY_FAVORITE, ['day' => $day], $user_who_favorite);
     $this->assertEqual($day->id, $news->day_id);
     $this->assertEqual("odom://day/{$day->id}", $news->link);
   }
@@ -621,7 +633,7 @@ class odNewsServiceTest extends odUnitTestCase
     $this->assertEqual(1, count($this->follower->getNews()));
     $news = $this->follower->getNews()->at(0);
     $this->assertNewsUsers($news, $this->follower, $this->sender);
-    $this->assertNewsText($news, odNewsService::MSG_DAY_Favorite, $this->sender->name, $day->title);
+    $this->assertNewsText($news, odNewsService::MSG_DAY_FAVORITE, ['day' => $day]);
     $this->assertEqual($day->id, $news->day_id);
     $this->assertEqual("odom://day/{$day->id}", $news->link);
   }
@@ -658,8 +670,7 @@ class odNewsServiceTest extends odUnitTestCase
       $notification = $notifications[0];
       $this->assertEqual($device_token->id, $notification['device_token_id']);
       $valid_text = odNewsService::getMessage(
-        odNewsService::MSG_DAY_CREATED,
-        [$this->sender->name, $day->title]
+        odNewsService::MSG_DAY_CREATED, ['sender' => $this->sender,'day' => $day]
       );
       $this->assertEqual($valid_text, $notification['text']);
       $this->assertEqual(null, $notification['icon']);
@@ -685,9 +696,9 @@ class odNewsServiceTest extends odUnitTestCase
     return $this->fail('Wrong recipient');
   }
 
-  protected function assertNewsText(News $news, $message)
+  protected function assertNewsText(News $news, $message, array $params = array(), $sender = null)
   {
-    $params = array_slice(func_get_args(), 2);
+    $params['sender'] = (!$sender) ? $this->sender : $sender;
     $text = odNewsService::getMessage($message, $params);
     return $this->assertEqual($text, $news->text);
   }

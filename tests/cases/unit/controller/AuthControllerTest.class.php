@@ -196,7 +196,7 @@ class AuthControllerTest extends odControllerTestCase
 
       $errors = $response->errors;
       if($this->assertEqual(1, count($errors)))
-        $this->assertEqual('Invalid OAuth access token.', $errors[0]);
+        $this->assertEqual('Token expired', $errors[0]);
     }
   }
 

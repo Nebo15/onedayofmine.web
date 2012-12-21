@@ -6,7 +6,8 @@ class AirBrakeErrorHandler
     $airbrake_key = lmb_env_get('AIRBRAKE_KEY');
     $error_class = get_class($e);
     $error_message = ($e instanceof lmbException) ? $e->getOriginalMessage() : $e->getMessage();
-    $uri = isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : 'cli';
+    $uri = isset($_SERVER['REQUEST_URI']) ? 'http://'.$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] : 'cli';
+
     $env = lmb_app_mode();
 
     $backtrace = '';
@@ -87,39 +88,28 @@ EOD;
       lmbToolkit::instance()
         ->getLog()
         ->error("AirBrake returned HTTP ".$request->getResponseCode(), ['response_body' => $request->getResponseBody()]);
-
-      self::showErrorPage('Critical error occurred. If this keeps happening for long perion of time email us at support@onedayofmine.com.');
     }
-    else
-      self::showErrorPage();
   }
 
   protected static function arrayToXMLVarList(array $array, $key_prefix='')
   {
     $result = '';
 
-    foreach ($array as $key => $value) {
+    foreach ($array as $key => $value)
+    {
+      if(is_object($value))
+        $value = json_encode((array) $value);
+
       $key = $key_prefix ? "{$key_prefix}[{$key}]" : $key;
 
       if(is_array($value))
         $result .= self::arrayToXMLVarList($value, $key);
       else
+      {
         $result .= "<var key=\"{$key}\">{$value}</var>";
+      }
     }
 
     return $result;
-  }
-
-  protected static function showErrorPage($message = 'Critical error occurred. We recieved notification about it, and we will fix it shortly.')
-  {
-    header('HTTP/1.x 500 Server Error');
-    header('Content-Type: application/json');
-
-    echo json_encode([
-      'code'   => 500,
-      'status' => 'Internal error',
-      'result' => null,
-      'errors' => [$message],
-    ]);
   }
 }

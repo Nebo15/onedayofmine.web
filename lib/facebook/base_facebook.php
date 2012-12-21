@@ -1117,6 +1117,7 @@ abstract class BaseFacebook
             (strpos($message, 'An active access token must be used') !== false)
         ) {
           $this->destroySession();
+          throw new odFacebookApiExpiredTokenException($e->getMessage());
         }
         break;
     }

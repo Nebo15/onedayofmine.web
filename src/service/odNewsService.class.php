@@ -17,22 +17,22 @@ class odNewsService
    * @todo move this to lang file
    */
   ## Day ##
-  const MSG_DAY_CREATED         = "<a href=\"app://users/:id\">%s</a> just created day <a href=\"app://days/:id\">%s</a>";
-  const MSG_DAY_COMMENT         = "%s has responded you in day %s";
-  const MSG_DAY_LIKED           = "%s liked day %s";
-  const MSG_DAY_SHARE           = "%s share day %s";
-  const MSG_DAY_Favorite       = "%s added the day %s to favorites";
+  const MSG_DAY_CREATED         = "{sender} just created day {day}";
+  const MSG_DAY_COMMENT         = "{sender} has responded you in day {day}";
+  const MSG_DAY_LIKED           = "{sender} liked day {day}";
+  const MSG_DAY_SHARE           = "{sender} share day {day}";
+  const MSG_DAY_FAVORITE        = "{sender} added the day {day} to favorites";
 
   ## Moment ##
-  const MSG_MOMENT_CREATED      = "%s created moment in day %s";
-  const MSG_MOMENT_COMMENT      = "%s has responded you in moment of day %s";
-  const MSG_MOMENT_LIKED        = "%s liked moment in day %s";
+  const MSG_MOMENT_CREATED      = "{sender} created moment in day {day}";
+  const MSG_MOMENT_COMMENT      = "{sender} has responded you in moment of day {day}";
+  const MSG_MOMENT_LIKED        = "{sender} liked moment in day {day}";
 
   ## Follow ##
-  const MSG_FOLLOW              = "%s started to follow %s";
+  const MSG_FOLLOW              = "{sender} started to follow {user}";
 
   ## User ##
-  const MSG_FBFRIEND_REGISTERED = "You'r facebook friend '%s' just started to use this application, follow hem?";
+  const MSG_FBFRIEND_REGISTERED = "You'r facebook friend '{sender}' just started to use this application, follow hem?";
 
   /**
    * @var User
@@ -59,7 +59,7 @@ class odNewsService
       'link' => "odom://user/{$user->id}"
     ]);
 
-    $this->send($news, self::MSG_FBFRIEND_REGISTERED, array($user->name));
+    $this->send($news, self::MSG_FBFRIEND_REGISTERED);
   }
 
   /**
@@ -79,7 +79,7 @@ class odNewsService
       'user_id' => $followed_user->id,
       'link' => "odom://user/{$followed_user->id}"
     ]);
-    $this->send($news, self::MSG_FOLLOW, array($this->sender->name, $followed_user->name));
+    $this->send($news, self::MSG_FOLLOW, ['user' => $followed_user]);
   }
 
   /**
@@ -89,6 +89,7 @@ class odNewsService
   {
     lmb_assert_true($day->id);
     $news = (new News)->import([
+      'user_id' => $this->sender->id,
       'day_id' => $day->id,
       'link' => "odom://day/{$day->id}"
     ]);
@@ -97,7 +98,7 @@ class odNewsService
       if(1 == $follower->getSettings()->notifications_new_days)
         $this->addRecipient($follower);
     }
-    $this->send($news, self::MSG_DAY_CREATED, array($this->sender->name, $day->title));
+    $this->send($news, self::MSG_DAY_CREATED, ['day' => $day]);
   }
 
   function onDayDelete(Day $day)
@@ -119,7 +120,7 @@ class odNewsService
     $user = User::findById($day->user_id);
     if(1 == $user->getSettings()->notifications_related_activity)
       $this->addRecipient($user);
-    $this->send($news, self::MSG_DAY_SHARE, array($this->sender->name, $day->title));
+    $this->send($news, self::MSG_DAY_SHARE, ['day' => $day]);
   }
 
   function onDayFavorite(Day $day)
@@ -137,7 +138,7 @@ class odNewsService
       if(1 == $follower->getSettings()->notifications_related_activity)
         $this->addRecipient($follower);
 
-    $this->send($news, self::MSG_DAY_Favorite, array($this->sender->name, $day->title));
+    $this->send($news, self::MSG_DAY_FAVORITE, ['day' => $day]);
   }
 
   /**
@@ -153,7 +154,7 @@ class odNewsService
       if(1 == $follower->getSettings()->notifications_new_days)
         $this->addRecipient($follower);
 
-    $this->send($news, self::MSG_MOMENT_CREATED, array($this->sender->name, $moment->getDay()->title));
+    $this->send($news, self::MSG_MOMENT_CREATED, ['day' => $moment->getDay()]);
   }
 
   function onMomentDelete(Moment $moment)
@@ -182,7 +183,7 @@ class odNewsService
       if(1 == $follower->getSettings()->notifications_related_activity)
         $this->addRecipient($follower);
 
-    $this->send($news, self::MSG_DAY_LIKED, array($this->sender->name, $day->title));
+    $this->send($news, self::MSG_DAY_LIKED, ['day' => $day]);
   }
 
   function onDayUnlike(Day $day, DayLike $like)
@@ -200,6 +201,7 @@ class odNewsService
       'moment_like_id' => $like->id,
       'link' => "odom://moment/{$moment->id}"
     ]);
+    $day = $moment->getDay();
     $owner = $moment->getDay()->getUser();
 
     if($owner->getSettings()->notifications_related_activity)
@@ -209,7 +211,7 @@ class odNewsService
       if(1 == $follower->getSettings()->notifications_related_activity)
         $this->addRecipient($follower);
 
-    $this->send($news, self::MSG_MOMENT_LIKED, array($this->sender->name, $moment->getDay()->title));
+    $this->send($news, self::MSG_MOMENT_LIKED, ['day' => $day]);
   }
 
   function onMomentUnlike(Moment $moment, MomentLike $like)
@@ -240,7 +242,7 @@ class odNewsService
           $this->addRecipient($comment_author);
     }
 
-    $this->send($news, self::MSG_DAY_COMMENT, array($this->sender->name, $day->title));
+    $this->send($news, self::MSG_DAY_COMMENT, ['day' => $day]);
   }
 
   function onDayCommentDelete(DayComment $comment)
@@ -273,7 +275,7 @@ class odNewsService
           $this->addRecipient($comment_author);
     }
 
-    $this->send($news, self::MSG_MOMENT_COMMENT, array($this->sender->name, $day->title));
+    $this->send($news, self::MSG_MOMENT_COMMENT, ['day' => $day]);
   }
 
   function onMomentCommentDelete(MomentComment $comment)
@@ -303,20 +305,27 @@ class odNewsService
    * @param  array  $params
    * @return string
    */
-  public static function getMessage($type, array $params = array())
+  public static function getMessage($tpl, array $params = array())
   {
-    lmb_assert_type($type, 'string');
-    array_unshift($params, $type);
-    $replaces_mustbe = substr_count($type, '%');
-    $replaces_given = count($params) - 1;
-    if($replaces_mustbe != $replaces_given)
+    if(false !== strpos($tpl, '{sender}'))
     {
-      throw new lmbException("Wrong params count", array(
-        'type' => $type,
-        'params' => array_slice($params, 1)
-      ));
+      if(!isset($params['sender']))
+        throw new lmbException('sender not found in params');
+      $tpl = str_replace('{sender}', "<a href=\"odom://users/{$params['sender']->id}\">{$params['sender']->name}</a>", $tpl);
     }
-    return vsprintf($type, $params);
+    if(false !== strpos($tpl, '{user}'))
+    {
+      if(!isset($params['user']))
+        throw new lmbException('user not found in params');
+      $tpl = str_replace('{user}', "<a href=\"odom://users/{$params['user']->id}\">{$params['user']->name}</a>", $tpl);
+    }
+    if(false !== strpos($tpl, '{day}'))
+    {
+      if(!isset($params['day']))
+        throw new lmbException('day not found in params');
+      $tpl = str_replace('{day}', "<a href=\"odom://days/{$params['day']->id}\">{$params['day']->title}</a>", $tpl);
+    }
+    return $tpl;
   }
 
   /**
@@ -350,6 +359,7 @@ class odNewsService
 
   protected function send(News $news, $type, array $params = array())
   {
+    $params['sender'] = $this->sender;
     $text = self::getMessage($type, $params);
     $news->setSender($this->sender);
     $news->text = $text;

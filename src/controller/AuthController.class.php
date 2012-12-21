@@ -67,7 +67,7 @@ class AuthController extends BaseJsonController
   function _register($facebook_access_token)
   {
     $user = new User();
-    $user->setFacebookAccessToken($facebook_access_token);
+    $user->facebook_access_token = $facebook_access_token;
     $profile = $this->toolkit->getFacebookProfile($user);
     $user->import($profile->getInfo());
     $user->save();

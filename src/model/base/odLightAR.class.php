@@ -126,7 +126,8 @@ abstract class odLightAR extends odDirtableObject implements ArrayAccess
   function import(array $props)
   {
     foreach($props as $key => $value)
-      $this->set($key, $value);
+      if($this->has($key))
+        $this->set($key, $value);
     return $this;
   }
 

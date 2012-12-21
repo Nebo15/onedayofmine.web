@@ -52,12 +52,12 @@ class UserFollowing extends BaseModel
     return $following_ids;
   }
 
-  public static function isUserFollowUsers(User $follower_user, lmbCollectionInterface $followed_users)
+  public static function isUserFollowUsers(User $follower_user, $followed_users)
   {
     if(!$follower_user->id)
       throw new lmbException("Can't retrieve user id");
 
-    if(!$followed_users->count())
+    if(!count($followed_users))
       return [];
 
     $following_ids = lmbArrayHelper::getColumnValues('id', $followed_users);

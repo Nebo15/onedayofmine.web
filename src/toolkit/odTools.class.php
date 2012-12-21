@@ -11,6 +11,7 @@ lmb_require('src/service/odExportHelper.class.php');
 lmb_require('src/service/odRequestsLog.class.php');
 lmb_require('src/service/odSearchService.class.php');
 lmb_require('src/service/odAsyncJobs.class.php');
+lmb_require('tests/src/service/odJobQueueClientForTests.class.php');
 lmb_require('src/model/User.class.php');
 
 if(!class_exists('CFRuntime')) require_once('amazon-sdk/sdk.class.php');
@@ -401,8 +402,7 @@ class odTools extends lmbAbstractTools
   {
     if(!$this->job_queue_client)
     {
-      $client = new GearmanClient();
-      $client->addServer();
+      $client = new odJobQueueClientForTests();
       $this->job_queue_client = $client;
     }
     return $this->job_queue_client;
