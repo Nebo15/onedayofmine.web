@@ -26,7 +26,7 @@ class AuthController extends BaseJsonController
     if(!$facebook->getUser()) {
       $this->response->redirect($facebook->getLoginUrl());
     } else {
-      return '<html><head><script>window.location = "odom://index.html#profile:token=' . $facebook->getAccessToken() . '";</script></head><body></body></html>';
+      return '<html><head><scriipt>window.location = "odom://index.html#profile:token=' . $facebook->getAccessToken() . '";</script></head><body></body></html>';
       // $this->response->redirect('odom://index.html#profile:token=' . $facebook->getAccessToken());
     }
 
