@@ -366,7 +366,7 @@ abstract class BaseFacebook
    * @return string A valid user access token, or false if one
    *                could not be determined.
    */
-  function getUserAccessToken() {
+  protected function getUserAccessToken() {
     // first, consider a signed request if it's supplied.
     // if there is a signed request, then it alone determines
     // the access token.
