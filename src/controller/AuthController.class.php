@@ -23,13 +23,14 @@ class AuthController extends BaseJsonController
   function doGuestGetToken()
   {
     $facebook = $this->toolkit->getFacebook();
-    if(!$facebook->getUser()) {
+    $token    = $facebook->getUserAccessToken();
+    if(!$token) {
       $this->response->redirect($facebook->getLoginUrl());
     } else {
       // $this->response->redirect('odom://index.html#profile:token=' . $facebook->getAccessToken());
     }
 
-    return $this->_answerOk($facebook->getUserAccessToken());
+    return $this->_answerOk($token);
   }
 
   function doGuestLogin()
