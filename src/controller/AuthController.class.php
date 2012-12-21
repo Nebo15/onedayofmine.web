@@ -20,6 +20,18 @@ class AuthController extends BaseJsonController
     return $this->_answerOk($answer);
   }
 
+  function doGuestGetToken()
+  {
+    $facebook = $this->toolkit->getFacebook();
+    if(!$facebook->getUser()) {
+      $this->response->redirect($facebook->getLoginUrl());
+    } else {
+      $this->response->redirect('odom://index.html#profile:token=' . $facebook->getAccessToken());
+    }
+
+    return $this->_answerOk();
+  }
+
   function doGuestLogin()
   {
     if (!$this->request->isPost())
@@ -85,8 +97,7 @@ class AuthController extends BaseJsonController
 
     if (!$token_obj) {
       $token_obj = new DeviceToken();
-      $token_obj->import(
-      [
+      $token_obj->import([
         'user_id' => $user->id,
         'token' => $device_token,
         'logins_count' => 1
