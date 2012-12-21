@@ -20,7 +20,7 @@ class AuthController extends BaseJsonController
     return $this->_answerOk($answer);
   }
 
-  function doGuestGetToken()
+  function doGuestMobileFacebookLogin()
   {
     $facebook = $this->toolkit->getFacebook();
     if(!$facebook->getUser()) {
