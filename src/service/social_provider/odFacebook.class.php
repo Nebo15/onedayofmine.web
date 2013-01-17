@@ -5,7 +5,7 @@ lmb_require('src/service/social_provider/odFacebookApiExpiredTokenException.clas
 
 class odFacebook extends BaseFacebook implements odSocialServicesProviderInterface
 {
-  protected $storage;
+  protected $storage_key;
   protected $supported_keys = ['state', 'code', 'access_token', 'user_id'];
 
   public static function getConfig()
@@ -15,16 +15,28 @@ class odFacebook extends BaseFacebook implements odSocialServicesProviderInterfa
 
   function __construct(array $config = null)
   {
+	  $this->storage_key = lmbToolkit::instance()->getRequest()->get('storage_key')
+			  ? lmbToolkit::instance()->getRequest()->get('storage_key')
+			  : time() . rand(1, 100000);
     parent::__construct($config ?: self::getConfig());
   }
+
+	public function setStorageKey($key)
+	{
+		$this->storage_key = $key;
+	}
+
+	public function getStorageKey()
+	{
+		return $this->storage_key;
+	}
 
   protected function setPersistentData($key, $value) {
     if (!in_array($key, $this->supported_keys)) {
       self::errorLog('Unsupported key passed to setPersistentData.');
       return;
     }
-
-    lmbToolkit::instance()->getSessionStorage()->set($this->constructSessionVariableName($key), $value);
+    lmbToolkit::instance()->getCache('fb')->set($this->constructSessionVariableName($key), $value);
   }
 
   protected function getPersistentData($key, $default = false) {
@@ -32,8 +44,7 @@ class odFacebook extends BaseFacebook implements odSocialServicesProviderInterfa
       self::errorLog('Unsupported key passed to getPersistentData.');
       return $default;
     }
-
-    return lmbToolkit::instance()->getSessionStorage()->get($this->constructSessionVariableName($key)) ?: $default;
+    return lmbToolkit::instance()->getCache('fb')->get($this->constructSessionVariableName($key)) ?: $default;
   }
 
   protected function clearPersistentData($key) {
@@ -41,18 +52,17 @@ class odFacebook extends BaseFacebook implements odSocialServicesProviderInterfa
       self::errorLog('Unsupported key passed to clearPersistentData.');
       return;
     }
-
-    lmbToolkit::instance()->getSessionStorage()->delete($this->constructSessionVariableName($key));
+    lmbToolkit::instance()->getCache('fb')->delete($this->constructSessionVariableName($key));
   }
 
   protected function clearAllPersistentData() {
     foreach ($this->supported_keys as $key) {
-      $this->clearPersistentData($key);
+	    lmbToolkit::instance()->getCache('fb')->delete($this->constructSessionVariableName($key));
     }
   }
 
   protected function constructSessionVariableName($key) {
-    return implode('_', array('fb', $this->getAppId(), $key));
+    return $this->storage_key.'_'.$key;
   }
 
   function makeQuery($query)

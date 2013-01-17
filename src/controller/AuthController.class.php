@@ -24,7 +24,9 @@ class AuthController extends BaseJsonController
   {
     $facebook = $this->toolkit->getFacebook();
     if(!$facebook->getUser()) {
-      $this->response->redirect($facebook->getLoginUrl());
+	    $params = ['redirect_uri' => $this->toolkit->getSiteUrl('/auth/mobile_facebook_login?storage_key=' .
+			    $facebook->getStorageKey())];
+	    $this->response->redirect($facebook->getLoginUrl($params));
       return 'Redirecting...';
     } else {
       $this->response->redirect('odom://index.html#profile:token=' . $facebook->getAccessToken());
