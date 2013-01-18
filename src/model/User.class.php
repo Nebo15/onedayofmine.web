@@ -110,6 +110,13 @@ class User extends BaseModel
     return Day::find(lmbSQLCriteria::equal('user_id', $this->id), array('id' => 'DESC'));
   }
 
+	function getPublicDays()
+	{
+		$criteria = lmbSQLCriteria::equal('user_id', $this->id)
+				->add(lmbSQLCriteria::equal('is_deleted', 0));
+		return Day::find($criteria, ['id' => 'DESC']);
+	}
+
   function getFavoriteDays()
   {
     $favorites = DayFavorite::find(lmbSQLCriteria::equal('user_id', $this->id));
