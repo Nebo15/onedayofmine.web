@@ -7,6 +7,39 @@ lmb_require('src/model/DeviceToken.class.php');
 lmb_require('src/model/DeviceNotification.class.php');
 
 /**
+ * @param path_to_output_file
+ */
+function task_od_create_crontab($args = array())
+{
+	if(count($args) == 1)
+		$output_file = array_shift($args);
+
+	$project_dir = taskman_prop('PROJECT_DIR');
+	$log_str = " >> $project_dir/var/logs/cron.log 2>&1\n";
+	$output = '';
+
+	$output .= "*/5 *	* * *	www-data cd $project_dir; ./limb od_calc_ratings $log_str";
+	$output .= "*/5 *	* * *	www-data cd $project_dir; ./limb od_delete_deleted_days $log_str";
+	$output .= "* *	* * *	www-data cd $project_dir; ./limb od_job_worker $log_str";
+
+	# Sphinx
+	## Users
+	$sphinx_config = "--config $project_dir/settings/third-party/sphinx/sphinx.conf";
+	$output .= "* * * * * sphinxsearch indexer $sphinx_config --rotate users_delta $log_str";
+	$output .= "* * * * * sphinxsearch indexer $sphinx_config --rotate --merge users users_delta $log_str";
+	$output .= "1 4 * * * sphinxsearch indexer $sphinx_config--rotate -users $log_str";
+	## Days
+	$output .= "* * * * * sphinxsearch indexer $sphinx_config --rotate days_delta $log_str";
+	$output .= "* * * * * sphinxsearch indexer $sphinx_config --rotate --merge days days_delta $log_str";
+	$output .= "1 4	* * *	sphinxsearch indexer $sphinx_config --rotate days $log_str";
+
+	if(isset($output_file))
+		file_put_contents($output_file, $output);
+	else
+		echo $output;
+}
+
+/**
  * @alias od_calc_interest
  */
 function task_od_calc_ratings()
