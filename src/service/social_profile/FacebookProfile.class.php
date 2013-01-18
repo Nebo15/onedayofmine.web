@@ -166,7 +166,7 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
 
   public function shareDayUnlike(Day $day, DayLike $like)
   {
-    return $this->_deleteBuiltInLike($like->getFacebookId());
+    return $this->_deleteBuiltInLike($like->facebook_id);
   }
 
   public function shareMomentAdd(Day $day, Moment $moment)
