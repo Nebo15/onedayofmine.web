@@ -11,6 +11,9 @@ lmb_require('src/model/DeviceNotification.class.php');
  */
 function task_od_create_crontab($args = array())
 {
+	error_reporting(E_ALL);
+	ini_set('display_errors', true);
+	
 	if(count($args) == 1)
 		$output_file = array_shift($args);
 
