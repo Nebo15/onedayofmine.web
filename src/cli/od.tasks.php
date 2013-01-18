@@ -68,8 +68,8 @@ function task_od_delete_deleted_days()
 	{
 		foreach($day->getMoments() as $moment)
 			$moment->destroy();
-		taskman_msg('Delete day #'.$day->id.': '.$day->title);
-		$day->destory();
+		taskman_msg('Delete day #'.$day->id.': '.$day->title.PHP_EOL);
+		$day->destroy();
 	}
 
 }
