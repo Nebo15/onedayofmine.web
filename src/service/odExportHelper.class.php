@@ -128,7 +128,7 @@ class odExportHelper
   {
     $exported = $user->exportForApi();
 
-    $exported->days_count = (int) $user->getDays()->count();
+    $exported->days_count = (int) $user->getPublicDays()->count();
 
     $favorite_days_count = lmbDBAL::selectQuery('day_favorite')
       ->addRawField('COUNT(*)', 'count')
