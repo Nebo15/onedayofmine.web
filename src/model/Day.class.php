@@ -141,4 +141,11 @@ class Day extends BaseModel
     $days = self::sortByIds($days, $ids);
     return $days;
   }
+
+	static function findOldDeletedDays()
+	{
+		$criteria = lmbSQLCriteria::equal('is_deleted', 1)
+				->add(lmbSQLCriteria::less('utime', time() - 30 * 24 * 60 * 60));
+		return Day::find($criteria);
+	}
 }

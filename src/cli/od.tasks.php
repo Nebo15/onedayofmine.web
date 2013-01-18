@@ -1,6 +1,7 @@
 <?php
 lmb_require(taskman_prop('PROJECT_DIR').'setup.php');
 
+lmb_require('src/model/Day.class.php');
 lmb_require('src/model/User.class.php');
 lmb_require('src/model/DeviceToken.class.php');
 lmb_require('src/model/DeviceNotification.class.php');
@@ -59,6 +60,18 @@ function task_od_close_old_days()
     $user->save();
     echo "Removed current day fo user #".$user->id.PHP_EOL;
   }
+}
+
+function task_delete_deleted_days()
+{
+	foreach(Day::findOldDeletedDays() as $day)
+	{
+		foreach($day->getMoments() as $moment)
+			$moment->destroy();
+		taskman_msg('Delete day #'.$day->id.': '.$day->title);
+		$day->destory();
+	}
+
 }
 
 function task_od_apns_feedback()
