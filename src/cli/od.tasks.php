@@ -62,7 +62,7 @@ function task_od_close_old_days()
   }
 }
 
-function task_delete_deleted_days()
+function task_od_delete_deleted_days()
 {
 	foreach(Day::findOldDeletedDays() as $day)
 	{
