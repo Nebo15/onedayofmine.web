@@ -11,6 +11,7 @@ class DayComment extends BaseComment
 
   public $day_id;
   public $text;
+	public $ctime;
 
   function setDay(Day $day)
   {

@@ -63,6 +63,12 @@ class DaysController extends BaseJsonController
       $day->save();
     }
 
+	  if($cover_moment_id = $this->request->get('cover_moment_id')) {
+		  $cover_moment = Moment::findById($cover_moment_id);
+		  $day->attachImage(file_get_contents($cover_moment->getImage('532')));
+		  $day->save();
+	  }
+
     $this->_importSaveAndAnswer($day, array('title', 'occupation', 'location', 'type'));
 
     return $this->_answerOk($this->toolkit->getExportHelper()->exportDay($day));
