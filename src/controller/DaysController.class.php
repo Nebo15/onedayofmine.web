@@ -65,7 +65,8 @@ class DaysController extends BaseJsonController
 
 	  if($cover_moment_id = $this->request->get('cover_moment_id')) {
 		  $cover_moment = Moment::findById($cover_moment_id);
-		  $day->attachImage(file_get_contents($cover_moment->getImagePath(['width' => 532])));
+		  $url = $this->toolkit->getSiteUrl($cover_moment->getImage(['width' => 532]));
+		  $day->attachImage(file_get_contents($url));
 		  $day->save();
 	  }
 
