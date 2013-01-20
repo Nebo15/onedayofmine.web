@@ -8,16 +8,16 @@ trait Imageable
     $extension = lmbToolkit::instance()->getImageHelper()->getImageExtensionByImageContent($content);
     $this->image_ext = $extension;
 
-    lmbFs::safeWrite($this->_getSavePath(), $content);
+    lmbFs::safeWrite($this->getImagePath(), $content);
 
     if('jpeg' == $extension && 'Moment' == get_called_class())
-      $this->_fillExifInfo($this->_getSavePath());
+      $this->_fillExifInfo($this->getImagePath());
 
     foreach ($this->_getConvertionSizes() as $size)
     {
-      $helper = new lmbConvertImageHelper($this->_getSavePath());
+      $helper = new lmbConvertImageHelper($this->getImagePath());
       $helper->resizeAndCropFrame($size);
-      $helper->save($this->_getSavePath($size));
+      $helper->save($this->getImagePath($size));
     }
 
     $is_s3_enabled = lmbToolkit::instance()->getConcreteAmazonServiceConfig('S3')['enabled'];
@@ -26,7 +26,7 @@ trait Imageable
       $this->_sendImagesToS3();
 
       foreach ($this->_getAllSizes() as $size)
-        lmbFs::rm($this->_getSavePath($size));
+        lmbFs::rm($this->getImagePath($size));
      }
   }
 
@@ -41,7 +41,7 @@ trait Imageable
       foreach ($this->_getAllSizes() as $size)
       {
         if($size)
-          lmbFs::rm($this->_getSavePath($size));
+          lmbFs::rm($this->getImagePath($size));
       }
     }
     else
@@ -74,7 +74,7 @@ trait Imageable
     foreach ($this->_getAllSizes() as $size)
     {
       $s3->batch()->create_object($bucket, $this->_getS3SavePath($size), array(
-        'fileUpload' => $this->_getSavePath($size),
+        'fileUpload' => $this->getImagePath($size),
         'acl' => AmazonS3::ACL_PUBLIC,
         'https' => false
       ));
@@ -159,7 +159,7 @@ trait Imageable
     return $this->_getCommonConfig()[get_called_class()];
   }
 
-  protected function _getSavePath($size = null)
+  function getImagePath($size = null)
   {
     return lmb_env_get('APP_DIR').DIRECTORY_SEPARATOR.$this->_getCommonConfig()['save_path'].DIRECTORY_SEPARATOR.$this->getImage($size);
   }
