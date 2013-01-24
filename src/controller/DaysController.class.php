@@ -15,8 +15,11 @@ class DaysController extends BaseJsonController
     if($day->is_deleted)
       return $this->_answerModelNotFoundById('Day', $this->request->id);
 
-    $day->views_count = $day->views_count + 1;
-    $day->save();
+	  if(!$this->_getUser() || $this->_getUser()->id != $day->user_id)
+	  {
+      $day->views_count = $day->views_count + 1;
+      $day->save();
+	  }
 
     return $this->_answerOk($this->toolkit->getExportHelper()->exportDay($day));
   }
