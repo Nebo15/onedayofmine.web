@@ -48,6 +48,8 @@ class Day extends BaseModel
     $this->showImages($export);
     $export->final_description = $this->final_description;
     $export->views_count = $this->views_count ?: 0;
+	  $export->ctime = $this->ctime;
+	  $export->utime = $this->utime;
 
     return $export;
   }
