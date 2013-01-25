@@ -196,6 +196,13 @@ class DaysController extends BaseJsonController
     if($day->user_id != $this->_getUser()->id)
       return $this->_answerNotOwner();
 
+	  $user = $this->_getUser();
+	  if($user->current_day_id == $day->id)
+	  {
+		  $user->current_day_id = null;
+		  $user->save();
+	  }
+
     $day->is_deleted = 1;
     $day->save();
 
