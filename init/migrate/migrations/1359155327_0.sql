@@ -1,0 +1,3 @@
+SET FOREIGN_KEY_CHECKS = 0;
+ALTER TABLE `user` MODIFY `current_day_id` int(11) unsigned NULL;
+SET FOREIGN_KEY_CHECKS = 1;
