@@ -204,7 +204,7 @@ class DaysController extends BaseJsonController
 		$user = $this->_getUser();
 		if ($user->current_day_id == $day->id)
 		{
-			$user->current_day_id = null;
+			$user->current_day_id = false;
 			$user->save();
 		}
 
