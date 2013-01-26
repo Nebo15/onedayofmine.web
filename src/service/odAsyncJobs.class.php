@@ -2,25 +2,19 @@
 
 class odAsyncJobs
 {
-  /**
-   * @var GearmanJob
-   */
-  public $job;
-
-
-  function _userCreate($user_id)
+  static function _userCreate($user_id)
   {
     $user = User::findById($user_id);
     self::toolkit()->getNewsObserver()->onUserRegister($user);
   }
 
-  function _userFollow($user_id)
+	static function _userFollow($user_id)
   {
     $user = User::findById($user_id);
     self::toolkit()->getNewsObserver()->onFollow($user);
   }
 
-  function _shareDayStart($day_id)
+	static function _shareDayStart($day_id)
   {
     $day = Day::findById($day_id);
     self::toolkit()->getNewsObserver()->onDay($day);
@@ -29,7 +23,7 @@ class odAsyncJobs
     self::toolkit()->getTwitterProfile()->shareDayBegin($day);
   }
 
-  function _shareDayEnd($day_id)
+	static function _shareDayEnd($day_id)
   {
     $day = Day::findById($day_id);
 //    $this->job->sendStatus(1, 2);
@@ -37,7 +31,7 @@ class odAsyncJobs
     self::toolkit()->getTwitterProfile()->shareDayEnd($day);
   }
 
-  function _shareDay($day_id)
+	static function _shareDay($day_id)
   {
     $day = Day::findById($day_id);
     self::toolkit()->getFacebookProfile()->shareDay($day);
@@ -46,7 +40,7 @@ class odAsyncJobs
     self::toolkit()->getNewsObserver()->onDayShare($day);
   }
 
-  function _dayLike($day_id, $like_id)
+	static function _dayLike($day_id, $like_id)
   {
     $day = Day::findById($day_id);
     $like = DayLike::findById($like_id);
@@ -56,7 +50,7 @@ class odAsyncJobs
     self::toolkit()->getNewsObserver()->onDayLike($day, $like);
   }
 
-  function _dayUnlike($day_id, $like_id)
+	static function _dayUnlike($day_id, $like_id)
   {
     $day = Day::findById($day_id);
     $like = DayLike::findById($like_id);
@@ -66,49 +60,49 @@ class odAsyncJobs
     self::toolkit()->getNewsObserver()->onDayUnlike($day, $like);
   }
 
-  function _dayCommentCreate($comment_id)
+	static function _dayCommentCreate($comment_id)
   {
     $comment = DayComment::findById($comment_id);
     self::toolkit()->getNewsObserver()->onDayComment($comment);
   }
 
-  function _dayCommentDelete($comment_id)
+	static function _dayCommentDelete($comment_id)
   {
     $comment = DayComment::findById($comment_id);
     self::toolkit()->getNewsObserver()->onDayCommentDelete($comment);
   }
 
-  function _dayDelete($day_id)
+	static function _dayDelete($day_id)
   {
     $day = Day::findById($day_id);
     self::toolkit()->getNewsObserver()->onDayDelete($day);
   }
 
-  function _dayRestore($day_id)
+	static function _dayRestore($day_id)
   {
     $day = Day::findById($day_id);
     self::toolkit()->getNewsObserver()->onDayRestore($day);
   }
 
-  function _momentCreate($moment_id)
+	static function _momentCreate($moment_id)
   {
     $moment = Moment::findById($moment_id);
     self::toolkit()->getNewsObserver()->onMoment($moment);
   }
 
-  function _momentDelete($moment_id)
+	static function _momentDelete($moment_id)
   {
     $moment = Moment::findById($moment_id);
     self::toolkit()->getNewsObserver()->onMomentDelete($moment);
   }
 
-  function _momentRestore($moment_id)
+	static function _momentRestore($moment_id)
   {
     $moment = Moment::findById($moment_id);
     self::toolkit()->getNewsObserver()->onMomentRestore($moment);
   }
 
-  function _momentLike($moment_id, $like_id)
+	static function _momentLike($moment_id, $like_id)
   {
     $moment = Moment::findById($moment_id);
     $like = MomentLike::findById($like_id);
@@ -118,7 +112,7 @@ class odAsyncJobs
     self::toolkit()->getNewsObserver()->onMomentLike($moment, $like);
   }
 
-  function _momentUnlike($moment_id, $like_id)
+	static function _momentUnlike($moment_id, $like_id)
   {
     lmb_assert_true($moment = Moment::findById($moment_id));
     lmb_assert_true($like = MomentLike::findById($like_id));
@@ -128,26 +122,26 @@ class odAsyncJobs
     self::toolkit()->getNewsObserver()->onMomentUnlike($moment, $like);
   }
 
-  function _momentCommentCreate($comment_id)
+	static function _momentCommentCreate($comment_id)
   {
     $comment = MomentComment::findById($comment_id);
     self::toolkit()->getNewsObserver()->onMomentComment($comment);
   }
 
-  function _momentCommentDelete($comment_id)
+	static function _momentCommentDelete($comment_id)
   {
     lmb_assert_true($comment = MomentComment::findById($comment_id));
     self::toolkit()->getNewsObserver()->onMomentCommentDelete($comment);
   }
 
-  function _facebookInvite($user_id, $uid)
+	static function _facebookInvite($user_id, $uid)
   {
     $user = User::findById($user_id);
     $profile = self::toolkit()->getFacebookProfile($user);
     $profile->shareInvitation($uid);
   }
 
-  function _emailInvite($email, $name)
+	static function _emailInvite($email, $name)
   {
     $text =<<<EOD
 Hello!
@@ -159,7 +153,6 @@ EOD;
     self::toolkit()->getMailer()
       ->sendPlainMail($email, 'Invitation to One Day of Mine', $text);
   }
-
 
   static function encodeWorkload($params)
   {
