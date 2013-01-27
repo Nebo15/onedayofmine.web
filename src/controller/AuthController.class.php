@@ -53,7 +53,6 @@ class AuthController extends BaseJsonController
       $user->facebook_access_token = $facebook_access_token;
       $user->save();
     }
-
     $this->toolkit->setUser($user);
 
     if ($is_new_user)

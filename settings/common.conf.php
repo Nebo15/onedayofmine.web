@@ -5,5 +5,6 @@ $conf = array(
   'default_news_count' => 100,
   'default_comments_count' => 3,
   'static_host' => 'http://onedayofmine.s3.amazonaws.com/',
-  'requests_log_enabled' => false
+  'requests_log_enabled' => false,
+	'async_enabled' => true,
 );

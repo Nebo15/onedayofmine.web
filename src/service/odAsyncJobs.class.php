@@ -4,7 +4,8 @@ class odAsyncJobs
 {
   static function _userCreate($user_id)
   {
-    $user = User::findById($user_id);
+    if(!$user = User::findById($user_id))
+	    throw new lmbException('User with id='.$user_id.' not found');
     self::toolkit()->getNewsObserver()->onUserRegister($user);
   }
 
