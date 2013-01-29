@@ -96,7 +96,7 @@
             var $days = $('.days');
             $.ajax({
                 dataType:"json",
-                url:'https://api.instagram.com/v1/users/50699135/?callback=?',
+                url:'https://api.instagram.com/v1/users/self/?callback=?',
                 data:{
                     access_token:hash
                 },
@@ -104,7 +104,7 @@
                 success:function (user_response) {
                     photos_count = user_response.data.counts.media;
                     $('.bar').css('width', '10%');
-                    getPhotos(photos_count, 'https://api.instagram.com/v1/users/50699135/media/recent/?access_token=' + hash + '&count=40&callback=?', function () {
+                    getPhotos(photos_count, 'https://api.instagram.com/v1/users/self/media/recent/?access_token=' + hash + '&count=40&callback=?', function () {
                         var current_day = [photos.shift()];
                         for (i in photos) {
                             var prev_photo = current_day[current_day.length - 1];
