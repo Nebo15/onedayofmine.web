@@ -1,0 +1,6 @@
+{{wrap with="import/layout.phtml"}}
+	{{into slot="content"}}
+		<a href="https://api.instagram.com/oauth/authorize/?client_id={$#client_id}&redirect_uri={$#redirect_url}&response_type=code" class="btn btn-success btn-large">Start <i class="icon-white icon-play"></i></a>
+	{{/into}}
+{{/wrap}}
+

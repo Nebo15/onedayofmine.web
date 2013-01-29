@@ -208,7 +208,7 @@ class lmbMacroTag extends lmbMacroNode
 
   function raiseRequiredAttribute($attribute_name)
   {
-    $this->raise('Missing required attribute', array('attribute' => $attribute_name));
+    $this->raise("Missing required attribute '$attribute_name'", array('attribute' => $attribute_name));
   }
 
   function preParse($compiler)

@@ -7,26 +7,26 @@ lmb_require('src/model/Moment.class.php');
 
 class PagesController extends lmbController
 {
-  function doDay()
-  {
-    $id = $this->request->get('id');
+	function doDay()
+	{
+		$id = $this->request->get('id');
 
-    $this->day = Day::findById($id);
-    if(!$this->day || $this->day->is_deleted)
-      return $this->forward('pages', 'not_found');
-  }
+		$this->day = Day::findById($id);
+		if (!$this->day || $this->day->is_deleted)
+			return $this->forward('pages', 'not_found');
+	}
 
-  function doMoment()
-  {
-    $id = $this->request->get('id');
+	function doMoment()
+	{
+		$id = $this->request->get('id');
 
-    $this->moment = Moment::findById($id);
-    if(!$this->moment || $this->moment->getDay()->is_deleted)
-      return $this->forward('pages', 'not_found');
-  }
+		$this->moment = Moment::findById($id);
+		if (!$this->moment || $this->moment->getDay()->is_deleted)
+			return $this->forward('pages', 'not_found');
+	}
 
-  function doNotFound()
-  {
-    $this->response->setCode(404);
-  }
+	function doNotFound()
+	{
+		$this->response->setCode(404);
+	}
 }
