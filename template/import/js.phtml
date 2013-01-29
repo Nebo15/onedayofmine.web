@@ -76,7 +76,7 @@
                 Start <i class="icon-white icon-play"></i>
             </a>
 
-            <div class="well well-small" style="display:none">Sorry. You have no days with 3 or more photos</div>
+            <div class="well cant" style="display:none">Sorry. You have no days with 3 or more photos</div>
 
             <div class="days"></div>
         </div>
@@ -105,6 +105,7 @@
                     photos_count = user_response.data.counts.media;
                     $('.bar').css('width', '10%');
                     getPhotos(photos_count, 'https://api.instagram.com/v1/users/self/media/recent/?access_token=' + hash + '&count=40&callback=?', function () {
+		                    var cant_assemble = true;
                         var current_day = [photos.shift()];
                         for (i in photos) {
                             var prev_photo = current_day[current_day.length - 1];
@@ -114,6 +115,7 @@
                             else {
                                 $('.bar').css('width', "" + 90 + ((photos_count - photos.length) / photos_count * 0.1) + '%');
                                 if (current_day.length > 3) {
+		                                cant_assemble = false;
 		                                var out = '<div class="well"><h4>' + (new Date(current_day[current_day.length - 1].created_time * 1000)).toLocaleDateString() +
 						                                '</h4><ul>';
 						                        for(p in current_day)
@@ -131,6 +133,8 @@
                         }
 
 		                    $('.progress').hide();
+		                    if(cant_assemble)
+		                      $('.cant').show();
                     });
                 }
             });
