@@ -337,11 +337,6 @@ class DaysController extends BaseJsonController
 			$image_content = base64_decode($this->request->get('image_content'));
 		else
 			$image_content = file_get_contents($this->request->get('image_url'));
-		if (!count($day->getMoments()))
-		{
-			$day->attachImage($image_content);
-			$day->save();
-		}
 
 		$moment = new Moment();
 		$moment->setDay($day);
