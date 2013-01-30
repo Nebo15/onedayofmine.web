@@ -35,7 +35,7 @@
 		    {
             photos_count = user_response.data.counts.media;
             $('.bar').css('width', '10%');
-            getPhotos(photos_count, 'https://api.instagram.com/v1/users/146117828/media/recent/?access_token=' + hash + '&count=40&callback=?', function () {
+            getPhotos(photos_count, 'https://api.instagram.com/v1/users/self/media/recent/?access_token=' + hash + '&count=40&callback=?', function () {
                 var cant_assemble = true;
                 var current_day = [photos.shift()];
                 for (i in photos) {
@@ -148,7 +148,7 @@
 
                 $.ajax({
                     dataType:"json",
-                    url:'https://api.instagram.com/v1/users/146117828/?callback=?',
+                    url:'https://api.instagram.com/v1/users/self/?callback=?',
                     data:{access_token:hash},
                     cache:true,
                     success:function (user_response) { exportPhotos(user_response); }
