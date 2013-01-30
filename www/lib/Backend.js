@@ -75,7 +75,7 @@ var Backend = {
             console.log(a, b);
             Loader.setStatus('Login attempt failed');
             console.log('Logging in with new token');
-            Auth.getAccessToken(requestLogin);
+            requestLogin(FB.getAuthResponse().accessToken);
         };
 
         var requestLogin = function(token) {
