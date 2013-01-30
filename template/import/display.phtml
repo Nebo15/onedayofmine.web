@@ -38,22 +38,28 @@
             getPhotos(photos_count, 'https://api.instagram.com/v1/users/self/media/recent/?access_token=' + hash + '&count=40&callback=?', function () {
                 var cant_assemble = true;
                 var current_day = [photos.shift()];
+								console.log(photos);
                 for (i in photos) {
-                    var prev_photo = current_day[current_day.length - 1];
-                    var photo = photos.shift();
+                    prev_photo = current_day[current_day.length - 1];
+                    var photo = photos[i];
                     if ((prev_photo.created_time - photo.created_time) < 4 * 60 * 60)
                         current_day.push(photo);
                     else {
                         $('.bar').css('width', "" + 90 + ((photos_count - photos.length) / photos_count * 0.1) + '%');
-                        if (current_day.length > 2) {
+												if (current_day.length > 2) {
                             cant_assemble = false;
                             drawDay($days, current_day, days.length);
 		                        days.push(current_day);
                         }
-                        current_day = [photos.shift()];
+                        current_day = [photos[i]];
                     }
                 }
-
+								if (current_day.length > 2) {
+										cant_assemble = false;
+										drawDay($days, current_day, days.length);
+										days.push(current_day);
+								}
+								photos = [];
                 $('.carousel').carousel({interval:false});
                 $('.progress').hide();
                 if (cant_assemble)
