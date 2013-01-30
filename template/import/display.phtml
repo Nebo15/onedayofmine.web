@@ -1,6 +1,159 @@
-{{wrap with="import/layout.phtml"}}
-	{{into slot="content"}}
-		<a href="https://api.instagram.com/oauth/authorize/?client_id={$#client_id}&redirect_uri={$#redirect_url}&response_type=code" class="btn btn-success btn-large">Start <i class="icon-white icon-play"></i></a>
-	{{/into}}
-{{/wrap}}
+{{wrap with="layout.phtml"}}
+{{into slot="content"}}
+        <div class="jumbotron">
+            <h2>Instagram &rarr; Facebook</h2>
 
+            <div style="margin-bottom: 20px">Import your days from Instagram to Facebook</div>
+
+            <div class="progress progress-striped" style="display:none">
+                <div class="bar" style="width: 0%;"></div>
+            </div>
+
+            <a href="https://api.instagram.com/oauth/authorize/?client_id={$#instagram.client_id}&redirect_uri={$#instagram.redirect_url}&response_type=token"
+               class="btn btn-primary btn-large" style="display:none">
+                Start <i class="icon-white icon-play"></i>
+            </a>
+
+            <div class="well-large cant" style="display:none">Sorry. You have no days with 3 or more photos</div>
+
+            <div class="days"></div>
+        </div>
+{{/into}}
+{{into slot="js"}}
+
+        var hash = window.location.hash.substr(14);
+        var photos_count = 0;
+        var photos = [];
+        var $days = $('.days');
+        var days = [];
+
+        function formatDate(photo) {
+            return (new Date(photo.created_time * 1000)).toLocaleString();
+        }
+
+		    function exportPhotos(user_response)
+		    {
+            photos_count = user_response.data.counts.media;
+            $('.bar').css('width', '10%');
+            getPhotos(photos_count, 'https://api.instagram.com/v1/users/146117828/media/recent/?access_token=' + hash + '&count=40&callback=?', function () {
+                var cant_assemble = true;
+                var current_day = [photos.shift()];
+                for (i in photos) {
+                    var prev_photo = current_day[current_day.length - 1];
+                    var photo = photos.shift();
+                    if ((prev_photo.created_time - photo.created_time) < 4 * 60 * 60)
+                        current_day.push(photo);
+                    else {
+                        $('.bar').css('width', "" + 90 + ((photos_count - photos.length) / photos_count * 0.1) + '%');
+                        if (current_day.length > 2) {
+                            cant_assemble = false;
+                            drawDay($days, current_day, days.length);
+		                        days.push(current_day);
+                        }
+                        current_day = [photos.shift()];
+                    }
+                }
+
+                $('.carousel').carousel({interval:false});
+                $('.progress').hide();
+                if (cant_assemble)
+                    $('.cant').show();
+            });
+		    }
+
+        function getPhotos(photos_count, url, callback) {
+            $.ajax({
+                dataType:"json",
+                url:url,
+                cache:true,
+                success:function (photos_resp) {
+                    photos = photos.concat(photos_resp.data);
+                    $('.bar').css('width', "" + (10 + photos.length / photos_count * 70) + "%");
+                    if (typeof photos_resp.pagination.next_max_id != 'undefined')
+                        getPhotos(photos_count, url + '&max_id=' + photos_resp.pagination.next_max_id, callback);
+                    else
+                        callback();
+                }
+            });
+        }
+
+        function drawDay($days, current_day, day_position) {
+            var out = '<div day_pos="'+day_position+'" class="well"><h4>' + (new Date(current_day[current_day.length - 1].created_time * 1000)).toLocaleDateString() +
+                    '</h4><ul class="thumbnails">';
+
+            for (p in current_day) {
+                var el = current_day[p];
+                var photo = el.images.thumbnail;
+                out += '<li><img src="' + photo.url + '" class="img-rounded thumbnail"/></li>';
+            }
+
+            out += '<br/><div style="margin-top:30px"><a class="btn btn-primary btn-large"><i class="icon-white icon-pencil"></i> Create a day</a></p>';
+            $days.append(out + "</div>");
+
+            $('.btn-primary').click(function () {
+                var day = days[$(this).parents('.well').attr('day_pos')];
+                var $progress = $(this).parents('.well').append('<div class="progress progress-striped">' +
+                        '<div class="bar" style="width: 10%;"></div>' +
+                        '</div>');
+                $(this).remove();
+								PostImages(day);
+            });
+        }
+
+        function PostImages(day_data) {
+            FB.login(function (response) {
+                if (!response.authResponse) return;
+                Backend.Login(function () {
+                    Backend.PostRequest('days/start', {
+                        title:'My day', type:'Holiday'
+                    }).done(function (day_response) {
+						          var day = day_response.result;
+		                  var defs = [];
+                      var is_sended = false;
+						          $.each(day_data, function(i, photo_data) {
+				                 defs.push(Backend.PostRequest('days/'+day.id+'/add_moment', {
+                                  time: Tools.getISODate(new Date(photo_data.created_time * 1000)),
+                                  image_url: photo_data.images.standard_resolution.url,
+                                  description: photo_data.caption.text
+                              }));
+		                  });
+                      $.when.apply(null, defs).then(function() {
+                          window.location.href = '/pages/' + day.id + '/day';
+                      });
+                    });
+                });
+            });
+        };
+
+        function getRemoteImageContent(url, callback) {
+		        var img = new Image();
+		        img.src = url;
+            img.onload = function() {
+                var canvas = document.createElement("canvas");
+                canvas.width = img.width;
+                canvas.height = img.height;
+                var ctx = canvas.getContext("2d");
+                ctx.drawImage(img, 0, 0);
+                var encoded = canvas.toDataURL("image/jpg");
+                callback(encoded.substring(encoded.indexOf('base64,')+7));
+            }
+        }
+
+        $(document).ready(function () {
+            if (window.location.hash.length < 2) {
+                $('a.btn').show();
+            }
+            else {
+                $('.progress').show();
+
+                $.ajax({
+                    dataType:"json",
+                    url:'https://api.instagram.com/v1/users/146117828/?callback=?',
+                    data:{access_token:hash},
+                    cache:true,
+                    success:function (user_response) { exportPhotos(user_response); }
+                });
+            }
+        });
+{{/into}}
+	{{/wrap}}

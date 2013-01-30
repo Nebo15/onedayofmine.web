@@ -9,12 +9,7 @@ class ImportController extends lmbController
 
 	function doDisplay()
 	{
-		$this->client_id = $this->toolkit->getConf('common')->instagram['client_id'];
-		$this->redirect_url = $this->toolkit->getConf('common')->instagram['redirect_url'];
-	}
-
-	function doJs()
-	{
+		$this->facebook_app_id = $this->toolkit->getConf('facebook')->appId;
 		$this->instagram = $this->toolkit->getConf('common')->instagram;
 	}
 

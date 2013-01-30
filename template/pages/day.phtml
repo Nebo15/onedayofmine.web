@@ -8,17 +8,22 @@
     <meta property="{$#facebook_app_namespace}:type" content="some type" />
   {{/into}}
   {{into slot="content"}}
-    <h1>Day #{$#day.id}</h1>
-    <ul>
-      <li>id: {$#day.id}</li>
-      <li>user_id: {$#day.user_id}</li>
-      <li>title: {$#day.title}</li>
-      <li>description: {$#day.description}</li>
-      <li>start_time: {$#day.start_time}</li>
-      <li>likes_count: {$#day.likes_count}</li>
-      <li>ctime: {$#day.ctime}</li>
-      <li>utime: {$#day.utime}</li>
-      <li>cip: {$#day.cip}</li>
-    </ul>
+    <h1>{$#day->title}</h1>
+		<blockquote>
+      <p>{$#day->final_description|default:"no description"}</p>
+      <small>by <b>{$#day->user->name}</b></small>
+		</blockquote>
+
+		{{list using="$#day->moments"}}
+		<ul class="thumbnails">
+				{{list:item}}
+		    <li class="span4">
+		        <a href="#" class="thumbnail">
+		            <img src="{$item->image_266}" alt="">
+		        </a>
+		    </li>
+				{{/list:item}}
+		</ul>
+		{{/list}}
   {{/into}}
 {{/wrap}}

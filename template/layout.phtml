@@ -7,13 +7,53 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{$#title}</title>
   <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# {$#facebook_app_namespace}: http://ogp.me/ns/fb/{$#facebook_app_namespace}#">
   <meta property="fb:app_id" content="{$#facebook_app_id}" />
+  <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
+  <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-responsive.min.css" rel="stylesheet">
+  <link href="/styles/main.css" rel="stylesheet">
   {{slot id='meta'/}}
 </head>
 <body>
+<div id="fb-root"></div>
+<script>
+    window.fbAsyncInit = function () {
+        FB.init({
+            appId: <?= $this->facebook_app_id; ?>,
+            status:true,
+            cookie:true,
+            xfbml:true
+        });
+    };
+    (function (d) {
+        var js, id = 'facebook-jssdk';
+        if (d.getElementById(id)) { return;}
+        js = d.createElement('script');
+        js.id = id;
+        js.async = true;
+        js.src = "//connect.facebook.net/" + (window.navigator.userLanguage || window.navigator.language) + "/all.js";
+        d.getElementsByTagName('head')[0].appendChild(js);
+    }(document));
+</script>
+<div class="container">
+    <div class="container-narrow">
   {{slot id='content'/}}
   {{slot id='content_zone'/}}
+	 </div>
+	</div>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+	<script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
+	<script src="/lib/Tools.js"></script>
+	<script src="/lib/Loader.js"></script>
+	<script src="/lib/Backend.js"></script>
+	{{slot id="js_include"/}}
+	<script>
+			{{slot id="js"/}}
+			$(document).ready(function() {
+					{{slot id="js_ready"/}}
+			});
+	</script>
 </body>
 </html>

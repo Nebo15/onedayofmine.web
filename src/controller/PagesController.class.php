@@ -9,11 +9,19 @@ class PagesController extends lmbController
 {
 	function doDay()
 	{
-		$id = $this->request->get('id');
+		if (!$day = Day::findById($this->request->id))
+			return $this->_answerModelNotFoundById('Day', $this->request->id);
 
-		$this->day = Day::findById($id);
-		if (!$this->day || $this->day->is_deleted)
-			return $this->forward('pages', 'not_found');
+		if ($day->is_deleted)
+			return $this->_answerModelNotFoundById('Day', $this->request->id);
+
+		if (!$this->toolkit->getUser() || $this->toolkit->getUser()->id != $day->user_id)
+		{
+			$day->views_count = $day->views_count + 1;
+			$day->save();
+		}
+
+		$this->day = $this->toolkit->getExportHelper()->exportDay($day);
 	}
 
 	function doMoment()

@@ -45,7 +45,7 @@ class DaysController extends BaseJsonController
 
 		$day->getDbConnection()->commitTransaction();
 
-		$this->toolkit->doAsync('shareDayStart', $day->id);
+		//$this->toolkit->doAsync('shareDayStart', $day->id);
 
 		return $this->_answerOk($this->toolkit->getExportHelper()->exportDay($day));
 	}
@@ -323,14 +323,20 @@ class DaysController extends BaseJsonController
 		if (!$this->request->isPost())
 			return $this->_answerNotPost();
 
-		$errors = $this->_checkPropertiesInRequest(array('time', 'image_content'));
+		$errors = $this->_checkPropertiesInRequest(array('time'));
 		if (count($errors))
 			return $this->_answerWithError($errors);
+
+		if(!$this->request->get('image_content') && !$this->request->get('image_url'))
+			return $this->_answerWithError("image_content or image_url must be in request");
 
 		if (!$day = Day::findById($this->request->id))
 			return $this->_answerModelNotFoundById('Day', $this->request->id);
 
-		$image_content = base64_decode($this->request->get('image_content'));
+		if($this->request->get('image_content'))
+			$image_content = base64_decode($this->request->get('image_content'));
+		else
+			$image_content = file_get_contents($this->request->get('image_url'));
 		if (!count($day->getMoments()))
 		{
 			$day->attachImage($image_content);

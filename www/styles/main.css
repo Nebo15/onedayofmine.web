@@ -1,0 +1,62 @@
+body {
+    padding-bottom: 40px;
+}
+
+.container-narrow {
+    margin: 0 auto;
+    max-width: 760px;
+}
+
+.container-narrow > hr {
+    margin: 30px 0;
+}
+
+.progress {
+    height: 30px;
+    font-size: 36px;
+    margin: 50px 0;
+}
+
+h4 {
+    background-color: #aaa;
+    -webkit-background-clip: text;
+    -moz-background-clip: text;
+    /*background-clip: text;*/
+    color: transparent;
+    text-shadow: rgba(255, 255, 255, 0.5) 0px 2px 2px;
+}
+
+.jumbotron {
+    text-align: center;
+}
+
+.jumbotron h1 {
+    font-size: 72px;
+    line-height: 1;
+}
+
+.jumbotron .btn {
+    font-size: 21px;
+    padding: 14px 24px;
+}
+
+/*.days ul {*/
+/*list-style: none;*/
+/*padding-bottom: 20px;*/
+/*}*/
+
+/*.days ul li {*/
+/*float: left;*/
+/*}*/
+
+.thumbnails {
+    margin: 20px;
+}
+
+.thumbnails > li {
+    margin-left: 10px;
+}
+
+.days br {
+    clear: both;
+}
