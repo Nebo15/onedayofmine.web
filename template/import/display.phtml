@@ -1,6 +1,6 @@
 {{wrap with="layout.phtml"}}
 {{into slot="content"}}
-        <div class="jumbotron">
+        <div>
             <h2>Instagram &rarr; Facebook</h2>
 
             <div style="margin-bottom: 20px">Import your days from Instagram to Facebook</div>
@@ -26,6 +26,7 @@
         var photos = [];
         var $days = $('.days');
         var days = [];
+				var instagram_user = 'self';
 
         function formatDate(photo) {
             return (new Date(photo.created_time * 1000)).toLocaleString();
@@ -35,10 +36,9 @@
 		    {
             photos_count = user_response.data.counts.media;
             $('.bar').css('width', '10%');
-            getPhotos(photos_count, 'https://api.instagram.com/v1/users/self/media/recent/?access_token=' + hash + '&count=40&callback=?', function () {
+            getPhotos(photos_count, 'https://api.instagram.com/v1/users/'+instagram_user+'/media/recent/?access_token=' + hash + '&count=40&callback=?', function () {
                 var cant_assemble = true;
                 var current_day = [photos.shift()];
-								console.log(photos);
                 for (i in photos) {
                     prev_photo = current_day[current_day.length - 1];
                     var photo = photos[i];
@@ -83,20 +83,36 @@
             });
         }
 
-        function drawDay($days, current_day, day_position) {
-            var out = '<div day_pos="'+day_position+'" class="well"><h4>' + (new Date(current_day[current_day.length - 1].created_time * 1000)).toLocaleDateString() +
+        function drawDay($days, current_day, day_position)
+				{
+            var html = '<div day_pos="'+day_position+'" class="well"><h4>' + (new Date(current_day[current_day.length - 1].created_time * 1000)).toLocaleDateString() +
                     '</h4><ul class="thumbnails">';
 
             for (p in current_day) {
                 var el = current_day[p];
                 var photo = el.images.thumbnail;
-                out += '<li><img src="' + photo.url + '" class="img-rounded thumbnail"/></li>';
+                html += '<li style="width:160px;"> \
+										<div class="thumbnail" style="height:240px;overflow:hidden;"> \
+											<img src="' + photo.url + '" class="img-rounded"/> \
+	                    <button class="remove-photo-action" photo_position="' + p + '"> \
+	                        <i class="icon icon-remove"></i> \
+	                    </button> \
+											<p><small>'+(el.caption ? el.caption.text : 'empty')+'</small></p> \
+										</div></li>';
             }
 
-            out += '<br/><div style="margin-top:30px"><a class="btn btn-primary btn-large"><i class="icon-white icon-pencil"></i> Create a day</a></p>';
-            $days.append(out + "</div>");
+            html += '</ul><br/><div style="margin-top:30px">' +
+								'<a class="btn btn-primary btn-large export-action">' +
+								'<i class="icon-white icon-pencil"></i> Create a day</a>' +
+								'</div>';
+						var $out = $(html).hide();
+						$days.append($out);
 
-            $('.btn-primary').click(function () {
+            $out.children('ul').children('li').children('div').children('button').click(function() {
+							console.log('remove: '+$(this).attr('photo_position'));
+						});
+
+            $out.children('div').children('a.export-action').click(function () {
                 var day = days[$(this).parents('.well').attr('day_pos')];
                 var $progress = $(this).parents('.well').append('<div class="progress progress-striped">' +
                         '<div class="bar" style="width: 10%;"></div>' +
@@ -104,7 +120,9 @@
                 $(this).remove();
 								PostImages(day);
             });
-        }
+
+            $out.slideDown('slow');
+				}
 
         function PostImages(day_data) {
             FB.login(function (response) {
@@ -120,7 +138,7 @@
 				                 defs.push(Backend.PostRequest('days/'+day.id+'/add_moment', {
                                   time: Tools.getISODate(new Date(photo_data.created_time * 1000)),
                                   image_url: photo_data.images.standard_resolution.url,
-                                  description: photo_data.caption.text
+                                  description: photo_data.caption ? photo_data.caption.text : ''
                               }));
 		                  });
                       $.when.apply(null, defs).then(function() {
@@ -154,7 +172,7 @@
 
                 $.ajax({
                     dataType:"json",
-                    url:'https://api.instagram.com/v1/users/self/?callback=?',
+                    url:'https://api.instagram.com/v1/users/'+instagram_user+'/?callback=?',
                     data:{access_token:hash},
                     cache:true,
                     success:function (user_response) { exportPhotos(user_response); }

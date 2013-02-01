@@ -10,10 +10,10 @@ class PagesController extends lmbController
 	function doDay()
 	{
 		if (!$day = Day::findById($this->request->id))
-			return $this->_answerModelNotFoundById('Day', $this->request->id);
+			return $this->forwardTo404();
 
 		if ($day->is_deleted)
-			return $this->_answerModelNotFoundById('Day', $this->request->id);
+			return $this->forwardTo404();
 
 		if (!$this->toolkit->getUser() || $this->toolkit->getUser()->id != $day->user_id)
 		{

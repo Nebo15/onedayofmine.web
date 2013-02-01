@@ -11,8 +11,11 @@
   <title>{$#title}</title>
   <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# {$#facebook_app_namespace}: http://ogp.me/ns/fb/{$#facebook_app_namespace}#">
   <meta property="fb:app_id" content="{$#facebook_app_id}" />
-  <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">
+<!--  <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">-->
+  <link href="/styles/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="../styles/font-awesome.min.css">
   <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-responsive.min.css" rel="stylesheet">
+  <link href="/styles/bootstrap-editable.css" rel="stylesheet">
   <link href="/styles/main.css" rel="stylesheet">
   {{slot id='meta'/}}
 </head>
@@ -45,6 +48,7 @@
 	</div>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
 	<script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
+  <script src="/lib/bootstrap-editable.min.js"></script>
 	<script src="/lib/Tools.js"></script>
 	<script src="/lib/Loader.js"></script>
 	<script src="/lib/Backend.js"></script>
