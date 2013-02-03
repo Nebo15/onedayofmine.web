@@ -17,10 +17,11 @@
 		{{list using="$#day->moments"}}
 		<ul class="thumbnails">
 				{{list:item}}
-		    <li class="span4">
-		        <a href="#" class="thumbnail">
-		            <img src="{$item->image_266}" alt="">
-		        </a>
+		    <li class="span4 pull-left">
+				    <div class="thumbnail">
+		          <img src="{$item->image_266}" alt="">
+              <p>{$item->description|nl2br}</p>
+						</div>
 		    </li>
 				{{/list:item}}
 		</ul>
