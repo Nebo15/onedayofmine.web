@@ -15,6 +15,9 @@
   <link href="/styles/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="/styles/font-awesome.min.css">
   <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-responsive.min.css" rel="stylesheet">
+	<style>
+			body { padding-top: 60px; }
+	</style>
   <link href="/styles/bootstrap-editable.css" rel="stylesheet">
   <link href="/styles/main.css" rel="stylesheet">
   {{slot id='meta'/}}
@@ -52,14 +55,8 @@
                 <a class="brand" href="/pages/">OneDayOfMine</a>
                 <div class="nav-collapse collapse navbar-responsive-collapse">
                     <ul class="nav">
-                        <li class="<?= ($this->menu == 'interesting') ? 'active' : '';?>">
-                            <a href="/pages/days_interesting"><i class="icon-large icon-group"></i> Interesting</a>
-                        </li>
-                        <li class="<?= ($this->menu == 'new') ? 'active' : '';?>">
-                            <a href="/pages/days_new"><i class="icon-large icon-calendar"></i> New</a>
-                        </li>
-                        <li class="<?= ($this->menu == 'live') ? 'active' : '';?>">
-                            <a href="/pages/days_live"><i class="icon-large icon-eye-open"></i> Live</a>
+                        <li class="<?= ($this->menu == 'discover') ? 'active' : '';?>">
+                            <a href="/pages/days_discover"><i class="icon-large icon-group"></i> Discover</a>
                         </li>
                         <li class="<?= ($this->menu == 'search') ? 'active' : '';?>">
                             <a href="/pages/days_search"><i class="icon-large icon-search"></i> Search</a>
@@ -69,7 +66,7 @@
                         <ul class="nav">
                             <li class="dropdown <?= ($this->menu == 'me') ? 'active' : '';?>">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                    <i class="icon-large icon-user"></i><b class="caret"></b>
+                                    <i class="icon-large icon-user"></i> Me <b class="caret"></b>
                                 </a>
                                 <ul class="dropdown-menu">
                                     <li><a href="/pages/settings"><i class="icon icon-cog"></i> Settings</a></li>

@@ -1,0 +1,21 @@
+<?
+$this->title = "Interesting days";
+$this->menu = 'interesting';
+?>
+{{wrap with="layout.phtml"}}
+{{into slot="content"}}
+	{{list using="$#days"}}
+		<ul class="thumbnails">
+				{{list:item}}
+		    <li class="span3">
+		        <div class="thumbnail">
+		            <img src="{$item->image_532|default:'http://lorempixel.com/532/532/'}" alt="">
+		            <h3>{$item->title}</h3>
+		            <p><small>{$item->final_description}</small></p>
+		        </div>
+		    </li>
+				{{/list:item}}
+		</ul>
+	{{/list}}
+{{/into}}
+{{/wrap}}

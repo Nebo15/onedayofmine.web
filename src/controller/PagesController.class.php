@@ -1,12 +1,22 @@
 <?php
 lmb_require('limb/web_app/src/controller/lmbController.class.php');
 lmb_require('tests/src/odStaticObjectMother.class.php');
+lmb_require('src/service/InterestCalculator.class.php');
 lmb_require('src/Json.class.php');
 lmb_require('src/model/Day.class.php');
 lmb_require('src/model/Moment.class.php');
 
 class PagesController extends lmbController
 {
+	function doDaysDiscover()
+	{
+		$days_ratings = (new InterestCalculator())->getDaysRatings(0, 20, 20);
+
+		$this->days = [];
+		foreach ($days_ratings as $day_rating)
+			$this->days[] = $this->toolkit->getExportHelper()->exportDay($day_rating->getDay());
+	}
+
 	function doDay()
 	{
 		if (!$day = Day::findById($this->request->id))
