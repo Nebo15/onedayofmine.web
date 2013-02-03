@@ -49,22 +49,18 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </a>
-                <a class="brand" href="#">OneDayOfMine</a>
+                <a class="brand" href="/pages/">OneDayOfMine</a>
                 <div class="nav-collapse collapse navbar-responsive-collapse">
                     <ul class="nav">
-                        <li class="dropdown">
-                            <a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-large icon-globe"></i> Explore <b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li><a href="/pages/days_interesting">Interesting</a></li>
-                                <li><a href=/pages/days_live>Live</a></li>
-                                <li><a href="/pages/days_new">New</a></li>
-                                <li class="divider"></li>
-                                <li><a href="/pages/days_search">Search</a></li>
-                            </ul>
+                        <li class="<?= ($this->menu == 'explore') ? 'active' : '';?>">
+                            <a href="/pages/days_interesting"><i class="icon-large icon-globe"></i> Explore</a>
                         </li>
                     </ul>
+                    <div class="pull-right">
+                        <a class="btn btn-success"><i class="icon-camera"></i></a>
+                    </div>
                     <ul class="nav pull-right">
-                        <li class="dropdown">
+                        <li class="dropdown <?= ($this->menu == 'me') ? 'active' : '';?>">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                 <i class="icon-large icon-user"></i><b class="caret"></b>
                             </a>
@@ -72,19 +68,16 @@
                                 <li><a href="/pages/settings"><i class="icon icon-cog"></i> Settings</a></li>
                                 <li class="divider"></li>
                                 <li><a href="/pages/my_days"><i class="icon icon-camera"></i> My days</a></li>
-                                <li><a href="/pages/favourite_days"><i class="icon icon-bookmark"></i> Favourite days</a></li>
+                                <li><a href="/pages/my_favourite_days"><i class="icon icon-bookmark"></i> Favourite days</a></li>
+                                <li><a href="/pages/my_followers"><i class="icon icon-hand-left"></i> Followers & following</a></li>
                                 <li class="divider"></li>
-                                <li><a href="#"><i class="icon icon-hand-left"></i> My followers</a></li>
-                                <li><a href="#"><i class="icon icon-hand-right"></i> I'm following</a></li>
-                                <li class="divider"></li>
-                                <li><a href="#"><i class="icon icon-search"></i> Find and invite people</a></li>
+                                <li><a href="/pages/find_people"><i class="icon icon-search"></i> Find and invite people</a></li>
                                 <li class="divider"></li>
                                 <li><a href="#"><i class="icon icon-signout"></i> Logout</a></li>
                             </ul>
                         </li>
                         <li class="divider-vertical"></li>
-                        <li <?= $this->menu == 'new' ? 'class="active"' : ''; ?>><a href="/pages/new_day"><i class="icon-large icon-camera" style="color:#000"></i></a></li>
-                    </ul>
+										</ul>
                 </div><!-- /.nav-collapse -->
             </div>
         </div><!-- /navbar-inner -->
