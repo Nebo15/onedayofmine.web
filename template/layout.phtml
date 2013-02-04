@@ -114,11 +114,7 @@
 	<script>
 			{{slot id="js"/}}
 			$(document).ready(function() {
-          FB.login(function (response) {
-              if (!response.authResponse) return;
-		          console.log(FB.getAuthResponse());
-							{{slot id="js_ready"/}}
-          });
+          {{slot id="js_ready"/}}
 			});
 	</script>
 </body>

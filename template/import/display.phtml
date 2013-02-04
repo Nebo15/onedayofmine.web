@@ -11,7 +11,7 @@
 
             <a href="https://api.instagram.com/oauth/authorize/?client_id={$#instagram.client_id}&redirect_uri={$#instagram.redirect_url}&response_type=token"
                class="btn btn-primary btn-large" style="display:none">
-                Start <i class="icon-white icon-play"></i>
+                Step 1 of 3 <i class="icon-white icon-forward"></i>
             </a>
 
             <div class="well-large cant" style="display:none">Sorry. You have no days with 3 or more photos</div>
@@ -19,165 +19,40 @@
             <div class="days"></div>
         </div>
 {{/into}}
-{{into slot="js"}}
+{{into slot="js_include"}}
+	<script id="day-item" type="text/x-handlebars-template">
+      <div day_pos="[[day_position]]" class="well">
+	      <h4 class="time">[[time]]</h4>
+	      <ul class="thumbnails">
+				[[#moments]]
+	          <li style="width:160px;">
+		          <div class="thumbnail">
+				          <img src="[[images.thumbnail.url]]" class="img-rounded"/>
+				          <p><small>[[caption.text]]</small></p>
+				          <center>
+						          <button class="btn btn-warning remove-photo-action" moment_id="[[id]]">Remove</button>
+				          </center>
+		          </div>
+	          </li>
+		    [[/moments]]
 
-        var hash = window.location.hash.substr(14);
-        var photos_count = 0;
-        var photos = [];
-        var $days = $('.days');
-        var days = [];
-				var instagram_user = 'self';
-
-        function formatDate(photo) {
-            return (new Date(photo.created_time * 1000)).toLocaleString();
-        }
-
-		    function exportPhotos(user_response)
-		    {
-            photos_count = user_response.data.counts.media;
-            $('.bar').css('width', '10%');
-            getPhotos(photos_count, 'https://api.instagram.com/v1/users/'+instagram_user+'/media/recent/?access_token=' + hash + '&count=40&callback=?', function () {
-                var cant_assemble = true;
-                var current_day = [photos.shift()];
-                for (i in photos) {
-                    prev_photo = current_day[current_day.length - 1];
-                    var photo = photos[i];
-                    if ((prev_photo.created_time - photo.created_time) < 4 * 60 * 60)
-                        current_day.push(photo);
-                    else {
-                        $('.bar').css('width', "" + 90 + ((photos_count - photos.length) / photos_count * 0.1) + '%');
-												if (current_day.length > 2) {
-                            cant_assemble = false;
-                            drawDay($days, current_day, days.length);
-		                        days.push(current_day);
-                        }
-                        current_day = [photos[i]];
-                    }
-                }
-								if (current_day.length > 2) {
-										cant_assemble = false;
-										drawDay($days, current_day, days.length);
-										days.push(current_day);
-								}
-								photos = [];
-                $('.carousel').carousel({interval:false});
-                $('.progress').hide();
-                if (cant_assemble)
-                    $('.cant').show();
-            });
-		    }
-
-        function getPhotos(photos_count, url, callback) {
-            $.ajax({
-                dataType:"json",
-                url:url,
-                cache:true,
-                success:function (photos_resp) {
-                    photos = photos.concat(photos_resp.data);
-                    $('.bar').css('width', "" + (10 + photos.length / photos_count * 70) + "%");
-                    if (typeof photos_resp.pagination.next_max_id != 'undefined')
-                        getPhotos(photos_count, url + '&max_id=' + photos_resp.pagination.next_max_id, callback);
-                    else
-                        callback();
-                }
-            });
-        }
-
-        function drawDay($days, current_day, day_position)
-				{
-            var html = '<div day_pos="'+day_position+'" class="well"><h4>' + (new Date(current_day[current_day.length - 1].created_time * 1000)).toLocaleDateString() +
-                    '</h4><ul class="thumbnails">';
-
-            for (p in current_day) {
-                var el = current_day[p];
-                var photo = el.images.thumbnail;
-                html += '<li style="width:160px;"> \
-										<div class="thumbnail" style="height:240px;overflow:hidden;"> \
-											<img src="' + photo.url + '" class="img-rounded"/> \
-	                    <button class="remove-photo-action" photo_position="' + p + '"> \
-	                        <i class="icon icon-remove"></i> \
-	                    </button> \
-											<p><small>'+(el.caption ? el.caption.text : 'empty')+'</small></p> \
-										</div></li>';
-            }
-
-            html += '</ul><br/><div style="margin-top:30px">' +
-								'<a class="btn btn-primary btn-large export-action">' +
-								'<i class="icon-white icon-pencil"></i> Create a day</a>' +
-								'</div>';
-						var $out = $(html).hide();
-						$days.append($out);
-
-            $out.children('ul').children('li').children('div').children('button').click(function() {
-							console.log('remove: '+$(this).attr('photo_position'));
-						});
-
-            $out.children('div').children('a.export-action').click(function () {
-                var day = days[$(this).parents('.well').attr('day_pos')];
-                var $progress = $(this).parents('.well').append('<div class="progress progress-striped">' +
-                        '<div class="bar" style="width: 10%;"></div>' +
-                        '</div>');
-                $(this).remove();
-								PostImages(day);
-            });
-
-            $out.slideDown('slow');
-				}
-
-        function PostImages(day_data) {
-            FB.login(function (response) {
-                if (!response.authResponse) return;
-                Backend.Login(function () {
-                    Backend.PostRequest('days/start', {
-                        title:'My day', type:'Holiday'
-                    }).done(function (day_response) {
-						          var day = day_response.result;
-		                  var defs = [];
-                      var is_sended = false;
-						          $.each(day_data, function(i, photo_data) {
-				                 defs.push(Backend.PostRequest('days/'+day.id+'/add_moment', {
-                                  time: Tools.getISODate(new Date(photo_data.created_time * 1000)),
-                                  image_url: photo_data.images.standard_resolution.url,
-                                  description: photo_data.caption ? photo_data.caption.text : ''
-                              }));
-		                  });
-                      $.when.apply(null, defs).then(function() {
-                          window.location.href = '/pages/' + day.id + '/day';
-                      });
-                    });
-                });
-            });
-        };
-
-        function getRemoteImageContent(url, callback) {
-		        var img = new Image();
-		        img.src = url;
-            img.onload = function() {
-                var canvas = document.createElement("canvas");
-                canvas.width = img.width;
-                canvas.height = img.height;
-                var ctx = canvas.getContext("2d");
-                ctx.drawImage(img, 0, 0);
-                var encoded = canvas.toDataURL("image/jpg");
-                callback(encoded.substring(encoded.indexOf('base64,')+7));
-            }
-        }
-
-        $(document).ready(function () {
-            if (window.location.hash.length < 2) {
-                $('a.btn').show();
-            }
-            else {
-                $('.progress').show();
-
-                $.ajax({
-                    dataType:"json",
-                    url:'https://api.instagram.com/v1/users/'+instagram_user+'/?callback=?',
-                    data:{access_token:hash},
-                    cache:true,
-                    success:function (user_response) { exportPhotos(user_response); }
-                });
-            }
-        });
+	      </ul><br/>
+	      <button class="btn btn-primary btn-large export-action">
+	        Step 2 of 3 <i class="icon-white icon-forward"></i> </button>
+      </div>
+	</script>
+	<script src="/lib/handlebars.js"></script>
+	<script src="/lib/Importer.js"></script>
 {{/into}}
-	{{/wrap}}
+{{into slot="js_ready"}}
+    hash = window.location.hash.substr(14);
+    $(document).ready(function () {
+        if (window.location.hash.length < 2) {
+            $('a.btn').show();
+        }
+        else {
+            Importer.import(hash);
+        }
+    });
+{{/into}}
+{{/wrap}}
