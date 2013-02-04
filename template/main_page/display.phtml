@@ -1,12 +1,13 @@
 <?
 $this->title = "OneDayOfMine";
-$this->fb_disabled = true;
+$this->fb_disabled = false;
 $this->menu_disabled = true;
 ?>
 {{wrap with="layout.phtml"}}
 {{into slot="content"}}
 <div class="hero-unit">
-		<h1>One Day Of Mine</h1>
+  <div style="position:absolute;top:5px;right:75px;"><img src="/img/1.png"/></div>
+	<h1>One Day Of Mine</h1>
 	<p>Comming soon...</p>
 		<br/>
     <ul class="unstyled">
@@ -31,9 +32,9 @@ $this->menu_disabled = true;
             <i class="icon-large icon-question-sign"></i>
             Do you have any questions? <a href="mailto:welcome@onedayofmine.com">welcome@onedayofmine.com</a>!
         </li>
-
     </ul>
 </div>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 {{/into}}
 {{into slot="js_ready"}}
 {{/into}}
