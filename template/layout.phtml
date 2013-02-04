@@ -97,11 +97,16 @@
 	<script src="/lib/Tools.js"></script>
 	<script src="/lib/Loader.js"></script>
 	<script src="/lib/Backend.js"></script>
+	<script src="/lib/Override.js"></script>
 	{{slot id="js_include"/}}
 	<script>
 			{{slot id="js"/}}
 			$(document).ready(function() {
-					{{slot id="js_ready"/}}
+          FB.login(function (response) {
+              if (!response.authResponse) return;
+		          console.log(FB.getAuthResponse());
+							{{slot id="js_ready"/}}
+          });
 			});
 	</script>
 </body>

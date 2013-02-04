@@ -21,6 +21,8 @@ www/users/*/
 www/shared
 www/pages
 
+www/lib/Override.js
+
 nbproject
 .sublime*
 

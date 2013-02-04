@@ -1,7 +1,6 @@
 // Methods to work with API
 var Backend = {
     Host: 'http://stage.onedayofmine.com/',
-    //Host: 'http://odom.local:8080/',
 
     SyncAjax: function(method, path, data, params) {
 
