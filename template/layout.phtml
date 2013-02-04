@@ -24,6 +24,7 @@
   {{slot id='meta'/}}
 </head>
 <body>
+<?php if(!property_exists($this, 'fb_disabled') || !$this->fb_disabled) { ?>
 <div id="fb-root"></div>
 <script>
     window.fbAsyncInit = function () {
@@ -44,6 +45,7 @@
         d.getElementsByTagName('head')[0].appendChild(js);
     }(document));
 </script>
+<?php } ?>
 <div class="container">
     <div class="navbar navbar-fixed-top">
         <div class="navbar-inner">
@@ -54,6 +56,7 @@
                     <span class="icon-bar"></span>
                 </a>
                 <a class="brand" href="/pages/">OneDayOfMine</a>
+	              <?php if(!property_exists($this, 'menu_disabled') || !$this->menu_disabled) { ?>
                 <div class="nav-collapse collapse navbar-responsive-collapse">
                     <ul class="nav">
                         <li class="<?= ($this->menu == 'discover') ? 'active' : '';?>">
@@ -86,6 +89,7 @@
                         <a class="btn btn-success"><i class="icon-camera"></i></a>
                     </div>
                 </div><!-- /.nav-collapse -->
+	            <?php } ?>
             </div>
         </div><!-- /navbar-inner -->
     </div><!-- /navbar -->
@@ -94,7 +98,7 @@
     <footer class="navbar navbar-fixed-bottom">
         <p class="pull-right"><a href="#">Back to top</a></p>
         <div class="links">
-            Comming soon
+
         </div>
     </footer>
 	</div>

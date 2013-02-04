@@ -8,23 +8,62 @@
     <meta property="{$#facebook_app_namespace}:type" content="some type" />
   {{/into}}
   {{into slot="content"}}
-    <h1>{$#day->title}</h1>
-		<blockquote>
-      <p>{$#day->final_description|default:"no description"}</p>
-      <small>by <b>{$#day->user->name}</b></small>
-		</blockquote>
 
-		{{list using="$#day->moments"}}
-		<ul class="thumbnails">
-				{{list:item}}
-		    <li class="span4 pull-left">
-				    <div class="thumbnail">
-		          <img src="{$item->image_266}" alt="">
-              <p>{$item->description|nl2br}</p>
-						</div>
-		    </li>
-				{{/list:item}}
-		</ul>
-		{{/list}}
+<div class="row-fluid">
+    <div class="span3"></div>
+    <div class="span6">
+        <h1>{$#day->title}</h1>
+        <blockquote>
+            <p>{$#day->final_description|default:"no description"}</p>
+            <small>by <b>{$#day->user->name}</b></small>
+        </blockquote>
+
+        <dl>
+            <dt>type:</dt>
+            <dd>{$#day->type}</dd>
+            <dt>views_count:</dt>
+            <dd>{$#day->views_count}</dd>
+            <dt>ctime:</dt>
+            <dd>{$#day->ctime}</dd>
+            <dt>utime:</dt>
+            <dd>{$#day->utime}</dd>
+            <dt>is favourite:</dt>
+            <dd><?= $this->day->is_favorite ? 'true' : 'false'; ?></dd>
+            <dt>likes count:</dt>
+            <dd>{$#day->likes_count}</dd>
+            <dt>comments count:</dt>
+            <dd>{$#day->comments_count}</dd>
+	      </dl>
+
+        {{list using="$#day->moments"}}
+        <ul class="unstyled">
+            {{list:item}}
+            <li class="well">
+		            <h4 class="time"><center>{$item->time}</center></h4>
+                <img src="{$item->image_532}" alt="">
+                <p>{$item->description|nl2br}</p>
+	              <hr/>
+		            <a href="#" class="btn btn-primary"><i class="icon-large icon-pencil"></i> Edit</a>
+                <a href="#" class="btn btn-danger">Delete</a>
+
+		            <dl>
+				            <dt>time:</dt>
+				            <dd>{$item->time}</dd>
+                    <dt>likes count:</dt>
+                    <dd>{$item->likes_count}</dd>
+                    <dt>is liked:</dt>
+                    <dd><?= $item->is_liked ? 'true' : 'false'; ?></dd>
+                    <dt>comments count:</dt>
+                    <dd>{$item->comments_count}</dd>
+		            </dl>
+            </li>
+            {{/list:item}}
+        </ul>
+        {{/list}}
+        <h3>Comments:</h3>
+        <textarea rows="3" class="input-block-level"></textarea>
+        <button class="btn btn-large btn-block btn-primary" type="button">Send a comment</button>
+    </div>
+</div>
   {{/into}}
 {{/wrap}}

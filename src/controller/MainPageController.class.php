@@ -3,7 +3,7 @@ lmb_require('src/controller/BaseJsonController.class.php');
 lmb_require('tests/src/toolkit/odTestsTools.class.php');
 lmb_require('src/Json.class.php');
 
-class MainPageController extends BaseJsonController
+class MainPageController extends lmbController
 {
   function doGuestDisplay()
   {
@@ -20,11 +20,6 @@ class MainPageController extends BaseJsonController
   function doGuestNoop()
   {
     return $this->_answerOk();
-  }
-
-  function doGuestException()
-  {
-    throw new lmbException('Some exception', array('foo' => 1, 'bar' => 2));
   }
 
   function doGuestBundleFiles()
