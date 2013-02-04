@@ -5,29 +5,15 @@ lmb_require('src/Json.class.php');
 
 class MainPageController extends lmbController
 {
-  function doGuestDisplay()
-  {
-    return $this->_answerOk('Hello from ODOM ('.lmb_app_mode().')');
-  }
-
-  function doGuestDeploy()
+  function doDeploy()
   {
     echo '<pre>';
     system(lmb_env_get('APP_DIR').'/cli/update.sh');
     die();
   }
 
-  function doGuestNoop()
+  function doNoop()
   {
     return $this->_answerOk();
-  }
-
-  function doGuestBundleFiles()
-  {
-    User::findById('1');
-//    $files = array_values(get_included_files());
-    $files = array_values($_ENV['LIMB_LAZY_CLASS_PATHS']);
-    array_unshift($files, 'limb/core/common.inc.php');
-    return $this->_answerOk($files);
   }
 }
