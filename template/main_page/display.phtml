@@ -4,6 +4,9 @@ $this->fb_disabled = true;
 $this->menu_disabled = true;
 ?>
 {{wrap with="layout.phtml"}}
+{{into slot="css"}}
+	.unstyled li { padding-top:15px;}
+{{/into}}
 {{into slot="content"}}
 <div class="hero-unit">
   <div class="visible-desktop" style="position:absolute;top:55px;right:75px;"><img src="/img/1.jpg"/></div>
