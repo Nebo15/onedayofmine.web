@@ -8,11 +8,13 @@ $this->menu = 'interesting';
 		<ul class="thumbnails">
 				{{list:item}}
 		    <li class="span3">
-		        <div class="thumbnail">
-		            <img src="{$item->image_532|default:'http://lorempixel.com/532/532/'}" alt="">
-		            <h3>{$item->title}</h3>
-		            <p><small>{$item->final_description}</small></p>
-		        </div>
+				    <a href="/pages/{$item->id}/day">
+			        <div class="thumbnail">
+			            <img src="{$item->image_532|default:'http://lorempixel.com/532/532/'}" alt="">
+			            <h3>{$item->title}</h3>
+			            <p><small>{$item->final_description}</small></p>
+			        </div>
+            </a>
 		    </li>
 				{{/list:item}}
 		</ul>
