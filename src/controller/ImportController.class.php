@@ -27,6 +27,8 @@ class ImportController extends lmbController
 		]);
 		$this->user = json_decode($req->send()->getBody());
 
+		var_dump($this->user);die();
+
 		$response = [];
 		$photos = $this->_get_photos_recursively($this->instagram_api_host.'/v1/users/self/media/recent/?access_token='.$this->user->access_token);
 

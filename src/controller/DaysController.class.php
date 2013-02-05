@@ -1,6 +1,7 @@
 <?php
 lmb_require('src/controller/BaseJsonController.class.php');
 lmb_require('src/service/InterestCalculator.class.php');
+lmb_require('src/service/InstagramPhotosAnalyzer.class.php');
 lmb_require('src/model/Day.class.php');
 lmb_require('src/model/DayFavorite.class.php');
 lmb_require('src/model/Complaint.class.php');
@@ -442,11 +443,7 @@ class DaysController extends BaseJsonController
 
 	function doGuestAnalyzeInstagramDay()
 	{
-		sleep(2);
-		return $this->_answerOk([
-			'type' => 'Holiday',
-			'title' => 'foo bar',
-			'description' => 'desc'
-		]);
+		sleep(1);
+		return $this->_answerOk((new InstagramPhotosAnalyzer($this->request->get('moments')))->analyze());
 	}
 }
