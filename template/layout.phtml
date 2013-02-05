@@ -11,7 +11,7 @@
   <title>{$#title}</title>
   <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# {$#facebook_app_namespace}: http://ogp.me/ns/fb/{$#facebook_app_namespace}#">
   <meta property="fb:app_id" content="{$#facebook_app_id}" />
-<!--  <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">-->
+  <!--  <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">-->
   <link href="/styles/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="/styles/font-awesome.min.css">
   <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-responsive.min.css" rel="stylesheet">
@@ -21,6 +21,22 @@
   <link href="/styles/bootstrap-editable.css" rel="stylesheet">
   <link href="/styles/main.css" rel="stylesheet">
   {{slot id='meta'/}}
+  <script id="menu_me_authorized" type="text/x-handlebars-template">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+      <i class="icon-large icon-user"></i> Me <b class="caret"></b>
+    </a>
+    <ul class="dropdown-menu">
+      <li><a href="/pages/settings"><i class="icon icon-cog"></i> Settings</a></li>
+      <li class="divider"></li>
+      <li><a href="/pages/my_days"><i class="icon icon-camera"></i> My days</a></li>
+      <li><a href="/pages/my_favourite_days"><i class="icon icon-bookmark"></i> Favourite days</a></li>
+      <li><a href="/pages/my_followers"><i class="icon icon-hand-left"></i> Followers &amp; following</a></li>
+      <li class="divider"></li>
+      <li><a href="/pages/find_people"><i class="icon icon-search"></i> Find and invite people</a></li>
+      <li class="divider"></li>
+      <li><a href="#"><i class="icon icon-signout"></i> Logout</a></li>
+    </ul>
+  </script>
 </head>
 <body>
 <?php if(!property_exists($this, 'fb_disabled') || !$this->fb_disabled) { ?>
@@ -31,7 +47,7 @@
             appId: <?= $this->facebook_app_id; ?>,
             status:true,
             cookie:true,
-            xfbml:true
+            xfbml:false
         });
     };
     (function (d) {
@@ -65,28 +81,23 @@
                             <a href="/pages/days_search"><i class="icon-large icon-search"></i> Search</a>
                         </li>
                     </ul>
+
                     <div class="nav pull-right">
-                        <ul class="nav">
-                            <li class="dropdown <?= ($this->menu == 'me') ? 'active' : '';?>">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                    <i class="icon-large icon-user"></i> Me <b class="caret"></b>
-                                </a>
-                                <ul class="dropdown-menu">
-                                    <li><a href="/pages/settings"><i class="icon icon-cog"></i> Settings</a></li>
-                                    <li class="divider"></li>
-                                    <li><a href="/pages/my_days"><i class="icon icon-camera"></i> My days</a></li>
-                                    <li><a href="/pages/my_favourite_days"><i class="icon icon-bookmark"></i> Favourite days</a></li>
-                                    <li><a href="/pages/my_followers"><i class="icon icon-hand-left"></i> Followers & following</a></li>
-                                    <li class="divider"></li>
-                                    <li><a href="/pages/find_people"><i class="icon icon-search"></i> Find and invite people</a></li>
-                                    <li class="divider"></li>
-                                    <li><a href="#"><i class="icon icon-signout"></i> Logout</a></li>
-                                </ul>
-                            </li>
-                            <li class="divider-vertical"></li>
-                        </ul>
-                        <a class="btn btn-success"><i class="icon-camera"></i></a>
+                      <ul class="nav">
+                        <li id="menu_me" class="dropdown <?= ($this->menu == 'me') ? 'active' : '';?>">
+                          <a id="login_button">
+                            <i class="icon-large icon-key"></i> Login
+                          </a>
+                        </li>
+                        <li class="divider-vertical"></li>
+                        <li>
+                          <div style="width:70px;">
+                            <a href="#" class="btn btn-success disabled"><i class="icon-camera"></i></a>
+                          </div>
+                        </li>
+                      </ul>
                     </div>
+
                 </div><!-- /.nav-collapse -->
 	            <?php } ?>
             </div>
@@ -95,27 +106,40 @@
       {{slot id='content'/}}
       {{slot id='content_zone'/}}
 		<?php if(!property_exists($this, 'menu_disabled') || !$this->menu_disabled) { ?>
-	    <footer class="navbar navbar-fixed-bottom">
+<!-- 	    <footer class="navbar navbar-fixed-bottom">
 	        <p class="pull-right"><a href="#">Back to top</a></p>
 	        <div class="links">
 
 	        </div>
-	    </footer>
+	    </footer> -->
 		<?php } ?>
 	</div>
-	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-	<script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+	<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
   <script src="/lib/bootstrap-editable.min.js"></script>
-	<script src="/lib/Tools.js"></script>
-	<script src="/lib/Loader.js"></script>
-	<script src="/lib/Backend.js"></script>
+
+  <script src="/lib/Tools.js"></script>
+	<script src="/lib/Auth.js"></script>
+  <script src="/lib/Loader.js"></script>
+  <script src="/lib/Backend.js"></script>
+  <script src="/lib/Storage.js"></script>
 	<script src="/lib/Override.js"></script>
 	{{slot id="js_include"/}}
 	<script>
-			{{slot id="js"/}}
-			$(document).ready(function() {
-          {{slot id="js_ready"/}}
-			});
+		{{slot id="js"/}}
+		$(document).ready(function() {
+      {{slot id="js_ready"/}}
+
+      if(Auth.hasAccessToken()) {
+        $('#menu_me').html($('#menu_me_authorized').html());
+      } else {
+        $('#login_button').click(function() {
+          Auth.login(function() {
+            window.location.reload();
+          });
+        });
+      }
+		});
 	</script>
 </body>
 </html>
