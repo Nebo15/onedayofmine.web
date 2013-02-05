@@ -58,7 +58,10 @@ var Importer = {
             Importer.photos = [];
             $('.carousel').carousel({interval:false});
             if (cant_assemble)
+            {
+                Importer.$progress.hide();
                 $('.cant').show();
+            }
         });
     },
 
@@ -95,6 +98,7 @@ var Importer = {
 
         $day.find('button.analyze-action').click(function(event) {
             var _day = Importer.days[$(this).parents('.well').attr('day_pos')];
+            $days.hide();
             Importer.showAnalyzeStep($day, _day);
         });
 
