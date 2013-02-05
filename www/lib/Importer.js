@@ -25,9 +25,13 @@ var Importer = {
         return (new Date(photo.created_time * 1000)).toLocaleString();
     },
 
+    setProgress:function(percents) {
+        Importer.$progress.find('.bar').css('width', "" + percents + "%");
+    },
+
     exportPhotos:function (user_response) {
         photos_count = user_response.data.counts.media;
-        $('.bar').css('width', '10%');
+        Importer.setProgress(5);
         Importer.getPhotos(photos_count, 'https://api.instagram.com/v1/users/' + Importer.instagram_user + '/media/recent/?access_token=' + hash + '&count=40&callback=?', function () {
             var cant_assemble = true;
             var current_day = [Importer.photos.shift()];
@@ -37,7 +41,7 @@ var Importer = {
                 if ((prev_photo.created_time - photo.created_time) < 4 * 60 * 60)
                     current_day.push(photo);
                 else {
-                    $('.bar').css('width', "" + 90 + ((photos_count - Importer.photos.length) / photos_count * 0.1) + '%');
+                    Importer.setProgress((95 + ((photos_count - Importer.photos.length) / photos_count * 0.1)) * 0.5);
                     if (current_day.length > 2) {
                         cant_assemble = false;
                         Importer.drawDay(Importer.$days, current_day, Importer.days.length);
@@ -53,7 +57,6 @@ var Importer = {
             }
             Importer.photos = [];
             $('.carousel').carousel({interval:false});
-            $('.progress').hide();
             if (cant_assemble)
                 $('.cant').show();
         });
@@ -66,8 +69,7 @@ var Importer = {
             cache:true,
             success:function (photos_resp) {
                 Importer.photos = Importer.photos.concat(photos_resp.data);
-                $('.bar').css('width', "" + (10 + Importer.photos.length / photos_count * 70) + "%");
-                $('.bar').html('Getting your photos from Instagram...');
+                Importer.setProgress((5 + Importer.photos.length / photos_count * 70) * 0.3);
                 if (typeof photos_resp.pagination.next_max_id != 'undefined')
                     Importer.getPhotos(photos_count, url + '&max_id=' + photos_resp.pagination.next_max_id, callback);
                 else
@@ -84,40 +86,53 @@ var Importer = {
             day_position: day_position
         };
 
-        var day = $($.trim(template(view)));
-        day.find('button.remove-photo-action').click(function(event) {
-          event.preventDefault();
+        var $day = $($.trim(template(view)));
+        var $out = $days.append($day.hide());
+
+        $day.find('button.remove-photo-action').click(function(event) {
           console.log('remove: ' + $(this).attr('moment_id'));
         });
 
-        var $out = $days.append(day);
-
-        $out.on('click', 'button.export-action', function (event) {
+        $day.find('button.analyze-action').click(function(event) {
             var _day = Importer.days[$(this).parents('.well').attr('day_pos')];
-            $(this).remove();
-            Importer.showAnalyzeStep($out.children('div'), _day);
-            event.preventDefault();
+            Importer.showAnalyzeStep($day, _day);
         });
 
-        $out.slideDown('slow');
+        $day.slideDown('slow');
     },
 
-    showAnalyzeStep:function($day, day)
+    showAnalyzeStep:function($day, moments)
     {
-        console.log('analyze', day);
+        Importer.setProgress(55);
+        Backend.PostRequest('days/analyze_instagram_day', {moments: moments}).done(function(response) {
+            $day.find('.type').val(response.result.type);
+            $day.find('.title').val(response.result.title);
+            $day.find('.desc').val(response.result.description);
+            $day.find('.export-action').click(function() {
+               Importer.postDay({
+                   type: $day.find('.type').val(),
+                   title: $day.find('.title').val(),
+                   desc: $day.find('.desc').val(),
+                   moments: moments
+               });
+            });
+            Importer.setProgress(75);
+            $day.find('.step2').hide('slow');
+            $day.find('.step3').show('slow');
+        });
     },
 
-    postImage:function (day_data) {
+    postDay:function (day_data) {
         FB.login(function (response) {
             if (!response.authResponse) return;
             Backend.Login(function () {
                 Backend.PostRequest('days/start', {
-                    title:'My day', type:'Holiday'
+                    title:day_data.title, type: day_data.type, final_description: day_data.desc
                 }).done(function (day_response) {
                         var day = day_response.result;
                         var defs = [];
                         var is_sended = false;
-                        $.each(day_data, function (i, photo_data) {
+                        $.each(day_data.moments, function (i, photo_data) {
                             defs.push(Backend.PostRequest('days/' + day.id + '/add_moment', {
                                 time:Tools.getISODate(new Date(photo_data.created_time * 1000)),
                                 image_url:photo_data.images.standard_resolution.url,

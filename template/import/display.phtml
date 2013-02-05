@@ -9,10 +9,10 @@
                 <div class="bar" style="width: 0%;"></div>
             </div>
 
-            <a href="https://api.instagram.com/oauth/authorize/?client_id={$#instagram.client_id}&redirect_uri={$#instagram.redirect_url}&response_type=token"
+            <center><a href="https://api.instagram.com/oauth/authorize/?client_id={$#instagram.client_id}&redirect_uri={$#instagram.redirect_url}&response_type=token"
                class="btn btn-primary btn-large" style="display:none">
                 Step 1 of 3 <i class="icon-white icon-forward"></i>
-            </a>
+            </a></center>
 
             <div class="well-large cant" style="display:none">Sorry. You have no days with 3 or more photos</div>
 
@@ -22,23 +22,56 @@
 {{into slot="js_include"}}
 	<script id="day-item" type="text/x-handlebars-template">
       <div day_pos="[[day_position]]" class="well">
-	      <h4 class="time">[[time]]</h4>
-	      <ul class="thumbnails">
-				[[#moments]]
-	          <li style="width:160px;">
-		          <div class="thumbnail">
-				          <img src="[[images.thumbnail.url]]" class="img-rounded"/>
-				          <p><small>[[caption.text]]</small></p>
-				          <center>
-						          <button class="btn btn-warning remove-photo-action" moment_id="[[id]]">Remove</button>
-				          </center>
-		          </div>
-	          </li>
-		    [[/moments]]
+          <h4 class="time">[[time]]</h4>
+		      <div class="step2">
+				      <ul class="thumbnails">
+							[[#moments]]
+				          <li style="width:160px;">
+					          <div class="thumbnail">
+							          <img src="[[images.thumbnail.url]]" class="img-rounded"/>
+							          <p><small>[[caption.text]]</small></p>
+							          <center>
+									          <button class="btn btn-warning remove-photo-action" moment_id="[[id]]">Remove</button>
+							          </center>
+					          </div>
+				          </li>
+					    [[/moments]]
 
-	      </ul><br/>
-	      <button class="btn btn-primary btn-large export-action">
-	        Step 2 of 3 <i class="icon-white icon-forward"></i> </button>
+				      </ul><br/>
+			        <center><button class="btn btn-primary btn-large analyze-action">
+				        Step 2 of 3 <i class="icon-white icon-forward"></i> </button></center>
+				  </div>
+		      <div class="step3" style="display:none">
+						<form class="form-horizontal">
+                <div class="control-group">
+                    <label class="control-label " for="type_[[day_position]]">Day type</label>
+                    <div class="controls">
+                        <select id="type_[[day_position]]" class="type input-xxlarge">
+                            <option value="Working">Working</option>
+                            <option value="Day off">Day off</option>
+                            <option value="Holiday">Holiday</option>
+                            <option value="Trip">Trip</option>
+		                    </select>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="title_[[day_position]]">Title</label>
+                    <div class="controls">
+                        <input type="text" id="title_[[day_position]]" class="title input-xxlarge">
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" for="desc_[[day_position]]">Description</label>
+                    <div class="controls">
+                        <textarea id="desc_[[day_position]]" class="desc input-xxlarge" rows="5"></textarea>
+                    </div>
+                </div>
+
+                <center><button class="btn btn-primary btn-large export-action">
+                    Final step! <i class="icon-white icon-forward"></i> </button></center>
+						</form>
+		      </div>
       </div>
 	</script>
 	<script src="/lib/handlebars.js"></script>
