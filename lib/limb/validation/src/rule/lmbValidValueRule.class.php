@@ -35,7 +35,7 @@ class lmbValidValueRule extends lmbSingleFieldRule
     {
       if(!in_array($value, $this->valid_value))
       {
-        $this->error('{Field} value is wrong', array('valid' => $this->valid_value, 'given' => $value));
+        $this->error('{Field} value is wrong', array('valid' => implode(',', $this->valid_value), 'given' => $value));
       }
     }
     elseif ($value != $this->valid_value)
