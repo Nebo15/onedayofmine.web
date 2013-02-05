@@ -85,7 +85,7 @@ var Importer = {
         };
 
         var day = $($.trim(template(view)));
-        day.find('button.remove-photo-action').click(function() {
+        day.find('button.remove-photo-action').click(function(event) {
           event.preventDefault();
           console.log('remove: ' + $(this).attr('moment_id'));
         });
