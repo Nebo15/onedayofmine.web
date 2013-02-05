@@ -6,7 +6,7 @@
 class InstagramPhotosAnalyzer
 {
 	protected $moments = [];
-	protected $type = 'Working';
+	protected $type = 'Working day';
 	protected $title;
 	protected $description;
 
