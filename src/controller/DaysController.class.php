@@ -439,4 +439,14 @@ class DaysController extends BaseJsonController
 		return $this->_answerOk($this->toolkit->getExportHelper()->exportDayCommentItems($day->getCommentsWithLimitation($from,
 			$to, $limit)));
 	}
+
+	function doGuestAnalyzeInstagramDay()
+	{
+		sleep(2);
+		return $this->_answerOk([
+			'type' => 'Holiday',
+			'title' => 'foo bar',
+			'description' => 'desc'
+		]);
+	}
 }
