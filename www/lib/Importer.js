@@ -77,24 +77,25 @@ var Importer = {
     },
 
     drawDay:function ($days, current_day, day_position) {
-
         var template = Handlebars.compile($("#day-item").html().split('[[').join('{{').split(']]').join('}}'));
         var view = {
             time: current_day[0] ? Importer.formatDate(current_day[0]) : '',
             moments: current_day,
             day_position: day_position
         };
-        var $out = $days.append(template(view));
 
-        $out.on('click', 'button.remove-photo-action', function(event) {;
-            event.preventDefault();
-            console.log('remove: ' + $(this).attr('moment_id'));
+        var day = $($.trim(template(view)));
+        day.find('button.remove-photo-action').click(function() {
+          event.preventDefault();
+          console.log('remove: ' + $(this).attr('moment_id'));
         });
 
+        var $out = $days.append(day);
+
         $out.on('click', 'button.export-action', function (event) {
-            var day = Importer.days[$(this).parents('.well').attr('day_pos')];
+            var _day = Importer.days[$(this).parents('.well').attr('day_pos')];
             $(this).remove();
-            Importer.showAnalyzeStep($out.children('div'), day);
+            Importer.showAnalyzeStep($out.children('div'), _day);
             event.preventDefault();
         });
 
