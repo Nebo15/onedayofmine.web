@@ -98,7 +98,9 @@ var Importer = {
 
         $day.find('button.analyze-action').click(function(event) {
             var _day = Importer.days[$(this).parents('.well').attr('day_pos')];
-            $days.hide();
+            $days.find('.well').each(function(i, el) {
+               if(!$(el).is($day)) $(el).hide('fast');
+            });
             Importer.showAnalyzeStep($day, _day);
         });
 
