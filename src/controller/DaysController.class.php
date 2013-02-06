@@ -36,8 +36,9 @@ class DaysController extends BaseJsonController
 
 		$day = new Day();
 		$day->setUser($this->_getUser());
-		$day->title = $this->request->getPost('title');
+		$day->title = $this->request->getPostFiltered('title', FILTER_SANITIZE_STRING);
 		$day->type = $this->request->getPost('type');
+		$day->final_description = $this->request->getPostFiltered('final_description', FILTER_SANITIZE_STRING);
 		$day->save();
 
 		$user = $this->_getUser();
