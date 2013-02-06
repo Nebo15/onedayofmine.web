@@ -95,6 +95,16 @@ var Importer = {
 
         $day.find('button.remove-photo-action').click(function (event) {
             console.log('remove: ' + $(this).attr('moment_id'));
+            if($(this).hasClass('btn-info'))
+            {
+                $(this).removeClass('btn-info').addClass('btn-primary').html('Restore');
+                $(this).parent().parent().find('img').css('opacity', '0.3');
+            }
+            else
+            {
+                $(this).removeClass('btn-primary').addClass('btn-info').html('Remove');
+                $(this).parent().parent().find('img').css('opacity', '1');
+            }
         });
 
         $day.find('button.analyze-action').click(function (event) {

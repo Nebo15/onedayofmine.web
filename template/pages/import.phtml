@@ -1,4 +1,6 @@
 {{wrap with="layout.phtml"}}
+{{into slot="css"}}
+{{/into}}
 {{into slot="content"}}
         <div>
             <h2>Instagram &rarr; Facebook</h2>
@@ -27,13 +29,15 @@
 				      <ul class="thumbnails">
 							[[#moments]]
 				          <li style="width:160px;">
-					          <div class="thumbnail">
-							          <img src="[[images.thumbnail.url]]" class="img-rounded"/>
-							          <p><small>[[caption.text]]</small></p>
-							          <center>
-									          <button class="btn btn-warning remove-photo-action" moment_id="[[id]]">Remove</button>
-							          </center>
-					          </div>
+						          <div class="thumbnail">
+								          <div class="img-wrap"  style="background:white">
+                              <img src="[[images.thumbnail.url]]" class="img-rounded"/>
+                          </div>
+                          <p><small>[[caption.text]]</small></p>
+                          <center>
+                              <button class="btn btn-info remove-photo-action" moment_id="[[id]]">Remove</button>
+                          </center>
+						          </div>
 				          </li>
 					    [[/moments]]
 
