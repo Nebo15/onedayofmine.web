@@ -1,7 +1,7 @@
 <?php
 
 $conf = array(
-  'save_path' => 'www/users',
+  'save_path' => 'www',
   'Day'    => array(
     'path'      => 'users/days/:hash_:image_width.:file_extension',
     'sizes'     => array(
