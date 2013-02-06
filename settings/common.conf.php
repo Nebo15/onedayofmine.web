@@ -13,4 +13,9 @@ $conf = array(
 		'client_secret' => '3aaf3029cb40488f9a2adc2a5a9a1443',
 		'redirect_url' => lmb_env_get('HOST_URL').'pages/import'
 	],
+
+	'flickr' => [
+		'key' => '7779fdde3c7525e0015d46694b6839d1',
+		'secret' => 'bdf98eeeba525020'
+	]
 );
