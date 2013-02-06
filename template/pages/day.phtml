@@ -14,52 +14,47 @@
     <div class="span6">
         <h1>{$#day->title}</h1>
         <blockquote>
-            <p>{$#day->final_description|default:"no description"}</p>
-            <small>by <b>{$#day->user->name}</b></small>
+            <small>by <b><a href="/pages/{$#day->user->id}/user">{$#day->user->name}</a></b></small>
         </blockquote>
 
-        <dl>
-            <dt>type:</dt>
-            <dd>{$#day->type}</dd>
-            <dt>views_count:</dt>
-            <dd>{$#day->views_count}</dd>
-            <dt>ctime:</dt>
-            <dd>{$#day->ctime}</dd>
-            <dt>utime:</dt>
-            <dd>{$#day->utime}</dd>
-            <dt>is favourite:</dt>
-            <dd><?= $this->day->is_favorite ? 'true' : 'false'; ?></dd>
-            <dt>likes count:</dt>
-            <dd>{$#day->likes_count}</dd>
-            <dt>comments count:</dt>
-            <dd>{$#day->comments_count}</dd>
-	      </dl>
+	      <div style="padding-bottom:10px">
+            <span class="label label-info">{$#day->type}</span>
+			      <div class="pull-right">
+					      <i class="icon icon-large icon-eye-open"> {$#day->views_count}</i>
+					      <i class="icon icon-large icon-time"> {$#day->utime}</i>
+					      <i class="icon icon-large icon-heart"> {$#day->likes_count}</i>
+                <i class="icon icon-large icon-comments"> {$#day->comments_count}</i>
+                <i class="icon icon-large icon-bookmark<?= $this->day->is_favorite ? '' : '-empty'; ?>"></i>
+			      </div>
+	      </div>
 
         {{list using="$#day->moments"}}
         <ul class="unstyled">
             {{list:item}}
             <li class="well">
-		            <h4 class="time"><center>{$item->time}</center></h4>
-                <img src="{$item->image_532}" alt="">
-                <p>{$item->description|nl2br}</p>
-	              <hr/>
-		            <a href="#" class="btn btn-primary"><i class="icon-large icon-pencil"></i> Edit</a>
-                <a href="#" class="btn btn-danger">Delete</a>
+		            <div>
+                    <h4 class="time pull-left">{$item->time}</h4>
+                    <div class="pull-right">
+                        <i class="icon icon-large icon-comments">{$item->comments_count}</i>
+                        <i class="icon icon-large icon-heart<?= $item->is_liked ? '' : '-empty'; ?>">{$item->likes_count}</i>
+                    </div>
+		            </div>
 
-		            <dl>
-				            <dt>time:</dt>
-				            <dd>{$item->time}</dd>
-                    <dt>likes count:</dt>
-                    <dd>{$item->likes_count}</dd>
-                    <dt>is liked:</dt>
-                    <dd><?= $item->is_liked ? 'true' : 'false'; ?></dd>
-                    <dt>comments count:</dt>
-                    <dd>{$item->comments_count}</dd>
-		            </dl>
+                <img src="{$item->image_532}" alt="">
+                <p style="padding-top:10px">{$item->description|nl2br}</p>
+	              <hr/>
+	              <div>
+		              <a href="#" class="btn btn-primary"><i class="icon-large icon-pencil"></i> Edit</a>
+                  <a href="#" class="btn btn-danger">Delete</a>
+		            </div>
             </li>
             {{/list:item}}
         </ul>
         {{/list}}
+
+        <p>{$#day->final_description|default:"no description"|nl2br}</p>
+	      <hr/>
+
         <h3>Comments:</h3>
         <textarea rows="3" class="input-block-level"></textarea>
         <button class="btn btn-large btn-block btn-primary" type="button">Send a comment</button>

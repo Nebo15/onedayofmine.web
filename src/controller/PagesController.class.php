@@ -8,6 +8,10 @@ lmb_require('src/model/Moment.class.php');
 
 class PagesController extends lmbController
 {
+	/**
+	 * @var odTools
+	 */
+	protected $toolkit;
 	protected $instagram_api_host = 'https://api.instagram.com';
 
 	function doDaysDiscover()
@@ -17,6 +21,12 @@ class PagesController extends lmbController
 		$this->days = [];
 		foreach ($days_ratings as $day_rating)
 			$this->days[] = $this->toolkit->getExportHelper()->exportDay($day_rating->getDay());
+	}
+
+	function doMyDays()
+	{
+		$user = lmbToolkit::instance()->getUser();
+		$this->days = $this->toolkit->getExportHelper()->exportDayItems($user->getDays());
 	}
 
 	function doDay()
