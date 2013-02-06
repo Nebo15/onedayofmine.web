@@ -5,7 +5,6 @@ var Auth = {
         var token = response.authResponse.accessToken;
         console.log('Token recieved: ' + token);
         Storage.set('token', token);
-
         return onLoginSuccess(token);
       } else {
         alert('You need to authorize application to continue using it');
@@ -28,5 +27,10 @@ var Auth = {
         });
       }
     });
+  },
+
+  logout: function(callback) {
+    Storage.set('token', null);
+    callback();
   }
 };

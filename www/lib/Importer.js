@@ -25,8 +25,10 @@ var Importer = {
         return (new Date(photo.created_time * 1000)).toLocaleString();
     },
 
-    setProgress:function(percents) {
+    setProgress:function (percents) {
         Importer.$progress.find('.bar').css('width', "" + percents + "%");
+        if(100 == percents)
+            Importer.$progress.hide();
     },
 
     exportPhotos:function (user_response) {
@@ -57,8 +59,7 @@ var Importer = {
             }
             Importer.photos = [];
             $('.carousel').carousel({interval:false});
-            if (cant_assemble)
-            {
+            if (cant_assemble) {
                 Importer.$progress.hide();
                 $('.cant').show();
             }
@@ -84,47 +85,42 @@ var Importer = {
     drawDay:function ($days, current_day, day_position) {
         var template = Handlebars.compile($("#day-item").html().split('[[').join('{{').split(']]').join('}}'));
         var view = {
-            time: current_day[0] ? Importer.formatDate(current_day[0]) : '',
-            moments: current_day,
-            day_position: day_position
+            time:current_day[0] ? Importer.formatDate(current_day[0]) : '',
+            moments:current_day,
+            day_position:day_position
         };
 
         var $day = $($.trim(template(view)));
         var $out = $days.append($day.hide());
 
-        $day.find('button.remove-photo-action').click(function(event) {
-          console.log('remove: ' + $(this).attr('moment_id'));
+        $day.find('button.remove-photo-action').click(function (event) {
+            console.log('remove: ' + $(this).attr('moment_id'));
         });
 
-        $day.find('button.analyze-action').click(function(event) {
+        $day.find('button.analyze-action').click(function (event) {
             var _day = Importer.days[$(this).parents('.well').attr('day_pos')];
-            $days.find('.well').each(function(i, el) {
-               if(!$(el).is($day)) $(el).hide('fast');
-            });
             Importer.showAnalyzeStep($day, _day);
         });
 
         $day.slideDown('slow');
     },
 
-    showAnalyzeStep:function($day, moments)
-    {
+    showAnalyzeStep:function ($day, moments) {
         Importer.setProgress(55);
-        Backend.PostRequest('days/analyze_instagram_day', {moments: moments}).done(function(response) {
+        Backend.PostRequest('days/analyze_instagram_day', {moments:moments}).done(function (response) {
             $day.find('.type').val(response.result.type);
             $day.find('.title').val(response.result.title);
             $day.find('.desc').val(response.result.description);
-            $day.find('.export-action').click(function() {
-                if(!$day.find('.title').val())
-                {
+            $day.find('.export-action').click(function () {
+                if (!$day.find('.title').val()) {
                     $day.find('.title').parent().parent().addClass('error');
                     return;
                 }
-                Importer.postDay({
-                    type: $day.find('.type').val(),
-                    title: $day.find('.title').val(),
-                    desc: $day.find('.desc').val(),
-                    moments: moments
+                Importer.postDay($day, {
+                    type:$day.find('.type').val(),
+                    title:$day.find('.title').val(),
+                    desc:$day.find('.desc').val(),
+                    moments:moments
                 });
             });
             Importer.setProgress(75);
@@ -133,28 +129,30 @@ var Importer = {
         });
     },
 
-    postDay:function (day_data)
-    {
-        FB.login(function (response) {
-            if (!response.authResponse) return;
-            Backend.Login(function () {
-                Backend.PostRequest('days/start', {
-                    title:day_data.title, type: day_data.type, final_description: day_data.desc
-                }).done(function (day_response) {
-                        var day = day_response.result;
-                        var defs = [];
-                        var is_sended = false;
-                        $.each(day_data.moments, function (i, photo_data) {
-                            defs.push(Backend.PostRequest('days/' + day.id + '/add_moment', {
-                                time:Tools.getISODate(new Date(photo_data.created_time * 1000)),
-                                image_url:photo_data.images.standard_resolution.url,
-                                description:photo_data.caption ? photo_data.caption.text : ''
-                            }));
-                        });
-                        $.when.apply(null, defs).then(function () {
-                            window.location.href = '/pages/' + day.id + '/day';
-                        });
-                    });
+    postDay:function ($day, day_data) {
+        Auth.login(function () {
+            Backend.PostRequest('days/start', {
+                title:day_data.title, type:day_data.type, final_description:day_data.desc
+            }).done(function (day_response) {
+                var day = day_response.result;
+                var defs = [];
+                var is_sended = false;
+                var defs_finished = 0;
+                $.each(day_data.moments, function (i, photo_data) {
+                    defs.push(Backend.PostRequest('days/' + day.id + '/add_moment', {
+                        time:Tools.getISODate(new Date(photo_data.created_time * 1000)),
+                        image_url:photo_data.images.standard_resolution.url,
+                        description:photo_data.caption ? photo_data.caption.text : ''
+                    }).done(function() {
+                        defs_finished++;
+                        Importer.setProgress(75 + (defs_finished / defs.length) * 25);
+                    }));
+                });
+                $.when.apply(null, defs).then(function () {
+                    $day.hide('fast').html('<div class="alert alert-success">'+
+                        'Day successfully imported. View <a href="/pages/'+day_response.result.id+'/day">result</a>.'+
+                    '</div>').removeClass('well').show('slow');
+                });
             });
         });
     },
