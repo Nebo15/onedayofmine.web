@@ -115,12 +115,17 @@ var Importer = {
             $day.find('.title').val(response.result.title);
             $day.find('.desc').val(response.result.description);
             $day.find('.export-action').click(function() {
-               Importer.postDay({
-                   type: $day.find('.type').val(),
-                   title: $day.find('.title').val(),
-                   desc: $day.find('.desc').val(),
-                   moments: moments
-               });
+                if(!$day.find('.title').val())
+                {
+                    $day.find('.title').parent().parent().addClass('error');
+                    return;
+                }
+                Importer.postDay({
+                    type: $day.find('.type').val(),
+                    title: $day.find('.title').val(),
+                    desc: $day.find('.desc').val(),
+                    moments: moments
+                });
             });
             Importer.setProgress(75);
             $day.find('.step2').hide('slow');
@@ -128,7 +133,8 @@ var Importer = {
         });
     },
 
-    postDay:function (day_data) {
+    postDay:function (day_data)
+    {
         FB.login(function (response) {
             if (!response.authResponse) return;
             Backend.Login(function () {
