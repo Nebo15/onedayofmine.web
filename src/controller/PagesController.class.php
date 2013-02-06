@@ -14,6 +14,11 @@ class PagesController extends lmbController
 	protected $toolkit;
 	protected $instagram_api_host = 'https://api.instagram.com';
 
+	function doDisplay()
+	{
+		$this->doImport();
+	}
+
 	function doDaysDiscover()
 	{
 		$days_ratings = (new InterestCalculator())->getDaysRatings();
