@@ -10,7 +10,8 @@ $this->menu = 'interesting';
 		    <li class="span3">
 				    <a href="/pages/{$item->id}/day">
 			        <div class="thumbnail">
-			            <img src="{$item->image_532|default:'http://lorempixel.com/532/532/'}" alt="">
+					        <?php $image = $item->image_532 ? $item->image_532 : ($item->moments) ? $item->moments[0]->image_532 : '/img/no_photo.png'; ?>
+			            <img src="{$image}" alt="{$item->final_description}">
 			            <h3>{$item->title}</h3>
 			            <p><small>{$item->final_description}</small></p>
 			        </div>
