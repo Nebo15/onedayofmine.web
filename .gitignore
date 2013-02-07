@@ -20,6 +20,7 @@ www/tests
 www/users/*/
 www/shared
 www/pages
+www/days
 
 www/lib/Override.js
 
