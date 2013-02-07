@@ -60,7 +60,7 @@ class AuthController extends BaseJsonController
 
     $this->_processDeviceToken($user);
 
-    $this->response->setCookie('token', $facebook_access_token, time() + 60 * 60 * 24 * 31);
+    // $this->response->setCookie('token', $facebook_access_token, time() + 60 * 60 * 24 * 31);
 
     return $this->_answerOk($this->toolkit->getExportHelper()->exportUser($user));
   }

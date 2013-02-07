@@ -21,7 +21,7 @@
             <div class="days"></div>
         </div>
 {{/into}}
-{{into slot="js_include"}}
+{{into slot="templates"}}
 	<script id="day-item" type="text/x-handlebars-template">
       <div day_pos="[[day_position]]" class="well">
           <h4 class="time">[[time]]</h4>
@@ -78,8 +78,10 @@
 		      </div>
       </div>
 	</script>
-	<script src="/lib/handlebars.js"></script>
-	<script src="/lib/Importer.js"></script>
+{{/into}}
+{{into slot="js_include"}}
+  <script src="/lib/vendor/handlebars.js"></script>
+  <script src="/lib/Importer.js"></script>
 {{/into}}
 {{into slot="js_ready"}}
     hash = window.location.hash.substr(14);
@@ -88,6 +90,9 @@
             $('a.btn').show();
         }
         else {
+            Importer.$days = $('.days');
+            Importer.$progress = $('.progress');
+
             Importer.import(hash);
         }
     });

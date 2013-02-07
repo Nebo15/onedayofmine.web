@@ -37,7 +37,7 @@ class PagesController extends lmbController
 	function doDay()
 	{
 		if (!$day = Day::findById($this->request->id))
-			return $this->forwardTo404();
+			return $this->forward('pages', 'not_found');
 
 		if ($day->is_deleted)
 			return $this->forwardTo404();
@@ -63,6 +63,16 @@ class PagesController extends lmbController
 		if (!$this->moment || $this->moment->getDay()->is_deleted)
 			return $this->forward('pages', 'not_found');
 	}
+
+	function doUser()
+	{
+		$user = User::findById($this->request->get('id'));
+		if (!$user)
+			return $this->forward('pages', 'not_found');
+
+		$this->user = $this->toolkit->getExportHelper()->exportUser($user);
+	}
+
 
 	function doNotFound()
 	{

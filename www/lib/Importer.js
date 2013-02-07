@@ -117,10 +117,13 @@ var Importer = {
 
     showAnalyzeStep:function ($day, moments) {
         Importer.setProgress(55);
-        Backend.PostRequest('days/analyze_instagram_day', {moments:moments}).done(function (response) {
-            $day.find('.type').val(response.result.type);
-            $day.find('.title').val(response.result.title);
-            $day.find('.desc').val(response.result.description);
+        var analyze_request = API.request('POST', 'days/analyze_instagram_day', {moments:moments});
+        analyze_request.success(function(response) {
+            var result = response.data.result;
+
+            $day.find('.type').val(result.type);
+            $day.find('.title').val(result.title);
+            $day.find('.desc').val(result.description);
             $day.find('.export-action').click(function () {
                 if (!$day.find('.title').val()) {
                     $day.find('.title').parent().parent().addClass('error');
@@ -137,34 +140,44 @@ var Importer = {
             $day.find('.step2').hide('slow');
             $day.find('.step3').show('slow');
         });
+
+        analyze_request.send();
     },
 
     postDay:function ($day, day_data) {
-        Auth.login(function () {
-            Backend.PostRequest('days/start', {
-                title:day_data.title, type:day_data.type, final_description:day_data.desc
-            }).done(function (day_response) {
-                var day = day_response.result;
-                var defs = [];
-                var is_sended = false;
-                var defs_finished = 0;
-                $.each(day_data.moments, function (i, photo_data) {
-                    defs.push(Backend.PostRequest('days/' + day.id + '/add_moment', {
-                        time:Tools.getISODate(new Date(photo_data.created_time * 1000)),
-                        image_url:photo_data.images.standard_resolution.url,
-                        description:photo_data.caption ? photo_data.caption.text : ''
-                    }).done(function() {
-                        defs_finished++;
-                        Importer.setProgress(75 + (defs_finished / defs.length) * 25);
-                    }));
+        var day_request = API.request('POST', 'days/start', {
+            title:day_data.title,
+            type:day_data.type,
+            final_description:day_data.desc
+        });
+
+        day_request.success(function(response) {
+            var day = response.data.result;
+            var defs = [];
+            var is_sended = false;
+            var defs_finished = 0;
+            $.each(day_data.moments, function (i, photo_data) {
+                var moment_request = API.request('POST', 'days/' + day.id + '/add_moment', {
+                    time:Tools.getISODate(new Date(photo_data.created_time * 1000)),
+                    image_url:photo_data.images.standard_resolution.url,
+                    description:photo_data.caption ? photo_data.caption.text : ''
                 });
-                $.when.apply(null, defs).then(function () {
-                    $day.hide('fast').html('<div class="alert alert-success">'+
-                        'Day successfully imported. View <a href="/pages/'+day_response.result.id+'/day">result</a>.'+
-                    '</div>').removeClass('well').show('slow');
+
+                moment_request.success(function(response) {
+                  defs_finished++;
+                  Importer.setProgress(75 + (defs_finished / defs.length) * 25);
                 });
+
+                defs.push(moment_request.send());
+            });
+            $.when.apply(null, defs).then(function () {
+                $day.hide('fast').html('<div class="alert alert-success">'+
+                    'Day successfully imported. View <a href="/pages/'+response.data.result.id+'/day">result</a>.'+
+                '</div>').removeClass('well').show('slow');
             });
         });
+
+        day_request.send();
     },
 
     getRemoteImageContent:function (url, callback) {
@@ -178,6 +191,6 @@ var Importer = {
             ctx.drawImage(img, 0, 0);
             var encoded = canvas.toDataURL("image/jpg");
             callback(encoded.substring(encoded.indexOf('base64,') + 7));
-        }
+        };
     }
-}
+};
