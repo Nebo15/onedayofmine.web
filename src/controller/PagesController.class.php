@@ -16,10 +16,9 @@ class PagesController extends lmbController
 
 	function performAction()
 	{
-		if($this->toolkit->getUser())
-		{
-			$this->current_user = $this->toolkit->getExportHelper()->exportUser($this->toolkit->getUser());
-		}
+		$this->current_user = $this->toolkit->getUser()
+				? (array) $this->toolkit->getExportHelper()->exportUser($this->toolkit->getUser())
+				: new stdClass;
 		return parent::performAction();
 	}
 
