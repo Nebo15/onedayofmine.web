@@ -128,16 +128,17 @@
       if(Auth.hasAccessToken()) {
         $('#menu_me').html($('#menu_me_authorized').html());
         $('#logout-action').click(function() {
-		      console.log('logout');
           Auth.logout(function() {
             window.location.reload();
           });
         });
       } else {
         $('#login_button').click(function() {
-          Auth.login(function() {
-            window.location.reload();
-          });
+		      Auth.login(function() {
+            Backend.Login(function() {
+		          window.location.reload();
+            });
+		      });
         });
       }
 		});
