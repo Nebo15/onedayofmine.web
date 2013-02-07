@@ -20,8 +20,8 @@
 	      <div style="padding-bottom:10px">
             <span class="label label-info">{$#day->type}</span>
 			      <div class="pull-right">
+                <i class="icon icon-large icon-time"> {$#day->utime}</i>
 					      <i class="icon icon-large icon-eye-open"> {$#day->views_count}</i>
-					      <i class="icon icon-large icon-time"> {$#day->utime}</i>
 					      <i class="icon icon-large icon-heart"> {$#day->likes_count}</i>
                 <i class="icon icon-large icon-comments"> {$#day->comments_count}</i>
                 <i class="icon icon-large icon-bookmark<?= $this->day->is_favorite ? '' : '-empty'; ?>"></i>
@@ -35,8 +35,8 @@
 		            <div>
                     <div class="pull-left">
 		                    <? if($this->is_owner) { ?>
-                            <a href="#" class="btn btn-primary"><i class="icon-large icon-pencil"></i></a>
-                            <a href="#" class="btn btn-danger"><i class="icon-large icon-trash"></i></a>
+                            <a href="#" class="btn"><i class="icon-large icon-pencil"></i></a>
+                            <a href="#" class="btn"><i class="icon-large icon-trash"></i></a>
 		                    <? } ?>
                     </div>
 				            <div class="pull-left with-shadow" style="text-align: center">{$item->time}</div>
