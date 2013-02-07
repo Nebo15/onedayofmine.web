@@ -3,14 +3,14 @@
 $conf = array(
   'save_path' => 'www',
   'Day'    => array(
-    'path'      => 'users/days/:hash_:image_width.:file_extension',
+    'path'      => 'days/:hash_:image_width.:file_extension',
     'sizes'     => array(
                      array('width' => 266, 'height' => 266),
                      array('width' => 532, 'height' => 532),
                    ),
   ),
   'Moment' => array(
-    'path'      => 'users/days/:day_id/:hash_:image_width.:file_extension',
+    'path'      => 'days/:day_id/:hash_:image_width.:file_extension',
     'sizes'     => array(
                      array('width' => 266, 'height' => 266),
                      array('width' => 532, 'height' => 532),

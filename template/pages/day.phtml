@@ -20,11 +20,12 @@
 	      <div style="padding-bottom:10px">
             <span class="label label-info">{$#day->type}</span>
 			      <div class="pull-right">
+                <i class="icon icon-large icon-time"> {$#day->utime}</i>
 					      <i class="icon icon-large icon-eye-open"> {$#day->views_count}</i>
-					      <i class="icon icon-large icon-time"> {$#day->utime}</i>
 					      <i class="icon icon-large icon-heart"> {$#day->likes_count}</i>
                 <i class="icon icon-large icon-comments"> {$#day->comments_count}</i>
-                <i class="icon icon-large icon-bookmark<?= $this->day->is_favorite ? '' : '-empty'; ?>"></i>
+				        <? $is_favorite = (property_exists($this->day, 'is_favorite')) ? $this->day->is_favorite : false; ?>
+                <i class="icon icon-large icon-bookmark<?= $is_favorite ? '' : '-empty'; ?>"></i>
 			      </div>
 	      </div>
 
@@ -33,20 +34,43 @@
             {{list:item}}
             <li class="well">
 		            <div>
-                    <h4 class="time pull-left">{$item->time}</h4>
-                    <div class="pull-right">
-                        <i class="icon icon-large icon-comments">{$item->comments_count}</i>
-                        <i class="icon icon-large icon-heart<?= $item->is_liked ? '' : '-empty'; ?>">{$item->likes_count}</i>
+                    <div class="pull-left">
+		                    <? if($this->is_owner) { ?>
+                            <a href="#" class="btn"><i class="icon-large icon-pencil"></i></a>
+                            <a href="#" class="btn"><i class="icon-large icon-trash"></i></a>
+		                    <? } ?>
                     </div>
+				            <div class="pull-left with-shadow" style="text-align: center">{$item->time}</div>
+                    <div class="pull-right with-shadow">
+		                    <? if(!$item->is_liked) { ?>
+	                          <a href="#" class="btn"><i class="icon-large icon-heart">{$item->likes_count}</i></a>
+		                    <? } else { ?>
+	                          <a href="#" class="btn"><i class="icon-large icon-heart-empty">{$item->likes_count}</i></a>
+		                    <? } ?>
+                        <a href="#" class="btn"><i class="icon-large icon-share"></i></a>
+                    </div>
+                    <br class="clearFix"/>
 		            </div>
+                <br class="clearFix"/>
 
-                <img src="{$item->image_532}" alt="">
+								<div><center>
+                    <img src="{$item->image_532}" width="400" height="400" class="img-polaroid" alt="">
+                </center></div>
                 <p style="padding-top:10px">{$item->description|nl2br}</p>
-	              <hr/>
-	              <div>
-		              <a href="#" class="btn btn-primary"><i class="icon-large icon-pencil"></i> Edit</a>
-                  <a href="#" class="btn btn-danger">Delete</a>
-		            </div>
+
+                <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                        <h3 id="myModalLabel">Modal header</h3>
+                    </div>
+                    <div class="modal-body">
+                        <p>One fine body…</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+                        <button class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
             </li>
             {{/list:item}}
         </ul>
