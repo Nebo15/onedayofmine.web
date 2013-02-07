@@ -172,8 +172,8 @@ class odTools extends lmbAbstractTools
       return $request->getPost('token');
     elseif($request->getGet('token'))
       return $request->getGet('token');
-    elseif($request->getCookie('token'))
-      return $request->getCookie('token');
+    // elseif($request->getCookie('token'))
+    //   return $request->getCookie('token');
     else
       return null;
   }
