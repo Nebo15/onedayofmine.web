@@ -24,7 +24,8 @@
 					      <i class="icon icon-large icon-eye-open"> {$#day->views_count}</i>
 					      <i class="icon icon-large icon-heart"> {$#day->likes_count}</i>
                 <i class="icon icon-large icon-comments"> {$#day->comments_count}</i>
-                <i class="icon icon-large icon-bookmark<?= $this->day->is_favorite ? '' : '-empty'; ?>"></i>
+				        <? $is_favorite = (property_exists($this->day, 'is_favorite')) ? $this->day->is_favorite : false; ?>
+                <i class="icon icon-large icon-bookmark<?= $is_favorite ? '' : '-empty'; ?>"></i>
 			      </div>
 	      </div>
 
