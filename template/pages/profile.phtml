@@ -4,6 +4,44 @@ $this->menu = 'me';
 ?>
 {{wrap with="layout.phtml"}}
 {{into slot="content"}}
-<h1>Settings</h1>
+<div class="row-fluid">
+<h1>Profile</h1>
+
+<div>
+		<div style="padding:10px 0" class="pull-left">
+		    <div style="width:192px;margin:0 auto;background-color:#fff">
+		        <img class="change_photo" src="{$#current_user.image_192}"/>
+		        <small>Tap photo if you want</small>
+		    </div>
+		</div>
+		<div class="pull-left">
+        <form class="form-horizontal">
+            <div class="control-group">
+                <label class="control-label" for="inputOccupation">Occupation</label>
+                <div class="controls">
+                    <input type="text" id="inputOccupation" placeholder="Occupation" value="{$#current_user.occupation}">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="inputLocation">Location</label>
+                <div class="controls">
+                    <input type="password" id="inputLocation" placeholder="location" value="{$#current_user.location}">
+                </div>
+            </div>
+            <div class="control-group">
+                <label class="control-label" for="inputBirthday">Birthday</label>
+                <div class="controls">
+                    <input id="inputBirthday" type="date" placeholder="dd/mm/yyyy" value="{$#current_user.birthday}">
+                </div>
+            </div>
+            <div class="control-group">
+                <div class="controls">
+                    <button type="submit" class="btn btn-success">Update</button>
+                </div>
+            </div>
+        </form>
+		</div>
+</div>
+	</div>
 {{/into}}
 {{/wrap}}
