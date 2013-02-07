@@ -160,8 +160,14 @@
               </div>
           </div><!-- /navbar-inner -->
       </div><!-- /navbar -->
-      {{slot id='content'/}}
-      {{slot id='content_zone'/}}
+      <div class="row-fluid">
+<!--        <div class="span2 hidden-tablet hidden-iphone"></div>-->
+<!--        <div class="span8">-->
+		        {{slot id='content'/}}
+		        {{slot id='content_zone'/}}
+<!--        </div>-->
+<!--		    <div class="span2 hidden-tablet hidden-iphone"></div>-->
+		  </div>
 	</div>
 </body>
 </html>
