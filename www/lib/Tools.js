@@ -1,3 +1,31 @@
+// Global helpers
+(function() {
+  String.prototype.hashCode = function() {
+    var hash = 0, i, char;
+
+    if (this.length === 0) return hash;
+
+    for (i = 0; i < this.length; i++) {
+      char = this.charCodeAt(i);
+      hash = ((hash<<5)-hash)+char;
+      hash = hash & hash; // Convert to 32bit integer
+    }
+
+    return hash;
+  };
+
+  $.isMobile = function() {
+    var userAgent = window.navigator.userAgent;
+
+    if (userAgent.match(/iPad/i) || userAgent.match(/iPhone/i) || userAgent.match(/iPod/i)) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+})();
+
+// Tools
 var Tools = {
     resetToggle: function(toggle, active) {
         var handle = toggle.find('.toggle-handle');

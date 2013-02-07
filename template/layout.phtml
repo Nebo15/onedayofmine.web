@@ -9,126 +9,83 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{$#title}</title>
+
+  <!-- Ajust to mobile devices -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Open Graph integration -->
   <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# {$#facebook_app_namespace}: http://ogp.me/ns/fb/{$#facebook_app_namespace}#">
   <meta property="fb:app_id" content="{$#facebook_app_id}" />
-  <!--  <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-combined.min.css" rel="stylesheet">-->
+  {{slot id='og_meta'/}}
+
+  <!-- Vendor style sheets -->
   <link href="/styles/bootstrap.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="/styles/font-awesome.css">
-  <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-responsive.min.css" rel="stylesheet">
-	<style>
-			{{slot id="css"/}}
-	</style>
   <link href="/styles/bootstrap-editable.css" rel="stylesheet">
+  <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-responsive.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/styles/font-awesome.css">
+
+  <!-- Application style sheets -->
   <link href="/styles/main.css" rel="stylesheet">
+  <style>
+      {{slot id="css"/}}
+  </style>
+
+  <!-- Additional meta tags -->
   {{slot id='meta'/}}
 
-  <script id="menu_me_authorized" type="text/x-handlebars-template">
-    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-      <i class="icon-large icon-user"></i> Me <b class="caret"></b>
-    </a>
-    <ul class="dropdown-menu">
-      <li><a href="/pages/settings"><i class="icon icon-cog"></i> Settings</a></li>
-      <li class="divider"></li>
-      <li><a href="/pages/my_days"><i class="icon icon-camera"></i> My days</a></li>
-      <li><a href="/pages/my_favourite_days"><i class="icon icon-bookmark"></i> Favourite days</a></li>
-      <li><a href="/pages/my_followers"><i class="icon icon-hand-left"></i> Followers &amp; following</a></li>
-      <li class="divider"></li>
-      <li><a href="/pages/find_people"><i class="icon icon-search"></i> Find and invite people</a></li>
-      <li class="divider"></li>
-      <li><a href="#" id="logout-action"><i class="icon icon-signout"></i> Logout</a></li>
-    </ul>
-  </script>
-</head>
-<body>
-<?php if(!property_exists($this, 'fb_disabled') || !$this->fb_disabled) { ?>
-<div id="fb-root"></div>
-<script>
+  <!-- Vendor scripts -->
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+  <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
+  <script src="/lib/vendor/bootstrap-editable.min.js"></script>
+  <?php if(!property_exists($this, 'fb_disabled') || !$this->fb_disabled) { ?>
+  <script>
     window.fbAsyncInit = function () {
-        FB.init({
-            appId: <?= $this->facebook_app_id; ?>,
-            status:true,
-            cookie:true,
-            xfbml:false
-        });
+      FB.init({
+        appId: <?= $this->facebook_app_id; ?>,
+        status:true,
+        cookie:true,
+        xfbml:false
+      });
     };
     (function (d) {
-        var js, id = 'facebook-jssdk';
-        if (d.getElementById(id)) { return;}
-        js = d.createElement('script');
-        js.id = id;
-        js.async = true;
-        js.src = "//connect.facebook.net/" + (window.navigator.userLanguage || window.navigator.language) + "/all.js";
-        d.getElementsByTagName('head')[0].appendChild(js);
+      var js, id = 'facebook-jssdk';
+      if (d.getElementById(id)) { return;}
+      js = d.createElement('script');
+      js.id = id;
+      js.async = true;
+      js.src = "//connect.facebook.net/" + (window.navigator.userLanguage || window.navigator.language) + "/all.js";
+      d.getElementsByTagName('head')[0].appendChild(js);
     }(document));
-</script>
-<?php } ?>
-<div class="container">
-    <div class="navbar navbar-static-top">
-        <div class="navbar-inner">
-            <div class="container">
-                <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-responsive-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </a>
-                <a class="brand" href="/pages/">OneDayOfMine</a>
-	              <?php if(!property_exists($this, 'menu_disabled') || !$this->menu_disabled) { ?>
-                <div class="nav-collapse collapse navbar-responsive-collapse">
-                    <ul class="nav">
-                        <li class="<?= ($this->menu == 'discover') ? 'active' : '';?>">
-                            <a href="/pages/days_discover"><i class="icon-large icon-group"></i> Discover</a>
-                        </li>
-                        <li class="<?= ($this->menu == 'search') ? 'active' : '';?>">
-                            <a href="/pages/days_search"><i class="icon-large icon-search"></i> Search</a>
-                        </li>
-                    </ul>
+  </script>
+  <?php } ?>
 
-                    <div class="nav pull-right">
-                      <ul class="nav">
-                        <li id="menu_me" class="dropdown <?= ($this->menu == 'me') ? 'active' : '';?>">
-                          <a id="login_button">
-                            <i class="icon-large icon-key"></i> Login
-                          </a>
-                        </li>
-                        <li class="divider-vertical"></li>
-                        <li>
-                          <div style="width:70px;">
-                            <a href="#" class="btn btn-success disabled"><i class="icon-camera"></i></a>
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-
-                </div><!-- /.nav-collapse -->
-	            <?php } ?>
-            </div>
-        </div><!-- /navbar-inner -->
-    </div><!-- /navbar -->
-      {{slot id='content'/}}
-      {{slot id='content_zone'/}}
-	</div>
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-	<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
-  <script src="/lib/bootstrap-editable.min.js"></script>
-
+  <!-- Application scripts -->
   <script src="/lib/Tools.js"></script>
-	<script src="/lib/Auth.js"></script>
-  <script src="/lib/Loader.js"></script>
-  <script src="/lib/Backend.js"></script>
   <script src="/lib/Storage.js"></script>
-	<script src="/lib/Override.js"></script>
-	{{slot id="js_include"/}}
-	<script>
-		{{slot id="js"/}}
-		$(document).ready(function() {
+  <script src="/lib/Config.js"></script>
+  <script src="/lib/Loader.js"></script>
+  <script src="/lib/Auth.js"></script>
+  <script src="/lib/Response.js"></script>
+  <script src="/lib/Request.js"></script>
+  <script src="/lib/API.js"></script>
+  <script src="/lib/Override.js"></script>
+
+  <!-- Per-page scripts -->
+  {{slot id="js_include"/}}
+
+  <script>
+    {{slot id="js"/}}
+  </script>
+
+  <script>
+    $(document).ready(function() {
       {{slot id="js_ready"/}}
 
       if(Auth.hasAccessToken()) {
         $('#menu_me').html($('#menu_me_authorized').html());
         $('#logout-action').click(function() {
-		      console.log('logout');
+          console.log('logout');
           Auth.logout(function() {
             window.location.reload();
           });
@@ -140,7 +97,73 @@
           });
         });
       }
-		});
-	</script>
+    });
+  </script>
+
+  <!-- Templates and placeholders -->
+  <script id="menu_me_authorized" type="text/x-handlebars-template">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+      <i class="icon-large icon-user"></i> Me <b class="caret"></b>
+    </a>
+    <ul class="dropdown-menu">
+      <li><a href="/pages/settings"><i class="icon icon-cog"></i> Settings</a></li>
+
+      <li class="divider"></li>
+      <li><a href="/pages/my_days"><i class="icon icon-camera"></i> My days</a></li>
+      <li><a href="/pages/my_favourite_days"><i class="icon icon-bookmark"></i> Favourite days</a></li>
+      <li><a href="/pages/my_followers"><i class="icon icon-hand-left"></i> Followers &amp; following</a></li>
+
+      <li class="divider"></li>
+      <li><a href="/pages/find_people"><i class="icon icon-search"></i> Find and invite people</a></li>
+
+      <li class="divider"></li>
+      <li><a href="#" id="logout-action"><i class="icon icon-signout"></i> Logout</a></li>
+    </ul>
+  </script>
+  {{slot id='templates'/}}
+</head>
+<body>
+<?php if(!property_exists($this, 'fb_disabled') || !$this->fb_disabled) { ?>
+<div id="fb-root"></div>
+<?php } ?>
+<div class="container">
+    <div class="navbar navbar-static-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <a class="brand" href="/pages/">OneDayOfMine</a>
+	              <?php if(!property_exists($this, 'menu_disabled') || !$this->menu_disabled) { ?>
+                  <div class="nav-collapse collapse navbar-responsive-collapse">
+                      <ul class="nav">
+                          <li class="<?= ($this->menu == 'discover') ? 'active' : '';?>">
+                              <a href="/pages/days_discover"><i class="icon-large icon-group"></i> Discover</a>
+                          </li>
+                          <li class="<?= ($this->menu == 'search') ? 'active' : '';?>">
+                              <a href="/pages/days_search"><i class="icon-large icon-search"></i> Search</a>
+                          </li>
+                      </ul>
+
+                      <div class="nav pull-right">
+                        <ul class="nav">
+                          <li id="menu_me" class="dropdown <?= ($this->menu == 'me') ? 'active' : '';?>">
+                            <a id="login_button">
+                              <i class="icon-large icon-key"></i> Login
+                            </a>
+                          </li>
+                          <li class="divider-vertical"></li>
+                          <li>
+                            <div style="width:70px;">
+                              <a href="#" class="btn btn-success disabled"><i class="icon-camera"></i></a>
+                            </div>
+                          </li>
+                        </ul>
+                      </div>
+                  </div><!-- /.nav-collapse -->
+  	            <?php } ?>
+              </div>
+          </div><!-- /navbar-inner -->
+      </div><!-- /navbar -->
+      {{slot id='content'/}}
+      {{slot id='content_zone'/}}
+	</div>
 </body>
 </html>
