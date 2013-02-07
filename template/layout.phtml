@@ -85,7 +85,7 @@
       if(Auth.hasAccessToken()) {
         $('#menu_me').html($('#menu_me_authorized').html());
         $('#logout-action').click(function() {
-          Auth.logout(function() {
+          API.logout(function() {
             window.location.reload();
           });
         });
@@ -102,7 +102,7 @@
   <!-- Templates and placeholders -->
   <script id="menu_me_authorized" type="text/x-handlebars-template">
     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-      <i class="icon-large icon-user"></i> Me <b class="caret"></b>
+      <i class="icon-large icon-user"></i> {$#current_user.name} <b class="caret"></b>
     </a>
     <ul class="dropdown-menu">
       <li><a href="/pages/profile"><i class="icon icon-cog"></i> Profile</a></li>

@@ -14,6 +14,15 @@ class PagesController extends lmbController
 	protected $toolkit;
 	protected $instagram_api_host = 'https://api.instagram.com';
 
+	function performAction()
+	{
+		if($this->toolkit->getUser())
+		{
+			$this->current_user = $this->toolkit->getExportHelper()->exportUser($this->toolkit->getUser());
+		}
+		return parent::performAction();
+	}
+
 	function doDisplay()
 	{
 		$this->doImport();
