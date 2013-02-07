@@ -17,7 +17,7 @@ $conf = array(
                    ),
   ),
   'User'   => array(
-    'path'      => 'users/:id/:hash_:image_width.:file_extension',
+    'path'      => ':id/:hash_:image_width.:file_extension',
     'sizes'     => array(
                      array('width' => 36, 'height'  => 36),
                      array('width' => 72, 'height'  => 72),
