@@ -33,32 +33,28 @@
             {{list:item}}
             <li class="well">
 		            <div>
-                    <h4 class="time pull-left">{$item->time}</h4>
-                    <div class="pull-right">
-                        <i class="icon icon-large icon-comments">{$item->comments_count}</i>
-                        <i class="icon icon-large icon-heart">{$item->likes_count}</i>
-                    </div>
-		            </div>
-								<div><center>
-                    <img src="{$item->image_532}" width="400" height="400" class="img-rounded" alt="">
-                </center></div>
-                <p style="padding-top:10px">{$item->description|nl2br}</p>
-	              <hr/>
-	              <div>
-			              <div class="pull-left">
-				                <? if(!$item->is_liked) { ?>
-					                  <a href="#" class="btn"><i class="icon-large icon-heart"></i></a>
-							          <? } else { ?>
-                            <a href="#" class="btn"><i class="icon-large icon-heart-empty"></i></a>
-												<? } ?>
-                        <a href="#" class="btn"><i class="icon-large icon-share"></i></a>
-			              </div>
-		                <div class="pull-right">
+                    <div class="pull-left">
                         <a href="#" class="btn btn-primary"><i class="icon-large icon-pencil"></i></a>
                         <a href="#" class="btn btn-danger"><i class="icon-large icon-trash"></i></a>
-		                </div>
+                    </div>
+				            <div class="pull-left with-shadow" style="text-align: center">{$item->time}</div>
+                    <div class="pull-right with-shadow">
+		                    <? if(!$item->is_liked) { ?>
+	                          <a href="#" class="btn"><i class="icon-large icon-heart">{$item->likes_count}</i></a>
+		                    <? } else { ?>
+	                          <a href="#" class="btn"><i class="icon-large icon-heart-empty">{$item->likes_count}</i></a>
+		                    <? } ?>
+                        <a href="#" class="btn"><i class="icon-large icon-share"></i></a>
+                    </div>
+                    <br class="clearFix"/>
 		            </div>
-		            <br class="clearFix"/>
+                <br class="clearFix"/>
+
+								<div><center>
+                    <img src="{$item->image_532}" width="400" height="400" class="img-polaroid" alt="">
+                </center></div>
+                <p style="padding-top:10px">{$item->description|nl2br}</p>
+
                 <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
