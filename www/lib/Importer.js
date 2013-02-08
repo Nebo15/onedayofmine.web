@@ -93,17 +93,30 @@ var Importer = {
         var $day = $($.trim(template(view)));
         var $out = $days.append($day.hide());
 
-        $day.find('button.remove-photo-action').click(function (event) {
-            console.log('remove: ' + $(this).attr('moment_id'));
+        $day.find('button.remove-photo-action').click(function (event)
+        {
+            var day_pos = $(this).attr('day_pos');
+            var moment_id = $(this).attr('moment_id');
+
             if($(this).hasClass('btn-info'))
             {
                 $(this).removeClass('btn-info').addClass('btn-primary').html('Restore');
                 $(this).parent().parent().find('img').css('opacity', '0.3');
+
+                $.each(Importer.days[day_pos], function(i, moment) {
+                    if(moment.id == moment_id)
+                        Importer.days[day_pos][i].skip = true;
+                });
             }
             else
             {
-                $(this).removeClass('btn-primary').addClass('btn-info').html('Remove');
+                $(this).removeClass('btn-primary').addClass('btn-info').html('Skip');
                 $(this).parent().parent().find('img').css('opacity', '1');
+
+                $.each(Importer.days[day_pos], function(i, moment) {
+                    if(moment.id == moment_id)
+                        Importer.days[day_pos][i].skip = false;
+                });
             }
         });
 
@@ -129,11 +142,16 @@ var Importer = {
                     $day.find('.title').parent().parent().addClass('error');
                     return;
                 }
+                var moments_to_export = [];
+                $.each(moments, function(i, moment) {
+                   if(moment.skip == undefined || moment.skip == false)
+                     moments_to_export.push(moment);
+                });
                 Importer.postDay($day, {
                     type:$day.find('.type').val(),
                     title:$day.find('.title').val(),
                     desc:$day.find('.desc').val(),
-                    moments:moments
+                    moments:moments_to_export
                 });
             });
             Importer.setProgress(75);
