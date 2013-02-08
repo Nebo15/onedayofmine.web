@@ -7,17 +7,15 @@ var API = (function() {
   }
 
   return {
-    request: function(method, path, data, params) {
+
+    request: function(method, path, data, params)
+    {
       var request = new Request(method, path, data, params);
 
       request.statusCodeGroup(4, function(jqXHR, textStatus, errorThrown) {
         Loader.hide();
         var response = jQuery.parseJSON(jqXHR.responseText);
         alert(response.errors[0]);
-      });
-
-      request.statusCode(0, function() {
-        Navigation.redirectToPage('error');
       });
 
       if(Storage.get('token')) {
