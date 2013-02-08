@@ -332,21 +332,25 @@ class odExportHelperTest extends odUnitTestCase
 
   function testExportMomentItems_forGuest()
   {
-    $moments = [];
-    for($i = 0; $i < 10; $i++) {
-      $moment = $this->generator->momentWithImage();
-      $moment->save();
-      for($j = 0; $j < rand(0, 10); $j++) {
-        $like = $this->generator->momentLike($moment);
-        $like->save();
-      }
-      $moments[] = $moment;
-    }
+    $moment3 = $this->generator->momentWithImage();
+	  $moment3->time = 3;
+	  $moment3->save();
+	  $moment1 = $this->generator->momentWithImage();
+	  $moment1->time = 1;
+	  $moment1->save();
+    $moment2 = $this->generator->momentWithImage();
+	  $moment2->time = 2;
+	  $moment2->save();
+	  $shuffled_moments = [$moment3, $moment1, $moment2];
 
     $this->db_connection->resetStats();
 
-    $exported = $this->export_helper->exportMomentItems($moments);
+    $exported = $this->export_helper->exportMomentItems($shuffled_moments);
     $this->assertJsonMomentItems($exported, true);
+
+		$this->assertEqual($exported[0]->id, $moment1->id);
+	  $this->assertEqual($exported[1]->id, $moment2->id);
+	  $this->assertEqual($exported[2]->id, $moment3->id);
 
     $this->assertEqual(2, count($this->db_connection->getQueries()));
   }

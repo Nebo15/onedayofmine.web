@@ -305,10 +305,11 @@ class odExportHelper
           $exported_moment->is_liked = true;
       }
       $exported_moment->comments_count = isset($comments_count[$moment->id]) ? $comments_count[$moment->id]['count'] : 0;
-      $result[] = $exported_moment;
+	    $order_key = str_pad($moment->time.'', 10, '0', STR_PAD_LEFT).str_pad($moment->id, 8, '0', STR_PAD_LEFT);
+      $result[$order_key] = $exported_moment;
     }
-
-    return $result;
+	  ksort($result, SORT_NUMERIC);
+    return array_values($result);
   }
 
   ############### Comments ###############
