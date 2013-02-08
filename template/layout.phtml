@@ -3,7 +3,7 @@
   $this->facebook_app_namespace = $this->toolkit->getConf('facebook')->namespace;
   $this->facebook_app_id = $this->toolkit->getConf('facebook')->appId;
 	if(property_exists($this, 'title'))
-		$this->title = 'OneDayOfMine:'.$this->title;
+		$this->title = 'OneDayOfMine / '.$this->title;
 ?>
 <!DOCTYPE html>
 <html>
@@ -23,7 +23,8 @@
   <link href="/styles/bootstrap.min.css" rel="stylesheet">
   <link href="/styles/bootstrap-editable.css" rel="stylesheet">
   <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-responsive.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="/styles/font-awesome.css">
+  <link href="/styles/font-awesome.css" rel="stylesheet">
+  {{slot id='css_include'}}
 
   <!-- Application style sheets -->
   <link href="/styles/main.css" rel="stylesheet">
@@ -129,6 +130,11 @@
     <div class="navbar navbar-static-top">
         <div class="navbar-inner">
             <div class="container">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
                 <a class="brand" href="/pages/">OneDayOfMine</a>
 	              <?php if(!property_exists($this, 'menu_disabled') || !$this->menu_disabled) { ?>
                   <div class="nav-collapse collapse navbar-responsive-collapse">
