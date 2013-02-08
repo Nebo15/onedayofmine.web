@@ -8,8 +8,6 @@ var Importer = {
     instagram_user:'self',
 
     import:function (hash) {
-        Importer.$progress.show();
-
         $.ajax({
             dataType:"json",
             url:'https://api.instagram.com/v1/users/' + Importer.instagram_user + '/?callback=?',
@@ -26,7 +24,12 @@ var Importer = {
     },
 
     setProgress:function (percents) {
-        Importer.$progress.find('.bar').css('width', "" + percents + "%");
+        Importer.$progress.show();
+        Importer.$progress.find('.bar-danger').css('width', "" + (percents > 50 ? 50 : percents) + "%");
+        percents -= 50;
+        Importer.$progress.find('.bar-warning').css('width', "" + (percents > 25 ? 25 : percents) + "%");
+        percents -= 25;
+        Importer.$progress.find('.bar-success').css('width', "" + (percents > 25 ? 25 : percents) + "%");
         if(100 == percents)
             Importer.$progress.hide();
     },
@@ -191,6 +194,7 @@ var Importer = {
                 $day.hide('fast').html('<div class="alert alert-success">'+
                     'Day successfully imported. View <a href="/pages/'+response.data.result.id+'/day">result</a>.'+
                 '</div>').removeClass('well').show('slow');
+                Importer.$progress.hide();
             });
         }).send();
     },
