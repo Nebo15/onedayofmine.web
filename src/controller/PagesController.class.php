@@ -53,6 +53,9 @@ class PagesController extends lmbController
 			$this->is_owner = true;
 
 		$this->day = $this->toolkit->getExportHelper()->exportDay($day);
+
+    $this->day->utime = date('m/d/y', $this->day->utime);
+    $this->day->ctime = date('m/d/y', $this->day->ctime);
 	}
 
 	function doMoment()
