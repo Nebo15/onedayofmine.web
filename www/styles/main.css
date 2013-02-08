@@ -19,11 +19,15 @@ body {
 
 .with-shadow {
     color: rgba(70,70,70,0.6);
-    //text-shadow: 2px 2px 3px rgba(255,255,255,0.1);
+    /*//text-shadow: 2px 2px 3px rgba(255,255,255,0.1);*/
 }
 
 .jumbotron {
     text-align: center;
+}
+
+.day-bages {
+    /*font-size: 0.7em;*/
 }
 
 .jumbotron h1 {
