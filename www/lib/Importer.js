@@ -137,7 +137,7 @@ var Importer = {
             $day.find('.type').val(result.type);
             $day.find('.title').val(result.title);
             $day.find('.desc').val(result.description);
-            $day.find('.export-action').click(function () {
+            $day.find('.export-action').click(function (event) {
                 if (!$day.find('.title').val()) {
                     $day.find('.title').parent().parent().addClass('error');
                     return;
@@ -153,6 +153,7 @@ var Importer = {
                     desc:$day.find('.desc').val(),
                     moments:moments_to_export
                 });
+                return false;
             });
             Importer.setProgress(75);
             $day.find('.step2').hide('slow');
@@ -167,9 +168,7 @@ var Importer = {
             title:day_data.title,
             type:day_data.type,
             final_description:day_data.desc
-        });
-
-        day_request.success(function(response) {
+        }).success(function(response) {
             var day = response.data.result;
             var defs = [];
             var is_sended = false;
@@ -193,9 +192,7 @@ var Importer = {
                     'Day successfully imported. View <a href="/pages/'+response.data.result.id+'/day">result</a>.'+
                 '</div>').removeClass('well').show('slow');
             });
-        });
-
-        day_request.send();
+        }).send();
     },
 
     getRemoteImageContent:function (url, callback) {
