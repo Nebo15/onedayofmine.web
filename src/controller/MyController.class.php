@@ -9,7 +9,7 @@ class MyController extends BaseJsonController
     $user = $this->_getUser();
     if($this->request->isPost())
     {
-      $properties = array('name', 'sex', 'email', 'location', 'occupation', 'birthday');
+      $properties = array('name', 'sex', 'location', 'occupation', 'birthday');
       foreach($properties as $property)
       {
         if($this->request->has($property))

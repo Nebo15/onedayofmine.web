@@ -1,14 +1,12 @@
 <?
-$this->title = "Settings";
+$this->title = "Profile";
 $this->menu = 'me';
 ?>
 {{wrap with="layout.phtml"}}
 {{into slot="content"}}
-<div class="row-fluid">
 <h1>Profile</h1>
-
 <div>
-		<div style="padding:10px 0" class="pull-left">
+		<div style="" class="pull-left">
 		    <div style="width:192px;margin:0 auto;background-color:#fff">
 		        <img class="change_photo" src="{$#current_user.image_192}"/>
 		        <small>Tap photo if you want</small>
@@ -16,6 +14,12 @@ $this->menu = 'me';
 		</div>
 		<div class="pull-left">
         <form class="form-horizontal">
+            <div class="control-group">
+                <label class="control-label" for="inputName">Name</label>
+                <div class="controls">
+                    <input type="text" id="inputName" placeholder="Name" value="{$#current_user.name}">
+                </div>
+            </div>
             <div class="control-group">
                 <label class="control-label" for="inputOccupation">Occupation</label>
                 <div class="controls">
@@ -25,7 +29,7 @@ $this->menu = 'me';
             <div class="control-group">
                 <label class="control-label" for="inputLocation">Location</label>
                 <div class="controls">
-                    <input type="password" id="inputLocation" placeholder="location" value="{$#current_user.location}">
+                    <input type="text" id="inputLocation" placeholder="location" value="{$#current_user.location}">
                 </div>
             </div>
             <div class="control-group">
@@ -36,12 +40,34 @@ $this->menu = 'me';
             </div>
             <div class="control-group">
                 <div class="controls">
-                    <button type="submit" class="btn btn-success">Update</button>
+                    <div class="alert alert-success hide">
+		                    Profile saved!
+                    </div>
+                </div>
+	          </div>
+            <div class="control-group">
+                <div class="controls">
+                    <button type="submit" class="btn btn-success update-action">
+		                    <i class="icon icon-ok"></i> Update
+                    </button>
                 </div>
             </div>
         </form>
 		</div>
-</div>
 	</div>
+{{/into}}
+{{into slot="js_ready"}}
+		$('.update-action').click(function(event) {
+				var data = {
+					name: $('#inputName').val(),
+					location: $('#inputLocation').val(),
+					occupation: $('#inputOccupation').val(),
+					birthday: $('#inputBirthday').val(),
+				};
+				var req = API.request('POST', 'my/profile', data).complete(function() {
+					$('.alert-success').show();
+				}).send();
+				return false;
+		});
 {{/into}}
 {{/wrap}}
