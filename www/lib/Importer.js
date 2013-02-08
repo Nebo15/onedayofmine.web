@@ -124,6 +124,7 @@ var Importer = {
         });
 
         $day.find('button.analyze-action').click(function (event) {
+            $(this).addClass('disabled');
             var _day = Importer.days[$(this).parents('.well').attr('day_pos')];
             Importer.showAnalyzeStep($day, _day);
         });
@@ -136,11 +137,11 @@ var Importer = {
         var analyze_request = API.request('POST', 'days/analyze_instagram_day', {moments:moments});
         analyze_request.success(function(response) {
             var result = response.data.result;
-
             $day.find('.type').val(result.type);
             $day.find('.title').val(result.title);
             $day.find('.desc').val(result.description);
             $day.find('.export-action').click(function (event) {
+                $(this).addClass('disabled');
                 if (!$day.find('.title').val()) {
                     $day.find('.title').parent().parent().addClass('error');
                     return;
@@ -191,9 +192,9 @@ var Importer = {
                 defs.push(moment_request.send());
             });
             $.when.apply(null, defs).then(function () {
-                $day.hide('fast').html('<div class="alert alert-success">'+
+                $day.html('<div class="alert alert-success">'+
                     'Day successfully imported. View <a href="/pages/'+response.data.result.id+'/day">result</a>.'+
-                '</div>').removeClass('well').show('slow');
+                '</div>').removeClass('well');
                 Importer.$progress.hide();
             });
         }).send();
