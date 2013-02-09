@@ -40,6 +40,13 @@ var Template = (function() {
     return new Handlebars.SafeString(link);
   });
 
+  Handlebars.registerHelper('clip', function(string, len) {
+    console.log(string, len);
+    if(null == string)
+      return '';
+    return new Handlebars.SafeString(string.substr(0, len - 1) + (string.length > len ? '&hellip;' : ''));
+  });
+
   return {
     compileElement: function(source, data, callback) {
       if(!templates_compiled[source.hashCode()]) {

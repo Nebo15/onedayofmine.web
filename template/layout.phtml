@@ -2,8 +2,11 @@
   $this->host_url = lmb_env_get('HOST_URL');
   $this->facebook_app_namespace = $this->toolkit->getConf('facebook')->namespace;
   $this->facebook_app_id = $this->toolkit->getConf('facebook')->appId;
+
 	if(property_exists($this, 'title'))
-		$this->title = 'OneDayOfMine / '.$this->title;
+		$this->title = 'OneDayOfMine: '.$this->title;
+	else
+		$this->title = 'OneDayOfMine';
 ?>
 <!DOCTYPE html>
 <html>

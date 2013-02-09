@@ -5,12 +5,14 @@
         <div>
             <h3>Import from Instagram</h3>
 
-            <div class="progress progress-striped" style="display:none">
-                <div class="bar" style="width: 0%;"></div>
+            <div class="progress" style="display:none">
+                <div class="bar bar-danger" style="width: 0%;"></div>
+                <div class="bar bar-warning" style="width: 0%;"></div>
+                <div class="bar bar-success" style="width: 0%;"></div>
             </div>
 
             <center><a href="https://api.instagram.com/oauth/authorize/?client_id={$#instagram.client_id}&redirect_uri={$#instagram.redirect_url}&response_type=token"
-               class="btn btn-primary btn-large" style="display:none">
+               class="btn btn-danger btn-large" style="display:none">
                 Step 1 of 3 <i class="icon-white icon-forward"></i>
             </a></center>
 
@@ -31,18 +33,17 @@
 				          <li style="width:160px;">
 						          <div class="thumbnail">
 								          <div class="img-wrap"  style="background:#fff">
-                              <img src="[[images.thumbnail.url]]" class="img-rounded"/>
+                              <img src="[[images.thumbnail.url]]" class="img-rounded" alt="[[caption.text]]" title="[[caption.text]]"/>
                           </div>
-                          <p><small>[[caption.text]]</small></p>
-                          <center>
-                              <button class="btn btn-info remove-photo-action" moment_id="[[id]]">Remove</button>
+                          <center style="padding-top:10px">
+                              <button class="btn btn-info remove-photo-action" day_pos="[[../day_position]]" moment_id="[[id]]">Skip</button>
                           </center>
 						          </div>
 				          </li>
 					    [[/moments]]
 
-				      </ul><br/>
-			        <center><button class="btn btn-primary btn-large analyze-action">
+				      </ul>
+			        <center><button class="btn btn-warning btn-large analyze-action">
 				        Step 2 of 3 <i class="icon-white icon-forward"></i> </button></center>
 				  </div>
 		      <div class="step3" style="display:none">
@@ -72,7 +73,7 @@
                     </div>
                 </div>
 
-                <center><button class="btn btn-primary btn-large export-action">
+                <center><button class="btn btn-success btn-large export-action">
                     Final step! <i class="icon-white icon-forward"></i> </button></center>
 						</form>
 		      </div>
@@ -81,7 +82,9 @@
 {{/into}}
 {{into slot="js_include"}}
   <script src="/lib/vendor/handlebars.js"></script>
+	<script src="/lib/Template.js"></script>
   <script src="/lib/Importer.js"></script>
+  <script src="/lib/vendor/jquery.grid-a-licious.min.js"></script>
 {{/into}}
 {{into slot="js_ready"}}
     hash = window.location.hash.substr(14);
@@ -92,7 +95,6 @@
         else {
             Importer.$days = $('.days');
             Importer.$progress = $('.progress');
-
             Importer.import(hash);
         }
     });

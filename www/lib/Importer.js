@@ -8,8 +8,6 @@ var Importer = {
     instagram_user:'self',
 
     import:function (hash) {
-        Importer.$progress.show();
-
         $.ajax({
             dataType:"json",
             url:'https://api.instagram.com/v1/users/' + Importer.instagram_user + '/?callback=?',
@@ -26,7 +24,12 @@ var Importer = {
     },
 
     setProgress:function (percents) {
-        Importer.$progress.find('.bar').css('width', "" + percents + "%");
+        Importer.$progress.show();
+        Importer.$progress.find('.bar-danger').css('width', "" + (percents > 50 ? 50 : percents) + "%");
+        percents -= 50;
+        Importer.$progress.find('.bar-warning').css('width', "" + (percents > 25 ? 25 : percents) + "%");
+        percents -= 25;
+        Importer.$progress.find('.bar-success').css('width', "" + (percents > 25 ? 25 : percents) + "%");
         if(100 == percents)
             Importer.$progress.hide();
     },
@@ -93,21 +96,35 @@ var Importer = {
         var $day = $($.trim(template(view)));
         var $out = $days.append($day.hide());
 
-        $day.find('button.remove-photo-action').click(function (event) {
-            console.log('remove: ' + $(this).attr('moment_id'));
+        $day.find('button.remove-photo-action').click(function (event)
+        {
+            var day_pos = $(this).attr('day_pos');
+            var moment_id = $(this).attr('moment_id');
+
             if($(this).hasClass('btn-info'))
             {
                 $(this).removeClass('btn-info').addClass('btn-primary').html('Restore');
                 $(this).parent().parent().find('img').css('opacity', '0.3');
+
+                $.each(Importer.days[day_pos], function(i, moment) {
+                    if(moment.id == moment_id)
+                        Importer.days[day_pos][i].skip = true;
+                });
             }
             else
             {
-                $(this).removeClass('btn-primary').addClass('btn-info').html('Remove');
+                $(this).removeClass('btn-primary').addClass('btn-info').html('Skip');
                 $(this).parent().parent().find('img').css('opacity', '1');
+
+                $.each(Importer.days[day_pos], function(i, moment) {
+                    if(moment.id == moment_id)
+                        Importer.days[day_pos][i].skip = false;
+                });
             }
         });
 
         $day.find('button.analyze-action').click(function (event) {
+            $(this).addClass('disabled');
             var _day = Importer.days[$(this).parents('.well').attr('day_pos')];
             Importer.showAnalyzeStep($day, _day);
         });
@@ -120,21 +137,27 @@ var Importer = {
         var analyze_request = API.request('POST', 'days/analyze_instagram_day', {moments:moments});
         analyze_request.success(function(response) {
             var result = response.data.result;
-
             $day.find('.type').val(result.type);
             $day.find('.title').val(result.title);
             $day.find('.desc').val(result.description);
-            $day.find('.export-action').click(function () {
+            $day.find('.export-action').click(function (event) {
+                $(this).addClass('disabled');
                 if (!$day.find('.title').val()) {
                     $day.find('.title').parent().parent().addClass('error');
                     return;
                 }
+                var moments_to_export = [];
+                $.each(moments, function(i, moment) {
+                   if(moment.skip == undefined || moment.skip == false)
+                     moments_to_export.push(moment);
+                });
                 Importer.postDay($day, {
                     type:$day.find('.type').val(),
                     title:$day.find('.title').val(),
                     desc:$day.find('.desc').val(),
-                    moments:moments
+                    moments:moments_to_export
                 });
+                return false;
             });
             Importer.setProgress(75);
             $day.find('.step2').hide('slow');
@@ -149,9 +172,7 @@ var Importer = {
             title:day_data.title,
             type:day_data.type,
             final_description:day_data.desc
-        });
-
-        day_request.success(function(response) {
+        }).success(function(response) {
             var day = response.data.result;
             var defs = [];
             var is_sended = false;
@@ -171,13 +192,12 @@ var Importer = {
                 defs.push(moment_request.send());
             });
             $.when.apply(null, defs).then(function () {
-                $day.hide('fast').html('<div class="alert alert-success">'+
+                $day.html('<div class="alert alert-success">'+
                     'Day successfully imported. View <a href="/pages/'+response.data.result.id+'/day">result</a>.'+
-                '</div>').removeClass('well').show('slow');
+                '</div>').removeClass('well');
+                Importer.$progress.hide();
             });
-        });
-
-        day_request.send();
+        }).send();
     },
 
     getRemoteImageContent:function (url, callback) {
