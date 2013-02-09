@@ -71,10 +71,6 @@ h1, h2, h3, h4, h5, h6 {
   text-align: center;
 }
 
-.moment-description {
-
-}
-
 .moment-controls-overlay {
   top:5px;
   right: 5px;
@@ -90,18 +86,18 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .moment-image-holder {
-  max-width: 100%;
   position: relative;
-  width: 400px;
   clear: both;
+  max-width: 100%;
+  width: 400px;
   font-size: 1em;
   margin-left: auto;
   margin-right: auto;
 }
 
 .moment-image-holder img {
+  max-width: 100%;
   width: 400px;
-  height: 400px;
 }
 
 .moment-image-holder a {
@@ -125,6 +121,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .moment-description {
+  max-width: 100%;
   width: 420px;
   margin-left: auto;
   margin-right: auto;
@@ -184,3 +181,21 @@ h1, h2, h3, h4, h5, h6 {
 
 /* display of quote author (alternatively use a class on the element following the blockquote) */
 .bubble + p {padding-left:15px; font:14px Arial, sans-serif;}
+
+/* Responsive */
+@media only screen and
+  (-webkit-min-device-pixel-ratio: 1.5), only screen and
+  (-o-min-device-pixel-ratio: 3/2), only screen and
+  (min-device-pixel-ratio: 1.5) {
+}
+
+@media (max-width: 767px) {
+  .moment-description {
+    width: 220px;
+  }
+
+  .moment-image-holder,
+  .moment-image-holder img {
+    width: 200px;
+  }
+}

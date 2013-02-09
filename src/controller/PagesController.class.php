@@ -52,6 +52,8 @@ class PagesController extends lmbController
     if ($this->toolkit->getUser() && $this->toolkit->getUser()->id == $day->user_id)
       $this->is_owner = true;
 
+    // var_dump($this->toolkit->getUser()->id);
+
     $this->day = $this->toolkit->getExportHelper()->exportDay($day);
 
     $this->day->utime = date('m/d/y', $this->day->utime);
