@@ -30,7 +30,9 @@ class PagesController extends lmbController
 
 	function doMyDays()
 	{
-		$user = lmbToolkit::instance()->getUser();
+		if (!$user = lmbToolkit::instance()->getUser())
+			return $this->forwardTo404();
+
 		$this->days = $this->toolkit->getExportHelper()->exportDayItems($user->getDays());
 	}
 
@@ -52,8 +54,6 @@ class PagesController extends lmbController
     if ($this->toolkit->getUser() && $this->toolkit->getUser()->id == $day->user_id)
       $this->is_owner = true;
 
-    // var_dump($this->toolkit->getUser()->id);
-
     $this->day = $this->toolkit->getExportHelper()->exportDay($day);
 
     $this->day->utime = date('m/d/y', $this->day->utime);
@@ -70,12 +70,18 @@ class PagesController extends lmbController
 
 		$this->moment = Moment::findById($id);
 		if (!$this->moment || $this->moment->getDay()->is_deleted)
-			return $this->forward('pages', 'not_found');
+			return $this->forwardTo404();
 	}
 
 	function doNotFound()
 	{
 		$this->response->setCode(404);
+	}
+
+	function forwardTo404()
+	{
+		$this->response->setCode(404);
+		$this->setTemplate('pages/not_found.phtml');
 	}
 
 	function doImport()
