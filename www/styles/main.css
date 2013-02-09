@@ -183,19 +183,22 @@ h1, h2, h3, h4, h5, h6 {
 .bubble + p {padding-left:15px; font:14px Arial, sans-serif;}
 
 /* Responsive */
-@media only screen and
+@media (max-width: 767px) or only screen and
   (-webkit-min-device-pixel-ratio: 1.5), only screen and
   (-o-min-device-pixel-ratio: 3/2), only screen and
   (min-device-pixel-ratio: 1.5) {
-}
+  h1, h2, h3, h4, h5, h6 {
+    font-size: 70%;
+  }
 
-@media (max-width: 767px) {
   .moment-description {
-    width: 220px;
+    width: 210px;
   }
 
   .moment-image-holder,
   .moment-image-holder img {
-    width: 200px;
+    width: 230px;
+    margin-left: 0;
+    margin-right: 0;
   }
 }
