@@ -14,9 +14,19 @@ class PagesController extends lmbController
 	protected $toolkit;
 	protected $instagram_api_host = 'https://api.instagram.com';
 
+	function doDayCreate()
+	{
+		return $this->doImport();
+	}
+
 	function doDisplay()
 	{
-		$this->doImport();
+		if($this->toolkit->getUser())
+			return $this->doImport();
+		else
+		{
+			$this->setTemplate('pages/display_guest.phtml');
+		}
 	}
 
 	function doDaysDiscover()

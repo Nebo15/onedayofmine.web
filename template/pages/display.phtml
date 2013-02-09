@@ -3,24 +3,15 @@ $this->menu = '';
 ?>
 {{wrap with="layout.phtml"}}
 {{into slot="content"}}
-<div class="hero-unit">
-	<h1>Start import days&hellip;</h1>
-	<div style="padding-top: 50px">
-	<a class="btn btn-large btn-main" href="https://api.instagram.com/oauth/authorize/?client_id={$#instagram.client_id}&redirect_uri={$#instagram.redirect_url}&response_type=token">
-			&hellip;from Instagram
-      <i class="icon icon-large icon-camera-retro"></i>
-	</a>
-  <a class="btn btn-large btn-main disabled" href="/pages/import">
-      &hellip;from Flickr
-      <i class="icon icon-large icon-camera"></i>
-  </a>
-  <a class="btn btn-large btn-main disabled" href="/pages/import">
-      &hellip;from Facebook
-      <i class="icon icon-large icon-facebook-sign"></i>
-  </a>
-	<br class="clearFix"/>
-  </div>
-</div>
+<div class="row">
+		<div class="span8">
+				<h5>News</h5>
+		</div>
+		<div class="span4">
+				<div class="span4"><h5>following</h5></div>
+        <div class="span4"><h5>followers</h5></div>
+		</div>
 
+</div>
 {{/into}}
 {{/wrap}}
