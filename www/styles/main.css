@@ -2,6 +2,14 @@ body {
     padding-bottom: 40px;
 }
 
+h1, h2, h3, h4, h5, h6 {
+  margin-bottom: 5px;
+}
+
+.btn:hover, a.not-decorated {
+  text-decoration: none;
+}
+
 .container-narrow {
     margin: 0 auto;
     max-width: 760px;
@@ -26,6 +34,10 @@ body {
     text-align: center;
 }
 
+.text-center {
+  text-align: center;
+}
+
 .day-bages {
     /*font-size: 0.7em;*/
 }
@@ -33,6 +45,12 @@ body {
 .jumbotron h1 {
     font-size: 72px;
     line-height: 1;
+}
+
+.add-on-small {
+  padding: 2px 7px !important;
+  height: 26px !important;
+  font-size: 14.45px !important;
 }
 
 /*.days ul {*/
@@ -55,3 +73,125 @@ body {
 .days br {
     clear: both;
 }
+
+.moment-item {
+  position: relative;
+}
+
+.moment-item-placeholder {
+  text-align: center;
+}
+
+.moment-description {
+
+}
+
+.moment-controls-overlay {
+  top:5px;
+  right: 5px;
+  position: absolute;
+}
+
+.moment-controls-overlay a {
+  padding: 0px;
+}
+
+.moment-time {
+  margin-bottom: 5px;
+}
+
+.moment-image-holder {
+  position: relative;
+  width: 400px;
+  height: 400px;
+  clear: both;
+  font-size: 1em;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.moment-image-holder img {
+  width: 400px;
+  height: 400px;
+}
+
+.moment-image-holder a {
+  color: #FFF;
+}
+
+.moment-image-overlay {
+  position: absolute;
+  color:#FFF;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 2px 6px 2px 2px;
+  vertical-align: middle;
+  text-align: center;
+  font-weight: bold;
+}
+
+.overlay-like {
+  bottom:5px;
+  right: 5px;
+}
+
+.moment-description {
+  width: 420px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.comment-item .text {
+  overflow: hidden;
+}
+
+.comment-item img {
+  margin-right: 20px;
+}
+
+.comment-item .bubble {
+  margin-left: 100px;
+}
+
+/* Speech bubbles */
+.bubble {
+  position:relative;
+  padding:15px;
+  /*margin:5px 0 0.5em;*/
+  color:#333;
+  background:#eee;
+  /* css3 */
+  -webkit-border-radius:10px;
+  -moz-border-radius:10px;
+  border-radius:10px;
+}
+
+.moment-description p {font-size:28px; line-height:1.25em;}
+
+/* creates the triangle */
+.bubble:after {
+  content:"";
+  position:absolute;
+  top:-30px;
+  left:50px;
+  border:15px solid transparent;
+  border-bottom-color:#eee;
+    /* reduce the damage in FF3.0 */
+    display:block;
+    width:0;
+}
+
+/* creates the larger triangle */
+
+
+/* creates the smaller  triangle */
+.bubble.left:after {
+  top:16px; /* value = (:before top) + (:before border-top) - (:after border-top) */
+  bottom:auto;
+  left:-21px; /* value = - border-left-width - border-right-width */
+  border-width:9px 21px 9px 0;
+  border-color:transparent #eee;
+}
+
+/* display of quote author (alternatively use a class on the element following the blockquote) */
+.bubble + p {padding-left:15px; font:14px Arial, sans-serif;}

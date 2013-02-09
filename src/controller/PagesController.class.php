@@ -48,14 +48,18 @@ class PagesController extends lmbController
 			$day->save();
 		}
 
-		$this->is_owner = false;
-		if ($this->toolkit->getUser() && $this->toolkit->getUser()->id == $day->user_id)
-			$this->is_owner = true;
+    $this->is_owner = false;
+    if ($this->toolkit->getUser() && $this->toolkit->getUser()->id == $day->user_id)
+      $this->is_owner = true;
 
-		$this->day = $this->toolkit->getExportHelper()->exportDay($day);
+    $this->day = $this->toolkit->getExportHelper()->exportDay($day);
 
     $this->day->utime = date('m/d/y', $this->day->utime);
     $this->day->ctime = date('m/d/y', $this->day->ctime);
+
+    foreach ($this->day->moments as $moment) {
+      $moment->time = date('h:i', strtotime($moment->time));
+    }
 	}
 
 	function doMoment()
