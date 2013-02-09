@@ -63,6 +63,10 @@ h1, h2, h3, h4, h5, h6 {
   position: relative;
 }
 
+.moment-item img {
+  max-width: 100%;
+}
+
 .moment-item-placeholder {
   text-align: center;
 }
