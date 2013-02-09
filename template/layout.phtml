@@ -89,7 +89,7 @@
       if(Auth.hasAccessToken()) {
         $('#menu_me').html($('#menu_me_authorized').html());
         $('#logout-action').click(function() {
-          Auth.logout(function() {
+          API.logout(function() {
             window.location.reload();
           });
         });

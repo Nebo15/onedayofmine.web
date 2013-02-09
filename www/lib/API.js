@@ -80,13 +80,13 @@ var API = (function() {
       }
     },
 
-    logout: function() {
+    logout: function(callback) {
       console.log('Logging out');
       console.log('Dropping LocalStorage cache');
-      Storage.clear();
-      var logout_request = new Request('GET', 'auth/logout', {async:false});
-      logout_request.send();
-      Navigation.redirectToDefaultPage();
+      (new Request('GET', 'auth/logout', {async:false}).complete(function() {
+          Storage.clear();
+          callback();
+      })).send();
     }
   };
 })();
