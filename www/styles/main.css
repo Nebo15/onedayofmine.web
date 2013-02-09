@@ -183,11 +183,7 @@ h1, h2, h3, h4, h5, h6 {
 .bubble + p {padding-left:15px; font:14px Arial, sans-serif;}
 
 /* Responsive */
-@media (max-width: 767px) {
-  h1, h2, h3, h4, h5, h6 {
-    font-size: 70%;
-  }
-
+@media (max-width: 500px) {
   .moment-description {
     width: 210px;
   }
