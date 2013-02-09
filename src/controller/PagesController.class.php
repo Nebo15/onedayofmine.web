@@ -31,7 +31,7 @@ class PagesController extends lmbController
 	function doMyDays()
 	{
 		if (!$user = lmbToolkit::instance()->getUser())
-			return $this->forwardTo404();
+			return $this->forwardToUnauthorized();
 
 		$this->days = $this->toolkit->getExportHelper()->exportDayItems($user->getDays());
 	}
@@ -82,6 +82,12 @@ class PagesController extends lmbController
 	{
 		$this->response->setCode(404);
 		$this->setTemplate('pages/not_found.phtml');
+	}
+
+	function forwardToUnauthorized()
+	{
+		$this->response->setCode(401);
+		$this->setTemplate('pages/not_authorized.phtml');
 	}
 
 	function doImport()
