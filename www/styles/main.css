@@ -3,7 +3,7 @@ body {
 }
 
 h1, h2, h3, h4, h5, h6 {
-  margin-bottom: 5px;
+  margin-bottom: 0;
 }
 
 .btn:hover, a.not-decorated {
@@ -21,7 +21,6 @@ h1, h2, h3, h4, h5, h6 {
 
 .with-shadow {
     color: rgba(70,70,70,0.6);
-    /*//text-shadow: 2px 2px 3px rgba(255,255,255,0.1);*/
 }
 
 .text-center {
@@ -30,6 +29,14 @@ h1, h2, h3, h4, h5, h6 {
 
 .day-bages {
     /*font-size: 0.7em;*/
+}
+
+.timepicker {
+  margin-bottom: 5px;
+}
+
+.timepicker input {
+  width: 37px;
 }
 
 .add-on-small {
@@ -57,6 +64,19 @@ h1, h2, h3, h4, h5, h6 {
 
 .days br {
     clear: both;
+}
+
+.day-controls {
+  margin-top: 35px;
+}
+
+.day-controls a {
+  padding-left: 5px;
+}
+
+.day-info {
+  font-size: 0.9em;
+  clear: both;
 }
 
 .moment-item {
@@ -89,7 +109,7 @@ h1, h2, h3, h4, h5, h6 {
   position: relative;
   clear: both;
   max-width: 100%;
-  width: 400px;
+  width: 410px;
   font-size: 1em;
   margin-left: auto;
   margin-right: auto;
@@ -97,7 +117,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .moment-image-holder img {
   max-width: 100%;
-  width: 400px;
+  width: 410px;
 }
 
 .moment-image-holder a {
@@ -127,8 +147,16 @@ h1, h2, h3, h4, h5, h6 {
   margin-right: auto;
 }
 
+.comment-item {
+  margin-top: 10px;
+}
+
 .comment-item .text {
   overflow: hidden;
+}
+
+.comment-item .bubble {
+  padding-bottom: 1px;
 }
 
 .comment-item img {
@@ -167,6 +195,21 @@ h1, h2, h3, h4, h5, h6 {
     width:0;
 }
 
+.bubble small {
+  margin-top: 5px;
+  display: block;
+  line-height: 20px;
+  color: #999999;
+}
+
+.bubble small a {
+  color: rgb(153, 153, 153);
+}
+
+.bubble small:before {
+  content: '\2014 \00A0';
+}
+
 /* creates the larger triangle */
 
 
@@ -182,8 +225,32 @@ h1, h2, h3, h4, h5, h6 {
 /* display of quote author (alternatively use a class on the element following the blockquote) */
 .bubble + p {padding-left:15px; font:14px Arial, sans-serif;}
 
+ul.inline >li:last-child,
+ol.inline >li:last-child {
+  padding-right: 0;
+}
+
+ul.inline >li:first-child,
+ol.inline >li:first-child {
+  padding-left: 0;
+}
+
 /* Responsive */
 @media (max-width: 500px) {
+  .comment-item img {
+    width: 36px;
+  }
+
+  ul.inline >li,
+  ol.inline >li {
+    padding-left: 3px;
+    padding-right: 3px;
+  }
+
+  .comment-item .bubble {
+    margin-left: 50px;
+  }
+
   .moment-description {
     width: 210px;
   }
