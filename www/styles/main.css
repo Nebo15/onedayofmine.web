@@ -231,6 +231,10 @@ h1, h2, h3, h4, h5, h6 {
     width: 36px;
   }
 
+  .comment-item .bubble {
+    margin-left: 50px;
+  }
+
   .moment-description {
     width: 210px;
   }
