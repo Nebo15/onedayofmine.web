@@ -225,6 +225,16 @@ h1, h2, h3, h4, h5, h6 {
 /* display of quote author (alternatively use a class on the element following the blockquote) */
 .bubble + p {padding-left:15px; font:14px Arial, sans-serif;}
 
+ul.inline >li:last-child,
+ol.inline >li:last-child {
+  padding-right: 0;
+}
+
+ul.inline >li:first-child,
+ol.inline >li:first-child {
+  padding-left: 0;
+}
+
 /* Responsive */
 @media (max-width: 500px) {
   .comment-item img {
