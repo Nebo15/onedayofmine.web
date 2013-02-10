@@ -68,9 +68,11 @@
 
                           <br class="clearfix" />
 
-                          <p class="bubble moment-description">
-                            {$item->description|nl2br}
-                          </p>
+                          <? if($item->description || $this->is_owner) { ?>
+                            <p class="bubble moment-description">
+                              {$item->description|nl2br}
+                            </p>
+                          <? } ?>
                       </li>
                       <? if($this->is_owner) { ?>
                         <li class="well moment-item-placeholder">
@@ -80,6 +82,44 @@
                       {{/list:item}}
                   </ul>
               {{/list}}
+
+              <div class="bubble">
+                <? if($this->is_owner) { ?>
+                  <span class="pull-right">
+                    <a class="not-decorated with-shadow"><i class="icon-pencil"></i></a>
+                  </span>
+                <? } ?>
+                {$#day->final_description|default:"no description"|nl2br}
+
+                <? if($this->is_owner) { ?>
+                <div<? if($this->day->final_description) { ?> class="hidden"<? } ?>>
+                  <textarea rows="3" class="input-block-level" placeholder="Enter final description..."></textarea>
+
+                  <? if(!$this->day->final_description) { ?>
+                    <button class="btn btn-block" type="button">Close the day</button>
+                  <? } else { ?>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn">Cancel</button>
+                  <? } ?>
+                </div>
+                <? } ?>
+              </div>
+
+              <span class="pull-right">
+                <ul class="unstyled inline">
+                  <li>
+                    <div class="input-prepend">
+                      <span class="add-on add-on-small"><i class="icon icon-heart"></i> {$#day->likes_count}</span>
+                      <button class="btn btn-small" type="button"> Like</button>
+                    </div>
+                  </li>
+                  <li>
+                    <div class="input-prepend">
+                      <button class="btn btn-small" type="button"><i class="icon icon-share"></i> Share</button>
+                    </div>
+                  </li>
+                </ul>
+              </span>
 
               <div id="add_moment_modal" class="modal hide fade">
                 <div class="modal-header">
@@ -128,44 +168,6 @@
                   <a href="#" class="btn btn-primary">Save changes</a>
                 </div> -->
               </div>
-
-              <p class="bubble">
-                <? if($this->is_owner) { ?>
-                  <span class="pull-right">
-                    <a class="not-decorated with-shadow"><i class="icon-pencil"></i></a>
-                  </span>
-                <? } ?>
-                {$#day->final_description|default:"no description"|nl2br}
-
-                <? if($this->is_owner) { ?>
-                <div<? if($this->day->final_description) { ?> class="hidden"<? } ?>>
-                  <textarea rows="3" class="input-block-level" placeholder="Enter final description..."></textarea>
-
-                  <? if(!$this->day->final_description) { ?>
-                    <button class="btn btn-block" type="button">Close the day</button>
-                  <? } else { ?>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
-                    <button type="button" class="btn">Cancel</button>
-                  <? } ?>
-                </div>
-                <? } ?>
-              </p>
-
-              <span class="pull-right">
-                <ul class="unstyled inline">
-                  <li>
-                    <div class="input-prepend">
-                      <span class="add-on add-on-small"><i class="icon icon-heart"></i> {$#day->likes_count}</span>
-                      <button class="btn btn-small" type="button"> Like</button>
-                    </div>
-                  </li>
-                  <li>
-                    <div class="input-prepend">
-                      <button class="btn btn-small" type="button"><i class="icon icon-share"></i> Share</button>
-                    </div>
-                  </li>
-                </ul>
-              </span>
 
               <br class="clearfix" /><br />
               <hr/>
