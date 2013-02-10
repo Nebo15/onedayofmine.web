@@ -1,8 +1,35 @@
-<?php
-/**
- * Created by JetBrains PhpStorm.
- * User: korchasa
- * Date: 07.02.13
- * Time: 15:48
- * To change this template use File | Settings | File Templates.
- */
+<?
+$this->menu = '';
+?>
+{{wrap with="layout.phtml"}}
+{{into slot="content"}}
+<div>
+		<img src="{$#user.image_192}" class="pull-left"/>
+    <h1>{$#user.name}</h1>
+		<ul class="unstyled">
+				<li><i class="icon icon-time"></i> birthday: {$#user.birthday}</li>
+				<li><i class="icon icon-wrench"></i> occupation: {$#user.occupation}</li>
+				<li><i class="icon icon-map-marker"></i> location: {$#user.location|default:"?"}</li>
+        <li><i class="icon icon-map-marker"></i> followers: {$#user.followers_count}</li>
+        <li><i class="icon icon-map-marker"></i> following: {$#user.following_count}</li>
+		</ul>
+</div>
+<br class="clearFix"/>
+{{list using="$#user.days"}}
+<ul class="thumbnails">
+    {{list:item}}
+    <li class="span3">
+        <div class="thumbnail">
+            <a href="/pages/{$item->id}/day">
+                <img src="{$item->image_532|default:'/img/no_photo.png'}" alt="{$item->final_description}">
+
+                <h3>{$item->title}</h3>
+            </a>
+            <p><small>{$item->final_description|raw}</small></p>
+        </div>
+    </li>
+    {{/list:item}}
+</ul>
+{{/list}}
+{{/into}}
+{{/wrap}}
