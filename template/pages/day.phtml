@@ -8,11 +8,9 @@
     <meta property="{$#facebook_app_namespace}:type" content="{$#day->type}" />
   {{/into}}
   {{into slot="js_include"}}
-    <script src="/lib/vendor/bootstrap-timepicker.min.js"></script>
     <script src="/lib/vendor/bootstrap-fileupload.js"></script>
   {{/into}}
   {{into slot="css_include"}}
-    <link href="/styles/bootstrap-timepicker.min.css" rel="stylesheet">
     <link href="/styles/jasny-bootstrap.css" rel="stylesheet">
   {{/into}}
   {{into slot="js_ready"}}
@@ -25,8 +23,7 @@
       <div class="row-fluid">
           <div class="span6 offset3">
               <? if($this->is_owner) { ?>
-                <span class="pull-right" style="margin-top: 35px;">
-                  <a class="not-decorated with-shadow"><i class="icon-pencil"></i></a>
+                <span class="day-controls pull-right" style="margin-top: 35px;">
                   <a class="not-decorated with-shadow"><i class="icon-trash"></i></a>
                 </span>
               <? } ?>
@@ -43,20 +40,21 @@
                   <ul class="unstyled">
                       {{list:item}}
                       <li class="well moment-item">
-                          <span class="moment-controls-overlay">
-                            <? if($this->is_owner) { ?>
-                              <a class="not-decorated with-shadow"><i class="icon-pencil"></i></a>
+                          <? if($this->is_owner) { ?>
+                            <span class="moment-controls-overlay">
                               <a class="not-decorated with-shadow"><i class="icon-trash"></i></a>
-                            <? } ?>
-                            <!-- <a class="btn btn-link with-shadow"><i class="icon-share"></i></a> -->
-                          </span>
+                            </span>
+                          <? } ?>
 
-                          <!-- <div class="input-append bootstrap-timepicker">
-                              <input type="text" class="input-small input-timepicker" value="{$item->time}" />
-                              <span class="add-on"><i class="icon-time"></i></span>
-                          </div> -->
-                          <div id="moment-time" class="text-centered with-shadow" style="text-align: center">
-                            <i class="icon-time"></i>{$item->time}
+                          <div class="timepicker text-center with-shadow">
+                            <? if($this->is_owner) { ?>
+                              <span class="input-prepend">
+                                  <span class="add-on add-on-small"><i class="icon-time"></i></span>
+                                  <input type="time" class="input-mini add-on-small" value="{$item->time}" />
+                              </span>
+                            <? } else { ?>
+                              <i class="icon-time"></i> {$item->time}
+                            <? } ?>
                           </div>
 
                           <div class="moment-image-holder">
@@ -83,39 +81,60 @@
                   </ul>
               {{/list}}
 
-              <div class="bubble">
+              <p class="bubble">
                 <? if($this->is_owner) { ?>
-                  <span class="pull-right">
-                    <a class="not-decorated with-shadow"><i class="icon-pencil"></i></a>
-                  </span>
-                <? } ?>
-                {$#day->final_description|default:"no description"|nl2br}
+                  <textarea rows="3" class="input-block-level" placeholder="Enter final description...">{$#day->final_description|default:""|nl2br}</textarea>
 
-                <? if($this->is_owner) { ?>
-                <div<? if($this->day->final_description) { ?> class="hidden"<? } ?>>
-                  <textarea rows="3" class="input-block-level" placeholder="Enter final description..."></textarea>
-
-                  <? if(!$this->day->final_description) { ?>
-                    <button class="btn btn-block" type="button">Close the day</button>
-                  <? } else { ?>
-                    <button type="submit" class="btn btn-primary">Save changes</button>
-                    <button type="button" class="btn">Cancel</button>
-                  <? } ?>
-                </div>
+                    <? if($this->day->final_description) { ?>
+                      <button type="submit" class="btn btn-block disabled">Save changes</button>
+                    <? } else { ?>
+                      <button class="btn btn-block<? if(count($this->day->moments) > 1) { ?> disabled<? } ?>" type="button">Close the day</button>
+                    <? } ?>
+                <? } elseif($this->day->final_description) { ?>
+                  {$#day->final_description|default:""|nl2br}
                 <? } ?>
-              </div>
+              </p>
 
               <span class="pull-right">
                 <ul class="unstyled inline">
                   <li>
+                    <?php
+                    $disabled = false;
+                    if(!property_exists($this->day, 'is_liked')) {
+                      $disabled = true;
+                      $text = "Like";
+                      $icon = "icon-heart";
+                    } elseif($this->day->is_liked) {
+                      $text = "Unlike";
+                      $icon = "icon-heart-empty";
+                    } else {
+                      $text = "Like";
+                      $icon = "icon-heart";
+                    }
+                    ?>
                     <div class="input-prepend">
-                      <span class="add-on add-on-small"><i class="icon icon-heart"></i> {$#day->likes_count}</span>
-                      <button class="btn btn-small" type="button"> Like</button>
+                      <span class="add-on add-on-small"><i class="icon <?= $icon ?>"></i></span>
+                      <button class="btn btn-small<?= $disabled ? ' disabled' : '' ?>" type="button"> <?= $text ?></button>
                     </div>
                   </li>
                   <li>
                     <div class="input-prepend">
                       <button class="btn btn-small" type="button"><i class="icon icon-share"></i> Share</button>
+                    </div>
+                  </li>
+                  <li>
+                    <?php
+                    if($this->day->is_favorite) {
+                      $text = "Remove from favorites";
+                      $icon = "icon-bookmark";
+                    } else {
+                      $text = "Add to favorites";
+                      $icon = "icon-bookmark-empty";
+                    }
+                    ?>
+                    <div class="input-prepend">
+                      <span class="add-on add-on-small"><i class="icon <?= $icon ?>"></i></span>
+                      <button class="btn btn-small" type="button"> <?= $text ?></button>
                     </div>
                   </li>
                 </ul>
