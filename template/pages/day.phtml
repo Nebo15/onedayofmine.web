@@ -68,7 +68,7 @@
                           <br class="clearfix" />
 
 
-                          <? if($this->is_owner || $this->day->final_description) { ?>
+                          <? if($this->is_owner || $item->description) { ?>
                             <p class="bubble moment-description">
                               <? if($this->is_owner) { ?>
                                 <textarea rows="3" class="input-block-level" placeholder="Enter moment description...">{$item->description|default:""|nl2br}</textarea>
