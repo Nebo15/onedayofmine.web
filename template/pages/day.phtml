@@ -132,11 +132,6 @@
                     </div>
                   </li>
                   <li>
-                    <div class="input-prepend">
-                      <button class="btn btn-small" type="button"><i class="icon icon-share"></i> Share</button>
-                    </div>
-                  </li>
-                  <li>
                     <?php
                     if($this->day->is_favorite) {
                       $text = "Unfavorite";
@@ -150,6 +145,9 @@
                       <span class="add-on add-on-small"><i class="icon <?= $icon ?>"></i></span>
                       <button class="btn btn-small" type="button"> <?= $text ?></button>
                     </div>
+                  </li>
+                  <li>
+                    <button class="btn btn-small" style="margin-top: 14px" type="button"><i class="icon icon-share"></i> Share</button>
                   </li>
                 </ul>
               </span>
