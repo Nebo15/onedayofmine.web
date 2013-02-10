@@ -241,6 +241,12 @@ ol.inline >li:first-child {
     width: 36px;
   }
 
+  ul.inline >li,
+  ol.inline >li {
+    padding-left: 3px;
+    padding-right: 3px;
+  }
+
   .comment-item .bubble {
     margin-left: 50px;
   }
