@@ -191,6 +191,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .bubble small {
+  margin-top: 5px;
   display: block;
   line-height: 20px;
   color: #999999;
