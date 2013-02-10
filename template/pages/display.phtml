@@ -2,14 +2,112 @@
 $this->menu = '';
 ?>
 {{wrap with="layout.phtml"}}
+{{into slot="css"}}
+.followers-list li {
+  float:left;
+  margin-right:3px;
+}
+.followers-list li img {
+	width:32px;
+	height:32px;
+}
+
+blockquote small::before {
+	content: '';
+}
+
+blockquote small {
+	margin-top:5px;
+}
+
+blockquote small img, blockquote p img{
+	width:32px;
+	height:32px;
+}
+{{/into}}
 {{into slot="content"}}
 <div class="row">
 		<div class="span8">
-				<h5>News</h5>
+				<h3>News</h3>
+				<ul class="unstyled">
+						<li>
+                <blockquote>
+                    <p>
+                        <img src="http://images.instagram.com/profiles/profile_1450621_75sq_1360187746.jpg" width="32" height="32"/>
+		                    <a href="/pages/5/user">Laura Vandervoort</a> создал новый день <a href="/pages/2/day">Один командировочный день.</a>
+                    </p>
+                    <small>02/10/13</small>
+                </blockquote>
+						</li>
+            <li>
+                <blockquote>
+		                <p>
+                      <img src="http://images.instagram.com/profiles/profile_1450621_75sq_1360187746.jpg" width="32" height="32"/>
+                      <a href="#">Joe Qinstein</a> добавил момент в день <a href="">В гостях у Рерихов в Индийских Гималаях</a>
+			              </p>
+                    <small>
+		                    <img src="http://onedayofmine-stage.s3.amazonaws.com/days/7/e7b12b8b815fd9a8cdea2259809f88633c5254cd_532.jpeg" width="32" height="32">
+		                    Какое то время и я провела в задумчивости, прислушиваясь к своим ощущениям...
+                    </small>
+                </blockquote>
+            </li>
+            <li>
+                <blockquote>
+                    <p>
+                        <img src="http://images.instagram.com/profiles/profile_1450621_75sq_1360187746.jpg" width="32" height="32"/>
+                        <a href="#">Joe Qinstein</a> добавил 2 момента в день <a href="">В гостях у Рерихов в Индийских Гималаях</a>
+                    </p>
+	                  <p>
+                    <small>
+                        <img src="http://onedayofmine-stage.s3.amazonaws.com/days/7/af5c17ab3caee0279d62e4daa21bc2c41c82c282_532.jpeg">
+                        Портрет Николая Рериха на фоне буддийского монастыря...<br/>
+                    </small>
+                    </p>
+                    <p>
+                        <small>
+                            <img src="http://onedayofmine-stage.s3.amazonaws.com/days/7/aa9df1b2ed4a017dd9490d25c0b2978e1d1fbd37_532.jpeg">
+                            Карта путешествий Рерихов с 1925-28гг. Путешествие Алтай-Гималаи. Название на слуху<br/>
+                        </small>
+                    </p>
+                </blockquote>
+            </li>
+            <li>
+                <blockquote>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante.</p>
+                    <small>Someone famous <cite title="Source Title">Source Title</cite></small>
+                </blockquote>
+            </li>
+				</ul>
 		</div>
 		<div class="span4">
-				<div class="span4"><h5>following</h5></div>
-        <div class="span4"><h5>followers</h5></div>
+				<div class="span4">
+						<h5>Following&nbsp;&nbsp;<small>7</small></h5>
+						<ul class="unstyled  followers-list">
+								<li class="pull-left">
+										<img src="http://images.instagram.com/profiles/profile_1450621_75sq_1360187746.jpg"/>
+								</li>
+                <li class="pull-left">
+                    <img src="http://images.instagram.com/profiles/profile_39989663_75sq_1360449330.jpg"/>
+                </li>
+                <li class="pull-left">
+                    <img src="http://images.instagram.com/profiles/profile_47719173_75sq_1358861573.jpg"/>
+                </li>
+						</ul>
+				</div>
+        <div class="span4">
+		        <h5>Followers  ( 3 )</h5>
+            <ul class="unstyled followers-list">
+                <li>
+                    <img src="http://images.instagram.com/profiles/profile_10518982_75sq_1357688182.jpg" class="img-rounded"/>
+                </li>
+                <li>
+                    <img src="http://images.instagram.com/profiles/profile_299349163_75sq_1359754073.jpg" class="img-rounded"/>
+                </li>
+                <li>
+                    <img src="http://images.instagram.com/profiles/profile_20499101_75sq_1359408582.jpg" class="img-rounded"/>
+                </li>
+            </ul>
+        </div>
 		</div>
 
 </div>

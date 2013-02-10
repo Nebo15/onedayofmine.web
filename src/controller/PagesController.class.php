@@ -22,7 +22,12 @@ class PagesController extends lmbController
 	function doDisplay()
 	{
 		if($this->toolkit->getUser())
+		{
+			$user  = $this->toolkit->getUser();
+			$news = $user->getNewsWithLimitation(null, null, 20);
+			$this->news = (array) $this->toolkit->getExportHelper()->exportNewsItems($news);
 			return $this->doImport();
+		}
 		else
 		{
 			$this->setTemplate('pages/display_guest.phtml');
