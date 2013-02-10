@@ -95,6 +95,7 @@
         });
       } else {
         $('#login_button').click(function() {
+          $('#login_button').off('click').html('<img src="/img/loading.gif"/>');
           API.login(function() {
             window.location.reload();
           });
