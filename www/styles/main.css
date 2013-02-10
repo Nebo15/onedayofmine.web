@@ -41,7 +41,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .add-on-small {
   padding: 2px 7px !important;
-  height: 26px !important;
+  height: 32px !important;
   font-size: 14.45px !important;
 }
 
@@ -66,12 +66,17 @@ h1, h2, h3, h4, h5, h6 {
     clear: both;
 }
 
+.day-controls {
+  margin-top: 35px;
+}
+
 .day-controls a {
   padding-left: 5px;
 }
 
 .day-info {
   font-size: 0.9em;
+  clear: both;
 }
 
 .moment-item {
