@@ -212,19 +212,19 @@
               <h4>Comments:</h4>
               {{list using="$#day->comments"}}
                 <ul class="unstyled">
-                    {{list:item}}
-                      <li class="comment-item">
-                        <img src="{$item->user->image_72}" width="72" class="pull-left" alt="" />
+                  {{list:item}}
+                    <li class="comment-item">
+                      <img src="{$item->user->image_72}" width="72" class="pull-left img-rounded" alt="" />
 
-                        <div class="bubble left">
-                          <p class="text">
-                            {$item->text}
-                          </p>
-                        </div>
+                      <div class="bubble left">
+                        <p class="text">
+                          {$item->text}
+                        </p>
+                      </div>
 
-                        <br class="clearfix" />
-                      </li>
-                    {{/list:item}}
+                      <br class="clearfix" />
+                    </li>
+                  {{/list:item}}
                 </ul>
               {{/list}}
               <textarea rows="3" class="input-block-level"></textarea>
