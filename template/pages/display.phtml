@@ -18,11 +18,17 @@ blockquote small::before {
 
 blockquote small {
 	margin-top:5px;
+	margin-left:32px;
 }
 
 blockquote small img, blockquote p img{
 	width:32px;
 	height:32px;
+}
+
+.userpic {
+	width:24px;
+	height:24px;
 }
 {{/into}}
 {{into slot="content"}}
@@ -33,17 +39,16 @@ blockquote small img, blockquote p img{
 						<li>
                 <blockquote>
                     <p>
-                        <img src="http://images.instagram.com/profiles/profile_1450621_75sq_1360187746.jpg" width="32" height="32"/>
+                        <img src="http://onedayofmine-stage.s3.amazonaws.com/5/e1077869a66d3dcc1fbcd38d65af6def3559d54f_192.jpeg" class="userpic" style="width:16px;height:16px"/>
 		                    <a href="/pages/5/user">Laura Vandervoort</a> создал новый день <a href="/pages/2/day">Один командировочный день.</a>
                     </p>
-                    <small>02/10/13</small>
                 </blockquote>
 						</li>
             <li>
                 <blockquote>
 		                <p>
-                      <img src="http://images.instagram.com/profiles/profile_1450621_75sq_1360187746.jpg" width="32" height="32"/>
-                      <a href="#">Joe Qinstein</a> добавил момент в день <a href="">В гостях у Рерихов в Индийских Гималаях</a>
+                      <img src="http://onedayofmine-stage.s3.amazonaws.com/7/f968e57050673e6032f702c259362e65e7f2ff2b_192.jpeg" style="width:24px;height:24px"/>
+                      <a href="#">Joe Qinstein</a> добавил момент в день <a href="">Один день из Еревана в Батуми на машине</a>
 			              </p>
                     <small>
 		                    <img src="http://onedayofmine-stage.s3.amazonaws.com/days/7/e7b12b8b815fd9a8cdea2259809f88633c5254cd_532.jpeg" width="32" height="32">
@@ -109,7 +114,9 @@ blockquote small img, blockquote p img{
             </ul>
         </div>
 		</div>
-
 </div>
+<script>
+    $('.tool').tooltip();
+</script>
 {{/into}}
 {{/wrap}}
