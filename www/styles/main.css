@@ -150,6 +150,10 @@ h1, h2, h3, h4, h5, h6 {
   overflow: hidden;
 }
 
+.comment-item .bubble {
+  padding-bottom: 1px;
+}
+
 .comment-item img {
   margin-right: 20px;
 }
@@ -184,6 +188,20 @@ h1, h2, h3, h4, h5, h6 {
     /* reduce the damage in FF3.0 */
     display:block;
     width:0;
+}
+
+.bubble small {
+  display: block;
+  line-height: 20px;
+  color: #999999;
+}
+
+.bubble small a {
+  color: rgb(153, 153, 153);
+}
+
+.bubble small:before {
+  content: '\2014 \00A0';
 }
 
 /* creates the larger triangle */
