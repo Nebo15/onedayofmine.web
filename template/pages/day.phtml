@@ -48,9 +48,10 @@
 
                           <div class="timepicker text-center with-shadow">
                             <? if($this->is_owner) { ?>
-                              <span class="input-prepend">
-                                  <span class="add-on add-on-small"><i class="icon-time"></i></span>
-                                  <input type="time" class="input-mini add-on-small" value="{$item->time}" />
+                              <span class="input-prepend input-append">
+                                <span class="add-on add-on-small"><i class="icon-time"></i></span>
+                                <input type="time" class="input-mini add-on-small" value="{$item->time}" />
+                                <button class="btn btn-small disabled" type="button">Save</button>
                               </span>
                             <? } else { ?>
                               <i class="icon-time"></i> {$item->time}
@@ -66,9 +67,15 @@
 
                           <br class="clearfix" />
 
-                          <? if($item->description || $this->is_owner) { ?>
+
+                          <? if($this->is_owner || $this->day->final_description) { ?>
                             <p class="bubble moment-description">
-                              {$item->description|nl2br}
+                              <? if($this->is_owner) { ?>
+                                <textarea rows="3" class="input-block-level" placeholder="Enter moment description...">{$item->description|default:""|nl2br}</textarea>
+                                <button type="submit" class="btn btn-block disabled">Save description</button>
+                              <? } else { ?>
+                                {$item->description|nl2br}
+                              <? } ?>
                             </p>
                           <? } ?>
                       </li>

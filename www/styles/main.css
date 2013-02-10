@@ -104,7 +104,7 @@ h1, h2, h3, h4, h5, h6 {
   position: relative;
   clear: both;
   max-width: 100%;
-  width: 400px;
+  width: 410px;
   font-size: 1em;
   margin-left: auto;
   margin-right: auto;
@@ -112,7 +112,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .moment-image-holder img {
   max-width: 100%;
-  width: 400px;
+  width: 410px;
 }
 
 .moment-image-holder a {
