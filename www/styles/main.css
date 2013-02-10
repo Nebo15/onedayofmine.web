@@ -227,6 +227,10 @@ h1, h2, h3, h4, h5, h6 {
 
 /* Responsive */
 @media (max-width: 500px) {
+  .comment-item img {
+    width: 36px;
+  }
+
   .moment-description {
     width: 210px;
   }
