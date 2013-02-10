@@ -117,4 +117,12 @@ class PagesController extends lmbController
 		$this->response->setCode(401);
 		$this->setTemplate('pages/not_authorized.phtml');
 	}
+
+	function performAction()
+	{
+		$this->current_user = $this->toolkit->getUser()
+				? (array) $this->toolkit->getExportHelper()->exportUser($this->toolkit->getUser())
+				: new stdClass;
+		return parent::performAction();
+	}
 }
