@@ -81,19 +81,26 @@
                   </ul>
               {{/list}}
 
-              <p class="bubble">
-                <? if($this->is_owner) { ?>
-                  <textarea rows="3" class="input-block-level" placeholder="Enter final description...">{$#day->final_description|default:""|nl2br}</textarea>
+              <? if($this->is_owner || $this->day->final_description) { ?>
+                <p class="bubble">
+                  <? if($this->is_owner) { ?>
+                    <textarea rows="3" class="input-block-level" placeholder="Enter final description...">{$#day->final_description|default:""|nl2br}</textarea>
 
-                    <? if($this->day->final_description) { ?>
-                      <button type="submit" class="btn btn-block disabled">Save changes</button>
-                    <? } else { ?>
-                      <button class="btn btn-block<? if(count($this->day->moments) > 1) { ?> disabled<? } ?>" type="button">Close the day</button>
-                    <? } ?>
-                <? } elseif($this->day->final_description) { ?>
-                  {$#day->final_description|default:""|nl2br}
-                <? } ?>
-              </p>
+                      <? if($this->day->final_description) { ?>
+                        <button type="submit" class="btn btn-block disabled">Save changes</button>
+                      <? } else { ?>
+                        <button class="btn btn-block<? if(count($this->day->moments) > 1) { ?> disabled<? } ?>" type="button">Close the day</button>
+                      <? } ?>
+                  <? } else { ?>
+                    {$#day->final_description|default:""|nl2br}
+                  <? } ?>
+                </p>
+              <? } else { ?>
+                <div class="alert alert-block">
+                  <h4>This day is live!</h4>
+                  Stay tuned for new moments in this day, it's not finished yet!
+                </div>
+              <? } ?>
 
               <span class="pull-right">
                 <ul class="unstyled inline">
