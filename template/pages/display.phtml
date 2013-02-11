@@ -27,12 +27,13 @@ blockquote small img, blockquote p img{
 }
 
 .userpic {
-	width:24px;
-	height:24px;
+	width:32px;
+	height:32px;
 }
-.userpic:hover {
-	width:96px;
-	height:96px;
+
+.label {
+	text-shadow: 0px 1px 1px #4d4d4d;
+	color: #fff;
 }
 {{/into}}
 {{into slot="content"}}
@@ -43,6 +44,7 @@ blockquote small img, blockquote p img{
 						<li>
                 <blockquote>
                     <p>
+                        <span class="label pull-right">12s</span>
                         <img src="http://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Kutuzov_by_Volkov.jpg/240px-Kutuzov_by_Volkov.jpg" class="userpic"/>
 		                    <a href="/pages/5/user">Мишка &quot;одноглазый&quot;</a> создал новый день <a href="/pages/2/day">Катаемся, с друзьями, в Альпах</a>
                     </p>
@@ -51,30 +53,32 @@ blockquote small img, blockquote p img{
             <li>
                 <blockquote>
 		                <p>
+                      <span class="label pull-right">15m</span>
                       <img src="http://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Helene_Paris_David.jpg/220px-Helene_Paris_David.jpg" class="userpic"/>
                       <a href="#">Парис из Трои</a> добавил момент в день <a href="">Подарочный конь от данайцев</a>
 			              </p>
-	                  <p>
-		                <img src="http://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Trojan_horse_%C3%87anakkale.jpg/220px-Trojan_horse_%C3%87anakkale.jpg">
+                    <p style="margin-top:5px;">
+		                  <img src="http://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Trojan_horse_%C3%87anakkale.jpg/220px-Trojan_horse_%C3%87anakkale.jpg">
                     </p>
                 </blockquote>
             </li>
             <li>
                 <blockquote>
                     <p>
+                        <span class="label pull-right">3d</span>
                         <img src="http://images.instagram.com/profiles/profile_1450621_75sq_1360187746.jpg" class="userpic"/>
                         <a href="#">Joe Qinstein</a> добавил 2 момента в день <a href="">В гостях у Рерихов в Индийских Гималаях</a>
                     </p>
-	                  <p>
-                    <img src="http://onedayofmine-stage.s3.amazonaws.com/days/7/af5c17ab3caee0279d62e4daa21bc2c41c82c282_532.jpeg">
-										<img src="http://onedayofmine-stage.s3.amazonaws.com/days/7/aa9df1b2ed4a017dd9490d25c0b2978e1d1fbd37_532.jpeg">
-
+	                  <p style="margin-top:5px;">
+                      <img src="http://onedayofmine-stage.s3.amazonaws.com/days/7/af5c17ab3caee0279d62e4daa21bc2c41c82c282_532.jpeg">
+											<img src="http://onedayofmine-stage.s3.amazonaws.com/days/7/aa9df1b2ed4a017dd9490d25c0b2978e1d1fbd37_532.jpeg">
                     </p>
                 </blockquote>
             </li>
             <li>
                 <blockquote>
                     <p>
+                        <span class="label pull-right">6w</span>
 		                    <img src="http://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/CroppedStalin1943.jpg/280px-CroppedStalin1943.jpg" class="userpic"/>
 		                    <a href="">Иося Джуга</a> ответил на ваш комментарий "<a href="">Свобода! Равенство! И другие блага...</a>"
  		                </p>
@@ -84,10 +88,11 @@ blockquote small img, blockquote p img{
             <li>
                 <blockquote>
                     <p>
+                        <span class="label pull-right">100y</span>
                         <img src="http://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/DelarocheNapoleon.jpg/220px-DelarocheNapoleon.jpg" class="userpic"/>
                         <a href="">Наполеон (Боня Островной)</a> прокомментировал ваш день "<a href="">Смог в Москве 2010</a>"
                     </p>
-                    <small>Мисье, вы ничего не знаете о смогах в Москве. Вот помню в 1812, мы с ребятами...</small>
+                    <small>Мисье, вы ничего не знаете о смогах в Москве. Вот помню в прошлом году, мы с ребятами...</small>
                 </blockquote>
             </li>
 				</ul>
@@ -96,29 +101,21 @@ blockquote small img, blockquote p img{
 				<div class="span4">
 						<h5>Following&nbsp;&nbsp;<small>7</small></h5>
 						<ul class="unstyled  followers-list">
-								<li class="pull-left">
-										<img src="http://images.instagram.com/profiles/profile_1450621_75sq_1360187746.jpg"/>
-								</li>
-                <li class="pull-left">
-                    <img src="http://images.instagram.com/profiles/profile_39989663_75sq_1360449330.jpg"/>
-                </li>
-                <li class="pull-left">
-                    <img src="http://images.instagram.com/profiles/profile_47719173_75sq_1358861573.jpg"/>
-                </li>
+								<li><img src="http://images.instagram.com/profiles/profile_1450621_75sq_1360187746.jpg"/></li>
+                <li><img src="http://images.instagram.com/profiles/profile_39989663_75sq_1360449330.jpg"/></li>
+                <li><img src="http://images.instagram.com/profiles/profile_47719173_75sq_1358861573.jpg"/></li>
+                <li><img src="http://images.instagram.com/profiles/profile_299349163_75sq_1359754073.jpg"/></li>
 						</ul>
 				</div>
         <div class="span4">
-		        <h5>Followers  ( 3 )</h5>
+		        <h5>Followers&nbsp;&nbsp;<small>3</small></h5>
             <ul class="unstyled followers-list">
-                <li>
-                    <img src="http://images.instagram.com/profiles/profile_10518982_75sq_1357688182.jpg" class="img-rounded"/>
-                </li>
-                <li>
-                    <img src="http://images.instagram.com/profiles/profile_299349163_75sq_1359754073.jpg" class="img-rounded"/>
-                </li>
-                <li>
-                    <img src="http://images.instagram.com/profiles/profile_20499101_75sq_1359408582.jpg" class="img-rounded"/>
-                </li>
+                <li><img src="http://images.instagram.com/profiles/profile_10518982_75sq_1357688182.jpg"/></li>
+                <li><img src="http://images.instagram.com/profiles/profile_299349163_75sq_1359754073.jpg"/></li>
+                <li><img src="http://images.instagram.com/profiles/profile_20499101_75sq_1359408582.jpg"/></li>
+                <li><img src="http://images.instagram.com/profiles/profile_1450621_75sq_1360187746.jpg"/></li>
+                <li><img src="http://images.instagram.com/profiles/profile_39989663_75sq_1360449330.jpg"/></li>
+                <li><img src="http://images.instagram.com/profiles/profile_47719173_75sq_1358861573.jpg"/></li>
             </ul>
         </div>
 		</div>
