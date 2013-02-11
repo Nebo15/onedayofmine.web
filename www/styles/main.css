@@ -45,6 +45,10 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 14.45px !important;
 }
 
+.icon-heart,
+.icon-heart-empty {
+  color: #FF0000;
+}
 /*.days ul {*/
 /*list-style: none;*/
 /*padding-bottom: 20px;*/

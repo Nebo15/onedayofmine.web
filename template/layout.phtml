@@ -95,7 +95,7 @@
         });
       } else {
         $('#login_button').click(function() {
-          $('#login_button').off('click').html('<img src="/img/loading.gif"/>');
+          $('#login_button').off('click').html('<i class="icon-large icon-refresh icon-spin"></i> Login');
           API.login(function() {
             window.location.reload();
           });
@@ -107,7 +107,7 @@
   <!-- Templates and placeholders -->
   <script id="menu_me_authorized" type="text/x-handlebars-template">
     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-      <img src="{$#current_user.image_36}" width="24" height="24"/> <b class="caret"></b>
+      {$#current_user.name} <img src="{$#current_user.image_36}" width="24" height="24" class="img-rounded" /> <b class="caret"></b>
     </a>
     <ul class="dropdown-menu">
       <li><a href="/pages/my_days"><i class="icon icon-camera"></i> My days</a></li>

@@ -14,10 +14,7 @@
     <link href="/styles/jasny-bootstrap.css" rel="stylesheet">
   {{/into}}
   {{into slot="js_ready"}}
-    $('input.input-timepicker').timepicker({
-        minuteStep: 1,
-        showMeridian: false
-    });
+
   {{/into}}
   {{into slot="content"}}
       <div class="row-fluid">
@@ -119,21 +116,26 @@
                       $text = "Like";
                       $icon = "icon-heart";
                     } elseif($this->day->is_liked) {
-                      $icon = "icon-heart";
                       $text = "Unlike";
+                      $icon = "icon-heart";
                     } else {
                       $text = "Like";
                       $icon = "icon-heart-empty";
                     }
                     ?>
                     <div class="input-prepend">
-                      <span class="add-on add-on-small"><i class="icon <?= $icon ?>"></i></span>
+                      <span class="add-on add-on-small"><i class="icon <?= $icon ?>"></i> {$this->day->likes_count}</span>
                       <button class="btn btn-small<?= $disabled ? ' disabled' : '' ?>" type="button"> <?= $text ?></button>
                     </div>
                   </li>
                   <li>
                     <?php
-                    if($this->day->is_favorite) {
+                    $disabled = false;
+                    if(!property_exists($this->day, 'is_favorite')) {
+                      $disabled = true;
+                      $text = "Favorite";
+                      $icon = "icon-bookmark";
+                    } elseif($this->day->is_favorite) {
                       $text = "Unfavorite";
                       $icon = "icon-bookmark";
                     } else {
@@ -143,7 +145,7 @@
                     ?>
                     <div class="input-prepend">
                       <span class="add-on add-on-small"><i class="icon <?= $icon ?>"></i></span>
-                      <button class="btn btn-small" type="button"> <?= $text ?></button>
+                      <button class="btn btn-small<?= $disabled ? ' disabled' : '' ?>" type="button"> <?= $text ?></button>
                     </div>
                   </li>
                   <li>
