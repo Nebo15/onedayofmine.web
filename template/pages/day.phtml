@@ -116,8 +116,8 @@
                       $text = "Like";
                       $icon = "icon-heart";
                     } elseif($this->day->is_liked) {
-                      $icon = "icon-heart";
                       $text = "Unlike";
+                      $icon = "icon-heart";
                     } else {
                       $text = "Like";
                       $icon = "icon-heart-empty";
@@ -130,7 +130,12 @@
                   </li>
                   <li>
                     <?php
-                    if($this->day->is_favorite) {
+                    $disabled = false;
+                    if(!property_exists($this->day, 'is_favorite')) {
+                      $disabled = true;
+                      $text = "Favorite";
+                      $icon = "icon-bookmark";
+                    } elseif($this->day->is_favorite) {
                       $text = "Unfavorite";
                       $icon = "icon-bookmark";
                     } else {
