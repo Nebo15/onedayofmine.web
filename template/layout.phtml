@@ -95,7 +95,7 @@
         });
       } else {
         $('#login_button').click(function() {
-          $('#login_button').off('click').html('<i class="icon-refresh icon-spin"></i>');
+          $('#login_button').off('click').html('<i class="icon-large icon-refresh icon-spin"></i> Login');
           API.login(function() {
             window.location.reload();
           });
