@@ -63,7 +63,7 @@ var API = (function() {
         login_request.error(onLoginFail, true);
 
         Loader.setStatus('Login attempt failed');
-        Auth.getAccessToken(doLogin);
+        Auth.login(doLogin);
       }, true);
 
       var doLogin = function() {
