@@ -141,6 +141,7 @@
             like_current_state = false;
             likes_count--;
 
+            like_button.html('Like');
             $('#toggle_like_icon').html('<i class="icon icon-heart-empty"></i> ' + likes_count);
           });
           like_request.send();
@@ -150,6 +151,7 @@
             like_current_state = true;
             likes_count++;
 
+            like_button.html('Unlike');
             $('#toggle_like_icon').html('<i class="icon icon-heart"></i> ' + likes_count);
           });
           like_request.send();
