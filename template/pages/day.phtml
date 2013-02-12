@@ -129,7 +129,7 @@
 
     // Like toggle
     <?php if(property_exists($this->day, 'is_liked')) { ?>
-    var like_current_state = {$this->day->is_liked};
+    var like_current_state = {$this->day->is_liked|default:'false'};
     var likes_count = {$this->day->likes_count};
 
     var like_button = $('button#toggle_like');
