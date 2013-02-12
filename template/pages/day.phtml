@@ -15,6 +15,7 @@
     <link href="/styles/jasny-bootstrap.css" rel="stylesheet">
   {{/into}}
   {{into slot="js_ready"}}
+  <? if($this->is_owner) { ?>
     $('.moment-item').each(function() {
       var element = $(this);
       var id = element.attr('moment_id');
@@ -124,10 +125,11 @@
         final_description_request.send();
       }
     });
+    <? } ?>
 
     // Like toggle
     <?php if(property_exists($this->day, 'is_liked')) { ?>
-    var like_current_state = {$#day->is_liked};
+    var like_current_state = {$this->day->is_liked};
     var likes_count = {$this->day->likes_count};
 
     var like_button = $('button#toggle_like');
