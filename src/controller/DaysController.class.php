@@ -77,7 +77,7 @@ class DaysController extends BaseJsonController
 			$day->save();
 		}
 
-		$this->_importSaveAndAnswer($day, array('title', 'occupation', 'location', 'type'));
+		$this->_importSaveAndAnswer($day, array('title', 'occupation', 'location', 'type', 'final_description'));
 
 		return $this->_answerOk($this->toolkit->getExportHelper()->exportDay($day));
 	}

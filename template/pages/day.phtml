@@ -9,12 +9,164 @@
   {{/into}}
   {{into slot="js_include"}}
     <script src="/lib/vendor/bootstrap-fileupload.js"></script>
+    <script src="/lib/vendor/jquery.scrollTo-1.4.3.1-min.js"></script>
   {{/into}}
   {{into slot="css_include"}}
     <link href="/styles/jasny-bootstrap.css" rel="stylesheet">
   {{/into}}
   {{into slot="js_ready"}}
+    $('.moment-item').each(function() {
+      var element = $(this);
+      var id = element.attr('moment_id');
 
+      // Moment time
+      var time_input  = element.find('input[type=time]');
+      var time_button = element.find('#trigger_save_time');
+
+      time_input.change(function(event) {
+        time_button.removeClass('disabled').addClass('btn-success');
+      });
+
+      time_button.click(function() {
+        if(!time_button.hasClass('disabled')) {
+          console.log("new time " + time_input.val());
+
+          var found = false;
+          $('.moment-item').each(function() {
+            if($(this) == element && found)
+              return;
+
+              console.log(time_input.val() + '<' + $(this).find('input[type=time]').val());
+            if(time_input.val() < $(this).find('input[type=time]').val()) {
+              found = true;
+
+              var placeholder = element.next();
+              element.insertBefore($(this));
+              placeholder.insertAfter(element);
+              $(window).scrollTo(element, 300);
+            }
+          });
+
+          time_button.addClass('disabled').removeClass('btn-success');
+        }
+      });
+
+      // Moment delete
+      var delete_button = element.find('#trigger_delete');
+
+      delete_button.click(function() {
+        if(confirm("Do you really want to delete this moment?")) {
+          var delete_request = API.request('POST', '/moments/' + id + '/delete');
+          delete_request.success(function() {
+            element.fadeOut(500);
+            element.next().fadeOut(500);
+          });
+
+          delete_request.error(function() {
+            alert("We can't delete moment right now, please try again later or tell us about this issue");
+          });
+
+          delete_request.send();
+        }
+      });
+
+      // Moment description edit
+      var description = element.find('.moment-description');
+      var description_input  = description.find('textarea');
+      var description_button = description.find('button[type=submit]');
+
+      description_input.on('keyup', function(event) {
+        description_button.removeClass('disabled').addClass('btn-success');
+      });
+
+      description_button.click(function() {
+        if(!description_button.hasClass('disabled')) {
+          var description_request = API.request('POST', '/moments/' + id + '/update', {
+            description: description_input.val()
+          });
+
+          description_request.success(function() {
+            description_button.addClass('disabled').removeClass('btn-success');
+          });
+
+          description_request.error(function() {
+            description_button.addClass('btn-error').removeClass('btn-success');
+          });
+
+          description_request.send();
+        }
+      });
+    });
+
+    // Moment description edit
+    var final_description = $('.final-description');
+    var final_description_input  = final_description.find('textarea');
+    var final_description_button = final_description.find('button[type=submit]');
+
+    final_description_input.on('keyup', function(event) {
+      final_description_button.removeClass('disabled').addClass('btn-success');
+    });
+
+    final_description_button.click(function() {
+      if(!final_description_button.hasClass('disabled')) {
+        var final_description_request = API.request('POST', '/days/{$#day->id}/update', {
+          final_description: final_description_input.val()
+        });
+
+        final_description_request.success(function() {
+          final_description_button.addClass('disabled').removeClass('btn-success');
+        });
+
+        final_description_request.error(function() {
+          final_description_button.addClass('btn-error').removeClass('btn-success');
+        });
+
+        final_description_request.send();
+      }
+    });
+
+    // Like toggle
+    <?php if(property_exists($this->day, 'is_liked')) { ?>
+    var like_current_state = {$#day->is_liked};
+    var likes_count = {$this->day->likes_count};
+
+    var like_button = $('button#toggle_like');
+    like_button.click(function() {
+      if(!like_button.hasClass('disabled')) {
+        if(like_current_state == true) {
+          var like_request = API.request('POST', '/days/{$#day->id}/unlike');
+          like_request.success(function() {
+            like_current_state = false;
+            likes_count--;
+
+            $('#toggle_like_icon').html('<i class="icon icon-heart-empty"></i> ' + likes_count);
+          });
+          like_request.send();
+        } else {
+          var like_request = API.request('POST', '/days/{$#day->id}/like');
+          like_request.success(function() {
+            like_current_state = true;
+            likes_count++;
+
+            $('#toggle_like_icon').html('<i class="icon icon-heart"></i> ' + likes_count);
+          });
+          like_request.send();
+        }
+      }
+    });
+    <? } ?>
+
+    // Share toggle
+    $('button#toggle_share').click(function() {
+       if(!$(this).hasClass('disabled')) {
+        $(this).addClass('disabled')
+        var share_request = API.request('POST', '/days/{$#day->id}/share');
+        share_request.complete(function() {
+          $(this).removeClass('disabled');
+        });
+        share_request.send();
+      }
+    });
   {{/into}}
   {{into slot="content"}}
       <div class="row-fluid">
@@ -35,11 +187,16 @@
 
               {{list using="$#day->moments"}}
                   <ul class="unstyled">
+                      <? if($this->is_owner) { ?>
+                        <li class="well moment-item-placeholder">
+                          <a class="not-decorated with-shadow" data-toggle="modal" data-target="#add_moment_modal"><i class="icon-plus-sign icon-2x"></i></a>
+                        </li>
+                      <? } ?>
                       {{list:item}}
-                      <li class="well moment-item">
+                      <li class="well moment-item" moment_id="{$item->id}">
                           <? if($this->is_owner) { ?>
                             <span class="moment-controls-overlay">
-                              <a class="not-decorated with-shadow"><i class="icon-trash"></i></a>
+                              <a class="not-decorated with-shadow" id="trigger_delete"><i class="icon-trash"></i></a>
                             </span>
                           <? } ?>
 
@@ -48,7 +205,7 @@
                               <span class="input-prepend input-append">
                                 <span class="add-on add-on-small"><i class="icon-time"></i></span>
                                 <input type="time" class="input-mini add-on-small" value="{$item->time}" />
-                                <button class="btn btn-small disabled" type="button">Save</button>
+                                <button id="trigger_save_time" class="btn btn-small disabled" type="button">Save</button>
                               </span>
                             <? } else { ?>
                               <i class="icon-time"></i> {$item->time}
@@ -86,15 +243,15 @@
               {{/list}}
 
               <? if($this->is_owner || $this->day->final_description) { ?>
-                <p class="bubble">
+                <p class="bubble final-description">
                   <? if($this->is_owner) { ?>
                     <textarea rows="3" class="input-block-level" placeholder="Enter final description...">{$#day->final_description|default:""|nl2br}</textarea>
 
-                      <? if($this->day->final_description) { ?>
-                        <button type="submit" class="btn btn-block disabled">Save changes</button>
-                      <? } else { ?>
-                        <button class="btn btn-block<? if(count($this->day->moments) > 1) { ?> disabled<? } ?>" type="button">Close the day</button>
-                      <? } ?>
+                    <? if($this->day->final_description) { ?>
+                      <button type="submit" class="btn btn-block disabled">Save changes</button>
+                    <? } else { ?>
+                      <button type="submit" class="btn btn-block<? if(count($this->day->moments) > 1) { ?> disabled<? } ?>">Close the day</button>
+                    <? } ?>
                   <? } else { ?>
                     {$#day->final_description|default:""|nl2br}
                   <? } ?>
@@ -124,11 +281,11 @@
                     }
                     ?>
                     <div class="input-prepend">
-                      <span class="add-on add-on-small"><i class="icon <?= $icon ?>"></i> {$this->day->likes_count}</span>
-                      <button class="btn btn-small<?= $disabled ? ' disabled' : '' ?>" type="button"> <?= $text ?></button>
+                      <span id="toggle_like_icon" class="add-on add-on-small"><i class="icon <?= $icon ?>"></i> {$this->day->likes_count}</span>
+                      <button id="toggle_like" class="btn btn-small<?= $disabled ? ' disabled' : '' ?>" type="button"> <?= $text ?></button>
                     </div>
                   </li>
-                  <li>
+                  <!-- <li>
                     <?php
                     $disabled = false;
                     if(!property_exists($this->day, 'is_favorite')) {
@@ -147,9 +304,9 @@
                       <span class="add-on add-on-small"><i class="icon <?= $icon ?>"></i></span>
                       <button class="btn btn-small<?= $disabled ? ' disabled' : '' ?>" type="button"> <?= $text ?></button>
                     </div>
-                  </li>
+                  </li> -->
                   <li>
-                    <button class="btn btn-small" style="margin-top: 14px" type="button"><i class="icon icon-share"></i> Share</button>
+                    <button id="toggle_share" class="btn btn-small" style="margin-top: 14px" type="button"><i class="icon icon-share"></i> Share</button>
                   </li>
                 </ul>
               </span>
