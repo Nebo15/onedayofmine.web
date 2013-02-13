@@ -48,6 +48,10 @@ var Template = (function() {
   });
 
   return {
+    prepareTemplate: function(template) {
+      return template.html().split('[[').join('{{').split(']]').join('}}');
+    },
+
     compileElement: function(source, data, callback) {
       if(!templates_compiled[source.hashCode()]) {
         templates_compiled[source.hashCode()] = Handlebars.compile(source);

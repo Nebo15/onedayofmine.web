@@ -8,156 +8,238 @@
     <meta property="{$#facebook_app_namespace}:type" content="{$#day->type}" />
   {{/into}}
   {{into slot="js_include"}}
+    <script src="/lib/vendor/handlebars.js"></script>
     <script src="/lib/vendor/bootstrap-fileupload.js"></script>
     <script src="/lib/vendor/jquery.scrollTo-1.4.3.1-min.js"></script>
+    <script src="/lib/Template.js"></script>
   {{/into}}
   {{into slot="css_include"}}
     <link href="/styles/jasny-bootstrap.css" rel="stylesheet">
   {{/into}}
+  {{into slot="templates"}}
+    <script id="template_comments" type="text/x-handlebars-template">
+      [[#comments]]
+        <li class="comment-item" style="display:none" comment_id="[[id]]">
+          <img src="[[user.image_72]]" width="72" class="pull-left img-rounded" alt="" />
+
+          <div class="bubble left">
+            <p class="text">
+              [[text]]
+              <br />
+              <small>by <b><a href="/pages/[[user.id]]/user">[[user.name]]</a></b></small>
+            </p>
+          </div>
+        </li>
+      [[/comments]]
+    </script>
+  {{/into}}
+  <script>
   {{into slot="js_ready"}}
-  <? if($this->is_owner) { ?>
-    $('.moment-item').each(function() {
-      var element = $(this);
-      var id = element.attr('moment_id');
+    <? if($this->toolkit->getUser()) { ?>
+      <? if($this->is_owner) { ?>
+        $('.moment-item').each(function() {
+          var element = $(this);
+          var id = element.attr('moment_id');
 
-      // Moment time
-      var time_input  = element.find('input[type=time]');
-      var time_button = element.find('#trigger_save_time');
+          // Moment time
+          var time_input  = element.find('input[type=time]');
+          var time_button = element.find('#trigger_save_time');
 
-      time_input.change(function(event) {
-        time_button.removeClass('disabled').addClass('btn-success');
-      });
+          time_input.change(function(event) {
+            time_button.removeClass('disabled').addClass('btn-success');
+          });
 
-      time_button.click(function() {
-        if(!time_button.hasClass('disabled')) {
-          console.log("new time " + time_input.val());
+          time_button.click(function() {
+            if(!time_button.hasClass('disabled')) {
+              console.log("new time " + time_input.val());
 
-          var found = false;
-          $('.moment-item').each(function() {
-            if($(this) == element && found)
-              return;
+              var found = false;
+              $('.moment-item').each(function() {
+                if($(this) == element && found)
+                  return;
 
-              console.log(time_input.val() + '<' + $(this).find('input[type=time]').val());
-            if(time_input.val() < $(this).find('input[type=time]').val()) {
-              found = true;
+                  console.log(time_input.val() + '<' + $(this).find('input[type=time]').val());
+                if(time_input.val() < $(this).find('input[type=time]').val()) {
+                  found = true;
 
-              var placeholder = element.next();
-              element.insertBefore($(this));
-              placeholder.insertAfter(element);
-              $(window).scrollTo(element, 300);
+                  var placeholder = element.next();
+                  element.insertBefore($(this));
+                  placeholder.insertAfter(element);
+                  $(window).scrollTo(element, 300);
+                }
+              });
+
+              time_button.addClass('disabled').removeClass('btn-success');
             }
           });
 
-          time_button.addClass('disabled').removeClass('btn-success');
-        }
-      });
+          // Moment delete
+          var delete_button = element.find('#trigger_delete');
 
-      // Moment delete
-      var delete_button = element.find('#trigger_delete');
+          delete_button.click(function() {
+            if(confirm("Do you really want to delete this moment?")) {
+              var delete_request = API.request('POST', '/moments/' + id + '/delete');
+              delete_request.success(function() {
+                element.fadeOut(500);
+                element.next().fadeOut(500);
+              });
 
-      delete_button.click(function() {
-        if(confirm("Do you really want to delete this moment?")) {
-          var delete_request = API.request('POST', '/moments/' + id + '/delete');
-          delete_request.success(function() {
-            element.fadeOut(500);
-            element.next().fadeOut(500);
+              delete_request.error(function() {
+                alert("We can't delete moment right now, please try again later or tell us about this issue");
+              });
+
+              delete_request.send();
+            }
           });
 
-          delete_request.error(function() {
-            alert("We can't delete moment right now, please try again later or tell us about this issue");
+          // Moment description edit
+          var description = element.find('.moment-description');
+          var description_input  = description.find('textarea');
+          var description_button = description.find('button[type=submit]');
+
+          description_input.on('keyup', function(event) {
+            description_button.removeClass('disabled').addClass('btn-success');
           });
 
-          delete_request.send();
-        }
-      });
+          description_button.click(function() {
+            if(!description_button.hasClass('disabled')) {
+              var description_request = API.request('POST', '/moments/' + id + '/update', {
+                description: description_input.val()
+              });
 
-      // Moment description edit
-      var description = element.find('.moment-description');
-      var description_input  = description.find('textarea');
-      var description_button = description.find('button[type=submit]');
+              description_request.success(function() {
+                description_button.addClass('disabled').removeClass('btn-success');
+              });
 
-      description_input.on('keyup', function(event) {
-        description_button.removeClass('disabled').addClass('btn-success');
-      });
+              description_request.error(function() {
+                description_button.addClass('btn-error').removeClass('btn-success');
+              });
 
-      description_button.click(function() {
-        if(!description_button.hasClass('disabled')) {
-          var description_request = API.request('POST', '/moments/' + id + '/update', {
-            description: description_input.val()
+              description_request.send();
+            }
           });
-
-          description_request.success(function() {
-            description_button.addClass('disabled').removeClass('btn-success');
-          });
-
-          description_request.error(function() {
-            description_button.addClass('btn-error').removeClass('btn-success');
-          });
-
-          description_request.send();
-        }
-      });
-    });
-
-    // Moment description edit
-    var final_description = $('.final-description');
-    var final_description_input  = final_description.find('textarea');
-    var final_description_button = final_description.find('button[type=submit]');
-
-    final_description_input.on('keyup', function(event) {
-      final_description_button.removeClass('disabled').addClass('btn-success');
-    });
-
-    final_description_button.click(function() {
-      if(!final_description_button.hasClass('disabled')) {
-        var final_description_request = API.request('POST', '/days/{$#day->id}/update', {
-          final_description: final_description_input.val()
         });
 
-        final_description_request.success(function() {
-          final_description_button.addClass('disabled').removeClass('btn-success');
+        // Moment description edit
+        var final_description = $('.final-description');
+        var final_description_input  = final_description.find('textarea');
+        var final_description_button = final_description.find('button[type=submit]');
+
+        final_description_input.on('keyup', function(event) {
+          final_description_button.removeClass('disabled').addClass('btn-success');
         });
 
-        final_description_request.error(function() {
-          final_description_button.addClass('btn-error').removeClass('btn-success');
+        final_description_button.click(function() {
+          if(!final_description_button.hasClass('disabled')) {
+            var final_description_request = API.request('POST', '/days/{$#day->id}/update', {
+              final_description: final_description_input.val()
+            });
+
+            final_description_request.success(function() {
+              final_description_button.addClass('disabled').removeClass('btn-success');
+            });
+
+            final_description_request.error(function() {
+              final_description_button.addClass('btn-error').removeClass('btn-success');
+            });
+
+            final_description_request.send();
+          }
         });
+      <? } ?>
 
-        final_description_request.send();
-      }
-    });
-    <? } ?>
+      // Comments updater
+      var comments_loader = $('.comments-loader');
+      var comments_loader_button =  comments_loader.find('button[type=button]');
+      var comments_template = Template.prepareTemplate($('#template_comments'));
 
-    // Like toggle
-    <?php if(property_exists($this->day, 'is_liked')) { ?>
-    var like_current_state = {$this->day->is_liked|default:'false'};
-    var likes_count = {$this->day->likes_count};
-
-    var like_button = $('button#toggle_like');
-    like_button.click(function() {
-      if(!like_button.hasClass('disabled')) {
-        if(like_current_state == true) {
-          var like_request = API.request('POST', '/days/{$#day->id}/unlike');
-          like_request.success(function() {
-            like_current_state = false;
-            likes_count--;
-
-            like_button.html('Like');
-            $('#toggle_like_icon').html('<i class="icon icon-heart-empty"></i> ' + likes_count);
+      var updateComments = function() {
+        if(!comments_loader_button.hasClass('disabled')) {
+          var comments_request = API.request('GET', '/days/{$#day->id}/comments', {
+            from: comments.find('li[comment_id]').last().attr('comment_id')
           });
-          like_request.send();
-        } else {
-          var like_request = API.request('POST', '/days/{$#day->id}/like');
-          like_request.success(function() {
-            like_current_state = true;
-            likes_count++;
 
-            like_button.html('Unlike');
-            $('#toggle_like_icon').html('<i class="icon icon-heart"></i> ' + likes_count);
+          comments_loader_button.addClass('disabled');
+
+          comments_request.success(function(response) {
+            comments_loader_button.removeClass('disabled btn-error');
+
+            comments_loader.before(Template.compileElement(comments_template, {comments:response.data.result}));
+
+            $('.comment-item').fadeIn();
           });
-          like_request.send();
+
+          comments_request.error(function() {
+            comments_loader_button.addClass('btn-error');
+          });
+
+          comments_request.send();
         }
-      }
-    });
+      };
+
+      comments_loader_button.click(updateComments);
+
+      // Comments
+      var comments = $('.comments');
+      var comments_input  = comments.find('textarea');
+      var comments_button = comments.find('button[type=submit]');
+
+      comments_input.on('keyup', function(event) {
+        comments_button.removeClass('disabled').addClass('btn-success');
+      });
+
+      comments_button.click(function() {
+        if(!comments_button.hasClass('disabled')) {
+          var comments_request = API.request('POST', '/days/{$#day->id}/comment', {
+            text: comments_input.val()
+          });
+
+          comments_request.success(function() {
+            comments_input.val('');
+            updateComments();
+            comments_button.addClass('disabled').removeClass('btn-success');
+          });
+
+          comments_request.error(function() {
+            comments_button.addClass('btn-error').removeClass('btn-success');
+          });
+
+          comments_request.send();
+        }
+      });
+
+      // Like toggle
+      <?php if(property_exists($this->day, 'is_liked')) { ?>
+        var like_current_state = {$this->day->is_liked|default:'false'};
+        var likes_count = {$this->day->likes_count};
+
+        var like_button = $('button#toggle_like');
+        like_button.click(function() {
+          if(!like_button.hasClass('disabled')) {
+            if(like_current_state == true) {
+              var like_request = API.request('POST', '/days/{$#day->id}/unlike');
+              like_request.success(function() {
+                like_current_state = false;
+                likes_count--;
+
+                like_button.text('Like');
+                $('#toggle_like_icon').html('<i class="icon icon-heart-empty"></i> ' + likes_count);
+              });
+              like_request.send();
+            } else {
+              var like_request = API.request('POST', '/days/{$#day->id}/like');
+              like_request.success(function() {
+                like_current_state = true;
+                likes_count++;
+
+                like_button.text('Unlike');
+                $('#toggle_like_icon').html('<i class="icon icon-heart"></i> ' + likes_count);
+              });
+              like_request.send();
+            }
+          }
+        });
+      <? } ?>
     <? } ?>
 
     // Share toggle
@@ -172,6 +254,7 @@
       }
     });
   {{/into}}
+  </script>
   {{into slot="content"}}
       <div class="row-fluid">
           <div class="span6 offset3">
@@ -188,6 +271,10 @@
                 {$#day->type} by <b><a href="/pages/{$#day->user->id}/user">{$#day->user->name}</a></b>
                 <!-- @ {$#day.location} -->
               </p>
+
+              <div class="responsive-scroll-helper">
+                Go to comments
+              </div>
 
               {{list using="$#day->moments"}}
                   <ul class="unstyled">
@@ -269,6 +356,7 @@
 
               <span class="pull-right">
                 <ul class="unstyled inline">
+                  <? if($this->toolkit->getUser()) { ?>
                   <li>
                     <?php
                     $disabled = false;
@@ -309,6 +397,7 @@
                       <button class="btn btn-small<?= $disabled ? ' disabled' : '' ?>" type="button"> <?= $text ?></button>
                     </div>
                   </li> -->
+                  <? } ?>
                   <li>
                     <button id="toggle_share" class="btn btn-small" style="margin-top: 14px" type="button"><i class="icon icon-share"></i> Share</button>
                   </li>
@@ -357,41 +446,44 @@
                       </div>
                   </p>
                 </div>
-                <!-- <div class="modal-footer">
-                  <a href="#" class="btn">Close</a>
-                  <a href="#" class="btn btn-primary">Save changes</a>
-                </div> -->
               </div>
 
               <br class="clearfix" /><br />
               <hr/>
 
-              <span class="pull-right">
-                <i class="icon icon-comments"></i> {$#day->comments_count}
-              </span>
+              <div class="comments">
+                <span class="pull-right not-decorated with-shadow"><i class="icon-comments"></i> {$this->day->comments_count}</span>
+                <h4>Comments:</h4>
+                {{list using="$#day->comments"}}
+                  <ul class="unstyled">
+                    {{list:item}}
+                      <li class="comment-item" comment_id="{$item->id}">
+                        <img src="{$item->user->image_72}" width="72" class="pull-left img-rounded" alt="" />
 
-              <h4>Comments:</h4>
-              {{list using="$#day->comments"}}
-                <ul class="unstyled">
-                  {{list:item}}
-                    <li class="comment-item">
-                      <img src="{$item->user->image_72}" width="72" class="pull-left img-rounded" alt="" />
-
-                      <div class="bubble left">
-                        <p class="text">
-                          {$item->text}
-                          <br />
-                          <small>by <b><a href="/pages/{$item->user->id}/user">{$item->user->name}</a></b></small>
-                        </p>
-                      </div>
-
-                      <br class="clearfix" />
+                        <div class="bubble left">
+                          <p class="text">
+                            {$item->text}
+                            <br />
+                            <small>by <b><a href="/pages/{$item->user->id}/user">{$item->user->name}</a></b></small>
+                          </p>
+                        </div>
+                      </li>
+                    {{/list:item}}
+                    <li class="comments-loader">
+                      <? if($this->day->comments_count > 3) { ?>
+                          <button id="toggle_comments" class="btn btn-small btn-block" type="button">
+                            Load more comments
+                          </button>
+                      <? } ?>
                     </li>
-                  {{/list:item}}
-                </ul>
-              {{/list}}
-              <textarea rows="3" class="input-block-level"></textarea>
-              <button class="btn btn-block" type="button">Send a comment</button>
+                  </ul>
+                {{/list}}
+
+                <? if($this->toolkit->getUser()) { ?>
+                  <textarea rows="3" class="input-block-level"></textarea>
+                  <button type="submit" class="btn btn-block disabled">Send a comment</button>
+                <? } ?>
+              </div>
           </div>
       </div>
   {{/into}}

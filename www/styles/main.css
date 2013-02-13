@@ -153,6 +153,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .comment-item {
   margin-top: 10px;
+  clear: both;
 }
 
 .comment-item .text {
@@ -167,8 +168,15 @@ h1, h2, h3, h4, h5, h6 {
   margin-right: 20px;
 }
 
-.comment-item .bubble {
+.comment-item .bubble,
+.comments-loader {
   margin-left: 100px;
+}
+
+.comments-loader {
+  clear: both;
+  margin-top: 10px;
+  margin-bottom: 15px;
 }
 
 /* Speech bubbles */
