@@ -1,6 +1,7 @@
 <?php
 
 $conf = [
+	'enabled' => true,
   'host'  => 'localhost',
   'port'  => 3312,
 

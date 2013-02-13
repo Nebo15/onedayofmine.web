@@ -10,6 +10,7 @@ lmb_require('src/service/ImageHelper.class.php');
 lmb_require('src/service/odExportHelper.class.php');
 lmb_require('src/service/odRequestsLog.class.php');
 lmb_require('src/service/odSearchService.class.php');
+lmb_require('src/service/odFakeSearchService.class.php');
 lmb_require('src/service/odAsyncJobs.class.php');
 lmb_require('tests/src/service/odJobQueueClientForTests.class.php');
 lmb_require('src/model/User.class.php');
@@ -97,7 +98,11 @@ class odTools extends lmbAbstractTools
   function getSearchService($conf_name)
   {
     if(!array_key_exists($conf_name, $this->search_clients)) {
+
       $config = lmbToolkit::instance()->getConf('sphinx');
+
+	    if(false == $config->enabled)
+		    return new odFakeSearchService($config);
 
       lmb_assert_true(array_key_exists($conf_name, $config), "Sphinx configuration not found for '{$conf_name}'");
 
