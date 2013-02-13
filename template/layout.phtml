@@ -101,11 +101,13 @@
         });
       }
 
+      {{slot id="js_ready"/}}
+    });
+
+    $(document).load(function() {
       $('.thumbnails').masonry({
         itemSelector: 'li'
       });
-
-      {{slot id="js_ready"/}}
     });
   </script>
 
