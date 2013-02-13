@@ -262,12 +262,13 @@
     <? } ?>
 
     // Share toggle
-    $('button#toggle_share').click(function() {
-       if(!$(this).hasClass('disabled')) {
-        $(this).addClass('disabled')
+    var share_button = $('button#toggle_share');
+    share_button.click(function() {
+       if(!share_button.hasClass('disabled')) {
+        share_button.addClass('disabled')
         var share_request = API.request('POST', '/days/{$#day->id}/share');
         share_request.complete(function() {
-          $(this).removeClass('disabled');
+          share_button.removeClass('disabled');
         });
         share_request.send();
       }
