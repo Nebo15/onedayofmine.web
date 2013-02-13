@@ -53,6 +53,9 @@
             if(!time_button.hasClass('disabled')) {
               console.log("new time " + time_input.val());
 
+              // time_input.addClass('disabled');
+              // time_button.addClass('disabled');
+
               var found = false;
               $('.moment-item').each(function() {
                 if($(this) == element && found)
@@ -103,11 +106,15 @@
 
           description_button.click(function() {
             if(!description_button.hasClass('disabled')) {
+              description_input.prop("disabled", true);
+              description_button.addClass('disabled');
+
               var description_request = API.request('POST', '/moments/' + id + '/update', {
                 description: description_input.val()
               });
 
               description_request.success(function() {
+                description_input.prop("disabled", false);
                 description_button.addClass('disabled').removeClass('btn-success');
               });
 
@@ -131,11 +138,15 @@
 
         final_description_button.click(function() {
           if(!final_description_button.hasClass('disabled')) {
+            final_description_input.prop("disabled", true);
+            final_description_button.addClass('disabled');
+
             var final_description_request = API.request('POST', '/days/{$#day->id}/update', {
               final_description: final_description_input.val()
             });
 
             final_description_request.success(function() {
+              final_description_input.prop("disabled", false);
               final_description_button.addClass('disabled').removeClass('btn-success');
             });
 
@@ -190,12 +201,16 @@
 
       comments_button.click(function() {
         if(!comments_button.hasClass('disabled')) {
+          comments_input.prop("disabled", true);
+          comments_button.addClass('disabled');
+
           var comments_request = API.request('POST', '/days/{$#day->id}/comment', {
             text: comments_input.val()
           });
 
           comments_request.success(function() {
             comments_input.val('');
+            comments_input.prop("disabled", false);
             updateComments();
             comments_button.addClass('disabled').removeClass('btn-success');
           });
@@ -216,6 +231,8 @@
         var like_button = $('button#toggle_like');
         like_button.click(function() {
           if(!like_button.hasClass('disabled')) {
+            like_button.addClass('disabled');
+
             if(like_current_state == true) {
               var like_request = API.request('POST', '/days/{$#day->id}/unlike');
               like_request.success(function() {
@@ -224,6 +241,7 @@
 
                 like_button.text('Like');
                 $('#toggle_like_icon').html('<i class="icon icon-heart-empty"></i> ' + likes_count);
+                like_button.removeClass('disabled');
               });
               like_request.send();
             } else {
@@ -234,6 +252,7 @@
 
                 like_button.text('Unlike');
                 $('#toggle_like_icon').html('<i class="icon icon-heart"></i> ' + likes_count);
+                like_button.removeClass('disabled');
               });
               like_request.send();
             }
