@@ -273,6 +273,11 @@
         share_request.send();
       }
     });
+
+    // Mobile nav comments
+    $('.mobile-nav #comments').click(function() {
+      $(document).scrollTo($('.comments'), 400);
+    });
   {{/into}}
   </script>
   {{into slot="content"}}
@@ -292,8 +297,16 @@
                 <!-- @ {$#day.location} -->
               </p>
 
-              <div class="responsive-scroll-helper">
-                Go to comments
+              <div class="mobile-nav">
+                <h5>Go to:</h5>
+                <ul class="unstyled">
+                  <li>
+                    <div class="input-prepend">
+                      <span class="add-on add-on-small"><i class="icon-comments"></i> {$this->day->comments_count}</span>
+                      <button id="comments" class="btn btn-small" type="button">Comments</button>
+                    </div>
+                  </li>
+                </ul>
               </div>
 
               {{list using="$#day->moments"}}
@@ -374,8 +387,8 @@
                 </div>
               <? } ?>
 
-              <span class="pull-right">
-                <ul class="unstyled inline">
+              <div class="day-user-actions">
+                <ul class="pull-right unstyled inline">
                   <? if($this->toolkit->getUser()) { ?>
                   <li>
                     <?php
@@ -422,53 +435,8 @@
                     <button id="toggle_share" class="btn btn-small" style="margin-top: 14px" type="button"><i class="icon icon-share"></i> Share</button>
                   </li>
                 </ul>
-              </span>
-
-              <div id="add_moment_modal" class="modal hide fade">
-                <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                  <h3>Add moment</h3>
-                </div>
-                <div class="modal-body">
-                  <p>
-                      <h4>From your PC:</h4>
-                      <div class="text-center">
-                        <div class="fileupload fileupload-new" data-provides="fileupload">
-                          <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
-                            <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&text=no+image" />
-                          </div>
-                          <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
-                          <div>
-                            <span class="btn btn-file">
-                              <span class="fileupload-new">Select image</span>
-                              <span class="fileupload-exists">Change</span>
-                              <input type="file" />
-                            </span>
-                            <a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
-                          </div>
-                        </div>
-                      </div>
-
-                      <h4>Import from:</h4>
-                      <div class="text-center">
-                        <a class="btn">
-                            <i class="icon icon-large icon-camera-retro"></i>
-                            Instagram
-                        </a>
-                        <a class="btn disabled">
-                            <i class="icon icon-large icon-camera"></i>
-                            Flickr
-                        </a>
-                        <a class="btn disabled">
-                            <i class="icon icon-large icon-facebook-sign"></i>
-                            Facebook
-                        </a>
-                      </div>
-                  </p>
-                </div>
               </div>
 
-              <br class="clearfix" /><br />
               <hr/>
 
               <div class="comments">
@@ -505,6 +473,50 @@
                 <? } ?>
               </div>
           </div>
+      </div>
+
+      <div id="add_moment_modal" class="modal hide fade">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h3>Add moment</h3>
+        </div>
+        <div class="modal-body">
+          <p>
+              <h4>From your PC:</h4>
+              <div class="text-center">
+                <div class="fileupload fileupload-new" data-provides="fileupload">
+                  <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
+                    <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&text=no+image" />
+                  </div>
+                  <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                  <div>
+                    <span class="btn btn-file">
+                      <span class="fileupload-new">Select image</span>
+                      <span class="fileupload-exists">Change</span>
+                      <input type="file" />
+                    </span>
+                    <a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
+                  </div>
+                </div>
+              </div>
+
+              <h4>Import from:</h4>
+              <div class="text-center">
+                <a class="btn">
+                    <i class="icon icon-large icon-camera-retro"></i>
+                    Instagram
+                </a>
+                <a class="btn disabled">
+                    <i class="icon icon-large icon-camera"></i>
+                    Flickr
+                </a>
+                <a class="btn disabled">
+                    <i class="icon icon-large icon-facebook-sign"></i>
+                    Facebook
+                </a>
+              </div>
+          </p>
+        </div>
       </div>
   {{/into}}
 {{/wrap}}

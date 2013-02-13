@@ -83,6 +83,10 @@ h1, h2, h3, h4, h5, h6 {
   clear: both;
 }
 
+.day-user-actions {
+  height: 45px;
+}
+
 .moment-item {
   position: relative;
 }
@@ -248,6 +252,12 @@ ol.inline >li:first-child {
 }
 
 /* Responsive */
+@media (min-width: 500px) {
+  .mobile-nav {
+    display: none;
+  }
+}
+
 @media (max-width: 500px) {
   .comment-item img {
     width: 36px;
