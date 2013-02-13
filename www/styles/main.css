@@ -62,10 +62,10 @@ h1, h2, h3, h4, h5, h6 {
   -moz-column-count: 4;
   -moz-column-gap: 10px;
   -moz-column-fill: auto;
-  -webkit-column-count: 3;
+  -webkit-column-count: 4;
   -webkit-column-gap: 10px;
   -webkit-column-fill: auto;
-  column-count: 3;
+  column-count: 4;
   column-gap: 15px;
   column-fill: auto;
   /*margin: 20px;*/
