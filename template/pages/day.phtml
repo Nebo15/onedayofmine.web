@@ -442,21 +442,22 @@
               <div class="comments">
                 <span class="pull-right not-decorated with-shadow"><i class="icon-comments"></i> {$this->day->comments_count}</span>
                 <h4>Comments:</h4>
-                {{list using="$#day->comments"}}
                   <ul class="unstyled">
-                    {{list:item}}
-                      <li class="comment-item" comment_id="{$item->id}">
-                        <img src="{$item->user->image_72}" width="72" class="pull-left img-rounded" alt="" />
+                    {{list using="$#day->comments"}}
+                      {{list:item}}
+                        <li class="comment-item" comment_id="{$item->id}">
+                          <img src="{$item->user->image_72}" width="72" class="pull-left img-rounded" alt="" />
 
-                        <div class="bubble left">
-                          <p class="text">
-                            {$item->text}
-                            <br />
-                            <small>by <b><a href="/pages/{$item->user->id}/user">{$item->user->name}</a></b></small>
-                          </p>
-                        </div>
-                      </li>
-                    {{/list:item}}
+                          <div class="bubble left">
+                            <p class="text">
+                              {$item->text}
+                              <br />
+                              <small>by <b><a href="/pages/{$item->user->id}/user">{$item->user->name}</a></b></small>
+                            </p>
+                          </div>
+                        </li>
+                      {{/list:item}}
+                    {{/list}}
                     <li class="comments-loader">
                       <? if($this->day->comments_count > 3) { ?>
                           <button id="toggle_comments" class="btn btn-small btn-block" type="button">
@@ -465,7 +466,6 @@
                       <? } ?>
                     </li>
                   </ul>
-                {{/list}}
 
                 <? if($this->toolkit->getUser()) { ?>
                   <textarea rows="3" class="input-block-level"></textarea>
