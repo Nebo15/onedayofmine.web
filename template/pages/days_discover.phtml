@@ -3,22 +3,26 @@ $this->title = "Interesting days";
 $this->menu = 'interesting';
 ?>
 {{wrap with="layout.phtml"}}
-{{into slot="content"}}
-	{{list using="$#days"}}
-		<ul class="thumbnails">
-				{{list:item}}
-		    <li class="span3">
-				    <a href="/pages/{$item->id}/day">
-			        <div class="thumbnail">
-					        <?php $image = $item->image_266 ? $item->image_266 : ($item->moments) ? $item->moments[0]->image_266 : '/img/no_photo.png'; ?>
-			            <img src="{$image}" alt="{$item->final_description}" width="266" height="266">
-			            <h5>{$item->title}</h5>
-			            <p><small>{$item->final_description}</small></p>
-			        </div>
-            </a>
-		    </li>
-				{{/list:item}}
-		</ul>
-	{{/list}}
-{{/into}}
+  {{into slot="content"}}
+    <div class="row-fluid">
+      <div class="span10 offset1">
+      	{{list using="$#days"}}
+      		<ul class="thumbnails">
+    				{{list:item}}
+      		    <li class="span3">
+      				    <a href="/pages/{$item->id}/day">
+      			        <div class="thumbnail">
+      					        <?php $image = $item->image_266 ? $item->image_266 : ($item->moments) ? $item->moments[0]->image_266 : '/img/no_photo.png'; ?>
+      			            <img src="{$image}" alt="{$item->final_description}" width="266" height="266">
+      			            <h5>{$item->title}</h5>
+      			            <p><small>{$item->final_description}</small></p>
+      			        </div>
+                  </a>
+      		    </li>
+    				{{/list:item}}
+      		</ul>
+      	{{/list}}
+      </div>
+    </div>
+  {{/into}}
 {{/wrap}}
