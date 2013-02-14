@@ -20,60 +20,26 @@ $this->menu = '';
         <div class="comments">
             <span class="pull-right not-decorated with-shadow"></span>
             <ul class="unstyled">
-                <li class="comment-item">
-                    <img src="http://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Kutuzov_by_Volkov.jpg/240px-Kutuzov_by_Volkov.jpg" width="72" class="pull-left img-rounded" alt="" />
-                    <div class="bubble left">
-                        <p class="text">
-                            Новый день <a href="/pages/2/day">Катаемся, с друзьями, в Альпах</a>
-                            <br />
-                            <small>by <b><a href="/pages/id/user">Мишка &quot;одноглазый&quot;</a></b> at <b>time</b></small>
-                        </p>
-                    </div>
-                </li>
-                <li class="comment-item">
-		                <a href="#">
-                        <img src="http://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Helene_Paris_David.jpg/220px-Helene_Paris_David.jpg" width="72" class="pull-left img-rounded"/>
-                    </a>
-                    <div class="bubble left">
-                        <p class="text">
-                            Новый момент в день <a href="">Подарочный конь от данайцев</a>
-                            <br />
-                            <ul class="unstyled">
-                                <li><img src="http://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Trojan_horse_%C3%87anakkale.jpg/220px-Trojan_horse_%C3%87anakkale.jpg" width="133"></li>
-                            </ul>
-                            <small>by <b><a href="/pages/id/user">Парис из Трои</a></b> at <b>time</b></small>
-                        </p>
-                    </div>
-                </li>
-                <li class="comment-item">
-                    <img src="http://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/DelarocheNapoleon.jpg/220px-DelarocheNapoleon.jpg" width="72" class="pull-left img-rounded" alt="" />
-                    <div class="bubble left">
-                        <p class="text">
-                            Прокомментировал ваш день <a href="">Смог в Москве 2010</a>
-                            <br />
-                            <blockquote>
-                                Мисье, вы ничего не знаете о смогах в Москве. Вот помню в прошлом году, мы с ребятами...
-                            </blockquote>
-                            <small>by <b><a href="/pages/id/user">Наполеон (Боня Островной)</a></b> at <b>time</b></small>
-                        </p>
-                    </div>
-                </li>
-                <li class="comment-item">
-                    <img src="http://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/DelarocheNapoleon.jpg/220px-DelarocheNapoleon.jpg" width="72" class="pull-left img-rounded" alt="" />
-                    <div class="bubble left">
-                        <p class="text">
-                            Ответ на ваш комментарий к дню <a href="">Смог в Москве 2010</a>
-                            <br />
-                        <blockquote>
-		                        <blockquote>
-                                Ни разу не видел такого! Хоррор можно было снимать.
-		                        </blockquote>
-                            Мисье, вы ничего не знаете о смогах в Москве. Вот помню в прошлом году, мы с ребятами...
-                        </blockquote>
-                        <small>by <b><a href="/pages/id/user">Наполеон (Боня Островной)</a></b> at <b>time</b></small>
-                        </p>
-                    </div>
-                </li>
+            {{list using="$#news"}}
+	              {{list:item}}
+		                <li class="comment-item">
+		                    <img src="{$item.sender.image_72}" width="72" class="pull-left img-rounded" alt="" />
+		                    <div class="bubble left">
+		                        <p class="text">
+		                            {$item.text|raw}
+		                            <br />
+                                <ul class="unstyled">
+                                    <li><img src="{$item.moment.image_266}" width="72"></li>
+                                </ul>
+			                          <blockquote>
+			                              {$item.day_comment.text}{$item.moment_comment.text}
+                                </blockquote>
+		                            <small><b>{$item.time|date:'M j \a\t g:m a'}</b></small>
+		                        </p>
+		                    </div>
+		                </li>
+                {{/list:item}}
+            {{/list}}
             </ul>
         </div>
 		</div>
