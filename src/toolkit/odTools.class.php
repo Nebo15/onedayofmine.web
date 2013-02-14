@@ -101,12 +101,16 @@ class odTools extends lmbAbstractTools
 
       $config = lmbToolkit::instance()->getConf('sphinx');
 
-	    if(false == $config->enabled)
-		    return new odFakeSearchService($config);
-
       lmb_assert_true(array_key_exists($conf_name, $config), "Sphinx configuration not found for '{$conf_name}'");
 
-      $index_conf         = $config[$conf_name];
+	    if(false == $config->enabled)
+	    {
+		    $fake = new odFakeSearchService($config);
+				$fake->model_name = $conf_name;
+		    return $fake;
+	    }
+
+	    $index_conf         = $config[$conf_name];
       if(!array_key_exists('host', $index_conf))
         $index_conf['host'] = $config['host'];
 
