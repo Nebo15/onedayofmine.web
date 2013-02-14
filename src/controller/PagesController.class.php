@@ -130,4 +130,9 @@ class PagesController extends lmbController
 				: new stdClass;
 		return parent::performAction();
 	}
+
+	protected function _getUser()
+	{
+		return $this->toolkit->getUser();
+	}
 }

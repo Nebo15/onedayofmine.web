@@ -19,19 +19,71 @@
 		{{/list}}
 {{/template}}
 
-<script id="days_list" type="text/x-handlebars-template">
-    <ul class="thumbnails">
-        [[#days]]
-        <li class="span3">
-            <div class="thumbnail">
-                <a href="/pages/[[id]]/day">
-                    <img src="[[image_532]][[#unless image_532]]/img/no_photo.png[[/unless]]" alt="[[final_description]]">
-                    <h3>[[title]]</h3>
-                </a>
-                <p><small>[[final_description]]</small></p>
+{{template name='users_list'}}
+		{{list using="$users"}}
+		    <ul class="unstyled">
+		        {{list:item}}
+            <li style="background-color:#eeeeee">
+                <div class="row" >
+                    <div class="span1">
+                        <img src="http://images.instagram.com/profiles/profile_1450621_75sq_1360187746.jpg"/>
+                    </div>
+                    <div class="span5">
+                        <a href="">{$item.name}</a> - occupation from location
+                        <small>asdasdas</small>
+                        <div class="pull-right" style="height:70px;">
+                            <a href="#" class="btn btn-danger" style="margin:17px 10px 0 0">Unfollow</a>
+                        </div>
+                    </div>
+                </div>
+            </li>
+		        {{/list:item}}
+		    </ul>
+				{{list:default}}
+					Empty
+				{{/list:default}}
+		{{/list}}
+{{/template}}
+
+<script id="users_list" type="text/x-handlebars-template">
+    <ul class="unstyled">
+        [[#users]]
+        <li style="background-color:#eeeeee; margin-top:10px">
+            <div class="row" >
+                <div class="span1">
+                    <img src="[[image]]"/>
+                </div>
+                <div class="span5">
+                    <a href="">[[name]]</a>
+                    <small>[[text]]</small>
+                    <div class="pull-right" style="height:70px;">
+                        <a href="#" class="btn [[btn_class]]" style="margin:17px 10px 0 0" [[btn_attr]]="[[btn_value]]">[[btn_text]]</a>
+                    </div>
+                </div>
             </div>
         </li>
-        [[/days]]
+        [[/users]]
+    </ul>
+</script>
+
+<script id="users_list" type="text/x-handlebars-template">
+    <ul class="unstyled">
+        [[#users]]
+            <li style="background-color:#eeeeee">
+                <div class="row" >
+                    <div class="span1">
+                        <img src="http://images.instagram.com/profiles/profile_1450621_75sq_1360187746.jpg"/>
+                    </div>
+                    <div class="span5">
+                        <a href="">Name</a> - occupation from location
+                        <small>asdasdas</small>
+                        <div class="pull-right" style="height:70px;">
+                            <a href="#" class="btn btn-danger" style="margin:17px 10px 0 0">Unfollow</a>
+                        </div>
+                    </div>
+                </div>
+            </li>
+        [[/users]]
     </ul>
 </script>
 
