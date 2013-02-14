@@ -24,8 +24,12 @@
 
           <div class="bubble left">
             <p class="text">
+              [[#if-eq user.id {$this->current_user->id}]]
+                <a class="pull-right not-decorated with-shadow" id="trigger_delete"><i class="icon-trash"></i></a>
+              [[/if-eq]]
+
               [[text]]
-              <br />
+
               <small>by <b><a href="/pages/[[user.id]]/user">[[user.name]]</a></b></small>
             </p>
           </div>
@@ -89,7 +93,7 @@
 
               delete_request.error(function() {
                 alert("We can't delete moment right now, please try again later or tell us about this issue");
-              });
+              }, true);
 
               delete_request.send();
             }
@@ -163,11 +167,32 @@
       var comments = $('.comments');
       var comments_input  = comments.find('textarea');
       var comments_button = comments.find('button[type=submit]');
+      var comments_delete_button_selector = '#trigger_delete';
+      var comments_delete_button = comments.find(comments_delete_button_selector);
       var comments_counter = comments.find('#comments_counter');
 
       var comments_loader = $('.comments-loader');
       var comments_loader_button =  comments_loader.find('button[type=button]');
       var comments_template = Template.prepareTemplate($('#template_comments'));
+
+      var deleteComment = function() {
+        var element = $(this).closest('[comment_id]');
+        var id = element.attr('comment_id');
+
+        if(confirm("Do you really want to delete your comment?")) {
+          var delete_request = API.request('POST', '/day_comments/' + id + '/delete');
+          delete_request.success(function() {
+            element.fadeOut(500);
+            element.remove();
+          });
+
+          delete_request.error(function() {
+            alert("We can't delete comment right now, please try again later or tell us about this issue");
+          }, true);
+
+          delete_request.send();
+        }
+      };
 
       var updateComments = function() {
         if(!comments_loader_button.hasClass('disabled')) {
@@ -180,7 +205,11 @@
           comments_request.success(function(response) {
             comments_loader_button.removeClass('disabled btn-error');
 
-            comments_loader.before(Template.compileElement(comments_template, {comments:response.data.result}));
+            var tmp = $($.trim(Template.compileElement(comments_template, {comments:response.data.result})));
+
+            tmp.find(comments_delete_button_selector).click(deleteComment);
+
+            comments_loader.before(tmp);
 
             $('.comment-item').fadeIn();
 
@@ -231,6 +260,8 @@
           comments_request.send();
         }
       });
+
+      comments_delete_button.click(deleteComment);
 
       // Like toggle
       <?php if(property_exists($this->day, 'is_liked')) { ?>
@@ -297,7 +328,7 @@
                   <a class="not-decorated with-shadow"><i class="icon-trash"></i></a>
                 </span>
               <? } ?>
-              <h3>{$#day->title}</h3>
+              <h3 contenteditable>{$#day->title}</h3>
               <p class="muted day-info">
                 <span class="pull-right">
                   <i class="icon icon-calendar"></i> {$#day->utime}
@@ -462,8 +493,12 @@
 
                           <div class="bubble left">
                             <p class="text">
+                              <? if($item->user->id == $this->current_user->id) { ?>
+                                <a class="pull-right not-decorated with-shadow" id="trigger_delete"><i class="icon-trash"></i></a>
+                              <? } ?>
+
                               {$item->text}
-                              <br />
+
                               <small>by <b><a href="/pages/{$item->user->id}/user">{$item->user->name}</a></b></small>
                             </p>
                           </div>

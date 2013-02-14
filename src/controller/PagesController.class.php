@@ -77,6 +77,8 @@ class PagesController extends lmbController
     foreach ($this->day->moments as $moment) {
       $moment->time = date('h:i', strtotime($moment->time));
     }
+
+    $this->current_user = $this->toolkit->getUser();
 	}
 
 	function doMoment()

@@ -13,7 +13,6 @@ var API = (function() {
       var request = new Request(method, path, data, params);
 
       request.statusCodeGroup(4, function(jqXHR, textStatus, errorThrown) {
-        Loader.hide();
         var response = jQuery.parseJSON(jqXHR.responseText);
         alert(response.errors[0]);
       });
@@ -36,9 +35,9 @@ var API = (function() {
         });
       });
 
-      request.statusCode(404, function() {
-        alert('Page not found!');
-      });
+      // request.statusCode(404, function() {
+      //   alert('Page not found!');
+      // });
 
       return request;
     },
