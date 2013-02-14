@@ -5,23 +5,6 @@ $this->menu = 'me';
 {{wrap with="layout.phtml"}}
   {{into slot="content"}}
   <h3>My days</h3>
-    {{list using="$#days"}}
-  		<ul class="thumbnails">
-		    {{list:item}}
-		    <li class="span3">
-	        <div class="thumbnail">
-            <a href="/pages/{$item->id}/day">
-              <img src="{$item->image_532|default:'/img/no_photo.png'}" alt="{$item->final_description}">
-              <h3>{$item->title}</h3>
-            </a>
-            <p><small>{$item->final_description}</small></p>
-          </div>
-		    </li>
-		    {{/list:item}}
-  		</ul>
-      {{list:default}}
-      You don't have days yet.
-      {{/list:default}}
-    {{/list}}
+			{{apply template="days_list" days="{$#days}"/}}
   {{/into}}
 {{/wrap}}
