@@ -5,13 +5,13 @@ $conf = [
   'host'  => 'localhost',
   'port'  => 3312,
 
-  'users' => [
+  'User' => [
     'match_mode'     => SPH_MATCH_EXTENDED2,
     'ranking_mode'   => SPH_RANK_PROXIMITY_BM25,
     'index'          => 'users',
   ],
 
-  'days'  => [
+  'Day'  => [
     'match_mode'     => SPH_MATCH_EXTENDED2,
     'ranking_mode'   => SPH_RANK_PROXIMITY_BM25,
     'index'          => 'days',

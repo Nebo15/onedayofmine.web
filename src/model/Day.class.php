@@ -136,7 +136,7 @@ class Day extends BaseModel
 
   static function findByString($query, $from_id = null, $to_id = null, $limit = null)
   {
-    $ids  = lmbToolkit::instance()->getSearchService('days')->find($query, $from_id, $to_id, $limit);
+    $ids  = lmbToolkit::instance()->getSearchService('Day')->find($query, $from_id, $to_id, $limit);
     if(!$ids)
       return [];
     $days = self::findByIds($ids);
