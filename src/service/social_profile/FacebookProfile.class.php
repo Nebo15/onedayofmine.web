@@ -74,7 +74,7 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
   public function getFriends()
   {
     $fields = implode(',', self::_getUserFacebookFieldsMap());
-    $fql_result = $this->provider->makeQuery("SELECT {$fields} FROM user WHERE is_app_user AND uid IN (SELECT uid2 FROM friend WHERE uid1 = me())");
+    $fql_result = $this->provider->makeQuery("SELECT {$fields}, is_app_user FROM user WHERE uid IN (SELECT uid2 FROM friend WHERE uid1 = me()) ORDER BY first_name");
 
     $friends = [];
     if($fql_result)
