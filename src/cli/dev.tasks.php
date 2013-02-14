@@ -116,12 +116,7 @@ function task_od_remove_db_data()
 	lmb_require('tests/src/toolkit/odTestsTools.class.php');
 
 	lmbToolkit::merge(new odTestsTools());
-	lmbToolkit::instance()->truncateTablesOf(
-		'Complaint',
-		'Day', 'DayComment', 'DayFavorite', 'DayInterestRecord',
-		'Moment', 'MomentComment',
-		'News',
-		'User', 'UserFollowing', 'UserSettings');
+	lmbToolkit::instance()->truncateDb();
 }
 
 /**
