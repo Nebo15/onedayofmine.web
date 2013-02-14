@@ -66,13 +66,15 @@ var Template = (function() {
     },
 
     renderElement: function(source, target, data, callback) {
-      var html = Template.compileElement(typeof source == "string" ? source : source.html(), data);
 
-      target.empty();
-      target.html(html);
+        var tpl_code = typeof source == "string" ? source : source.html();
+        var html = Template.compileElement(tpl_code, data);
 
-      if(callback)
-        callback();
+        target.empty();
+        target.html(html);
+
+        if(callback)
+            callback();
     }
   };
 })();

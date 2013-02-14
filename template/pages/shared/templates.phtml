@@ -1,0 +1,53 @@
+{{template name='days_list'}}
+		{{list using="$days"}}
+				<ul class="thumbnails">
+				    {{list:item}}
+				    <li class="span3">
+				        <div class="thumbnail">
+				            <a href="/pages/{$item->id}/day">
+				                <img src="{$item->image_532|default:'/img/no_photo.png'}" alt="{$item->final_description}">
+				                <h3>{$item->title}</h3>
+				            </a>
+				            <p><small>{$item->final_description}</small></p>
+				        </div>
+				    </li>
+				    {{/list:item}}
+				</ul>
+				{{list:default}}
+						You don't have days yet.
+				{{/list:default}}
+		{{/list}}
+{{/template}}
+
+<script id="days_list" type="text/x-handlebars-template">
+    <ul class="thumbnails">
+        [[#days]]
+        <li class="span3">
+            <div class="thumbnail">
+                <a href="/pages/[[id]]/day">
+                    <img src="[[image_532]][[#unless image_532]]/img/no_photo.png[[/unless]]" alt="[[final_description]]">
+                    <h3>[[title]]</h3>
+                </a>
+                <p><small>[[final_description]]</small></p>
+            </div>
+        </li>
+        [[/days]]
+    </ul>
+</script>
+
+<script id="menu_me_authorized" type="text/x-handlebars-template">
+    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+        {$#current_user.name} <img src="{$#current_user.image_36}" width="24" height="24" class="img-rounded" /> <b class="caret"></b>
+    </a>
+    <ul class="dropdown-menu">
+        <li><a href="/pages/my_days"><i class="icon icon-camera"></i> My days</a></li>
+        <li><a href="/pages/my_followers"><i class="icon icon-hand-right"></i> My followers &amp; following</a></li>
+        <li class="divider"></li>
+        <li><a href="/pages/profile"><i class="icon icon-cog"></i> Profile</a></li>
+        <li class="divider"></li>
+        <li><a href="/pages/find_people"><i class="icon icon-search"></i> Find and invite people</a></li>
+
+        <li class="divider"></li>
+        <li><a href="#" id="logout-action"><i class="icon icon-signout"></i> Logout</a></li>
+    </ul>
+</script>
