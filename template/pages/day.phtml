@@ -160,6 +160,11 @@
       <? } ?>
 
       // Comments updater
+      var comments = $('.comments');
+      var comments_input  = comments.find('textarea');
+      var comments_button = comments.find('button[type=submit]');
+      var comments_counter = comments.find('#comments_counter');
+
       var comments_loader = $('.comments-loader');
       var comments_loader_button =  comments_loader.find('button[type=button]');
       var comments_template = Template.prepareTemplate($('#template_comments'));
@@ -178,6 +183,14 @@
             comments_loader.before(Template.compileElement(comments_template, {comments:response.data.result}));
 
             $('.comment-item').fadeIn();
+
+            var count = parseInt(comments_counter.text())+response.data.result.length;
+
+            if(count > 3 && comments_loader_button.css('display') == 'none') {
+              comments_loader_button.css('display', 'block');
+            }
+
+            comments_counter.text(count);
           });
 
           comments_request.error(function() {
@@ -191,10 +204,6 @@
       comments_loader_button.click(updateComments);
 
       // Comments
-      var comments = $('.comments');
-      var comments_input  = comments.find('textarea');
-      var comments_button = comments.find('button[type=submit]');
-
       comments_input.on('keyup', function(event) {
         comments_button.removeClass('disabled').addClass('btn-success');
       });
@@ -440,7 +449,10 @@
               <hr/>
 
               <div class="comments">
-                <span class="pull-right not-decorated with-shadow"><i class="icon-comments"></i> {$this->day->comments_count}</span>
+                <span class="pull-right not-decorated with-shadow">
+                  <i class="icon-comments"></i>
+                  <span id="comments_counter"><? if($this->day->comments_count > 3) { ?>3/<? } ?>{$this->day->comments_count}</span>
+                </span>
                 <h4>Comments:</h4>
                   <ul class="unstyled">
                     {{list using="$#day->comments"}}
@@ -459,11 +471,9 @@
                       {{/list:item}}
                     {{/list}}
                     <li class="comments-loader">
-                      <? if($this->day->comments_count > 3) { ?>
-                          <button id="toggle_comments" class="btn btn-small btn-block" type="button">
-                            Load more comments
-                          </button>
-                      <? } ?>
+                      <button class="btn btn-small btn-block"<? if($this->day->comments_count < 4) { ?> style="display:none"<? } ?> type="button">
+                        Load more comments
+                      </button>
                     </li>
                   </ul>
 
