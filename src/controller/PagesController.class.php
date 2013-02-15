@@ -28,6 +28,15 @@ class PagesController extends lmbController
 
 			$this->news = $this->_mergeNews($news);
 
+			foreach($this->news as $i => $news_item)
+			{
+				$search = ['/odom:\/\/users\/(\d+)/', '/odom:\/\/days\/(\d+)/'];
+				$replace = ['/pages/$1/user', '/pages/$1/day'];
+				$this->news[$i]->text = preg_replace($search, $replace, $news_item->text);
+			}
+
+			$this->news = $this->_toFlatArray($this->news);
+
 			return $this->doImport();
 		}
 		else
@@ -64,7 +73,7 @@ class PagesController extends lmbController
 			}
 		}
 
-		return $this->_toFlatArray($result);
+		return $result;
 	}
 
 	function doDaysDiscover()

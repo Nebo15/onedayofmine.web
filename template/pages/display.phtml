@@ -12,6 +12,10 @@ $this->menu = '';
 	height:32px;
 }
 
+.comment-item img {
+  margin:0px;
+}
+
 {{/into}}
 {{into slot="content"}}
 <div class="row">
@@ -29,18 +33,18 @@ $this->menu = '';
 		                            {$item.text|raw}
 		                            <br />
 			                          {{list using="{$item.days}" as="$day"}}
-		                                <ul class="unstyled">
-						                            {{list:item}}
-		                                    <li><img src="{$item.moment.image_266}" width="72"></li>
-		                                    {{/list:item}}
-		                                </ul>
+				                            {{list:item}}
+                                        <a href="/pages/{$day.id}/day">
+                                            <img src="{$day.image_266}" width="72">
+	                                      </a>
+                                    {{/list:item}}
                                 {{/list}}
 		                            {{list using="{$item.moments}" as="$moment"}}
-		                            <ul class="unstyled">
 		                                {{list:item}}
-		                                <li><img src="{$moment.image_266}" width="72"></li>
+		                                    <a href="/pages/{$item.day.id}/day">
+				                                    <img src="{$moment.image_266}" width="72">
+		                                    </a>
 		                                {{/list:item}}
-		                            </ul>
 		                            {{/list}}
 		                            {{list using="{$item.day_comments}" as="$comment"}}
 		                                {{list:item}}
