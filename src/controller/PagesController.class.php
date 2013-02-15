@@ -37,6 +37,12 @@ class PagesController extends lmbController
 
 			$this->news = $this->_toFlatArray($this->news);
 
+			$followers = $this->_getUser()->getFollowersUsers();
+			$this->followers = $this->_toFlatArray($this->toolkit->getExportHelper()->exportUserItems($followers));
+
+			$following = $this->_getUser()->getFollowingUsers();
+			$this->following = $this->_toFlatArray($this->toolkit->getExportHelper()->exportUserItems($following));
+
 			return $this->doImport();
 		}
 		else

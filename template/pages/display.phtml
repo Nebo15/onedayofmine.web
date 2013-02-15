@@ -8,8 +8,8 @@ $this->menu = '';
   margin-right:3px;
 }
 .followers-list li img {
-	width:32px;
-	height:32px;
+	width:72px;
+	height:72px;
 }
 
 .comment-item img {
@@ -67,24 +67,34 @@ $this->menu = '';
 		</div>
 		<div class="span4">
 				<div class="span4">
-						<h5>Following&nbsp;&nbsp;<small>7</small></h5>
-						<ul class="unstyled  followers-list">
-								<li><img src="http://images.instagram.com/profiles/profile_1450621_75sq_1360187746.jpg"/></li>
-                <li><img src="http://images.instagram.com/profiles/profile_39989663_75sq_1360449330.jpg"/></li>
-                <li><img src="http://images.instagram.com/profiles/profile_47719173_75sq_1358861573.jpg"/></li>
-                <li><img src="http://images.instagram.com/profiles/profile_299349163_75sq_1359754073.jpg"/></li>
-						</ul>
+						<h5>Following&nbsp;&nbsp;<small>{$#current_user.following_count}</small></h5>
+						{{list using="{$#following}"}}
+                <ul class="unstyled  followers-list">
+								{{list:item}}
+                    <li><a href="/pages/{$item.id}/user">
+		                    <img src="{$item.image_72}"/>
+                    </a></li>
+		            {{/list:item}}
+                </ul>
+								{{list:empty}}
+                    <p>You have no following users. But you can <a href="/pages/find_people">find</a> em!</p>
+								{{/list:empty}}
+						{{/list}}
 				</div>
         <div class="span4">
-		        <h5>Followers&nbsp;&nbsp;<small>3</small></h5>
-            <ul class="unstyled followers-list">
-                <li><img src="http://images.instagram.com/profiles/profile_10518982_75sq_1357688182.jpg"/></li>
-                <li><img src="http://images.instagram.com/profiles/profile_299349163_75sq_1359754073.jpg"/></li>
-                <li><img src="http://images.instagram.com/profiles/profile_20499101_75sq_1359408582.jpg"/></li>
-                <li><img src="http://images.instagram.com/profiles/profile_1450621_75sq_1360187746.jpg"/></li>
-                <li><img src="http://images.instagram.com/profiles/profile_39989663_75sq_1360449330.jpg"/></li>
-                <li><img src="http://images.instagram.com/profiles/profile_47719173_75sq_1358861573.jpg"/></li>
-            </ul>
+		        <h5>Followers&nbsp;&nbsp;<small>{$#current_user.followers_count}</small></h5>
+            {{list using="{$#followers}"}}
+		            <ul class="unstyled  followers-list">
+		                {{list:item}}
+		                <li><a href="/pages/{$item.id}/user">
+		                    <img src="{$item.image_72}"/>
+		                </a></li>
+		                {{/list:item}}
+		            </ul>
+		            {{list:empty}}
+                    <p>You have no followers. But you can <a href="/pages/find_people">find</a> em!</p>
+		            {{/list:empty}}
+            {{/list}}
         </div>
 		</div>
 </div>
