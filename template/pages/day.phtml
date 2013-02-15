@@ -25,7 +25,7 @@
           <div class="bubble left">
             <p class="text">
               [[#if-eq user.id {$this->current_user->id}]]
-                <a class="pull-right not-decorated with-shadow" id="trigger_delete"><i class="icon-trash"></i></a>
+                <a class="pull-right not-decorated with-shadow" id="trigger_comment_delete"><i class="icon-trash"></i></a>
               [[/if-eq]]
 
               [[text]]
@@ -41,6 +41,80 @@
   {{into slot="js_ready"}}
     <? if($this->toolkit->getUser()) { ?>
       <? if($this->is_owner) { ?>
+        // Day delete
+        var day_delete_button = $('#trigger_day_delete');
+
+        day_delete_button.click(function() {
+          if(confirm("Do you really want to delete this day?")) {
+            var delete_request = API.request('POST', '/days/' + day_delete_button.attr('day_id') + '/delete');
+            delete_request.success(function() {
+              window.location = '/pages/my_days';
+            });
+
+            delete_request.error(function() {
+              alert("We can't delete this day right now, please try again later or tell us about this issue");
+            }, true);
+
+            delete_request.send();
+          }
+        });
+
+        // Day title
+        var day_title_input = $('.day-title');
+        var day_title_button = $('#trigger_save_day_title');
+
+        day_title_input.on('keyup', function() {
+          var text = day_title_input.text();
+
+          if($.trim(text) != '' && text.length > 4) {
+            if(day_title_button.css('display') == 'none') {
+              day_title_button.slideDown();
+            }
+            day_title_button.removeClass('disabled').addClass('btn-success');
+            day_title_button.text('Save title');
+          } else {
+            day_title_button.addClass('disabled').removeClass('btn-success');
+            day_title_button.text('Title is too short');
+          }
+        });
+
+        day_title_button.click(function() {
+          if(!day_title_button.hasClass('disabled')) {
+            day_title_input.prop("contenteditable", false);
+            day_title_button.addClass('disabled');
+
+            var final_description_request = API.request('POST', '/days/{$#day->id}/update', {
+              title: day_title_input.text()
+            });
+
+            final_description_request.success(function() {
+              day_title_input.prop("contenteditable", true);
+              day_title_button.slideUp();
+              day_title_button.addClass('disabled').removeClass('btn-success');
+            });
+
+            final_description_request.error(function() {
+              day_title_button.addClass('btn-error').removeClass('btn-success');
+              day_title_button.text('Retry');
+            });
+
+            final_description_request.send();
+          }
+        });
+
+        // day_title_input.on('blur', function(event) {
+        //   var text = day_title_input.text();
+        //   if($.trim(text) != '') {
+        //     if(text.length > 4) {
+        //       console.log(text);
+        //     } else {
+        //       alert('Day title is too short!');
+        //       day_title_input.focus();
+        //     }
+        //   }
+        // });
+
+        // Moments
         $('.moment-item').each(function() {
           var element = $(this);
           var id = element.attr('moment_id');
@@ -81,7 +155,7 @@
           });
 
           // Moment delete
-          var delete_button = element.find('#trigger_delete');
+          var delete_button = element.find('#trigger_moment_delete');
 
           delete_button.click(function() {
             if(confirm("Do you really want to delete this moment?")) {
@@ -89,6 +163,8 @@
               delete_request.success(function() {
                 element.fadeOut(500);
                 element.next().fadeOut(500);
+                element.remove();
+                element.next().remove();
               });
 
               delete_request.error(function() {
@@ -167,7 +243,7 @@
       var comments = $('.comments');
       var comments_input  = comments.find('textarea');
       var comments_button = comments.find('button[type=submit]');
-      var comments_delete_button_selector = '#trigger_delete';
+      var comments_delete_button_selector = '#trigger_comment_delete';
       var comments_delete_button = comments.find(comments_delete_button_selector);
       var comments_counter = comments.find('#comments_counter');
 
@@ -325,10 +401,16 @@
           <div class="span6 offset3">
               <? if($this->is_owner) { ?>
                 <span class="day-controls pull-right">
-                  <a class="not-decorated with-shadow"><i class="icon-trash"></i></a>
+                  <a class="not-decorated with-shadow" id="trigger_day_delete" day_id="{$#day->id}"><i class="icon-trash"></i></a>
                 </span>
               <? } ?>
-              <h3 contenteditable>{$#day->title}</h3>
+
+              <h3 <? if($this->is_owner) { ?>contenteditable <? } ?>class="day-title">{$#day->title}</h3>
+
+              <? if($this->is_owner) { ?>
+                <button id="trigger_save_day_title" type="submit" class="btn btn-block btn-success" style="display:none">Save title</button>
+              <? } ?>
+
               <p class="muted day-info">
                 <span class="pull-right">
                   <i class="icon icon-calendar"></i> {$#day->utime}
@@ -360,7 +442,7 @@
                       <li class="well moment-item" moment_id="{$item->id}">
                           <? if($this->is_owner) { ?>
                             <span class="moment-controls-overlay">
-                              <a class="not-decorated with-shadow" id="trigger_delete"><i class="icon-trash"></i></a>
+                              <a class="not-decorated with-shadow" id="trigger_moment_delete"><i class="icon-trash"></i></a>
                             </span>
                           <? } ?>
 
@@ -494,7 +576,7 @@
                           <div class="bubble left">
                             <p class="text">
                               <? if($item->user->id == $this->current_user->id) { ?>
-                                <a class="pull-right not-decorated with-shadow" id="trigger_delete"><i class="icon-trash"></i></a>
+                                <a class="pull-right not-decorated with-shadow" id="trigger_comment_delete"><i class="icon-trash"></i></a>
                               <? } ?>
 
                               {$item->text}
