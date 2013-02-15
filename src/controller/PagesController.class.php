@@ -24,8 +24,10 @@ class PagesController extends lmbController
 		if($this->toolkit->getUser())
 		{
 			$user  = $this->toolkit->getUser();
-			$news = $user->getNewsWithLimitation(null, null, 20);
-			$this->news = (array) $this->toolkit->getExportHelper()->exportNewsItems($news);
+			$news = $user->getNews();
+
+			$this->news = $this->_toFlatArray($this->toolkit->getExportHelper()->exportNewsItems($news));
+
 			return $this->doImport();
 		}
 		else
@@ -136,5 +138,10 @@ class PagesController extends lmbController
 	protected function _getUser()
 	{
 		return $this->toolkit->getUser();
+	}
+
+	protected function _toFlatArray($object)
+	{
+		return json_decode(json_encode($object), true);
 	}
 }

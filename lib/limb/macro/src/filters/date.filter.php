@@ -13,6 +13,7 @@
  * @filter date
  * @package macro
  * @version $Id$
+ * @alias time
  */ 
 class lmbMacroDateFilter extends lmbMacroFilter
 {

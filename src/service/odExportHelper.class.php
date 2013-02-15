@@ -426,9 +426,33 @@ class odExportHelper
     $sender_users     = User::findByIds($senders_ids);
     $sender_users     = lmbArrayHelper::makeKeysFromColumnValues('id', $sender_users);
 
+	  $days_ids = lmbArrayHelper::getColumnValues('day_id', $news);
+	  $days     = Day::findByIds($days_ids);
+	  $days     = lmbArrayHelper::makeKeysFromColumnValues('id', $days);
+
+	  $days_comments_ids = lmbArrayHelper::getColumnValues('day_comment_id', $news);
+	  $days_comments     = DayComment::findByIds($days_comments_ids);
+	  $days_comments     = lmbArrayHelper::makeKeysFromColumnValues('id', $days_comments);
+
+	  $moments_ids = lmbArrayHelper::getColumnValues('moment_id', $news);
+	  $moments     = Moment::findByIds($moments_ids);
+	  $moments     = lmbArrayHelper::makeKeysFromColumnValues('id', $moments);
+
+	  $moment_comments_ids = lmbArrayHelper::getColumnValues('moment_comment_id', $news);
+	  $moment_comments     = MomentComment::findByIds($moment_comments_ids);
+	  $moment_comments     = lmbArrayHelper::makeKeysFromColumnValues('id', $moment_comments);
+
     foreach ($news as $news_item) {
       $news = $news_item->exportForApi();
       $news->sender = $this->exportUserSubentity($sender_users[$news_item->sender_id]);
+	    if($news_item->day_id)
+	      $news->day = $this->exportDaySubentity($days[$news_item->day_id]);
+	    if($news_item->day_comment_id)
+		    $news->day_comment = $this->exportDayCommentSubentity($days_comments[$news_item->day_comment_id]);
+	    if($news_item->moment_id)
+		    $news->moment = $this->exportMomentSubentity($moments[$news_item->moment_id]);
+	    if($news_item->moment_comment_id)
+		    $news->moment_comment = $this->exportMomentSubentity($moment_comments[$news_item->moment_comment_id]);
       $exported[] = $news;
     }
     return $exported;
