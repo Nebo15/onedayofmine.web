@@ -24,9 +24,11 @@
 
           <div class="bubble left">
             <p class="text">
-              [[#if-eq user.id {$this->current_user->id}]]
-                <a class="pull-right not-decorated with-shadow" id="trigger_comment_delete"><i class="icon-trash"></i></a>
-              [[/if-eq]]
+              <? if($this->current_user) { ?>
+                [[#if-eq user.id {$this->current_user->id}]]
+                  <a class="pull-right not-decorated with-shadow" id="trigger_comment_delete"><i class="icon-trash"></i></a>
+                [[/if-eq]]
+              <? } ?>
 
               [[text]]
 
@@ -102,18 +104,6 @@
           }
         });
 
-        // day_title_input.on('blur', function(event) {
-        //   var text = day_title_input.text();
-        //   if($.trim(text) != '') {
-        //     if(text.length > 4) {
-        //       console.log(text);
-        //     } else {
-        //       alert('Day title is too short!');
-        //       day_title_input.focus();
-        //     }
-        //   }
-        // });
-
         // Moments
         $('.moment-item').each(function() {
           var element = $(this);
@@ -139,8 +129,14 @@
                 if($(this) == element && found)
                   return;
 
-                  console.log(time_input.val() + '<' + $(this).find('input[type=time]').val());
-                if(time_input.val() < $(this).find('input[type=time]').val()) {
+                var tmp = $(this).find('input[type=time]').val().split(":");
+                var tmp_moment_time = new Date(2000, 1, 1, parseInt(tmp[1]), parseInt(tmp[0])).getTime();
+
+                var time_input_split = time_input.val().split(":");
+                var selected_moment_time = new Date(2000, 1, 1, parseInt(time_input_split[1]), parseInt(time_input_split[0])).getTime();
+
+                console.log(selected_moment_time + '<' + tmp_moment_time);
+                if(selected_moment_time < tmp_moment_time) {
                   found = true;
 
                   var placeholder = element.next();
@@ -575,7 +571,7 @@
 
                           <div class="bubble left">
                             <p class="text">
-                              <? if($item->user->id == $this->current_user->id) { ?>
+                              <? if($this->current_user && $item->user->id == $this->current_user->id) { ?>
                                 <a class="pull-right not-decorated with-shadow" id="trigger_comment_delete"><i class="icon-trash"></i></a>
                               <? } ?>
 
