@@ -125,6 +125,7 @@ var Importer = {
 
         $day.find('button.analyze-action').click(function (event) {
             $(this).addClass('disabled');
+            $(this).html('<i class="icon-large icon-refresh icon-spin"></i> Importing...');
             var _day = Importer.days[$(this).parents('.well').attr('day_pos')];
             Importer.showAnalyzeStep($day, _day);
         });
@@ -133,6 +134,7 @@ var Importer = {
     },
 
     showAnalyzeStep:function ($day, moments) {
+        $(window).scrollTo($day, 300);
         Importer.setProgress(55);
         var analyze_request = API.request('POST', 'days/analyze_instagram_day', {moments:moments});
         analyze_request.success(function(response) {
@@ -142,6 +144,7 @@ var Importer = {
             $day.find('.desc').val(result.description);
             $day.find('.export-action').click(function (event) {
                 $(this).addClass('disabled');
+                $(this).html('<i class="icon-large icon-refresh icon-spin"></i> Sending...');
                 if (!$day.find('.title').val()) {
                     $day.find('.title').parent().parent().addClass('error');
                     return;
