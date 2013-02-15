@@ -6,21 +6,7 @@ $this->menu = 'interesting';
   {{into slot="content"}}
     <div class="row-fluid">
       <div class="span10 offset1">
-      	{{list using="$#days"}}
-      		<ul class="thumbnails">
-    				{{list:item}}
-      		    <li>
-    				    <a href="/pages/{$item->id}/day">
-    			        <div class="thumbnail" style="height:320px">
-  					        <?php $image = $item->image_266 ? $item->image_266 : ($item->moments) ? $item->moments[0]->image_266 : '/img/no_photo.png'; ?>
-  			            <img src="{$image}" alt="{$item->final_description}" width="266" height="266">
-  			            <p>{$item->title}</p>
-    			        </div>
-                </a>
-      		    </li>
-    				{{/list:item}}
-      		</ul>
-      	{{/list}}
+      	{{apply template="days_list" days="{$#days}"/}}
       </div>
     </div>
   {{/into}}

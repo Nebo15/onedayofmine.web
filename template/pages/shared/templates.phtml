@@ -1,14 +1,17 @@
 {{template name='days_list'}}
 		{{list using="$days"}}
+				<h1>Interesting days</h1>
 				<ul class="thumbnails">
 				    {{list:item}}
 				    <li class="span3">
 				        <div class="thumbnail">
 				            <a href="/pages/{$item->id}/day">
 				                <img src="{$item->image_532|default:'/img/no_photo.png'}" alt="{$item->final_description}">
-				                <h3>{$item->title}</h3>
+				                <h5>{$item->title}</h5>
+                    </a>
+                    <a href="/pages/{$item->user->id}/user">
+						            <p>{$item->user->name}</p>
 				            </a>
-				            <p><small>{$item->final_description}</small></p>
 				        </div>
 				    </li>
 				    {{/list:item}}
