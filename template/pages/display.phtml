@@ -28,12 +28,30 @@ $this->menu = '';
 		                        <p class="text">
 		                            {$item.text|raw}
 		                            <br />
-                                <ul class="unstyled">
-                                    <li><img src="{$item.moment.image_266}" width="72"></li>
-                                </ul>
-			                          <blockquote>
-			                              {$item.day_comment.text}{$item.moment_comment.text}
-                                </blockquote>
+			                          {{list using="{$item.days}" as="$day"}}
+		                                <ul class="unstyled">
+						                            {{list:item}}
+		                                    <li><img src="{$item.moment.image_266}" width="72"></li>
+		                                    {{/list:item}}
+		                                </ul>
+                                {{/list}}
+		                            {{list using="{$item.moments}" as="$moment"}}
+		                            <ul class="unstyled">
+		                                {{list:item}}
+		                                <li><img src="{$moment.image_266}" width="72"></li>
+		                                {{/list:item}}
+		                            </ul>
+		                            {{/list}}
+		                            {{list using="{$item.day_comments}" as="$comment"}}
+		                                {{list:item}}
+			                                  <blockquote>{$comment.text}</blockquote>
+		                                {{/list:item}}
+		                            {{/list}}
+		                            {{list using="{$item.moment_comments}" as="$comment"}}
+				                            {{list:item}}
+				                                <blockquote>{$comment.text}</blockquote>
+				                            {{/list:item}}
+		                            {{/list}}
 		                            <small><b>{$item.time|date:'M j \a\t g:m a'}</b></small>
 		                        </p>
 		                    </div>
