@@ -74,7 +74,7 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
   public function getFriends()
   {
     $fields = implode(',', self::_getUserFacebookFieldsMap());
-    $fql_result = $this->provider->makeQuery("SELECT {$fields}, is_app_user FROM user WHERE uid IN (SELECT uid2 FROM friend WHERE uid1 = me()) ORDER BY first_name");
+    $fql_result = $this->provider->makeQuery("SELECT {$fields} FROM user WHERE uid IN (SELECT uid2 FROM friend WHERE uid1 = me()) ORDER BY first_name");
 
     $friends = [];
     if($fql_result)
@@ -213,7 +213,7 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
   {
     return array(
       'uid', 'email', 'first_name', 'last_name', 'sex', 'timezone', 'profile_update_time',
-      'pic', 'pic_big', 'work', 'current_location', 'birthday_date'
+      'pic', 'pic_square', 'pic_big', 'work', 'current_location', 'birthday_date'
     );
   }
 
@@ -227,6 +227,7 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
       'timezone'         => $fb['timezone'],
       'facebook_profile_utime' => $fb['profile_update_time'],
       'pic'              => $fb['pic'],
+	    'pic_square'       => $fb['pic_square'],
       'pic_big'          => $fb['pic_big'],
       'occupation'       => isset($fb['work']['position']['name'])
                                ? $fb['work']['position']['name']
