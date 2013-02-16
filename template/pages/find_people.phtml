@@ -5,46 +5,60 @@ $this->menu = 'me';
 {{wrap with="layout.phtml"}}
 {{into slot="content"}}
 <div class="row">
-		<div class="span6">
-				<h1>Find</h1>
-				<form class="form-search" style="margin-top:15px">
-				    <input type="text" class="input-xlarge search-query">
-				    <button type="submit" class="btn">Search</button>
-				</form>
+		<div class="span8">
+				<h1>Find
+						<form class="form-search form-inline" style="margin-top:15px">
+						    <input type="text" class="input-xlarge search-query">
+						    <button type="submit" class="btn">Search</button>
+						</form>
+        </h1>
 				<div id="search-result"></div>
 		</div>
-    <div class="span6">
+    <div class="span3" style="padding-left:15px;">
         <h1>Invite</h1>
-        <div id="invite-result"></div>
+        <div id="invite-result"><i class="icon-large icon-refresh icon-spin"></i> Loading...</div>
 		</div>
 </div>
+{{/into}}
+{{into slot="js_include"}}
+<script id="invite_list" type="text/x-handlebars-template">
+    <ul class="unstyled">
+        [[#users]]
+        <li style="background-color:#eeeeee;" class="pull-left">
+		        <a href="" uid="[[uid]]">
+                <img src="[[image_50]]"/>
+            </a>
+        </li>
+        [[/users]]
+    </ul>
+</script>
+<script id="users_list" type="text/x-handlebars-template">
+    <ul class="thumbnails">
+        [[#users]]
+        <li style="margin-top:10px">
+            <div class="thumbnail" style="width:200px">
+                <img src="[[image_192]]" class="img-rounded"/>
+                <p><a href="">[[name]]</a></p>
+                <center>
+                    <a href="#" class="btn btn-info" style="margin:17px 10px 0 0">Follow</a>
+                </center>
+            </div>
+        </li>
+        [[/users]]
+    </ul>
+</script>
 {{/into}}
 {{into slot="js_ready"}}
 
 		API.request('POST', 'social/facebook_friends').success(function(response) {
 				var users = response.data.result;
-				$.each(users, function(i, user) {
-						users[i].image = user.image_150;
-						users[i].btn_attr = 'uid';
-						users[i].btn_value = user.uid;
-						users[i].btn_text = 'Invite';
-						users[i].btn_class = 'btn-info';
-				});
-				Template.renderElement(Template.prepareTemplate($('#users_list')), $('#invite-result'), {users:users});
+				Template.renderElement(Template.prepareTemplate($('#invite_list')), $('#invite-result'), {users:users});
 		}).send();
 
 		$('.form-search').submit(function() {
 				var req = API.request('POST', 'users/search', {query:$('.search-query').val()}).success(function(response) {
 						$('#search-result').html();
 						var users = response.data.result;
-						$.each(users, function(i, user) {
-								console.log(user);
-								users[i].image = user.image_96;
-								users[i].btn_attr = 'uid';
-								users[i].btn_value = user.uid;
-								users[i].btn_text = 'Follow';
-								users[i].btn_class = '';
-						});
 						Template.renderElement(Template.prepareTemplate($('#users_list')), $('#search-result'), {users:users});
 				}).send();
 				return false;
