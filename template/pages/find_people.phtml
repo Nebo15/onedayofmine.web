@@ -15,33 +15,47 @@ $this->menu = 'me';
 				<div id="search-result"></div>
 		</div>
     <div class="span3" style="padding-left:15px;">
-        <h1>Invite</h1>
-        <div id="invite-result"><i class="icon-large icon-refresh icon-spin"></i> Loading...</div>
+        <div id="invite-result">
+		        <div style="margin-top:30px"><center><i class="icon-large icon-refresh icon-spin"></i> Loading...</center></div>
+        </div>
 		</div>
 </div>
 {{/into}}
 {{into slot="js_include"}}
 <script id="invite_list" type="text/x-handlebars-template">
+    <h5>Your friends in service</h5>
     <ul class="unstyled">
-        [[#users]]
+        [[#registered]]
         <li style="background-color:#eeeeee;" class="pull-left">
-		        <a href="" uid="[[uid]]">
+            <a href="/pages/[[user.id]]/user">
                 <img src="[[image_50]]"/>
             </a>
         </li>
-        [[/users]]
+        [[/registered]]
+    </ul>
+		<br class="clearFix"/>
+    <h5>Friends to invite</h5>
+    <ul class="unstyled">
+        [[#not_registered]]
+        <li style="background-color:#eeeeee;" class="pull-left">
+		        <a href="" uid="[[uid]]" class="invite-action">
+                <img src="[[image_50]]"/>
+            </a>
+        </li>
+        [[/not_registered]]
     </ul>
 </script>
 <script id="users_list" type="text/x-handlebars-template">
     <ul class="thumbnails">
         [[#users]]
-        <li style="margin-top:10px">
-            <div class="thumbnail" style="width:200px">
+        <li style="margin:10px 0 0 10px;width:180px">
+            <div class="thumbnail">
                 <img src="[[image_192]]" class="img-rounded"/>
-                <p><a href="">[[name]]</a></p>
-                <center>
-                    <a href="#" class="btn btn-info" style="margin:17px 10px 0 0">Follow</a>
-                </center>
+                <p><a href="/pages/[[id]]/user">[[name]]</a></p>
+	              <center>
+			              <a href="" class="btn btn-info follow-action [[#if following]]hide[[/if]]" user_id="[[id]]">Follow</a>
+                    <a href="" class="btn btn-danger unfollow-action [[#unless following]]hide[[/unless]]" user_id="[[id]]">Unfollow</a>
+	              </center>
             </div>
         </li>
         [[/users]]
@@ -51,15 +65,48 @@ $this->menu = 'me';
 {{into slot="js_ready"}}
 
 		API.request('POST', 'social/facebook_friends').success(function(response) {
-				var users = response.data.result;
-				Template.renderElement(Template.prepareTemplate($('#invite_list')), $('#invite-result'), {users:users});
+
+				var view = {
+					registered: [],
+					not_registered: []
+				}
+
+				$.each(response.data.result, function(i, user) {
+						if(user.user != null)
+								view.registered.push(user);
+						else
+								view.not_registered.push(user);
+				});
+
+				Template.renderElement(Template.prepareTemplate($('#invite_list')), $('#invite-result'), view);
+
+				$('.invite-action').click(function() {
+						if(!confirm('Invite this person?')) return;
+						API.request('POST', 'social/facebook_invite', {uid:$(this).attr('uid')}).send();
+						return false;
+				});
 		}).send();
 
 		$('.form-search').submit(function() {
 				var req = API.request('POST', 'users/search', {query:$('.search-query').val()}).success(function(response) {
 						$('#search-result').html();
 						var users = response.data.result;
+						console.log(users);
 						Template.renderElement(Template.prepareTemplate($('#users_list')), $('#search-result'), {users:users});
+						$('.follow-action').click(function() {
+								var user_id = $(this).attr('user_id');
+								$(this).hide();
+								$(this).parent().find('.unfollow-action').show();
+								API.request('POST', 'users/'+user_id+'/follow').send();
+								return false;
+						});
+						$('.unfollow-action').click(function() {
+								var user_id = $(this).attr('user_id');
+								$(this).hide();
+								$(this).parent().find('.follow-action').show();
+								API.request('POST', 'users/'+user_id+'/unfollow').send();
+								return false;
+						});
 				}).send();
 				return false;
 		});

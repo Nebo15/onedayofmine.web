@@ -38,6 +38,7 @@ var Importer = {
         photos_count = user_response.data.counts.media;
         Importer.setProgress(5);
         Importer.getPhotos(photos_count, 'https://api.instagram.com/v1/users/' + Importer.instagram_user + '/media/recent/?access_token=' + hash + '&count=40&callback=?', function () {
+            console.log(Importer.photos[0]);
             var cant_assemble = true;
             var current_day = [Importer.photos.shift()];
             for (i in Importer.photos) {
@@ -125,7 +126,7 @@ var Importer = {
 
         $day.find('button.analyze-action').click(function (event) {
             $(this).addClass('disabled');
-            $(this).html('<i class="icon-large icon-refresh icon-spin"></i> Importing...');
+            $(this).html('<i class="icon-large icon-refresh icon-spin"></i> Analyze...');
             var _day = Importer.days[$(this).parents('.well').attr('day_pos')];
             Importer.showAnalyzeStep($day, _day);
         });
