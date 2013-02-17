@@ -227,8 +227,8 @@ class odExportHelper
       $exported            = new stdClass;
       $exported->uid       = $facebook_user['facebook_uid'];
       $exported->name      = $facebook_user['name'];
-      $exported->image_50  = $facebook_user['pic'];
       $exported->image_150 = $facebook_user['pic_big'];
+	    $exported->image_50 = $facebook_user['pic_square'];
 
       if(isset($users[$exported->uid]))
       {
