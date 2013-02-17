@@ -38,7 +38,7 @@ $this->menu = 'me';
     <ul class="unstyled">
         [[#not_registered]]
         <li style="background-color:#eeeeee;" class="pull-left">
-		        <a href="" uid="[[uid]]" class="invite-action">
+		        <a href="" uid="[[uid]]" class="invite-action" title="[[name]]">
                 <img src="[[image_50]]"/>
             </a>
         </li>
@@ -81,8 +81,20 @@ $this->menu = 'me';
 				Template.renderElement(Template.prepareTemplate($('#invite_list')), $('#invite-result'), view);
 
 				$('.invite-action').click(function() {
-						if(!confirm('Invite this person?')) return;
-						API.request('POST', 'social/facebook_invite', {uid:$(this).attr('uid')}).send();
+						var obj = {
+								method: 'feed',
+								to: $(this).attr('uid'),
+								redirect_uri: 'http://'+Config.host+'/pages/find_people',
+								link: 'http://'+Config.host+'/pages/{$#current_user.id}/user',
+								name: 'One Day of Mine invitation',
+								description: "Hi, come and check out my photos in One Day of Mine, where people share days of their lifes."
+						};
+
+						function callback(response) {
+								alert('User invited');
+						}
+
+						FB.ui(obj, callback);
 						return false;
 				});
 		}).send();
