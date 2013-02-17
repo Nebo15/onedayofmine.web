@@ -68,27 +68,6 @@
     </ul>
 </script>
 
-<script id="users_list" type="text/x-handlebars-template">
-    <ul class="unstyled">
-        [[#users]]
-            <li style="background-color:#eeeeee">
-                <div class="row" >
-                    <div class="span1">
-                        <img src="http://images.instagram.com/profiles/profile_1450621_75sq_1360187746.jpg"/>
-                    </div>
-                    <div class="span5">
-                        <a href="">Name</a> - occupation from location
-                        <small>asdasdas</small>
-                        <div class="pull-right" style="height:70px;">
-                            <a href="#" class="btn btn-danger" style="margin:17px 10px 0 0">Unfollow</a>
-                        </div>
-                    </div>
-                </div>
-            </li>
-        [[/users]]
-    </ul>
-</script>
-
 <script id="menu_me_authorized" type="text/x-handlebars-template">
     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
         {$#current_user.name} <img src="{$#current_user.image_36}" width="24" height="24" class="img-rounded" /> <b class="caret"></b>
