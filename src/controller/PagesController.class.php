@@ -123,7 +123,12 @@ class PagesController extends lmbController
     $this->day->ctime = date('m/d/y', $this->day->ctime);
 
     foreach ($this->day->moments as $moment) {
-      $moment->time = date('h:i', strtotime($moment->time));
+      $time = strtotime($moment->time);
+
+      $moment->time = date('h:i', $time);
+      $moment->time_seconds = date('s', $time);
+      $moment->date = date('Y-m-d', $time);
+      $moment->timezone = date('P', $time);
     }
 
     $this->current_user = $this->toolkit->getUser();

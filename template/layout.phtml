@@ -24,7 +24,6 @@
 
   <!-- Vendor style sheets -->
   <link href="/styles/bootstrap.min.css" rel="stylesheet">
-  <link href="/styles/bootstrap-editable.css" rel="stylesheet">
   <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-responsive.min.css" rel="stylesheet">
   <link href="/styles/font-awesome.css" rel="stylesheet">
   {{slot id='css_include'}}
@@ -41,8 +40,9 @@
   <!-- Vendor scripts -->
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
   <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
-  <script src="/lib/vendor/bootstrap-editable.min.js"></script>
+  <script src="/lib/vendor/handlebars.js"></script>
   <script src="/lib/vendor/jquery.masonry.min.js"></script>
+  <script src="/lib/vendor/jquery.scrollTo-1.4.3.1-min.js"></script>
   <?php if(!property_exists($this, 'fb_disabled') || !$this->fb_disabled) { ?>
   <script>
     window.fbAsyncInit = function () {
@@ -73,7 +73,6 @@
   <script src="/lib/Auth.js"></script>
   <script src="/lib/Response.js"></script>
   <script src="/lib/Request.js"></script>
-  <script src="/lib/vendor/handlebars.js"></script>
   <script src="/lib/Template.js"></script>
   <script src="/lib/API.js"></script>
   <script src="/lib/Override.js"></script>

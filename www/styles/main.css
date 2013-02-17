@@ -45,6 +45,14 @@ h1, h2, h3, h4, h5, h6 {
   font-size: 14.45px !important;
 }
 
+input[subtype=date] {
+  width: 80px;
+}
+
+input[subtype=time] {
+  width: 40px;
+}
+
 .icon-heart,
 .icon-heart-empty {
   color: #980000;
