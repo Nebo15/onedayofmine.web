@@ -605,6 +605,9 @@ function task_test_analyze($args)
 		(new InstagramPhotosAnalyzer($day))->analyze();
 	}
 
+	var_dump($days);
+
+	echo 'Days found: '.count($days);
 }
 
 function task_import_ical($args)
