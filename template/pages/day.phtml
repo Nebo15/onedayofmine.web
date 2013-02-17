@@ -615,89 +615,93 @@
 
               <hr/>
 
-              <div class="comments">
-                <span class="pull-right not-decorated with-shadow">
-                  <i class="icon-comments"></i>
-                  <span id="comments_counter"><? if($this->day->comments_count > 3) { ?>3/<? } ?>{$this->day->comments_count}</span>
-                </span>
-                <h4>Comments:</h4>
-                  <ul class="unstyled">
-                    {{list using="$#day->comments"}}
-                      {{list:item}}
-                        <li class="comment-item" comment_id="{$item->id}">
-                          <img src="{$item->user->image_72}" width="72" class="pull-left img-rounded" alt="" />
+              <? if($this->toolkit->getUser() || $this->day->comments_count > 0) { ?>
+                <div class="comments">
+                  <span class="pull-right not-decorated with-shadow">
+                    <i class="icon-comments"></i>
+                    <span id="comments_counter"><? if($this->day->comments_count > 3) { ?>3/<? } ?>{$this->day->comments_count}</span>
+                  </span>
+                  <h4>Comments:</h4>
+                    <ul class="unstyled">
+                      {{list using="$#day->comments"}}
+                        {{list:item}}
+                          <li class="comment-item" comment_id="{$item->id}">
+                            <img src="{$item->user->image_72}" width="72" class="pull-left img-rounded" alt="" />
 
-                          <div class="bubble left">
-                            <p class="text">
-                              <? if($this->current_user && $item->user->id == $this->current_user->id) { ?>
-                                <a class="pull-right not-decorated with-shadow" id="trigger_comment_delete"><i class="icon-trash"></i></a>
-                              <? } ?>
+                            <div class="bubble left">
+                              <p class="text">
+                                <? if($this->current_user && $item->user->id == $this->current_user->id) { ?>
+                                  <a class="pull-right not-decorated with-shadow" id="trigger_comment_delete"><i class="icon-trash"></i></a>
+                                <? } ?>
 
-                              {$item->text}
+                                {$item->text}
 
-                              <small>by <b><a href="/pages/{$item->user->id}/user">{$item->user->name}</a></b></small>
-                            </p>
-                          </div>
-                        </li>
-                      {{/list:item}}
-                    {{/list}}
-                    <li class="comments-loader">
-                      <button class="btn btn-small btn-block"<? if($this->day->comments_count < 4) { ?> style="display:none"<? } ?> type="button">
-                        Load more comments
-                      </button>
-                    </li>
-                  </ul>
+                                <small>by <b><a href="/pages/{$item->user->id}/user">{$item->user->name}</a></b></small>
+                              </p>
+                            </div>
+                          </li>
+                        {{/list:item}}
+                      {{/list}}
+                      <li class="comments-loader">
+                        <button class="btn btn-small btn-block"<? if($this->day->comments_count < 4) { ?> style="display:none"<? } ?> type="button">
+                          Load more comments
+                        </button>
+                      </li>
+                    </ul>
 
-                <? if($this->toolkit->getUser()) { ?>
-                  <textarea rows="3" class="input-block-level"></textarea>
-                  <button type="submit" class="btn btn-block disabled">Send comment</button>
-                <? } ?>
-              </div>
+                  <? if($this->toolkit->getUser()) { ?>
+                    <textarea rows="3" class="input-block-level"></textarea>
+                    <button type="submit" class="btn btn-block disabled">Send comment</button>
+                  <? } ?>
+                </div>
+              <? } ?>
           </div>
       </div>
 
-      <div id="add_moment_modal" class="modal hide fade">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h3>Add moment</h3>
-        </div>
-        <div class="modal-body">
-          <p>
-              <h4>From your PC:</h4>
-              <div class="text-center">
-                <div class="fileupload fileupload-new" data-provides="fileupload">
-                  <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
-                    <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&text=no+image" />
-                  </div>
-                  <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
-                  <div>
-                    <span class="btn btn-file">
-                      <span class="fileupload-new">Select image</span>
-                      <span class="fileupload-exists">Change</span>
-                      <input type="file" />
-                    </span>
-                    <a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
+      <? if($this->is_owner) { ?>
+        <div id="add_moment_modal" class="modal hide fade">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3>Add moment</h3>
+          </div>
+          <div class="modal-body">
+            <p>
+                <h4>From your PC:</h4>
+                <div class="text-center">
+                  <div class="fileupload fileupload-new" data-provides="fileupload">
+                    <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
+                      <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&text=no+image" />
+                    </div>
+                    <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                    <div>
+                      <span class="btn btn-file">
+                        <span class="fileupload-new">Select image</span>
+                        <span class="fileupload-exists">Change</span>
+                        <input type="file" />
+                      </span>
+                      <a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <h4>Import from:</h4>
-              <div class="text-center">
-                <a class="btn">
-                    <i class="icon icon-large icon-camera-retro"></i>
-                    Instagram
-                </a>
-                <a class="btn disabled">
-                    <i class="icon icon-large icon-camera"></i>
-                    Flickr
-                </a>
-                <a class="btn disabled">
-                    <i class="icon icon-large icon-facebook-sign"></i>
-                    Facebook
-                </a>
-              </div>
-          </p>
+                <h4>Import from:</h4>
+                <div class="text-center">
+                  <a class="btn">
+                      <i class="icon icon-large icon-camera-retro"></i>
+                      Instagram
+                  </a>
+                  <a class="btn disabled">
+                      <i class="icon icon-large icon-camera"></i>
+                      Flickr
+                  </a>
+                  <a class="btn disabled">
+                      <i class="icon icon-large icon-facebook-sign"></i>
+                      Facebook
+                  </a>
+                </div>
+            </p>
+          </div>
         </div>
-      </div>
+      <? }?
   {{/into}}
 {{/wrap}}
