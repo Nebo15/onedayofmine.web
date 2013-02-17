@@ -77,5 +77,29 @@ var Tools = {
             day_diff == 1 && "Yesterday" ||
             day_diff < 7 && day_diff + " days ago" ||
             day_diff < 31 && Math.ceil( day_diff / 7 ) + " weeks ago";
+    },
+
+    createDateObject: function(date, time, timezone) {
+      var date_pieces = date.split('-');
+      var time_pieces = time.split(':');
+      var timezone_pieces = timezone.split(':');
+
+      // Returns in UTC Timezone
+      var obj = new Date();
+
+      obj.setUTCFullYear(parseInt(date_pieces[0], 10));
+      obj.setUTCMonth(parseInt(date_pieces[1], 10)-1);
+      obj.setUTCDate(parseInt(date_pieces[2], 10));
+
+      if(timezone.substring(0, 1) == '+') {
+        obj.setUTCHours(parseInt(time_pieces[0], 10) - parseInt(timezone_pieces[0], 10));
+        obj.setUTCMinutes(parseInt(time_pieces[1], 10) - parseInt(timezone_pieces[1], 10));
+      } else {
+        obj.setUTCHours(parseInt(time_pieces[0], 10) + parseInt(timezone_pieces[0], 10));
+        obj.setUTCMinutes(parseInt(time_pieces[1], 10) + parseInt(timezone_pieces[1], 10));
+      }
+        obj.setUTCSeconds(parseInt(time_pieces[2], 10));
+
+      return obj;
     }
 };

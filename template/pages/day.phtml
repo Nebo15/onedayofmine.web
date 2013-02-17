@@ -10,11 +10,13 @@
   {{into slot="js_include"}}
     <script src="/lib/vendor/handlebars.js"></script>
     <script src="/lib/vendor/bootstrap-fileupload.js"></script>
-    <script src="/lib/vendor/jquery.scrollTo-1.4.3.1-min.js"></script>
-    <script src="/lib/Template.js"></script>
+    <script src="/lib/vendor/bootstrap-datepicker.js"></script>
+    <script src="/lib/vendor/bootstrap-timepicker.min.js"></script>
   {{/into}}
   {{into slot="css_include"}}
     <link href="/styles/jasny-bootstrap.css" rel="stylesheet">
+    <link href="/styles/bootstrap-datepicker.css" rel="stylesheet">
+    <link href="/styles/bootstrap-timepicker.min.css" rel="stylesheet">
   {{/into}}
   {{into slot="templates"}}
     <script id="template_comments" type="text/x-handlebars-template">
@@ -110,43 +112,75 @@
           var id = element.attr('moment_id');
 
           // Moment time
-          var time_input  = element.find('input[type=time]');
-          var time_button = element.find('#trigger_save_time');
+          var date_input_selector = 'input[subtype=date]';
+          var time_input_selector  = 'input[subtype=time]';
 
-          time_input.change(function(event) {
-            time_button.removeClass('disabled').addClass('btn-success');
+          var date_input  = element.find(date_input_selector);
+          var time_input  = element.find(time_input_selector);
+
+          var datetime_button = element.find('#trigger_save_time');
+
+          time_input.bind('change keyup', function(event) {
+            datetime_button.removeClass('disabled').addClass('btn-success');
           });
 
-          time_button.click(function() {
-            if(!time_button.hasClass('disabled')) {
-              console.log("new time " + time_input.val());
+          date_input.change(function(event) {
+            datetime_button.removeClass('disabled').addClass('btn-success');
+          });
 
-              // time_input.addClass('disabled');
-              // time_button.addClass('disabled');
+          datetime_button.click(function() {
+            if(!datetime_button.hasClass('disabled')) {
+              datetime_button.addClass('disabled');
+              time_input.prop('disabled', true);
+              date_input.prop('disabled', true);
 
-              var found = false;
-              $('.moment-item').each(function() {
-                if($(this) == element && found)
-                  return;
+              // Returns in UTC Timezone
+              var new_datetime = Tools.createDateObject(date_input.val(), time_input.val() + ':' + time_input.attr('seconds'), time_input.attr('timezone'));
 
-                var tmp = $(this).find('input[type=time]').val().split(":");
-                var tmp_moment_time = new Date(2000, 1, 1, parseInt(tmp[1]), parseInt(tmp[0])).getTime();
-
-                var time_input_split = time_input.val().split(":");
-                var selected_moment_time = new Date(2000, 1, 1, parseInt(time_input_split[1]), parseInt(time_input_split[0])).getTime();
-
-                console.log(selected_moment_time + '<' + tmp_moment_time);
-                if(selected_moment_time < tmp_moment_time) {
-                  found = true;
-
-                  var placeholder = element.next();
-                  element.insertBefore($(this));
-                  placeholder.insertAfter(element);
-                  $(window).scrollTo(element, 300);
-                }
+              var moment_time_request = API.request('POST', '/moments/'+id+'/update', {
+                time: date_input.val() + 'T' + time_input.val() + ':' + time_input.attr('seconds') + time_input.attr('timezone')
               });
 
-              time_button.addClass('disabled').removeClass('btn-success');
+              console.log(date_input.val() + 'T' + time_input.val() + ':' + time_input.attr('seconds') + time_input.attr('timezone'));
+
+              moment_time_request.success(function() {
+                var placeholder = element.next();
+
+                var found = false;
+                $('.moment-item').each(function() {
+                  if($(this).is(element) || found) {
+                    return;
+                  }
+
+                  var tmp_datetime = Tools.createDateObject(
+                                            $(this).find(date_input_selector).val(),
+                                            $(this).find(time_input_selector).val() + ':' + $(this).find(time_input_selector).attr('seconds'),
+                                            $(this).find(time_input_selector).attr('timezone'));
+
+                  if(new_datetime < tmp_datetime) {
+                    found = true;
+
+                    element.insertBefore($(this));
+                  }
+                });
+
+                if(!found) {
+                  $('.moment-item').parent().append(element);
+                }
+
+                placeholder.insertAfter(element);
+                $(window).scrollTo(element, 300);
+
+                time_input.prop('disabled', false);
+                date_input.prop('disabled', false);
+                datetime_button.addClass('disabled').removeClass('btn-success');
+              });
+
+              moment_time_request.error(function() {
+                datetime_button.addClass('btn-error').removeClass('btn-success');
+              });
+
+              moment_time_request.send();
             }
           });
 
@@ -232,6 +266,28 @@
 
             final_description_request.send();
           }
+        });
+
+        var today = new Date();
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1; //January is 0!
+        var yyyy = today.getFullYear();
+        if(dd<10){dd='0'+dd} if(mm<10){mm='0'+mm} today = yyyy+'/'+mm+'/'+dd;
+
+        $('input[subtype=date]').datepicker({
+          format: 'yyyy-mm-dd',
+          startDate: '2000-01-01',
+          endDate: today,
+          weekStart: 1,
+          todayBtn: true,
+          todayHighlight: true
+        });
+
+        $('input[subtype=time]').timepicker({
+          minuteStep: 5,
+          template: false,
+          isOpen: true,
+          showMeridian: false
         });
       <? } ?>
 
@@ -435,51 +491,53 @@
                         </li>
                       <? } ?>
                       {{list:item}}
-                      <li class="well moment-item" moment_id="{$item->id}">
-                          <? if($this->is_owner) { ?>
-                            <span class="moment-controls-overlay">
-                              <a class="not-decorated with-shadow" id="trigger_moment_delete"><i class="icon-trash"></i></a>
-                            </span>
-                          <? } ?>
-
-                          <div class="timepicker text-center with-shadow">
+                        <li class="well moment-item" moment_id="{$item->id}" itemscope itemtype="http://schema.org/ImageObject">
                             <? if($this->is_owner) { ?>
-                              <span class="input-prepend input-append">
-                                <span class="add-on add-on-small"><i class="icon-time"></i></span>
-                                <input type="time" class="input-mini add-on-small" value="{$item->time}" />
-                                <button id="trigger_save_time" class="btn btn-small disabled" type="button">Save</button>
+                              <span class="moment-controls-overlay">
+                                <a class="not-decorated with-shadow" id="trigger_moment_delete"><i class="icon-trash"></i></a>
                               </span>
-                            <? } else { ?>
-                              <i class="icon-time"></i> {$item->time}
                             <? } ?>
-                          </div>
 
-                          <div class="moment-image-holder">
-                            <img src="{$item->image_532}" width="400" class="img-polaroid" alt="" />
-                            <!-- <span class="moment-image-overlay overlay-like">
-                              <i class="icon-heart<?= $item->is_liked ? '' : '-empty'; ?>"></i> {$item->likes_count}
-                            </span> -->
-                          </div>
-
-                          <br class="clearfix" />
-
-
-                          <? if($this->is_owner || $item->description) { ?>
-                            <p class="bubble moment-description">
+                            <div class="timepicker text-center with-shadow">
                               <? if($this->is_owner) { ?>
-                                <textarea rows="3" class="input-block-level" placeholder="Enter moment description...">{$item->description|default:""|nl2br}</textarea>
-                                <button type="submit" class="btn btn-block disabled">Save description</button>
+                                <span class="input-prepend input-append">
+                                  <span class="add-on add-on-small"><i class="icon-calendar"></i></span>
+                                  <input type="text" subtype="date" class="add-on-small" value="{$item->date}" />
+
+                                  <span class="add-on add-on-small"><i class="icon-time"></i></span>
+                                  <input type="text" subtype="time" class="add-on-small" value="{$item->time}" seconds="{$item->time_seconds}" timezone="{$item->timezone}" />
+
+                                  <button id="trigger_save_time" class="btn btn-small disabled" type="button">Save</button>
+                                </span>
                               <? } else { ?>
-                                {$item->description|nl2br}
+                                <time datetime="{$item->datetime_iso}"><i class="icon-time"></i> {$item->time}</time>
                               <? } ?>
-                            </p>
-                          <? } ?>
-                      </li>
-                      <? if($this->is_owner) { ?>
-                        <li class="well moment-item-placeholder">
-                          <a class="not-decorated with-shadow" data-toggle="modal" data-target="#add_moment_modal"><i class="icon-plus-sign icon-2x"></i></a>
+                            </div>
+
+                            <div class="moment-image-holder">
+                              <img src="{$item->image_532}" width="400" class="img-polaroid" itemprop="contentUrl" alt="" />
+                            </div>
+
+                            <br class="clearfix" />
+
+
+                            <? if($this->is_owner || $item->description) { ?>
+                              <p class="bubble moment-description" itemprop="description">
+                                <? if($this->is_owner) { ?>
+                                  <textarea rows="3" class="input-block-level" placeholder="Enter moment description...">{$item->description|default:""|nl2br}</textarea>
+                                  <button type="submit" class="btn btn-block disabled">Save description</button>
+                                <? } else { ?>
+                                  {$item->description|nl2br}
+                                <? } ?>
+                              </p>
+                            <? } ?>
                         </li>
-                      <? } ?>
+
+                        <? if($this->is_owner) { ?>
+                          <li class="well moment-item-placeholder">
+                            <a class="not-decorated with-shadow" data-toggle="modal" data-target="#add_moment_modal"><i class="icon-plus-sign icon-2x"></i></a>
+                          </li>
+                        <? } ?>
                       {{/list:item}}
                   </ul>
               {{/list}}
@@ -557,89 +615,93 @@
 
               <hr/>
 
-              <div class="comments">
-                <span class="pull-right not-decorated with-shadow">
-                  <i class="icon-comments"></i>
-                  <span id="comments_counter"><? if($this->day->comments_count > 3) { ?>3/<? } ?>{$this->day->comments_count}</span>
-                </span>
-                <h4>Comments:</h4>
-                  <ul class="unstyled">
-                    {{list using="$#day->comments"}}
-                      {{list:item}}
-                        <li class="comment-item" comment_id="{$item->id}">
-                          <img src="{$item->user->image_72}" width="72" class="pull-left img-rounded" alt="" />
+              <? if($this->toolkit->getUser() || $this->day->comments_count > 0) { ?>
+                <div class="comments">
+                  <span class="pull-right not-decorated with-shadow">
+                    <i class="icon-comments"></i>
+                    <span id="comments_counter"><? if($this->day->comments_count > 3) { ?>3/<? } ?>{$this->day->comments_count}</span>
+                  </span>
+                  <h4>Comments:</h4>
+                    <ul class="unstyled">
+                      {{list using="$#day->comments"}}
+                        {{list:item}}
+                          <li class="comment-item" comment_id="{$item->id}">
+                            <img src="{$item->user->image_72}" width="72" class="pull-left img-rounded" alt="" />
 
-                          <div class="bubble left">
-                            <p class="text">
-                              <? if($this->current_user && $item->user->id == $this->current_user->id) { ?>
-                                <a class="pull-right not-decorated with-shadow" id="trigger_comment_delete"><i class="icon-trash"></i></a>
-                              <? } ?>
+                            <div class="bubble left">
+                              <p class="text">
+                                <? if($this->current_user && $item->user->id == $this->current_user->id) { ?>
+                                  <a class="pull-right not-decorated with-shadow" id="trigger_comment_delete"><i class="icon-trash"></i></a>
+                                <? } ?>
 
-                              {$item->text}
+                                {$item->text}
 
-                              <small>by <b><a href="/pages/{$item->user->id}/user">{$item->user->name}</a></b></small>
-                            </p>
-                          </div>
-                        </li>
-                      {{/list:item}}
-                    {{/list}}
-                    <li class="comments-loader">
-                      <button class="btn btn-small btn-block"<? if($this->day->comments_count < 4) { ?> style="display:none"<? } ?> type="button">
-                        Load more comments
-                      </button>
-                    </li>
-                  </ul>
+                                <small>by <b><a href="/pages/{$item->user->id}/user">{$item->user->name}</a></b></small>
+                              </p>
+                            </div>
+                          </li>
+                        {{/list:item}}
+                      {{/list}}
+                      <li class="comments-loader">
+                        <button class="btn btn-small btn-block"<? if($this->day->comments_count < 4) { ?> style="display:none"<? } ?> type="button">
+                          Load more comments
+                        </button>
+                      </li>
+                    </ul>
 
-                <? if($this->toolkit->getUser()) { ?>
-                  <textarea rows="3" class="input-block-level"></textarea>
-                  <button type="submit" class="btn btn-block disabled">Send comment</button>
-                <? } ?>
-              </div>
+                  <? if($this->toolkit->getUser()) { ?>
+                    <textarea rows="3" class="input-block-level"></textarea>
+                    <button type="submit" class="btn btn-block disabled">Send comment</button>
+                  <? } ?>
+                </div>
+              <? } ?>
           </div>
       </div>
 
-      <div id="add_moment_modal" class="modal hide fade">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-          <h3>Add moment</h3>
-        </div>
-        <div class="modal-body">
-          <p>
-              <h4>From your PC:</h4>
-              <div class="text-center">
-                <div class="fileupload fileupload-new" data-provides="fileupload">
-                  <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
-                    <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&text=no+image" />
-                  </div>
-                  <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
-                  <div>
-                    <span class="btn btn-file">
-                      <span class="fileupload-new">Select image</span>
-                      <span class="fileupload-exists">Change</span>
-                      <input type="file" />
-                    </span>
-                    <a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
+      <? if($this->is_owner) { ?>
+        <div id="add_moment_modal" class="modal hide fade">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3>Add moment</h3>
+          </div>
+          <div class="modal-body">
+            <p>
+                <h4>From your PC:</h4>
+                <div class="text-center">
+                  <div class="fileupload fileupload-new" data-provides="fileupload">
+                    <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
+                      <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&text=no+image" />
+                    </div>
+                    <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+                    <div>
+                      <span class="btn btn-file">
+                        <span class="fileupload-new">Select image</span>
+                        <span class="fileupload-exists">Change</span>
+                        <input type="file" />
+                      </span>
+                      <a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <h4>Import from:</h4>
-              <div class="text-center">
-                <a class="btn">
-                    <i class="icon icon-large icon-camera-retro"></i>
-                    Instagram
-                </a>
-                <a class="btn disabled">
-                    <i class="icon icon-large icon-camera"></i>
-                    Flickr
-                </a>
-                <a class="btn disabled">
-                    <i class="icon icon-large icon-facebook-sign"></i>
-                    Facebook
-                </a>
-              </div>
-          </p>
+                <h4>Import from:</h4>
+                <div class="text-center">
+                  <a class="btn">
+                      <i class="icon icon-large icon-camera-retro"></i>
+                      Instagram
+                  </a>
+                  <a class="btn disabled">
+                      <i class="icon icon-large icon-camera"></i>
+                      Flickr
+                  </a>
+                  <a class="btn disabled">
+                      <i class="icon icon-large icon-facebook-sign"></i>
+                      Facebook
+                  </a>
+                </div>
+            </p>
+          </div>
         </div>
-      </div>
+      <? } ?>
   {{/into}}
 {{/wrap}}
