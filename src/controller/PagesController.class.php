@@ -129,6 +129,9 @@ class PagesController extends lmbController
       $moment->time_seconds = date('s', $time);
       $moment->date = date('Y-m-d', $time);
       $moment->timezone = date('P', $time);
+
+      $moment->datetime_w3c = date(DATE_W3C, $time);
+      $moment->datetime_iso = date(DATE_ISO8601, $time);
     }
 
     $this->current_user = $this->toolkit->getUser();
