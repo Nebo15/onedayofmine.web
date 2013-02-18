@@ -99,6 +99,15 @@ class PagesController extends lmbController
 		$this->days = $this->toolkit->getExportHelper()->exportDayItems($user->getDays());
 	}
 
+	function doMyFollowers()
+	{
+		if (!$user = lmbToolkit::instance()->getUser())
+			return $this->forwardToUnauthorized();
+
+		$this->followers = $this->_toFlatArray($this->toolkit->getExportHelper()->exportUserItems($user->getFollowersUsers()));
+		$this->following = $this->_toFlatArray($this->toolkit->getExportHelper()->exportUserItems($user->getFollowingUsers()));
+	}
+
 	function doDay()
 	{
 		if (!$day = Day::findById($this->request->id))
