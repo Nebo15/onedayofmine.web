@@ -63,8 +63,11 @@ input[subtype=time] {
 }
 
 .days dl {
+    width:532px;height:532;
+    overflow: hidden;
     position: relative; margin: 1em 0;
 }
+
 .days dl dt img  {
     display: block;
 }
