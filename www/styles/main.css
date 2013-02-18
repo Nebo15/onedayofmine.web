@@ -58,8 +58,17 @@ input[subtype=time] {
   color: #980000;
 }
 
+/** days list */
 .days {
+    list-style: none;
+}
+.days::after {
     clear: both;
+}
+
+.days li {
+    float:left;
+    margin-right:10px
 }
 
 .days dl {
