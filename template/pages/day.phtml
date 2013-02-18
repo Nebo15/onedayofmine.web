@@ -141,8 +141,6 @@
                 time: date_input.val() + 'T' + time_input.val() + ':' + time_input.attr('seconds') + time_input.attr('timezone')
               });
 
-              console.log(date_input.val() + 'T' + time_input.val() + ':' + time_input.attr('seconds') + time_input.attr('timezone'));
-
               moment_time_request.success(function() {
                 var placeholder = element.next();
 

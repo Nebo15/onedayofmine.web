@@ -92,8 +92,8 @@ var Tools = {
       obj.setUTCDate(parseInt(date_pieces[2], 10));
 
       if(timezone.substring(0, 1) == '+') {
-        obj.setUTCHours(parseInt(time_pieces[0], 10) - parseInt(timezone_pieces[0], 10));
-        obj.setUTCMinutes(parseInt(time_pieces[1], 10) - parseInt(timezone_pieces[1], 10));
+        obj.setUTCHours(parseInt(time_pieces[0], 10));
+        obj.setUTCMinutes(parseInt(time_pieces[1], 10));
       } else {
         obj.setUTCHours(parseInt(time_pieces[0], 10) + parseInt(timezone_pieces[0], 10));
         obj.setUTCMinutes(parseInt(time_pieces[1], 10) + parseInt(timezone_pieces[1], 10));
