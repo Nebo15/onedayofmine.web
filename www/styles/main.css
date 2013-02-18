@@ -58,25 +58,28 @@ input[subtype=time] {
   color: #980000;
 }
 
-.days br {
+.days {
     clear: both;
 }
 
-.day-controls {
-  margin-top: 35px;
+.days dl {
+    position: relative; margin: 1em 0;
+}
+.days dl dt img  {
+    display: block;
+}
+.days dl dd {
+    position: absolute; left: 0em; bottom: 0em; right: 0em;
+    background: #000; background: rgba(0, 0, 0, 0.7);
+    margin:0;
 }
 
-.day-controls a {
-  padding-left: 5px;
+.days dd a {
+    color:#999
 }
-
-.day-info {
-  font-size: 0.9em;
-  clear: both;
-}
-
-.day-info a {
-  white-space: nowrap;
+.days dl dd div {
+    display: block; float: left; clear: both;
+    padding: 0em 0.5em; color: #fff;
 }
 
 .day-user-actions {

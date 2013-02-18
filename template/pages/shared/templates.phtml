@@ -1,17 +1,25 @@
 {{template name='days_list'}}
 		{{list using="$days"}}
-				<ul class="thumbnails">
+				<ul class="days thumbnails">
 				    {{list:item}}
 				    <li class="span3">
-				        <div class="thumbnail">
-				            <a href="/pages/{$item->id}/day">
-				                <img src="{$item->image_532|default:'/img/no_photo.png'}" alt="{$item->final_description}">
-				                <h5>{$item->title}</h5>
-                    </a>
-                    <a href="/pages/{$item->user->id}/user">
-						            <p>{$item->user->name}</p>
-				            </a>
-				        </div>
+						    <dl>
+								    <dt>
+                        <a href="/pages/{$item->id}/day">
+                            <img src="{$item->image_532|default:'/img/no_photo.png'}" alt="{$item->final_description}">
+                        </a>
+								    </dt>
+								    <dd>
+                        <div>
+                            <a href="/pages/{$item->id}/day">
+		                            <h5>{$item->title|i18n_clip:60,0,"..."}</h5>
+	                          </a>
+		                        <a href="/pages/{$item->user->id}/user">
+                                {$item->user->name}
+                            </a>
+                        </div>
+								    </dd>
+						    </dl>
 				    </li>
 				    {{/list:item}}
 				</ul>
