@@ -12,10 +12,11 @@
 								    <dd>
                         <div>
                             <a href="/pages/{$item->id}/day">
-		                            <h5>{$item->title|i18n_clip:60,0,"..."}</h5>
+		                            {$item->title|i18n_clip:50,0,"..."}
 	                          </a>
+	                          <br/>
 		                        <a href="/pages/{$item->user->id}/user">
-                                {$item->user->name}
+                                <small>{$item->user->name}</small>
                             </a>
                         </div>
 								    </dd>
