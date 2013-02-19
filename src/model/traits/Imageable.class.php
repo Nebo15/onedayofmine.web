@@ -108,9 +108,13 @@ trait Imageable
 
   function showImages(stdClass $export)
   {
+	  $images_founded = false;
     foreach ($this->getImages() as $image_width => $image) {
       $export->$image_width = $image;
+	    if($image)
+	      $images_founded = true;
     }
+	  return $images_founded;
   }
 
   function getImages()
