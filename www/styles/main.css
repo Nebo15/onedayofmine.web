@@ -93,7 +93,7 @@ input[subtype=time] {
 }
 .days dl dd {
     position: absolute; left: 0em; bottom: 0em; right: 0em;
-    background: #000; background: rgba(0, 0, 0, 0.85);
+    background: #000; background: rgba(0, 0, 0, 0.6);
     margin:0;
 }
 

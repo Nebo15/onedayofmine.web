@@ -12,7 +12,7 @@
 								    <dd>
                         <div>
                             <a href="/pages/{$item->id}/day">
-		                            {$item->title|i18n_clip:50,0,"..."}
+		                            {$item->title|i18n_clip:60,0,"..."}
 	                          </a>
 	                          <br/>
 		                        <a href="/pages/{$item->user->id}/user">
@@ -29,6 +29,33 @@
 				{{/list:default}}
 		{{/list}}
 {{/template}}
+
+<script id="days_list" type="text/x-handlebars-template">
+		<ul class="days">
+				[[#days]]
+		    <li>
+		        <dl class="with-box-shadow">
+		            <dt>
+		                <a href="/pages/[[id]]/day">
+		                    <img src="[[image_532]]" alt="[[final_description]]">
+		                </a>
+		            </dt>
+		            <dd>
+		                <div>
+		                    <a href="/pages/[[id]]/day">
+		                        [[clip title 30]]
+		                    </a>
+		                    <br/>
+		                    <a href="/pages/[[user.id]]/user">
+		                        <small>[[user.name]]</small>
+		                    </a>
+		                </div>
+		            </dd>
+		        </dl>
+		    </li>
+        [[/days]]
+		</ul>
+</script>
 
 {{template name='users_list'}}
 		{{list using="$users"}}
