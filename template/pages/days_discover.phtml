@@ -4,12 +4,8 @@ $this->menu = 'interesting';
 ?>
 {{wrap with="layout.phtml"}}
   {{into slot="content"}}
-    <div class="row-fluid">
-      <div class="span10 offset1">
         <h1>Interesting days</h1>
       	{{apply template="days_list" days="{$#days}"/}}
-      </div>
-    </div>
   {{/into}}
   {{into slot="js_ready"}}
 			//$('.thumbnail').equalHeights(300, 400);
