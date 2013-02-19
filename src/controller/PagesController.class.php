@@ -88,7 +88,14 @@ class PagesController extends lmbController
 
 		$this->days = [];
 		foreach ($days_ratings as $day_rating)
-			$this->days[] = $this->_toFlatArray($this->toolkit->getExportHelper()->exportDay($day_rating->getDay()));
+		{
+			$item = $this->_toFlatArray($this->toolkit->getExportHelper()->exportDay($day_rating->getDay()));
+			if(!$item['image_532'])
+				continue;
+			if(!$item['image_266'])
+				continue;
+			$this->days[] = $item;
+		}
 	}
 
 	function doMyDays()

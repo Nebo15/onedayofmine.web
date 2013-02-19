@@ -3,28 +3,17 @@ $this->title = "Interesting days";
 $this->menu = 'interesting';
 ?>
 {{wrap with="layout.phtml"}}
+{{into slot="css"}}
+		.carousel-caption { color:#fff; }
+{{/into}}
 {{into slot="content"}}
 <!-- Main Area -->
 <div id="main_area" style="padding-top:30px">
     <!-- Slider -->
     <div class="row">
-        <div class="span6">
-            <!-- Bottom switcher of slider -->
-            <ul class="thumbnails">
-                {{list using="$#days" key="{$i}"}}
-	                  {{list:item}}
-				                <li class="span2">
-				                    <a class="thumbnail" id="carousel-selector-{$i}">
-				                        <img src="{$item.image_266}"/>
-				                    </a>
-				                </li>
-                    {{/list:item}}
-	              {{/list}}
-            </ul>
-        </div>
-        <div class="span6" id="slider">
+        <div class="span6 offset3" id="slider">
             <div class="row">
-                <div class="span8" id="carousel-bounding-box" style="width:532px">
+                <div class="span6" id="carousel-bounding-box" style="width:532px">
                     <div id="myCarousel" class="carousel slide">
                         <div class="carousel-inner">
                             {{list using="$#days" key="{$i}"}}
@@ -53,7 +42,20 @@ $this->menu = 'interesting';
     <!--/Slider-->
 
     <div class="row hidden-phone" id="slider-thumbs">
-
+        <div class="span12">
+            <!-- Bottom switcher of slider -->
+            <ul class="thumbnails">
+                {{list using="$#days" key="{$i}"}}
+                {{list:item}}
+                <li class="span2">
+                    <a class="thumbnail" id="carousel-selector-{$i}">
+                        <img src="{$item.image_266}"/>
+                    </a>
+                </li>
+                {{/list:item}}
+                {{/list}}
+            </ul>
+        </div>
     </div>
 </div>
 <script>
