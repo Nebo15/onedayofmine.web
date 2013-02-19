@@ -3,11 +3,80 @@ $this->title = "Interesting days";
 $this->menu = 'interesting';
 ?>
 {{wrap with="layout.phtml"}}
-  {{into slot="content"}}
-        <h1>Interesting days</h1>
-      	{{apply template="days_list" days="{$#days}"/}}
-  {{/into}}
-  {{into slot="js_ready"}}
-			//$('.thumbnail').equalHeights(300, 400);
-  {{/into}}
+{{into slot="content"}}
+<!-- Main Area -->
+<div id="main_area" style="padding-top:30px">
+    <!-- Slider -->
+    <div class="row">
+        <div class="span6">
+            <!-- Bottom switcher of slider -->
+            <ul class="thumbnails">
+                {{list using="$#days" key="{$i}"}}
+	                  {{list:item}}
+				                <li class="span2">
+				                    <a class="thumbnail" id="carousel-selector-{$i}">
+				                        <img src="{$item.image_266}"/>
+				                    </a>
+				                </li>
+                    {{/list:item}}
+	              {{/list}}
+            </ul>
+        </div>
+        <div class="span6" id="slider">
+            <div class="row">
+                <div class="span8" id="carousel-bounding-box" style="width:532px">
+                    <div id="myCarousel" class="carousel slide">
+                        <div class="carousel-inner">
+                            {{list using="$#days" key="{$i}"}}
+		                            {{list:item}}
+			                              <? $class = (!$i) ? 'active' : '';?>
+				                            <div class="item {$class}" data-slide-number="{$i}">
+						                            <img src="{$item.image_532}"/>
+						                            <div class="carousel-caption">
+								                            {$item.title}
+								                            <br/>
+								                            <small>{$item.user.name}</small>
+						                            </div>
+				                            </div>
+		                            {{/list:item}}
+                            {{/list}}
+                        </div>
+                        <!-- Carousel nav -->
+                        <a class="carousel-control left" href="#myCarousel" data-slide="prev">‹</a>
+                        <a class="carousel-control right" href="#myCarousel" data-slide="next">›</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!--/Slider-->
+
+    <div class="row hidden-phone" id="slider-thumbs">
+
+    </div>
+</div>
+<script>
+    jQuery(document).ready(function ($) {
+
+        $('#myCarousel').carousel({
+            interval:5000
+        });
+
+        $('#carousel-text').html($('#slide-content-0').html());
+
+        //Handles the carousel thumbnails
+        $('[id^=carousel-selector-]').click(function () {
+            var id_selector = $(this).attr("id");
+            var id = id_selector.substr(id_selector.length - 1);
+            var id = parseInt(id);
+            $('#myCarousel').carousel(id);
+        });
+
+    });
+</script>
+{{/into}}
+{{into slot="js_ready"}}
+//$('.thumbnail').equalHeights(300, 400);
+{{/into}}
 {{/wrap}}
