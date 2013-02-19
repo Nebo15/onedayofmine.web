@@ -5,18 +5,18 @@
 				    <li>
 						    <dl class="with-box-shadow">
 								    <dt>
-                        <a href="/pages/{$item->id}/day">
-                            <img src="{$item->image_532|default:'/img/no_photo.png'}" alt="{$item->final_description}">
+                        <a href="/pages/{$item.id}/day">
+                            <img src="{$item.image_532|default:'/img/no_photo.png'}" alt="{$item.final_description}">
                         </a>
 								    </dt>
 								    <dd>
                         <div>
-                            <a href="/pages/{$item->id}/day">
-		                            {$item->title|i18n_clip:60,0,"..."}
+                            <a href="/pages/{$item.id}/day">
+		                            {$item.title|i18n_clip:60,0,"..."}
 	                          </a>
 	                          <br/>
-		                        <a href="/pages/{$item->user->id}/user">
-                                <small>{$item->user->name}</small>
+		                        <a href="/pages/{$item.user.id}/user">
+                                <small>{$item.user.name}</small>
                             </a>
                         </div>
 								    </dd>

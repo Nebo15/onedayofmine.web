@@ -6,6 +6,12 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 0;
 }
 
+h1.big { font-size: 38.25px;}
+h1 { font-size: 29.75px;}
+h2 { font-size: 21.25px;}
+h3 { font-size: 17px;}
+h4 { font-size: 14.45px; }
+
 .btn:hover, a.not-decorated {
   text-decoration: none;
 }
@@ -79,7 +85,7 @@ input[subtype=time] {
 
 .days dl {
     position: relative;
-    margin: 11px;
+    margin: 11px 11px 0 0;
 }
 
 .days dt {

@@ -103,7 +103,7 @@ class PagesController extends lmbController
 		if (!$user = lmbToolkit::instance()->getUser())
 			return $this->forwardToUnauthorized();
 
-		$this->days = $this->toolkit->getExportHelper()->exportDayItems($user->getPublicDays());
+		$this->days = $this->_toFlatArray($this->toolkit->getExportHelper()->exportDayItems($user->getPublicDays()));
 	}
 
 	function doMyFollowers()
@@ -177,7 +177,12 @@ class PagesController extends lmbController
 			return $this->forwardTo404();
 
 		$this->user = (array) $this->toolkit->getExportHelper()->exportUser($user);
-		$this->user['days'] = (array) $this->toolkit->getExportHelper()->exportDayItems($user->getPublicDays());
+		$this->user['days'] = $this->_toFlatArray($this->toolkit->getExportHelper()->exportDayItems($user->getPublicDays()));
+		$followers = $user->getFollowersUsers();
+		$this->user['followers'] = $this->_toFlatArray($this->toolkit->getExportHelper()->exportUserItems($followers));
+
+		$following = $user->getFollowingUsers();
+		$this->user['following'] = $this->_toFlatArray($this->toolkit->getExportHelper()->exportUserItems($following));
 	}
 
 	function doNotFound()
