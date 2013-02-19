@@ -3,58 +3,15 @@ $this->title = "My followers and following";
 $this->menu = 'me';
 ?>
 {{wrap with="layout.phtml"}}
-{{into slot="css"}}
-.follow-action, .unfollow-action {
-  margin:17px 10px 0 0;
-}
-{{/into}}
 {{into slot="content"}}
 <div class="row">
-    <div class="span6">
+    <div class="span5 offset1" style="margin-right:30px">
 		    <h1>Followers <small><?= count($this->followers); ?> people</small></h1>
-	      {{list using="$#followers"}}
-		    <ul class="unstyled" style="margin-top:1em">
-				    {{list:item}}
-				    <li style="background-color:#eeeeee">
-						    <div class="row" >
-								    <div class="span1">
-										    <img src="{$item.image_192}"/>
-								    </div>
-		                <div class="span5">
-				                <a href="">{$item.name}</a> {$item.occupation} <? if($item['location']) { ?>from {$item.location}<? } ?>
-                        <div class="pull-right" style="height:70px;">
-                            <a href="#" user_id="{$item.id}" class="follow-action btn btn-info <? if($item['following']) { ?>hide<? } ?>">Follow</a>
-                            <a href="#" user_id="{$item.id}" class="unfollow-action btn btn-danger <? if(!$item['following']) { ?>hide<? } ?>">Unfollow</a>
-                        </div>
-		                </div>
-                </div>
-				    </li>
-				    {{/list:item}}
-		    </ul>
-		    {{/list}}
+	      {{apply template="users_list" users="{$#followers}"/}}
     </div>
-    <div class="span6">
+    <div class="span5">
         <h1>Following <small><?= count($this->following); ?> people</small></h1>
-        <ul class="unstyled"  style="margin-top:1em">
-            <li style="background-color:#eeeeee">
-                <div class="row" >
-                    <div class="span1">
-                        <img src="{$item.image_192}" class="img-rounded"/>
-                    </div>
-                    <div class="span5">
-                        <a href="">{$item.name}</a> {$item.occupation} <? if($item['location']) { ?>from {$item.location}<? } ?>
-                        <div class="pull-right" style="height:70px;">
-                            <a href="#" user_id="{$item.id}" class="follow-action btn btn-info <? if($item['following']) { ?>hide<? } ?>">
-		                            Follow
-                            </a>
-                            <a href="#" user_id="{$item.id}" class="unfollow-action btn btn-danger <? if(!$item['following']) { ?>hide<? } ?>">
-		                            Unfollow
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </li>
-        </ul>
+        {{apply template="users_list" users="{$#following}"/}}
     </div>
 </div>
 {{/into}}
@@ -62,12 +19,12 @@ $this->menu = 'me';
 	$('.follow-action').click(function() {
 		API.request('POST', 'users/'+$(this).attr('user_id')+'/follow').send();
 		$(this).hide();
-		$(this).parent().find('.unfollow-action').show();
+		$(this).parent().find('.unfollow-action').css('display', 'block');
 	});
 	$('.unfollow-action').click(function() {
 		API.request('POST', 'users/'+$(this).attr('user_id')+'/unfollow').send();
 		$(this).hide();
-		$(this).parent().find('.follow-action').show();
+		$(this).parent().find('.follow-action').css('display', 'block');
 	});
 {{/into}}
 {{/wrap}}

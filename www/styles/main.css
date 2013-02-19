@@ -19,6 +19,12 @@ h1, h2, h3, h4, h5, h6 {
     margin: 30px 0;
 }
 
+.with-box-shadow {
+    -moz-box-shadow: 0 1px 1px rgba(0,0,0,0.15);
+    -webkit-box-shadow: 0 1px 1px rgba(0,0,0,0.15);
+    box-shadow: 0 1px 1px rgba(0,0,0,0.15);
+}
+
 .with-shadow {
     color: rgba(70,70,70,0.6);
 }
@@ -106,9 +112,48 @@ input[subtype=time] {
     padding: 0.2em 0.5em; color: #fff;
 }
 
+/** users list */
+.users .row {
+    background-color:#fff;
+    margin-bottom:10px;
+    height:72px;
+    -moz-box-shadow: 0 1px 1px rgba(0,0,0,0.15);
+    -webkit-box-shadow: 0 1px 1px rgba(0,0,0,0.15);
+    box-shadow: 0 1px 1px rgba(0,0,0,0.15);
+}
+.users .left {
+    float:left;
+    width:72px;
+}
+.users .left a {
+    float:left;
+    margin-right:10px
+}
+.users .left img {
+    width:72px;
+    height:72px;
+}
+.users .middle {
+    float:left;
+    width:250px;
+    padding: 10px
+}
+.users .middle small {
+    color:#999;
+}
+.users .right {
+    float:right;
+}
+
+.follow-action, .unfollow-action {
+    margin:17px 10px 0 0;
+}
+/** /users list */
+
 .day-user-actions {
   height: 45px;
 }
+
 
 .moment-item {
   position: relative;
