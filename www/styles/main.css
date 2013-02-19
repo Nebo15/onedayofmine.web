@@ -86,13 +86,19 @@ input[subtype=time] {
 }
 .days dl dd {
     position: absolute; left: 0em; bottom: 0em; right: 0em;
-    background: #000; background: rgba(0, 0, 0, 0.7);
+    background: #000; background: rgba(0, 0, 0, 0.85);
     margin:0;
 }
 
 .days dd a {
-    color:#999
+    color:#fff;
+    font-weight: normal;
 }
+.days dd a:hover {
+    color:rgb(156, 0, 1);
+    text-decoration: none;
+}
+
 .days dl dd div {
     display: block; float: left; clear: both;
     padding: 0em 0.5em; color: #fff;
