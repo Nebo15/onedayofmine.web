@@ -4,7 +4,22 @@ $this->menu = 'interesting';
 ?>
 {{wrap with="layout.phtml"}}
 {{into slot="css"}}
-		.carousel-caption { color:#fff; }
+	.carousel-caption a {
+		color:#fff;
+	}
+	.carousel-caption a:hover {
+		color:rgb(156, 0, 1);
+		text-decoration:none;
+	}
+	.carousel-control.left, .carousel-control.right {
+		font-size:80px;
+	}
+	.carousel-control.left {
+		left:-55px;
+	}
+	.carousel-control.right {
+		right:-55px;
+	}
 {{/into}}
 {{into slot="content"}}
 <!-- Main Area -->
@@ -20,11 +35,17 @@ $this->menu = 'interesting';
 		                            {{list:item}}
 			                              <? $class = (!$i) ? 'active' : '';?>
 				                            <div class="item {$class}" data-slide-number="{$i}">
-						                            <img src="{$item.image_532}"/>
+						                            <a href="/pages/{$item.id}/day">
+						                                <img src="{$item.image_532}"/>
+                                        </a>
 						                            <div class="carousel-caption">
-								                            {$item.title}
+                                            <a href="/pages/{$item.id}/day">
+								                                {$item.title}
+	                                          </a>
 								                            <br/>
-								                            <small>{$item.user.name}</small>
+								                            <small>
+                                                <a href="/pages/{$item.user.id}/user">{$item.user.name}</a>
+								                            </small>
 						                            </div>
 				                            </div>
 		                            {{/list:item}}
