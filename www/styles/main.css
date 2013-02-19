@@ -127,7 +127,6 @@ input[subtype=time] {
 }
 .users .left a {
     float:left;
-    padding-right:10px;
 }
 .users .left img {
     width:72px;
@@ -136,7 +135,7 @@ input[subtype=time] {
 .users .middle {
     float:left;
     width:250px;
-    padding: 10px
+    padding: 10px 10px 10px 20px;
 }
 .users .middle small {
     color:#999;
