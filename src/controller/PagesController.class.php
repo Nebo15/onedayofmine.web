@@ -96,7 +96,7 @@ class PagesController extends lmbController
 		if (!$user = lmbToolkit::instance()->getUser())
 			return $this->forwardToUnauthorized();
 
-		$this->days = $this->toolkit->getExportHelper()->exportDayItems($user->getDays());
+		$this->days = $this->toolkit->getExportHelper()->exportDayItems($user->getPublicDays());
 	}
 
 	function doMyFollowers()
