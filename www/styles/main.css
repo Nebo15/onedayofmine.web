@@ -68,11 +68,11 @@ input[subtype=time] {
 
 .days li {
     float:left;
-    margin-right:10px
 }
 
 .days dl {
-    position: relative; margin: 1em 0;
+    position: relative;
+    margin: 7px;
 }
 
 .days dt {
