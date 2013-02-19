@@ -44,12 +44,12 @@ $this->menu = 'interesting';
     <div class="row hidden-phone" id="slider-thumbs">
         <div class="span12">
             <!-- Bottom switcher of slider -->
-            <ul class="thumbnails">
+            <ul class="unstyled">
                 {{list using="$#days" key="{$i}"}}
                 {{list:item}}
-                <li class="span2">
-                    <a class="thumbnail" slider_pos="{$i}">
-                        <img src="{$item.image_266}"/>
+                <li class="pull-left">
+                    <a class="thumb" slider_pos="{$i}">
+                        <img src="{$item.image_266}" style="width:53px;height:53px;padding-right:5px"/>
                     </a>
                 </li>
                 {{/list:item}}
@@ -68,7 +68,7 @@ $this->menu = 'interesting';
         $('#carousel-text').html($('#slide-content-0').html());
 
         //Handles the carousel thumbnails
-        $('[id^=carousel-selector-]').click(function () {
+        $('.thumb').click(function () {
             var id = parseInt($(this).attr("slider_pos"));
             $('#myCarousel').carousel(id);
         });
