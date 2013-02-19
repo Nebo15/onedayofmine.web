@@ -22,20 +22,37 @@ $this->menu = '';
       </ul>
 		</div>
 		<div class="span4">
-      <div class="span4" style="margin-right:30px">
-        <h3>Followers <small><?= count($this->user['followers']); ?> people</small></h3>
-        {{apply template="users_list" users="{$#user.followers}"/}}
-      </div>
       <div class="span4">
         <h3>Following <small><?= count($this->user['following']); ?> people</small></h3>
-        {{apply template="users_list" users="{$#user.following}"/}}
+        {{list using="{$#user.following}"}}
+	        <ul class="unstyled  followers-list">
+	          {{list:item}}
+	          <li><a href="/pages/{$item.id}/user">
+	            <img src="{$item.image_72}"/>
+	          </a></li>
+	          {{/list:item}}
+	        </ul>
+        {{/list}}
+      </div>
+      <div class="span4">
+        <h3>Followers <small><?= count($this->user['followers']); ?> people</small></h3>
+        {{list using="{$#user.followers}"}}
+        <ul class="unstyled  followers-list">
+            {{list:item}}
+            <li><a href="/pages/{$item.id}/user">
+                <img src="{$item.image_72}"/>
+            </a></li>
+            {{/list:item}}
+        </ul>
+        {{/list}}
+      </div>
       </div>
 		</div>
 	</div>
 	<div class="row">
-			<div class="span12">
-          {{apply template="days_list" days="$#user.days"/}}
-			</div>
+		<div class="span12">
+			{{apply template="days_list" days="$#user.days"/}}
+		</div>
 	</div>
 
 </div>
