@@ -23,8 +23,8 @@ $this->menu = 'me';
 		                <div class="span5">
 				                <a href="">{$item.name}</a> {$item.occupation} <? if($item['location']) { ?>from {$item.location}<? } ?>
                         <div class="pull-right" style="height:70px;">
-                            <a href="#" class="follow-action btn <? if($item['following']) { ?>hide<? } ?>">Follow</a>
-                            <a href="#" class="unfollow-action btn btn-danger <? if(!$item['following']) { ?>hide<? } ?>">Unfollow</a>
+                            <a href="#" user_id="{$item.id}" class="follow-action btn btn-info <? if($item['following']) { ?>hide<? } ?>">Follow</a>
+                            <a href="#" user_id="{$item.id}" class="unfollow-action btn btn-danger <? if(!$item['following']) { ?>hide<? } ?>">Unfollow</a>
                         </div>
 		                </div>
                 </div>
@@ -44,8 +44,12 @@ $this->menu = 'me';
                     <div class="span5">
                         <a href="">{$item.name}</a> {$item.occupation} <? if($item['location']) { ?>from {$item.location}<? } ?>
                         <div class="pull-right" style="height:70px;">
-                            <a href="#" class="follow-action btn <? if($item['following']) { ?>hide<? } ?>">Follow</a>
-                            <a href="#" class="unfollow-action btn btn-danger <? if(!$item['following']) { ?>hide<? } ?>">Unfollow</a>
+                            <a href="#" user_id="{$item.id}" class="follow-action btn btn-info <? if($item['following']) { ?>hide<? } ?>">
+		                            Follow
+                            </a>
+                            <a href="#" user_id="{$item.id}" class="unfollow-action btn btn-danger <? if(!$item['following']) { ?>hide<? } ?>">
+		                            Unfollow
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -53,6 +57,17 @@ $this->menu = 'me';
         </ul>
     </div>
 </div>
-
+{{/into}}
+{{into slot="js_ready"}}
+	$('.follow-action').click(function() {
+		API.request('POST', 'users/'+$(this).attr('user_id')+'/follow').send();
+		$(this).hide();
+		$(this).parent().find('.unfollow-action').show();
+	});
+	$('.unfollow-action').click(function() {
+		API.request('POST', 'users/'+$(this).attr('user_id')+'/unfollow').send();
+		$(this).hide();
+		$(this).parent().find('.follow-action').show();
+	});
 {{/into}}
 {{/wrap}}
