@@ -127,7 +127,7 @@ input[subtype=time] {
 }
 .users .left a {
     float:left;
-    margin-right:10px
+    padding-right:10px;
 }
 .users .left img {
     width:72px;
