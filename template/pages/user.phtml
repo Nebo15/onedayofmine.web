@@ -3,7 +3,14 @@ $this->menu = '';
 ?>
 {{wrap with="layout.phtml"}}
 {{into slot="css"}}
-
+.followers-list li {
+	float:left;
+	margin-right:3px;
+}
+.followers-list li img {
+	width:72px;
+	height:72px;
+}
 {{/into}}
 {{into slot="content"}}
 <div>
