@@ -21,12 +21,10 @@ $this->menu = '';
 		</div>
 		<div class="span6">
       <h1>{$#user.name}</h1>
-      <ul class="unstyled">
-        <li><i class="icon icon-wrench"></i> occupation: {$#user.occupation}</li>
-        <li><i class="icon icon-map-marker"></i> location: {$#user.location|default:"?"}</li>
-        <li><i class="icon icon-hand-right"></i> followers: {$#user.followers_count}</li>
-        <li><i class="icon icon-hand-left"></i> following: {$#user.following_count}</li>
-      </ul>
+      <p><small>{$#user.occupation} {{if var="$#user.location"}}from {{/if}}{$#user.location}</small></p>
+			<p><i class="icon icon-camera"></i> days: 14</p>
+      <p><i class="icon icon-comments"></i> comments: 35</p>
+      <p><i class="icon icon-bookmark"></i> favourite: 12</p>
 		</div>
 		<div class="span4">
       <div class="span4">
