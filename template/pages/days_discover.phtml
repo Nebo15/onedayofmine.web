@@ -11,6 +11,10 @@ $this->menu = 'interesting';
 		color:rgb(156, 0, 1);
 		text-decoration:none;
 	}
+	.carousel-inner img {
+		width:532px;
+		height:532px;
+	}
 	.carousel-control.left, .carousel-control.right {
 		font-size:80px;
 	}
@@ -23,7 +27,7 @@ $this->menu = 'interesting';
 {{/into}}
 {{into slot="content"}}
 <!-- Main Area -->
-<div id="main_area" style="padding-top:30px">
+<div id="main_area" style="padding-top:5px">
     <!-- Slider -->
     <div class="row">
         <div class="span6 offset3" id="slider">
@@ -79,25 +83,13 @@ $this->menu = 'interesting';
         </div>
     </div>
 </div>
-<script>
-    jQuery(document).ready(function ($) {
-
-        $('#myCarousel').carousel({
-            interval:5000
-        });
-
-        $('#carousel-text').html($('#slide-content-0').html());
-
-        //Handles the carousel thumbnails
-        $('.thumb').click(function () {
-            var id = parseInt($(this).attr("slider_pos"));
-            $('#myCarousel').carousel(id);
-        });
-
-    });
-</script>
 {{/into}}
 {{into slot="js_ready"}}
-//$('.thumbnail').equalHeights(300, 400);
+		$('#myCarousel').carousel({ interval:5000 });
+
+		$('.thumb').click(function () {
+				var id = parseInt($(this).attr("slider_pos"));
+				$('#myCarousel').carousel(id);
+		});
 {{/into}}
 {{/wrap}}
