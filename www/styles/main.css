@@ -61,6 +61,7 @@ input[subtype=time] {
 /** days list */
 .days {
     list-style: none;
+    margin:0;
 }
 .days::after {
     clear: both;
@@ -72,7 +73,7 @@ input[subtype=time] {
 
 .days dl {
     position: relative;
-    margin: 7px;
+    margin: 11px;
 }
 
 .days dt {
