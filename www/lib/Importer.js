@@ -7,6 +7,18 @@ var Importer = {
     days:[],
     instagram_user:'self',
 
+    findUser: function(name, callback) {
+        $.ajax({
+            dataType:"json",
+            url:'https://api.instagram.com/v1/users/search/?callback=?',
+            data:{access_token:hash, q:name},
+            cache:true,
+            success:function (user_response) {
+                callback(user_response.data[0]);
+            }
+        });
+    },
+
     import:function (hash) {
         $.ajax({
             dataType:"json",
