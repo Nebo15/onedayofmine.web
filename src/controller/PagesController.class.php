@@ -142,12 +142,10 @@ class PagesController extends lmbController
     foreach ($this->day->moments as $moment) {
       $time = strtotime($moment->time);
 
-      $moment->time = date('H:i', $time);
       if($min_timestamp > $time)
         $min_timestamp = $time;
 
-
-      $moment->time = date('h:i', $time);
+			$moment->time = date('H:i', $time);
       $moment->time_seconds = date('s', $time);
       $moment->date = date('Y-m-d', $time);
       $moment->timezone = date('P', $time);
