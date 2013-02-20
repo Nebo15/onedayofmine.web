@@ -1127,51 +1127,5 @@
               <? } ?>
           </div>
       </div>
-
-      <? if($this->is_owner) { ?>
-        <div id="add_moment_modal" class="modal hide fade">
-          <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            <h3>Add moment</h3>
-          </div>
-          <div class="modal-body">
-            <p>
-                <h4>From your PC:</h4>
-                <div class="text-center">
-                  <div class="fileupload fileupload-new" data-provides="fileupload">
-                    <div class="fileupload-new thumbnail" style="width: 200px; height: 150px;">
-                      <img src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&text=no+image" />
-                    </div>
-                    <div class="fileupload-preview fileupload-exists thumbnail" style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
-                    <div>
-                      <span class="btn btn-file">
-                        <span class="fileupload-new">Select image</span>
-                        <span class="fileupload-exists">Change</span>
-                        <input type="file" />
-                      </span>
-                      <a href="#" class="btn fileupload-exists" data-dismiss="fileupload">Remove</a>
-                    </div>
-                  </div>
-                </div>
-
-                <h4>Import from:</h4>
-                <div class="text-center">
-                  <a class="btn">
-                      <i class="icon icon-large icon-camera-retro"></i>
-                      Instagram
-                  </a>
-                  <a class="btn disabled">
-                      <i class="icon icon-large icon-camera"></i>
-                      Flickr
-                  </a>
-                  <a class="btn disabled">
-                      <i class="icon icon-large icon-facebook-sign"></i>
-                      Facebook
-                  </a>
-                </div>
-            </p>
-          </div>
-        </div>
-      <? } ?>
   {{/into}}
 {{/wrap}}
