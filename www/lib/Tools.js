@@ -101,5 +101,56 @@ var Tools = {
         obj.setUTCSeconds(parseInt(time_pieces[2], 10));
 
       return obj;
+    },
+
+    addPrefixZeros: function(number) {
+      if(number<10) {
+        number = '0' + number;
+      }
+      return number;
+    },
+
+    getDate: function(obj) {
+      if(obj === undefined) {
+        obj = new Date();
+      }
+      var dd = Tools.addPrefixZeros(obj.getDate());
+      var mm = Tools.addPrefixZeros(obj.getMonth() + 1); //January is 0!
+      var yyyy = obj.getFullYear();
+      return yyyy+'-'+mm+'-'+dd;
+    },
+
+    getTime: function(obj) {
+      if(obj === undefined) {
+        obj = new Date();
+      }
+      var hh = Tools.addPrefixZeros(obj.getHours());
+      var mm = Tools.addPrefixZeros(obj.getMinutes());
+      return hh+':'+mm;
+    },
+
+    getSeconds: function(obj) {
+      if(obj === undefined) {
+        obj = new Date();
+      }
+      return Tools.addPrefixZeros(obj.getSeconds());
+    },
+
+    getTimezone: function(obj) {
+      if(obj === undefined) {
+        obj = new Date();
+      }
+      return Tools.minutesToHours(obj.getTimezoneOffset());
+    },
+
+    minutesToHours: function(minutes) {
+      minutes = minutes.toString();
+      var sign = minutes.substring(0, 1);
+
+      minutes = Math.abs(parseInt(minutes, 10));
+      var hours = Math.floor(minutes / 60);
+      minutes = minutes % 60;
+
+      return sign + Tools.addPrefixZeros(hours) + ':' + Tools.addPrefixZeros(minutes);
     }
 };

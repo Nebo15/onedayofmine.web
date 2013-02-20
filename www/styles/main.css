@@ -1,5 +1,5 @@
 body {
-    padding-bottom: 40px;
+  padding-bottom: 40px;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -11,12 +11,12 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .container-narrow {
-    margin: 0 auto;
-    max-width: 760px;
+  margin: 0 auto;
+  max-width: 760px;
 }
 
 .container-narrow > hr {
-    margin: 30px 0;
+  margin: 30px 0;
 }
 
 .with-shadow {
@@ -28,16 +28,40 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .day-bages {
-    /*font-size: 0.7em;*/
+  /*font-size: 0.7em;*/
 }
 
 .timepicker {
   margin-bottom: 5px;
 }
 
-/*.timepicker input {
-  width: 37px;
-}*/
+.popover button {
+  margin-top: 8px;
+  width: 160px;
+}
+
+.popover h5:first-child {
+  margin-top: 0px;
+}
+
+.btn-file {
+  position: relative;
+  overflow: hidden;
+  vertical-align: middle;
+}
+
+.btn-file > input {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  font-size: 23px;
+  cursor: pointer;
+  opacity: 0;
+  filter: alpha(opacity=0);
+  transform: translate(-300px, 0) scale(4);
+  direction: ltr;
+}
 
 .add-on-small {
   padding: 2px 7px !important;
@@ -55,6 +79,10 @@ input[subtype=time] {
 
 .icon-heart,
 .icon-heart-empty {
+  color: #980000;
+}
+
+.alert-small {
   color: #980000;
 }
 
@@ -91,8 +119,25 @@ input[subtype=time] {
   max-width: 100%;
 }
 
+.moment-item-new {
+  border-color:#ab0001;
+}
+
+.moment-item-new.error {
+  border-color:#ab0001;
+}
+
+.moment-item-new.success {
+  border-color:rgb(30, 168, 77) !important;
+}
+
 .moment-item-placeholder {
   text-align: center;
+  border-style: dashed;
+}
+
+.moment-item-placeholder i {
+  vertical-align:middle
 }
 
 .moment-controls-overlay {
@@ -149,6 +194,10 @@ input[subtype=time] {
   width: 420px;
   margin-left: auto;
   margin-right: auto;
+}
+
+.final-description {
+  /*background-color: #fcf8e3;*/
 }
 
 .comment-item {

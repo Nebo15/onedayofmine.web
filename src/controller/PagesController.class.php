@@ -119,8 +119,8 @@ class PagesController extends lmbController
 
     $this->day = $this->toolkit->getExportHelper()->exportDay($day);
 
-    $this->day->utime = date('m/d/y', $this->day->utime);
-    $this->day->ctime = date('m/d/y', $this->day->ctime);
+    $this->day->utime = date('Y-m-d', $this->day->utime);
+    $this->day->ctime = date('Y-m-d', $this->day->ctime);
 
     foreach ($this->day->moments as $moment) {
       $time = strtotime($moment->time);

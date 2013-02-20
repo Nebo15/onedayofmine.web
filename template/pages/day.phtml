@@ -9,12 +9,10 @@
   {{/into}}
   {{into slot="js_include"}}
     <script src="/lib/vendor/handlebars.js"></script>
-    <script src="/lib/vendor/bootstrap-fileupload.js"></script>
     <script src="/lib/vendor/bootstrap-datepicker.js"></script>
     <script src="/lib/vendor/bootstrap-timepicker.min.js"></script>
   {{/into}}
   {{into slot="css_include"}}
-    <link href="/styles/jasny-bootstrap.css" rel="stylesheet">
     <link href="/styles/bootstrap-datepicker.css" rel="stylesheet">
     <link href="/styles/bootstrap-timepicker.min.css" rel="stylesheet">
   {{/into}}
@@ -40,11 +38,228 @@
         </li>
       [[/comments]]
     </script>
+
+    <script id="template_moment" type="text/x-handlebars-template">
+      <li class="well moment-item moment-item-new" itemscope itemtype="http://schema.org/ImageObject">
+        <span class="moment-controls-overlay">
+          <a class="not-decorated with-shadow" id="trigger_moment_delete"><i class="icon-trash"></i></a>
+        </span>
+
+        <div class="timepicker text-center with-shadow">
+          <span class="input-prepend input-append">
+            <span class="add-on add-on-small"><i class="icon-calendar"></i></span>
+            <input type="text" subtype="date" class="add-on-small" value="[[moment.date]]" />
+
+            <span class="add-on add-on-small"><i class="icon-time"></i></span>
+            <input type="text" subtype="time" class="add-on-small" value="[[moment.time]]" seconds="[[moment.time_seconds]]" timezone="[[moment.timezone]]" />
+
+            <button id="trigger_save_time" class="btn btn-small disabled" type="button">Save</button>
+          </span>
+        </div>
+
+        <div class="moment-image-holder">
+          <img src="[[moment.image]]" width="400" class="img-polaroid" itemprop="contentUrl" alt="" />
+        </div>
+
+        <br class="clearfix" />
+
+        <p class="bubble moment-description" itemprop="description">
+          <textarea rows="3" class="input-block-level" placeholder="Enter moment description...">[[moment.description]]</textarea>
+          <button type="submit" class="btn btn-block btn-success">Add moment</button>
+        </p>
+      </li>
+
+      <li class="well moment-item-placeholder">
+        <a class="not-decorated with-shadow"><i class="icon-plus-sign icon-2x"></i></a>
+      </li>
+    </script>
+
+    <script id="template_image_select" type="text/x-handlebars-template">
+      <div class="file-selector">
+        <h5>From PC:</h5>
+        <div class="text-center">
+          <div class="fileupload fileupload-new" data-provides="fileupload">
+            <div>
+              <button class="btn btn-file">
+                <span class="fileupload-new">
+                  <i class="icon icon-large icon-cloud-upload"></i>
+                  Select image
+                </span>
+                <input type="file" />
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <h5>Import from:</h5>
+        <div class="text-center">
+          <button class="btn">
+              <i class="icon icon-large icon-camera-retro"></i>
+              Instagram
+          </button>
+          <button class="btn disabled">
+              <i class="icon icon-large icon-camera"></i>
+              Flickr
+          </button>
+          <button class="btn disabled">
+              <i class="icon icon-large icon-facebook-sign"></i>
+              Facebook
+          </button>
+        </div>
+      </div>
+    </script>
   {{/into}}
   <script>
   {{into slot="js_ready"}}
+    var today = Tools.getDate();
+
     <? if($this->toolkit->getUser()) { ?>
       <? if($this->is_owner) { ?>
+        // File reader
+        var FileReaderFilter = /^(?:image\/bmp|image\/cis\-cod|image\/gif|image\/ief|image\/jpeg|image\/jpeg|image\/jpeg|image\/pipeg|image\/png|image\/svg\+xml|image\/tiff|image\/x\-cmu\-raster|image\/x\-cmx|image\/x\-icon|image\/x\-portable\-anymap|image\/x\-portable\-bitmap|image\/x\-portable\-graymap|image\/x\-portable\-pixmap|image\/x\-rgb|image\/x\-xbitmap|image\/x\-xpixmap|image\/x\-xwindowdump)$/i;
+
+        // Moment time selectors
+        var date_input_selector = 'input[subtype=date]';
+        var time_input_selector = 'input[subtype=time]';
+
+        // Moment add helpers
+        var moments_selector = '.moment-item';
+        var moment_placeholder_selector = '.moment-item-placeholder';
+        var moment_description_selector = '.moment-description';
+        var moment_description_button_selector = 'button[type=submit]';
+
+        // File selector popover
+        var popover_template = $($.trim($('#template_image_select').html())); // Tricky creation of object, that can handle events
+        var popover_file_select_handler = function(event) {
+          var $this = $(this);
+          var reader = new FileReader();
+          var file = event.target.files !== undefined ? event.target.files[0] : (event.target.value ? { name: event.target.value.replace(/^.+\\/, '') } : null);
+
+          $(reader).load(function() {
+            var moment = $this.closest(moments_selector);
+            moment.find(moment_description_selector).find(moment_description_button_selector).addClass('btn-success').removeClass('disabled');
+            moment.addClass('success');
+            moment.find('img').attr('src', this.result);
+            $this.change(popover_file_select_handler);
+          });
+
+          if (!FileReaderFilter.test(file.type)) {
+            alert("Currently we support only images!");
+            return;
+          }
+
+          reader.readAsDataURL(file);
+
+          console.log('BOOM');
+        };
+
+        popover_template.find('input[type=file]').change(popover_file_select_handler);
+
+        var add_image_popover = {
+          html: true,
+          trigger: 'manual',
+          title: 'Select file',
+          content: popover_template,
+          position: function() {
+            if($(window).width() > 800) {
+              return 'right';
+            } else {
+              return 'bottom';
+            }
+          }
+        };
+
+        var init_placeholder_actions = function(placeholder) {
+          placeholder.bind('dragover', function(event) {
+            event.stopPropagation();
+            event.preventDefault();
+            event.originalEvent.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+          });
+
+          placeholder.bind('drop', function (event) {
+            event.stopPropagation();
+            event.preventDefault();
+
+            // Feature: upload by dragging from another page
+            // console.log(event.originalEvent.dataTransfer.getData('text/html'));
+
+            var files = event.originalEvent.dataTransfer.files; // FileList object.
+
+            for (var i = 0, file; file = files[i]; i++) {
+              create_moment_from_file(file);
+            }
+          });
+
+          placeholder.find('a').click(function() {
+            var _this = $(this).closest(moment_placeholder_selector);
+            var prev_moment = _this.prev();
+            var next_moment = _this.next();
+
+            var this_moment = {
+              date:Tools.getDate(),
+              time:Tools.getTime(),
+              time_seconds:Tools.getSeconds(),
+              timezone:Tools.getTimezone()
+            };
+
+            if(prev_moment.length != 0 && next_moment.length != 0) {
+              var prev_date_input = prev_moment.find(date_input_selector);
+              var prev_time_input = prev_moment.find(time_input_selector);
+
+              var prev_timestamp = Tools.createDateObject(prev_date_input.val(),
+                                                        prev_time_input.val() + ':' + prev_time_input.attr('seconds'),
+                                                        prev_time_input.attr('timezone')).getTime();
+
+              var next_date_input = next_moment.find(date_input_selector);
+              var next_time_input = next_moment.find(time_input_selector);
+
+              var next_timestamp = Tools.createDateObject(next_date_input.val(),
+                                                        next_time_input.val() + ':' + next_time_input.attr('seconds'),
+                                                        next_time_input.attr('timezone')).getTime();
+
+              var new_moment_date = new Date();
+              new_moment_date.setTime(Math.ceil((prev_timestamp+next_timestamp)/2));
+
+              this_moment = {
+                date:Tools.getDate(new_moment_date),
+                time:Tools.getTime(new_moment_date),
+                time_seconds:Tools.getSeconds(new_moment_date),
+                timezone:Tools.getTimezone(new_moment_date)
+              };
+            } else if(next_moment.length != 0) {
+              var next_date_input = next_moment.find(date_input_selector);
+              var next_time_input = next_moment.find(time_input_selector);
+
+              // Returns in UTC Timezone
+              var new_moment_date = Tools.createDateObject(next_date_input.val(),
+                                                        next_time_input.val() + ':' + next_time_input.attr('seconds'),
+                                                        next_time_input.attr('timezone'));
+
+              new_moment_date.setMinutes(new_moment_date.getMinutes() - 15);
+
+              this_moment = {
+                date:Tools.getDate(new_moment_date),
+                time:Tools.getTime(new_moment_date),
+                time_seconds:Tools.getSeconds(new_moment_date),
+                timezone:Tools.getTimezone(new_moment_date)
+              };
+            }
+
+            create_moment(this_moment);
+          });
+        };
+
+        (function() {
+          // Don't open files in browser if user missed moment-box
+          $(document).bind('drop dragover', function(event) {
+            event.stopPropagation();
+            event.preventDefault();
+            event.originalEvent.dataTransfer.dropEffect = 'none'; // Explicitly show this is a copy.
+          });
+
+          init_placeholder_actions($(moment_placeholder_selector));
+        })();
+
         // Day delete
         var day_delete_button = $('#trigger_day_delete');
 
@@ -64,59 +279,174 @@
         });
 
         // Day title
-        var day_title_input = $('.day-title');
-        var day_title_button = $('#trigger_save_day_title');
+        var day_title = $('#day_title_selector');
+        var day_title_input = day_title.find('input[type=text]');
+        var day_title_button = day_title.find('button[type=submit]');
+        var day_title_alert = day_title.find('.alert-small');
+        var day_title_alert_contents = day_title_alert.find('.contents');
 
         day_title_input.on('keyup', function() {
-          var text = day_title_input.text();
+          var text = day_title_input.val();
 
           if($.trim(text) != '' && text.length > 4) {
-            if(day_title_button.css('display') == 'none') {
-              day_title_button.slideDown();
-            }
             day_title_button.removeClass('disabled').addClass('btn-success');
-            day_title_button.text('Save title');
+            day_title_alert.finish().hide();
           } else {
             day_title_button.addClass('disabled').removeClass('btn-success');
-            day_title_button.text('Title is too short');
+            day_title_alert.finish().show();
+            day_title_alert_contents.text('Title is too short');
           }
         });
 
         day_title_button.click(function() {
           if(!day_title_button.hasClass('disabled')) {
-            day_title_input.prop("contenteditable", false);
+            day_title_input.prop("disabled", true);
             day_title_button.addClass('disabled');
 
-            var final_description_request = API.request('POST', '/days/{$#day->id}/update', {
-              title: day_title_input.text()
+            var day_title_request = API.request('POST', '/days/{$#day->id}/update', {
+              title: day_title_input.val()
             });
 
-            final_description_request.success(function() {
-              day_title_input.prop("contenteditable", true);
-              day_title_button.slideUp();
+            day_title_request.success(function() {
+              day_title_input.prop("disabled", false);
+              day_title_button.text('Save');
               day_title_button.addClass('disabled').removeClass('btn-success');
             });
 
-            final_description_request.error(function() {
-              day_title_button.addClass('btn-error').removeClass('btn-success');
+            day_title_request.error(function() {
+              day_title_button.addClass('btn-danger').removeClass('btn-success');
               day_title_button.text('Retry');
             });
 
-            final_description_request.send();
+            day_title_request.send();
           }
         });
 
-        // Moments
-        $('.moment-item').each(function() {
-          var element = $(this);
-          var id = element.attr('moment_id');
+        // Day type
+        var day_type = $('#day_type_selector');
+        var day_type_buttons = day_type.find('button');
 
-          // Moment time
-          var date_input_selector = 'input[subtype=date]';
-          var time_input_selector  = 'input[subtype=time]';
+        day_type_buttons.click(function() {
+          var $this = $(this);
+
+          day_type_buttons.removeClass('btn-success active');
+          $this.addClass('active');
+
+          var day_type_request = API.request('POST', '/days/{$#day->id}/update', {
+            type: $this.text()
+          });
+
+          day_type_request.success(function() {
+            $this.addClass('btn-success').removeClass('btn-danger');;
+          });
+
+          day_type_request.error(function() {
+            $this.addClass('btn-danger').removeClass('btn-success');;
+          });
+
+          day_type_request.send();
+        });
+
+        // Day date
+        // var day_date = $('#day_date_selector');
+        // var day_date_input  = day_date.find(date_input_selector);
+        // var day_date_button = day_date.find('button');
+
+        // day_date_input.datepicker({
+        //   format: 'yyyy-mm-dd',
+        //   startDate: '2000-01-01',
+        //   endDate: today,
+        //   weekStart: 1,
+        //   todayBtn: true,
+        //   todayHighlight: true
+        // });
+
+        // day_date_input.change(function(event) {
+        //   day_date_button.removeClass('disabled').addClass('btn-success');
+        // });
+
+        // day_date_button.click(function() {
+        //   if(!day_date_button.hasClass('disabled')) {
+        //     day_date_button.addClass('disabled');
+        //     day_date_input.prop('disabled', true);
+
+        //     var day_date_request = API.request('POST', '/days/{$#day->id}/update', {
+        //       time: date_input.val() + 'T' + time_input.val() + ':' + time_input.attr('seconds') + time_input.attr('timezone')
+        //     });
+
+        //     day_date_request.success(function() {
+        //       date_input.prop('disabled', false);
+        //       day_date_button.addClass('disabled').removeClass('btn-success');
+        //     });
+
+        //     day_date_request.error(function() {
+        //       day_date_button.addClass('btn-danger').removeClass('btn-success');
+        //     });
+
+        //     day_date_request.send();
+        //   }
+        // });
+
+        // Moments
+        var moment_template = Template.prepareTemplate($('#template_moment'));
+
+        var insert_moment = function(element) {
+          var date_input = element.find(date_input_selector);
+          var time_input = element.find(time_input_selector);
+
+          // Returns in UTC Timezone
+          var new_datetime = Tools.createDateObject(date_input.val(), time_input.val() + ':' + time_input.attr('seconds'), time_input.attr('timezone'));
+
+          var placeholder = element.next();
+
+          var found = false;
+          $(moments_selector).each(function() {
+            if($(this).is(element) || found) {
+              return;
+            }
+
+            var tmp_datetime = Tools.createDateObject(
+                                      $(this).find(date_input_selector).val(),
+                                      $(this).find(time_input_selector).val() + ':' + $(this).find(time_input_selector).attr('seconds'),
+                                      $(this).find(time_input_selector).attr('timezone'));
+
+            if(new_datetime < tmp_datetime) {
+              found = true;
+
+              element.insertBefore($(this));
+            }
+          });
+
+          if(!found) {
+            $('.moments-list').append(element);
+          }
+
+          placeholder.insertAfter(element);
+        };
+
+        var attach_moment_events = function(element) {
+          var id = element.attr('moment_id');
 
           var date_input  = element.find(date_input_selector);
           var time_input  = element.find(time_input_selector);
+
+          // Moment time
+          date_input.datepicker({
+            format: 'yyyy-mm-dd',
+            startDate: '2000-01-01',
+            endDate: today,
+            weekStart: 1,
+            todayBtn: true,
+            todayHighlight: true
+          });
+
+          time_input.timepicker({
+            minuteStep: 5,
+            template: false,
+            isOpen: true,
+            showMeridian: false
+          });
+
 
           var datetime_button = element.find('#trigger_save_time');
 
@@ -134,41 +464,12 @@
               time_input.prop('disabled', true);
               date_input.prop('disabled', true);
 
-              // Returns in UTC Timezone
-              var new_datetime = Tools.createDateObject(date_input.val(), time_input.val() + ':' + time_input.attr('seconds'), time_input.attr('timezone'));
-
               var moment_time_request = API.request('POST', '/moments/'+id+'/update', {
                 time: date_input.val() + 'T' + time_input.val() + ':' + time_input.attr('seconds') + time_input.attr('timezone')
               });
 
-              console.log(date_input.val() + 'T' + time_input.val() + ':' + time_input.attr('seconds') + time_input.attr('timezone'));
-
               moment_time_request.success(function() {
-                var placeholder = element.next();
-
-                var found = false;
-                $('.moment-item').each(function() {
-                  if($(this).is(element) || found) {
-                    return;
-                  }
-
-                  var tmp_datetime = Tools.createDateObject(
-                                            $(this).find(date_input_selector).val(),
-                                            $(this).find(time_input_selector).val() + ':' + $(this).find(time_input_selector).attr('seconds'),
-                                            $(this).find(time_input_selector).attr('timezone'));
-
-                  if(new_datetime < tmp_datetime) {
-                    found = true;
-
-                    element.insertBefore($(this));
-                  }
-                });
-
-                if(!found) {
-                  $('.moment-item').parent().append(element);
-                }
-
-                placeholder.insertAfter(element);
+                insert_moment(element, date_input.val(), time_input.val());
                 $(window).scrollTo(element, 300);
 
                 time_input.prop('disabled', false);
@@ -177,7 +478,7 @@
               });
 
               moment_time_request.error(function() {
-                datetime_button.addClass('btn-error').removeClass('btn-success');
+                datetime_button.addClass('btn-danger').removeClass('btn-success');
               });
 
               moment_time_request.send();
@@ -191,10 +492,7 @@
             if(confirm("Do you really want to delete this moment?")) {
               var delete_request = API.request('POST', '/moments/' + id + '/delete');
               delete_request.success(function() {
-                element.fadeOut(500);
-                element.next().fadeOut(500);
-                element.remove();
-                element.next().remove();
+                remove_moment(element);
               });
 
               delete_request.error(function() {
@@ -206,9 +504,9 @@
           });
 
           // Moment description edit
-          var description = element.find('.moment-description');
+          var description = element.find(moment_description_selector);
           var description_input  = description.find('textarea');
-          var description_button = description.find('button[type=submit]');
+          var description_button = description.find(moment_description_button_selector);
 
           description_input.on('keyup', function(event) {
             description_button.removeClass('disabled').addClass('btn-success');
@@ -229,12 +527,202 @@
               });
 
               description_request.error(function() {
-                description_button.addClass('btn-error').removeClass('btn-success');
+                description_button.addClass('btn-danger').removeClass('btn-success');
               });
 
               description_request.send();
             }
           });
+        };
+
+        var remove_moment = function(element) {
+          var fade_time = 500;
+
+          element.next().fadeOut(fade_time, function() {
+            element.next().remove();
+          });
+
+          element.slideUp(fade_time, function() {
+            element.remove();
+          });
+        };
+
+        var create_moment = function(moment, do_scroll) {
+          // Default data
+          moment = $.extend({
+            date:Tools.getDate(),
+            time:Tools.getTime(),
+            time_seconds:Tools.getSeconds(),
+            timezone:Tools.getTimezone(),
+            image:'http://placehold.it/532x532&text=Select+image',
+            description:''
+          }, moment);
+
+          var tmp = $($.trim(Template.compileElement(moment_template, {moment:moment})));
+          var element = tmp.first();
+
+          // Moment description editor
+          var description = element.find('.moment-description');
+          var description_input = description.find('textarea');
+
+          // Save button
+          var save_button = description.find('button[type=submit]');
+
+          if(moment.image == 'http://placehold.it/532x532&text=Select+image') {
+            element.find('img').popover(add_image_popover);
+            save_button.addClass('disabled').removeClass('btn-success');
+
+            element.find('img').load(function() {
+              element.find('img').popover('show');
+            });
+          }
+
+          // Moment placeholder
+          init_placeholder_actions(element.next());
+
+          var date_input  = element.find(date_input_selector);
+          var time_input  = element.find(time_input_selector);
+
+          // Moment time
+          date_input.datepicker({
+            format: 'yyyy-mm-dd',
+            startDate: '2000-01-01',
+            endDate: today,
+            weekStart: 1,
+            todayBtn: true,
+            todayHighlight: true
+          });
+
+          time_input.timepicker({
+            minuteStep: 5,
+            template: false,
+            isOpen: true,
+            showMeridian: false
+          });
+
+
+          var datetime_button = element.find('#trigger_save_time');
+
+          time_input.bind('change keyup', function(event) {
+            datetime_button.removeClass('disabled').addClass('btn-success');
+          });
+
+          date_input.change(function(event) {
+            datetime_button.removeClass('disabled').addClass('btn-success');
+          });
+
+          datetime_button.click(function() {
+            if(!datetime_button.hasClass('disabled')) {
+              datetime_button.addClass('disabled');
+              time_input.prop('disabled', true);
+              date_input.prop('disabled', true);
+
+              insert_moment(element, date_input.val(), time_input.val());
+              $(window).scrollTo(element, 300);
+
+              time_input.prop('disabled', false);
+              date_input.prop('disabled', false);
+              datetime_button.addClass('disabled').removeClass('btn-success');
+            }
+          });
+
+          // Moment delete
+          var delete_button = element.find('#trigger_moment_delete');
+
+          delete_button.click(function() {
+            if(confirm("Do you really want to delete this moment?")) {
+              element.find('img').popover('hide');
+              remove_moment(element);
+            }
+          });
+
+          // Save moment
+          save_button.click(function() {
+            if(!save_button.hasClass('disabled')) {
+              description_input.prop("disabled", true);
+              save_button.addClass('disabled');
+              datetime_button.addClass('disabled');
+              time_input.prop('disabled', true);
+              date_input.prop('disabled', true);
+
+              var src = element.find('img').attr('src');
+              var base64 = src.substring(src.indexOf('base64')+7);
+
+              var save_request = API.request('POST', '/days/{$#day->id}/add_moment', {
+                description: description_input.val(),
+                image_content: base64,
+                time: date_input.val() + 'T' + time_input.val() + ':' + time_input.attr('seconds') + time_input.attr('timezone')
+              });
+
+              save_request.success(function(response) {
+                description_input.prop("disabled", false);
+                save_button.addClass('disabled').removeClass('btn-success');
+                save_button.text('Save description');
+                element.removeClass('moment-item-new error success');
+                time_input.prop('disabled', false);
+                date_input.prop('disabled', false);
+                datetime_button.addClass('disabled').removeClass('btn-success');
+
+                // Set moment_id
+                element.attr('moment_id', response.data.result.id);
+
+                // Re-bind normal events
+                element.find('*').off();
+                attach_moment_events(element);
+              });
+
+              save_request.error(function() {
+                save_button.addClass('btn-danger').removeClass('btn-success');
+              });
+
+              save_request.send();
+            }
+          });
+
+          insert_moment(element);
+
+          if(do_scroll == undefined || do_scroll !== false) {
+            $(window).scrollTo(element, 500);
+          }
+
+          return element;
+        };
+
+        var create_moment_from_file = function(file) {
+          var reader = new FileReader();
+
+          var file_date = file.lastModifiedDate.getFullYear() + '-' + file.lastModifiedDate.getMonth() + '-' + file.lastModifiedDate.getDate();
+          var file_time = file.lastModifiedDate.getHours() + ':' + file.lastModifiedDate.getMinutes();
+          var file_time_seconds = file.lastModifiedDate.getSeconds();
+          var file_timezone_offset = Tools.minutesToHours(file.lastModifiedDate.getTimezoneOffset());
+
+          $(reader).load(function() {
+            var element = create_moment({
+              date:file_date,
+              time:file_time,
+              time_seconds:file_time_seconds,
+              timezone:file_timezone_offset,
+              image:this.result,
+              description:''
+            }, false);
+
+            $(window).scrollTo($('.moment-item-new').first(), 500);
+          });
+
+          if (!FileReaderFilter.test(file.type)) {
+            alert("Currently we support only images!");
+            return;
+          }
+
+          reader.readAsDataURL(file);
+        };
+
+        // Make it accessible globally
+        window.create_moment_from_file = create_moment_from_file;
+        window.create_moment = create_moment;
+
+        $(moments_selector).each(function() {
+          attach_moment_events($(this));
         });
 
         // Moment description edit
@@ -261,33 +749,11 @@
             });
 
             final_description_request.error(function() {
-              final_description_button.addClass('btn-error').removeClass('btn-success');
+              final_description_button.addClass('btn-danger').removeClass('btn-success');
             });
 
             final_description_request.send();
           }
-        });
-
-        var today = new Date();
-        var dd = today.getDate();
-        var mm = today.getMonth() + 1; //January is 0!
-        var yyyy = today.getFullYear();
-        if(dd<10){dd='0'+dd} if(mm<10){mm='0'+mm} today = yyyy+'/'+mm+'/'+dd;
-
-        $('input[subtype=date]').datepicker({
-          format: 'yyyy-mm-dd',
-          startDate: '2000-01-01',
-          endDate: today,
-          weekStart: 1,
-          todayBtn: true,
-          todayHighlight: true
-        });
-
-        $('input[subtype=time]').timepicker({
-          minuteStep: 5,
-          template: false,
-          isOpen: true,
-          showMeridian: false
         });
       <? } ?>
 
@@ -300,7 +766,7 @@
       var comments_counter = comments.find('#comments_counter');
 
       var comments_loader = $('.comments-loader');
-      var comments_loader_button =  comments_loader.find('button[type=button]');
+      var comments_loader_button = comments_loader.find('button[type=button]');
       var comments_template = Template.prepareTemplate($('#template_comments'));
 
       var comment_storage_key = "days/{$#day->id}/comment";
@@ -338,7 +804,7 @@
           comments_loader_button.addClass('disabled');
 
           comments_request.success(function(response) {
-            comments_loader_button.removeClass('disabled btn-error');
+            comments_loader_button.removeClass('disabled btn-danger');
 
             var tmp = $($.trim(Template.compileElement(comments_template, {comments:response.data.result})));
 
@@ -358,7 +824,7 @@
           });
 
           comments_request.error(function() {
-            comments_loader_button.addClass('btn-error');
+            comments_loader_button.addClass('btn-danger');
           });
 
           comments_request.send();
@@ -391,10 +857,11 @@
             comments_input.prop("disabled", false);
             updateComments();
             comments_button.addClass('disabled').removeClass('btn-success');
+            Storage.remove(comment_storage_key);
           });
 
           comments_request.error(function() {
-            comments_button.addClass('btn-error').removeClass('btn-success');
+            comments_button.addClass('btn-danger').removeClass('btn-success');
           });
 
           comments_request.send();
@@ -467,21 +934,58 @@
                 <span class="day-controls pull-right">
                   <a class="not-decorated with-shadow" id="trigger_day_delete" day_id="{$#day->id}"><i class="icon-trash"></i></a>
                 </span>
+
+                <div style="margin-bottom:20px;">
+                  <div id="day_title_selector">
+                    <h5>Day title:</h5>
+                    <span class="input-append">
+                      <input type="text" class="add-on-small input-xlarge" value="{$#day->title}" />
+                      <button class="btn disabled btn-small" type="submit">Save</button>
+                    </span>
+                    <br />
+                    <small class="alert-small" style="display:none">
+                      * <span class="contents"></span>
+                    </small>
+                  </div>
+
+                  <div id="day_type_selector">
+                    <h5>Day type:</h5>
+                    <div class="btn-group">
+                      <button class="btn btn-small<? if($this->day->type == 'Working day') {?> active btn-success<? } ?>">Working day</button>
+                      <button class="btn btn-small<? if($this->day->type == 'Day off') {?> active btn-success<? } ?>">Day off</button>
+                      <button class="btn btn-small<? if($this->day->type == 'Holiday') {?> active btn-success<? } ?>">Holiday</button>
+                      <button class="btn btn-small<? if($this->day->type == 'Trip') {?> active btn-success<? } ?>">Trip</button>
+                    </div>
+                  </div>
+
+                  <!--<div id="day_date_selector">
+                    <h5>Day date:</h5>
+                    <span class="input-prepend input-append">
+                      <span class="add-on add-on-small"><i class="icon-calendar"></i></span>
+                      <input type="text" subtype="date" class="add-on-small" value="{$#day->utime}" />
+                      <button id="trigger_save_time" class="btn disabled btn-small" type="button">Save</button>
+                    </span>
+                  </div>-->
+
+                  <br />
+                  <p class="muted day-info">
+                    <span class="pull-right">
+                      <i class="icon icon-calendar"></i> {$#day->utime}
+                    </span>
+                    by <b><a href="/pages/{$#day->user->id}/user">{$#day->user->name}</a></b>
+                  </p>
+                </div>
+              <? } else { ?>
+                <h3 class="day-title">{$#day->title}</h3>
+
+                <p class="muted day-info">
+                  <span class="pull-right">
+                    <i class="icon icon-calendar"></i> {$#day->utime}
+                  </span>
+                  {$#day->type} by <b><a href="/pages/{$#day->user->id}/user">{$#day->user->name}</a></b>
+                  <!-- @ {$#day.location} -->
+                </p>
               <? } ?>
-
-              <h3 <? if($this->is_owner) { ?>contenteditable <? } ?>class="day-title">{$#day->title}</h3>
-
-              <? if($this->is_owner) { ?>
-                <button id="trigger_save_day_title" type="submit" class="btn btn-block btn-success" style="display:none">Save title</button>
-              <? } ?>
-
-              <p class="muted day-info">
-                <span class="pull-right">
-                  <i class="icon icon-calendar"></i> {$#day->utime}
-                </span>
-                {$#day->type} by <b><a href="/pages/{$#day->user->id}/user">{$#day->user->name}</a></b>
-                <!-- @ {$#day.location} -->
-              </p>
 
               <div class="mobile-nav">
                 <h5>Go to:</h5>
@@ -496,62 +1000,64 @@
               </div>
 
               {{list using="$#day->moments"}}
-                  <ul class="unstyled">
-                      <? if($this->is_owner) { ?>
-                        <li class="well moment-item-placeholder">
-                          <a class="not-decorated with-shadow" data-toggle="modal" data-target="#add_moment_modal"><i class="icon-plus-sign icon-2x"></i></a>
-                        </li>
-                      <? } ?>
-                      {{list:item}}
-                        <li class="well moment-item" moment_id="{$item->id}" itemscope itemtype="http://schema.org/ImageObject">
-                            <? if($this->is_owner) { ?>
-                              <span class="moment-controls-overlay">
-                                <a class="not-decorated with-shadow" id="trigger_moment_delete"><i class="icon-trash"></i></a>
-                              </span>
-                            <? } ?>
-
-                            <div class="timepicker text-center with-shadow">
-                              <? if($this->is_owner) { ?>
-                                <span class="input-prepend input-append">
-                                  <span class="add-on add-on-small"><i class="icon-calendar"></i></span>
-                                  <input type="text" subtype="date" class="add-on-small" value="{$item->date}" />
-
-                                  <span class="add-on add-on-small"><i class="icon-time"></i></span>
-                                  <input type="text" subtype="time" class="add-on-small" value="{$item->time}" seconds="{$item->time_seconds}" timezone="{$item->timezone}" />
-
-                                  <button id="trigger_save_time" class="btn btn-small disabled" type="button">Save</button>
-                                </span>
-                              <? } else { ?>
-                                <time datetime="{$item->datetime_iso}"><i class="icon-time"></i> {$item->time}</time>
-                              <? } ?>
-                            </div>
-
-                            <div class="moment-image-holder">
-                              <img src="{$item->image_532}" width="400" class="img-polaroid" itemprop="contentUrl" alt="" />
-                            </div>
-
-                            <br class="clearfix" />
-
-
-                            <? if($this->is_owner || $item->description) { ?>
-                              <p class="bubble moment-description" itemprop="description">
-                                <? if($this->is_owner) { ?>
-                                  <textarea rows="3" class="input-block-level" placeholder="Enter moment description...">{$item->description|default:""|nl2br}</textarea>
-                                  <button type="submit" class="btn btn-block disabled">Save description</button>
-                                <? } else { ?>
-                                  {$item->description|nl2br}
-                                <? } ?>
-                              </p>
-                            <? } ?>
-                        </li>
-
+                <ul class="unstyled moments-list">
+                  <? if($this->is_owner) { ?>
+                    <li class="well moment-item-placeholder">
+                      <a class="not-decorated with-shadow"><i class="icon-plus-sign icon-2x"></i></a>
+                    </li>
+                  <? } ?>
+                  {{list:item}}
+                    <li class="well moment-item" moment_id="{$item->id}" itemscope itemtype="http://schema.org/ImageObject">
                         <? if($this->is_owner) { ?>
-                          <li class="well moment-item-placeholder">
-                            <a class="not-decorated with-shadow" data-toggle="modal" data-target="#add_moment_modal"><i class="icon-plus-sign icon-2x"></i></a>
-                          </li>
+                          <span class="moment-controls-overlay">
+                            <a class="not-decorated with-shadow" id="trigger_moment_delete"><i class="icon-trash"></i></a>
+                          </span>
                         <? } ?>
-                      {{/list:item}}
-                  </ul>
+
+                        <div class="timepicker text-center with-shadow">
+                          <? if($this->is_owner) { ?>
+                            <span class="input-prepend input-append">
+                              <span class="add-on add-on-small"><i class="icon-calendar"></i></span>
+                              <input type="text" subtype="date" class="add-on-small" value="{$item->date}" />
+
+                              <span class="add-on add-on-small"><i class="icon-time"></i></span>
+                              <input type="text" subtype="time" class="add-on-small" value="{$item->time}" seconds="{$item->time_seconds}" timezone="{$item->timezone}" />
+
+                              <button id="trigger_save_time" class="btn btn-small disabled" type="button">Save</button>
+                            </span>
+                          <? } else { ?>
+                            <time datetime="{$item->datetime_iso}"><i class="icon-time"></i> {$item->time}</time>
+                          <? } ?>
+                        </div>
+
+                        <div class="moment-image-holder">
+                          <img src="{$item->image_532}" width="400" class="img-polaroid" itemprop="contentUrl" alt="" />
+                        </div>
+
+                        <br class="clearfix" />
+
+
+                        <? if($this->is_owner || $item->description) { ?>
+                          <p class="bubble moment-description" itemprop="description">
+                            <? if($this->is_owner) { ?>
+                              <textarea rows="3" class="input-block-level" placeholder="Enter moment description...">{$item->description|default:""|nl2br}</textarea>
+                              <button type="submit" class="btn btn-block disabled">Save description</button>
+                            <? } else { ?>
+                              {$item->description|nl2br}
+                            <? } ?>
+                          </p>
+                        <? } ?>
+                    </li>
+
+                    <? if($this->is_owner) { ?>
+                      <li class="well moment-item-placeholder">
+                        <a class="not-decorated with-shadow">
+                          <i class="icon-plus-sign icon-2x"></i>
+                        </a>
+                      </li>
+                    <? } ?>
+                  {{/list:item}}
+                </ul>
               {{/list}}
 
               <? if($this->is_owner || $this->day->final_description) { ?>
