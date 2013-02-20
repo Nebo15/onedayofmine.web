@@ -138,8 +138,13 @@ class PagesController extends lmbController
     $this->day->utime = date('Y-m-d', $this->day->utime);
     $this->day->ctime = date('Y-m-d', $this->day->ctime);
 
+    $min_timestamp = time();
     foreach ($this->day->moments as $moment) {
       $time = strtotime($moment->time);
+
+      if($min_timestamp > $time)
+        $min_timestamp = $time;
+
 
       $moment->time = date('h:i', $time);
       $moment->time_seconds = date('s', $time);
@@ -149,6 +154,8 @@ class PagesController extends lmbController
       $moment->datetime_w3c = date(DATE_W3C, $time);
       $moment->datetime_iso = date(DATE_ISO8601, $time);
     }
+
+    $this->day->date = date('Y-m-d', $min_timestamp);
 
     $this->current_user = $this->toolkit->getUser();
 	}
