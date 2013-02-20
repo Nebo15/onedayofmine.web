@@ -45,7 +45,12 @@ class Day extends BaseModel
     $export->user_id = $this->user_id;
     $export->type = $this->type;
     $export->title = $this->title;
-    $this->showImages($export);
+	  if(!$this->showImages($export))
+	  {
+		  $moments = $this->getMoments();
+		  if(count($moments))
+			  $moments[0]->showImages($export);
+	  }
     $export->final_description = $this->final_description;
     $export->views_count = $this->views_count ?: 0;
 	  $export->ctime = (int) $this->ctime;

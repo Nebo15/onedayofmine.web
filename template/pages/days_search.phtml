@@ -13,10 +13,19 @@ $this->menu = 'search';
 {{/into}}
 {{into slot="js_ready"}}
 		$('.form-search').submit(function() {
+				if($('' == '.search-query').val())
+						return;
 				var req = API.request('POST', 'days/search', {query:$('.search-query').val()}).success(function(response) {
 						$('#days').html();
-						var source = Template.prepareTemplate($('#days_list'));
-						Template.renderElement(source, $('#days'), {days:response.data.result});
+						if(0 == response.data.result.length)
+						{
+								$('#days').html("<p>We can't find any days by your query</p>");
+						}
+						else
+						{
+								var source = Template.prepareTemplate($('#days_list'));
+								Template.renderElement(source, $('#days'), {days:response.data.result});
+						}
 				}).send();
 				return false;
     });

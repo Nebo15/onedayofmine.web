@@ -2,33 +2,64 @@
 $this->menu = '';
 ?>
 {{wrap with="layout.phtml"}}
+{{into slot="css"}}
+.followers-list li {
+	float:left;
+	margin-right:3px;
+}
+.followers-list li img {
+	width:72px;
+	height:72px;
+}
+{{/into}}
 {{into slot="content"}}
 <div>
-		<img src="{$#user.image_192}" class="pull-left"/>
-    <h1>{$#user.name}</h1>
-		<ul class="unstyled">
-				<li><i class="icon icon-wrench"></i> occupation: {$#user.occupation}</li>
-				<li><i class="icon icon-map-marker"></i> location: {$#user.location|default:"?"}</li>
-        <li><i class="icon icon-hand-right"></i> followers: {$#user.followers_count}</li>
-        <li><i class="icon icon-hand-left"></i> following: {$#user.following_count}</li>
-		</ul>
-</div>
-<br class="clearFix"/>
-{{list using="$#user.days"}}
-<ul class="thumbnails">
-    {{list:item}}
-    <li class="span3">
-        <div class="thumbnail">
-            <a href="/pages/{$item->id}/day">
-                <img src="{$item->image_532|default:'/img/no_photo.png'}" alt="{$item->final_description}">
+	<br/>
+	<div class="row">
+		<div class="span2">
+      <img src="{$#user.image_192}" class="pull-left"/>
+		</div>
+		<div class="span6">
+      <h1>{$#user.name}</h1>
+      <p><small>{$#user.occupation} {{if var="$#user.location"}}from {{/if}}{$#user.location}</small></p>
+			<p><i class="icon icon-camera"></i> days: 14</p>
+      <p><i class="icon icon-comments"></i> comments: 35</p>
+      <p><i class="icon icon-bookmark"></i> favourite: 12</p>
+		</div>
+		<div class="span4">
+      <div class="span4">
+        <h3>Following <small><?= count($this->user['following']); ?> people</small></h3>
+        {{list using="{$#user.following}"}}
+	        <ul class="unstyled  followers-list">
+	          {{list:item}}
+	          <li><a href="/pages/{$item.id}/user">
+	            <img src="{$item.image_72}"/>
+	          </a></li>
+	          {{/list:item}}
+	        </ul>
+        {{/list}}
+      </div>
+      <div class="span4">
+        <h3>Followers <small><?= count($this->user['followers']); ?> people</small></h3>
+        {{list using="{$#user.followers}"}}
+        <ul class="unstyled  followers-list">
+            {{list:item}}
+            <li><a href="/pages/{$item.id}/user">
+                <img src="{$item.image_72}"/>
+            </a></li>
+            {{/list:item}}
+        </ul>
+        {{/list}}
+      </div>
+      </div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="span12">
+			{{apply template="days_list" days="$#user.days"/}}
+		</div>
+	</div>
 
-                <h3>{$item->title}</h3>
-            </a>
-            <p><small>{$item->final_description|raw}</small></p>
-        </div>
-    </li>
-    {{/list:item}}
-</ul>
-{{/list}}
+</div>
 {{/into}}
 {{/wrap}}

@@ -20,7 +20,7 @@ $this->menu = '';
 {{into slot="content"}}
 <div class="row">
 		<div class="span8">
-				<h3>News</h3>
+				<h1>News</h1>
         <div class="comments">
             <span class="pull-right not-decorated with-shadow"></span>
             <ul class="unstyled">
@@ -67,7 +67,7 @@ $this->menu = '';
 		</div>
 		<div class="span4">
 				<div class="span4">
-						<h5>Following&nbsp;&nbsp;<small>{$#current_user.following_count}</small></h5>
+						<h3>Following&nbsp;&nbsp;<small>{$#current_user.following_count}</small></h3>
 						{{list using="{$#following}"}}
                 <ul class="unstyled  followers-list">
 								{{list:item}}
@@ -82,7 +82,7 @@ $this->menu = '';
 						{{/list}}
 				</div>
         <div class="span4">
-		        <h5>Followers&nbsp;&nbsp;<small>{$#current_user.followers_count}</small></h5>
+		        <h3>Followers&nbsp;&nbsp;<small>{$#current_user.followers_count}</small></h3>
             {{list using="{$#followers}"}}
 		            <ul class="unstyled  followers-list">
 		                {{list:item}}

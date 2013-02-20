@@ -1,49 +1,84 @@
 {{template name='days_list'}}
 		{{list using="$days"}}
-				<ul class="thumbnails">
+				<ul class="days">
 				    {{list:item}}
-				    <li class="span3">
-				        <div class="thumbnail">
-				            <a href="/pages/{$item->id}/day">
-				                <img src="{$item->image_532|default:'/img/no_photo.png'}" alt="{$item->final_description}">
-				                <h5>{$item->title}</h5>
-                    </a>
-                    <a href="/pages/{$item->user->id}/user">
-						            <p>{$item->user->name}</p>
-				            </a>
-				        </div>
+				    <li>
+						    <dl class="with-box-shadow">
+								    <dt>
+                        <a href="/pages/{$item.id}/day">
+                            <img src="{$item.image_532|default:'/img/no_photo.png'}" alt="{$item.final_description}">
+                        </a>
+								    </dt>
+								    <dd>
+                        <div>
+                            <a href="/pages/{$item.id}/day">
+		                            {$item.title|i18n_clip:60,0,"..."}
+	                          </a>
+	                          <br/>
+		                        <a href="/pages/{$item.user.id}/user">
+                                <small>{$item.user.name}</small>
+                            </a>
+                        </div>
+								    </dd>
+						    </dl>
 				    </li>
 				    {{/list:item}}
 				</ul>
 				{{list:default}}
-						You don't have days yet.
+						Empty
 				{{/list:default}}
 		{{/list}}
 {{/template}}
 
+<script id="days_list" type="text/x-handlebars-template">
+		<ul class="days">
+				[[#days]]
+		    <li>
+		        <dl class="with-box-shadow">
+		            <dt>
+		                <a href="/pages/[[id]]/day">
+		                    <img src="[[image_532]]" alt="[[final_description]]">
+		                </a>
+		            </dt>
+		            <dd>
+		                <div>
+		                    <a href="/pages/[[id]]/day">
+		                        [[clip title 30]]
+		                    </a>
+		                    <br/>
+		                    <a href="/pages/[[user.id]]/user">
+		                        <small>[[user.name]]</small>
+		                    </a>
+		                </div>
+		            </dd>
+		        </dl>
+		    </li>
+        [[/days]]
+		</ul>
+</script>
+
 {{template name='users_list'}}
 		{{list using="$users"}}
-		    <ul class="unstyled">
-		        {{list:item}}
-            <li style="background-color:#eeeeee">
-                <div class="row" >
-                    <div class="span1">
-                        <img src="http://images.instagram.com/profiles/profile_1450621_75sq_1360187746.jpg"/>
-                    </div>
-                    <div class="span5">
-                        <a href="">{$item.name}</a> - occupation from location
-                        <small>asdasdas</small>
-                        <div class="pull-right" style="height:70px;">
-                            <a href="#" class="btn btn-danger" style="margin:17px 10px 0 0">Unfollow</a>
-                        </div>
-                    </div>
-                </div>
-            </li>
-		        {{/list:item}}
-		    </ul>
-				{{list:default}}
-					Empty
-				{{/list:default}}
+		<div class="users">
+		    {{list:item}}
+		    <div class="row">
+		        <div class="left">
+		            <a href="/pages/{$item.id}/user">
+		                <img src="{$item.image_72}"/>
+		            </a>
+		        </div>
+		        <div class="middle">
+		            <a href="/pages/{$item.id}/user">{$item.name}</a>
+		            <br/>
+		            <small>{$item.occupation} <? if($item['location']) { ?>{$item.location}<? } ?></small>
+		        </div>
+		        <div class="right">
+		            <a href="#" user_id="{$item.id}" class="follow-action btn btn-info <? if($item['following']) { ?>hide<? } ?>">Follow</a>
+		            <a href="#" user_id="{$item.id}" class="unfollow-action btn btn-danger <? if(!$item['following']) { ?>hide<? } ?>">Unfollow</a>
+		        </div>
+		    </div>
+		    {{/list:item}}
+		</div>
 		{{/list}}
 {{/template}}
 

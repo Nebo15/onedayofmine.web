@@ -88,7 +88,14 @@ class PagesController extends lmbController
 
 		$this->days = [];
 		foreach ($days_ratings as $day_rating)
-			$this->days[] = $this->toolkit->getExportHelper()->exportDay($day_rating->getDay());
+		{
+			$item = $this->_toFlatArray($this->toolkit->getExportHelper()->exportDay($day_rating->getDay()));
+			if(!$item['image_532'])
+				continue;
+			if(!$item['image_266'])
+				continue;
+			$this->days[] = $item;
+		}
 	}
 
 	function doMyDays()
@@ -96,7 +103,16 @@ class PagesController extends lmbController
 		if (!$user = lmbToolkit::instance()->getUser())
 			return $this->forwardToUnauthorized();
 
-		$this->days = $this->toolkit->getExportHelper()->exportDayItems($user->getDays());
+		$this->days = $this->_toFlatArray($this->toolkit->getExportHelper()->exportDayItems($user->getPublicDays()));
+	}
+
+	function doMyFollowers()
+	{
+		if (!$user = lmbToolkit::instance()->getUser())
+			return $this->forwardToUnauthorized();
+
+		$this->followers = $this->_toFlatArray($this->toolkit->getExportHelper()->exportUserItems($user->getFollowersUsers()));
+		$this->following = $this->_toFlatArray($this->toolkit->getExportHelper()->exportUserItems($user->getFollowingUsers()));
 	}
 
 	function doDay()
@@ -161,7 +177,12 @@ class PagesController extends lmbController
 			return $this->forwardTo404();
 
 		$this->user = (array) $this->toolkit->getExportHelper()->exportUser($user);
-		$this->user['days'] = (array) $this->toolkit->getExportHelper()->exportDayItems($user->getPublicDays());
+		$this->user['days'] = $this->_toFlatArray($this->toolkit->getExportHelper()->exportDayItems($user->getPublicDays()));
+		$followers = $user->getFollowersUsers();
+		$this->user['followers'] = $this->_toFlatArray($this->toolkit->getExportHelper()->exportUserItems($followers));
+
+		$following = $user->getFollowingUsers();
+		$this->user['following'] = $this->_toFlatArray($this->toolkit->getExportHelper()->exportUserItems($following));
 	}
 
 	function doNotFound()

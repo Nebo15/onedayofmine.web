@@ -21,6 +21,14 @@
             </div>
 
             <div class="days"></div>
+
+            <div class="alert alert-info hide">
+		            Import from custom instagram account (debug only):
+                <form class="form-inline custom-import-action">
+                    <input type="text" class="input-small" placeholder="username">
+                    <input class="btn btn-info" type="submit" value="Import"/>
+                </form>
+            </div>
         </div>
 {{/into}}
 {{into slot="templates"}}
@@ -85,16 +93,31 @@
 	<script src="/lib/vendor/jquery.scrollTo-1.4.3.1-min.js"></script>
 {{/into}}
 {{into slot="js_ready"}}
-    hash = window.location.hash.substr(14);
-    $(document).ready(function () {
-        if (window.location.hash.length < 2) {
-            $('a.btn').show();
-        }
-        else {
-            Importer.$days = $('.days');
-            Importer.$progress = $('.progress');
-            Importer.import(hash);
-        }
-    });
+  hash = window.location.hash.substr(14);
+  $(document).ready(function () {
+    if (window.location.hash.length < 2) {
+      $('a.btn').show();
+    }
+    else {
+			$('.custom-import-action').parent().show();
+      Importer.$days = $('.days');
+      Importer.$progress = $('.progress');
+      Importer.import(hash);
+    }
+
+    $('.custom-import-action').submit(function() {
+			Importer.$days.html('');
+			Importer.findUser($(this).find('input[type=text]').val(), function(user) {
+				Importer.days = [];
+				Importer.photos = [];
+				Importer.photos_count = 0;
+				Importer.$days = $('.days');
+				Importer.instagram_user = user.id;
+				Importer.$progress = $('.progress');
+				Importer.import(hash);
+			});
+			return false;
+		});
+  });
 {{/into}}
 {{/wrap}}

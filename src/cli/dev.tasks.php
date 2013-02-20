@@ -527,7 +527,7 @@ function task_od_siege_log()
 function task_instagram_test_users($args)
 {
 	lmb_require('limb/fs/src/lmbFs.class.php');
-	$q = new HttpRequest('https://api.instagram.com/v1/tags/chicago/media/recent?access_token=' . $args[0]);
+	$q = new HttpRequest('https://api.instagram.com/v1/tags/love/media/recent?access_token=' . $args[0]);
 	$photos = json_decode($q->send()->getBody())->data;
 	$users = [];
 
@@ -543,42 +543,7 @@ function task_test_analyze($args)
 {
 	lmb_require('src/service/InstagramPhotosAnalyzer.class.php');
 
-	function _get_photos_recursively($url)
-	{
-		$request = _request($url);
-
-		if (!isset($request->data))
-			var_dump($request);
-
-		$photos = [];
-		foreach ($request->data as $raw_photo)
-		{
-			$photos[$raw_photo->created_time] = $raw_photo;
-		}
-		if ($request->pagination && property_exists($request->pagination, 'next_url'))
-			$photos = $photos + _get_photos_recursively($request->pagination->next_url);
-		ksort($photos);
-		return $photos;
-	}
-
-	function _request($url)
-	{
-		lmb_require('limb/fs/src/lmbFs.class.php');
-		$hash = md5($url);
-		$cache_file = lmb_var_dir() . '/importer/' . $hash;
-		if (!file_exists($cache_file))
-		{
-			$request = new HttpRequest();
-			$request->setUrl($url);
-			$response = $request->send();
-			lmbFs::safeWrite($cache_file, serialize($response));
-		}
-		$content = isset($response) ? $response : unserialize(file_get_contents($cache_file));
-		$body = json_decode($content->getBody());
-		return $body;
-	}
-
-	$photos = _get_photos_recursively('https://api.instagram.com/v1/users/' . $args[1] . '/media/recent/?access_token=' . $args[0]);
+	$photos = _get_instagram_photos_recursively('https://api.instagram.com/v1/users/' . $args[1] . '/media/recent/?access_token=' . $args[0]);
 
 	$days = [];
 	$current_day = [array_shift($photos)];
@@ -608,6 +573,71 @@ function task_test_analyze($args)
 	var_dump($days);
 
 	echo 'Days found: '.count($days);
+}
+
+function task_stat($args)
+{
+	$url = 'https://api.instagram.com/v1/tags/love/media/recent?access_token='.$args[0];
+	$photos = _get_instagram_photos_recursively($url, 300);
+	$photos_without_loc = 0;
+	$photos_with_coords = 0;
+	$photos_with_id = 0;
+
+	foreach($photos as $photo)
+	{
+		if(null == $photo->location)
+			$photos_without_loc++;
+		else
+		{
+			if(property_exists($photo->location, 'latitude'))
+				$photos_with_coords++;
+			if(property_exists($photo->location, 'id'))
+				$photos_with_id++;
+		}
+	}
+
+	echo 'Photos without loc: '.$photos_without_loc.PHP_EOL;
+	echo 'Photos with coords: '.$photos_with_coords.PHP_EOL;
+	echo 'Photos with id: '.$photos_with_id.PHP_EOL;
+	echo 'Photos count: '.count($photos).PHP_EOL;
+}
+
+function _get_instagram_photos_recursively($url, $max_depth = 100)
+{
+	if(!$max_depth)
+		return [];
+	$request = _request_with_cache($url);
+
+	if (!isset($request->data))
+		var_dump($request);
+
+	$photos = [];
+	foreach ($request->data as $raw_photo)
+	{
+		$photos[$raw_photo->created_time] = $raw_photo;
+	}
+	if ($request->pagination && property_exists($request->pagination, 'next_url'))
+		$photos = $photos + _get_instagram_photos_recursively($request->pagination->next_url, $max_depth - 1);
+	ksort($photos);
+	return $photos;
+}
+
+function _request_with_cache($url)
+{
+	taskman_msg('request: '.$url.PHP_EOL);
+	lmb_require('limb/fs/src/lmbFs.class.php');
+	$hash = md5($url);
+	$cache_file = lmb_var_dir() . '/importer/' . $hash;
+	if (!file_exists($cache_file))
+	{
+		$request = new HttpRequest();
+		$request->setUrl($url);
+		$response = $request->send();
+		lmbFs::safeWrite($cache_file, serialize($response));
+	}
+	$content = isset($response) ? $response : unserialize(file_get_contents($cache_file));
+	$body = json_decode($content->getBody());
+	return $body;
 }
 
 function task_import_ical($args)
