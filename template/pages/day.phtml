@@ -655,6 +655,7 @@
               });
 
               save_request.success(function(response) {
+                element.find('img').popover('hide');
                 description_input.prop("disabled", false);
                 save_button.addClass('disabled').removeClass('btn-success');
                 save_button.text('Save description');

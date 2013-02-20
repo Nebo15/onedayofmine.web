@@ -187,6 +187,9 @@ input[subtype=time] {
   height: 45px;
 }
 
+.day-controls {
+  margin-top: 10px;
+}
 
 .moment-item {
   position: relative;
