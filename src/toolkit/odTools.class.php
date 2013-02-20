@@ -425,7 +425,6 @@ class odTools extends lmbAbstractTools
       ->doBackground($function_name, odAsyncJobs::encodeWorkload($params));
 	  else
 	  {
-		  //call sync
 		  return call_user_func_array(['odAsyncJobs', '_'.$function_name], $params);
 	  }
   }
