@@ -303,6 +303,13 @@
       var comments_loader_button =  comments_loader.find('button[type=button]');
       var comments_template = Template.prepareTemplate($('#template_comments'));
 
+      var comment_storage_key = "days/{$#day->id}/comment";
+
+      var comment_saved_input = Storage.get(comment_storage_key);
+      if(comments_input.val() == '' && comment_saved_input !== undefined && comment_saved_input != false) {
+        comments_input.val(comment_saved_input);
+      }
+
       var deleteComment = function() {
         var element = $(this).closest('[comment_id]');
         var id = element.attr('comment_id');
@@ -363,6 +370,11 @@
       // Comments
       comments_input.on('keyup', function(event) {
         comments_button.removeClass('disabled').addClass('btn-success');
+        if($.trim(comments_input.val()) != '') {
+          Storage.set(comment_storage_key, comments_input.val());
+        } else {
+          Storage.remove(comment_storage_key);
+        }
       });
 
       comments_button.click(function() {
