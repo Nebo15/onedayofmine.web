@@ -928,7 +928,7 @@
                   </p>
                 </div>
               <? } else { ?>
-                <h3 class="day-title">{$#day->title}</h3>
+                <h2 class="day-title">{$#day->title}</h2>
 
                 <p class="muted day-info">
                   <span class="pull-right">
@@ -1091,7 +1091,7 @@
                     <i class="icon-comments"></i>
                     <span id="comments_counter"><? if($this->day->comments_count > 3) { ?>3/<? } ?>{$this->day->comments_count}</span>
                   </span>
-                  <h4>Comments:</h4>
+                  <h2>Comments:</h2>
                     <ul class="unstyled">
                       {{list using="$#day->comments"}}
                         {{list:item}}
