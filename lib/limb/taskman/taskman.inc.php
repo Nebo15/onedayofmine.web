@@ -233,12 +233,12 @@ class TaskmanTask
   function acquireLock()
   {
 	  $lock_file = $this->getLockFilename();
-	  if(!is_writable($lock_file))
+	  if(file_exists($lock_file) && !is_writable($lock_file))
 	  {
 		  taskman_sysmsg("Lock file have no write permissions. Check $lock_file");
 		  exit(1);
 	  }
-	  
+
     $this->lock_file_poiner = @fopen($lock_file, "w+");
     if (@flock($this->lock_file_poiner, LOCK_EX | LOCK_NB)) {
       return true;
