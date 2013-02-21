@@ -333,6 +333,7 @@ class odObjectMother
       'facebook_profile_utime' => $this->integer(11),
       'pic'              => 'http://fbcdn.com/'.$this->image_name(),
       'pic_big'          => 'http://fbcdn.com/'.$this->image_name(),
+	    'pic_square'       => 'http://fbcdn.com/'.$this->image_name(),
       'occupation'       => $this->string(),
       'current_location' => $this->string(),
       'birthday'         => $this->date_sql()

@@ -459,7 +459,7 @@ class odExportHelperTest extends odUnitTestCase
     $this->db_connection->resetStats();
 
     $exported = $this->export_helper->exportNewsItems($news);
-    $this->assertEqual(1, count($this->db_connection->getQueries()));
+    $this->assertEqual(5, count($this->db_connection->getQueries()));
     $this->assertJsonNewsItems($exported);
   }
 
