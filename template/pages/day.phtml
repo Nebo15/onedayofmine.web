@@ -112,7 +112,7 @@
     <script id="template_upload_progress" type="text/x-handlebars-template">
       <div class="moment-upload-progress" style="display:none">
         <div class="progress progress-striped active">
-          <div class="bar" style="width: 40%;"></div>
+          <div class="bar" style="width: 1%;"></div>
         </div>
       </div>
     </script>
@@ -628,9 +628,17 @@
                 time: date_input.val() + 'T' + time_input.val() + ':' + time_input.attr('seconds') + time_input.attr('timezone')
               });
 
-              element.find('.moment-image-holder img').after($('#template_upload_progress').html());
-              var upload_progress_bar = element.find('.moment-upload-progress .progress');
-              var upload_progress_bar_indicator = upload_progress_bar.find('.bar');
+              var moment_image = element.find('.moment-image-holder img');
+
+              moment_image.after($('#template_upload_progress').html());
+              var upload_progress_bar = element.find('.moment-upload-progress');
+              var upload_progress_bar_indicator = upload_progress_bar.find('.progress .bar');
+
+              upload_progress_bar.css('top', ((moment_image.height()-10)/2) + 'px');
+
+              moment_image.animate({
+                opacity: 0.25
+              }, 500);
 
               save_request.params.progress = function(event) {
                 if(event.lengthComputable) {
@@ -654,6 +662,10 @@
                 upload_progress_bar.fadeOut(500, function() {
                   upload_progress_bar.detach();
                 })
+
+                moment_image.animate({
+                  opacity: 1
+                }, 500);
 
                 // Set moment_id
                 element.attr('moment_id', response.data.result.id);
