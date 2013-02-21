@@ -736,8 +736,9 @@
         comments_button.removeClass('disabled').addClass('btn-success');
       }
 
-      var getCommentsCounter = function(value) {
-        return parseInt(comments_counter.text());
+      var getCommentsCounter = function() {
+        var text = comments_counter.text();
+        return parseInt(text.substring(text.indexOf('/')));
       };
 
       var setCommentsCounter = function(value) {
