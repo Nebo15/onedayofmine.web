@@ -24,7 +24,7 @@
             <p class="text">
               <? if($this->current_user) { ?>
                 [[#if-eq user.id {$this->current_user->id}]]
-                  <a class="pull-right not-decorated with-shadow" id="trigger_comment_delete"><i class="icon-trash"></i></a>
+                  <a class="pull-right not-decorated with-shadow btn-comment-delete"><i class="icon-trash"></i></a>
                 [[/if-eq]]
               <? } ?>
 
@@ -720,7 +720,7 @@
       var comments = $('.comments');
       var comments_input  = comments.find('textarea');
       var comments_button = comments.find('button[type=submit]');
-      var comments_delete_button_selector = '#trigger_comment_delete';
+      var comments_delete_button_selector = '.btn-comment-delete';
       var comments_delete_button = comments.find(comments_delete_button_selector);
       var comments_counter = comments.find('#comments_counter');
 
@@ -733,17 +733,25 @@
       var comment_saved_input = Storage.get(comment_storage_key);
       if(comments_input.val() == '' && comment_saved_input !== undefined && comment_saved_input != false) {
         comments_input.val(comment_saved_input);
+        comments_button.removeClass('disabled').addClass('btn-success');
       }
 
-      var getCommentsCounter = function(value) {
-        return parseInt(comments_counter.text());
+      var getCommentsCounter = function() {
+        var text = comments_counter.text();
+        return parseInt(text.substring(text.indexOf('/')+1));
       };
 
       var setCommentsCounter = function(value) {
-        if(value > 3 && comments_loader_button.css('display') == 'none') {
+        var real_count = $('.comment-item').length;
+
+        if((value > real_count || value > 3) && comments_loader_button.css('display') == 'none') {
           comments_loader_button.fadeIn(500);
         } else {
           comments_loader_button.fadeOut(500);
+        }
+
+        if(value > real_count) {
+          value = real_count + '/' + value;
         }
 
         comments_counter.text(value);
@@ -1110,7 +1118,7 @@
                             <div class="bubble left">
                               <p class="text">
                                 <? if($this->current_user && $item->user->id == $this->current_user->id) { ?>
-                                  <a class="pull-right not-decorated with-shadow" id="trigger_comment_delete"><i class="icon-trash"></i></a>
+                                  <a class="pull-right not-decorated with-shadow btn-comment-delete"><i class="icon-trash"></i></a>
                                 <? } ?>
 
                                 {$item->text}

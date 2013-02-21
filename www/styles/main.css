@@ -150,23 +150,6 @@ input[subtype=time] {
 }
 
 .days li .day-controls-overlay-left, .days .day-controls-overlay-right {
-  display: none;
-  -webkit-opacity: 0;
-  -moz-opacity: 0;
-  opacity: 0;
-}
-
-.days li:hover .day-controls-overlay-left, .days li:hover .day-controls-overlay-right {
-  -webkit-opacity: 1;
-  -moz-opacity: 1;
-  opacity: 1;
-  -webkit-transition: all 1s ease;
-  -moz-transition: all 1s ease;
-  -ms-transition: all 1s ease;
-  -o-transition: all 1s ease;
-  transform: all 1s ease;
-
-  display:block;
   top: 5px;
   position: absolute;
   background: rgba(0, 0, 0, 0.3);
@@ -176,6 +159,22 @@ input[subtype=time] {
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   border-radius: 5px;
+
+  -webkit-transition: all 0.4s ease;
+  -moz-transition: all 0.4s ease;
+  -ms-transition: all 0.4s ease;
+  -o-transition: all 0.4s ease;
+  transform: all 0.4s ease;
+
+  -webkit-opacity: 0;
+  -moz-opacity: 0;
+  opacity: 0;
+}
+
+.days li:hover .day-controls-overlay-left, .days li:hover .day-controls-overlay-right {
+  -webkit-opacity: 1;
+  -moz-opacity: 1;
+  opacity: 1;
 }
 
 .days .day-controls-overlay-left {
