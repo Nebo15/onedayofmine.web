@@ -27,8 +27,8 @@
 
   <!-- Vendor style sheets -->
   <link href="/styles/bootstrap.min.css" rel="stylesheet">
-  <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/css/bootstrap-responsive.min.css" rel="stylesheet">
-  <link href="/styles/font-awesome.css" rel="stylesheet">
+  <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-responsive.min.css" rel="stylesheet">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css" rel="stylesheet">
   {{slot id='css_include'/}}
 
   <!-- Application style sheets -->
@@ -41,8 +41,8 @@
   {{slot id='meta'/}}
 
   <!-- Vendor scripts -->
-  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-  <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
   <script src="/lib/vendor/handlebars.js"></script>
   <script src="/lib/vendor/jquery.scrollTo-1.4.3.1-min.js"></script>
   <script src="/lib/vendor/jquery.cookie.js"></script>
@@ -56,6 +56,10 @@
         cookie:true,
         xfbml:false
       });
+
+      <? if($this->current_user) { ?>
+
+      <? } ?>
     };
     (function (d) {
       var js, id = 'facebook-jssdk';
