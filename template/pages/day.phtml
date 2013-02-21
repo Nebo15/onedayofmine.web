@@ -8,6 +8,7 @@
   {{/into}}
   {{into slot="js_include"}}
     <script src="/lib/vendor/bootstrap-datepicker.js"></script>
+    <script src="/lib/vendor/jquery.ajax-progress.js"></script>
     <script src="/lib/vendor/bootstrap-timepicker.min.js"></script>
   {{/into}}
   {{into slot="css_include"}}
@@ -103,6 +104,15 @@
               <i class="icon icon-large icon-facebook-sign"></i>
               Facebook
           </button>
+        </div>
+      </div>
+    </script>
+
+
+    <script id="template_upload_progress" type="text/x-handlebars-template">
+      <div class="moment-upload-progress" style="display:none">
+        <div class="progress progress-striped active">
+          <div class="bar" style="width: 40%;"></div>
         </div>
       </div>
     </script>
@@ -499,7 +509,7 @@
             element.next().remove();
           });
 
-          element.slideUp(fade_time, function() {
+          element.fadeOut(fade_time, function() {
             element.remove();
           });
         };
@@ -593,7 +603,9 @@
 
           delete_button.click(function() {
             if(confirm("Do you really want to delete this moment?")) {
-              element.find('img').popover('hide');
+              element.find('.popover').fadeOut(300, function() {
+                element.find('img').popover('hide');
+              })
               remove_moment(element);
             }
           });
@@ -616,8 +628,22 @@
                 time: date_input.val() + 'T' + time_input.val() + ':' + time_input.attr('seconds') + time_input.attr('timezone')
               });
 
+              element.find('.moment-image-holder img').after($('#template_upload_progress').html());
+              var upload_progress_bar = element.find('.moment-upload-progress .progress');
+              var upload_progress_bar_indicator = upload_progress_bar.find('.bar');
+
+              save_request.params.progress = function(event) {
+                if(event.lengthComputable) {
+                  upload_progress_bar_indicator.css('width', ((event.loaded / event.total) * 100) + '%');
+                } else {
+                  console.log('Content Length not reported!');
+                }
+              };
+
               save_request.success(function(response) {
-                element.find('img').popover('hide');
+                element.find('.popover').fadeOut(300, function() {
+                  element.find('img').popover('hide');
+                });
                 description_input.prop("disabled", false);
                 save_button.addClass('disabled').removeClass('btn-success');
                 save_button.text('Save description');
@@ -625,6 +651,9 @@
                 time_input.prop('disabled', false);
                 date_input.prop('disabled', false);
                 datetime_button.addClass('disabled').removeClass('btn-success');
+                upload_progress_bar.fadeOut(500, function() {
+                  upload_progress_bar.detach();
+                })
 
                 // Set moment_id
                 element.attr('moment_id', response.data.result.id);
@@ -638,7 +667,9 @@
                 save_button.addClass('btn-danger').removeClass('btn-success');
               });
 
-              save_request.send();
+              upload_progress_bar.fadeIn(500, function() {
+                save_request.send();
+              })
             }
           });
 
