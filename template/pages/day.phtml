@@ -38,7 +38,7 @@
     </script>
 
     <script id="template_moment" type="text/x-handlebars-template">
-      <li class="well moment-item moment-item-new" itemscope itemtype="http://schema.org/ImageObject">
+      <li class="well moment-item moment-item-new">
         <span class="moment-controls-overlay">
           <a class="not-decorated with-shadow" id="trigger_moment_delete"><i class="icon-trash"></i></a>
         </span>
@@ -56,12 +56,12 @@
         </div>
 
         <div class="moment-image-holder">
-          <img src="[[moment.image]]" width="400" class="img-polaroid" itemprop="contentUrl" alt="" />
+          <img src="[[#if moment.image]][[moment.image]][[else]]http://placehold.it/532x532&text=Select+image[[/if]]" width="400" class="img-polaroid" alt="" />
         </div>
 
         <br class="clearfix" />
 
-        <p class="bubble moment-description" itemprop="description">
+        <p class="bubble moment-description">
           <textarea rows="3" class="input-block-level" placeholder="Enter moment description...">[[moment.description]]</textarea>
           <button type="submit" class="btn btn-block btn-success">Add moment</button>
         </p>
@@ -127,7 +127,7 @@
         var moment_description_button_selector = 'button[type=submit]';
 
         // File selector popover
-        var popover_template = $($.trim($('#template_image_select').html())); // Tricky creation of object, that can handle events
+        var popover_template = $('#template_image_select').html(); // Tricky creation of object, that can handle events
         var popover_file_select_handler = function(event) {
           var $this = $(this);
           var reader = new FileReader();
@@ -137,8 +137,7 @@
             var moment = $this.closest(moments_selector);
             moment.find(moment_description_selector).find(moment_description_button_selector).addClass('btn-success').removeClass('disabled');
             moment.addClass('success');
-            moment.find('img').attr('src', this.result);
-            $this.change(popover_file_select_handler);
+            moment.find('.moment-image-holder img').attr('src', this.result);
           });
 
           if (!FileReaderFilter.test(file.type)) {
@@ -147,11 +146,7 @@
           }
 
           reader.readAsDataURL(file);
-
-          console.log('BOOM');
         };
-
-        popover_template.find('input[type=file]').change(popover_file_select_handler);
 
         var add_image_popover = {
           html: true,
@@ -516,7 +511,7 @@
             time:Tools.getTime(),
             time_seconds:Tools.getSeconds(),
             timezone:Tools.getTimezone(),
-            image:'http://placehold.it/532x532&text=Select+image',
+            image:'',
             description:''
           }, moment);
 
@@ -530,8 +525,13 @@
           // Save button
           var save_button = description.find('button[type=submit]');
 
-          if(moment.image == 'http://placehold.it/532x532&text=Select+image') {
-            element.find('img').popover(add_image_popover);
+          if(moment.image == '') {
+            var popover = element.find('img').popover(add_image_popover);
+
+            $(popover).bind('shown', function() {
+              element.find('input[type=file]').on('change', popover_file_select_handler);
+            });
+
             save_button.addClass('disabled').removeClass('btn-success');
 
             element.find('img').load(function() {
