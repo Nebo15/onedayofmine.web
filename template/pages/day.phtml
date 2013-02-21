@@ -742,10 +742,16 @@
       };
 
       var setCommentsCounter = function(value) {
-        if(value > 3 && comments_loader_button.css('display') == 'none') {
+        var real_count = $('.comment-item').length;
+
+        if((value > real_count || value > 3) && comments_loader_button.css('display') == 'none') {
           comments_loader_button.fadeIn(500);
         } else {
           comments_loader_button.fadeOut(500);
+        }
+
+        if(value > real_count) {
+          value = real_count + '/' + value;
         }
 
         comments_counter.text(value);
