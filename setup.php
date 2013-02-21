@@ -21,6 +21,9 @@ lmb_package_require('cache2');
 lmb_package_require('profile');
 lmb_package_require('mail');
 
+lmb_package_require('i18n');
+lmb_require('limb/i18n/utf8.inc.php');
+
 lmb_env_setor('APP_DIR', $app_dir);
 lmb_env_setor('LIBS_DIR', $libs_dir);
 lmb_env_setor('LIMB_VAR_DIR', $app_dir . '/var/');
