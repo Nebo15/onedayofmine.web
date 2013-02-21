@@ -130,7 +130,7 @@ function task_od_parse_lj($argv)
 	$app_dir = taskman_prop('PROJECT_DIR');
 
 	lmb_require($app_dir . 'setup.php');
-	lmb_require('ljparse/*.class.php');
+	lmb_require_glob('ljparse/*.class.php');
 	lmb_require($app_dir . 'tests/src/odObjectMother.class.php');
 
 	$occupations = array("Bus and Truck Mechanics", "Bus Boy / Bus Girl", "Bus Driver (School)", "Bus Driver (Transit)", "Business Professor", "Business Service Specialist", "Cabinet Maker", "Camp Director", "Caption Writer", "Cardiologist (MD)", "Cardiopulmonary Technologist", "Career Counselor", "Cargo and Freight Agents", "Carpenter's Assistant", "Carpet Installer", "Cartographer (Map Scientist)", "Cartographic Technician", "Cartoonist (Publications)", "Casino Cage Worker", "Casino Cashier", "Casino Dealer", "Casino Floor Person", "Casino Manager", "Casino Pit Boss", "Casino Slot Machine Mechanic", "Casino Surveillance Officer", "Casting Director", "Catering Administrator", "Ceiling Tile Installer", "Cement Mason", "Ceramic Engineer", "Certified Public Accountant (CPA)", "Chaplain (Prison, Military, Hospital)", "Chemical Engineer", "Chemical Equipment Operator", "Chemical Plant Operator", "Chemical Technicians", "Chemistry Professor", "Chief Financial Officer", "Child Care Center Administrator", "Child Care Worker", "Child Life Specialist", "Child Support Investigator", "Child Support Services Worker", "City Planning Aide", "Civil Drafter", "Civil Engineer", "Civil Engineering Technician", "Clergy Member (Religious Leader)", "Clinical Dietitian", "Clinical Psychologist", "Clinical Sociologist", "Coatroom and Dressing Room Attendants", "College/University Professor", "Commercial Designer", "Commercial Diver", "Commercial Fisherman", "Communication Equipment Mechanic", "Communications Professor", "Community Health Nurse", "Community Organization Worker", "Community Welfare Worker", "Compensation Administrator", "Compensation Specialist", "Compliance Officer", "Computer Aided Design (CAD) Technician", "Computer and Information Scientists, Research", "Computer and Information Systems Managers", "Computer Applications Engineer", "Computer Controlled Machine Tool Operators", "Computer Customer Support Specialist", "Computer Hardware Technician", "Computer Operators", "Computer Programmer", "Computer Science Professor");
@@ -224,10 +224,10 @@ function task_od_parse_lj($argv)
 		$day = new Day();
 		$day->title = $post->getTitle() . ' ' . $posts_remain;
 		$day->setUser($tests_users[array_rand($tests_users)]);
-		$day->setOccupation($occupations[array_rand($occupations)]);
-		$day->setTimezone(0);
-		$day->setLocation($locations[array_rand($locations)]);
-		$day->setType($types[array_rand($types)]);
+		$day->occupation = ($occupations[array_rand($occupations)]);
+		$day->timezone = 0;
+		$day->location = $locations[array_rand($locations)];
+		$day->type = $types[array_rand($types)];
 
 		$likes_count = rand(-5, count($tests_users));
 		shuffle($tests_users);
@@ -348,7 +348,7 @@ function task_od_tests_users()
 	array_pop($tests_users); // Bar
 	foreach ($tests_users as $test_user)
 	{
-		echo "Register '{$test_user->getName()}'...";
+		echo "Register '{$test_user->name}'...";
 		$request = new HttpRequest(lmb_env_get('HOST_URL') . '/auth/login');
 		$request->setMethod(HTTP_METH_POST);
 		$request->setPostFields(array('token' => $test_user->facebook_access_token));

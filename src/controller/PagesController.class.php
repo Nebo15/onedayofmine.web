@@ -145,8 +145,7 @@ class PagesController extends lmbController
       if($min_timestamp > $time)
         $min_timestamp = $time;
 
-
-      $moment->time = date('h:i', $time);
+			$moment->time = date('H:i', $time);
       $moment->time_seconds = date('s', $time);
       $moment->date = date('Y-m-d', $time);
       $moment->timezone = date('P', $time);

@@ -169,7 +169,11 @@ class DaysController extends BaseJsonController
 		$like->setUser($this->_getUser());
 		$like->save();
 
-		$this->toolkit->doAsync('dayLike', $day->id, $like->id);
+		try
+		{
+			$this->toolkit->doAsync('dayLike', $day->id, $like->id);
+		}
+		catch(FacebookApiException $e) {}
 
 		return $this->_answerOk();
 	}

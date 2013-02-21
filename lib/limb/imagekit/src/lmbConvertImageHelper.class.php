@@ -38,7 +38,8 @@ class lmbConvertImageHelper
 
   function resizeFixedWidth($size)
   {
-    if($this->_getWidth() > $size['width'])
+	  $current_width = $this->converter->getContainer()->getWidth();
+    if($current_width > $size['width'])
     {
       $resize_params = array('width' => $size['width'], 'preserve_aspect_ratio' => true);
       $this->converter->apply('resize', $resize_params);
@@ -47,7 +48,8 @@ class lmbConvertImageHelper
 
   function resizeFixedHeight($size)
   {
-    if($this->_getHeight() > $size['height'])
+	  $current_height = $this->converter->getContainer()->getHeight();
+    if($current_height > $size['height'])
     {
       $resize_params = array('height' => $size['height'], 'preserve_aspect_ratio' => true);
       $this->converter->apply('resize', $resize_params);
@@ -56,13 +58,14 @@ class lmbConvertImageHelper
 
   function resizeFullFrame($size)
   {
-    if($this->_getWidth() > $size['width'] || $this->_getHeight() > $size['height'])
+	  $current_width = $this->converter->getContainer()->getWidth();
+	  $current_height = $this->converter->getContainer()->getHeight();
+    if($current_width > $size['width'] || $current_height > $size['height'])
     {
-      if( ((float)$this->_getWidth()/$this->_getHeight()) > ((float)$size['width']/$size['height']) )
+      if( ((float)$current_width/$current_height) > ((float)$size['width']/$size['height']) )
         $resize_params = array('width' => $size['width'], 'preserve_aspect_ratio' => true);
       else
         $resize_params = array('height' => $size['height'], 'preserve_aspect_ratio' => true);
-
       $this->converter->apply('resize', $resize_params);
     }
   }
@@ -98,12 +101,8 @@ class lmbConvertImageHelper
   function resizeAndCropFrame($size)
   {
     $this->resizePartialFrame($size);
-
-    if($this->converter->getContainer()->getWidth() > $size['width'])
-      $this->cropFixedWidth($size);
-
-    if($this->converter->getContainer()->getHeight() > $size['height'])
-      $this->cropFixedHeight($size);
+		$this->cropFixedWidth($size);
+    $this->cropFixedHeight($size);
   }
 
   function cropByCoords($source_file, $crop_params, $quality = null)
@@ -125,11 +124,12 @@ class lmbConvertImageHelper
 
   function cropFixedWidth($size)
   {
-    if($this->_getWidth() > $size['width'])
+	  $current_width = $this->converter->getContainer()->getWidth();
+    if($current_width > $size['width'])
     {
       $crop_params = array(
         'width' => $size['width'], 'height' => $size['height'],
-        'x' => ($this->_getWidth() - $size['width']) / 2, 'y' => 0,
+        'x' => ($current_width - $size['width']) / 2, 'y' => 0,
       );
       $this->converter->apply('crop', $crop_params);
     }
@@ -137,29 +137,14 @@ class lmbConvertImageHelper
 
   function cropFixedHeight($size)
   {
-    if($this->_getHeight() > $size['height'])
+	  $current_height = $this->converter->getContainer()->getHeight();
+    if($current_height > $size['height'])
     {
       $crop_params = array(
         'width' => $size['width'], 'height' => $size['height'],
-        'x' => 0, 'y' => ($this->_getHeight() - $size['height']) / 2,
+        'x' => 0, 'y' => ($current_height - $size['height']) / 2,
       );
       $this->converter->apply('crop', $crop_params);
     }
-  }
-
-  protected function _getWidth()
-  {
-    static $width;
-    if(!$width)
-      $width = $this->converter->getContainer()->getWidth();
-    return $width;
-  }
-
-  protected function _getHeight()
-  {
-    static $height;
-    if(!$height)
-      $height = $this->converter->getContainer()->getHeight();;
-    return $height;
   }
 }

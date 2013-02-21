@@ -131,7 +131,7 @@ function lmb_substr_count($haystack, $needle)
  */
 function lmb_str_split($str, $split_len=1)
 {
-  return $GLOBALS['LIMB_CHARSET_DRIVER']->_str_split($strX, $strY);
+  return $GLOBALS['LIMB_CHARSET_DRIVER']->_str_split($str, $split_len);
 }
 /**
  * This is multibyte aware alternative to preg_match
