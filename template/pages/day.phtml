@@ -24,7 +24,7 @@
             <p class="text">
               <? if($this->current_user) { ?>
                 [[#if-eq user.id {$this->current_user->id}]]
-                  <a class="pull-right not-decorated with-shadow" id="trigger_comment_delete"><i class="icon-trash"></i></a>
+                  <a class="pull-right not-decorated with-shadow btn-comment-delete"><i class="icon-trash"></i></a>
                 [[/if-eq]]
               <? } ?>
 
@@ -720,7 +720,7 @@
       var comments = $('.comments');
       var comments_input  = comments.find('textarea');
       var comments_button = comments.find('button[type=submit]');
-      var comments_delete_button_selector = '#trigger_comment_delete';
+      var comments_delete_button_selector = '.btn-comment-delete';
       var comments_delete_button = comments.find(comments_delete_button_selector);
       var comments_counter = comments.find('#comments_counter');
 
@@ -1111,7 +1111,7 @@
                             <div class="bubble left">
                               <p class="text">
                                 <? if($this->current_user && $item->user->id == $this->current_user->id) { ?>
-                                  <a class="pull-right not-decorated with-shadow" id="trigger_comment_delete"><i class="icon-trash"></i></a>
+                                  <a class="pull-right not-decorated with-shadow btn-comment-delete"><i class="icon-trash"></i></a>
                                 <? } ?>
 
                                 {$item->text}
