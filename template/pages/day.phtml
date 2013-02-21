@@ -733,6 +733,7 @@
       var comment_saved_input = Storage.get(comment_storage_key);
       if(comments_input.val() == '' && comment_saved_input !== undefined && comment_saved_input != false) {
         comments_input.val(comment_saved_input);
+        comments_button.removeClass('disabled').addClass('btn-success');
       }
 
       var getCommentsCounter = function(value) {
