@@ -149,7 +149,12 @@ input[subtype=time] {
     padding: 0.2em 0.5em; color: #fff;
 }
 
-.days .day-controls-overlay-left, .days .day-controls-overlay-right {
+.days li .day-controls-overlay-left, .days .day-controls-overlay-right {
+    display: none;
+}
+
+.days li:hover .day-controls-overlay-left, .days li:hover .day-controls-overlay-right {
+    display:block;
     top: 5px;
     position: absolute;
     background: rgba(0, 0, 0, 0.3);
