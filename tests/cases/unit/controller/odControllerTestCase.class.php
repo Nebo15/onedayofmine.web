@@ -53,8 +53,8 @@ abstract class odControllerTestCase extends odUnitTestCase
 
     $this->toolkit->setJobQueueClient(new odJobQueueClientForTests());
 
-    $this->toolkit->setSearchService('users', new SearchServiceMock);
-    $this->toolkit->setSearchService('days', new SearchServiceMock);
+    $this->toolkit->setSearchService('User', new SearchServiceMock);
+    $this->toolkit->setSearchService('Day', new SearchServiceMock);
   }
 
   function get($action, $params = array(), $id = null)
