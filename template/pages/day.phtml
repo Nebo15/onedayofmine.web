@@ -741,7 +741,9 @@
 
       var setCommentsCounter = function(value) {
         if(value > 3 && comments_loader_button.css('display') == 'none') {
-          comments_loader_button.css('display', 'block');
+          comments_loader_button.fadeIn(500);
+        } else {
+          comments_loader_button.fadeOut(500);
         }
 
         comments_counter.text(value);
