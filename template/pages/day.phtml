@@ -735,6 +735,18 @@
         comments_input.val(comment_saved_input);
       }
 
+      var getCommentsCounter = function(value) {
+        return parseInt(comments_counter.text());
+      };
+
+      var setCommentsCounter = function(value) {
+        if(value > 3 && comments_loader_button.css('display') == 'none') {
+          comments_loader_button.css('display', 'block');
+        }
+
+        comments_counter.text(value);
+      };
+
       var deleteComment = function() {
         var element = $(this).closest('[comment_id]');
         var id = element.attr('comment_id');
@@ -744,6 +756,8 @@
           delete_request.success(function() {
             element.fadeOut(500, function() {
               element.remove();
+
+              setCommentsCounter(getCommentsCounter()-1);
             });
           });
 
@@ -774,13 +788,7 @@
 
             $('.comment-item').fadeIn();
 
-            var count = parseInt(comments_counter.text())+response.data.result.length;
-
-            if(count > 3 && comments_loader_button.css('display') == 'none') {
-              comments_loader_button.css('display', 'block');
-            }
-
-            comments_counter.text(count);
+            setCommentsCounter(getCommentsCounter()+response.data.result.length);
           });
 
           comments_request.error(function() {
