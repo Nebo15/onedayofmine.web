@@ -742,8 +742,9 @@
         if(confirm("Do you really want to delete your comment?")) {
           var delete_request = API.request('POST', '/day_comments/' + id + '/delete');
           delete_request.success(function() {
-            element.fadeOut(500);
-            element.remove();
+            element.fadeOut(500, function() {
+              element.remove();
+            });
           });
 
           delete_request.error(function() {
