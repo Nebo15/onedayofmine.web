@@ -738,7 +738,7 @@
 
       var getCommentsCounter = function() {
         var text = comments_counter.text();
-        return parseInt(text.substring(text.indexOf('/')));
+        return parseInt(text.substring(text.indexOf('/')+1));
       };
 
       var setCommentsCounter = function(value) {
