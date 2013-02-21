@@ -44,8 +44,9 @@
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
   <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.2.2/js/bootstrap.min.js"></script>
   <script src="/lib/vendor/handlebars.js"></script>
-  <script src="/lib/vendor/jquery.masonry.min.js"></script>
   <script src="/lib/vendor/jquery.scrollTo-1.4.3.1-min.js"></script>
+  <script src="/lib/vendor/jquery.cookie.js"></script>
+
   <?php if(!property_exists($this, 'fb_disabled') || !$this->fb_disabled) { ?>
   <script>
     window.fbAsyncInit = function () {
@@ -106,12 +107,6 @@
       }
 
       {{slot id="js_ready"/}}
-    });
-
-    $(document).load(function() {
-      $('.thumbnails').masonry({
-        itemSelector: 'li'
-      });
     });
   </script>
 
