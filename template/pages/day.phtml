@@ -286,13 +286,17 @@
         day_title_input.on('keyup', function() {
           var text = day_title_input.val();
 
-          if($.trim(text) != '' && text.length > 4) {
-            day_title_button.removeClass('disabled').addClass('btn-success');
-            day_title_alert.finish().hide();
-          } else {
+          if($.trim(text) == '' || text.length < 4) {
             day_title_button.addClass('disabled').removeClass('btn-success');
             day_title_alert.finish().show();
             day_title_alert_contents.text('Title is too short');
+          } else if(text.length > 40) {
+            day_title_button.addClass('disabled').removeClass('btn-success');
+            day_title_alert.finish().show();
+            day_title_alert_contents.text('Title is too long');
+          } else {
+            day_title_button.removeClass('disabled').addClass('btn-success');
+            day_title_alert.finish().hide();
           }
         });
 
