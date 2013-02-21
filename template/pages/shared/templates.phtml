@@ -8,6 +8,12 @@
                         <a href="/pages/{$item.id}/day">
                             <img src="{$item.image_532|default:'/img/no_photo.png'}" alt="{$item.final_description}">
                         </a>
+									      <span class="day-controls-overlay-left">
+												    <i class="icon icon-heart"></i> {$item.likes_count}
+										    </span>
+										    <span class="day-controls-overlay-right">
+												    <i class="icon icon-large icon-comments"></i> {$item.comments_count}
+										    </span>
 								    </dt>
 								    <dd>
                         <div>

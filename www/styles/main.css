@@ -126,8 +126,11 @@ input[subtype=time] {
     display: block;
 }
 .days dl dd {
-    position: absolute; left: 0em; bottom: 0em; right: 0em;
-    background: #000; background: rgba(0, 0, 0, 0.6);
+    position: absolute;
+    left: 0em;
+    bottom: 0em;
+    right: 0em;
+    background: rgba(0, 0, 0, 0.6);
     margin:0;
 }
 
@@ -144,6 +147,26 @@ input[subtype=time] {
 .days dl dd div {
     display: block; float: left; clear: both;
     padding: 0.2em 0.5em; color: #fff;
+}
+
+.days .day-controls-overlay-left, .days .day-controls-overlay-right {
+    top: 5px;
+    position: absolute;
+    background: rgba(0, 0, 0, 0.3);
+    padding: 1px 5px;
+    font-weight: lighter;
+    color:#ccc;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+}
+
+.days .day-controls-overlay-left {
+    left: 5px;
+}
+
+.days .day-controls-overlay-right {
+    right: 5px;
 }
 
 /** users list */
