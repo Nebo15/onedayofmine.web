@@ -2,9 +2,9 @@
 {{wrap with="layout.phtml"}}
   {{into slot="og_meta"}}
     <meta property="og:type" content="{$#facebook_app_namespace}:day" />
-    <meta property="og:url" content="{$#host_url}pages/{$#day.id}/day" />
-    <meta property="og:title" content="{$#day.title}" />
-    <meta property="{$#facebook_app_namespace}:location" content="{$#day.location}" />
+    <meta property="og:url" content="{$#host_url}pages/{$#day->id}/day" />
+    <meta property="og:title" content="{$#day->title}" />
+    <meta property="{$#facebook_app_namespace}:location" content="{$#day->location}" />
     <meta property="{$#facebook_app_namespace}:type" content="{$#day->type}" />
   {{/into}}
   {{into slot="js_include"}}
