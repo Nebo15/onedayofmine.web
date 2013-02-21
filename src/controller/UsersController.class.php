@@ -98,6 +98,8 @@ class UsersController extends BaseJsonController
       return $this->_answerModelNotFoundById('User', $this->request->id);
 
     list($from, $to, $limit) = $this->_getFromToLimitations();
-    return $this->_answerOk($user->getActivityWithLimitation($from, $to, $limit));
+    return $this->_answerOk(
+	    $this->toolkit->getExportHelper()->exportNewsItems($user->getActivityWithLimitation($from, $to, $limit))
+    );
   }
 }

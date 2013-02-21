@@ -318,10 +318,10 @@ class UsersControllerTest extends odControllerTestCase
       $this->assertEqual(4, count($response_activities));
       $this->assertJsonNewsItems($response_activities);
 
-      $this->assertEqual($news4->exportForApi(), $response_activities[0]);
-      $this->assertEqual($news3->exportForApi(), $response_activities[1]);
-      $this->assertEqual($news2->exportForApi(), $response_activities[2]);
-      $this->assertEqual($news1->exportForApi(), $response_activities[3]);
+      $this->assertEqual($news4->id, $response_activities[0]->id);
+      $this->assertEqual($news3->id, $response_activities[1]->id);
+      $this->assertEqual($news2->id, $response_activities[2]->id);
+      $this->assertEqual($news1->id, $response_activities[3]->id);
     }
 
     $response_with_from = $this->get('activity', [
@@ -333,9 +333,9 @@ class UsersControllerTest extends odControllerTestCase
       $this->assertEqual(3, count($response_activities));
       $this->assertJsonNewsItems($response_activities);
 
-      $this->assertEqual($news3->exportForApi(), $response_activities[0]);
-      $this->assertEqual($news2->exportForApi(), $response_activities[1]);
-      $this->assertEqual($news1->exportForApi(), $response_activities[2]);
+      $this->assertEqual($news3->id, $response_activities[0]->id);
+      $this->assertEqual($news2->id, $response_activities[1]->id);
+      $this->assertEqual($news1->id, $response_activities[2]->id);
     }
 
     $response_with_range = $this->get('activity', [
@@ -348,8 +348,8 @@ class UsersControllerTest extends odControllerTestCase
       $this->assertEqual(2, count($response_activities));
       $this->assertJsonNewsItems($response_activities);
 
-      $this->assertEqual($news3->exportForApi(), $response_activities[0]);
-      $this->assertEqual($news2->exportForApi(), $response_activities[1]);
+      $this->assertEqual($news3->id, $response_activities[0]->id);
+      $this->assertEqual($news2->id, $response_activities[1]->id);
     }
 
     $response_with_limit = $this->get('activity', [
@@ -363,7 +363,7 @@ class UsersControllerTest extends odControllerTestCase
       $this->assertEqual(1, count($response_activities));
       $this->assertJsonNewsItems($response_activities);
 
-      $this->assertEqual($news3->exportForApi(), $response_activities[0]);
+      $this->assertEqual($news3->id, $response_activities[0]->id);
     }
   }
 
@@ -388,7 +388,7 @@ class UsersControllerTest extends odControllerTestCase
     $user5->name = 'Mike Jameson';
     $user5->save();
 
-    $this->toolkit->getSearchService('users')->setReturnValue('find', [
+    $this->toolkit->getSearchService('User')->setReturnValue('find', [
       $user1->id,
       $user2->id,
       $user3->id,

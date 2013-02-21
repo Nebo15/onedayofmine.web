@@ -360,7 +360,7 @@ class DaysGuestControllerTest extends odControllerTestCase
     $day6->is_deleted = 1;
     $day6->save();
 
-    $this->toolkit->getSearchService('days')->setReturnValue('find', [
+    $this->toolkit->getSearchService('Day')->setReturnValue('find', [
       $day1->id,
       $day3->id,
       $day2->id,
