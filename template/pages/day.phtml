@@ -744,14 +744,17 @@
       var setCommentsCounter = function(value) {
         var real_count = $('.comment-item').length;
 
-        if((value > real_count || value > 3) && comments_loader_button.css('display') == 'none') {
+        if(value < real_count) {
+          value = real_count;
+        } else if(value > real_count) {
+          if(comments_loader_button.css('display') == 'none') {
+            comments_loader_button.fadeIn(500);
+          }
+          value = real_count + '/' + value;
+        } else if(value > 3 && comments_loader_button.css('display') == 'none') {
           comments_loader_button.fadeIn(500);
         } else {
           comments_loader_button.fadeOut(500);
-        }
-
-        if(value > real_count) {
-          value = real_count + '/' + value;
         }
 
         comments_counter.text(value);
@@ -798,7 +801,7 @@
 
             $('.comment-item').fadeIn();
 
-            setCommentsCounter(getCommentsCounter()+response.data.result.length);
+            setCommentsCounter(getCommentsCounter());
           });
 
           comments_request.error(function() {
