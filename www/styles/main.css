@@ -150,20 +150,31 @@ input[subtype=time] {
 }
 
 .days li .day-controls-overlay-left, .days .day-controls-overlay-right {
-    display: none;
+  display: none;
+  -webkit-opacity: 0;
+  -moz-opacity: 0;
+  opacity: 0;
 }
 
 .days li:hover .day-controls-overlay-left, .days li:hover .day-controls-overlay-right {
-    display:block;
-    top: 5px;
-    position: absolute;
-    background: rgba(0, 0, 0, 0.3);
-    padding: 1px 5px;
-    font-weight: lighter;
-    color:#ccc;
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    border-radius: 5px;
+  -webkit-opacity: 1;
+  -moz-opacity: 1;
+  opacity: 1;
+  -webkit-transition: all 1s ease;
+  -moz-transition: all 1s ease;
+  -ms-transition: all 1s ease;
+  -o-transition: all 1s ease;
+
+  display:block;
+  top: 5px;
+  position: absolute;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 1px 5px;
+  font-weight: lighter;
+  color:#ccc;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
 }
 
 .days .day-controls-overlay-left {
