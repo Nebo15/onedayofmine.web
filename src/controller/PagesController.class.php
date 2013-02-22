@@ -129,8 +129,11 @@ class PagesController extends lmbController
 			$day->save();
 		}
 
+    $this->is_preview = false;
     $this->is_owner = false;
-    if ($this->toolkit->getUser() && $this->toolkit->getUser()->id == $day->user_id)
+    if($this->request->has('previev'))
+      $this->is_preview = true;
+    else if ($this->toolkit->getUser() && $this->toolkit->getUser()->id == $day->user_id)
       $this->is_owner = true;
 
     $this->day = $this->toolkit->getExportHelper()->exportDay($day);

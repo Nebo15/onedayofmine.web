@@ -958,7 +958,12 @@
           <div class="span6 offset3">
               <? if($this->is_owner) { ?>
                 <span class="day-controls pull-right">
-                  <a class="not-decorated with-shadow" id="trigger_day_delete" day_id="{$#day->id}"><i class="icon-trash"></i></a>
+                  <a class="not-decorated with-shadow" href="/pages/{$#day->id}/day?previev" day_id="{$#day->id}">
+                    <i class="icon-eye-open"></i>
+                  </a>
+                  <a class="not-decorated with-shadow" id="trigger_day_delete" day_id="{$#day->id}">
+                    <i class="icon-trash"></i>
+                  </a>
                 </span>
 
                 <div style="margin-bottom:20px;">
@@ -993,6 +998,14 @@
                   </p>
                 </div>
               <? } else { ?>
+                <? if($this->is_preview) { ?>
+                  <div class="alert alert-block day-preview-alert">
+                    <h3>This is preview page!</h3>
+                    Here you can see how you'r day is displayed for other users!
+                    <a href="/pages/{$#day->id}/day">Go back.</a>
+                  </div>
+                <? } ?>
+
                 <h2 class="day-title">{$#day->title}</h2>
 
                 <p class="muted day-info">
