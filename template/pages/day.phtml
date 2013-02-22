@@ -108,6 +108,25 @@
       </div>
     </script>
 
+    <script id="template_image_select_mobile" type="text/x-handlebars-template">
+      <div class="file-selector">
+        <h5>From PC:</h5>
+        <div class="text-center">
+          <div class="fileupload fileupload-new" data-provides="fileupload">
+            <div>
+              <button class="btn btn-file">
+                <span class="fileupload-new">
+                  <i class="icon icon-large icon-cloud-upload"></i>
+                  Select image
+                </span>
+                <input type="file" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </script>
+
 
     <script id="template_upload_progress" type="text/x-handlebars-template">
       <div class="moment-upload-progress" style="display:none">
@@ -137,7 +156,11 @@
         var moment_description_button_selector = 'button[type=submit]';
 
         // File selector popover
-        var popover_template = $('#template_image_select').html(); // Tricky creation of object, that can handle events
+        if($.isMobile()) {
+          var popover_template = $('#template_image_select_mobile').html();
+        } else {
+          var popover_template = $('#template_image_select').html();
+        }
         var popover_file_select_handler = function(event) {
           var $this = $(this);
           var reader = new FileReader();
@@ -164,10 +187,10 @@
           title: 'Select file',
           content: popover_template,
           position: function() {
-            if($(window).width() > 800) {
-              return 'right';
-            } else {
+            if($(window).width() < 900 || $.isMobile()) {
               return 'bottom';
+            } else {
+              return 'right';
             }
           }
         };
