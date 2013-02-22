@@ -58,6 +58,18 @@
         cookie:true,
         xfbml:false
       });
+
+      $(function() {
+        <? if($this->toolkit->getUser()) { ?>
+          if(!Auth.hasAccessToken()) {
+            API.login();
+          }
+        <? } else { ?>
+          if(Auth.hasAccessToken()) {
+            Auth.logout();
+          }
+        <? } ?>
+      });
     };
   </script>
 
@@ -78,20 +90,6 @@
 
   <script>
     {{slot id="js"/}}
-  </script>
-
-  <script>
-    $(function() {
-    <? if($this->toolkit->getUser()) { ?>
-      if(!Auth.hasAccessToken()) {
-        API.login();
-      }
-    <? } else { ?>
-      if(Auth.hasAccessToken()) {
-        Auth.logout();
-      }
-    <? } ?>
-    });
   </script>
 
   <script>
