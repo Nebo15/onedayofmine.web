@@ -74,7 +74,7 @@ $this->menu = '';
     		</div>
     		<div class="span3">
           {{list using="{$#user.following}"}}
-            <div class="span3">
+            <div class="row">
               <h3>Following <small><?= count($this->user['following']); ?> people</small></h3>
       	        <ul class="unstyled  followers-list">
       	          {{list:item}}
@@ -89,7 +89,7 @@ $this->menu = '';
           {{/list}}
 
           {{list using="{$#user.followers}"}}
-            <div class="span4">
+            <div class="row">
               <h3>Followers <small><?= count($this->user['followers']); ?> people</small></h3>
               <ul class="unstyled  followers-list">
                   {{list:item}}
