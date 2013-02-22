@@ -23,8 +23,8 @@
 
           <div class="bubble left">
             <p class="text">
-              <? if($this->current_user) { ?>
-                [[#if-eq user.id {$this->current_user->id}]]
+              <? if($this->toolkit->getUser()) { ?>
+                [[#if-eq user.id {$#current_user->id}]]
                   <a class="pull-right not-decorated with-shadow btn-comment-delete"><i class="icon-trash"></i></a>
                 [[/if-eq]]
               <? } ?>
@@ -1165,7 +1165,7 @@
 
                             <div class="bubble left">
                               <p class="text">
-                                <? if($this->current_user && $item->user->id == $this->current_user->id) { ?>
+                                <? if($this->toolkit->getUser() && $item->user->id == $this->toolkit->getUser()->id) { ?>
                                   <a class="pull-right not-decorated with-shadow btn-comment-delete"><i class="icon-trash"></i></a>
                                 <? } ?>
 
