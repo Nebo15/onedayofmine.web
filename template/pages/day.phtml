@@ -941,13 +941,19 @@
     // Share toggle
     var share_button = $('button#toggle_share');
     share_button.click(function() {
-       if(!share_button.hasClass('disabled')) {
-        share_button.addClass('disabled')
-        var share_request = API.request('POST', '/days/{$#day->id}/share');
-        share_request.complete(function() {
-          share_button.removeClass('disabled');
+      if(!share_button.hasClass('disabled')) {
+        share_button.addClass('disabled');
+        var obj = {
+            method: 'feed',
+            redirect_uri: 'http://'+Config.host+'/pages/{$#day->id}/day',
+            link: 'http://'+Config.host+'/pages/{$#day->id}/day',
+            name: '{$#day->title}',
+            description: "{$#day->final_description}"
+        };
+
+        FB.ui(obj, function() {
+          share_button.addClass('btn-success');
         });
-        share_request.send();
       }
     });
 
