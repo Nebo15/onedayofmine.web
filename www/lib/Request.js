@@ -14,9 +14,7 @@ var Request = function(method, path, data, params) {
 
     // HTTP 4XX - 5XX, and jqXHR errors
     // function(jqXHR, textStatus, errorThrown)
-    error: [function(jqXHR, textStatus, errorThrown) {
-      alert(textStatus + ': ' + errorThrown);
-    }],
+    error: [],
 
     // Always after reuqest
     // function(jqXHR, textStatus) {}
@@ -43,11 +41,11 @@ var Request = function(method, path, data, params) {
 
       if(callbacks.statusGroups[code_group]) {
         callbacks.statusGroups[code_group].apply($this, args);
-      } else {
-        $.each(callbacks_arr, function(index, callback) {
-          callback.apply($this, args);
-        });
       }
+
+      $.each(callbacks_arr, function(index, callback) {
+        callback.apply($this, args);
+      });
     }
   }
 
