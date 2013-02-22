@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.5.25a, for osx10.6 (i386)
+-- MySQL dump 10.13  Distrib 5.5.29, for osx10.8 (i386)
 --
 -- Host: localhost    Database: one_day
 -- ------------------------------------------------------
--- Server version	5.5.25a-log
+-- Server version	5.5.29
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -45,12 +45,11 @@ CREATE TABLE `day` (
   `facebook_id` varchar(20) DEFAULT NULL,
   `twitter_id` varchar(20) DEFAULT NULL,
   `title` varchar(255) NOT NULL,
-  `location` varchar(255) NOT NULL DEFAULT '',
-  `occupation` varchar(255) NOT NULL DEFAULT '',
   `final_description` varchar(1023) DEFAULT NULL,
   `type` enum('Working day','Day off','Holiday','Trip','Special event') NOT NULL,
   `image_ext` enum('jpg','png','gif','jpeg') DEFAULT NULL,
   `is_deleted` int(1) unsigned NOT NULL DEFAULT '0',
+  `views_count` int(11) unsigned NOT NULL DEFAULT '0',
   `ctime` int(10) unsigned NOT NULL,
   `utime` int(10) unsigned NOT NULL,
   `cip` int(11) NOT NULL,
@@ -127,6 +126,43 @@ CREATE TABLE `day_like` (
   `ctime` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `user_id-day_id` (`user_id`,`day_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `device_notification`
+--
+
+DROP TABLE IF EXISTS `device_notification`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `device_notification` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `device_token_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `text` varchar(256) CHARACTER SET armscii8 NOT NULL DEFAULT '',
+  `icon` int(2) unsigned DEFAULT NULL,
+  `sound` varchar(63) CHARACTER SET armscii8 DEFAULT NULL,
+  `is_sended` int(1) unsigned NOT NULL DEFAULT '0',
+  `ctime` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `device_token`
+--
+
+DROP TABLE IF EXISTS `device_token`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `device_token` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `token` varchar(128) CHARACTER SET ascii NOT NULL DEFAULT '',
+  `ctime` int(11) unsigned NOT NULL DEFAULT '0',
+  `logins_count` int(5) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `token` (`token`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -291,6 +327,7 @@ CREATE TABLE `news` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `sender_id` int(11) unsigned NOT NULL,
   `user_id` int(11) unsigned DEFAULT NULL,
+  `link` varchar(256) NOT NULL DEFAULT '',
   `text` char(255) NOT NULL DEFAULT '',
   `day_id` int(11) unsigned DEFAULT NULL,
   `moment_id` int(11) unsigned DEFAULT NULL,
@@ -355,6 +392,20 @@ CREATE TABLE `schema_info` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
+-- Table structure for table `sphinx_counter`
+--
+
+DROP TABLE IF EXISTS `sphinx_counter`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sphinx_counter` (
+  `counter_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `max_doc_id` int(11) NOT NULL DEFAULT '0',
+  UNIQUE KEY `counter_id` (`counter_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
 -- Table structure for table `user`
 --
 
@@ -365,7 +416,7 @@ CREATE TABLE `user` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `user_settings_id` int(11) unsigned DEFAULT NULL,
   `name` char(100) NOT NULL DEFAULT '',
-  `email` char(255) NOT NULL DEFAULT '',
+  `email` varchar(255) DEFAULT NULL,
   `image_ext` enum('jpg','jpeg','png','gif') DEFAULT NULL,
   `facebook_uid` char(20) NOT NULL DEFAULT '',
   `facebook_access_token` char(255) NOT NULL DEFAULT '',
@@ -378,7 +429,7 @@ CREATE TABLE `user` (
   `occupation` char(255) NOT NULL DEFAULT '',
   `birthday` date NOT NULL,
   `sex` enum('male','female') DEFAULT NULL,
-  `current_day_id` int(11) unsigned NOT NULL,
+  `current_day_id` int(11) unsigned DEFAULT NULL,
   `ctime` int(10) unsigned NOT NULL DEFAULT '0',
   `utime` int(10) unsigned NOT NULL DEFAULT '0',
   `cip` int(11) NOT NULL,
@@ -436,12 +487,12 @@ CREATE TABLE `user_settings` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-09-07 12:58:24
--- MySQL dump 10.13  Distrib 5.5.25a, for osx10.6 (i386)
+-- Dump completed on 2013-02-21 21:24:55
+-- MySQL dump 10.13  Distrib 5.5.29, for osx10.8 (i386)
 --
 -- Host: localhost    Database: one_day
 -- ------------------------------------------------------
--- Server version	5.5.25a-log
+-- Server version	5.5.29
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -460,6 +511,7 @@ CREATE TABLE `user_settings` (
 
 LOCK TABLES `schema_info` WRITE;
 /*!40000 ALTER TABLE `schema_info` DISABLE KEYS */;
+INSERT INTO `schema_info` (`version`) VALUES (1359155327);
 /*!40000 ALTER TABLE `schema_info` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -472,4 +524,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2012-09-07 12:58:24
+-- Dump completed on 2013-02-21 21:24:55
