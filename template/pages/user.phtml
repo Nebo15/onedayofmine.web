@@ -92,13 +92,13 @@ $this->menu = '';
             <div class="row">
               <h3>Followers <small><?= count($this->user['followers']); ?> people</small></h3>
               <ul class="unstyled  followers-list">
-                  {{list:item}}
-                    <li>
-                      <a href="/pages/{$item.id}/user">
-                        <img src="{$item.image_72}" class="img-rounded" />
-                      </a>
-                    </li>
-                  {{/list:item}}
+                {{list:item}}
+                  <li>
+                    <a href="/pages/{$item.id}/user">
+                      <img src="{$item.image_72}" class="img-rounded" />
+                    </a>
+                  </li>
+                {{/list:item}}
               </ul>
             </div>
           {{/list}}
