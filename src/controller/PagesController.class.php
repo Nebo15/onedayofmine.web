@@ -156,7 +156,6 @@ class PagesController extends lmbController
 
     $this->day->date = date('Y-m-d', $min_timestamp);
 
-    $this->current_user = $this->toolkit->getUser();
 	}
 
 	function doMoment()

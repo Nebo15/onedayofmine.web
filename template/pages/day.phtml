@@ -24,7 +24,7 @@
           <div class="bubble left">
             <p class="text">
               <? if($this->toolkit->getUser()) { ?>
-                [[#if-eq user.id {$#current_user->id}]]
+                [[#if-eq user.id <?= $this->toolkit->getUser()->id ?>]]
                   <a class="pull-right not-decorated with-shadow btn-comment-delete"><i class="icon-trash"></i></a>
                 [[/if-eq]]
               <? } ?>
