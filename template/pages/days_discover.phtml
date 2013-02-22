@@ -1,9 +1,14 @@
 <?
-$this->title = "Interesting days";
-$this->menu = 'interesting';
+$this->title = "Discover days";
+$this->menu = 'discover';
 ?>
 {{wrap with="layout.phtml"}}
 {{into slot="content"}}
-	{{apply template="days_list" days="$#days"/}}
+  <div class="row">
+    <div class="span10 offset1">
+      <h1>Discover days</h1>
+    	{{apply template="days_list" days="$#days"/}}
+    </div>
+  </div>
 {{/into}}
 {{/wrap}}
