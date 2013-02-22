@@ -21,6 +21,9 @@ h4 { font-size: 14.45px; }
   text-decoration: none;
 }
 
+.tooltip-inner {
+  max-width: 250px !important;
+}
 .container-narrow {
   margin: 0 auto;
   max-width: 760px;

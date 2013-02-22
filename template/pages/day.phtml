@@ -25,7 +25,7 @@
             <p class="text">
               <? if($this->toolkit->getUser()) { ?>
                 [[#if-eq user.id <?= $this->toolkit->getUser()->id ?>]]
-                  <a class="pull-right not-decorated with-shadow btn-comment-delete"><i class="icon-trash"></i></a>
+                  <a class="pull-right not-decorated with-shadow btn-comment-delete"><i class="icon-trash with-tooltip" data-original-title="Delete"></i></a>
                 [[/if-eq]]
               <? } ?>
 
@@ -41,7 +41,7 @@
     <script id="template_moment" type="text/x-handlebars-template">
       <li class="well moment-item moment-item-new">
         <span class="moment-controls-overlay">
-          <a class="not-decorated with-shadow" id="trigger_moment_delete"><i class="icon-trash"></i></a>
+          <a class="not-decorated with-shadow" id="trigger_moment_delete"><i class="icon-trash with-tooltip" data-original-title="Delete"></i></a>
         </span>
 
         <div class="timepicker text-center with-shadow">
@@ -69,7 +69,7 @@
       </li>
 
       <li class="well moment-item-placeholder">
-        <a class="not-decorated with-shadow"><i class="icon-plus-sign icon-2x"></i></a>
+        <a class="not-decorated with-shadow"><i class="icon-plus-sign icon-2x with-tooltip" data-original-title="Click or drag files here to add moments"></i></a>
       </li>
     </script>
 
@@ -759,6 +759,10 @@
             final_description_request.send();
           }
         });
+
+        $('.with-tooltip').tooltip({
+          placement: 'bottom'
+        });
       <? } ?>
 
       // Comments updater
@@ -820,7 +824,7 @@
           });
 
           delete_request.error(function() {
-            alert("We can't delete comment right now, please try again later or tell us about this issue");
+            alert("We can't delete right now, please try again later or tell us about this issue");
           }, true);
 
           delete_request.send();
@@ -958,11 +962,11 @@
           <div class="span6 offset3">
               <? if($this->is_owner) { ?>
                 <span class="day-controls pull-right">
-                  <a class="not-decorated with-shadow" href="/pages/{$#day->id}/day?previev" day_id="{$#day->id}">
-                    <i class="icon-eye-open"></i>
+                  <a class="not-decorated with-shadow" href="/pages/{$#day->id}/day?previev">
+                    <i class="icon-eye-open with-tooltip" data-original-title="Enter preview mode"></i>
                   </a>
                   <a class="not-decorated with-shadow" id="trigger_day_delete" day_id="{$#day->id}">
-                    <i class="icon-trash"></i>
+                    <i class="icon-trash with-tooltip" data-original-title="Delete day"></i>
                   </a>
                 </span>
 
@@ -1001,7 +1005,7 @@
                 <? if($this->is_preview) { ?>
                   <div class="alert alert-block day-preview-alert">
                     <h3>This is preview page!</h3>
-                    Here you can see how you'r day is displayed for other users!
+                    Here you can see how your day is displayed for other users!
                     <a href="/pages/{$#day->id}/day">Go back.</a>
                   </div>
                 <? } ?>
@@ -1033,14 +1037,14 @@
                 <ul class="unstyled moments-list">
                   <? if($this->is_owner) { ?>
                     <li class="well moment-item-placeholder">
-                      <a class="not-decorated with-shadow"><i class="icon-plus-sign icon-2x"></i></a>
+                      <a class="not-decorated with-shadow"><i class="icon-plus-sign icon-2x with-tooltip" data-original-title="Click or drag files here to add moments"></i></a>
                     </li>
                   <? } ?>
                   {{list:item}}
                     <li class="well moment-item" moment_id="{$item->id}" itemscope itemtype="http://schema.org/ImageObject">
                         <? if($this->is_owner) { ?>
                           <span class="moment-controls-overlay">
-                            <a class="not-decorated with-shadow" id="trigger_moment_delete"><i class="icon-trash"></i></a>
+                            <a class="not-decorated with-shadow" id="trigger_moment_delete"><i class="icon-trash with-tooltip" data-original-title="Delete"></i></a>
                           </span>
                         <? } ?>
 
@@ -1082,7 +1086,7 @@
                     <? if($this->is_owner) { ?>
                       <li class="well moment-item-placeholder">
                         <a class="not-decorated with-shadow">
-                          <i class="icon-plus-sign icon-2x"></i>
+                          <i class="icon-plus-sign icon-2x with-tooltip" data-original-title="Click or drag files here to add moments"></i>
                         </a>
                       </li>
                     <? } ?>
@@ -1179,7 +1183,7 @@
                             <div class="bubble left">
                               <p class="text">
                                 <? if($this->toolkit->getUser() && $item->user->id == $this->toolkit->getUser()->id) { ?>
-                                  <a class="pull-right not-decorated with-shadow btn-comment-delete"><i class="icon-trash"></i></a>
+                                  <a class="pull-right not-decorated with-shadow btn-comment-delete"><i class="icon-trash with-tooltip" data-original-title="Delete"></i></a>
                                 <? } ?>
 
                                 {$item->text}
