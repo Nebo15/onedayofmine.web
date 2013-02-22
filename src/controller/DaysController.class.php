@@ -456,12 +456,12 @@ class DaysController extends BaseJsonController
 
 	function doMomentsGatheringEnable()
 	{
-		return $this->_changeGatheringAction(true);
+		return $this->_changeGatheringAction(1);
 	}
 
 	function doMomentsGatheringDisable()
 	{
-		return $this->_changeGatheringAction(false);
+		return $this->_changeGatheringAction(0);
 	}
 
 	protected function _changeGatheringAction($value)
@@ -475,7 +475,7 @@ class DaysController extends BaseJsonController
 		if ($day->user_id != $this->_getUser()->id)
 			return $this->_answerNotOwner();
 
-		$day->is_gathering_enabled = 1;
+		$day->is_gathering_enabled = $value;
 		$day->saveSkipValidation();
 
 		if($value)
