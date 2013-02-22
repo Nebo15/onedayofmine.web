@@ -41,13 +41,15 @@
   {{slot id='meta'/}}
 
   <!-- Vendor scripts -->
+  <?php if(!property_exists($this, 'fb_disabled') || !$this->fb_disabled) { ?>
+    <script src="//connect.facebook.net/en_US/all.js"></script>
+  <?php } ?>
   <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
   <script src="/lib/vendor/handlebars.js"></script>
   <script src="/lib/vendor/jquery.scrollTo-1.4.3.1-min.js"></script>
   <script src="/lib/vendor/jquery.cookie.js"></script>
 
-  <?php if(!property_exists($this, 'fb_disabled') || !$this->fb_disabled) { ?>
   <script>
     window.fbAsyncInit = function () {
       FB.init({
@@ -56,22 +58,8 @@
         cookie:true,
         xfbml:false
       });
-
-      <? if($this->current_user) { ?>
-
-      <? } ?>
     };
-    (function (d) {
-      var js, id = 'facebook-jssdk';
-      if (d.getElementById(id)) { return;}
-      js = d.createElement('script');
-      js.id = id;
-      js.async = true;
-      js.src = "//connect.facebook.net/" + (window.navigator.userLanguage || window.navigator.language) + "/all.js";
-      d.getElementsByTagName('head')[0].appendChild(js);
-    }(document));
   </script>
-  <?php } ?>
 
   <!-- Application scripts -->
   <script src="/lib/Tools.js"></script>
@@ -90,6 +78,20 @@
 
   <script>
     {{slot id="js"/}}
+  </script>
+
+  <script>
+    $(function() {
+    <? if($this->toolkit->getUser()) { ?>
+      if(!Auth.hasAccessToken()) {
+        API.login();
+      }
+    <? } else { ?>
+      if(Auth.hasAccessToken()) {
+        Auth.logout();
+      }
+    <? } ?>
+    });
   </script>
 
   <script>
@@ -166,6 +168,5 @@
       {{slot id='content'/}}
       {{slot id='content_zone'/}}
 	</div>
-  <div id="fb-root"></div>
 </body>
 </html>
