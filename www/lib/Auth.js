@@ -31,6 +31,8 @@ var Auth = {
 
   logout: function(callback) {
     Storage.set('token', null);
-    callback();
+    FB.logout(function(response) {
+        callback();
+    });
   }
 };
