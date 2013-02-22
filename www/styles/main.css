@@ -244,9 +244,6 @@ input[subtype=time] {
   height: 45px;
 }
 
-.day-controls {
-  margin-top: 10px;
-}
 .day-controls a {
   margin-left: 10px;
 }
