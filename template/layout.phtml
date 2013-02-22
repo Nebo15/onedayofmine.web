@@ -52,14 +52,14 @@
 
   <script>
     window.fbAsyncInit = function () {
-      FB.init({
-        appId: <?= $this->facebook_app_id; ?>,
-        status:true,
-        cookie:true,
-        xfbml:false
-      });
-
       $(function() {
+        FB.init({
+          appId: <?= $this->facebook_app_id; ?>,
+          status:true,
+          cookie:true,
+          xfbml:false
+        });
+
         <? if($this->toolkit->getUser()) { ?>
           if(!Auth.hasAccessToken()) {
             API.login();
