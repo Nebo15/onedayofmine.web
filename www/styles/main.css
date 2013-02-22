@@ -6,6 +6,10 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: 0;
 }
 
+h2.day-title {
+  line-height: 35px;
+}
+
 h1.big { font-size: 38.25px;}
 h1 { font-size: 29.75px;}
 h2 { font-size: 21.25px;}
