@@ -483,6 +483,11 @@ ol.inline >li:first-child {
     width: 36px;
   }
 
+  .day-date {
+    display: block;
+    float: none !important;
+  }
+
   ul.inline >li,
   ol.inline >li {
     padding-left: 3px;
