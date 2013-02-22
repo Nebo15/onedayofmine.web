@@ -185,12 +185,16 @@ class PagesController extends lmbController
 			return $this->forwardTo404();
 
 		$this->user = (array) $this->toolkit->getExportHelper()->exportUser($user);
+
 		$this->user['days'] = $this->_toFlatArray($this->toolkit->getExportHelper()->exportDayItems($user->getPublicDays()));
 		$followers = $user->getFollowersUsers();
 		$this->user['followers'] = $this->_toFlatArray($this->toolkit->getExportHelper()->exportUserItems($followers));
 
 		$following = $user->getFollowingUsers();
 		$this->user['following'] = $this->_toFlatArray($this->toolkit->getExportHelper()->exportUserItems($following));
+
+    $this->user['comments_count'] = $user->getDaysComments()->count();
+
 	}
 
 	function doNotFound()

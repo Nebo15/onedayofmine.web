@@ -21,9 +21,15 @@ h4 { font-size: 14.45px; }
   text-decoration: none;
 }
 
+.row {
+  margin-left: 20px;
+  margin-right: 20px;
+}
+
 .tooltip-inner {
   max-width: 250px !important;
 }
+
 
 .navbar-static-top {
   margin-bottom: 10px;
@@ -303,16 +309,25 @@ input[subtype=time] {
   margin-right: auto;
 }
 
+.user-image-holder {
+  position: relative;
+  clear: both;
+  width: 192px;
+  height: 192px;
+}
+
 .moment-image-holder img {
   max-width: 100%;
   width: 420px;
 }
 
-.moment-image-holder a {
+.moment-image-holder a,
+.user-image-holder a {
   color: #FFF;
 }
 
-.moment-image-overlay {
+.moment-image-overlay,
+.user-image-overlay {
   position: absolute;
   color:#FFF;
   border-radius: 4px;
@@ -321,6 +336,11 @@ input[subtype=time] {
   vertical-align: middle;
   text-align: center;
   font-weight: bold;
+}
+
+.user-image-overlay {
+  bottom: 5px;
+  right: 5px;
 }
 
 .moment-upload-progress {
