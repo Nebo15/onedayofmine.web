@@ -8,6 +8,16 @@ var API = (function() {
 
   return {
 
+    get: function(path, data, params)
+    {
+      return this.request('GET', path, data, params);
+    },
+
+    post: function(path, data, params)
+    {
+      return this.request('POST', path, data, params);
+    },
+
     request: function(method, path, data, params)
     {
       var request = new Request(method, path, data, params);

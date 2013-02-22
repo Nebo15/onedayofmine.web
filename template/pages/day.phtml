@@ -108,7 +108,6 @@
       </div>
     </script>
 
-
     <script id="template_upload_progress" type="text/x-handlebars-template">
       <div class="moment-upload-progress" style="display:none">
         <div class="progress progress-striped active">
@@ -353,6 +352,20 @@
           });
 
           day_type_request.send();
+        });
+
+        //day opener
+				var $open_action = $('#day_open_switch').find('.open-action');
+        var $close_action = $('#day_open_switch').find('.close-action');
+        $open_action.click(function() {
+		      $(this).addClass('active').addClass('btn-success');
+		      $close_action.removeClass('active').removeClass('btn-danger');
+		      API.post('days/{$#day->id}/moments_gathering_enable').send();
+        });
+        $close_action.click(function() {
+          $(this).addClass('active').addClass('btn-danger');
+          $open_action.removeClass('active').removeClass('btn-success');
+          API.post('days/{$#day->id}/moments_gathering_disable').send();
         });
 
         // Moments
@@ -1001,6 +1014,14 @@
                       <button class="btn btn-small<? if($this->day->type == 'Day off') {?> active btn-success<? } ?>">Day off</button>
                       <button class="btn btn-small<? if($this->day->type == 'Holiday') {?> active btn-success<? } ?>">Holiday</button>
                       <button class="btn btn-small<? if($this->day->type == 'Trip') {?> active btn-success<? } ?>">Trip</button>
+                    </div>
+                  </div>
+
+                  <div id="day_open_switch">
+	                  <h5>Открыть день для добавления моментов друзьями:</h5>
+                    <div class="btn-group">
+                      <button class="btn btn-small open-action <? if($this->day->is_gathering_enabled) {?> active btn-success<? } ?>">Yes</button>
+                      <button class="btn btn-small close-action <? if(!$this->day->is_gathering_enabled) {?> active btn-danger<? } ?>">No</button>
                     </div>
                   </div>
 

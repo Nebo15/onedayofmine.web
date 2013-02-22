@@ -339,6 +339,9 @@ class DaysController extends BaseJsonController
 		if (!$day = Day::findById($this->request->id))
 			return $this->_answerModelNotFoundById('Day', $this->request->id);
 
+		if ($day->user_id != $this->_getUser()->id)
+			return $this->_answerNotOwner();
+
 		if($this->request->get('image_content'))
 			$image_content = base64_decode($this->request->get('image_content'));
 		else
@@ -448,7 +451,36 @@ class DaysController extends BaseJsonController
 
 	function doGuestAnalyzeInstagramDay()
 	{
-		sleep(1);
 		return $this->_answerOk((new InstagramPhotosAnalyzer($this->request->get('moments')))->analyze());
+	}
+
+	function doMomentsGatheringEnable()
+	{
+		return $this->_changeGatheringAction(true);
+	}
+
+	function doMomentsGatheringDisable()
+	{
+		return $this->_changeGatheringAction(false);
+	}
+
+	protected function _changeGatheringAction($value)
+	{
+		if (!$this->request->isPost())
+			return $this->_answerNotPost();
+
+		if (!$day = Day::findById($this->request->id))
+			return $this->_answerModelNotFoundById('Day', $this->request->id);
+
+		if ($day->user_id != $this->_getUser()->id)
+			return $this->_answerNotOwner();
+
+		$day->is_gathering_enabled = 1;
+		$day->saveSkipValidation();
+
+		if($value)
+			$this->toolkit->doAsync('dayEnableGathering', $day->id);
+
+		return $this->_answerOk();
 	}
 }

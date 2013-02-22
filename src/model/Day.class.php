@@ -8,7 +8,6 @@ lmb_require('src/model/DayLike.class.php');
 
 /**
  * @api field int id User ID
- * @static Day findById()
  */
 class Day extends BaseModel
 {
@@ -22,6 +21,7 @@ class Day extends BaseModel
   public $title;
   public $final_description;
   public $views_count;
+	public $is_gathering_enabled;
   public $is_deleted;
   public $facebook_id;
   public $twitter_id;

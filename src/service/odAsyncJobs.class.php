@@ -85,6 +85,12 @@ class odAsyncJobs
     self::toolkit()->getNewsObserver()->onDayRestore($day);
   }
 
+	static function _dayEnableGathering($day_id)
+	{
+		$day = Day::findById($day_id);
+		self::toolkit()->getNewsObserver()->onDayEnableGathering($day);
+	}
+
 	static function _momentCreate($moment_id)
   {
     $moment = Moment::findById($moment_id);

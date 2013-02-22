@@ -35,6 +35,11 @@ class odExportHelper
       $exported_day->is_liked = in_array($day->id, $liked_day);
     }
 
+	  if($is_owner)
+	  {
+		  $exported_day->is_gathering_enabled = $day->is_gathering_enabled;
+	  }
+
     return $exported_day;
   }
 

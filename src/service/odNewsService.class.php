@@ -22,6 +22,7 @@ class odNewsService
   const MSG_DAY_LIKED           = "{sender} liked day {day}";
   const MSG_DAY_SHARE           = "{sender} share day {day}";
   const MSG_DAY_FAVORITE        = "{sender} added the day {day} to favorites";
+	const MSG_DAY_GATHERING       = "{sender} need your help! Add moments to day {day}";
 
   ## Moment ##
   const MSG_MOMENT_CREATED      = "{sender} created moment in day {day}";
@@ -140,6 +141,21 @@ class odNewsService
 
     $this->send($news, self::MSG_DAY_FAVORITE, ['day' => $day]);
   }
+
+	function onDayEnableGathering(Day $day)
+	{
+		lmb_assert_true($day->id);
+		$news = (new News)->import([
+			'day_id' => $day->id,
+			'link' => "odom://day/{$day->id}"
+		]);
+
+		foreach($this->sender->getFollowersUsers() as $follower)
+			if(1 == $follower->getSettings()->notifications_related_activity)
+				$this->addRecipient($follower);
+
+		$this->send($news, self::MSG_DAY_GATHERING, ['day' => $day]);
+	}
 
   /**
    * @param Moment $moment
