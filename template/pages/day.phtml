@@ -398,22 +398,27 @@
           var date_input  = element.find(date_input_selector);
           var time_input  = element.find(time_input_selector);
 
-          // Moment time
-          date_input.datepicker({
-            format: 'yyyy-mm-dd',
-            startDate: '2000-01-01',
-            endDate: today,
-            weekStart: 1,
-            todayBtn: true,
-            todayHighlight: true
-          });
+          if($.isMobile()) {
+            date_input.attr('type', 'date');
+            time_input.attr('type', 'time');
+          } else {
+            // Moment time
+            date_input.datepicker({
+              format: 'yyyy-mm-dd',
+              startDate: '2000-01-01',
+              endDate: today,
+              weekStart: 1,
+              todayBtn: true,
+              todayHighlight: true
+            });
 
-          time_input.timepicker({
-            minuteStep: 5,
-            template: false,
-            isOpen: true,
-            showMeridian: false
-          });
+            time_input.timepicker({
+              minuteStep: 5,
+              template: false,
+              isOpen: true,
+              showMeridian: false
+            });
+          }
 
 
           var datetime_button = element.find('#trigger_save_time');
@@ -1002,7 +1007,7 @@
                   <br />
                   <p class="muted day-info">
                     <span class="pull-right">
-                      <i class="icon icon-calendar"></i> {$#day->date}
+                      <i class="icon icon-calendar day-date"></i> {$#day->date}
                     </span>
                     by <b><a href="/pages/{$#day->user->id}/user">{$#day->user->name}</a></b>
                   </p>
