@@ -948,12 +948,22 @@
     share_button.click(function() {
       if(!share_button.hasClass('disabled')) {
         share_button.addClass('disabled');
+
+        var description = $('.final-description');
+        if(description.find('textarea').length > 0) {
+          description = description.find('textarea').text();
+        } else {
+          description = description.text();
+        }
+
+        var title = $('.day-title').text();
+
         var obj = {
             method: 'feed',
             redirect_uri: 'http://'+Config.host+'/pages/{$#day->id}/day',
             link: 'http://'+Config.host+'/pages/{$#day->id}/day',
-            name: '{$#day->title}',
-            description: "{$#day->final_description}"
+            name: title,
+            description: description
         };
 
         FB.ui(obj, function() {
@@ -985,7 +995,7 @@
                   <div id="day_title_selector">
                     <h5>Day title:</h5>
                     <span class="input-append">
-                      <input type="text" class="add-on-small input-xlarge" value="{$#day->title}" />
+                      <input type="text" class="add-on-small input-xlarge day-title" value="{$#day->title}" />
                       <button class="btn disabled btn-small" type="submit">Save</button>
                     </span>
                     <br />
