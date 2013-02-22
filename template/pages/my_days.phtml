@@ -4,7 +4,11 @@ $this->menu = 'me';
 ?>
 {{wrap with="layout.phtml"}}
   {{into slot="content"}}
-  <h1>My days</h1>
-			{{apply template="days_list" days="{$#days}"/}}
+    <div class="row">
+      <div class="span12">
+        <h1>My days</h1>
+        {{apply template="days_list" days="{$#days}"/}}
+      </div>
+    </div>
   {{/into}}
 {{/wrap}}
