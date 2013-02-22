@@ -485,6 +485,10 @@ ol.inline >li:first-child {
     float: none !important;
   }
 
+  .hidden-on-mobile {
+    display:none;
+  }
+
   ul.inline >li,
   ol.inline >li {
     padding-left: 3px;
