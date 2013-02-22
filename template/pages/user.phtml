@@ -2,64 +2,108 @@
 $this->menu = '';
 ?>
 {{wrap with="layout.phtml"}}
-{{into slot="css"}}
-.followers-list li {
-	float:left;
-	margin-right:3px;
-}
-.followers-list li img {
-	width:72px;
-	height:72px;
-}
-{{/into}}
-{{into slot="content"}}
-<div>
-	<br/>
-	<div class="row">
-		<div class="span2">
-      <img src="{$#user.image_192}" class="pull-left"/>
-		</div>
-		<div class="span6">
-      <h1>{$#user.name}</h1>
-      <p><small>{$#user.occupation} {{if var="$#user.location"}}from {{/if}}{$#user.location}</small></p>
-			<p><i class="icon icon-camera"></i> days: 14</p>
-      <p><i class="icon icon-comments"></i> comments: 35</p>
-      <p><i class="icon icon-bookmark"></i> favourite: 12</p>
-		</div>
-		<div class="span4">
-      <div class="span4">
-        <h3>Following <small><?= count($this->user['following']); ?> people</small></h3>
-        {{list using="{$#user.following}"}}
-	        <ul class="unstyled  followers-list">
-	          {{list:item}}
-	          <li><a href="/pages/{$item.id}/user">
-	            <img src="{$item.image_72}"/>
-	          </a></li>
-	          {{/list:item}}
-	        </ul>
-        {{/list}}
-      </div>
-      <div class="span4">
-        <h3>Followers <small><?= count($this->user['followers']); ?> people</small></h3>
-        {{list using="{$#user.followers}"}}
-        <ul class="unstyled  followers-list">
-            {{list:item}}
-            <li><a href="/pages/{$item.id}/user">
-                <img src="{$item.image_72}"/>
-            </a></li>
-            {{/list:item}}
-        </ul>
-        {{/list}}
-      </div>
-      </div>
-		</div>
-	</div>
-	<div class="row">
-		<div class="span12">
-			{{apply template="days_list" days="$#user.days"/}}
-		</div>
-	</div>
+  {{into slot="css"}}
+    .followers-list li {
+    	float:left;
+    	margin-right:3px;
+    }
+    .followers-list li img {
+    	width:72px;
+    	height:72px;
+    }
+  {{/into}}
+  <script type="text/javascript">
+  {{into slot="js_ready"}}
+    <? if($this->toolkit->getUser() && $this->user['id'] != $this->toolkit->getUser()->id) { ?>
+      var follow_button = $('#trigger_user_follow');
 
-</div>
-{{/into}}
+      follow_button.click(function() {
+        if(!follow_button.hasClass('disabled')) {
+          follow_button.addClass('disabled');
+
+          var user_follow_request = API.request('POST', '/users/{$#user.id}/follow');
+
+          user_follow_request.success(function() {
+            $(window).scrollTo(element, 300);
+            follow_button.addClass('disabled').removeClass('btn-success');
+          });
+
+          user_follow_request.error(function() {
+            follow_button.addClass('btn-danger').removeClass('btn-success');
+          });
+
+          user_follow_request.send();
+        }
+      });
+    <? } ?>
+  {{/into}}
+  </script>
+  {{into slot="content"}}
+    <div>
+    	<div class="row">
+    		<div class="span2">
+          <div class="user-image-holder">
+            <img src="{$#user.image_192}" width="192" class="pull-left img-rounded"/>
+            <span class="user-image-overlay hidden">
+              <a>Follow</a>
+            </span>
+          </div>
+    		</div>
+    		<div class="span5">
+          <h1>{$#user.name}</h1>
+          <p>
+            <small>{$#user.occupation} {{if var="$#user.location"}}from {{/if}}{$#user.location}</small>
+          </p>
+          <h3>Statistics:</h3>
+          <ul class="unstyled">
+            <li>Days: {$#user.days_count}</li>
+            <li>Comments: {$#user.comments_count}</li>
+          </ul>
+          <? if($this->toolkit->getUser() && $this->user['id'] != $this->toolkit->getUser()->id) { ?>
+            <? if($this->user['following']) { ?>
+              <button class="btn btn-danger" id="trigger_user_follow">Unfollow</button>
+            <? } else { ?>
+              <button class="btn btn-success" id="trigger_user_follow">Follow</button>
+            <? } ?>
+          <? } ?>
+    		</div>
+    		<div class="span3">
+          {{list using="{$#user.following}"}}
+            <div class="span3">
+              <h3>Following <small><?= count($this->user['following']); ?> people</small></h3>
+      	        <ul class="unstyled  followers-list">
+      	          {{list:item}}
+        	          <li>
+                      <a href="/pages/{$item.id}/user">
+        	             <img src="{$item.image_72}" class="img-rounded"/>
+        	            </a>
+                    </li>
+                  {{/list:item}}
+      	        </ul>
+            </div>
+          {{/list}}
+
+          {{list using="{$#user.followers}"}}
+            <div class="span4">
+              <h3>Followers <small><?= count($this->user['followers']); ?> people</small></h3>
+              <ul class="unstyled  followers-list">
+                  {{list:item}}
+                    <li>
+                      <a href="/pages/{$item.id}/user">
+                        <img src="{$item.image_72}" class="img-rounded" />
+                      </a>
+                    </li>
+                  {{/list:item}}
+              </ul>
+            </div>
+          {{/list}}
+        </div>
+  		</div>
+    	<div class="row">
+    		<div class="span11">
+    			{{apply template="days_list" days="$#user.days"/}}
+    		</div>
+    	</div>
+    </div>
+  {{/into}}
 {{/wrap}}
