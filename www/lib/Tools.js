@@ -56,8 +56,8 @@ var Tools = {
             pad(parseInt(Math.abs(timezone_offset/60))) + ':' +
             pad(Math.abs(timezone_offset%60)));
 
-        return date.getUTCFullYear() + '-' + pad(date.getUTCMonth() + 1) + '-' +  pad(date.getUTCDate())  +
-            'T' + pad(date.getUTCHours()) + ':' + pad(date.getUTCMinutes()) + ':' + pad(date.getUTCSeconds()) + offset;
+        return date.getFullYear() + '-' + pad(date.getMonth() + 1) + '-' +  pad(date.getDate())  +
+            'T' + pad(date.getHours()) + ':' + pad(date.getMinutes()) + ':' + pad(date.getSeconds()) + offset;
     },
 
     prettyDate: function(time){
@@ -92,11 +92,11 @@ var Tools = {
       obj.setUTCDate(parseInt(date_pieces[2], 10));
 
       if(timezone.substring(0, 1) == '+') {
-        obj.setUTCHours(parseInt(time_pieces[0], 10));
-        obj.setUTCMinutes(parseInt(time_pieces[1], 10));
+        obj.setUTCHours(parseInt(time_pieces[0], 10) - Math.abs(parseInt(timezone_pieces[0], 10)));
+        obj.setUTCMinutes(parseInt(time_pieces[1], 10) - Math.abs(parseInt(timezone_pieces[0], 10)));
       } else {
-        obj.setUTCHours(parseInt(time_pieces[0], 10) + parseInt(timezone_pieces[0], 10));
-        obj.setUTCMinutes(parseInt(time_pieces[1], 10) + parseInt(timezone_pieces[1], 10));
+        obj.setUTCHours(parseInt(time_pieces[0], 10) + Math.abs(parseInt(timezone_pieces[0], 10)));
+        obj.setUTCMinutes(parseInt(time_pieces[1], 10) + Math.abs(parseInt(timezone_pieces[1], 10)));
       }
         obj.setUTCSeconds(parseInt(time_pieces[2], 10));
 
@@ -140,12 +140,15 @@ var Tools = {
       if(obj === undefined) {
         obj = new Date();
       }
-      return Tools.minutesToHours(obj.getTimezoneOffset());
+      return Tools.minutesToHours(-1 * obj.getTimezoneOffset());
     },
 
     minutesToHours: function(minutes) {
       minutes = minutes.toString();
       var sign = minutes.substring(0, 1);
+      if(sign != '-') {
+        sign = '+';
+      }
 
       minutes = Math.abs(parseInt(minutes, 10));
       var hours = Math.floor(minutes / 60);

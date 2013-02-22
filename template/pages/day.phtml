@@ -227,7 +227,7 @@
                 date:Tools.getDate(new_moment_date),
                 time:Tools.getTime(new_moment_date),
                 time_seconds:Tools.getSeconds(new_moment_date),
-                timezone:Tools.getTimezone(new_moment_date)
+                timezone:prev_time_input.attr('timezone')
               };
             } else if(next_moment.length != 0) {
               var next_date_input = next_moment.find(date_input_selector);
@@ -244,8 +244,9 @@
                 date:Tools.getDate(new_moment_date),
                 time:Tools.getTime(new_moment_date),
                 time_seconds:Tools.getSeconds(new_moment_date),
-                timezone:Tools.getTimezone(new_moment_date)
+                timezone:next_time_input.attr('timezone')
               };
+
             }
 
             create_moment(this_moment);
@@ -572,7 +573,6 @@
             showMeridian: false
           });
 
-
           var datetime_button = element.find('#trigger_save_time');
 
           time_input.bind('change keyup', function(event) {
@@ -643,8 +643,6 @@
               save_request.params.progress = function(event) {
                 if(event.lengthComputable) {
                   upload_progress_bar_indicator.css('width', ((event.loaded / event.total) * 100) + '%');
-                } else {
-                  console.log('Content Length not reported!');
                 }
               };
 
@@ -697,10 +695,10 @@
         var create_moment_from_file = function(file) {
           var reader = new FileReader();
 
-          var file_date = file.lastModifiedDate.getFullYear() + '-' + file.lastModifiedDate.getMonth() + '-' + file.lastModifiedDate.getDate();
-          var file_time = file.lastModifiedDate.getHours() + ':' + file.lastModifiedDate.getMinutes();
-          var file_time_seconds = file.lastModifiedDate.getSeconds();
-          var file_timezone_offset = Tools.minutesToHours(file.lastModifiedDate.getTimezoneOffset());
+          var file_date = Tools.getDate(file.lastModifiedDate);
+          var file_time = Tools.getTime(file.lastModifiedDate);
+          var file_time_seconds = Tools.getSeconds(file.lastModifiedDate);
+          var file_timezone_offset = Tools.getTimezone(file.lastModifiedDate);
 
           $(reader).load(function() {
             var element = create_moment({
