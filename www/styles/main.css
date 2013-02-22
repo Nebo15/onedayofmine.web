@@ -21,11 +21,6 @@ h4 { font-size: 14.45px; }
   text-decoration: none;
 }
 
-.row {
-  margin-left: 20px;
-  margin-right: 20px;
-}
-
 .tooltip-inner {
   max-width: 250px !important;
 }
@@ -475,6 +470,11 @@ ol.inline >li:first-child {
 @media (min-width: 500px) {
   .mobile-nav {
     display: none;
+  }
+
+  .row {
+    margin-left: 20px;
+    margin-right: 20px;
   }
 }
 
