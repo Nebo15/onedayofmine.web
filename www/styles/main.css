@@ -24,6 +24,11 @@ h4 { font-size: 14.45px; }
 .tooltip-inner {
   max-width: 250px !important;
 }
+
+.navbar-static-top {
+  margin-bottom: 10px;
+}
+
 .container-narrow {
   margin: 0 auto;
   max-width: 760px;
