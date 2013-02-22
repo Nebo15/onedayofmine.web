@@ -21,18 +21,23 @@ $this->menu = '';
         if(!follow_button.hasClass('disabled')) {
           follow_button.addClass('disabled');
 
-          var user_follow_request = API.request('POST', '/users/{$#user.id}/follow');
+          if(follow_button.text() == 'Follow') {
+            var user_follow_request = API.request('POST', '/users/{$#user.id}/follow');
 
-          user_follow_request.success(function() {
-            $(window).scrollTo(element, 300);
-            follow_button.addClass('disabled').removeClass('btn-success');
-          });
+            user_follow_request.success(function() {
+              follow_button.addClass('disabled').removeClass('btn-success').addClass('btn-danger').text('Unfollow');
+            });
 
-          user_follow_request.error(function() {
-            follow_button.addClass('btn-danger').removeClass('btn-success');
-          });
+            user_follow_request.send();
+          } else {
+            var user_follow_request = API.request('POST', '/users/{$#user.id}/unfollow');
 
-          user_follow_request.send();
+            user_follow_request.success(function() {
+              follow_button.addClass('disabled').removeClass('btn-danger').addClass('btn-success').text('Follow');;
+            });
+
+            user_follow_request.send();
+          }
         }
       });
     <? } ?>
