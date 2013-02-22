@@ -14,6 +14,8 @@ class odExportHelper
   function exportDay(Day $day)
   {
     $exported_day = $this->exportDayItems([$day])[0];
+	  $exported_day->is_gathering_enabled = false;
+
     $is_owner = $this->current_user && $this->current_user->id && $this->current_user->id == $day->user_id;
 
     $exported_day->moments  = $this->exportMomentItems($day->getMoments());
@@ -24,15 +26,19 @@ class odExportHelper
 
     $exported_day->final_description = $day->final_description;
 
+
     if($this->current_user && !$is_owner)
     {
       $liked_day = lmbDBAL::selectQuery('day_like')
-      ->addField('day_id')
-      ->addCriteria(lmbSQLCriteria::equal('user_id', $this->current_user->id))
-      ->addCriteria(lmbSQLCriteria::equal('day_id', $day->id))
-      ->fetch()->toFlatArray();
+        ->addField('day_id')
+        ->addCriteria(lmbSQLCriteria::equal('user_id', $this->current_user->id))
+        ->addCriteria(lmbSQLCriteria::equal('day_id', $day->id))
+        ->fetch()->toFlatArray();
       $liked_day = lmbArrayHelper::getColumnValues('day_id', $liked_day);
       $exported_day->is_liked = in_array($day->id, $liked_day);
+
+	    if(UserFollowing::isUserFollowUser($day->user_id, $this->current_user))
+		    $exported_day->is_gathering_enabled = true;
     }
 
 	  if($is_owner)
@@ -181,7 +187,9 @@ class odExportHelper
     $exported = $this->exportUserSubentity($user);
 
     if($this->current_user && $this->current_user->id != $user->id)
+    {
       $exported->following = (bool) UserFollowing::isUserFollowUser($user, $this->current_user);
+    }
 
     return $exported;
   }

@@ -1104,6 +1104,10 @@
                 </ul>
               </div>
 
+							<? if($this->day->is_gathering_enabled) { ?>
+		              <div class="alert alert-info"">You can help {$#day->user->name}. Add photos</div>
+							<? } ?>
+
               {{list using="$#day->moments"}}
                 <ul class="unstyled moments-list">
                   <? if($this->is_owner) { ?>

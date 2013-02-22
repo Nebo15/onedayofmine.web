@@ -20,10 +20,11 @@ class UserFollowing extends BaseModel
     $this->follower_user_id = $user->id;
   }
 
-  public static function isUserFollowUser(User $follower_user, User $followed_user)
+  public static function isUserFollowUser($follower_user, User $followed_user)
   {
+	  $follower_id = is_object($follower_user) ? $follower_user->id : $follower_user;
     $criteria = lmbSQLCriteria::create()
-      ->add(lmbSQLCriteria::equal('follower_user_id', $follower_user->id))
+      ->add(lmbSQLCriteria::equal('follower_user_id', $follower_id))
       ->add(lmbSQLCriteria::equal('user_id', $followed_user->id));
     return !is_null(UserFollowing::findFirst($criteria));
   }
