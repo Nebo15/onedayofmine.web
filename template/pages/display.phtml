@@ -19,7 +19,7 @@ $this->menu = '';
 {{/into}}
 {{into slot="content"}}
 <div class="row">
-		<div class="span8">
+		<div class="span7 offset1">
 				<h1>News</h1>
         <div class="comments">
             <span class="pull-right not-decorated with-shadow"></span>
@@ -61,18 +61,21 @@ $this->menu = '';
 		                    </div>
 		                </li>
                 {{/list:item}}
+                {{list:empty}}
+                    <p>You don't have news. Try to <a href="/pages/find_people">follow</a> more people.</p>
+                {{/list:empty}}
             {{/list}}
             </ul>
         </div>
 		</div>
-		<div class="span4">
-				<div class="span4">
+		<div class="span3">
+				<div>
 						<h3>Following&nbsp;&nbsp;<small>{$#current_user.following_count}</small></h3>
 						{{list using="{$#following}"}}
                 <ul class="unstyled  followers-list">
 								{{list:item}}
                     <li><a href="/pages/{$item.id}/user">
-		                    <img src="{$item.image_72}"/>
+		                    <img src="{$item.image_72}" class="img-rounded" />
                     </a></li>
 		            {{/list:item}}
                 </ul>
@@ -81,18 +84,18 @@ $this->menu = '';
 								{{/list:empty}}
 						{{/list}}
 				</div>
-        <div class="span4">
+        <div>
 		        <h3>Followers&nbsp;&nbsp;<small>{$#current_user.followers_count}</small></h3>
             {{list using="{$#followers}"}}
-		            <ul class="unstyled  followers-list">
+		            <ul class="unstyled followers-list">
 		                {{list:item}}
 		                <li><a href="/pages/{$item.id}/user">
-		                    <img src="{$item.image_72}"/>
+		                    <img src="{$item.image_72}" class="img-rounded" />
 		                </a></li>
 		                {{/list:item}}
 		            </ul>
 		            {{list:empty}}
-                    <p>You have no followers. But you can <a href="/pages/find_people">find</a> em!</p>
+                    <p>You have no followers. <a href="/pages/find_people">Invite friends</a> that can follow you!</p>
 		            {{/list:empty}}
             {{/list}}
         </div>
