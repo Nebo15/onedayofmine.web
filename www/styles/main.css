@@ -486,7 +486,7 @@ ol.inline >li:first-child {
   }
 
   .hidden-on-mobile {
-    display:none;
+    display:none !important;
   }
 
   ul.inline >li,
