@@ -953,7 +953,7 @@
             redirect_uri: 'http://'+Config.host+'/pages/{$#day->id}/day',
             link: 'http://'+Config.host+'/pages/{$#day->id}/day',
             name: '{$#day->title}',
-            description: "{$#day->final_description|nl2br}"
+            description: "{$#day->final_description}"
         };
 
         FB.ui(obj, function() {
