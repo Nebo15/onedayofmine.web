@@ -61,6 +61,13 @@ h4 { font-size: 14.45px; }
   /*font-size: 0.7em;*/
 }
 
+.profile-image {
+  -webkit-border-bottom-left-radius: 0;
+  -webkit-border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
 .timepicker {
   margin-bottom: 5px;
 }
