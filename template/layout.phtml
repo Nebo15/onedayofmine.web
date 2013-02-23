@@ -110,6 +110,11 @@
         });
       }
 
+      // Init global tooltips
+      $('.with-tooltip').tooltip({
+        placement: 'bottom'
+      });
+
       {{slot id="js_ready"/}}
     });
   </script>

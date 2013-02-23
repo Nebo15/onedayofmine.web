@@ -75,7 +75,7 @@ $this->menu = '';
                 <ul class="unstyled  followers-list">
 								{{list:item}}
                     <li><a href="/pages/{$item.id}/user">
-		                    <img src="{$item.image_72}" class="img-rounded" />
+		                    <img src="{$item.image_72}" class="img-rounded with-tooltip" data-original-title="{$item.name}" />
                     </a></li>
 		            {{/list:item}}
                 </ul>
@@ -90,7 +90,7 @@ $this->menu = '';
 		            <ul class="unstyled followers-list">
 		                {{list:item}}
 		                <li><a href="/pages/{$item.id}/user">
-		                    <img src="{$item.image_72}" class="img-rounded" />
+		                    <img src="{$item.image_72}" class="img-rounded with-tooltip" data-original-title="{$item.name}" />
 		                </a></li>
 		                {{/list:item}}
 		            </ul>

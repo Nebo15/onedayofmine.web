@@ -76,11 +76,11 @@ $this->menu = '';
           {{list using="{$#user.users_following}"}}
             <div class="row">
               <h3>Following <small><?= count($this->user['users_following']); ?> people</small></h3>
-      	        <ul class="unstyled  followers-list">
+      	        <ul class="unstyled followers-list">
       	          {{list:item}}
         	          <li>
                       <a href="/pages/{$item.id}/user">
-        	             <img src="{$item.image_72}" class="img-rounded"/>
+        	             <img src="{$item.image_72}" class="img-rounded with-tooltip" data-original-title="{$item.name}" />
         	            </a>
                     </li>
                   {{/list:item}}
@@ -91,11 +91,11 @@ $this->menu = '';
           {{list using="{$#user.users_followers}"}}
             <div class="row">
               <h3>Followers <small><?= count($this->user['users_followers']); ?> people</small></h3>
-              <ul class="unstyled  followers-list">
+              <ul class="unstyled followers-list">
                 {{list:item}}
                   <li>
                     <a href="/pages/{$item.id}/user">
-                      <img src="{$item.image_72}" class="img-rounded" />
+                      <img src="{$item.image_72}" class="img-rounded with-tooltip" data-original-title="{$item.name}" />
                     </a>
                   </li>
                 {{/list:item}}
