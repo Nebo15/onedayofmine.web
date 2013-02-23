@@ -46,51 +46,36 @@ $this->menu = '';
   {{into slot="content"}}
     <div>
     	<div class="row">
-    		<div class="span2">
-          <div class="user-image-holder">
-            <img src="{$#user.image_192}" width="192" class="pull-left img-rounded profile-image"/>
-            <span class="user-image-overlay hidden">
-              <a>Follow</a>
-            </span>
-          </div>
-    		</div>
-    		<div class="span5">
-          <h1>{$#user.name}</h1>
-          <p>
-            <small>{$#user.occupation} {{if var="$#user.location"}}from {{/if}}{$#user.location}</small>
-          </p>
-          <h3>Statistics:</h3>
-          <ul class="unstyled">
-            <li>Days: {$#user.days_count}</li>
-            <li>Comments: {$#user.comments_count}</li>
-          </ul>
-          <? if($this->toolkit->getUser() && $this->user['id'] != $this->toolkit->getUser()->id) { ?>
-            <? if($this->user['following']) { ?>
-              <button class="btn btn-danger" id="trigger_user_follow">Unfollow</button>
-            <? } else { ?>
-              <button class="btn btn-success" id="trigger_user_follow">Follow</button>
+    		<div class="span3" style="width:200px">
+          <div class="user-image-holder<? if($this->toolkit->getUser() && $this->user['id'] != $this->toolkit->getUser()->id) { ?> friend<? } ?>">
+            <img src="{$#user.image_192}" width="192" class="pull-left img-rounded"/>
+            <? if($this->toolkit->getUser() && $this->user['id'] != $this->toolkit->getUser()->id) { ?>
+              <? if($this->user['following']) { ?>
+                <button class="btn btn-block btn-danger" id="trigger_user_follow">Unfollow</button>
+              <? } else { ?>
+                <button class="btn btn-block btn-success" id="trigger_user_follow">Follow</button>
+              <? } ?>
             <? } ?>
-          <? } ?>
-    		</div>
-    		<div class="span3">
+          </div>
+
           {{list using="{$#user.users_following}"}}
-            <div class="row">
-              <h3>Following <small><?= count($this->user['users_following']); ?> people</small></h3>
-      	        <ul class="unstyled followers-list">
-      	          {{list:item}}
-        	          <li>
+            <div style="margin-top:25px">
+              <h3>Following <small>(<?= count($this->user['users_following']); ?>)</small></h3>
+                <ul class="unstyled followers-list">
+                  {{list:item}}
+                    <li>
                       <a href="/pages/{$item.id}/user">
-        	             <img src="{$item.image_72}" class="img-rounded with-tooltip" data-original-title="{$item.name}" />
-        	            </a>
+                       <img src="{$item.image_72}" class="img-rounded with-tooltip" data-original-title="{$item.name}" />
+                      </a>
                     </li>
                   {{/list:item}}
-      	        </ul>
+                </ul>
             </div>
           {{/list}}
 
           {{list using="{$#user.users_followers}"}}
-            <div class="row">
-              <h3>Followers <small><?= count($this->user['users_followers']); ?> people</small></h3>
+            <div style="margin-top:25px">
+              <h3>Followers <small>(<?= count($this->user['users_followers']); ?>)</small></h3>
               <ul class="unstyled followers-list">
                 {{list:item}}
                   <li>
@@ -102,13 +87,47 @@ $this->menu = '';
               </ul>
             </div>
           {{/list}}
-        </div>
-  		</div>
-    	<div class="row">
-    		<div class="span11">
-    			{{apply template="days_list" days="$#user.days"/}}
     		</div>
-    	</div>
+    		<div class="span9">
+          <h1 style="margin-top:0">{$#user.name}</h1>
+          <?php if(array_key_exists('location', $this->user) && $this->user['location'] || array_key_exists('occupation', $this->user) && $this->user['occupation']) { ?>
+            <p>
+              <small>
+                {$#user.occupation}
+                <?php if(array_key_exists('location', $this->user) && $this->user['location']) { ?>
+                  from {$#user.location}
+                <? } ?>
+              </small>
+            </p>
+          <? } ?>
+
+          <h3>Bages <small>(5)</small></h3>
+          <div class="whithout-decoration">
+              <a href="/andrew_dryga/badge/50ccfde3046a13cd68fb97da">
+                <img src="https://playfoursquare.s3.amazonaws.com/badge/57/2KKQ4FII01YK1TYK.png" height="57">
+              </a>
+
+              <a href="/andrew_dryga/badge/50ccfca1e4b0d07027060f3e">
+                <img src="https://playfoursquare.s3.amazonaws.com/badge/57/YBOOA2FZ35D5E2QA.png" height="57">
+              </a>
+
+              <a href="/andrew_dryga/badge/50ccaa1fe4b0a8af857612fb">
+                <img src="https://playfoursquare.s3.amazonaws.com/badge/57/adventurer.png" height="57">
+              </a>
+
+              <a href="/andrew_dryga/badge/50ccaa1fe4b0a8af857612f2">
+                <img src="https://playfoursquare.s3.amazonaws.com/badge/57/swarm.png" alt="Swarm" width="57" height="57">
+              </a>
+
+              <a href="/andrew_dryga/badge/50af9d84e4b00d9395e34122">
+                <img src="https://playfoursquare.s3.amazonaws.com/badge/57/newbie.png" alt="Newbie" width="57" height="57">
+              </a>
+          </div>
+
+          <h3>Days <small>({$#user.days_count})</small></h3>
+          {{apply template="days_list" days="$#user.days"/}}
+    		</div>
+  		</div>
     </div>
   {{/into}}
 {{/wrap}}

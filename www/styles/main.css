@@ -17,7 +17,7 @@ h2 { font-size: 21.25px;}
 h3 { font-size: 17px;}
 h4 { font-size: 14.45px; }
 
-.btn:hover, a.not-decorated {
+.btn:hover, a.not-decorated, .whithout-decoration a {
   text-decoration: none;
 }
 
@@ -61,11 +61,18 @@ h4 { font-size: 14.45px; }
   /*font-size: 0.7em;*/
 }
 
-.profile-image {
+.friend img {
   -webkit-border-bottom-left-radius: 0;
   -webkit-border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
+}
+
+.friend button {
+  -webkit-border-top-left-radius: 0;
+  -webkit-border-top-right-radius: 0;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
 }
 
 .timepicker {
@@ -142,8 +149,8 @@ input[subtype=time] {
 }
 
 .days dt {
-    width:270px;
-    height:270px;
+    width:250px;
+    height:250px;
     overflow:hidden;
 }
 
@@ -312,7 +319,6 @@ input[subtype=time] {
   position: relative;
   clear: both;
   width: 192px;
-  height: 192px;
 }
 
 .moment-image-holder img {
@@ -485,6 +491,11 @@ ol.inline >li:first-child {
 @media (max-width: 500px) {
   .comment-item img {
     width: 36px;
+  }
+
+  .days dt {
+    width:278px;
+    height:278px;
   }
 
   .day-date {
