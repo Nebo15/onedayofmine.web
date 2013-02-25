@@ -40,7 +40,7 @@ class InstagramPhotosAnalyzer
 		{
 			if(!$this->description && $moment->caption)
 				$this->description = $moment->caption->text;
-			if($moment->caption && strlen($this->description) < $moment->caption->text)
+			if(property_exists($moment, 'caption') && $moment->caption && strlen($this->description) < $moment->caption->text)
 				$this->description = $moment->caption->text;
 		}
 
@@ -66,10 +66,10 @@ class InstagramPhotosAnalyzer
 	}
 
 	function _cleanup()
-	{
+	{	
 		foreach($this->moments as $i => $moment)
 		{
-			if($moment->caption && substr_count($moment->caption->text, '#') > 5)
+			if(property_exists($moment, 'caption') && $moment->caption && substr_count($moment->caption->text, '#') > 5)
 				$moment->caption->text = preg_replace( '/\#[a-z]+/i', '', $moment->caption->text);
 
 			if(!isset($moment->tags))

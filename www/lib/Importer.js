@@ -50,7 +50,6 @@ var Importer = {
         photos_count = user_response.data.counts.media;
         Importer.setProgress(5);
         Importer.getPhotos(photos_count, 'https://api.instagram.com/v1/users/' + Importer.instagram_user + '/media/recent/?access_token=' + hash + '&count=40&callback=?', function () {
-            console.log(Importer.photos[0]);
             var cant_assemble = true;
             var current_day = [Importer.photos.shift()];
             for (i in Importer.photos) {
@@ -88,7 +87,13 @@ var Importer = {
             url:url,
             cache:true,
             success:function (photos_resp) {
-                Importer.photos = Importer.photos.concat(photos_resp.data);
+                $.each(photos_resp.data, function(i, photo) {
+                    photo.likes = null;
+                    photo.user = null;
+                    photo.comments = null;
+                    console.log(photo);
+                    Importer.photos.push(photo);
+                });
                 Importer.setProgress((5 + Importer.photos.length / photos_count * 70) * 0.3);
                 if (typeof photos_resp.pagination.next_max_id != 'undefined')
                     Importer.getPhotos(photos_count, url + '&max_id=' + photos_resp.pagination.next_max_id, callback);
