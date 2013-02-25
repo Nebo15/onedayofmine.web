@@ -354,6 +354,8 @@ class DaysController extends BaseJsonController
 		$moment->description = $this->request->get('description', '');
 		if(!$is_owner)
 			$moment->is_hidden = 1;
+		if($this->request->has('instagram_id'))
+			$moment->instagram_id = $this->request->get('instagram_id');
 
 		$moment->save();
 

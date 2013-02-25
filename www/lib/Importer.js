@@ -91,7 +91,6 @@ var Importer = {
                     photo.likes = null;
                     photo.user = null;
                     photo.comments = null;
-                    console.log(photo);
                     Importer.photos.push(photo);
                 });
                 Importer.setProgress((5 + Importer.photos.length / photos_count * 70) * 0.3);
@@ -202,7 +201,8 @@ var Importer = {
                 var moment_request = API.request('POST', 'days/' + day.id + '/add_moment', {
                     time:Tools.getISODate(new Date(photo_data.created_time * 1000)),
                     image_url:photo_data.images.standard_resolution.url,
-                    description:photo_data.caption ? photo_data.caption.text : ''
+                    description:photo_data.caption ? photo_data.caption.text : '',
+                    instagram_id:photo_data.id
                 });
 
                 moment_request.success(function(response) {

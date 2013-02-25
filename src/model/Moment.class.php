@@ -3,6 +3,7 @@ lmb_require('src/model/base/BaseModel.class.php');
 lmb_require('src/model/traits/Imageable.class.php');
 lmb_require('src/model/MomentComment.class.php');
 lmb_require('src/model/MomentLike.class.php');
+lmb_require('limb/validation/src/rule/lmbPatternRule.class.php');
 
 /**
  * @api
@@ -26,6 +27,7 @@ class Moment extends BaseModel
 	public $is_hidden;
   public $is_deleted;
 
+	public $instagram_id;
   public $facebook_id;
   public $twitter_id;
 
@@ -36,6 +38,9 @@ class Moment extends BaseModel
   {
     $validator = new lmbValidator();
     $validator->addRequiredRule('day_id');
+
+	  if($this->instagram_id)
+		  $validator->addRule(new lmbPatternRule('instagram_id', '/[0-9]_/'));
     return $validator;
   }
 
