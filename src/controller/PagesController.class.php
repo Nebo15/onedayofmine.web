@@ -159,6 +159,8 @@ class PagesController extends lmbController
 
     $this->day->date = date('Y-m-d', $min_timestamp);
 
+		$this->day = $this->_toFlatArray($this->day);
+
 	}
 
 	function doMoment()
@@ -229,6 +231,23 @@ class PagesController extends lmbController
 
 	protected function _toFlatArray($object)
 	{
-		return json_decode(json_encode($object), true);
+		if(is_object($object))
+		{
+			$res = new lmbSet();
+			foreach((array) $object as $name => $value)
+				$res->$name = $this->_toFlatArray($value);
+			return $res;
+		}
+		elseif(is_array($object))
+		{
+			$res = [];
+			foreach($object as $key => $one_value)
+				$res[$key] = $this->_toFlatArray($one_value);
+			return $res;
+		}
+		else
+		{
+			return $object;
+		}
 	}
 }

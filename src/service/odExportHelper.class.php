@@ -18,14 +18,14 @@ class odExportHelper
 
     $is_owner = $this->current_user && $this->current_user->id && $this->current_user->id == $day->user_id;
 
-    $exported_day->moments  = $this->exportMomentItems($day->getMoments());
+	  $moments = $is_owner ? $day->getAllMoments() : $day->getMoments();
+    $exported_day->moments  = $this->exportMomentItems($moments);
 
     $comments = $day->getComments();
     $comments->paginate(0, lmbToolkit::instance()->getConf('common')->default_comments_count);
     $exported_day->comments = $this->exportDayCommentItems($comments);
 
     $exported_day->final_description = $day->final_description;
-
 
     if($this->current_user && !$is_owner)
     {
@@ -37,8 +37,9 @@ class odExportHelper
       $liked_day = lmbArrayHelper::getColumnValues('day_id', $liked_day);
       $exported_day->is_liked = in_array($day->id, $liked_day);
 
-	    if(UserFollowing::isUserFollowUser($day->user_id, $this->current_user))
-		    $exported_day->is_gathering_enabled = true;
+	    if($day->is_gathering_enabled)
+	      if(UserFollowing::isUserFollowUser($day->user_id, $this->current_user))
+		      $exported_day->is_gathering_enabled = true;
     }
 
 	  if($is_owner)
@@ -309,6 +310,8 @@ class odExportHelper
       unset($exported_moment->day_id);
       $exported_moment->likes_count = 0;
       $exported_moment->is_liked = false;
+	    if($moment->is_hidden)
+		    $exported_moment->is_hidden = true;
       foreach($likes as $like)
       {
         if($like['moment_id'] != $moment->id)

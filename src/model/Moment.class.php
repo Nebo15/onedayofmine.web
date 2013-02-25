@@ -23,6 +23,7 @@ class Moment extends BaseModel
   public $description;
   public $time;
   public $timezone;
+	public $is_hidden;
   public $is_deleted;
 
   public $facebook_id;

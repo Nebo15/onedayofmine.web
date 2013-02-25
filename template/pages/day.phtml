@@ -2,8 +2,8 @@
 {{wrap with="layout.phtml"}}
   {{into slot="og_meta"}}
     <meta property="og:type" content="{$#facebook_app_namespace}:day" />
-    <meta property="og:url" content="{$#host_url}pages/{$#day->id}/day" />
-    <meta property="og:title" content="{$#day->title}" />
+    <meta property="og:url" content="{$#host_url}pages/{$#day.id}/day" />
+    <meta property="og:title" content="{$#day.title}" />
     <meta property="{$#facebook_app_namespace}:type" content="{$#day->type}" />
   {{/into}}
   {{into slot="js_include"}}
@@ -139,7 +139,7 @@
     var today = Tools.getDate();
 
     <? if($this->toolkit->getUser()) { ?>
-      <? if($this->is_owner) { ?>
+      <? if($this->is_owner || $this->day->is_gathering_enabled) { ?>
         // File reader
         var FileReaderFilter = /^(?:image\/bmp|image\/cis\-cod|image\/gif|image\/ief|image\/jpeg|image\/jpeg|image\/jpeg|image\/pipeg|image\/png|image\/svg\+xml|image\/tiff|image\/x\-cmu\-raster|image\/x\-cmx|image\/x\-icon|image\/x\-portable\-anymap|image\/x\-portable\-bitmap|image\/x\-portable\-graymap|image\/x\-portable\-pixmap|image\/x\-rgb|image\/x\-xbitmap|image\/x\-xpixmap|image\/x\-xwindowdump)$/i;
 
@@ -522,25 +522,41 @@
           });
 
           description_button.click(function() {
-            if(!description_button.hasClass('disabled')) {
-              description_input.prop("disabled", true);
-              description_button.addClass('disabled');
-
-              var description_request = API.request('POST', '/moments/' + id + '/update', {
-                description: description_input.val()
-              });
-
-              description_request.success(function() {
-                description_input.prop("disabled", false);
-                description_button.addClass('disabled').removeClass('btn-success');
-              });
-
-              description_request.error(function() {
-                description_button.addClass('btn-danger').removeClass('btn-success');
-              });
-
-              description_request.send();
+            if(description_button.hasClass('disabled')) {
+		            return;
             }
+
+            description_input.prop("disabled", true);
+            description_button.addClass('disabled');
+
+            var description_request = API.request('POST', '/moments/' + id + '/update', {
+              description: description_input.val()
+            });
+
+            description_request.success(function() {
+              description_input.prop("disabled", false);
+              description_button.addClass('disabled').removeClass('btn-success');
+            });
+
+            description_request.error(function() {
+              description_button.addClass('btn-danger').removeClass('btn-success');
+            });
+
+            description_request.send();
+
+		        if(description_button.hasClass('approve-action'))
+		        {
+              API.post('moments/' + id + '/approve')
+		            .success(function() {
+                  description.parents('.moment-item').removeClass('moment-item-hidden');
+						      description_button.removeClass('approve-action');
+                  description_button.html('Save description');
+                })
+				        .error(function() {
+                  description_button.addClass('btn-danger').removeClass('btn-success');
+                })
+						    .send();
+          }
           });
         };
 
@@ -1100,27 +1116,26 @@
                 </ul>
               </div>
 
-							<? if($this->day->is_gathering_enabled) { ?>
+							<? if($this->day->is_gathering_enabled && !$this->is_owner) { ?>
 		              <div class="alert alert-info"">You can help {$#day->user->name}. Add photos</div>
 							<? } ?>
 
               {{list using="$#day->moments"}}
                 <ul class="unstyled moments-list">
-                  <? if($this->is_owner) { ?>
+                  <? if($this->is_owner || $this->day->is_gathering_enabled) { ?>
                     <li class="well moment-item-placeholder">
                       <a class="not-decorated with-shadow"><i class="icon-plus-sign icon-2x with-tooltip" data-original-title="Click or drag files here to add moments"></i></a>
                     </li>
                   <? } ?>
                   {{list:item}}
-                    <li class="well moment-item" moment_id="{$item->id}" itemscope itemtype="http://schema.org/ImageObject">
-                        <? if($this->is_owner) { ?>
+                    <li class="well moment-item {{if var='$item.is_hidden'}}moment-item-hidden{{/if}}" moment_id="{$item->id}" itemscope itemtype="http://schema.org/ImageObject">
+                        <? if($this->is_owner || $this->day->is_gathering_enabled) { ?>
                           <span class="moment-controls-overlay">
                             <a class="not-decorated with-shadow" id="trigger_moment_delete"><i class="icon-trash with-tooltip" data-original-title="Delete"></i></a>
                           </span>
                         <? } ?>
-
                         <div class="timepicker text-center with-shadow">
-                          <? if($this->is_owner) { ?>
+                          <? if($this->is_owner || $this->day->is_gathering_enabled) { ?>
                             <span class="input-prepend input-append">
                               <span class="add-on add-on-small hidden-on-mobile"><i class="icon-calendar"></i></span>
                               <input type="text" subtype="date" class="add-on-small" value="{$item->date}" />
@@ -1144,9 +1159,13 @@
 
                         <? if($this->is_owner || $item->description) { ?>
                           <p class="bubble moment-description" itemprop="description">
-                            <? if($this->is_owner) { ?>
+                            <? if($this->is_owner || $this->day->is_gathering_enabled) { ?>
                               <textarea rows="3" class="input-block-level" placeholder="Enter moment description...">{$item->description|default:""|nl2br}</textarea>
-                              <button type="submit" class="btn btn-block disabled">Save description</button>
+                              {{if var='$item.is_hidden'}}
+                                <button type="submit" class="btn btn-block btn-success approve-action">Approve</button>
+                              {{else}}
+                                <button type="submit" class="btn btn-block disabled">Save description</button>
+                              {{/if}}
                             <? } else { ?>
                               {$item->description|nl2br}
                             <? } ?>
@@ -1154,7 +1173,7 @@
                         <? } ?>
                     </li>
 
-                    <? if($this->is_owner) { ?>
+                    <? if($this->is_owner || $this->day->is_gathering_enabled) { ?>
                       <li class="well moment-item-placeholder">
                         <a class="not-decorated with-shadow">
                           <i class="icon-plus-sign icon-2x with-tooltip" data-original-title="Click or drag files here to add moments"></i>
