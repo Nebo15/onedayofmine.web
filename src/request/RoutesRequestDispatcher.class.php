@@ -29,8 +29,6 @@ class RoutesRequestDispatcher implements lmbRequestDispatcher
     if($controller = $request->get('controller'))
       $result['controller'] = $controller;
 
-	  lmbToolkit::instance()->getLog()->info('request: '.$uri->toString(), $_REQUEST);
-
     return $result;
   }
 }

@@ -67,10 +67,19 @@ class Day extends BaseModel
   function getMoments()
   {
     $criteria = lmbSQLCriteria::equal('day_id', $this->id)
-      ->add(lmbSQLCriteria::equal('is_deleted', 0));
+      ->add(lmbSQLCriteria::equal('is_deleted', 0))
+		  ->add(lmbSQLCriteria::equal('is_hidden', 0));
 
     return Moment::find($criteria, ['id' => 'DESC']);
   }
+
+	function getAllMoments()
+	{
+		$criteria = lmbSQLCriteria::equal('day_id', $this->id)
+				->add(lmbSQLCriteria::equal('is_deleted', 0));
+
+		return Moment::find($criteria, ['id' => 'DESC']);
+	}
 
   function getComments()
   {

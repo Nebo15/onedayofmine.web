@@ -327,6 +327,10 @@ input[subtype=time] {
   position: relative;
 }
 
+.moment-item-hidden {
+  background: #ffeeee;
+}
+
 .moment-controls-overlay {
   top:5px;
   right: 5px;

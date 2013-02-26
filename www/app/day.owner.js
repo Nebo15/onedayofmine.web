@@ -392,24 +392,40 @@ $(function() {
     });
 
     description_button.click(function() {
-      if(!description_button.hasClass('disabled')) {
-        description_input.prop("disabled", true);
-        description_button.addClass('disabled');
+      if(description_button.hasClass('disabled')) {
+        return;
+      }
 
-        var description_request = API.request('POST', '/moments/' + id + '/update', {
-          description: description_input.val()
-        });
+      description_input.prop("disabled", true);
+      description_button.addClass('disabled');
 
-        description_request.success(function() {
-          description_input.prop("disabled", false);
-          description_button.addClass('disabled').removeClass('btn-success');
-        });
+      var description_request = API.request('POST', '/moments/' + id + '/update', {
+        description: description_input.val()
+      });
 
-        description_request.error(function() {
-          description_button.addClass('btn-danger').removeClass('btn-success');
-        });
+      description_request.success(function() {
+        description_input.prop("disabled", false);
+        description_button.addClass('disabled').removeClass('btn-success');
+      });
 
-        description_request.send();
+      description_request.error(function() {
+        description_button.addClass('btn-danger').removeClass('btn-success');
+      });
+
+      description_request.send();
+
+      if(description_button.hasClass('approve-action'))
+      {
+        API.post('moments/' + id + '/approve')
+          .success(function() {
+            description.parents('.moment-item').removeClass('moment-item-hidden');
+            description_button.removeClass('approve-action');
+            description_button.html('Save description');
+          })
+          .error(function() {
+            description_button.addClass('btn-danger').removeClass('btn-success');
+          })
+          .send();
       }
     });
   };

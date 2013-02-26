@@ -339,8 +339,10 @@ class DaysController extends BaseJsonController
 		if (!$day = Day::findById($this->request->id))
 			return $this->_answerModelNotFoundById('Day', $this->request->id);
 
-		if ($day->user_id != $this->_getUser()->id)
-			return $this->_answerNotOwner();
+		$is_owner = $day->user_id == $this->_getUser()->id;
+		if (!$is_owner)
+			if(!$day->is_gathering_enabled || !UserFollowing::isUserFollowUser($day->user_id, $this->_getUser()))
+				return $this->_answerNotOwner();
 
 		if($this->request->get('image_content'))
 			$image_content = base64_decode($this->request->get('image_content'));
@@ -350,6 +352,11 @@ class DaysController extends BaseJsonController
 		$moment = new Moment();
 		$moment->setDay($day);
 		$moment->description = $this->request->get('description', '');
+		if(!$is_owner)
+			$moment->is_hidden = 1;
+		if($this->request->has('instagram_id'))
+			$moment->instagram_id = $this->request->get('instagram_id');
+
 		$moment->save();
 
 		$moment->attachImage($image_content);

@@ -152,4 +152,22 @@ class MomentsController extends BaseJsonController
 
     return $this->_answerOk($this->toolkit->getExportHelper()->exportMomentCommentItems($moment->getCommentsWithLimitation($from, $to, $limit)));
   }
+
+	function doApprove()
+	{
+		if(!$this->request->isPost())
+			return $this->_answerNotPost();
+
+		if(!$moment = Moment::findById($this->request->id))
+			return $this->_answerModelNotFoundById('Moment', $this->request->id);
+
+		$day = Day::findById($moment->day_id);
+		if($day->user_id != $this->_getUser()->id)
+			return $this->_answerNotOwner();
+
+		$moment->is_hidden = 0;
+		$moment->save();
+
+		return $this->_answerOk();
+	}
 }
