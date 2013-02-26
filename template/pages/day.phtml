@@ -159,12 +159,12 @@
                   </a>
                 </span>
 
-                <div>
-                  <div id="day_title_selector">
+                <div class="day-controls-group">
+                  <div id="day_title_selector" class="row">
                     <h5>Day title:</h5>
-                    <span class="input-append">
-                      <input type="text" class="add-on-small input-xlarge day-title" value="{$#day->title}" />
-                      <button class="btn disabled btn-small" type="submit">Save</button>
+                    <span class="input-append span12">
+                      <input type="text" class="add-on-small day-title span9" value="{$#day->title}" />
+                      <button class="btn disabled btn-small span2" type="submit">Save</button>
                     </span>
                     <br />
                     <small class="alert-small" style="display:none">
@@ -172,9 +172,9 @@
                     </small>
                   </div>
 
-                  <div id="day_type_selector">
+                  <div id="day_type_selector" class="row">
                     <h5>Day type:</h5>
-                    <div class="btn-group">
+                    <div class="btn-group span12">
                       <button class="btn btn-small<? if($this->day->type == 'Working day') {?> active btn-success<? } ?>">Working day</button>
                       <button class="btn btn-small<? if($this->day->type == 'Day off') {?> active btn-success<? } ?>">Day off</button>
                       <button class="btn btn-small<? if($this->day->type == 'Holiday') {?> active btn-success<? } ?>">Holiday</button>
@@ -182,9 +182,9 @@
                     </div>
                   </div>
 
-                  <div id="day_open_switch">
+                  <div id="day_open_switch" class="row">
 	                  <h5>Friends can add moments:</h5>
-                    <div class="btn-group">
+                    <div class="btn-group span12">
                       <button class="btn btn-small open-action <? if($this->day->is_gathering_enabled) {?> active btn-success<? } ?>">Yes</button>
                       <button class="btn btn-small close-action <? if(!$this->day->is_gathering_enabled) {?> active btn-danger<? } ?>">No</button>
                     </div>

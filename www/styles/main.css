@@ -21,6 +21,17 @@ h4 { font-size: 14.45px; }
   text-decoration: none;
 }
 
+.row-fluid input + button[class*="span"] {
+    float: none;           /* Remove the */
+    display: inline-block; /* floating   */
+    margin-left: 0;        /* Stick it to the left */
+}
+
+.input-prepend .btn-small,
+.input-append .btn-small {
+  height: 30px;
+}
+
 .tooltip-inner {
   max-width: 250px !important;
 }
@@ -266,6 +277,11 @@ input[subtype=time] {
 
 .day-controls a {
   margin-left: 10px;
+}
+
+.day-controls-group .row {
+  margin-left: 0;
+  margin-right: 0;
 }
 
 .moment-item {
