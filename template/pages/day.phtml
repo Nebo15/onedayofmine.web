@@ -230,7 +230,7 @@
               </div>
 
 							<? if($this->day->is_gathering_enabled && !$this->is_owner) { ?>
-		              <div class="alert alert-info">You can help {$#day->user->name}. Add photos</div>
+		              <div class="alert alert-info">You can help {$#day->user->name} by adding new moments.</div>
 							<? } ?>
 
               {{list using="$#day->moments"}}
