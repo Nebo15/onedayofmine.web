@@ -288,6 +288,10 @@ input[subtype=time] {
   border-color:rgb(30, 168, 77) !important;
 }
 
+.info {
+  border-color:#49afcd;
+}
+
 .moment-item-placeholder {
   text-align: center;
   border-style: dashed;

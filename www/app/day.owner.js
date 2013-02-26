@@ -62,10 +62,11 @@ $(function() {
       event.stopPropagation();
       event.preventDefault();
       event.originalEvent.dataTransfer.dropEffect = 'copy'; // Explicitly show this is a copy.
+      placeholder.addClass('success');
     });
 
     placeholder.bind('drop', function (event) {
-      event.stopPropagation();
+      // event.stopPropagation();
       event.preventDefault();
 
       // Feature: upload by dragging from another page
@@ -140,11 +141,16 @@ $(function() {
 
   (function() {
     // Don't open files in browser if user missed moment-box
-    $(document).bind('drop dragover', function(event) {
-      event.stopPropagation();
+    $(document).bind('dragover', function(event) {
       event.preventDefault();
       event.originalEvent.dataTransfer.dropEffect = 'none';
-      $(moment_placeholder_selector).addClass('success');
+      $(moment_placeholder_selector).addClass('info');
+    });
+
+    $(document).bind('drop dragleave dragend', function() {
+      event.stopPropagation();
+      event.preventDefault();
+      $(moment_placeholder_selector).removeClass('success info');
     });
 
     init_placeholder_actions($(moment_placeholder_selector));
