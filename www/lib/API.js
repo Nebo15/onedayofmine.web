@@ -32,10 +32,10 @@ var API = (function() {
       }
 
       request.statusCode(401, function() {
-        Loader.setStatus('Unauthorized access restricted');
+        console.log('Unauthorized access restricted');
 
         API.login(function() {
-          Loader.setStatus('Sending request with new credetials');
+          console.log('Sending request with new credetials');
           setRequestToken(request);
           request.send();
         }, function() {
@@ -53,11 +53,11 @@ var API = (function() {
     },
 
     login: function(onLoginComplete, onLoginFail) {
-      Loader.setStatus('Logging in');
+      console.log('Logging in');
       var login_request = new Request('POST', 'auth/login', {async:false});
 
       login_request.success(function(response) {
-        Loader.setStatus('Logged in');
+        console.log('Logged in');
         Storage.set('user', response.data.result);
 
         $.event.trigger({
@@ -71,7 +71,7 @@ var API = (function() {
       login_request.error(function() {
         login_request.error(onLoginFail, true);
 
-        Loader.setStatus('Login attempt failed');
+        console.log('Login attempt failed');
         Auth.login(doLogin);
       }, true);
 
