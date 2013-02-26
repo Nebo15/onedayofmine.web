@@ -21,6 +21,17 @@ h4 { font-size: 14.45px; }
   text-decoration: none;
 }
 
+.row-fluid input + button[class*="span"] {
+    float: none;           /* Remove the */
+    display: inline-block; /* floating   */
+    margin-left: 0;        /* Stick it to the left */
+}
+
+.input-prepend .btn-small,
+.input-append .btn-small {
+  height: 30px;
+}
+
 .tooltip-inner {
   max-width: 250px !important;
 }
@@ -51,6 +62,12 @@ h4 { font-size: 14.45px; }
 
 .text-center {
   text-align: center;
+}
+
+.day-info {
+  font-size: 0.8em;
+  margin-bottom: 0;
+  margin-top: 15px;
 }
 
 .day-preview-alert {
@@ -262,6 +279,11 @@ input[subtype=time] {
   margin-left: 10px;
 }
 
+.day-controls-group .row {
+  margin-left: 0;
+  margin-right: 0;
+}
+
 .moment-item {
   position: relative;
 }
@@ -274,21 +296,35 @@ input[subtype=time] {
   border-color:#ab0001;
 }
 
-.moment-item-new.error {
+.error {
   border-color:#ab0001;
 }
 
-.moment-item-new.success {
+.success {
   border-color:rgb(30, 168, 77) !important;
+}
+
+.info {
+  border-color:#49afcd;
 }
 
 .moment-item-placeholder {
   text-align: center;
   border-style: dashed;
+
+  -webkit-transition: all 0.4s ease;
+  -moz-transition: all 0.4s ease;
+  -ms-transition: all 0.4s ease;
+  -o-transition: all 0.4s ease;
+  transform: all 0.4s ease;
 }
 
 .moment-item-placeholder i {
   vertical-align:middle
+}
+
+.moment-item-placeholder .message {
+  position: relative;
 }
 
 .moment-item-hidden {
@@ -455,8 +491,19 @@ input[subtype=time] {
   content: '\2014 \00A0';
 }
 
-/* creates the larger triangle */
+.input-append .btn {
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
 
+.input-prepend .btn {
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+.input-append, .input-prepend {
+  margin-bottom: 0;
+}
 
 /* creates the smaller  triangle */
 .bubble.left:after {
