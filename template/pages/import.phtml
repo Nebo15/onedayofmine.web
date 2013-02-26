@@ -1,13 +1,32 @@
 {{wrap with="layout.phtml"}}
 {{into slot="css"}}
+.remove-photo-action {
+	cursor:pointer;
+}
+.thumbnails {
+	margin-left:0px;
+}
+.thumbnails > li {
+	margin:3px 3px 0 0;
+}
+
+.thumbnail {
+	border: none;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	border-radius: 0;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	box-shadow: none;
+	-webkit-transition: none;
+}
+
 {{/into}}
 {{into slot="content"}}
         <div>
             <h3>Import from Instagram</h3>
 
             <div class="progress" style="display:none">
-                <div class="bar bar-danger" style="width: 0%;"></div>
-                <div class="bar bar-warning" style="width: 0%;"></div>
                 <div class="bar bar-success" style="width: 0%;"></div>
             </div>
 
@@ -21,6 +40,8 @@
             </div>
 
             <div class="days"></div>
+
+						<button class="btn btn-block btn-large btn-info hide export-action" style="margin: 10px 0">more&hellip;<button>
 
             <div class="alert alert-info hide">
 		            Import from custom instagram account (debug only):
@@ -40,19 +61,18 @@
 							[[#moments]]
 				          <li style="width:160px;">
 						          <div class="thumbnail">
-								          <div class="img-wrap"  style="background:#fff">
-                              <img src="[[images.thumbnail.url]]" class="img-rounded" alt="[[caption.text]]" title="[[caption.text]]"/>
+								          <div class="img-wrap img-rounded"  style="background:#fff">
+									            <a class="remove-photo-action" day_pos="[[../day_position]]" moment_id="[[id]]">
+                                <img src="[[images.thumbnail.url]]" class="img-rounded" alt="[[caption.text]]" title="[[caption.text]]"/>
+															</a>
                           </div>
-                          <center style="padding-top:10px">
-                              <button class="btn btn-info remove-photo-action" day_pos="[[../day_position]]" moment_id="[[id]]">Skip</button>
-                          </center>
 						          </div>
 				          </li>
 					    [[/moments]]
 
 				      </ul>
-			        <center><button class="btn btn-warning btn-large analyze-action">
-				        Step 2 of 3 <i class="icon-white icon-forward"></i> </button></center>
+			        <button class="btn btn-large btn-block btn-warning analyze-action">
+				        Step 2 of 3 <i class="icon-white icon-forward"></i> </button>
 				  </div>
 		      <div class="step3" style="display:none">
 						<form class="form-horizontal">
@@ -104,6 +124,10 @@
       Importer.$progress = $('.progress');
       Importer.import(hash);
     }
+
+    $('.export-action').click(function() {
+			Importer.exportPhotos();
+		});
 
     $('.custom-import-action').submit(function() {
 			Importer.$days.html('');
