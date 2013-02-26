@@ -53,6 +53,10 @@ h4 { font-size: 14.45px; }
   text-align: center;
 }
 
+.day-info {
+  font-size: 0.8em;
+}
+
 .day-preview-alert {
   margin-top: 20px;
 }
@@ -451,8 +455,19 @@ input[subtype=time] {
   content: '\2014 \00A0';
 }
 
-/* creates the larger triangle */
+.input-append .btn {
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
+}
 
+.input-prepend .btn {
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+.input-append, .input-prepend {
+  margin-bottom: 0;
+}
 
 /* creates the smaller  triangle */
 .bubble.left:after {

@@ -1189,49 +1189,29 @@
               <div class="day-user-actions">
                 <ul class="pull-right unstyled inline">
                   <? if($this->toolkit->getUser()) { ?>
-                  <li>
-                    <?php
-                    $disabled = false;
-                    if(!property_exists($this->day, 'is_liked')) {
-                      $disabled = true;
-                      $text = "Like";
-                      $icon = "icon-heart";
-                    } elseif($this->day->is_liked) {
-                      $text = "Unlike";
-                      $icon = "icon-heart";
-                    } else {
-                      $text = "Like";
-                      $icon = "icon-heart-empty";
-                    }
-                    ?>
-                    <div class="input-prepend">
-                      <span id="toggle_like_icon" class="add-on add-on-small"><i class="icon <?= $icon ?>"></i> {$this->day->likes_count}</span>
-                      <button id="toggle_like" class="btn btn-small<?= $disabled ? ' disabled' : '' ?>" type="button"> <?= $text ?></button>
-                    </div>
-                  </li>
-                  <!-- <li>
-                    <?php
-                    $disabled = false;
-                    if(!property_exists($this->day, 'is_favorite')) {
-                      $disabled = true;
-                      $text = "Favorite";
-                      $icon = "icon-bookmark";
-                    } elseif($this->day->is_favorite) {
-                      $text = "Unfavorite";
-                      $icon = "icon-bookmark";
-                    } else {
-                      $text = "Favorite";
-                      $icon = "icon-bookmark-empty";
-                    }
-                    ?>
-                    <div class="input-prepend">
-                      <span class="add-on add-on-small"><i class="icon <?= $icon ?>"></i></span>
-                      <button class="btn btn-small<?= $disabled ? ' disabled' : '' ?>" type="button"> <?= $text ?></button>
-                    </div>
-                  </li> -->
+                    <li>
+                      <?php
+                      $disabled = false;
+                      if(!property_exists($this->day, 'is_liked')) {
+                        $disabled = true;
+                        $text = "Like";
+                        $icon = "icon-heart";
+                      } elseif($this->day->is_liked) {
+                        $text = "Unlike";
+                        $icon = "icon-heart";
+                      } else {
+                        $text = "Like";
+                        $icon = "icon-heart-empty";
+                      }
+                      ?>
+                      <div class="input-prepend">
+                        <span id="toggle_like_icon" class="add-on add-on-small"><i class="icon <?= $icon ?>"></i> {$this->day->likes_count}</span>
+                        <button id="toggle_like" class="btn btn-small<?= $disabled ? ' disabled' : '' ?>" type="button"> <?= $text ?></button>
+                      </div>
+                    </li>
                   <? } ?>
                   <li>
-                    <button id="toggle_share" class="btn btn-small" style="margin-top: 14px" type="button"><i class="icon icon-share"></i> Share</button>
+                    <button id="toggle_share" class="btn btn-small" type="button"><i class="icon icon-share"></i> Share</button>
                   </li>
                 </ul>
               </div>
