@@ -55,6 +55,8 @@ h4 { font-size: 14.45px; }
 
 .day-info {
   font-size: 0.8em;
+  margin-bottom: 0;
+  margin-top: 15px;
 }
 
 .day-preview-alert {
@@ -278,21 +280,31 @@ input[subtype=time] {
   border-color:#ab0001;
 }
 
-.moment-item-new.error {
+.error {
   border-color:#ab0001;
 }
 
-.moment-item-new.success {
+.success {
   border-color:rgb(30, 168, 77) !important;
 }
 
 .moment-item-placeholder {
   text-align: center;
   border-style: dashed;
+
+  -webkit-transition: all 0.4s ease;
+  -moz-transition: all 0.4s ease;
+  -ms-transition: all 0.4s ease;
+  -o-transition: all 0.4s ease;
+  transform: all 0.4s ease;
 }
 
 .moment-item-placeholder i {
   vertical-align:middle
+}
+
+.moment-item-placeholder .message {
+  position: relative;
 }
 
 .moment-controls-overlay {
