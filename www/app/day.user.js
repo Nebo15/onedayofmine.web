@@ -148,8 +148,9 @@ $(function() {
         if(!like_button.hasClass('disabled')) {
           like_button.addClass('disabled');
 
+          var like_request;
           if(day_data.is_liked == true) {
-            var like_request = API.request('POST', '/days/'+day_data.id+'/unlike');
+            like_request = API.request('POST', '/days/'+day_data.id+'/unlike');
             like_request.success(function() {
               day_data.is_liked = false;
               likes_count--;
@@ -158,9 +159,8 @@ $(function() {
               $('#toggle_like_icon').html('<i class="icon icon-heart-empty"></i> ' + likes_count);
               like_button.removeClass('disabled');
             });
-            like_request.send();
           } else {
-            var like_request = API.request('POST', '/days/'+day_data.id+'/like');
+            like_request = API.request('POST', '/days/'+day_data.id+'/like');
             like_request.success(function() {
               day_data.is_liked = true;
               likes_count++;
@@ -169,8 +169,8 @@ $(function() {
               $('#toggle_like_icon').html('<i class="icon icon-heart"></i> ' + likes_count);
               like_button.removeClass('disabled');
             });
-            like_request.send();
           }
+          like_request.send();
         }
       });
     }
