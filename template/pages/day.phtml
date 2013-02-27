@@ -24,7 +24,7 @@
     <link href="/styles/bootstrap-timepicker.min.css" rel="stylesheet">
   {{/into}}
   {{into slot="js"}}
-    var day_data = <?= str_replace("'", "\'", json_encode($this->day)); ?>;
+    var day_data = <?= json_encode($this->day); ?>;
   {{/into}}
   {{into slot="templates"}}
     <script id="template_comments" type="text/x-handlebars-template">
