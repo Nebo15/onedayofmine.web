@@ -27,10 +27,6 @@ h4 { font-size: 14.45px; }
     margin-left: 0;        /* Stick it to the left */
 }
 
-.input-prepend .btn-small,
-.input-append .btn-small {
-  height: 30px;
-}
 
 .tooltip-inner {
   max-width: 250px !important;
@@ -290,10 +286,6 @@ input[subtype=time] {
 
 .moment-item img {
   max-width: 100%;
-}
-
-.moment-item-new {
-  border-color:#ab0001;
 }
 
 .error {
