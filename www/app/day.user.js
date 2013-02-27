@@ -16,14 +16,14 @@ $(function() {
     var comment_storage_key = "days/"+day_data.id+"/comment";
 
     var comment_saved_input = Storage.get(comment_storage_key);
-    if(comments_input.val() == '' && comment_saved_input !== undefined && comment_saved_input != false) {
+    if(comments_input.val() == '' && comment_saved_input !== undefined && comment_saved_input) {
       comments_input.val(comment_saved_input);
       comments_button.removeClass('disabled').addClass('btn-success');
     }
 
     var getCommentsCounter = function() {
       var text = comments_counter.text();
-      return parseInt(text.substring(text.indexOf('/')+1));
+      return parseInt(text.substring(text.indexOf('/')+1), 10);
     };
 
     var setCommentsCounter = function(value) {

@@ -1,0 +1,12 @@
+{{wrap with="layout.phtml" into="content"}}
+  {{into slot="js_ready"}}
+    var hash = window.location.hash;
+    var hash_position = hash.indexOf('token');
+    if(hash != -1) {
+      Storage.set('instagram_token', hash.substring(hash_position+6));
+      window.close();
+    }
+  {{/into}}
+  <h1>Authorization successfull</h1>
+  Now you can close this window.
+{{/wrap}}

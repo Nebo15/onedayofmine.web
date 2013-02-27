@@ -297,7 +297,8 @@ input[subtype=time] {
 }
 
 .info {
-  border-color:#49afcd;
+  /*border-color: #49afcd;*/
+  border-style: dashed;
 }
 
 .moment-item-placeholder {
@@ -347,7 +348,8 @@ input[subtype=time] {
   margin-right: auto;
 }
 
-.user-image-holder {
+.user-image-holder,
+.img-wrap {
   position: relative;
   clear: both;
   width: 192px;
@@ -521,6 +523,63 @@ ol.inline >li:first-child {
 
 .show-on-mobile {
   display:none;
+}
+
+.modal-body .thumbnails .thumbnail .bage-bottom-right {
+  bottom: 0px;
+  right: 3px;
+  position: absolute;
+  vertical-align: middle;
+  text-align: center;
+  font-weight: bold;
+  opacity: 0;
+
+  -webkit-transition: all 0.4s ease;
+  -moz-transition: all 0.4s ease;
+  -ms-transition: all 0.4s ease;
+  -o-transition: all 0.4s ease;
+  transform: all 0.4s ease;
+}
+
+.modal-footer .btn {
+  -webkit-transition: all 0.4s ease;
+  -moz-transition: all 0.4s ease;
+  -ms-transition: all 0.4s ease;
+  -o-transition: all 0.4s ease;
+  transform: all 0.4s ease;
+}
+
+.modal-body .thumbnails .thumbnail.selected .bage-bottom-right {
+  opacity: 1;
+  color:rgb(30, 168, 77);
+}
+
+.modal-body .thumbnails {
+  margin-left: -15px;
+}
+
+.modal-body .thumbnails .thumbnail img {
+  opacity: 1;
+
+  -webkit-transition: all 0.4s ease;
+  -moz-transition: all 0.4s ease;
+  -ms-transition: all 0.4s ease;
+  -o-transition: all 0.4s ease;
+  transform: all 0.4s ease;
+}
+
+.modal-body .thumbnails .thumbnail.selected img {
+  opacity: 0.4;
+}
+
+.modal-body .thumbnails .thumbnail,
+.modal-body .thumbnails .thumbnail .img-wrap {
+  width: 150px;
+  height: 150px;
+}
+
+.modal-body .thumbnails > li {
+  margin-left: 20px !important;
 }
 
 /* Responsive */
