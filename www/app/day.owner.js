@@ -538,7 +538,16 @@ $(function() {
       iterativeFadeIn(tmp.first());
     };
 
-    Instagram.getCurrentUserPhotos(onDataRetrieved, onDataRetrieveStep);
+    var onInstagramTokenRecieved = function() {
+      Instagram.getCurrentUserPhotos(onDataRetrieved, onDataRetrieveStep);
+    };
+
+    var onInstagramTokenRecieveError = function() {
+      modal_container.modal('hide');
+      alert("It seems that you declined Instagram authorization.");
+    };
+
+    Instagram.getAccessToken(onInstagramTokenRecieved, onInstagramTokenRecieveError);
   };
 
   var create_moment = function(moment, do_scroll) {

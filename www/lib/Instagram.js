@@ -4,9 +4,9 @@ var Instagram = {
   client_id: Config.instagram.client_id,
   redirect_uri: Config.instagram.redirect_url,
 
-  getAccessToken: function(onTokenRecieved) {
+  getAccessToken: function(onTokenRecieved, onTokenError) {
     if(!Instagram.hasAccessToken()) {
-      Instagram.login(onTokenRecieved);
+      Instagram.login(onTokenRecieved, onTokenError);
     } else if(onTokenRecieved !== undefined) {
       onTokenRecieved(Storage.get('instagram_token'));
     }
@@ -16,7 +16,7 @@ var Instagram = {
     return Storage.get('instagram_token') !== undefined && Storage.get('instagram_token');
   },
 
-  login: function(onLogin) {
+  login: function(onLogin, onLoginError) {
     var child = window.open(Instagram.api_url + 'oauth/authorize/?client_id='+Instagram.client_id+'&redirect_uri='+Instagram.redirect_uri+'&response_type=token');
 
     var timer = setInterval(function() {
@@ -29,7 +29,11 @@ var Instagram = {
             onLogin(token);
           }
         } else {
-          alert("User didn't fully authorized");
+          if(onLoginError !== undefined) {
+            onLoginError();
+          } else {
+            alert("User didn't fully authorized");
+          }
         }
       }
     }, 200);
