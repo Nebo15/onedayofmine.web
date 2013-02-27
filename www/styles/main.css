@@ -525,7 +525,7 @@ ol.inline >li:first-child {
   display:none;
 }
 
-.modal-body .thumbnails .thumbnail .bage-bottom-right {
+.thumbnails .thumbnail .bage-bottom-right {
   bottom: 0px;
   right: 3px;
   position: absolute;
@@ -549,7 +549,7 @@ ol.inline >li:first-child {
   transform: all 0.4s ease;
 }
 
-.modal-body .thumbnails .thumbnail.selected .bage-bottom-right {
+.thumbnails .thumbnail.selected .bage-bottom-right {
   opacity: 1;
   color:rgb(30, 168, 77);
 }
@@ -558,7 +558,7 @@ ol.inline >li:first-child {
   margin-left: -15px;
 }
 
-.modal-body .thumbnails .thumbnail img {
+.import-modal .thumbnails .thumbnail img {
   opacity: 1;
 
   -webkit-transition: all 0.4s ease;
@@ -568,17 +568,17 @@ ol.inline >li:first-child {
   transform: all 0.4s ease;
 }
 
-.modal-body .thumbnails .thumbnail.selected img {
+.thumbnails .thumbnail.selected img {
   opacity: 0.4;
 }
 
-.modal-body .thumbnails .thumbnail,
-.modal-body .thumbnails .thumbnail .img-wrap {
+.import-modal .thumbnails .thumbnail,
+.import-modal .thumbnails .thumbnail .img-wrap {
   width: 150px;
   height: 150px;
 }
 
-.modal-body .thumbnails > li {
+.import-modal .thumbnails > li {
   margin-left: 20px !important;
 }
 
