@@ -447,100 +447,98 @@ $(function() {
   };
 
   var initialize_instagram_import = function(element) {
-    $.getCachedScript('/lib/Instagram.js').done(function() {
-      var modal_container      = $('#import_modal');
-      var modal_body_container = modal_container.find('.modal-body');
-      var modal_save_button    = modal_container.find('.modal-footer button.btn-success');
+    var modal_container      = $('#import_modal');
+    var modal_body_container = modal_container.find('.modal-body');
+    var modal_save_button    = modal_container.find('.modal-footer button.btn-success');
 
-      var modal_progress_template          = Template.prepareTemplate($('#template_import_progress'));
-      var modal_moments_container_template = Template.prepareTemplate($('#template_import_moments_container'));
-      var modal_moments_template           = Template.prepareTemplate($('#template_import_moments'));
+    var modal_progress_template          = Template.prepareTemplate($('#template_import_progress'));
+    var modal_moments_container_template = Template.prepareTemplate($('#template_import_moments_container'));
+    var modal_moments_template           = Template.prepareTemplate($('#template_import_moments'));
 
-      modal_body_container.html('');
-      modal_body_container.append(Template.compileElement(modal_progress_template));
-      modal_body_container.append(Template.compileElement(modal_moments_container_template));
+    modal_body_container.html('');
+    modal_body_container.append(Template.compileElement(modal_progress_template));
+    modal_body_container.append(Template.compileElement(modal_moments_container_template));
 
-      var modal_thumbnails_container = modal_body_container.find('.thumbnails');
+    var modal_thumbnails_container = modal_body_container.find('.thumbnails');
 
-      modal_save_button.click(function() {
-        if($(this).hasClass('disabled')) {
-          return;
-        }
+    modal_save_button.click(function() {
+      if($(this).hasClass('disabled')) {
+        return;
+      }
 
-        $(this).addClass('disabled');
+      $(this).addClass('disabled');
 
-        modal_thumbnails_container.find('.thumbnail.selected img').each(function() {
-          var $this = $(this);
+      modal_thumbnails_container.find('.thumbnail.selected img').each(function() {
+        var $this = $(this);
 
-          var date = new Date();
-          date.setTime($this.attr('timestamp')*1000);
+        var date = new Date();
+        date.setTime($this.attr('timestamp')*1000);
 
-          var file_date = Tools.getDate(date);
-          var file_description = $this.attr('title');
-          var file_time = Tools.getTime(date);
-          var file_time_seconds = Tools.getSeconds(date);
-          var file_timezone_offset = Tools.getTimezone();
+        var file_date = Tools.getDate(date);
+        var file_description = $this.attr('title');
+        var file_time = Tools.getTime(date);
+        var file_time_seconds = Tools.getSeconds(date);
+        var file_timezone_offset = Tools.getTimezone();
 
-          create_moment({
-            date:file_date,
-            time:file_time,
-            time_seconds:file_time_seconds,
-            timezone:file_timezone_offset,
-            image:$this.attr('src_big'),
-            description:file_description
-          }, false);
-        });
-
-        remove_moment(element, function() {
-          modal_container.modal('hide');
-          $(window).scrollTo($('.moment-item-new').first(), 500);
-        });
+        create_moment({
+          date:file_date,
+          time:file_time,
+          time_seconds:file_time_seconds,
+          timezone:file_timezone_offset,
+          image:$this.attr('src_big'),
+          description:file_description
+        }, false);
       });
 
-      modal_container.modal('show');
-
-      var attachMomentsEvents = function(moments) {
-        moments.find('.thumbnail').click(function() {
-          var $this = $(this);
-          if($this.hasClass('selected')) {
-            $this.removeClass('selected');
-
-            if(moments.find('.thumbnail.selected').length == 0) {
-              modal_save_button.addClass('disabled');
-            }
-          } else {
-            $this.addClass('selected');
-            modal_save_button.removeClass('disabled');
-          }
-        });
-      };
-
-      var iterativeFadeIn = function(step_element) {
-        step_element.fadeIn(100, function() {
-          iterativeFadeIn(step_element.next());
-        });
-      };
-
-      var onDataRetrieved = function(photos) {
-        modal_container.find('.bar').css('width', '100%');
-        setTimeout(function() {
-          modal_body_container.find('.import-progress').slideUp(300, function() {
-            $(this).detach();
-          });
-        }, 500);
-      };
-
-      var onDataRetrieveStep = function(step, max_steps, shots) {
-        modal_container.find('.bar').css('width', ((step / max_steps) * 100) + '%');
-
-        var tmp = $($.trim(Template.compileElement(modal_moments_template, {moments:shots})));
-        modal_thumbnails_container.append(tmp);
-        attachMomentsEvents(tmp);
-        iterativeFadeIn(tmp.first());
-      };
-
-      Instagram.getCurrentUserPhotos(onDataRetrieved, onDataRetrieveStep);
+      remove_moment(element, function() {
+        modal_container.modal('hide');
+        $(window).scrollTo($('.moment-item-new').first(), 500);
+      });
     });
+
+    modal_container.modal('show');
+
+    var attachMomentsEvents = function(moments) {
+      moments.find('.thumbnail').click(function() {
+        var $this = $(this);
+        if($this.hasClass('selected')) {
+          $this.removeClass('selected');
+
+          if(moments.find('.thumbnail.selected').length == 0) {
+            modal_save_button.addClass('disabled');
+          }
+        } else {
+          $this.addClass('selected');
+          modal_save_button.removeClass('disabled');
+        }
+      });
+    };
+
+    var iterativeFadeIn = function(step_element) {
+      step_element.fadeIn(100, function() {
+        iterativeFadeIn(step_element.next());
+      });
+    };
+
+    var onDataRetrieved = function(photos) {
+      modal_container.find('.bar').css('width', '100%');
+      setTimeout(function() {
+        modal_body_container.find('.import-progress').slideUp(300, function() {
+          $(this).detach();
+        });
+      }, 500);
+    };
+
+    var onDataRetrieveStep = function(step, max_steps, shots) {
+      modal_container.find('.bar').css('width', ((step / max_steps) * 100) + '%');
+
+      var tmp = $($.trim(Template.compileElement(modal_moments_template, {moments:shots})));
+      modal_thumbnails_container.append(tmp);
+      attachMomentsEvents(tmp);
+      iterativeFadeIn(tmp.first());
+    };
+
+    Instagram.getCurrentUserPhotos(onDataRetrieved, onDataRetrieveStep);
   };
 
   var create_moment = function(moment, do_scroll) {
