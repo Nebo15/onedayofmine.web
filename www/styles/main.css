@@ -422,6 +422,10 @@ input[subtype=time] {
   clear: both;
 }
 
+.img-polaroid {
+  margin: -5px;
+}
+
 .comment-item .text,
 .no-overflow {
   overflow: hidden;
