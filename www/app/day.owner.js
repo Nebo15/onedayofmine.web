@@ -508,7 +508,7 @@ $(function() {
       if(next_callback) {
         modal_thumbnails_paginate_button.removeClass('disabled').fadeIn(300);
 
-        modal_thumbnails_paginate_button.click(function() {
+        modal_thumbnails_paginate_button.off().click(function() {
           if($(this).hasClass('disabled')) {
             return;
           }
@@ -516,6 +516,20 @@ $(function() {
           $(this).addClass('disabled');
 
           next_callback();
+        });
+
+        modal_body_container.off().scroll(function() {
+          if(modal_thumbnails_paginate_button.hasClass('disabled') || modal_thumbnails_paginate_button.css('display') === 'none') {
+            return;
+          }
+
+          var _this = $(this);
+          var scrollBottom = _this.outerHeight() - _this[0].scrollHeight + _this.scrollTop();
+
+          if(scrollBottom >= -30) {
+            modal_thumbnails_paginate_button.addClass('disabled');
+            next_callback();
+          }
         });
       } else {
         modal_thumbnails_paginate_button.fadeOut(300);
@@ -534,7 +548,7 @@ $(function() {
     };
 
     var onInstagramTokenRecieved = function() {
-      Instagram.getCurrentUserPhotos(onDataRetrieved, onDataRetrieveStep);
+      Instagram.getCurrentUserPhotos(onDataRetrieved, onDataRetrieveStep, 3);
     };
 
     var onInstagramTokenRecieveError = function() {
