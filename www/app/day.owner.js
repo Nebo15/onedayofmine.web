@@ -449,7 +449,6 @@ $(function() {
   var initialize_instagram_import = function(element) {
     var modal_container      = $('#import_modal');
     var modal_body_container = modal_container.find('.modal-body-main');
-    var modal_save_button    = modal_container.find('.modal-footer button.btn-success');
 
     var modal_progress_template          = Template.prepareTemplate($('#template_import_progress'));
     var modal_moments_container_template = Template.prepareTemplate($('#template_import_moments_container'));
@@ -480,51 +479,22 @@ $(function() {
       }
     };
 
-    modal_save_button.click(function() {
-      if($(this).hasClass('disabled')) {
-        return;
-      }
-
-      $(this).addClass('disabled');
-
-      modal_thumbnails_container.find('.thumbnail.selected img').each(function() {
-        var $this = $(this);
-
-        var date = new Date();
-        date.setTime($this.attr('timestamp')*1000);
-
-        create_moment({
-          date:Tools.getDate(date),
-          time:Tools.getTime(date),
-          time_seconds:Tools.getSeconds(date),
-          timezone:Tools.getTimezone(),
-          image:$this.attr('src_big'),
-          instagram_id: $this.attr('instagram_id'),
-          description:$this.attr('title')
-        }, false);
-      });
-
-      remove_moment(element, function() {
-        modal_container.modal('hide');
-        $(window).scrollTo($('.moment-item-new').first(), 500);
-      });
-    });
-
     modal_container.modal('show');
 
     var attachThumbnailEvents = function(moments) {
       moments.find('.thumbnail').click(function() {
-        var $this = $(this);
-        if($this.hasClass('selected')) {
-          $this.removeClass('selected');
+        var $this = $(this).find('img');
 
-          if(moments.find('.thumbnail.selected').length == 0) {
-            modal_save_button.addClass('disabled');
-          }
-        } else {
-          $this.addClass('selected');
-          modal_save_button.removeClass('disabled');
-        }
+        element.find(moment_description_selector).find(moment_description_button_selector).addClass('btn-success').removeClass('disabled');
+        element.addClass('success').removeClass('info');
+
+        var img = element.find('.moment-image-holder img');
+        img.attr('src', $this.attr('src_big'));
+        img.attr('instagram_id', $this.attr('instagram_id'));
+
+        element.find('.moment-description textarea').text($this.attr('title'));
+
+        modal_container.modal('hide');
       });
     };
 
