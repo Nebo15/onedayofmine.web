@@ -69,7 +69,7 @@
         </div>
 
         <div class="moment-image-holder">
-          <img src="[[#if moment.image]][[moment.image]][[else]]http://placehold.it/532x532&text=Select+image[[/if]]" width="400" class="img-polaroid" alt="" />
+          <img src="[[#if moment.image]][[moment.image]][[else]]http://placehold.it/532x532&text=Select+image[[/if]]" [[#if moment.instagram_id]]instagram_id="[[moment.instagram_id]]"[[/if]] width="400" class="img-polaroid" alt="" />
         </div>
 
         <br class="clearfix" />
@@ -160,7 +160,7 @@
         <li style="display:none">
           <div class="thumbnail">
             <div class="img-wrap img-rounded">
-              <img src="[[images.thumbnail.url]]" src_big="[[images.standard_resolution.url]]" class="img-rounded" alt="[[caption.text]]" title="[[caption.text]]" timestamp="[[created_time]]"/>
+              <img src="[[images.thumbnail.url]]" src_big="[[images.standard_resolution.url]]" instagram_id="[[id]]" class="img-rounded" alt="[[caption.text]]" title="[[caption.text]]" timestamp="[[created_time]]"/>
               <span class="bage-bottom-right"><i class="icon-ok-sign"></i></span>
             </div>
           </div>

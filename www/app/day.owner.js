@@ -474,19 +474,14 @@ $(function() {
         var date = new Date();
         date.setTime($this.attr('timestamp')*1000);
 
-        var file_date = Tools.getDate(date);
-        var file_description = $this.attr('title');
-        var file_time = Tools.getTime(date);
-        var file_time_seconds = Tools.getSeconds(date);
-        var file_timezone_offset = Tools.getTimezone();
-
         create_moment({
-          date:file_date,
-          time:file_time,
-          time_seconds:file_time_seconds,
-          timezone:file_timezone_offset,
+          date:Tools.getDate(date),
+          time:Tools.getTime(date),
+          time_seconds:Tools.getSeconds(date),
+          timezone:Tools.getTimezone(),
           image:$this.attr('src_big'),
-          description:file_description
+          instagram_id: $this.attr('instagram_id'),
+          description:$this.attr('title')
         }, false);
       });
 
@@ -498,7 +493,7 @@ $(function() {
 
     modal_container.modal('show');
 
-    var attachMomentsEvents = function(moments) {
+    var attachThumbnailEvents = function(moments) {
       moments.find('.thumbnail').click(function() {
         var $this = $(this);
         if($this.hasClass('selected')) {
@@ -534,7 +529,7 @@ $(function() {
 
       var tmp = $($.trim(Template.compileElement(modal_moments_template, {moments:shots})));
       modal_thumbnails_container.append(tmp);
-      attachMomentsEvents(tmp);
+      attachThumbnailEvents(tmp);
       iterativeFadeIn(tmp.first());
     };
 
@@ -543,7 +538,7 @@ $(function() {
     };
 
     var onInstagramTokenRecieveError = function() {
-      modal_container.modal('hide');
+      modal_container.modal('show');
       alert("It seems that you declined Instagram authorization.");
     };
 
@@ -677,7 +672,9 @@ $(function() {
         time_input.prop('disabled', true);
         date_input.prop('disabled', true);
 
-        var src = element.find('img').attr('src');
+        var moment_image = element.find('.moment-image-holder img');
+
+        var src = moment_image.attr('src');
         var params = {
           description: description_input.val(),
           time: date_input.val() + 'T' + time_input.val() + ':' + time_input.attr('seconds') + time_input.attr('timezone')
@@ -689,9 +686,12 @@ $(function() {
           params.image_url = src;
         }
 
-        var save_request = API.request('POST', '/days/' + day_data.id + '/add_moment', params);
+        var instagram_id = moment_image.attr('instagram_id');
+        if(instagram_id !== undefined) {
+          params.instagram_id = instagram_id;
+        }
 
-        var moment_image = element.find('.moment-image-holder img');
+        var save_request = API.request('POST', '/days/' + day_data.id + '/add_moment', params);
 
         moment_image.after($('#template_upload_progress').html());
         var upload_progress_bar = element.find('.moment-upload-progress');
