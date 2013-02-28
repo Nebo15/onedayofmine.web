@@ -422,7 +422,8 @@ input[subtype=time] {
   clear: both;
 }
 
-.comment-item .text {
+.comment-item .text,
+.no-overflow {
   overflow: hidden;
 }
 

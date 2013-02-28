@@ -297,9 +297,8 @@
 
                         <br class="clearfix" />
 
-
                         <? if($this->is_owner || $item->description) { ?>
-                          <p class="bubble moment-description" itemprop="description">
+                          <div class="bubble moment-description" itemprop="description">
                             <? if($this->is_owner || $this->day->is_gathering_enabled) { ?>
                               <textarea rows="3" class="input-block-level" placeholder="Enter moment description...">{$item->description|default:""|nl2br}</textarea>
                               {{if var='$item.is_hidden'}}
@@ -308,9 +307,11 @@
                                 <button type="submit" class="btn btn-block disabled">Save description</button>
                               {{/if}}
                             <? } else { ?>
-                              {$item->description|nl2br}
+                              <div class="no-overflow">
+                                {$item->description|nl2br}
+                              </div>
                             <? } ?>
-                          </p>
+                          </div>
                         <? } ?>
                     </li>
 
@@ -326,7 +327,7 @@
               {{/list}}
 
               <? if($this->is_owner || $this->day->final_description) { ?>
-                <p class="bubble final-description">
+                <div class="bubble final-description">
                   <? if($this->is_owner) { ?>
                     <textarea rows="3" class="input-block-level" placeholder="Enter final description...">{$#day->final_description|default:""|nl2br}</textarea>
 
@@ -336,9 +337,11 @@
                       <button type="submit" class="btn btn-block<? if(count($this->day->moments) > 1) { ?> disabled<? } ?>">Close the day</button>
                     <? } ?>
                   <? } else { ?>
-                    {$#day->final_description|default:""|nl2br}
+                    <div class="no-overflow">
+                      {$#day->final_description|default:""|nl2br}
+                    </div>
                   <? } ?>
-                </p>
+                </div>
               <? } else { ?>
                 <div class="alert alert-block">
                   <h4>This day is live!</h4>
