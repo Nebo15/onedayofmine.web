@@ -448,7 +448,7 @@ $(function() {
 
   var initialize_instagram_import = function(element) {
     var modal_container      = $('#import_modal');
-    var modal_body_container = modal_container.find('.modal-body');
+    var modal_body_container = modal_container.find('.modal-body-main');
     var modal_save_button    = modal_container.find('.modal-footer button.btn-success');
 
     var modal_progress_template          = Template.prepareTemplate($('#template_import_progress'));
@@ -456,7 +456,9 @@ $(function() {
     var modal_moments_template           = Template.prepareTemplate($('#template_import_moments'));
 
     modal_body_container.html('');
-    modal_body_container.before(Template.compileElement(modal_progress_template));
+    if(modal_container.find('.import-progress').length === 0) {
+      modal_body_container.before(Template.compileElement(modal_progress_template));
+    }
     modal_body_container.append(Template.compileElement(modal_moments_container_template));
 
     var modal_thumbnails_container = modal_body_container.find('.thumbnails');
