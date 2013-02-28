@@ -456,10 +456,27 @@ $(function() {
     var modal_moments_template           = Template.prepareTemplate($('#template_import_moments'));
 
     modal_body_container.html('');
-    modal_body_container.append(Template.compileElement(modal_progress_template));
+    modal_body_container.before(Template.compileElement(modal_progress_template));
     modal_body_container.append(Template.compileElement(modal_moments_container_template));
 
     var modal_thumbnails_container = modal_body_container.find('.thumbnails');
+    var modal_thumbnails_paginate_button = modal_body_container.find('button.paginate');
+    var modal_progress = modal_container.find('.import-progress');
+    var modal_progress_bar = modal_progress.find('.bar');
+
+    var animations_speed = 300;
+
+    var setProgress = function(percents) {
+      modal_progress_bar.css('width', percents + '%');
+
+      if(percents === 100) {
+        setTimeout(function() {
+          modal_progress.slideUp(animations_speed);
+        }, 500);
+      } else if(modal_progress.css('display') == 'none') {
+        modal_progress.slideDown(animations_speed);
+      }
+    };
 
     modal_save_button.click(function() {
       if($(this).hasClass('disabled')) {
@@ -515,17 +532,28 @@ $(function() {
       });
     };
 
-    var onDataRetrieved = function(photos) {
-      modal_container.find('.bar').css('width', '100%');
-      setTimeout(function() {
-        modal_body_container.find('.import-progress').slideUp(300, function() {
-          $(this).detach();
+    var onDataRetrieved = function(photos, next_callback) {
+      if(next_callback) {
+        modal_thumbnails_paginate_button.removeClass('disabled').fadeIn(300);
+
+        modal_thumbnails_paginate_button.click(function() {
+          if($(this).hasClass('disabled')) {
+            return;
+          }
+
+          $(this).addClass('disabled');
+
+          next_callback();
         });
-      }, 500);
+      } else {
+        modal_thumbnails_paginate_button.fadeOut(300);
+      }
+
+      setProgress(100);
     };
 
     var onDataRetrieveStep = function(step, max_steps, shots) {
-      modal_container.find('.bar').css('width', ((step / max_steps) * 100) + '%');
+      setProgress((step / max_steps) * 100);
 
       var tmp = $($.trim(Template.compileElement(modal_moments_template, {moments:shots})));
       modal_thumbnails_container.append(tmp);

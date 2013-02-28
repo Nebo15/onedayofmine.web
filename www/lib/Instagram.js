@@ -96,16 +96,24 @@ var Instagram = {
           }
 
           if(media_response.pagination !== undefined && media_response.pagination.next_max_id !== undefined) {
-            if(depth < max_depth) {
-              Instagram._getShootsRecursive(url, function(next_shots, next_max_id) {
+            var get_next = function() {
+              Instagram._getShootsRecursive(url, function(next_shots, next_callback) {
                 $.merge(shots, next_shots);
-                callback(shots, next_max_id);
+                callback(shots, next_callback);
               }, step_callback, max_depth, {
                 max_id: media_response.pagination.next_max_id,
                 depth: depth
               });
+            };
+
+            if(depth < max_depth) {
+              get_next(callback);
             } else {
-              callback(shots, media_response.pagination.next_max_id);
+              depth = 0;
+              callback(shots, function() {
+                get_next();
+                // media_response.pagination.next_max_id
+              });
             }
           } else {
             callback(shots);
