@@ -16,14 +16,14 @@ $(function() {
     var comment_storage_key = "days/"+day_data.id+"/comment";
 
     var comment_saved_input = Storage.get(comment_storage_key);
-    if(comments_input.val() == '' && comment_saved_input !== undefined && comment_saved_input != false) {
+    if(comments_input.val() == '' && comment_saved_input !== undefined && comment_saved_input) {
       comments_input.val(comment_saved_input);
       comments_button.removeClass('disabled').addClass('btn-success');
     }
 
     var getCommentsCounter = function() {
       var text = comments_counter.text();
-      return parseInt(text.substring(text.indexOf('/')+1));
+      return parseInt(text.substring(text.indexOf('/')+1), 10);
     };
 
     var setCommentsCounter = function(value) {
@@ -148,8 +148,9 @@ $(function() {
         if(!like_button.hasClass('disabled')) {
           like_button.addClass('disabled');
 
+          var like_request;
           if(day_data.is_liked == true) {
-            var like_request = API.request('POST', '/days/'+day_data.id+'/unlike');
+            like_request = API.request('POST', '/days/'+day_data.id+'/unlike');
             like_request.success(function() {
               day_data.is_liked = false;
               likes_count--;
@@ -158,9 +159,8 @@ $(function() {
               $('#toggle_like_icon').html('<i class="icon icon-heart-empty"></i> ' + likes_count);
               like_button.removeClass('disabled');
             });
-            like_request.send();
           } else {
-            var like_request = API.request('POST', '/days/'+day_data.id+'/like');
+            like_request = API.request('POST', '/days/'+day_data.id+'/like');
             like_request.success(function() {
               day_data.is_liked = true;
               likes_count++;
@@ -169,8 +169,8 @@ $(function() {
               $('#toggle_like_icon').html('<i class="icon icon-heart"></i> ' + likes_count);
               like_button.removeClass('disabled');
             });
-            like_request.send();
           }
+          like_request.send();
         }
       });
     }

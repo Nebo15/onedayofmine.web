@@ -11,6 +11,7 @@
     <script src="/lib/vendor/jquery.ajax-progress.js"></script>
     <script src="/lib/vendor/bootstrap-timepicker.min.js"></script>
 
+    <script src="/lib/Instagram.js"></script>
     <script src="/app/day.js"></script>
     <? if($this->toolkit->getUser()) { ?>
       <script src="/app/day.user.js"></script>
@@ -24,7 +25,7 @@
     <link href="/styles/bootstrap-timepicker.min.css" rel="stylesheet">
   {{/into}}
   {{into slot="js"}}
-    var day_data = $.parseJSON('<?= json_encode($this->day); ?>');
+    var day_data = <?= json_encode($this->day); ?>;
   {{/into}}
   {{into slot="templates"}}
     <script id="template_comments" type="text/x-handlebars-template">
@@ -50,7 +51,7 @@
     </script>
 
     <script id="template_moment" type="text/x-handlebars-template">
-      <li class="well moment-item moment-item-new">
+      <li class="well moment-item moment-item-new info">
         <span class="moment-controls-overlay">
           <a class="not-decorated with-shadow" id="trigger_moment_delete"><i class="icon-trash with-tooltip" data-original-title="Delete"></i></a>
         </span>
@@ -102,16 +103,16 @@
         </div>
 
         <h5>Import from:</h5>
-        <div class="text-center">
-          <button class="btn">
+        <div class="text-center import-select">
+          <button class="btn" data-value="instagram">
               <i class="icon icon-large icon-camera-retro"></i>
               Instagram
           </button>
-          <button class="btn disabled">
+          <button class="btn" data-value="flickr">
               <i class="icon icon-large icon-camera"></i>
               Flickr
           </button>
-          <button class="btn disabled">
+          <button class="btn disabled" data-value="instagram">
               <i class="icon icon-large icon-facebook-sign"></i>
               Facebook
           </button>
@@ -144,6 +145,32 @@
         </div>
       </div>
     </script>
+
+    <script id="template_import_progress" type="text/x-handlebars-template">
+      <div class="import-progress">
+        <div class="text-center">Retrieving data from Instagram...</div>
+        <div class="progress progress-striped active">
+          <div class="bar" style="width: 1%;"></div>
+        </div>
+      </div>
+    </script>
+
+    <script id="template_import_moments" type="text/x-handlebars-template">
+      [[#moments]]
+        <li style="display:none">
+          <div class="thumbnail">
+            <div class="img-wrap img-rounded">
+              <img src="[[images.thumbnail.url]]" src_big="[[images.standard_resolution.url]]" class="img-rounded" alt="[[caption.text]]" title="[[caption.text]]" timestamp="[[created_time]]"/>
+              <span class="bage-bottom-right"><i class="icon-ok-sign"></i></span>
+            </div>
+          </div>
+        </li>
+      [[/moments]]
+    </script>
+
+    <script id="template_import_moments_container" type="text/x-handlebars-template">
+      <ul class="thumbnails"></ul>
+    </script>
   {{/into}}
 
   {{into slot="content"}}
@@ -164,7 +191,7 @@
                     <h5>Day title:</h5>
                     <span class="input-append span12">
                       <input type="text" class="add-on-small day-title span9" value="{$#day->title}" />
-                      <button class="btn disabled btn-small span2" type="submit">Save</button>
+                      <button class="btn disabled btn-small span2" type="submit" style="height:30px">Save</button>
                     </span>
                     <br />
                     <small class="alert-small" style="display:none">
@@ -391,6 +418,18 @@
                 </div>
               <? } ?>
           </div>
+      </div>
+
+      <div id="import_modal" class="modal hide fade import-modal" tabindex="-1" role="dialog" aria-labelledby="import_modal_label" aria-hidden="true">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h3 id="import_modal_label">Import</h3>
+        </div>
+        <div class="modal-body"></div>
+        <div class="modal-footer">
+          <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+          <button class="btn btn-success disabled">Save changes</button>
+        </div>
       </div>
   {{/into}}
 {{/wrap}}

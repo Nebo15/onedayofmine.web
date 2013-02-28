@@ -27,10 +27,6 @@ h4 { font-size: 14.45px; }
     margin-left: 0;        /* Stick it to the left */
 }
 
-.input-prepend .btn-small,
-.input-append .btn-small {
-  height: 30px;
-}
 
 .tooltip-inner {
   max-width: 250px !important;
@@ -292,10 +288,6 @@ input[subtype=time] {
   max-width: 100%;
 }
 
-.moment-item-new {
-  border-color:#ab0001;
-}
-
 .error {
   border-color:#ab0001;
 }
@@ -305,7 +297,8 @@ input[subtype=time] {
 }
 
 .info {
-  border-color:#49afcd;
+  /*border-color: #49afcd;*/
+  border-style: dashed;
 }
 
 .moment-item-placeholder {
@@ -355,7 +348,8 @@ input[subtype=time] {
   margin-right: auto;
 }
 
-.user-image-holder {
+.user-image-holder,
+.img-wrap {
   position: relative;
   clear: both;
   width: 192px;
@@ -527,6 +521,67 @@ ol.inline >li:first-child {
   padding-left: 0;
 }
 
+.show-on-mobile {
+  display:none;
+}
+
+.thumbnails .thumbnail .bage-bottom-right {
+  bottom: 0px;
+  right: 3px;
+  position: absolute;
+  vertical-align: middle;
+  text-align: center;
+  font-weight: bold;
+  opacity: 0;
+
+  -webkit-transition: all 0.4s ease;
+  -moz-transition: all 0.4s ease;
+  -ms-transition: all 0.4s ease;
+  -o-transition: all 0.4s ease;
+  transform: all 0.4s ease;
+}
+
+.modal-footer .btn {
+  -webkit-transition: all 0.4s ease;
+  -moz-transition: all 0.4s ease;
+  -ms-transition: all 0.4s ease;
+  -o-transition: all 0.4s ease;
+  transform: all 0.4s ease;
+}
+
+.thumbnails .thumbnail.selected .bage-bottom-right {
+  opacity: 1;
+  color:rgb(30, 168, 77);
+}
+
+.modal-body .thumbnails {
+  margin-left: -15px;
+}
+
+.import-modal .thumbnails .thumbnail img {
+  opacity: 1;
+
+  -webkit-transition: all 0.4s ease;
+  -moz-transition: all 0.4s ease;
+  -ms-transition: all 0.4s ease;
+  -o-transition: all 0.4s ease;
+  transform: all 0.4s ease;
+}
+
+.thumbnails .thumbnail.selected img {
+  opacity: 0.4;
+}
+
+.import-modal .thumbnails .thumbnail,
+.import-modal .thumbnails .thumbnail .img-wrap {
+  width: 150px;
+  height: 150px;
+}
+
+.import-modal .thumbnails > li {
+  margin-left: 20px !important;
+}
+
 /* Responsive */
 @media (min-width: 500px) {
   .mobile-nav {
@@ -556,6 +611,10 @@ ol.inline >li:first-child {
 
   .hidden-on-mobile {
     display:none !important;
+  }
+
+  .show-on-mobile {
+    display:block !important;
   }
 
   ul.inline >li,
