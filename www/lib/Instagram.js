@@ -96,16 +96,24 @@ var Instagram = {
           }
 
           if(media_response.pagination !== undefined && media_response.pagination.next_max_id !== undefined) {
-            if(depth < max_depth) {
-              Instagram._getShootsRecursive(url, function(next_shots) {
+            var get_next = function() {
+              Instagram._getShootsRecursive(url, function(next_shots, next_callback) {
                 $.merge(shots, next_shots);
-                callback(shots);
+                callback(shots, next_callback);
               }, step_callback, max_depth, {
                 max_id: media_response.pagination.next_max_id,
                 depth: depth
               });
+            };
+
+            if(depth < max_depth) {
+              get_next(callback);
             } else {
-              callback(shots);
+              depth = 0;
+              callback(shots, function() {
+                get_next();
+                // media_response.pagination.next_max_id
+              });
             }
           } else {
             callback(shots);
@@ -115,19 +123,19 @@ var Instagram = {
     });
   },
 
-  getCurrentUserPhotos: function(callback, step_callback, max_depth) {
-    Instagram.getUserPhotos('self', callback, step_callback, max_depth);
+  getCurrentUserPhotos: function(callback, step_callback, max_depth, params) {
+    Instagram.getUserPhotos('self', callback, step_callback, max_depth, params);
   },
 
-  getUserPhotos: function(user_id, callback, step_callback, max_depth) {
-    Instagram._getShootsRecursive('v1/users/' + user_id + '/media/recent', callback, step_callback, max_depth);
+  getUserPhotos: function(user_id, callback, step_callback, max_depth, params) {
+    Instagram._getShootsRecursive('v1/users/' + user_id + '/media/recent', callback, step_callback, max_depth, params);
   },
 
-  getCurrentUserFeed: function(callback, step_callback, max_depth) {
+  getCurrentUserFeed: function(callback, step_callback, max_depth, params) {
     Instagram.getUserFeed('self', callback, step_callback, max_depth);
   },
 
-  getUserFeed: function(user_id, callback, step_callback, max_depth) {
-    Instagram._getShootsRecursive('v1/users/' + user_id + '/feed', callback, step_callback, max_depth);
+  getUserFeed: function(user_id, callback, step_callback, max_depth, params) {
+    Instagram._getShootsRecursive('v1/users/' + user_id + '/feed', callback, step_callback, max_depth, params);
   }
 };
