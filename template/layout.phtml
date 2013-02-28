@@ -145,6 +145,9 @@
                           <li class="<?= ($this->menu == 'search') ? 'active' : '';?>">
                               <a href="/pages/days_search"><i class="icon-large icon-search"></i> Search</a>
                           </li>
+                          <li>
+                              <a href="/pages/day_create"><i class="icon-large icon-day_create"></i> Start day</a>
+                          </li>
                       </ul>
 
                       <div class="nav pull-right">
@@ -154,10 +157,10 @@
                               <i class="icon-large icon-key"></i> Login
                             </a>
                           </li>
-                          <li class="divider-vertical"></li>
-                          <li>
+                          <li class="divider-vertical hide-on-mobile"></li>
+                          <li class="hide-on-mobile">
                             <div style="width:70px;">
-                              <a href="/pages/day_create"><i class="btn btn-success icon-camera"></i> <span class="show-on-mobile">Start day</span></a>
+                              <a href="/pages/day_create" class="btn btn-success"><i class="icon-day_create"></i></a>
                             </div>
                           </li>
                         </ul>
