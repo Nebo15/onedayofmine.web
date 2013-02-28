@@ -272,6 +272,7 @@ input[subtype=time] {
 
 .day-user-actions {
   height: 45px;
+  margin-top: 15px;
 }
 
 .day-controls a {
