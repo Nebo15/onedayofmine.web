@@ -23,6 +23,17 @@ $(function() {
     popover_template = $('#template_image_select').html();
   }
 
+  // Import modal
+  var modal_container = $('#import_modal');
+
+  // Disable page scroll when modal is visible
+  $(modal_container).on('shown', function() {
+    $('body').css('overflow', 'hidden');
+  });
+  $(modal_container).on('hidden', function() {
+    $('body').css('overflow', 'auto');
+  });
+
   var popover_file_select_handler = function(event) {
     var $this = $(this);
     var reader = new FileReader();
@@ -447,7 +458,6 @@ $(function() {
   };
 
   var initialize_instagram_import = function(element) {
-    var modal_container      = $('#import_modal');
     var modal_body_container = modal_container.find('.modal-body-main');
 
     var modal_progress_template          = Template.prepareTemplate($('#template_import_progress'));
@@ -552,7 +562,7 @@ $(function() {
     };
 
     var onInstagramTokenRecieveError = function() {
-      modal_container.modal('show');
+      modal_container.modal('hide');
       alert("It seems that you declined Instagram authorization.");
     };
 

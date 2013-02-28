@@ -27,6 +27,9 @@ h4 { font-size: 14.45px; }
     margin-left: 0;        /* Stick it to the left */
 }
 
+.hero-unit {
+  margin-top: -10px;
+}
 
 .tooltip-inner {
   max-width: 250px !important;
@@ -269,6 +272,7 @@ input[subtype=time] {
 
 .day-user-actions {
   height: 45px;
+  margin-top: 15px;
 }
 
 .day-controls a {
@@ -419,7 +423,12 @@ input[subtype=time] {
   clear: both;
 }
 
-.comment-item .text {
+.img-polaroid {
+  margin: -5px;
+}
+
+.comment-item .text,
+.no-overflow {
   overflow: hidden;
 }
 
