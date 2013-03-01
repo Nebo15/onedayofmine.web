@@ -36,7 +36,7 @@ $this->menu_disabled = true;
 				</li>
 			</ul>
 		</div>
-		<div class="span3">
+		<div class="span4" style="border:1px solid red">
 			<a class="twitter-timeline" data-dnt="true" href="https://twitter.com/search?q=%23onedayofmine"
 				 data-widget-id="307511156766023680">Tweets about "#onedayofmine"</a>
 			<script>!function (d, s, id) {
@@ -53,5 +53,6 @@ $this->menu_disabled = true;
 	</div>
 	{{/into}}
 	{{into slot="js_ready"}}
+		$("iframe").contents().find(".timeline").css("background",'#eee');
 	{{/into}}
 	{{/wrap}}
