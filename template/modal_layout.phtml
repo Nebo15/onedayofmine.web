@@ -1,0 +1,123 @@
+<?php
+$this->host_url = lmb_env_get('HOST_URL');
+$this->facebook_app_namespace = $this->toolkit->getConf('facebook')->namespace;
+$this->facebook_app_id = $this->toolkit->getConf('facebook')->appId;
+?>
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- Open Graph integration -->
+<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# {$#facebook_app_namespace}: http://ogp.me/ns/fb/{$#facebook_app_namespace}#">
+	<meta property="fb:app_id" content="{$#facebook_app_id}" />
+	{{slot id='og_meta'/}}
+
+	<!-- Vendor style sheets -->
+	<link href="//netdna.bootstrapcdn.com/bootswatch/2.3.0/readable/bootstrap.min.css" rel="stylesheet">
+	<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/css/bootstrap-responsive.min.css" rel="stylesheet">
+	<link href="//netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css" rel="stylesheet">
+	{{slot id='css_include'/}}
+
+	<!-- Application style sheets -->
+	<link href="/styles/main.css" rel="stylesheet">
+	<style>
+		{{slot id="css"/}}
+	</style>
+
+	<!-- Additional meta tags -->
+	{{slot id='meta'/}}
+
+	<!-- Vendor scripts -->
+	<?php if(!property_exists($this, 'fb_disabled') || !$this->fb_disabled) { ?>
+	<script src="//connect.facebook.net/en_US/all.js"></script>
+	<?php } ?>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.0/js/bootstrap.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.0-rc.3/handlebars.min.js"></script>
+	<script src="/lib/vendor/jquery.scrollTo-1.4.3.1-min.js"></script>
+	<script src="/lib/vendor/jquery.cookie.js"></script>
+
+	<script>
+		window.fbAsyncInit = function () {
+			$(function() {
+				FB.init({
+					appId: <?= $this->facebook_app_id; ?>,
+					status:true,
+					cookie:true,
+					xfbml:false
+				});
+
+			<? if($this->toolkit->getUser()) { ?>
+				if(!Auth.hasAccessToken()) {
+					API.login();
+				}
+				<? } else { ?>
+				if(Auth.hasAccessToken()) {
+					Auth.logout();
+				}
+				<? } ?>
+			});
+		};
+	</script>
+
+	<!-- Application scripts -->
+	<script src="/lib/Tools.js"></script>
+	<script src="/lib/Storage.js"></script>
+	<script src="/lib/Config.js"></script>
+	<script src="/lib/Auth.js"></script>
+	<script src="/lib/Response.js"></script>
+	<script src="/lib/Request.js"></script>
+	<script src="/lib/Template.js"></script>
+	<script src="/lib/API.js"></script>
+	<script src="/lib/Override.js"></script>
+
+	<!-- Per-page scripts -->
+	{{slot id="js_include"/}}
+
+	<script>
+		{{slot id="js"/}}
+	</script>
+
+	<script>
+		$(document).ready(function() {
+			if(Auth.hasAccessToken()) {
+				$('#menu_me').html($('#menu_me_authorized').html());
+				$('#logout-action').click(function() {
+					API.logout(function() {
+						window.location.reload();
+					});
+				});
+			} else {
+				$('#login_button').click(function() {
+					$('#login_button').off('click').html('<i class="icon-large icon-refresh icon-spin"></i> Login');
+					API.login(function() {
+						window.location.reload();
+					});
+				});
+			}
+
+			// Init global tooltips
+			$('.with-tooltip').tooltip({
+				placement: 'bottom'
+			});
+
+			{{slot id="js_ready"/}}
+		});
+	</script>
+
+	{{include file="pages/shared/templates.phtml" /}}
+
+	{{slot id='templates'/}}
+</head>
+<body>
+	<?php if(!property_exists($this, 'fb_disabled') || !$this->fb_disabled) { ?>
+		<div id="fb-root"></div>
+	<?php } ?>
+	{{slot id='content'/}}
+	{{slot id='content_zone'/}}
+</div>
+</body>
+</html>

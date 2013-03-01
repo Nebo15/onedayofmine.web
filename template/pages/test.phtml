@@ -1,0 +1,81 @@
+{{wrap with="layout.phtml"}}
+{{into slot="content"}}
+<div>
+	<h3>Test sources</h3>
+
+	<button id="login_i">iLogin</button>
+	<button id="login">Login</button>
+	<button id="user">User</button>
+	<button id="photos">Photos</button>
+	<button id="days">Days</button>
+	<button id="logout">Logout</button>
+	<br/><br/>
+
+	<div id="out"></div>
+
+{{/into}}
+{{into slot="js_include"}}
+<script src="/lib/Importer.js"></script>
+{{/into}}
+{{into slot="js_ready"}}
+
+JSON.stringify = function (obj) {
+var t = typeof (obj);
+if (t != "object" || obj === null) {
+// simple data type
+if (t == "string") obj = '"'+obj+'"';
+return String(obj+'<br/>');
+}
+else {
+// recurse array or object
+var n, v, json = [], arr = (obj && obj.constructor == Array);
+for (n in obj) {
+v = obj[n]; t = typeof(v);
+if (t == "string") v = '"'+v+'"';
+else if (t == "object" && v !== null) v = JSON.stringify(v);
+json.push((arr ? "" : '"' + n + '":') + String(v) + "<br/>");
+}
+return (arr ? "[" : "{") + String(json) + (arr ? "]" : "}");
+}
+};
+
+$('#login_i').click(function(){
+$('#out').html(null);
+API.get('instagram/login_url').success(function(resp) {
+$('#out').html(JSON.stringify(resp.data.result));
+}).send();
+});
+
+$('#login').click(function(){
+$('#out').html(null);
+API.get('flickr/login_url').success(function(resp) {
+$('#out').html(JSON.stringify(resp.data.result));
+}).send();
+});
+
+$('#user').click(function(){
+$('#out').html(null);
+API.get('flickr/user').success(function(resp) {
+$('#out').html(JSON.stringify(resp.data.result));
+}).send();
+});
+
+$('#photos').click(function(){
+API.get('flickr/photos/1371683392/1361683392').success(function(resp) {
+$('#out').html(JSON.stringify(resp.data.result));
+}).send();
+});
+
+$('#days').click(function(){
+API.get('flickr/days/').success(function(resp) {
+$('#out').html(JSON.stringify(resp.data.result));
+}).send();
+});
+
+$('#logout').click(function(){
+API.post('flickr/logout').success(function(resp) {
+$('#out').html(JSON.stringify(resp.data.result));
+}).send();
+});
+{{/into}}
+{{/wrap}}
