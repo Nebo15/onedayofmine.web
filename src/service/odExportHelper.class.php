@@ -178,7 +178,11 @@ class odExportHelper
     }
 
     if($is_owner)
+    {
       $exported->email = $user->email;
+	    $exported->instagram_connected = (bool) $user->instagram_uid;
+	    $exported->flickr_connected = (bool) $user->flickr_uid;
+    }
 
     return $exported;
   }

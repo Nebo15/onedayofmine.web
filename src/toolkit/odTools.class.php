@@ -64,6 +64,12 @@ class odTools extends lmbAbstractTools
    */
   protected $apns;
 
+	/**
+	 * @var phpFlickr
+	 */
+	protected $flickr;
+
+
   function setUser($user)
   {
     $this->user = $user;
@@ -268,19 +274,19 @@ class odTools extends lmbAbstractTools
    *
    * @param  string $access_token
    * @param  string $access_token_secret
-   * @return odTwitter
+   * @return twitter
    */
   public function getTwitter($access_token = null, $access_token_secret = null)
   {
     if(!array_key_exists($access_token, $this->twitter_instances)) {
-      $config = odTwitter::getConfig();
+      $config = twitter::getConfig();
 
       if(!is_null($access_token) && !is_null($access_token_secret)) {
         $config['user_token']  = $access_token;
         $config['user_secret'] = $access_token_secret;
       }
 
-      $this->twitter_instances[$access_token] = new odTwitter($config);
+      $this->twitter_instances[$access_token] = new twitter($config);
     }
 
     return $this->twitter_instances[$access_token];
@@ -295,7 +301,7 @@ class odTools extends lmbAbstractTools
    * Create odFacebook instance with or without auth.
    *
    * @param  string $access_token
-   * @return odFacebook
+   * @return facebook
    */
   public function getFacebook($access_token_or_user = null)
   {
@@ -316,6 +322,16 @@ class odTools extends lmbAbstractTools
   {
     $this->facebook_instances[$access_token] = $facebook;
   }
+
+	public function getFlickr()
+	{
+		if(!$this->flickr)
+		{
+			$conf = lmbToolkit::instance()->getConf('common')->flickr;
+			$this->flickr = new odFlickr($conf['key'], $conf['secret']);
+		}
+		return $this->flickr;
+	}
 
   /**
    * @param User $user

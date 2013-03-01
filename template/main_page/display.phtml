@@ -5,14 +5,11 @@ $this->menu_disabled = true;
 ?>
 {{wrap with="layout.phtml"}}
 {{into slot="css"}}
-	.unstyled li { padding-top:15px;}
 {{/into}}
 {{into slot="content"}}
 <div class="hero-unit">
-<!--  <div class="visible-desktop" style="position:absolute;top:55px;right:75px;"><img src="/img/1.jpg"/></div>-->
 	<h1>One Day Of Mine</h1>
-	<p>Coming soon...</p>
-		<br/>
+	<p class="lead">Live the life through other people's eyes</p>
     <ul class="unstyled">
         <li>
 		        <i class="icon-large icon-camera-retro"></i>
@@ -37,7 +34,6 @@ $this->menu_disabled = true;
         </li>
     </ul>
 </div>
-<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 {{/into}}
 {{into slot="js_ready"}}
 {{/into}}

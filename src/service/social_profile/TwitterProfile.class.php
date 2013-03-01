@@ -1,9 +1,9 @@
 <?php
 lmb_require('src/service/social_provider/odTwitter.class.php');
-lmb_require('src/service/social_profile/SocialServicesProfileInterface.class.php');
+lmb_require('src/service/social_profile/SocialProfileInterface.class.php');
 lmb_require('src/service/social_profile/SharesInterface.class.php');
 
-class TwitterProfile implements SocialServicesProfileInterface, SharesInterface
+class TwitterProfile implements SocialProfileInterface, SharesInterface
 {
   const ID = 'Twitter';
 
@@ -12,7 +12,7 @@ class TwitterProfile implements SocialServicesProfileInterface, SharesInterface
    */
   protected $user;
   /**
-   * @var odTwitter
+   * @var twitter
    */
   protected $provider;
 
@@ -33,7 +33,7 @@ class TwitterProfile implements SocialServicesProfileInterface, SharesInterface
  }
 
   /**
-   * @return odTwitter
+   * @return twitter
    */
   public function getProvider()
   {
@@ -73,7 +73,7 @@ class TwitterProfile implements SocialServicesProfileInterface, SharesInterface
       if ($cursor == '0')
         break;
 
-      $response = $this->provider->api('1/friends/ids', odTwitter::METHOD_GET, array(
+      $response = $this->provider->api('1/friends/ids', twitter::METHOD_GET, array(
         'cursor' => $cursor
       ));
 
@@ -98,7 +98,7 @@ class TwitterProfile implements SocialServicesProfileInterface, SharesInterface
     for ($i=0; $i < $paging ; $i++) {
       $set = array_slice($ids, $i*$lookup, $lookup);
 
-      $response = $this->provider->api('1/users/lookup', odTwitter::METHOD_GET, array(
+      $response = $this->provider->api('1/users/lookup', twitter::METHOD_GET, array(
         'user_id' => implode(',', $set)
       ));
 
@@ -144,7 +144,7 @@ class TwitterProfile implements SocialServicesProfileInterface, SharesInterface
    *
    * @return array
    */
-  public function getPictures()
+  public function getUserpic()
   {
     if($this->getInfo_Raw()['default_profile_image'])
       return array();
@@ -175,7 +175,7 @@ class TwitterProfile implements SocialServicesProfileInterface, SharesInterface
    */
   protected function tweet($string)
   {
-    return $this->provider->api('1/statuses/update', odTwitter::METHOD_POST, array(
+    return $this->provider->api('1/statuses/update', twitter::METHOD_POST, array(
       'status' => $string
     ));
   }

@@ -51,14 +51,14 @@ class FacebookProfileTest extends odIntegrationTestCase
 
   function testGetPictures()
   {
-    $pictures = (new FacebookProfile($this->additional_user))->getPictures();
+    $pictures = (new FacebookProfile($this->additional_user))->getUserpic();
     $this->assertTrue(count($pictures));
   }
 
   function testGetPictures_PicturesIfDefault()
   {
     // foo should have default avatar
-    $pictures = (new FacebookProfile($this->main_user))->getPictures();
+    $pictures = (new FacebookProfile($this->main_user))->getUserpic();
     $this->assertEqual(count($pictures), 0);
   }
 
@@ -66,7 +66,7 @@ class FacebookProfileTest extends odIntegrationTestCase
   {
     // Bar should have not-default avatar
     $profile = (new FacebookProfile($this->additional_user));
-    $pictures = $profile->getPictures();
+    $pictures = $profile->getUserpic();
     $biggest = array_pop($pictures);
     $contents = $profile->getPictureContents($biggest);
     $this->assertTrue($contents);
