@@ -63,21 +63,21 @@ class TwitterProfileTest extends odIntegrationTestCase
 
   function testGetPictures()
   {
-    $pictures = (new TwitterProfile($this->main_user))->getPictures();
+    $pictures = (new TwitterProfile($this->main_user))->getUserpic();
     $this->assertTrue(count($pictures));
   }
 
   function testGetPictures_PicturesIfDefault()
   {
     // bar should have default avatar
-    $pictures = (new TwitterProfile($this->additional_user))->getPictures();
+    $pictures = (new TwitterProfile($this->additional_user))->getUserpic();
     $this->assertEqual(count($pictures), 0);
   }
 
   function testGetPictureContents()
   {
     $profile = (new TwitterProfile($this->main_user));
-    $pictures = $profile->getPictures();
+    $pictures = $profile->getUserpic();
     $biggest = array_pop($pictures);
     $contents = $profile->getPictureContents($biggest);
     $this->assertTrue($contents);

@@ -1,9 +1,9 @@
 <?php
 lmb_require('src/service/social_provider/odFacebook.class.php');
-lmb_require('src/service/social_profile/SocialServicesProfileInterface.class.php');
+lmb_require('src/service/social_profile/SocialProfileInterface.class.php');
 lmb_require('src/service/social_profile/SharesInterface.class.php');
 
-class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
+class FacebookProfile implements SocialProfileInterface, SharesInterface
 {
   const ID = 'Facebook';
 
@@ -12,7 +12,7 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
    */
   protected $user;
   /**
-   * @var odFacebook
+   * @var facebook
    */
   protected $provider;
 
@@ -42,7 +42,7 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
   }
 
   /**
-   * @return odFacebook
+   * @return facebook
    */
   public function getProvider()
   {
@@ -99,7 +99,7 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
     return $results;
   }
 
-  public function getPictures()
+  public function getUserpic()
   {
     $info = $this->getInfo_Raw();
     // $pic_hash = sha1($this->getPictureContents($info['pic']));

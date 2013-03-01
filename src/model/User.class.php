@@ -42,6 +42,10 @@ class User extends BaseModel
   public $twitter_uid;
   public $twitter_access_token;
   public $twitter_access_token_secret;
+	public $instagram_uid;
+	public $instagram_token;
+	public $flickr_uid;
+	public $flickr_token;
   public $current_day_id;
   public $user_settings_id;
   public $ctime;

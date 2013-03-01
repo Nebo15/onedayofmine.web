@@ -196,7 +196,58 @@ class PagesController extends lmbController
 		$this->user['users_following'] = $this->_toFlatArray($this->toolkit->getExportHelper()->exportUserItems($following));
 
     $this->user['comments_count'] = $user->getDaysComments()->count();
+	}
 
+	function doFlickr()
+	{
+		if(!$this->_getUser())
+			return $this->forwardToUnauthorized();
+		$flickr = $this->toolkit->getFlickr();
+		if(false && !$this->_getUser()->flickr_token || !$flickr->auth_checkToken($this->_getUser()->flickr_token))
+		{
+			if(1 == $this->request->get('step', 1))
+			{
+				$url = $flickr->auth_build_url('read', false);
+				return $this->redirect($url);
+			}
+			else
+				$this->_connectToFlickr();
+		}
+
+		$flickr->setToken($this->_getUser()->flickr_token);
+		$photos = $flickr->photos_search([
+			'user_id' => $this->_getUser()->flickr_uid,
+			'extras' => 'description,geo,date_taken,media,url_l'
+		])['photo'];
+		$response = [];
+		foreach($photos as $photo)
+		{
+			if(!array_key_exists('url_l', $photo) || 'photo' != $photo['media'] || 'ready' != $photo['media_status'])
+				continue;
+			$response[] = [
+				'flickr_id' => $photo['id'],
+				'title' => $photo['title'],
+				'image' => $photo['url_l'],
+				'description' => $photo['description'],
+				'location_latitude' => $photo['latitude'],
+				'location_longitude' => $photo['longitude'],
+			];
+		}
+		return json_encode($response);
+	}
+
+	function _connectToFlickr()
+	{
+		$flickr = $this->toolkit->getFlickr();
+		$response = $flickr->auth_getToken($this->request->get('frob'));
+		if(!$response)
+			return $this->redirect('/pages/flickr');
+		$user = $this->_getUser();
+		$user->flickr_uid = $response['user']['nsid'];
+		$user->flickr_token = $response['token'];
+		$user->save();
+
+		lmbToolkit::instance()->setUser($user);
 	}
 
 	function doNotFound()

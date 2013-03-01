@@ -19,4 +19,8 @@ $conf = array(
     'path' => '/:controller/:action/:id',
   ),
 
+	'ControllerTwoIdsAction' => array(
+		'path' => '/:controller/:action/:id/:another_id',
+	),
+
 );
