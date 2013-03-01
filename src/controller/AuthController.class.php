@@ -73,7 +73,7 @@ class AuthController extends BaseJsonController
     $user->import($profile->getInfo());
     $user->save();
 
-    $userpics = $profile->getPictures();
+    $userpics = $profile->getUserpic();
     if (count($userpics)) {
       $userpic_url = array_pop($userpics); // Returns biggest picture
       $userpic_contents = $profile->getPictureContents($userpic_url);

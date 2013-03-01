@@ -1,8 +1,8 @@
 <?php
-  lmb_require('src/service/social_profile/SocialServicesProfileInterface.class.php');
+  lmb_require('src/service/social_profile/SocialProfileInterface.class.php');
   lmb_require('src/service/social_profile/SharesInterface.class.php');
 
-class FakeProfile implements SocialServicesProfileInterface, SharesInterface
+class FakeProfile implements SocialProfileInterface, SharesInterface
 {
   const ID = 'Fake';
 
@@ -12,7 +12,7 @@ class FakeProfile implements SocialServicesProfileInterface, SharesInterface
   function getInfo() {}
   function getFriends() { return array();}
   function getRegisteredFriends() { return array(); }
-  function getPictures() {}
+  function getUserpic() {}
   function shareDayBegin(Day $day) {}
   function shareDayEnd(Day $day) {}
   function shareDay(Day $day) {}

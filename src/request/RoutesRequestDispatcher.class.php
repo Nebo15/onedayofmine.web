@@ -18,7 +18,7 @@ class RoutesRequestDispatcher implements lmbRequestDispatcher
     if($action = $request->get('action'))
       $result['action'] = $action;
 
-    if(is_numeric($result['action']))
+    if(isset($result['action']) && is_numeric($result['action']))
     {
       $tmp = array_key_exists('id', $result) ? $result['id'] : 'item';
       $result['id'] = (int) $result['action'];

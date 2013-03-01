@@ -1,9 +1,9 @@
 <?php
 lmb_require('facebook/base_facebook.php');
-lmb_require('src/service/social_provider/odSocialServicesProviderInterface.class.php');
+lmb_require('src/service/social_provider/SocialProviderInterface.class.php');
 lmb_require('src/service/social_provider/odFacebookApiExpiredTokenException.class.php');
 
-class odFacebook extends BaseFacebook implements odSocialServicesProviderInterface
+class odFacebook extends BaseFacebook implements SocialProviderInterface
 {
   protected $storage_key;
   protected $supported_keys = ['state', 'code', 'access_token', 'user_id'];
