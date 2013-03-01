@@ -8,33 +8,50 @@ $this->menu_disabled = true;
 {{/into}}
 {{into slot="content"}}
 <div class="hero-unit">
-	<h1>One Day Of Mine</h1>
-	<p class="lead">Live the life through other people's eyes</p>
-    <ul class="unstyled">
-        <li>
-		        <i class="icon-large icon-camera-retro"></i>
-            new life for old photos
-        </li>
-        <li>
-            <i class="icon-large icon-magic"></i>
-            easy to use: just click next and enjoy our magic
-        </li>
-        <li>
-		        <i class="icon-large icon-eye-open"></i>
-            look at life through the eyes of different people
-        </li>
-        <li>
-            <i class="icon-large icon-group"></i>
-            gain interest of other people by publishing days from your life
-        </li>
-        <li>
-		        <hr/>
-            <i class="icon-large icon-question-sign"></i>
-            Do you have any questions? <a href="mailto:welcome@onedayofmine.com">welcome@onedayofmine.com</a>!
-        </li>
-    </ul>
-</div>
-{{/into}}
-{{into slot="js_ready"}}
-{{/into}}
-{{/wrap}}
+	<div class="row">
+		<div class="span6">
+			<h1>One Day Of Mine</h1>
+			<p class="lead">Live the life through other people's eyes</p>
+			<ul class="unstyled">
+				<li>
+					<i class="icon-large icon-camera-retro"></i>
+					new life for old photos
+				</li>
+				<li>
+					<i class="icon-large icon-magic"></i>
+					easy to use: just click next and enjoy our magic
+				</li>
+				<li>
+					<i class="icon-large icon-eye-open"></i>
+					look at life through the eyes of different people
+				</li>
+				<li>
+					<i class="icon-large icon-group"></i>
+					gain interest of other people by publishing days from your life
+				</li>
+				<li>
+					<hr/>
+					<i class="icon-large icon-question-sign"></i>
+					Do you have any questions? <a href="mailto:welcome@onedayofmine.com">welcome@onedayofmine.com</a>!
+				</li>
+			</ul>
+		</div>
+		<div class="span3">
+			<a class="twitter-timeline" data-dnt="true" href="https://twitter.com/search?q=%23onedayofmine"
+				 data-widget-id="307511156766023680">Tweets about "#onedayofmine"</a>
+			<script>!function (d, s, id) {
+				var js, fjs = d.getElementsByTagName(s)[0];
+				if (!d.getElementById(id)) {
+					js = d.createElement(s);
+					js.id = id;
+					js.src = "//platform.twitter.com/widgets.js";
+					fjs.parentNode.insertBefore(js, fjs);
+				}
+			}(document, "script", "twitter-wjs");</script>
+		</div>
+		</dv>
+	</div>
+	{{/into}}
+	{{into slot="js_ready"}}
+	{{/into}}
+	{{/wrap}}
