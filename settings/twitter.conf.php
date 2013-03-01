@@ -1,7 +1,7 @@
 <?php
 $conf = array(
-  'consumer_key'      => '7jJVJCSS3rAkfyBc1LbOQ',
-  'consumer_secret'   => 'h2nlBrRpQh8OzKm45GNjRy3iPFnq30QZnNgVuG1bsg4',
+  'consumer_key'      => '7jJVJCSS3rAkfyBc1LbOQ', // Change to: Igz9AjrLELnqNqZsoCnBZw
+  'consumer_secret'   => 'h2nlBrRpQh8OzKm45GNjRy3iPFnq30QZnNgVuG1bsg4', // Change to: 1iPScImM6BhNUh0XkNRdcQqL71u5P6jvuOQQ0Njsuo
 );
 
 // Twitter test user credenatials:
