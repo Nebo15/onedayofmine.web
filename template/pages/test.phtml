@@ -1,17 +1,35 @@
 {{wrap with="layout.phtml"}}
 {{into slot="content"}}
 <div>
-	<h3>Test sources</h3>
+	<div class="row">
+		<div class="span4">
+			<h5>Instagram</h5>
+			<button class="btn btn-info" id="login_i">login</button>
+			<button class="btn" id="user_i">user</button>
+			<button class="btn" id="photos_i">photos</button>
+			<button class="btn" id="days_i">days</button>
+			<button class="btn btn-danger" id="logout_i">logout</button>
+		</div>
+		<div class="span4">
+			<h5>Flickr</h5>
+			<button class="btn btn-info" id="login">login</button>
+			<button class="btn" id="user">user</button>
+			<button class="btn" id="photos">photos</button>
+			<button class="btn" id="days">days</button>
+			<button class="btn btn-danger" id="logout">logout</button>
+		</div>
+		<div class="span3">
+			<h5>Facebook</h5>
+			<button class="btn" id="user_f">user</button>
+			<button class="btn" id="photos_f">photos</button>
+			<button class="btn" id="days_f">days</button>
+		</div>
+	</div>
 
-	<button id="login_i">iLogin</button>
-	<button id="login">Login</button>
-	<button id="user">User</button>
-	<button id="photos">Photos</button>
-	<button id="days">Days</button>
-	<button id="logout">Logout</button>
-	<br/><br/>
-
-	<div id="out"></div>
+	<br/>
+	<div class="row">
+		<div class="span12" id="out"></div>
+	</div>
 
 {{/into}}
 {{into slot="js_include"}}
@@ -19,7 +37,7 @@
 {{/into}}
 {{into slot="js_ready"}}
 
-JSON.stringify = function (obj) {
+obj2string = function (obj) {
 var t = typeof (obj);
 if (t != "object" || obj === null) {
 // simple data type
@@ -32,50 +50,37 @@ var n, v, json = [], arr = (obj && obj.constructor == Array);
 for (n in obj) {
 v = obj[n]; t = typeof(v);
 if (t == "string") v = '"'+v+'"';
-else if (t == "object" && v !== null) v = JSON.stringify(v);
+else if (t == "object" && v !== null) v = obj2string(v);
 json.push((arr ? "" : '"' + n + '":') + String(v) + "<br/>");
 }
 return (arr ? "[" : "{") + String(json) + (arr ? "]" : "}");
 }
 };
 
-$('#login_i').click(function(){
-$('#out').html(null);
-API.get('instagram/login_url').success(function(resp) {
-$('#out').html(JSON.stringify(resp.data.result));
-}).send();
-});
+function addClick(selector, url) {
+	$(selector).click(function(){
+		$('#out').html(null);
+		API.get(url).success(function(resp) {
+			$('#out').html(obj2string(resp.data.result));
+		}).send();
+	});
+}
 
-$('#login').click(function(){
-$('#out').html(null);
-API.get('flickr/login_url').success(function(resp) {
-$('#out').html(JSON.stringify(resp.data.result));
-}).send();
-});
+	addClick('#login_i', 'instagram/login_url');
+	addClick('#user_i', 'instagram/user');
+	addClick('#photos_i', 'instagram/photos');
+	addClick('#days_i', 'instagram/days');
+	addClick('#logout_i', 'instagram/logout');
 
-$('#user').click(function(){
-$('#out').html(null);
-API.get('flickr/user').success(function(resp) {
-$('#out').html(JSON.stringify(resp.data.result));
-}).send();
-});
+	addClick('#login', 'flickr/login_url');
+	addClick('#user', 'flickr/user');
+	addClick('#photos', 'flickr/photos');
+	addClick('#days', 'flickr/days');
+	addClick('#logout', 'flickr/logout');
 
-$('#photos').click(function(){
-API.get('flickr/photos/1371683392/1361683392').success(function(resp) {
-$('#out').html(JSON.stringify(resp.data.result));
-}).send();
-});
+	addClick('#user_f', 'facebook/user');
+	addClick('#photos_f', 'facebook/photos');
+	addClick('#days_f', 'facebook/days');
 
-$('#days').click(function(){
-API.get('flickr/days/').success(function(resp) {
-$('#out').html(JSON.stringify(resp.data.result));
-}).send();
-});
-
-$('#logout').click(function(){
-API.post('flickr/logout').success(function(resp) {
-$('#out').html(JSON.stringify(resp.data.result));
-}).send();
-});
 {{/into}}
 {{/wrap}}
