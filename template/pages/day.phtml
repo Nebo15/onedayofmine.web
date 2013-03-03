@@ -210,6 +210,7 @@
                     </div>
                   </div>
 
+	                <!--
                   <div id="day_open_switch" class="row">
 	                  <h5>Friends can add moments:</h5>
                     <div class="btn-group span12">
@@ -217,6 +218,7 @@
                       <button class="btn btn-small close-action <? if(!$this->day->is_gathering_enabled) {?> active btn-danger<? } ?>">No</button>
                     </div>
                   </div>
+                  -->
 
                   <p class="muted day-info">
                     <span class="pull-right day-date">
@@ -257,12 +259,14 @@
                 </ul>
               </div>
 
+              <!--
 							<? if($this->day->is_gathering_enabled && !$this->is_owner) { ?>
 		              <div class="alert alert-info">You can help {$#day->user->name} by adding new moments.</div>
 							<? } ?>
+							-->
 
 							<ul class="unstyled moments-list">
-              <? if($this->is_owner || $this->day->is_gathering_enabled) { ?>
+              <? if($this->is_owner) { ?>
 								<li class="well moment-item-placeholder">
 									<a class="not-decorated with-shadow"><i class="icon-plus-sign icon-2x with-tooltip" data-original-title="Click or drag files here to add moments"></i></a>
 								</li>
@@ -276,7 +280,7 @@
                           </span>
                         <? } ?>
                         <div class="timepicker text-center with-shadow">
-                          <? if($this->is_owner || $this->day->is_gathering_enabled) { ?>
+                          <? if($this->is_owner) { ?>
                             <span class="input-prepend input-append">
                               <span class="add-on add-on-small hidden-on-mobile"><i class="icon-calendar"></i></span>
                               <input type="text" subtype="date" class="add-on-small" value="{$item->date}" />
@@ -299,7 +303,7 @@
 
                         <? if($this->is_owner || $item->description) { ?>
                           <div class="bubble moment-description" itemprop="description">
-                            <? if($this->is_owner || $this->day->is_gathering_enabled) { ?>
+                            <? if($this->is_owner) { ?>
                               <textarea rows="3" class="input-block-level" placeholder="Enter moment description...">{$item->description|default:""|nl2br}</textarea>
                               {{if var='$item.is_hidden'}}
                                 <button type="submit" class="btn btn-block btn-success approve-action">Approve</button>
@@ -314,7 +318,7 @@
                           </div>
                         <? } ?>
                     </li>
-                    <? if($this->is_owner || $this->day->is_gathering_enabled) { ?>
+                    <? if($this->is_owner) { ?>
                       <li class="well moment-item-placeholder">
                         <a class="not-decorated with-shadow">
                           <i class="icon-plus-sign icon-2x with-tooltip" data-original-title="Click or drag files here to add moments"></i>
