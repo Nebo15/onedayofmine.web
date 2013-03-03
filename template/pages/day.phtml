@@ -80,6 +80,7 @@
         </p>
       </li>
 
+	    aaaaa
       <li class="well moment-item-placeholder">
         <a class="not-decorated with-shadow"><i class="icon-plus-sign icon-2x with-tooltip" data-original-title="Click or drag files here to add moments"></i></a>
       </li>
@@ -261,13 +262,13 @@
 		              <div class="alert alert-info">You can help {$#day->user->name} by adding new moments.</div>
 							<? } ?>
 
+							<ul class="unstyled moments-list">
+              <? if($this->is_owner || $this->day->is_gathering_enabled) { ?>
+								<li class="well moment-item-placeholder">
+									<a class="not-decorated with-shadow"><i class="icon-plus-sign icon-2x with-tooltip" data-original-title="Click or drag files here to add moments"></i></a>
+								</li>
+	            <? } ?>
               {{list using="$#day->moments"}}
-                <ul class="unstyled moments-list">
-                  <? if($this->is_owner || $this->day->is_gathering_enabled) { ?>
-                    <li class="well moment-item-placeholder">
-                      <a class="not-decorated with-shadow"><i class="icon-plus-sign icon-2x with-tooltip" data-original-title="Click or drag files here to add moments"></i></a>
-                    </li>
-                  <? } ?>
                   {{list:item}}
                     <li class="well moment-item {{if var='$item.is_hidden'}}moment-item-hidden{{/if}}" moment_id="{$item->id}" itemscope itemtype="http://schema.org/ImageObject">
                         <? if($this->is_owner || $this->day->is_gathering_enabled) { ?>
@@ -314,7 +315,6 @@
                           </div>
                         <? } ?>
                     </li>
-
                     <? if($this->is_owner || $this->day->is_gathering_enabled) { ?>
                       <li class="well moment-item-placeholder">
                         <a class="not-decorated with-shadow">
@@ -323,8 +323,8 @@
                       </li>
                     <? } ?>
                   {{/list:item}}
-                </ul>
               {{/list}}
+							</ul>
 
               <? if($this->is_owner || $this->day->final_description) { ?>
                 <div class="bubble final-description">
