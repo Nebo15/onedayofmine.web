@@ -45,8 +45,8 @@ class InstagramController extends BaseJsonController
 		$service = new InstagramPhotoSource($this->_getUser());
 		return $this->_answerOk(
 			$service->getPhotos(
-				$this->request->getInteger('id'),
-				$this->request->getInteger('another_id')
+				$this->request->getInteger('from'),
+				$this->request->getInteger('to')
 			)
 		);
 	}
@@ -54,7 +54,7 @@ class InstagramController extends BaseJsonController
 	function doDays()
 	{
 		$service = new InstagramPhotoSource($this->_getUser());
-		return $this->_answerOk($service->getDays($this->request->getInteger('id')));
+		return $this->_answerOk($service->getDays($this->request->getInteger('from')));
 	}
 
 	function doLogout()
