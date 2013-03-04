@@ -76,7 +76,7 @@
   <script>
     $(function() {
       <? if($this->toolkit->getUser()) { ?>
-        API.setCurrentUser(<?= json_encode($this->toolkit->getUser()); ?>);
+        API.setCurrentUser(<?= json_encode($this->toolkit->getExportHelper()->exportUser($this->toolkit->getUser())); ?>);
       <? } ?>
     });
   </script>
