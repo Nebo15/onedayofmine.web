@@ -9,7 +9,6 @@ var Auth = {
             alert('You need to authorize application to continue using it');
           }
         });
-      }
   },
 
   logout: function(callback) {
