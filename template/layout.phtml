@@ -51,14 +51,16 @@
   <script src="/lib/vendor/jquery.cookie.js"></script>
 
   <script>
-    window.fbAsyncInit = function () {
-      FB.init({
-        appId: <?= $this->facebook_app_id; ?>,
-        status:true,
-        cookie:true,
-        xfbml:false
-      });
-    };
+    $(function() {
+      window.fbAsyncInit = function () {
+        FB.init({
+          appId: <?= $this->facebook_app_id; ?>,
+          status:true,
+          cookie:true,
+          xfbml:false
+        });
+      };
+    });
   </script>
 
   <!-- Application scripts -->
