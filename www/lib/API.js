@@ -92,6 +92,23 @@ var API = (function() {
 
     getCurrentUser: function() {
       return current_user;
+    },
+
+    updateCurrentUser: function(onUserInfoRecieved) {
+      var user_update_request = API.request('GET', 'users/me');
+
+      user_update_request.success(function(response) {
+        API.setCurrentUser(response.data.result);
+
+        if(onUserInfoRecieved)
+          onUserInfoRecieved(API.getCurrentUser());
+      }, true);
+
+      user_update_request.error(function() {
+        alert("User info can't be updated, please try to reload the page");
+      }, true);
+
+      user_update_request.send();
     }
   };
 })();
