@@ -21,6 +21,7 @@ var Auth = {
 
   logout: function(callback) {
     FB.logout(function(response) {
+      if(callback)
         callback();
     });
   }
