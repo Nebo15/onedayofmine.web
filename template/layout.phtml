@@ -98,7 +98,7 @@
         });
       <? } else { ?>
         $('.trigger_login').click(function() {
-          $(this).off('click').html('<i class="icon-large icon-refresh icon-spin"></i> Login');
+          $(this).off('click').html('<i class="icon-large icon-refresh icon-spin"></i> Login with Facebook');
           API.login(function() {
             window.location.reload();
           });
@@ -151,7 +151,7 @@
                           <li id="menu_me" class="dropdown <?= ($this->menu == 'me') ? 'active' : '';?>">
                             <? if(!$this->toolkit->getUser()) { ?>
                               <a class="trigger_login">
-                                <i class="icon-large icon-key"></i> Login
+                                <i class="icon-large icon-facebook-sign"></i> Login with Facebook
                               </a>
                             <? } else { ?>
                               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
