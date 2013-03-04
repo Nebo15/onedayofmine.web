@@ -1,4 +1,5 @@
 var API = (function() {
+  "use strict";
   var current_user;
 
   return {
@@ -53,10 +54,7 @@ var API = (function() {
         onLoginComplete();
       }, true);
 
-      login_request.error(function() {
-        login_request.error(onLoginFail, true);
-
-        console.log('Login attempt failed');
+      var makeTry = function() {
         Auth.login(function(token) {
           $.cookie('token', token, {
             expires: 31,
@@ -65,9 +63,16 @@ var API = (function() {
           });
           login_request.send();
         });
+      };
+
+      login_request.error(function() {
+        login_request.error(onLoginFail, true);
+
+        console.log('Login attempt failed');
+        makeTry();
       }, true);
 
-      login_request.send();
+      makeTry();
     },
 
     logout: function(callback) {
