@@ -52,14 +52,12 @@
 
   <script>
     $(function() {
-      window.fbAsyncInit = function () {
-        FB.init({
-          appId: <?= $this->facebook_app_id; ?>,
-          status:true,
-          cookie:true,
-          xfbml:false
-        });
-      };
+      FB.init({
+        appId: <?= $this->facebook_app_id; ?>,
+        status:true,
+        cookie:true,
+        xfbml:false
+      });
     });
   </script>
 
