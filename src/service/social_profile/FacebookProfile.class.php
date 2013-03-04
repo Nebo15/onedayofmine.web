@@ -42,7 +42,7 @@ class FacebookProfile implements SocialProfileInterface, SharesInterface
   }
 
   /**
-   * @return facebook
+   * @return odFacebook
    */
   public function getProvider()
   {
