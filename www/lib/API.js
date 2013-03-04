@@ -72,12 +72,14 @@ var API = (function() {
 
     logout: function(callback) {
       console.log('Logging out');
-      (new Request('GET', 'auth/logout', {async:false}).complete(function() {
-          API.setCurrentUser(undefined);
-          Storage.clear();
-          $.removeCookie('token', {path: '/'});
-          callback();
-      })).send();
+      Auth.logout(function() {
+        (new Request('GET', 'auth/logout', {async:false}).complete(function() {
+            API.setCurrentUser(undefined);
+            Storage.clear();
+            $.removeCookie('token', {path: '/'});
+            callback();
+        })).send();
+      });
     },
 
     setCurrentUser: function(user) {
