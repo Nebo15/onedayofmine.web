@@ -17,6 +17,11 @@ class UsersController extends BaseJsonController
     return $this->_answerOk($this->toolkit->getExportHelper()->exportUser($user));
   }
 
+  function doMe()
+  {
+    return $this->_answerOk($this->toolkit->getExportHelper()->exportUser($this->toolkit->getUser()));
+  }
+
   function doGuestDays()
   {
     if(!$user = User::findById($this->request->id))
