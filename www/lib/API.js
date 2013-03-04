@@ -1,13 +1,8 @@
 var API = (function() {
-  function setRequestToken(request) {
-    if(request.params.data === undefined)
-      request.params.data = {};
-
-    request.params.data.token = Storage.get('token');
-  }
+  "use strict";
+  var current_user;
 
   return {
-
     get: function(path, data, params)
     {
       return this.request('GET', path, data, params);
@@ -27,16 +22,11 @@ var API = (function() {
         alert(response.errors[0]);
       });
 
-      if(Storage.get('token')) {
-        setRequestToken(request);
-      }
-
       request.statusCode(401, function() {
         console.log('Unauthorized access restricted');
 
         API.login(function() {
           console.log('Sending request with new credetials');
-          setRequestToken(request);
           request.send();
         }, function() {
           request.statusCode(401, function() {
@@ -44,10 +34,6 @@ var API = (function() {
           });
         });
       });
-
-      // request.statusCode(404, function() {
-      //   alert('Page not found!');
-      // });
 
       return request;
     },
@@ -58,7 +44,7 @@ var API = (function() {
 
       login_request.success(function(response) {
         console.log('Logged in');
-        Storage.set('user', response.data.result);
+        API.setCurrentUser(response.data.result);
 
         $.event.trigger({
             type: 'login',
@@ -68,34 +54,44 @@ var API = (function() {
         onLoginComplete();
       }, true);
 
+      var makeTry = function() {
+        Auth.login(function(token) {
+          $.cookie('token', token, {
+            expires: 31,
+            // secure: true, // TODO: turn this on for security
+            path: '/'
+          });
+          login_request.send();
+        });
+      };
+
       login_request.error(function() {
         login_request.error(onLoginFail, true);
 
         console.log('Login attempt failed');
-        Auth.login(doLogin);
+        makeTry();
       }, true);
 
-      var doLogin = function() {
-        setRequestToken(login_request);
-        login_request.send();
-      };
-
-      if (Storage.get('token')) {
-        setRequestToken(login_request);
-        doLogin();
-      } else {
-        console.log('Access token not set');
-        Auth.getAccessToken(doLogin);
-      }
+      makeTry();
     },
 
     logout: function(callback) {
       console.log('Logging out');
-      console.log('Dropping LocalStorage cache');
       (new Request('GET', 'auth/logout', {async:false}).complete(function() {
-          Storage.clear();
-          callback();
+        API.setCurrentUser(undefined);
+        Storage.clear();
+        $.removeCookie('token', {path: '/'});
+        Auth.logout();
+        callback();
       })).send();
+    },
+
+    setCurrentUser: function(user) {
+      current_user = user;
+    },
+
+    getCurrentUser: function() {
+      return current_user;
     }
   };
 })();

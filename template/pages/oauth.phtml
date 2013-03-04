@@ -1,0 +1,10 @@
+{{wrap with="layout.phtml" into="content"}}
+  {{into slot="js"}}
+    window.close();
+  {{/into}}
+  {{into slot="js_ready"}}
+    window.close();
+  {{/into}}
+  <h1>Authorization successfull</h1>
+  Now you can close this window.
+{{/wrap}}
