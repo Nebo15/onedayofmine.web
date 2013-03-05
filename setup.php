@@ -30,6 +30,7 @@ lmb_env_setor('LIMB_VAR_DIR', $app_dir . '/var/');
 
 if(array_key_exists('HTTP_NAME', $_SERVER))
   lmb_env_setor('HOST_URL', 'http://'.$_SERVER['HTTP_HOST'].'/');
+lmb_env_set('LIMB_HTTP_OFFSET_PATH', '');
 
 lmb_env_setor('LIMB_APP_MODE' , 'production');
 
