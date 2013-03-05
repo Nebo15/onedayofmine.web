@@ -61,12 +61,6 @@ class DaysOwnerControllerTest extends odControllerTestCase
     }
   }
 
-  /**
-   * @api description Creates <a href="#Entity:Moment">moment</a> in current active day and returns it.
-   * @api input param string description
-   * @api input param string image_content File contents, that was previously encoded by base64
-   * @api input option time ISO time of moment, when image was created
-   */
   function testAddMoment()
   {
     $this->main_user->save();
@@ -93,6 +87,34 @@ class DaysOwnerControllerTest extends odControllerTestCase
       $this->assertEqual($moment->time, $time);
     }
   }
+
+	function testAddMoment_withLocation()
+	{
+		$this->main_user->save();
+
+		$day = $this->generator->day($this->main_user);
+		$day->save();
+
+		lmbToolkit::instance()->setUser($this->main_user);
+
+		$response = $this->post('add_moment', [
+			'description'        => $description = $this->generator->string(200),
+			'time'               => $time        = '2010-08-09T18:31:42+03:00',
+			'image_content'      => $image       = base64_encode($this->generator->image()),
+			'location_latitude'  => $time        = $lat = '24',
+			'location_longitude' => $time        = $long = '42',
+		], $day->id);
+
+		if($this->assertResponse(200))
+		{
+			$moment = $response->result;
+			$loaded_moment = Moment::findFirst();
+			$this->assertEqual($moment->location_latitude, $lat);
+			$this->assertEqual($moment->location_longitude, $long);
+			$this->assertEqual($loaded_moment->location_latitude, $lat);
+			$this->assertEqual($loaded_moment->location_longitude, $long);
+		}
+	}
 
   function testAddMoment_WithGPS()
   {
