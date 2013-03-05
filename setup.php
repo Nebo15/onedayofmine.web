@@ -48,6 +48,7 @@ lmb_require('src/service/AirBrakeErrorHandler.class.php');
 
 if(lmb_env_get('LIMB_APP_MODE') != 'devel')
 {
-  lmbErrorGuard::registerExceptionHandler(array('AirBrakeErrorHandler', 'onException'));
-  lmbErrorGuard::registerErrorHandler(array('lmbErrorGuard', 'convertErrorsToExceptions'));
+  lmbErrorGuard::registerExceptionHandler(['AirBrakeErrorHandler', 'onException']);
+  lmbErrorGuard::registerErrorHandler(['lmbErrorGuard', 'convertErrorsToExceptions']);
+	lmbErrorGuard::registerFatalErrorHandler(['lmbErrorGuard', 'convertErrorsToExceptions']);
 }
