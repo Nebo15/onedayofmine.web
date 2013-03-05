@@ -30,6 +30,7 @@ lmb_env_setor('LIMB_VAR_DIR', $app_dir . '/var/');
 
 if(array_key_exists('HTTP_NAME', $_SERVER))
   lmb_env_setor('HOST_URL', 'http://'.$_SERVER['HTTP_HOST'].'/');
+lmb_env_set('LIMB_HTTP_OFFSET_PATH', '');
 
 lmb_env_setor('LIMB_APP_MODE' , 'production');
 
@@ -47,6 +48,7 @@ lmb_require('src/service/AirBrakeErrorHandler.class.php');
 
 if(lmb_env_get('LIMB_APP_MODE') != 'devel')
 {
-  lmbErrorGuard::registerExceptionHandler(array('AirBrakeErrorHandler', 'onException'));
-  lmbErrorGuard::registerErrorHandler(array('lmbErrorGuard', 'convertErrorsToExceptions'));
+  lmbErrorGuard::registerExceptionHandler(['AirBrakeErrorHandler', 'onException']);
+  lmbErrorGuard::registerErrorHandler(['lmbErrorGuard', 'convertErrorsToExceptions']);
+	lmbErrorGuard::registerFatalErrorHandler(['AirBrakeErrorHandler', 'onError']);
 }

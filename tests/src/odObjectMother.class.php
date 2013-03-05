@@ -149,7 +149,9 @@ class odObjectMother
     $day = $day ? $day : $this->day();
     $moment = new Moment();
     $moment->description = 'description '.$this->string(125);
-    $moment->setDay($day);
+	  $moment->time = time() - 60 * 60;
+	  $moment->timezone = 0;
+	  $moment->setDay($day);
     $moment->save();
 
     if($with_comments)

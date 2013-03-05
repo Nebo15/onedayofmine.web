@@ -541,7 +541,7 @@ function task_instagram_test_users($args)
 
 function task_test_analyze($args)
 {
-	lmb_require('src/service/InstagramPhotosAnalyzer.class.php');
+	lmb_require('src/service/ExternalPhotosAnalyzer.class.php');
 
 	$photos = _get_instagram_photos_recursively('https://api.instagram.com/v1/users/' . $args[1] . '/media/recent/?access_token=' . $args[0]);
 

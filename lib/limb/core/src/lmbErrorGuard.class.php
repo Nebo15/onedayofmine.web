@@ -82,7 +82,7 @@ class lmbErrorGuard
       return;
 
     if($error['type'] & (E_ERROR | E_COMPILE_ERROR))
-      self :: $fatal_error_delegate->invoke($error);
+      self :: $fatal_error_delegate->invoke($error['type'], $error['message'], $error['file'], $error['line']);
   }
 }
 

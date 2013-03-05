@@ -4,6 +4,7 @@ lmb_require('src/model/traits/Imageable.class.php');
 lmb_require('src/model/MomentComment.class.php');
 lmb_require('src/model/MomentLike.class.php');
 lmb_require('limb/validation/src/rule/lmbPatternRule.class.php');
+lmb_require('limb/validation/src/rule/lmbNumericValueRangeRule.class.php');
 
 /**
  * @api
@@ -28,6 +29,7 @@ class Moment extends BaseModel
   public $is_deleted;
 
 	public $instagram_id;
+	public $flickr_id;
   public $facebook_id;
   public $twitter_id;
 
@@ -41,15 +43,18 @@ class Moment extends BaseModel
 
 	  if($this->instagram_id)
 		  $validator->addRule(new lmbPatternRule('instagram_id', '/[0-9]_/'));
+
+	  $validator->addRequiredRule('time');
+	  $validator->addRequiredRule('timezone');
+	  if($this->time)
+	    $validator->addRule(new lmbNumericValueRangeRule('time', time() - 5 * 365 * 24 * 60 * 60, time()));
+
     return $validator;
   }
 
   function exportForApi(array $properties = null)
   {
-    $moment = new stdClass();
-    $moment->id = $this->id;
-    $moment->day_id = $this->day_id;
-    $moment->description = $this->description;
+    $moment = parent::exportForApi(['id', 'day_id', 'description', 'location_latitude', 'location_longitude']);
     $this->showImages($moment);
     $moment->time = BaseModel::stampToIso($this->time, $this->timezone);
 

@@ -444,6 +444,32 @@ GET /days/types
   "special event"
 ]}
 
+
+Анализ дня импортированного из внешних источников
+POST /days/analyze_external_day
+> Accept: application/json
+{[
+  {
+    id: "8511704824",
+    title: "IMG_0050",
+    image: "http://farm9.staticflickr.com/8512/8511704824_82d8a6ddb2_b.jpg",
+    image_width: 612,
+    image_height: 612,
+    location_latitude: 46.048938,
+    location_longitude: 14.524719,
+    location_name: "some name",
+    tags: [],
+    time: 12311376187
+  }
+]}
+< 200
+< Content-Type: application/json
+{
+	type: 'Working day',
+	title: 'My perfect working day in New York',
+	description: 'some text about'
+}
+
 -- Moments --
 
 Залайкать момент

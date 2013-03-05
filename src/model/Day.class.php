@@ -16,6 +16,12 @@ class Day extends BaseModel
   protected $_db_table_name = 'day';
   protected $_default_sort_params = array('id'=>'desc');
 
+	const TYPE_WORKING = 'Working day';
+	const TYPE_DAYOFF  = 'Day off';
+	const TYPE_HOLIDAY = 'Holiday';
+	const TYPE_TRIP    = 'Trip';
+	const TYPE_EVENT   = 'Special Event';
+
   public $user_id;
   public $type;
   public $title;

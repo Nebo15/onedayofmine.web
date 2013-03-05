@@ -49,11 +49,17 @@ class lmbNumericValueRangeRule extends lmbSingleFieldRule
       $this->error('{Field} must be a valid number.');
 
     if($value < $this->min_value)
-      $this->error('{Field} must be not less than {value}.', array('value' => $this->min_value));
+      $this->error(
+	      '{Field} must be not less than {valid}, but {actual} given.',
+	      array('valid' => $this->min_value, 'actual' => $value)
+      );
 
     if($value > $this->max_value)
     {
-      $this->error('{Field} must be not greater than {value}.', array('value' => $this->max_value));
+      $this->error(
+	      '{Field} must be not greater than {valid}, but {actual} given.',
+	      array('valid' => $this->min_value, 'actual' => $value)
+      );
     }
   }
 }

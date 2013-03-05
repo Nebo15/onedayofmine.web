@@ -1,7 +1,7 @@
 <?php
 lmb_require('src/controller/BaseJsonController.class.php');
 lmb_require('src/service/InterestCalculator.class.php');
-lmb_require('src/service/InstagramPhotosAnalyzer.class.php');
+lmb_require('src/service/ExternalPhotosAnalyzer.class.php');
 lmb_require('src/model/Day.class.php');
 lmb_require('src/model/DayFavorite.class.php');
 lmb_require('src/model/Complaint.class.php');
@@ -352,25 +352,21 @@ class DaysController extends BaseJsonController
 		$moment = new Moment();
 		$moment->setDay($day);
 		$moment->description = $this->request->get('description', '');
-		if(!$is_owner)
-			$moment->is_hidden = 1;
-		if($this->request->has('instagram_id'))
-			$moment->instagram_id = $this->request->get('instagram_id');
-
+		$moment->time = time();
+		$moment->timezone = $this->toolkit->getUser()->timezone;
+		$moment->instagram_id = $this->request->get('instagram_id', '');
+		$moment->flickr_id = $this->request->get('flickr_id', '');
+		$moment->facebook_id = $this->request->get('facebook_id', '');
+		$moment->location_latitude = $this->request->getInteger('location_latitude', 0);
+		$moment->location_longitude = $this->request->getInteger('location_longitude', 0);
 		$moment->save();
 
 		$moment->attachImage($image_content);
-		$moment->save();
-
 		if ($this->request->get('time'))
 		{
 			list($time, $timezone) = Moment::isoToStamp($this->request->get('time'));
 			$moment->time = $time;
 			$moment->timezone = $timezone;
-		}
-		else
-		{
-			$moment->timezone = $this->toolkit->getUser()->timezone;
 		}
 		$moment->save();
 
@@ -456,9 +452,10 @@ class DaysController extends BaseJsonController
 			$to, $limit)));
 	}
 
-	function doGuestAnalyzeInstagramDay()
+	function doGuestAnalyzeExternalDay()
 	{
-		return $this->_answerOk((new InstagramPhotosAnalyzer($this->request->get('moments')))->analyze());
+		$service = new ExternalPhotosAnalyzer($this->_getUser());
+		return $this->_answerOk($service->analyze($this->request->get('day')));
 	}
 
 	function doMomentsGatheringEnable()
