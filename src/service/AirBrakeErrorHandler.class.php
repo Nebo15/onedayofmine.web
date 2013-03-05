@@ -1,26 +1,37 @@
 <?php
 class AirBrakeErrorHandler
 {
-  static function onException(Exception $e)
+	static function onError($type, $message, $file, $line)
+	{
+		$backtrace = "<line method=\"\" file=\"{$file}\" number=\"{$line}\"/>".PHP_EOL;;
+		self::_send('Error ('.$type.')', $message, $backtrace);
+	}
+
+	static function onException(Exception $e)
+	{
+		$error_class = get_class($e);
+		$error_message = ($e instanceof lmbException) ? $e->getOriginalMessage() : $e->getMessage();
+
+		$backtrace = '';
+		foreach($e->getTrace() as $trace)
+		{
+			$method = '';
+			if(isset($trace['class']))
+				$method .= $trace['class'].'::';
+			if(isset($trace['function']))
+				$method .= $trace['function']."()";
+			if(isset($trace['file'], $trace['line']))
+				$backtrace .= "<line method=\"{$method}\" file=\"{$trace['file']}\" number=\"{$trace['line']}\"/>".PHP_EOL;
+		}
+
+		self::_send($error_class, $error_message, $backtrace);
+	}
+
+	protected static function _send($type, $message, $backtrace)
   {
     $airbrake_key = lmb_env_get('AIRBRAKE_KEY');
-    $error_class = get_class($e);
-    $error_message = ($e instanceof lmbException) ? $e->getOriginalMessage() : $e->getMessage();
-    $uri = isset($_SERVER['REQUEST_URI']) ? 'http://'.$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] : 'cli';
-
-    $env = lmb_app_mode();
-
-    $backtrace = '';
-    foreach($e->getTrace() as $trace)
-    {
-      $method = '';
-      if(isset($trace['class']))
-        $method .= $trace['class'].'::';
-      if(isset($trace['function']))
-        $method .= $trace['function']."()";
-      if(isset($trace['file'], $trace['line']))
-        $backtrace .= "<line method=\"{$method}\" file=\"{$trace['file']}\" number=\"{$trace['line']}\"/>".PHP_EOL;
-    }
+	  $uri = isset($_SERVER['REQUEST_URI']) ? 'http://'.$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'] : 'cli';
+	  $env = lmb_app_mode();
 
     $server_xml_variables  = self::arrayToXMLVarList($_SERVER);
     $server_xml_variables  = $server_xml_variables ? "<cgi-data>{$server_xml_variables}</cgi-data>" : '';
@@ -59,8 +70,8 @@ class AirBrakeErrorHandler
     <url>http://api.onedayofmine.com</url>
   </notifier>
   <error>
-    <class>{$error_class}</class>
-    <message>{$error_message}</message>
+    <class>{$type}</class>
+    <message>{$message}</message>
     <backtrace>{$backtrace}</backtrace>
   </error>
   <request>
