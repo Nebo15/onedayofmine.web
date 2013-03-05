@@ -29,10 +29,10 @@ class ExternalPhotosAnalyzer
 		$this->_checkLocation($moments);
 		$this->_checkHolidays($moments);
 		$this->_checkLongestTitle($moments);
+		$this->_checkEqualMomentsTitles($moments);
 		$this->_checkBirthday($moments);
 
 		$res = [];
-
 		return [
 			'type' => $this->_getWithMaxProbability($this->type),
 			'title' => $this->_getWithMaxProbability($this->title),
@@ -40,19 +40,28 @@ class ExternalPhotosAnalyzer
 		];
 	}
 
-	function addTitle($title, $probability)
+	function addTitle($value, $probability)
 	{
-		$this->title[$title] = $probability;
+		if(isset($this->title[$value]))
+			$this->title[$value] += $probability;
+		else
+			$this->title[$value] = $probability;
 	}
 
-	function addType($type, $probability)
+	function addType($value, $probability)
 	{
-		$this->type[$type] = $probability;
+		if(isset($this->type[$value]))
+			$this->type[$value] += $probability;
+		else
+			$this->type[$value] = $probability;
 	}
 
-	function addDescription($desc, $probability)
+	function addDescription($value, $probability)
 	{
-		$this->description[$desc] = $probability;
+		if(isset($this->description[$value]))
+			$this->description[$value] += $probability;
+		else
+			$this->description[$value] = $probability;
 	}
 
 	protected function _cleanup($moments)
@@ -94,6 +103,8 @@ class ExternalPhotosAnalyzer
 		$locations = [];
 		foreach($moments as $moment)
 		{
+			if(!trim($moment->location_name))
+				continue;
 			if(!isset($locations[$moment->location_name]))
 				$locations[$moment->location_name] = 0;
 			$locations[$moment->location_name]++;
@@ -148,6 +159,12 @@ class ExternalPhotosAnalyzer
 				$desc = $moment->title;
 		}
 		$this->addDescription($desc, 10);
+	}
+
+	protected function _checkEqualMomentsTitles($moments)
+	{
+		foreach($moments as $moment)
+			$this->addTitle($moment->title, 5);
 	}
 
 	protected function _checkBirthday($moments)

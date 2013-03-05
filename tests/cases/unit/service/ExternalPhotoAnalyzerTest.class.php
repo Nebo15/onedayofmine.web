@@ -7,7 +7,7 @@ lmb_require('src/model/User.class.php');
 class ExternalPhotoAnalyzerTest extends odUnitTestCase
 {
 	/**
-	 * @var ExternalPhotoAnalyzer
+	 * @var ExternalPhotosAnalyzer
 	 */
 	protected $service;
 	function setUp()
@@ -37,6 +37,20 @@ class ExternalPhotoAnalyzerTest extends odUnitTestCase
 		$this->assertEqual($res['title'], 'My perfect birthday!');
 	}
 
+	function testEqualsMomentsTitle()
+	{
+		$res = $this->service->analyze([
+			$this->_createPhoto('foo bar'),
+			$this->_createPhoto('foo bar'),
+			$this->_createPhoto('foo bar'),
+			$this->_createPhoto('foo bar'),
+			$this->_createPhoto('foo bar'),
+			$this->_createPhoto('foo bar'),
+			$this->_createPhoto('bar foo')
+		]);
+		$this->assertEqual($res['title'], 'foo bar');
+	}
+
 	function _createPhoto($title = null, $time = null)
 	{
 		return (object) [
@@ -46,9 +60,9 @@ class ExternalPhotoAnalyzerTest extends odUnitTestCase
 			'image' => "http://farm9.staticflickr.com/8512/8511704824_82d8a6ddb2_b.jpg",
       'image_width' => 612,
       'image_height' => 612,
-      'location_latitude' => 46.048938,
-      'location_longitude' => 14.524719,
-      'location_name' => "some name",
+      'location_latitude' => null,
+      'location_longitude' => null,
+      'location_name' => null,
       'tags' => []
 		];
 	}
