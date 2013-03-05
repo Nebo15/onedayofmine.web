@@ -352,25 +352,19 @@ class DaysController extends BaseJsonController
 		$moment = new Moment();
 		$moment->setDay($day);
 		$moment->description = $this->request->get('description', '');
-		if(!$is_owner)
-			$moment->is_hidden = 1;
-		if($this->request->has('instagram_id'))
-			$moment->instagram_id = $this->request->get('instagram_id');
-
+		$moment->time = time();
+		$moment->timezone = $this->toolkit->getUser()->timezone;
+		$moment->instagram_id = $this->request->get('instagram_id', '');
+		$moment->flickr_id = $this->request->get('flickr_id', '');
+		$moment->facebook_id = $this->request->get('facebook_id', '');
 		$moment->save();
 
 		$moment->attachImage($image_content);
-		$moment->save();
-
 		if ($this->request->get('time'))
 		{
 			list($time, $timezone) = Moment::isoToStamp($this->request->get('time'));
 			$moment->time = $time;
 			$moment->timezone = $timezone;
-		}
-		else
-		{
-			$moment->timezone = $this->toolkit->getUser()->timezone;
 		}
 		$moment->save();
 
