@@ -357,6 +357,8 @@ class DaysController extends BaseJsonController
 		$moment->instagram_id = $this->request->get('instagram_id', '');
 		$moment->flickr_id = $this->request->get('flickr_id', '');
 		$moment->facebook_id = $this->request->get('facebook_id', '');
+		$moment->location_latitude = $this->request->getInteger('location_latitude', 0);
+		$moment->location_longitude = $this->request->getInteger('location_longitude', 0);
 		$moment->save();
 
 		$moment->attachImage($image_content);

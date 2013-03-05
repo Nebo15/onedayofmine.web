@@ -332,14 +332,15 @@ class odExportHelperTest extends odUnitTestCase
 
   function testExportMomentItems_forGuest()
   {
+	  $base_time = time() - 60*60;
     $moment3 = $this->generator->momentWithImage();
-	  $moment3->time = 3;
+	  $moment3->time = $base_time + 2;
 	  $moment3->save();
 	  $moment1 = $this->generator->momentWithImage();
-	  $moment1->time = 1;
+	  $moment1->time = $base_time;
 	  $moment1->save();
     $moment2 = $this->generator->momentWithImage();
-	  $moment2->time = 2;
+	  $moment2->time = $base_time + 1;
 	  $moment2->save();
 	  $shuffled_moments = [$moment3, $moment1, $moment2];
 

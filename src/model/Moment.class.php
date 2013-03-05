@@ -54,10 +54,7 @@ class Moment extends BaseModel
 
   function exportForApi(array $properties = null)
   {
-    $moment = new stdClass();
-    $moment->id = $this->id;
-    $moment->day_id = $this->day_id;
-    $moment->description = $this->description;
+    $moment = parent::exportForApi(['id', 'day_id', 'description', 'location_latitude', 'location_longitude']);
     $this->showImages($moment);
     $moment->time = BaseModel::stampToIso($this->time, $this->timezone);
 
