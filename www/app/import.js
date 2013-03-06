@@ -1,15 +1,15 @@
 $(function() {
   "use strict";
 
+  // Creating import source
+  var importer = new Importer(window.location.hash.substring(1));
+
   // Config
-  var animations_speed = 500;
+  var animations_speed = 300;
 
   // Selectors
   var error_container = $('#error_container');
   var step_container  = $('#step_container');
-
-  var progress        = $('.progress');
-  var progress_bar    = progress.find('.bar');
 
   // Templates
   var day_template     = Template.prepareTemplate($('#template_import_day'));
@@ -20,28 +20,41 @@ $(function() {
   var step4_template   = Template.prepareTemplate($('#template_step4'));
 
   // Helpers
-  var setProgress = function(percents) {
-    progress_bar.css('width', percents + '%');
-
-    if(percents === 100) {
-      progress.fadeOut(animations_speed);
-    } else if(progress.css('display') == 'none') {
-      progress.fadeIn(animations_speed);
-    }
-  };
-
   var showError = function(message) {
     error_container.text(message);
     error_container.fadeIn(animations_speed);
   };
 
+  var setProgress = function(progress, percents) {
+    var progress_bar = progress.find('.bar');
+    progress_bar.css('width', percents + '%');
+
+    if(percents === 100) {
+      progress.slideUp(animations_speed);
+    } else if(progress.css('display') == 'none') {
+      progress.slideDown(animations_speed);
+    }
+  };
+
+  // Trigger scrollHitBottom when scroll hits end
+  $(window).scroll(function() {
+    var $this = $(this);
+    var scrollBottom = $this.height() - $this.scrollTop();
+
+    if(scrollBottom <= 50) {
+      $.event.trigger({
+        type: 'scrollHitBottom'
+      });
+    }
+  });
+
   // Step 1
   var step1 = function() {
     step_container.html(step1_template);
 
-    if(!Instagram.isConnected()) {
+    if(!importer.isConnected()) {
       step_container.find('.btn').click(function() {
-        Instagram.getAccessToken(function() {
+        importer.loginDirect(function() {
           step2();
         });
       });
@@ -51,13 +64,30 @@ $(function() {
   };
 
   // Step 2
-  var step2 = function(animate) {
+  var step2 = function() {
     // Prepare container
     step_container.html(step2_template);
+
+    // Days counter
+    var total_days_count = 0;
 
     // Selectors
     var days_container = step_container.find('.import_days');
     var step2_paginate_button = step_container.find('.paginate');
+    var loader_container = step_container.find('#loader_container');
+    var progress = loader_container.find('.progress');
+
+    loader_container.fadeIn(animations_speed);
+
+    var fake_progress = 1;
+    var fake_progress_interval = setInterval(function() {
+      fake_progress += 6;
+      if(fake_progress < 90) {
+        setProgress(progress, fake_progress);
+      } else {
+        clearInterval(fake_progress_interval);
+      }
+    }, 300);
 
     // Helpers
     var attachThumbnailsEvents = function(day_container) {
@@ -90,52 +120,81 @@ $(function() {
     };
 
     var iterativeFadeIn = function(step_element) {
-      step_element.fadeIn(100, function() {
+      step_element.fadeIn(200, function() {
         iterativeFadeIn(step_element.next());
       });
     };
 
-    var onDataRetrieved = function(days, next_callback) {
-      if(next_callback && days.length > 0) {
-        step2_paginate_button.removeClass('disabled').fadeIn(animations_speed);
-
-        step2_paginate_button.click(function() {
-          if($(this).hasClass('disabled')) {
-            return;
-          }
-
-          $(this).addClass('disabled');
-
-          next_callback();
-        });
+    var handleProgressBar = function(callback) {
+      if(loader_container.css('display') !== 'none') {
+        clearInterval(fake_progress_interval);
+        setProgress(progress, 101);
+        setTimeout(function() {
+          loader_container.slideUp(animations_speed, function() {
+            callback();
+          });
+        }, 1000);
       } else {
-        step2_paginate_button.fadeOut(animations_speed);
+        callback();
       }
+    };
 
-      setProgress(5 + (days.length / 5) * 95); // TODO real progress bar
+    var onDataRetrieved = function(days, next_callback) {
+      handleProgressBar(function() {
+        if(next_callback && days.length > 0) {
+          step2_paginate_button.removeClass('disabled').fadeIn(animations_speed);
 
-      $.each(days, function(index, day) {
-        var current_day_container = days_container.append(day_template).children().last();
-        var current_day_moments_container = current_day_container.find('.thumbnails');
+          step2_paginate_button.off().click(function() {
+            if($(this).hasClass('disabled')) {
+              return;
+            }
 
-        $.each(day, function(photo_index, photo) {
-          var tmp = $($.trim(Template.compileElement(moment_template, photo)));
+            $(this).addClass('disabled');
 
-          tmp.attr('data-description', JSON.stringify(photo));
+            next_callback();
+          });
 
-          current_day_moments_container.append(tmp);
-          iterativeFadeIn(tmp.first());
+          $(window).off('scrollHitBottom').on('scrollHitBottom', function() {
+           if(step2_paginate_button.hasClass('disabled') || step2_paginate_button.css('display') === 'none') {
+              return;
+            }
+
+            step2_paginate_button.addClass('disabled');
+
+            next_callback();
+          });
+        } else {
+          step2_paginate_button.fadeOut(animations_speed);
+        }
+
+        total_days_count += days.length;
+
+        if(total_days_count === 0) {
+          showError('Sorry. You have no days with 3 or more photos.');
+          return;
+        }
+
+        $.each(days, function(index, day) {
+          var current_day_container = days_container.append(day_template).children().last();
+          var current_day_moments_container = current_day_container.find('.thumbnails');
+
+          $.each(day, function(photo_index, photo) {
+            var tmp = $($.trim(Template.compileElement(moment_template, photo)));
+
+            tmp.attr('data-description', JSON.stringify(photo));
+
+            current_day_moments_container.append(tmp);
+          });
+
+          iterativeFadeIn(current_day_moments_container.children().first());
+
+          attachThumbnailsEvents(current_day_container);
         });
-
-        attachThumbnailsEvents(current_day_container);
       });
     };
 
-    // Add progress
-    setProgress(5);
-
     // Start retrieving days
-    Instagram.getUserDays(onDataRetrieved);
+    importer.getUserDays(onDataRetrieved);
   };
 
   // Step 3
@@ -150,10 +209,12 @@ $(function() {
     });
 
     analyze_request.success(function (response) {
-      day_container.find('>').slideUp(300, function() {
+      day_container.find('>').slideUp(animations_speed, function() {
         day_container.html(Template.compileElement(step3_template, response.data.result));
 
-        day_container.find('>').slideDown(300);
+        day_container.find('>').slideDown(animations_speed);
+
+        var progress = day_container.find('.progress');
 
         day_container.find('form').submit(function() {
           if($(this).find('.export-action').hasClass('disabled')) {
@@ -174,26 +235,33 @@ $(function() {
             var day = response.data.result;
             var requests = [];
 
+            setProgress(progress, 1);
+
             var finished_count = 0;
             $.each(selected_shots, function(index, shot) {
               var shot_data = {
                 time:         Tools.getISODate(new Date(shot.time * 1000)),
                 image_url:    shot.image,
-                description:  shot.title,
-                instagram_id: shot.id
+                description:  shot.title
               };
+
+              shot_data[importer.getSourceName() + '_id'] = shot.id;
+
+              console.log(shot_data);
 
               var moment_create_request = API.request('POST', 'days/' + day.id + '/add_moment', shot_data);
 
               moment_create_request.success(function (response) {
                 finished_count++;
+
+                setProgress(progress, finished_count/selected_shots.length*100);
               });
 
               requests.push(moment_create_request.send());
             });
 
             $.when.apply($, requests).then(function() {
-              day_container.find('>').slideUp(300, function() {
+              day_container.find('>').slideUp(animations_speed, function() {
                 day_container.html(Template.compileElement(step4_template, day));
               });
             });

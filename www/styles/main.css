@@ -591,6 +591,41 @@ ol.inline >li:first-child {
   margin-left: 20px !important;
 }
 
+.day .alert {
+  margin-bottom: 0;
+}
+
+.show-when-parent-disabled.icon-spin {
+  -moz-animation: none;
+  -o-animation: none;
+  -webkit-animation: none;
+  animation: none;
+}
+
+.show-when-parent-disabled {
+  opacity: 0.0;
+  width: 0 !important;
+
+  -webkit-transition: all 0.4s ease;
+  -moz-transition: all 0.4s ease;
+  -ms-transition: all 0.4s ease;
+  -o-transition: all 0.4s ease;
+  transform: all 0.4s ease;
+}
+
+.disabled .show-when-parent-disabled.icon-spin {
+  -moz-animation: spin 2s infinite linear;
+  -o-animation: spin 2s infinite linear;
+  -webkit-animation: spin 2s infinite linear;
+  animation: spin 2s infinite linear;
+}
+
+.disabled .show-when-parent-disabled {
+  opacity: 1;
+  width: 30px !important;
+  display: inline-block !important;
+}
+
 /* Responsive */
 @media (min-width: 500px) {
   .mobile-nav {

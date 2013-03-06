@@ -1,25 +1,34 @@
 {{wrap with="layout.phtml"}}
   {{into slot="js_include"}}
-    <script src="/lib/Instagram.js"></script>
+    <script src="/lib/Importer.js"></script>
     <script src="/app/import.js"></script>
   {{/into}}
   {{into slot="templates"}}
     <script id="template_step1" type="text/x-handlebars-template">
       <a class="btn btn-danger btn-large">
-        Step 1/3. Connect your account <i class="icon-white icon-forward"></i>
+        Connect your account <i class="icon-white icon-forward"></i>
       </a>
     </script>
 
     <script id="template_step2" type="text/x-handlebars-template">
+      <div id="loader_container" class="well cant text-center" style="display:none; margin-top:20px;">
+        <div class="progress row" style="margin-top:20px;">
+            <div class="bar bar-success" style="width: 0%;"></div>
+        </div>
+      </div>
       <ul class="import_days unstyled"></ul>
-      <button class="btn btn-block btn-large paginate" style="margin: 10px 0; display: none;">Load more</button>
+      <button class="btn btn-block btn-large paginate" style="margin: 10px 0; display: none;">
+        <i class="show-when-parent-disabled icon icon-spin icon-refresh"></i>
+        Load more
+      </button>
     </script>
 
     <script id="template_import_day" type="text/x-handlebars-template">
       <li class="day well">
         <ul class="thumbnails"></ul>
         <button class="btn btn-large btn-success analyze-action">
-          Step 2/3. Analyze photos
+          <i class="show-when-parent-disabled icon icon-spin icon-refresh"></i>
+          Analyze photos
           <i class="icon-white icon-forward"></i>
         </button>
       </li>
@@ -38,6 +47,10 @@
 
     <script id="template_step3" type="text/x-handlebars-template">
       <form class="form-horizontal" style="display:none">
+        <div class="progress row" style="margin-top:20px; display:none">
+            <div class="bar bar-success" style="width: 0%;"></div>
+        </div>
+
         <div class="control-group">
           <label class="control-label">Title</label>
           <div class="controls">
@@ -66,7 +79,8 @@
 
         <div class="text-center">
           <button class="btn btn-success btn-large export-action">
-            Step 3/3. Save day
+            <i class="show-when-parent-disabled icon icon-spin icon-refresh"></i>
+            Save day
             <i class="icon-white icon-forward"></i>
           </button>
         </div>
@@ -81,21 +95,9 @@
   {{/into}}
   {{into slot="content"}}
     <div>
-        <h1>Import from Instagram</h1>
+        <h1>Import</h1>
 
         <div id="error_container" class="well cant alert alert-danger" style="display:none; margin-top:20px;">Sorry. You have no days with 3 or more photos.</div>
-
-        <!--<div class="alert alert-info row" style="margin-top:20px;">
-            Import from custom instagram account (debug only):
-            <form class="form-inline custom-import-action">
-                <input type="text" class="input-medium" placeholder="username">
-                <input class="btn btn-info" type="submit" value="Import" />
-            </form>
-        </div>-->
-
-        <div class="progress row" style="margin-top:20px;">
-            <div class="bar bar-success" style="width: 0%;"></div>
-        </div>
 
         <div id="step_container" class="row" style="text-align:center; margin-top: 20px;">
           <a class="btn btn-danger btn-large">
