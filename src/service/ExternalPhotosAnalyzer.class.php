@@ -65,17 +65,22 @@ class ExternalPhotosAnalyzer
 	}
 
 	protected function _cleanup($moments)
-	{	
+	{
 		foreach($moments as $i => $moment)
 		{
 			if($moment->title && substr_count($moment->title, '#') > 5)
 				$moment->title = preg_replace( '/\#[a-z]+/i', '', $moment->title);
 
-			foreach($moment->tags as $j => $tag)
-			{
-				if('insta' == substr($tag, 0, 5) || 'follow' == substr($tag, 0, 6) || 'like' == substr($tag, 0, 4))
-					unset($moment->tags[$j]);
-			}
+      if(!property_exists($moment, 'tags') || !is_array($moment->tags)) {
+        $moment->tags = [];
+      } else {
+  			foreach($moment->tags as $j => $tag)
+  			{
+  				if('insta' == substr($tag, 0, 5) || 'follow' == substr($tag, 0, 6) || 'like' == substr($tag, 0, 4))
+  					unset($moment->tags[$j]);
+  			}
+      }
+
 			$moments[$i] = $moment;
 		}
 		return $moments;
@@ -103,7 +108,7 @@ class ExternalPhotosAnalyzer
 		$locations = [];
 		foreach($moments as $moment)
 		{
-			if(!trim($moment->location_name))
+			if(!property_exists($moment, 'location_name') || !trim($moment->location_name))
 				continue;
 			if(!isset($locations[$moment->location_name]))
 				$locations[$moment->location_name] = 0;
