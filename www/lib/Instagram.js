@@ -8,11 +8,11 @@ var Instagram = {
 
   loginDirect: function(redirect_uri) {
     redirect_uri = redirect_uri !== undefined ? redirect_uri : window.location;
-    window.location = Instagram.api_url + '?oauth_redirect_url=' + encodeURIComponent(redirect_uri);
+    window.location = Instagram.api_url + '/login?oauth_redirect_url=' + encodeURIComponent(redirect_uri);
   },
 
   login: function(onLogin, onLoginError) {
-    var child = window.open(Instagram.api_url + '?oauth_redirect_url=' + encodeURIComponent(Instagram.redirect_uri));
+    var child = window.open(Instagram.api_url + '/login?oauth_redirect_url=' + encodeURIComponent(Instagram.redirect_uri));
 
     var timer = setInterval(function() {
       if(child.closed) {
