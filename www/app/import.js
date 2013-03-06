@@ -83,6 +83,8 @@ $(function() {
           return;
         }
 
+        $(this).addClass('disabled');
+
         step3(day_container);
       });
     };
@@ -154,11 +156,11 @@ $(function() {
         day_container.find('>').slideDown(300);
 
         day_container.find('form').submit(function() {
-          if($(this).hasClass('disabled')) {
+          if($(this).find('.export-action').hasClass('disabled')) {
             return;
           }
 
-          $(this).addClass('disabled');
+          $(this).find('.export-action').addClass('disabled');
 
           var day_data = {
             title: day_container.find('.title').val(),
@@ -191,7 +193,9 @@ $(function() {
             });
 
             $.when.apply($, requests).then(function() {
-              day_container.html(Template.compileElement(step4_template, day));
+              day_container.find('>').slideUp(300, function() {
+                day_container.html(Template.compileElement(step4_template, day));
+              });
             });
           });
 
