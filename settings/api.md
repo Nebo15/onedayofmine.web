@@ -859,17 +859,8 @@ null
 -- Instagram --
 
 
-Все методы, кроме login_url при "непривязанном" аккаунте, возвращают 503
-
-Возвращает адрес страницы, которую необъодимо показать пользователю, чтобы привязать его аккаунт к ODOM. Если пользователь уже привязан к ODOM, то возвращается null.
-GET /instagram/login_url
-< 200
-< Content-Type: application/json
-{http://www.flickr.com/services/auth/?api_key=...}
-
-
-Привязка аккаунта(сохранение токена и id пользователя)
-POST /instagram/login
+Привязка аккаунта (сохранение токена и id пользователя) с последующим редиректом на oauth_redirect_url (может содержать только относительный путь и параметры)
+POST /instagram/login?oauth_redirect_url=%url%
 > Accept: application/json
 {
     token: "oiasdhasiudhsdisuhdiaudhiu987318hadiauh",
@@ -987,20 +978,12 @@ null
 -- Flickr --
 
 
-Все методы, кроме login_url при "непривязанном" аккаунте, возвращают 503.
-
-Возвращает адрес страницы, которую необъодимо показать пользователю, чтобы привязать его аккаунт к ODOM. Если пользователь уже привязан к ODOM, то возвращается null.
-GET /flickr/login_url
-< 200
-< Content-Type: application/json
-{http://www.flickr.com/services/auth/?api_key=...}
-
-Привязка аккаунта(сохранение токена и id пользователя)
-POST /flickr/login
+Привязка аккаунта (сохранение токена и id пользователя) с последующим редиректом на oauth_redirect_url (может содержать только относительный путь и параметры)
+POST /instagram/login?oauth_redirect_url=%url%
 > Accept: application/json
 {
     token: "oiasdhasiudhsdisuhdiaudhiu987318hadiauh",
-    id: "12312398241_91283719"
+    id: "12312398241"
 }
 < 200
 < Content-Type: application/json
@@ -1199,3 +1182,4 @@ GET /facebook/days/?from=1234
 < 200
 < Content-Type: application/json
 {"См. /flickr/days/"}
+nul

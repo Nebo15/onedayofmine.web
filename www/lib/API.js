@@ -3,18 +3,15 @@ var API = (function() {
   var current_user;
 
   return {
-    get: function(path, data, params)
-    {
+    get: function(path, data, params) {
       return this.request('GET', path, data, params);
     },
 
-    post: function(path, data, params)
-    {
+    post: function(path, data, params) {
       return this.request('POST', path, data, params);
     },
 
-    request: function(method, path, data, params)
-    {
+    request: function(method, path, data, params) {
       var request = new Request(method, path, data, params);
 
       request.statusCodeGroup(4, function(jqXHR, textStatus, errorThrown) {
@@ -92,6 +89,24 @@ var API = (function() {
 
     getCurrentUser: function() {
       return current_user;
+    },
+
+    updateCurrentUser: function(onUserInfoRecieved) {
+      var user_update_request = API.request('GET', 'users/me');
+
+      user_update_request.success(function(response) {
+        API.setCurrentUser(response.data.result);
+
+        if(onUserInfoRecieved) {
+          onUserInfoRecieved(API.getCurrentUser());
+        }
+      }, true);
+
+      user_update_request.error(function() {
+        alert("User info can't be updated, please try to reload the page");
+      }, true);
+
+      user_update_request.send();
     }
   };
 })();

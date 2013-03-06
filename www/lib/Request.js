@@ -66,7 +66,7 @@ var Request = function(method, path, data, params) {
     type:     method.toUpperCase() == 'POST' ? 'POST' : 'GET',
     url:      url,
     dataType: 'json',
-    data:     data,
+    data:     data || {},
     cache:    false
   }, params);
 

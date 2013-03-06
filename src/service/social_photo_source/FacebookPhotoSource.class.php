@@ -69,7 +69,7 @@ class FacebookPhotoSource extends BaseSocialPhotoSource
 			if(3 > count($day))
 				unset($days[$key]);
 		}
-		return $days;
+		return array_values($days);
 	}
 
 	function logout() {}
