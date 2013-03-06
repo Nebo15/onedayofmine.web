@@ -8,9 +8,10 @@ $this->menu = 'create_day';
   {{/into}}
   {{into slot="js_ready"}}
     $('#import_instagram').click(function() {
-      Instagram.getAccessToken(function() {
-        window.location = '/pages/import_instagram';
-      });
+      if(!Instagram.isConnected()) {
+        Instagram.loginDirect($(this).attr('href'));
+        return false;
+      }
     });
 
     $('#day_create').click(function() {
@@ -23,15 +24,15 @@ $this->menu = 'create_day';
     <div class="hero-unit">
       <h1>Import days from&hellip;</h1>
       <div class="text-center" style="padding-top: 50px;">
-        <a class="btn btn-large btn-main" id="import_instagram">
+        <a class="btn btn-large btn-main" id="import_instagram" href="/pages/import_instagram">
           <i class="icon icon-large icon-camera-retro"></i>
           Instagram
         </a>
-        <a class="btn btn-large btn-main disabled" id="import_flickr">
+        <a class="btn btn-large btn-main" id="import_flickr" href="/pages/import_flickr">
           <i class="icon icon-large icon-camera"></i>
           Flickr
         </a>
-        <a class="btn btn-large btn-main disabled" id="import_facebook">
+        <a class="btn btn-large btn-main" id="import_facebook" href="/pages/import_facebook">
           <i class="icon icon-large icon-facebook-sign"></i>
           Facebook
         </a>
