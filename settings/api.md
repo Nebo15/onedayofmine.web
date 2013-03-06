@@ -896,6 +896,9 @@ GET /instagram/photos/?from=1234
     image: "http://farm9.staticflickr.com/8512/8511704824_82d8a6ddb2_b.jpg",
     image_width: 612,
     image_height: 612,
+    thumb: "http://farm9.staticflickr.com/8512/8511704824_82d8a6ddb2_n.jpg",
+    thumb_width: 150,
+    thumb_height: 150,
     location_latitude: 46.048938,
     location_longitude: 14.524719,
     location_name: "some name",
@@ -916,6 +919,9 @@ GET /instagram/photos/?from=1234&to=1235
     image: "http://farm9.staticflickr.com/8512/8511704824_82d8a6ddb2_b.jpg",
     image_width: 612,
     image_height: 612,
+    thumb: "http://farm9.staticflickr.com/8512/8511704824_82d8a6ddb2_n.jpg",
+    thumb_width: 150,
+    thumb_height: 150,
     location_latitude: 46.048938,
     location_longitude: 14.524719,
     location_name: "some name",
@@ -925,7 +931,7 @@ GET /instagram/photos/?from=1234&to=1235
 ]}
 
 
-Возвращает 3 или больше (зависит от данных пользователя) фотографий объединенных в дни
+Возвращает не меньше 3 (может быть и больше) фотографий объединенных в дни
 GET /instagram/days/
 < 200
 < Content-Type: application/json
@@ -937,6 +943,9 @@ GET /instagram/days/
       image: "http://farm9.staticflickr.com/8512/8511704824_82d8a6ddb2_b.jpg",
       image_width: 612,
       image_height: 612,
+      thumb: "http://farm9.staticflickr.com/8512/8511704824_82d8a6ddb2_n.jpg",
+      thumb_width: 150,
+      thumb_height: 150,
       location_latitude: 46.048938,
       location_longitude: 14.524719,
       location_name: "some name",
@@ -953,7 +962,7 @@ GET /instagram/days/
   ...
 ]}
 
-Возвращает сколько-то дней, начиная с момента 1234
+Возвращает сколько-то дней, начиная с 1234 unix-time
 GET /instagram/days/?from=1234
 < 200
 < Content-Type: application/json
@@ -1006,6 +1015,9 @@ GET /flickr/photos/?from=1234
     image: "http://farm9.staticflickr.com/8512/8511704824_82d8a6ddb2_b.jpg",
     image_width: 612,
     image_height: 612,
+    thumb: "http://farm9.staticflickr.com/8512/8511704824_82d8a6ddb2_n.jpg",
+    thumb_width: 150,
+    thumb_height: 150,
     location_latitude: 46.048938,
     location_longitude: 14.524719,
     location_name: "some name",
@@ -1026,6 +1038,9 @@ GET /flickr/photos/?from=1234&to=1235
     image: "http://farm9.staticflickr.com/8512/8511704824_82d8a6ddb2_b.jpg",
     image_width: 612,
     image_height: 612,
+    thumb: "http://farm9.staticflickr.com/8512/8511704824_82d8a6ddb2_n.jpg",
+    thumb_width: 150,
+    thumb_height: 150,
     location_latitude: 46.048938,
     location_longitude: 14.524719,
     location_name: "some name",
@@ -1035,7 +1050,7 @@ GET /flickr/photos/?from=1234&to=1235
 ]}
 
 
-Возвращает 3 или больше (зависит от данных пользователя) фотографий объединенных в дни
+Возвращает не меньше 3(может быть и больше) фотографий объединенных в дни
 GET /flickr/days/
 < 200
 < Content-Type: application/json
@@ -1047,6 +1062,9 @@ GET /flickr/days/
       image: "http://farm9.staticflickr.com/8512/8511704824_82d8a6ddb2_b.jpg",
       image_width: 612,
       image_height: 612,
+    	thumb: "http://farm9.staticflickr.com/8512/8511704824_82d8a6ddb2_n.jpg",
+    	thumb_width: 150,
+    	thumb_height: 150,
       location_latitude: 46.048938,
       location_longitude: 14.524719,
       location_name: "some name",
@@ -1064,7 +1082,7 @@ GET /flickr/days/
 ]}
 
 
-Возвращает сколько-то дней, начиная с момента 1234
+Возвращает сколько-то дней, начиная с 1234 unix-time
 GET /flickr/days/?from=1234
 < 200
 < Content-Type: application/json
@@ -1076,4 +1094,92 @@ POST /flickr/logout
 {}
 < 200
 < Content-Type: application/json
+nul
+
+-- Facebook --
+
+
+Сколько то фотографий с 1234 unix-time (количество зависит от сервиса)
+GET /facebook/photos/?from=1234
+< 200
+< Content-Type: application/json
+{[
+  {
+    id: "8511704824",
+    title: "IMG_0050",
+    image: "http://farm9.staticflickr.com/8512/8511704824_82d8a6ddb2_b.jpg",
+    image_width: 612,
+    image_height: 612,
+    thumb: "http://farm9.staticflickr.com/8512/8511704824_82d8a6ddb2_n.jpg",
+    thumb_width: 150,
+    thumb_height: 300,
+    location_latitude: 46.048938,
+    location_longitude: 14.524719,
+    location_name: "some name",
+    tags: [],
+    time: 12311376187
+  }
+]}
+
+
+Все фотографии с 1234 по 1235 unix-time
+GET /facebook/photos/?from=1234&to=1235
+< 200
+< Content-Type: application/json
+{[
+  {
+    id: "8511704824",
+    title: "IMG_0050",
+    image: "http://farm9.staticflickr.com/8512/8511704824_82d8a6ddb2_b.jpg",
+    image_width: 612,
+    image_height: 612,
+    thumb: "http://farm9.staticflickr.com/8512/8511704824_82d8a6ddb2_n.jpg",
+    thumb_width: 150,
+    thumb_height: 150,
+    location_latitude: 46.048938,
+    location_longitude: 14.524719,
+    location_name: "some name",
+    tags: [],
+    time: 12311376187
+  }
+]}
+
+
+Возвращает не меньше 3(может быть и больше) фотографий объединенных в дни
+GET /facebook/days/
+< 200
+< Content-Type: application/json
+{[
+  [
+    {
+      id: "8511704824",
+      title: "IMG_0050",
+      image: "http://farm9.staticflickr.com/8512/8511704824_82d8a6ddb2_b.jpg",
+      image_width: 612,
+      image_height: 612,
+    	thumb: "http://farm9.staticflickr.com/8512/8511704824_82d8a6ddb2_n.jpg",
+    	thumb_width: 150,
+    	thumb_height: 150,
+      location_latitude: 46.048938,
+      location_longitude: 14.524719,
+      location_name: "some name",
+      tags: [],
+      time: 12311376187
+    },
+    ...,
+    ...
+  ],
+  [
+    ...,
+    ...
+  ],
+  ...
+]}
+
+
+Возвращает сколько-то дней, начиная с 1234 unix-time
+GET /facebook/days/?from=1234
+< 200
+< Content-Type: application/json
+{"См. /flickr/days/"}
 nul

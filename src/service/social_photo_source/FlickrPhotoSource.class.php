@@ -69,7 +69,7 @@ class FlickrPhotoSource extends BaseSocialPhotoSource
 
 		$options = [
 			//'user_id' => $this->user->flickr_uid,
-			'extras' => 'date_taken,geo,tags,url_l',
+			'extras' => 'date_taken,geo,tags,url_l,url_q',
 		];
 		if($from_stamp)
 			$options['max_taken_date'] = $from_stamp;
@@ -145,6 +145,9 @@ class FlickrPhotoSource extends BaseSocialPhotoSource
 				'image' => $raw_photo['url_l'],
 				'image_width' => $raw_photo['width_l'],
 				'image_height' => $raw_photo['height_l'],
+				'thumb' => $raw_photo['url_q'],
+				'thumb_width' => $raw_photo['width_q'],
+				'thumb_height' => $raw_photo['height_q'],
 				'description' => '',
 				'location_latitude' => (0 == $raw_photo['latitude']) ? null : $raw_photo['latitude'],
 				'location_longitude' => (0 == $raw_photo['longitude']) ? null : $raw_photo['longitude'],
