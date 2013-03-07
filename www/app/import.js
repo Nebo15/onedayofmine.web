@@ -96,14 +96,11 @@ $(function() {
       day_container.find('li').click(function() {
         var thumbnail = $(this).find('.thumbnail');
 
-        if(thumbnail.hasClass('selected')) {
-          thumbnail.removeClass('selected');
+        thumbnail.toggleClass('ignored');
 
-          if(day_container.find('.thumbnail.selected').length === 0) {
-            analyze_button.addClass('disabled');
-          }
+        if(day_container.find('.thumbnail:not(.ignored)').length === 0) {
+          analyze_button.addClass('disabled');
         } else {
-          thumbnail.addClass('selected');
           analyze_button.removeClass('disabled');
         }
       });
@@ -206,7 +203,7 @@ $(function() {
   // Step 3
   var step3 = function(day_container) {
     var selected_shots = [];
-    day_container.find('li').has('.thumbnail.selected').each(function(index, element) {
+    day_container.find('li').has('.thumbnail:not(.ignored)').each(function(index, element) {
       selected_shots.push($(element).data('description'));
     });
 

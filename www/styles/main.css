@@ -558,9 +558,9 @@ ol.inline >li:first-child {
   transform: all 0.4s ease;
 }
 
-.thumbnails .thumbnail.selected .bage-bottom-right {
+.thumbnails .thumbnail.ignored .bage-bottom-right {
   opacity: 1;
-  color:rgb(30, 168, 77);
+  color:#980000;
 }
 
 .modal-body .thumbnails {
@@ -577,7 +577,7 @@ ol.inline >li:first-child {
   transform: all 0.4s ease;
 }
 
-.thumbnails .thumbnail.selected img {
+.thumbnails .thumbnail.ignored img {
   opacity: 0.4;
 }
 
