@@ -170,7 +170,7 @@ $(function() {
         total_days_count += days.length;
 
         if(total_days_count === 0) {
-          showError('Sorry. You have no days with 3 or more photos.');
+          showError('Sorry. You have no days with 3 or more photos. Try to import photos from another source.');
           return;
         }
 
