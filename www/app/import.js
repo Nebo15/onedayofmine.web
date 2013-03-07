@@ -152,7 +152,7 @@ $(function() {
     var onDataRetrieved = function(days, next_callback) {
       handleProgressBar(function() {
         if(next_callback && days.length > 0) {
-          step2_paginate_button.removeClass('disabled').fadeIn(animations_speed);
+          step2_paginate_button.removeClass('disabled').animate({opacity:1}, animations_speed);
 
           step2_paginate_button.off().click(function() {
             if($(this).hasClass('disabled')) {
@@ -174,7 +174,7 @@ $(function() {
             next_callback();
           });
         } else {
-          step2_paginate_button.fadeOut(animations_speed);
+          step2_paginate_button.animate({opacity:0}, animations_speed);
         }
 
         total_days_count += days.length;
