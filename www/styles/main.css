@@ -613,14 +613,14 @@ ol.inline >li:first-child {
   transform: all 0.4s ease;
 }
 
-.disabled .show-when-parent-disabled.icon-spin {
+.show-spiner .show-when-parent-disabled.icon-spin {
   -moz-animation: spin 2s infinite linear;
   -o-animation: spin 2s infinite linear;
   -webkit-animation: spin 2s infinite linear;
   animation: spin 2s infinite linear;
 }
 
-.disabled .show-when-parent-disabled {
+.show-spiner .show-when-parent-disabled {
   opacity: 1;
   width: 30px !important;
   display: inline-block !important;

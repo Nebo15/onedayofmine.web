@@ -113,7 +113,7 @@ $(function() {
           return;
         }
 
-        $(this).addClass('disabled');
+        $(this).addClass('disabled show-spiner');
 
         step3(day_container);
       });
@@ -152,27 +152,21 @@ $(function() {
     var onDataRetrieved = function(days, next_callback) {
       handleProgressBar(function() {
         if(next_callback && days.length > 0) {
-          step2_paginate_button.removeClass('disabled').animate({opacity:1}, animations_speed);
+          step2_paginate_button.removeClass('disabled show-spiner').animate({opacity:1}, animations_speed);
 
-          step2_paginate_button.off().click(function() {
-            if($(this).hasClass('disabled')) {
+          var load_next = function() {
+            if(step2_paginate_button.hasClass('disabled')) {
               return;
             }
 
-            $(this).addClass('disabled');
+            step2_paginate_button.addClass('disabled show-spiner');
 
             next_callback();
-          });
+          };
 
-          $(window).off('scrollHitBottom').on('scrollHitBottom', function() {
-           if(step2_paginate_button.hasClass('disabled') || step2_paginate_button.css('display') === 'none') {
-              return;
-            }
-
-            step2_paginate_button.addClass('disabled');
-
-            next_callback();
-          });
+          // Events to load next page
+          step2_paginate_button.off().click(load_next);
+          $(window).off('scrollHitBottom').on('scrollHitBottom', load_next);
         } else {
           step2_paginate_button.animate({opacity:0}, animations_speed);
         }
@@ -233,7 +227,7 @@ $(function() {
             return;
           }
 
-          $(this).find('.export-action').addClass('disabled');
+          $(this).find('.export-action').addClass('disabled show-spiner');
 
           var day_data = {
             title: day_container.find('.title').val(),
@@ -258,8 +252,6 @@ $(function() {
               };
 
               shot_data[importer.getSourceName() + '_id'] = shot.id;
-
-              console.log(shot_data);
 
               var moment_create_request = API.request('POST', 'days/' + day.id + '/add_moment', shot_data);
 
