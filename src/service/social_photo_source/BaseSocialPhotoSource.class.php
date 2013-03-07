@@ -57,6 +57,8 @@ abstract class BaseSocialPhotoSource
 						$days[] = [$photo];
 				}
 			}
+			if($from_stamp == $photo['time'])
+				break;
 			$from_stamp = $photo['time'];
 		}
 

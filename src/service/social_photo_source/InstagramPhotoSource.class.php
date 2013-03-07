@@ -68,7 +68,7 @@ class InstagramPhotoSource extends BaseSocialPhotoSource
 		$url = "https://api.instagram.com/v1/users/{$this->uid}/media/recent/?access_token={$this->token}";
 		$url .= "&max_timestamp=".$from_stamp;
 		if($to_stamp)
-			$url .= "&min_timestamp=".$to_stamp;
+			$url .= "&min_timestamp=".($to_stamp + 1);
 
 		$answer = (new HttpRequest($url))->send();
 

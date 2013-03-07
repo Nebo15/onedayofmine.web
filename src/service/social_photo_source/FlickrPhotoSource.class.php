@@ -55,21 +55,29 @@ class FlickrPhotoSource extends BaseSocialPhotoSource
 		$provider->setToken($this->token);
 
 		$options = [
+			'user_id' => $this->uid,
 			'extras' => 'date_taken,geo,tags,url_l,url_q',
-			'content_type' => 1
+			'content_type' => 1,
+			'media' => 'photos',
+			'sort' => 'date-taken-desc'
 		];
+
 
 		if($from_stamp)
 		{
-			$options['max_upload_date'] = $from_stamp;
-			$options['max_taken_date'] = date('Y-m-d H:i:s', $from_stamp);
+			$datetime = new DateTime();
+			$datetime->setTimestamp($from_stamp - 1);
+			$datetime->setTimezone(new DateTimeZone('UTC'));
+			$options['max_taken_date'] = $datetime->format('Y-m-d H:i:s');
 		}
 		if($to_stamp)
 		{
-			$options['min_upload_date'] = $to_stamp;
-			$options['min_taken_date'] = date('Y-m-d H:i:s', $to_stamp);
+			$datetime = new DateTime();
+			$datetime->setTimestamp($to_stamp + 1);
+			$datetime->setTimezone(new DateTimeZone('UTC'));
+			$options['min_taken_date'] = $datetime->format('Y-m-d H:i:s');
 		}
-		$photos = $provider->people_getPhotos('me', $options)['photos'];
+		$photos = $provider->photos_search($options);
 
 		if($provider->getErrorMsg())
 			throw new lmbException('Flickr API answer: '.$provider->getErrorMsg());
@@ -93,7 +101,7 @@ class FlickrPhotoSource extends BaseSocialPhotoSource
 				'location_longitude' => (0 == $raw_photo['longitude']) ? null : $raw_photo['longitude'],
 				'location_name' => null,
 				'tags' => explode(' ', $raw_photo['tags']),
-				'time' => (int) DateTime::createFromFormat('Y-m-d H:i:sP', $raw_photo['datetaken'].'+0000')->getTimestamp(),
+				'time' => (int) DateTime::createFromFormat('Y-m-d H:i:sP', $raw_photo['datetaken'].'+0000')->getTimestamp()
 			];
 		}
 		return $result;
