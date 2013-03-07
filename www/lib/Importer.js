@@ -66,7 +66,7 @@ var Importer = function(source) {
       }, true);
 
       photo_request.error(function() {
-        alert("We wasn't able to recive '" + source + "' user info, please try to reload the page");
+        alert("We wasn't able to recive '" + source + "' user photos, please try to reload the page");
       }, true);
 
       photo_request.send();
@@ -84,7 +84,7 @@ var Importer = function(source) {
       }, true);
 
       days_request.error(function() {
-        alert("We wasn't able to recive '" + source + "' user info, please try to reload the page");
+        alert("We wasn't able to recive '" + source + "' user days, please try to reload the page");
       }, true);
 
       days_request.send();

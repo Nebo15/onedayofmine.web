@@ -1,3 +1,7 @@
+<?
+$this->menu = 'Import day';
+$this->menu = 'create_day';
+?>
 {{wrap with="layout.phtml"}}
   {{into slot="js_include"}}
     <script src="/lib/Importer.js"></script>
@@ -5,7 +9,7 @@
   {{/into}}
   {{into slot="templates"}}
     <script id="template_step1" type="text/x-handlebars-template">
-      <a class="btn btn-danger btn-large">
+      <a class="btn btn-danger">
         Connect your account <i class="icon-white icon-forward"></i>
       </a>
     </script>
@@ -17,7 +21,7 @@
         </div>
       </div>
       <ul class="import_days unstyled"></ul>
-      <button class="btn btn-block btn-large paginate" style="margin: 10px 0; display: none;">
+      <button class="btn btn-block paginate" style="margin: 10px 0; opacity:0;">
         <i class="show-when-parent-disabled icon icon-spin icon-refresh"></i>
         Load more
       </button>
@@ -26,7 +30,7 @@
     <script id="template_import_day" type="text/x-handlebars-template">
       <li class="day well" style="opacity:0">
         <ul class="thumbnails"></ul>
-        <button class="btn btn-large btn-success analyze-action">
+        <button class="btn btn-success analyze-action">
           <i class="show-when-parent-disabled icon icon-spin icon-refresh"></i>
           Analyze photos
           <i class="icon-white icon-forward"></i>
@@ -36,10 +40,10 @@
 
     <script id="template_import_moment" type="text/x-handlebars-template">
       <li class="inline" style="opacity:0">
-        <div class="thumbnail selected">
-          <div class="img-wrap img-rounded">
-            <img src="[[image]]" class="img-rounded" alt="[[title]]" />
-            <span class="bage-bottom-right"><i class="icon-ok-sign"></i></span>
+        <div class="thumbnail">
+          <div class="img-wrap img-rounded" style="background-image: url('[[image]]');">
+            <!--<img src="[[image]]" class="img-rounded" alt="[[title]]" />-->
+            <span class="bage-bottom-right"><i class="icon-remove"></i></span>
           </div>
         </div>
       </li>
@@ -78,7 +82,7 @@
         </div>
 
         <div class="text-center">
-          <button class="btn btn-success btn-large export-action">
+          <button class="btn btn-success export-action">
             <i class="show-when-parent-disabled icon icon-spin icon-refresh"></i>
             Save day
             <i class="icon-white icon-forward"></i>
@@ -100,7 +104,7 @@
         <div id="error_container" class="well cant alert alert-danger" style="display:none; margin-top:20px;"></div>
 
         <div id="step_container" class="row" style="text-align:center; margin-top: 20px;">
-          <a class="btn btn-danger btn-large">
+          <a class="btn btn-danger">
               Step 1 of 3. Authorization <i class="icon-white icon-forward"></i>
           </a>
         </div>

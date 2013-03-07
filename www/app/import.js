@@ -36,18 +36,6 @@ $(function() {
     }
   };
 
-  // Trigger scrollHitBottom when scroll hits end
-  $(window).scroll(function() {
-    var $this = $(this);
-    var scrollBottom = $this.height() - $this.scrollTop();
-
-    if(scrollBottom <= 50) {
-      $.event.trigger({
-        type: 'scrollHitBottom'
-      });
-    }
-  });
-
   // Step 1
   var step1 = function() {
     step_container.html(step1_template);
@@ -96,14 +84,11 @@ $(function() {
       day_container.find('li').click(function() {
         var thumbnail = $(this).find('.thumbnail');
 
-        if(thumbnail.hasClass('selected')) {
-          thumbnail.removeClass('selected');
+        thumbnail.toggleClass('ignored');
 
-          if(day_container.find('.thumbnail.selected').length === 0) {
-            analyze_button.addClass('disabled');
-          }
+        if(day_container.find('.thumbnail:not(.ignored)').length === 0) {
+          analyze_button.addClass('disabled');
         } else {
-          thumbnail.addClass('selected');
           analyze_button.removeClass('disabled');
         }
       });
@@ -113,7 +98,7 @@ $(function() {
           return;
         }
 
-        $(this).addClass('disabled');
+        $(this).addClass('disabled show-spiner');
 
         step3(day_container);
       });
@@ -152,29 +137,23 @@ $(function() {
     var onDataRetrieved = function(days, next_callback) {
       handleProgressBar(function() {
         if(next_callback && days.length > 0) {
-          step2_paginate_button.removeClass('disabled').fadeIn(animations_speed);
+          step2_paginate_button.removeClass('disabled show-spiner').animate({opacity:1}, animations_speed);
 
-          step2_paginate_button.off().click(function() {
-            if($(this).hasClass('disabled')) {
+          var load_next = function() {
+            if(step2_paginate_button.hasClass('disabled')) {
               return;
             }
 
-            $(this).addClass('disabled');
+            step2_paginate_button.addClass('disabled show-spiner');
 
             next_callback();
-          });
+          };
 
-          $(window).off('scrollHitBottom').on('scrollHitBottom', function() {
-           if(step2_paginate_button.hasClass('disabled') || step2_paginate_button.css('display') === 'none') {
-              return;
-            }
-
-            step2_paginate_button.addClass('disabled');
-
-            next_callback();
-          });
+          // Events to load next page
+          step2_paginate_button.off().click(load_next);
+          $(window).off('scrollHitBottom').on('scrollHitBottom', load_next);
         } else {
-          step2_paginate_button.fadeOut(animations_speed);
+          step2_paginate_button.animate({opacity:0}, animations_speed);
         }
 
         total_days_count += days.length;
@@ -212,7 +191,7 @@ $(function() {
   // Step 3
   var step3 = function(day_container) {
     var selected_shots = [];
-    day_container.find('li').has('.thumbnail.selected').each(function(index, element) {
+    day_container.find('li').has('.thumbnail:not(.ignored)').each(function(index, element) {
       selected_shots.push($(element).data('description'));
     });
 
@@ -233,7 +212,7 @@ $(function() {
             return;
           }
 
-          $(this).find('.export-action').addClass('disabled');
+          $(this).find('.export-action').addClass('disabled show-spiner');
 
           var day_data = {
             title: day_container.find('.title').val(),
@@ -258,8 +237,6 @@ $(function() {
               };
 
               shot_data[importer.getSourceName() + '_id'] = shot.id;
-
-              console.log(shot_data);
 
               var moment_create_request = API.request('POST', 'days/' + day.id + '/add_moment', shot_data);
 

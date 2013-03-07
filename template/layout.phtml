@@ -110,6 +110,15 @@
         placement: 'bottom'
       });
 
+      // Trigger scrollHitBottom when scroll hits end
+      $(window).scroll(function() {
+        if($(window).scrollTop() + $(window).height() > $(document).height() - 50) {
+          $.event.trigger({
+            type: 'scrollHitBottom'
+          });
+        }
+      });
+
       {{slot id="js_ready"/}}
     });
   </script>
