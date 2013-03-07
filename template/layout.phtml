@@ -112,10 +112,7 @@
 
       // Trigger scrollHitBottom when scroll hits end
       $(window).scroll(function() {
-        var $this = $(this);
-        var scrollBottom = $this.height() - $this.scrollTop();
-
-        if(scrollBottom <= 50) {
+        if($(window).scrollTop() + $(window).height() > $(document).height() - 50) {
           $.event.trigger({
             type: 'scrollHitBottom'
           });
