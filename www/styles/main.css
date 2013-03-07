@@ -362,6 +362,7 @@ input[subtype=time] {
 .moment-image-holder img {
   max-width: 100%;
   width: 420px;
+  min-height: 420px;
 }
 
 .moment-image-holder a,
@@ -567,7 +568,7 @@ ol.inline >li:first-child {
   margin-left: -15px;
 }
 
-.import-modal .thumbnails .thumbnail img {
+.import-modal .thumbnails .thumbnail {
   opacity: 1;
 
   -webkit-transition: all 0.4s ease;
@@ -577,7 +578,7 @@ ol.inline >li:first-child {
   transform: all 0.4s ease;
 }
 
-.thumbnails .thumbnail.ignored img {
+.thumbnails .thumbnail.ignored {
   opacity: 0.4;
 }
 
@@ -593,6 +594,15 @@ ol.inline >li:first-child {
 
 .day .alert {
   margin-bottom: 0;
+}
+
+.day .img-wrap {
+  width: 150px;
+  height: 150px;
+  overflow: hidden;
+  vertical-align: middle;
+  background-position: center;
+  background-size: cover;
 }
 
 .show-when-parent-disabled.icon-spin {
@@ -678,6 +688,7 @@ ol.inline >li:first-child {
   .moment-image-holder,
   .moment-image-holder img {
     width: 230px;
+    min-height: 230px;
     margin-left: 0;
     margin-right: 0;
   }
