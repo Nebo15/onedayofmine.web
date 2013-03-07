@@ -36,18 +36,6 @@ $(function() {
     }
   };
 
-  // Trigger scrollHitBottom when scroll hits end
-  $(window).scroll(function() {
-    var $this = $(this);
-    var scrollBottom = $this.height() - $this.scrollTop();
-
-    if(scrollBottom <= 50) {
-      $.event.trigger({
-        type: 'scrollHitBottom'
-      });
-    }
-  });
-
   // Step 1
   var step1 = function() {
     step_container.html(step1_template);
