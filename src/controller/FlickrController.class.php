@@ -10,7 +10,7 @@ class FlickrController extends BaseJsonController
     $service = new FlickrPhotoSource($this->_getUser());
     $redirect_url = '';
 
-    if($this->request->has('code')) {
+    if($this->request->has('frob')) {
       $service->login($this->request->get('frob'), $this->toolkit->getSiteUrl());
 
       if($this->toolkit->getSessionStorage()->get('oauth_redirect_url')) {
