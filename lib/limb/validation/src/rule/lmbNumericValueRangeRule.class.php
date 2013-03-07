@@ -58,7 +58,7 @@ class lmbNumericValueRangeRule extends lmbSingleFieldRule
     {
       $this->error(
 	      '{Field} must be not greater than {valid}, but {actual} given.',
-	      array('valid' => $this->min_value, 'actual' => $value)
+	      array('valid' => $this->max_value, 'actual' => $value)
       );
     }
   }

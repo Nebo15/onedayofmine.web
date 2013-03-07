@@ -47,7 +47,7 @@ class Moment extends BaseModel
 	  $validator->addRequiredRule('time');
 	  $validator->addRequiredRule('timezone');
 	  if($this->time)
-	    $validator->addRule(new lmbNumericValueRangeRule('time', time() - 5 * 365 * 24 * 60 * 60, time()));
+	    $validator->addRule(new lmbNumericValueRangeRule('time', 0, time() + $this->timezone * 60 * 60));
 
     return $validator;
   }
