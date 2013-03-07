@@ -11,11 +11,11 @@
     <script src="/lib/vendor/jquery.ajax-progress.js"></script>
     <script src="/lib/vendor/bootstrap-timepicker.min.js"></script>
 
-    <script src="/lib/Instagram.js"></script>
     <script src="/app/day.js"></script>
     <? if($this->toolkit->getUser()) { ?>
       <script src="/app/day.user.js"></script>
       <? if($this->is_owner || $this->day->is_gathering_enabled) { ?>
+        <script src="/lib/Importer.js"></script>
         <script src="/app/day.owner.js"></script>
       <? } ?>
     <? } ?>
@@ -69,7 +69,7 @@
         </div>
 
         <div class="moment-image-holder">
-          <img src="[[#if moment.image]][[moment.image]][[else]]http://placehold.it/532x532&text=Select+image[[/if]]" [[#if moment.instagram_id]]instagram_id="[[moment.instagram_id]]"[[/if]] width="400" class="img-polaroid" alt="" />
+          <img src="[[#if moment.image]][[moment.image]][[else]]http://placehold.it/532x532&text=Select+image[[/if]]" class="img-polaroid" alt="" />
         </div>
 
         <br class="clearfix" />
@@ -112,7 +112,7 @@
               <i class="icon icon-large icon-camera"></i>
               Flickr
           </button>
-          <button class="btn disabled" data-value="instagram">
+          <button class="btn" data-value="facebook">
               <i class="icon icon-large icon-facebook-sign"></i>
               Facebook
           </button>
