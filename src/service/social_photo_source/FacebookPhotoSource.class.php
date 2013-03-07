@@ -29,53 +29,7 @@ class FacebookPhotoSource extends BaseSocialPhotoSource
 		];
 	}
 
-	function getPhotos($from_stamp, $to_stamp = null)
-	{
-		return $this->_getPhotos($from_stamp, $to_stamp);
-	}
-
-	function getDays($from_stamp = null)
-	{
-		$days = [];
-		$days_expected = 4;
-		$photos = true;
-		while($days_expected > 0 && $photos)
-		{
-			$photos = $this->_getPhotos($from_stamp);
-			if(!count($days))
-				$days[] = [array_shift($photos)];
-			foreach($photos as $photo)
-			{
-				$current_day = end($days);
-				$prev_photo = end($current_day);
-				if(($prev_photo['time'] - $photo['time']) < 4*60*60)
-				{
-					$days[count($days) - 1][] = $photo;
-				}
-				else
-				{
-					$days[] = [$photo];
-					$days_expected--;
-				}
-			}
-
-			$current_day = end($days);
-			$prev_photo = end($current_day);
-			$from_stamp = $prev_photo['time'];
-		}
-
-		foreach($days as $key => $day)
-		{
-			if(3 > count($day))
-				unset($days[$key]);
-		}
-		return array_values($days);
-	}
-
-	function logout() {}
-	protected function getConfig(){}
-
-	protected function _getPhotos($from_stamp = null, $to_stamp = null)
+	function getPhotos($from_stamp = null, $to_stamp = null)
 	{
 		$profile = lmbToolkit::instance()->getFacebookProfile($this->user);
 		$fql = "SELECT "
@@ -108,4 +62,7 @@ class FacebookPhotoSource extends BaseSocialPhotoSource
 		}
 		return $result;
 	}
+
+	function logout() {}
+	protected function getConfig(){}
 }

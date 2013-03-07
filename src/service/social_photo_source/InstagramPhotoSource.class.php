@@ -60,7 +60,7 @@ class InstagramPhotoSource extends BaseSocialPhotoSource
 		];
 	}
 
-	function getPhotos($from_stamp, $to_stamp = null)
+	function getPhotos($from_stamp = null, $to_stamp = null)
 	{
 		if(!$this->user->instagram_uid)
 			throw new lmbException("Instagram info not found for user #".$this->user->id);
@@ -70,74 +70,14 @@ class InstagramPhotoSource extends BaseSocialPhotoSource
 		if($to_stamp)
 			$url .= "&min_timestamp=".$to_stamp;
 
-		return $this->_getPhotos($url);
-	}
-
-	function getDays($from_stamp = null)
-	{
-		if(!$this->user->instagram_uid)
-			throw new lmbException("Instagram info not found for user #".$this->user->id);
-
-		$url = "https://api.instagram.com/v1/users/{$this->uid}/media/recent/?access_token={$this->token}";
-		if($from_stamp)
-			$url .= "&max_timestamp=".$from_stamp;
-
-		$days = [];
-		$days_expected = 4;
-		while($days_expected > 0 && $url)
-		{
-			list($photos, $url) = $this->_getPhotos($url);
-			if(!count($days))
-				$days[] = [array_shift($photos)];
-			foreach($photos as $photo)
-			{
-				$current_day = end($days);
-				$prev_photo = end($current_day);
-				if(($prev_photo['time'] - $photo['time']) < 4*60*60)
-				{
-					$days[count($days) - 1][] = $photo;
-				}
-				else
-				{
-					$days[] = [$photo];
-					$days_expected--;
-				}
-			}
-		}
-
-		foreach($days as $key => $day)
-		{
-			if(3 > count($day))
-				unset($days[$key]);
-		}
-		return array_values($days);
-	}
-
-	function logout()
-	{
-		if(!$this->user->instagram_uid)
-			throw new lmbException("Instagram info not found for user #".$this->user->id);
-
-		$this->user->instagram_uid = '';
-		$this->user->instagram_token = '';
-		return $this->user->save();
-	}
-
-	protected function getConfig()
-	{
-		return lmbToolkit::instance()->getConf('common')->instagram;
-	}
-
-	protected function _getPhotos($url)
-	{
-		$answer =  (new HttpRequest($url))->send();
+		$answer = (new HttpRequest($url))->send();
 
 		if($answer->getResponseCode() != 200)
 			throw new lmbException('Instagram API answer: '.json_decode($answer->getBody())->meta->error_message);
 
 		$raw_info = json_decode($answer->getBody());
 		$url = $raw_info->pagination && property_exists($raw_info, 'next_url') ? $raw_info->pagination->next_url : null;
-		$result = [[], $url];
+		$result = [];
 		foreach($raw_info->data as $raw_photo)
 		{
 			$latitude = $raw_photo->location && property_exists($raw_photo->location, 'latitude')
@@ -146,7 +86,7 @@ class InstagramPhotoSource extends BaseSocialPhotoSource
 					? $raw_photo->location->longitude : null;
 			$location = $raw_photo->location && property_exists($raw_photo->location, 'name')
 					? $raw_photo->location->name : null;
-			$result[0][] = [
+			$result[] = [
 				'id' => $raw_photo->id,
 				'title' => $raw_photo->caption ? $raw_photo->caption->text : '',
 				'image' => $raw_photo->images->standard_resolution->url,
@@ -164,5 +104,20 @@ class InstagramPhotoSource extends BaseSocialPhotoSource
 			];
 		}
 		return $result;
+	}
+
+	function logout()
+	{
+		if(!$this->user->instagram_uid)
+			throw new lmbException("Instagram info not found for user #".$this->user->id);
+
+		$this->user->instagram_uid = '';
+		$this->user->instagram_token = '';
+		return $this->user->save();
+	}
+
+	protected function getConfig()
+	{
+		return lmbToolkit::instance()->getConf('common')->instagram;
 	}
 }

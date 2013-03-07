@@ -35,10 +35,10 @@ class FlickrPhotoSource extends BaseSocialPhotoSource
 			throw new lmbException("Flickr info not found for user #".$this->user->id);
 
 		$provider = new odFlickr($this->app_key, $this->app_secret);
-		$raw_info = $provider->people_getInfo($this->user->flickr_uid);
+		$raw_info = $provider->people_getInfo($this->uid);
 		return [
 			'id' => $raw_info['nsid'],
-			'image' => "http://flickr.com/buddyicons/{$this->user->flickr_uid}.jpg",
+			'image' => "http://flickr.com/buddyicons/{$this->uid}.jpg",
 			'image_width' => 48,
 			'image_height' => 48,
 			'name' => $raw_info['username'],
@@ -46,89 +46,28 @@ class FlickrPhotoSource extends BaseSocialPhotoSource
 		];
 	}
 
-	function getPhotos($from_stamp, $to_stamp = null)
+	function getPhotos($from_stamp = null, $to_stamp = null)
 	{
 		if(!$this->user->flickr_uid)
 			throw new lmbException("Flickr info not found for user #".$this->user->id);
 
-		$options = [
-			'user_id' => $this->user->flickr_uid,
-			'max_taken_date' => $from_stamp,
-			'extras' => 'date_taken,geo,tags,url_l',
-		];
-		if($to_stamp)
-			$options['min_taken_date'] = $to_stamp;
-
-		return $this->_getPhotos($options);
-	}
-
-	function getDays($from_stamp = null)
-	{
-		if(!$this->user->flickr_uid)
-			throw new lmbException("Flickr info not found for user #".$this->user->id);
+		$provider = new odFlickr($this->app_key, $this->app_secret);
+		$provider->setToken($this->token);
 
 		$options = [
 			'extras' => 'date_taken,geo,tags,url_l,url_q',
-			'content_type' => 1,
-			'page' => 0
+			'content_type' => 1
 		];
+
 		if($from_stamp)
-			$options['max_stamp'] = $from_stamp;
-
-		$days = [];
-		$photos = true;
-		while(count($days) < 3)
 		{
-			$options['page']++;
-			if(!$photos = $this->_getPhotos($options))
-				break;
-			if(!count($days))
-				$days[] = [array_shift($photos)];
-			foreach($photos as $photo)
-			{
-				$current_day_pos = count($days) - 1;
-				$prev_photo_pos = count($days[$current_day_pos]) - 1;
-				if(($days[$current_day_pos][$prev_photo_pos]['time'] - $photo['time']) < 4*60*60)
-				{
-					$days[$current_day_pos][] = $photo;
-				}
-				else
-				{
-					if(count($days[$current_day_pos]) < 3)
-						unset($days[$current_day_pos]);
-					$days[] = [$photo];
-				}
-			}
+			$options['max_upload_date'] = $from_stamp;
+			$options['max_taken_date'] = date('Y-m-d H:i:s', $from_stamp);
 		}
-
-		if(count($days[$current_day_pos]) < 3)
-			unset($days[$current_day_pos]);
-		return array_values($days);
-	}
-
-	function logout()
-	{
-		if(!$this->user->flickr_uid)
-			throw new lmbException("Flickr info not found for user #".$this->user->id);
-
-		$this->user->flickr_uid = '';
-		$this->user->flickr_token = '';
-		return $this->user->save();
-	}
-
-	protected function getConfig()
-	{
-		return lmbToolkit::instance()->getConf('common')->flickr;
-	}
-
-	protected function _getPhotos($options)
-	{
-		$provider = new odFlickr($this->app_key, $this->app_secret);
-		$provider->setToken($this->token);
-		if(isset($options['max_stamp']))
+		if($to_stamp)
 		{
-			$options['max_upload_date'] = $options['max_stamp'];
-			$options['max_taken_date'] = date('Y-m-d H:i:s', $options['max_stamp']);
+			$options['min_upload_date'] = $to_stamp;
+			$options['min_taken_date'] = date('Y-m-d H:i:s', $to_stamp);
 		}
 		$photos = $provider->people_getPhotos('me', $options)['photos'];
 
@@ -158,5 +97,20 @@ class FlickrPhotoSource extends BaseSocialPhotoSource
 			];
 		}
 		return $result;
+	}
+
+	function logout()
+	{
+		if(!$this->user->flickr_uid)
+			throw new lmbException("Flickr info not found for user #".$this->user->id);
+
+		$this->user->flickr_uid = '';
+		$this->user->flickr_token = '';
+		return $this->user->save();
+	}
+
+	protected function getConfig()
+	{
+		return lmbToolkit::instance()->getConf('common')->flickr;
 	}
 }
