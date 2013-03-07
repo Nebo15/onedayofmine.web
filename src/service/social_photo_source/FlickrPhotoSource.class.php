@@ -68,45 +68,41 @@ class FlickrPhotoSource extends BaseSocialPhotoSource
 			throw new lmbException("Flickr info not found for user #".$this->user->id);
 
 		$options = [
-			//'user_id' => $this->user->flickr_uid,
 			'extras' => 'date_taken,geo,tags,url_l,url_q',
+			'content_type' => 1,
+			'page' => 0
 		];
 		if($from_stamp)
-			$options['max_taken_date'] = $from_stamp;
+			$options['max_stamp'] = $from_stamp;
 
 		$days = [];
-		$days_expected = 4;
 		$photos = true;
-		while($days_expected > 0 && $photos)
+		while(count($days) < 3)
 		{
-			$photos = $this->_getPhotos($options);
+			$options['page']++;
+			if(!$photos = $this->_getPhotos($options))
+				break;
 			if(!count($days))
 				$days[] = [array_shift($photos)];
 			foreach($photos as $photo)
 			{
-				$current_day = end($days);
-				$prev_photo = end($current_day);
-				if(($prev_photo['time'] - $photo['time']) < 4*60*60)
+				$current_day_pos = count($days) - 1;
+				$prev_photo_pos = count($days[$current_day_pos]) - 1;
+				if(($days[$current_day_pos][$prev_photo_pos]['time'] - $photo['time']) < 4*60*60)
 				{
-					$days[count($days) - 1][] = $photo;
+					$days[$current_day_pos][] = $photo;
 				}
 				else
 				{
+					if(count($days[$current_day_pos]) < 3)
+						unset($days[$current_day_pos]);
 					$days[] = [$photo];
-					$days_expected--;
 				}
 			}
-
-			$current_day = end($days);
-			$prev_photo = end($current_day);
-			$options['max_taken_date'] = $prev_photo['time'];
 		}
 
-		foreach($days as $key => $day)
-		{
-			if(3 > count($day))
-				unset($days[$key]);
-		}
+		if(count($days[$current_day_pos]) < 3)
+			unset($days[$current_day_pos]);
 		return array_values($days);
 	}
 
@@ -129,6 +125,11 @@ class FlickrPhotoSource extends BaseSocialPhotoSource
 	{
 		$provider = new odFlickr($this->app_key, $this->app_secret);
 		$provider->setToken($this->token);
+		if(isset($options['max_stamp']))
+		{
+			$options['max_upload_date'] = $options['max_stamp'];
+			$options['max_taken_date'] = date('Y-m-d H:i:s', $options['max_stamp']);
+		}
 		$photos = $provider->people_getPhotos('me', $options)['photos'];
 
 		if($provider->getErrorMsg())
