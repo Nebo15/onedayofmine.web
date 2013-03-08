@@ -147,30 +147,36 @@
     </script>
 
     <script id="template_import_progress" type="text/x-handlebars-template">
-      <div class="import-progress modal-body">
-        <div class="text-center">Retrieving data from Instagram...</div>
+      <div class="import-progress">
+        <div class="text-center">Retrieving data...</div>
         <div class="progress progress-striped active">
           <div class="bar" style="width: 1%;"></div>
         </div>
       </div>
     </script>
 
-    <script id="template_import_moments" type="text/x-handlebars-template">
-      [[#moments]]
-        <li style="display:none">
-          <div class="thumbnail">
-            <div class="img-wrap img-rounded">
-              <img src="[[images.thumbnail.url]]" src_big="[[images.standard_resolution.url]]" instagram_id="[[id]]" class="img-rounded" alt="[[caption.text]]" title="[[caption.text]]" timestamp="[[created_time]]"/>
-              <span class="bage-bottom-right"><i class="icon-ok-sign"></i></span>
-            </div>
+    <script id="template_import_moment" type="text/x-handlebars-template">
+      <li class="import-thumb new" style="opacity:0">
+        <div class="thumbnail">
+          <div class="img-wrap img-rounded" style="background-image: url('[[image]]');">
+            <span class="bage-bottom-right"><i class="icon-remove"></i></span>
           </div>
-        </li>
-      [[/moments]]
+        </div>
+      </li>
     </script>
 
     <script id="template_import_moments_container" type="text/x-handlebars-template">
-      <ul class="thumbnails"></ul>
-      <button class="btn btn-block btn-large paginate" style="margin: 10px 0; display:none">Load more</button>
+      <div class="import-container" style="display:none">
+        <button class="btn btn-block paginate-prev" style="margin-bottom:25px;">
+          <i class="show-when-parent-disabled icon icon-spin icon-refresh"></i>
+          Earlier
+        </button>
+        <ul class="thumbnails"></ul>
+        <button class="btn btn-block paginate-next" style="margin-top:-15px;">
+          <i class="show-when-parent-disabled icon icon-spin icon-refresh"></i>
+          Later
+        </button>
+      </div>
     </script>
   {{/into}}
 

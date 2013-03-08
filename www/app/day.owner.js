@@ -68,6 +68,13 @@ $(function() {
     }
   };
 
+  var get_moment_date = function(moment) {
+    var date_input = moment.find(date_input_selector);
+    var time_input = moment.find(time_input_selector);
+
+    return Tools.createDateObject(date_input.val(), time_input.val() + ':' + time_input.attr('seconds'), time_input.attr('timezone'));
+  };
+
   var init_placeholder_actions = function(placeholder) {
     placeholder.bind('dragover', function(event) {
       event.stopPropagation();
@@ -102,46 +109,31 @@ $(function() {
         timezone:Tools.getTimezone()
       };
 
-      if(prev_moment.length != 0 && next_moment.length != 0) {
-        var prev_date_input = prev_moment.find(date_input_selector);
-        var prev_time_input = prev_moment.find(time_input_selector);
+      var new_moment_date;
 
-        var prev_timestamp = Tools.createDateObject(prev_date_input.val(),
-                                                  prev_time_input.val() + ':' + prev_time_input.attr('seconds'),
-                                                  prev_time_input.attr('timezone')).getTime();
+      if(prev_moment.length !== 0 && next_moment.length !== 0) {
+        var prev_timestamp = get_moment_date(prev_moment).getTime();
+        var next_timestamp = get_moment_date(next_moment).getTime();
 
-        var next_date_input = next_moment.find(date_input_selector);
-        var next_time_input = next_moment.find(time_input_selector);
-
-        var next_timestamp = Tools.createDateObject(next_date_input.val(),
-                                                  next_time_input.val() + ':' + next_time_input.attr('seconds'),
-                                                  next_time_input.attr('timezone')).getTime();
-
-        var new_moment_date = new Date();
+        new_moment_date = new Date();
         new_moment_date.setTime(Math.ceil((prev_timestamp+next_timestamp)/2));
 
         this_moment = {
-          date:Tools.getDate(new_moment_date),
-          time:Tools.getTime(new_moment_date),
-          time_seconds:Tools.getSeconds(new_moment_date),
-          timezone:prev_time_input.attr('timezone')
+          date: Tools.getDate(new_moment_date),
+          time: Tools.getTime(new_moment_date),
+          time_seconds: Tools.getSeconds(new_moment_date),
+          timezone: prev_moment.find(time_input_selector).attr('timezone')
         };
-      } else if(next_moment.length != 0) {
-        var next_date_input = next_moment.find(date_input_selector);
-        var next_time_input = next_moment.find(time_input_selector);
-
-        // Returns in UTC Timezone
-        var new_moment_date = Tools.createDateObject(next_date_input.val(),
-                                                  next_time_input.val() + ':' + next_time_input.attr('seconds'),
-                                                  next_time_input.attr('timezone'));
+      } else if(next_moment.length !== 0) {
+        new_moment_date = get_moment_date(next_moment);
 
         new_moment_date.setMinutes(new_moment_date.getMinutes() - 15);
 
         this_moment = {
-          date:Tools.getDate(new_moment_date),
-          time:Tools.getTime(new_moment_date),
-          time_seconds:Tools.getSeconds(new_moment_date),
-          timezone:next_time_input.attr('timezone')
+          date: Tools.getDate(new_moment_date),
+          time: Tools.getTime(new_moment_date),
+          time_seconds: Tools.getSeconds(new_moment_date),
+          timezone: next_moment.find(time_input_selector).attr('timezone')
         };
       }
 
@@ -280,7 +272,7 @@ $(function() {
     var time_input = element.find(time_input_selector);
 
     // Returns in UTC Timezone
-    var new_datetime = Tools.createDateObject(date_input.val(), time_input.val() + ':' + time_input.attr('seconds'), time_input.attr('timezone'));
+    var new_datetime = get_moment_date(element);
 
     var placeholder = element.next();
 
@@ -336,7 +328,6 @@ $(function() {
         showMeridian: false
       });
     }
-
 
     var datetime_button = element.find('#trigger_save_time');
 
@@ -457,32 +448,38 @@ $(function() {
     });
   };
 
-  var initialize_instagram_import = function(element) {
-    var modal_body_container = modal_container.find('.modal-body-main');
-
-    var modal_progress_template          = Template.prepareTemplate($('#template_import_progress'));
-    var modal_moments_container_template = Template.prepareTemplate($('#template_import_moments_container'));
-    var modal_moments_template           = Template.prepareTemplate($('#template_import_moments'));
-
-    modal_body_container.html('');
-    if(modal_container.find('.import-progress').length === 0) {
-      modal_body_container.before(Template.compileElement(modal_progress_template));
-    }
-    modal_body_container.append(Template.compileElement(modal_moments_container_template));
-
-    var modal_thumbnails_container = modal_body_container.find('.thumbnails');
-    var modal_thumbnails_paginate_button = modal_body_container.find('button.paginate');
-    var modal_progress = modal_container.find('.import-progress');
-    var modal_progress_bar = modal_progress.find('.bar');
+  var initialize_import = function(source, element) {
+    // Init importer
+    var importer = new Importer(source);
 
     var animations_speed = 300;
 
-    var setProgress = function(percents) {
+    // Templates
+    var modal_progress_template          = Template.prepareTemplate($('#template_import_progress'));
+    var modal_moments_container_template = Template.prepareTemplate($('#template_import_moments_container'));
+    var modal_moment_template            = Template.prepareTemplate($('#template_import_moment'));
+
+    // Selectors
+    var modal_body_container = modal_container.find('.modal-body-main');
+
+    modal_body_container.html('');
+    modal_body_container.append(Template.compileElement(modal_progress_template));
+    modal_body_container.append(Template.compileElement(modal_moments_container_template));
+
+    var modal_import_container = modal_body_container.find('.import-container');
+    var modal_thumbnails_container = modal_import_container.find('.thumbnails');
+    var modal_thumbnails_paginate_next_button = modal_body_container.find('button.paginate-next');
+    var modal_thumbnails_paginate_prev_button = modal_body_container.find('button.paginate-prev');
+
+    var modal_progress = modal_container.find('.import-progress');
+    var modal_progress_bar = modal_progress.find('.bar');
+
+    var setProgress = function(percents, callback) {
       modal_progress_bar.css('width', percents + '%');
 
       if(percents === 100) {
         setTimeout(function() {
-          modal_progress.slideUp(animations_speed);
+          modal_progress.slideUp(animations_speed, callback);
         }, 500);
       } else if(modal_progress.css('display') == 'none') {
         modal_progress.slideDown(animations_speed);
@@ -491,45 +488,105 @@ $(function() {
 
     modal_container.modal('show');
 
-    var attachThumbnailEvents = function(moments) {
-      moments.find('.thumbnail').click(function() {
-        var $this = $(this).find('img');
+    var attachThumbnailsEvents = function(photos) {
+      photos.find('.thumbnail').click(function() {
+        var data = $(this).data('description');
 
         element.find(moment_description_selector).find(moment_description_button_selector).addClass('btn-success').removeClass('disabled');
         element.addClass('success').removeClass('info');
 
         var img = element.find('.moment-image-holder img');
-        img.attr('src', $this.attr('src_big'));
-        img.attr('instagram_id', $this.attr('instagram_id'));
+        img.attr('src', data.image);
+        img.attr(source + '_id', data.id);
 
-        element.find('.moment-description textarea').text($this.attr('title'));
+        element.find('.moment-description textarea').text(data.title);
 
         modal_container.modal('hide');
       });
     };
 
     var iterativeFadeIn = function(step_element) {
-      step_element.fadeIn(100, function() {
+      step_element.animate({opacity:1}, 200, function() {
         iterativeFadeIn(step_element.next());
       });
     };
 
-    var onDataRetrieved = function(photos, next_callback) {
-      if(next_callback) {
-        modal_thumbnails_paginate_button.removeClass('disabled').fadeIn(300);
+    var showNewMoments = function() {
+      var new_shots = modal_thumbnails_container.children('.new');
+      new_shots.removeClass('new');
 
-        modal_thumbnails_paginate_button.off().click(function() {
-          if($(this).hasClass('disabled')) {
+      attachThumbnailsEvents(new_shots);
+
+      if(modal_import_container.css('display') === 'none') {
+        modal_import_container.slideDown(animations_speed, function() {
+          iterativeFadeIn(new_shots.first());
+        });
+      } else {
+        iterativeFadeIn(new_shots.first());
+      }
+    };
+
+    var onPrevDataRetrieved = function(prev_photos) {
+      if(prev_photos.length !== 0) {
+        modal_thumbnails_paginate_prev_button.removeClass('disabled show-spiner').slideDown(animations_speed).animate({opacity:1}, animations_speed);
+
+        $.each(prev_photos.reverse(), function(index, photo) {
+          var tmp = $($.trim(Template.compileElement(modal_moment_template, photo)));
+          tmp.find('.thumbnail').attr('data-description', JSON.stringify(photo));
+
+          modal_thumbnails_container.prepend(tmp);
+        });
+
+        showNewMoments();
+      } else {
+        modal_thumbnails_paginate_prev_button.removeClass('show-spiner').slideUp(animations_speed);
+      }
+    };
+
+    var onNextDataRetrieved = function(next_photos) {
+      if(next_photos.length !== 0) {
+        modal_thumbnails_paginate_next_button.removeClass('disabled show-spiner').animate({opacity:1}, animations_speed);
+
+        $.each(next_photos, function(index, photo) {
+          var tmp = $($.trim(Template.compileElement(modal_moment_template, photo)));
+          tmp.find('.thumbnail').attr('data-description', JSON.stringify(photo));
+
+          modal_thumbnails_container.append(tmp);
+        });
+
+        setProgress(100, function() {
+          showNewMoments();
+        });
+      } else {
+        modal_thumbnails_paginate_next_button.removeClass('show-spiner').animate({opacity:0}, animations_speed);
+      }
+    };
+
+    var onDataRetrieved = function(photos, next_callback, prev_callback) {
+      if(photos.length === 0) {
+        modal_thumbnails_paginate_next_button.animate({opacity:0}, animations_speed);
+        modal_thumbnails_paginate_prev_button.animate({opacity:0}, animations_speed).slideUp(animations_speed);
+
+        next_callback(); // Loads all data, sunce it cant find minTimestamp
+
+        return;
+      }
+
+      if(typeof next_callback === 'function') {
+        modal_thumbnails_paginate_next_button.removeClass('disabled show-spiner').animate({opacity:1}, animations_speed);
+
+        modal_thumbnails_paginate_next_button.click(function() {
+          if(modal_thumbnails_paginate_next_button.hasClass('disabled')) {
             return;
           }
 
-          $(this).addClass('disabled');
+          modal_thumbnails_paginate_next_button.addClass('disabled show-spiner');
 
           next_callback();
         });
 
-        modal_body_container.off().scroll(function() {
-          if(modal_thumbnails_paginate_button.hasClass('disabled') || modal_thumbnails_paginate_button.css('display') === 'none') {
+        modal_body_container.scroll(function() {
+          if(modal_thumbnails_paginate_next_button.hasClass('disabled') || modal_thumbnails_paginate_next_button.css('opacity') == '0') {
             return;
           }
 
@@ -537,36 +594,94 @@ $(function() {
           var scrollBottom = _this.outerHeight() - _this[0].scrollHeight + _this.scrollTop();
 
           if(scrollBottom >= -30) {
-            modal_thumbnails_paginate_button.addClass('disabled');
+            modal_thumbnails_paginate_next_button.addClass('disabled show-spiner');
             next_callback();
           }
         });
       } else {
-        modal_thumbnails_paginate_button.fadeOut(300);
+        modal_thumbnails_paginate_next_button.removeClass('show-spiner').animate({opacity:0}, animations_speed);
       }
 
-      setProgress(100);
+      if(typeof prev_callback === 'function') {
+        modal_thumbnails_paginate_prev_button.removeClass('disabled show-spiner').animate({opacity:1}, animations_speed);
+
+        modal_thumbnails_paginate_prev_button.click(function() {
+          if(modal_thumbnails_paginate_prev_button.hasClass('disabled')) {
+            return;
+          }
+
+          modal_thumbnails_paginate_prev_button.addClass('disabled show-spiner');
+
+          prev_callback();
+        });
+      } else {
+        modal_thumbnails_paginate_prev_button.removeClass('show-spiner').slideUp(animations_speed);
+      }
+
+      $.each(photos, function(index, photo) {
+        var tmp = $($.trim(Template.compileElement(modal_moment_template, photo)));
+        tmp.find('.thumbnail').attr('data-description', JSON.stringify(photo));
+
+        modal_thumbnails_container.append(tmp);
+      });
+
+      setProgress(100, function() {
+        showNewMoments();
+      });
     };
 
-    var onDataRetrieveStep = function(step, max_steps, shots) {
-      setProgress((step / max_steps) * 100);
+    var onTokenRecieved = function() {
+      var moments = $(moments_selector);
 
-      var tmp = $($.trim(Template.compileElement(modal_moments_template, {moments:shots})));
-      modal_thumbnails_container.append(tmp);
-      attachThumbnailEvents(tmp);
-      iterativeFadeIn(tmp.first());
+      var first_moment_date = get_moment_date(moments.first());
+      first_moment_date.setDate(first_moment_date.getDate()-3);
+
+      var last_moment_date  = get_moment_date(moments.last());
+      last_moment_date.setDate(last_moment_date.getDate()+3);
+
+      var fake_progress = 1;
+      var fake_progress_interval = setInterval(function() {
+        fake_progress += Math.floor((Math.random()*5)+1);
+        if(fake_progress < 80) {
+          setProgress(fake_progress);
+        } else {
+          clearInterval(fake_progress_interval);
+        }
+      }, 300);
+
+      var request_params = {
+        from: Math.floor(last_moment_date.getTime()/1000),
+        to:   Math.floor(first_moment_date.getTime()/1000)
+      };
+
+      var request_callbacks = {
+        onPrevPhotosRecieved: function(all_photos, new_photos) {
+          onPrevDataRetrieved(new_photos);
+        },
+        onNextPhotosRecieved: function(all_photos, new_photos) {
+          onNextDataRetrieved(new_photos);
+        }
+      };
+
+      importer.getUserPhotos(function(photos, next_callback, prev_callback) {
+        if(modal_progress.css('display') !== 'none') {
+          clearInterval(fake_progress_interval);
+          setProgress(90);
+        }
+        onDataRetrieved(photos, next_callback, prev_callback);
+      }, request_params, request_callbacks);
     };
 
-    var onInstagramTokenRecieved = function() {
-      Instagram.getCurrentUserPhotos(onDataRetrieved, onDataRetrieveStep, 3);
-    };
-
-    var onInstagramTokenRecieveError = function() {
+    var onTokenRecieveError = function() {
       modal_container.modal('hide');
-      alert("It seems that you declined Instagram authorization.");
+      alert("It seems that you declined authorization.");
     };
 
-    Instagram.getAccessToken(onInstagramTokenRecieved, onInstagramTokenRecieveError);
+    if(!importer.isConnected()) {
+      importer.login(onTokenRecieved, onTokenRecieveError);
+    } else {
+      onTokenRecieved();
+    }
   };
 
   var create_moment = function(moment, do_scroll) {
@@ -601,14 +716,7 @@ $(function() {
             return;
           }
 
-          switch($(this).attr('data-value')) {
-            case 'instagram':
-              initialize_instagram_import(element);
-              break;
-            case 'flickr':
-              initialize_flickr_import(element);
-              break;
-          }
+          initialize_import($(this).attr('data-value'), element);
         });
       });
 
@@ -710,10 +818,12 @@ $(function() {
           params.image_url = src;
         }
 
-        var instagram_id = moment_image.attr('instagram_id');
-        if(instagram_id !== undefined) {
-          params.instagram_id = instagram_id;
-        }
+        $(['instagram', 'flickr', 'facebook']).each(function(index, value) {
+          var id = moment_image.attr(value + '_id');
+          if(id !== undefined) {
+            params[value + '_id'] = id;
+          }
+        });
 
         var save_request = API.request('POST', '/days/' + day_data.id + '/add_moment', params);
 

@@ -596,7 +596,8 @@ ol.inline >li:first-child {
   margin-bottom: 0;
 }
 
-.day .img-wrap {
+.day .img-wrap,
+.import-thumb .img-wrap {
   width: 150px;
   height: 150px;
   overflow: hidden;
@@ -634,6 +635,10 @@ ol.inline >li:first-child {
   opacity: 1;
   width: 30px !important;
   display: inline-block !important;
+}
+
+.import-progress.modal-body .progress {
+  margin-bottom: 0;
 }
 
 /* Responsive */
