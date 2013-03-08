@@ -563,15 +563,6 @@ $(function() {
     };
 
     var onDataRetrieved = function(photos, next_callback, prev_callback) {
-      if(photos.length === 0) {
-        modal_thumbnails_paginate_next_button.animate({opacity:0}, animations_speed);
-        modal_thumbnails_paginate_prev_button.animate({opacity:0}, animations_speed).slideUp(animations_speed);
-
-        next_callback(); // Loads all data, sunce it cant find minTimestamp
-
-        return;
-      }
-
       if(typeof next_callback === 'function') {
         modal_thumbnails_paginate_next_button.removeClass('disabled show-spiner').animate({opacity:1}, animations_speed);
 
@@ -616,6 +607,15 @@ $(function() {
         });
       } else {
         modal_thumbnails_paginate_prev_button.removeClass('show-spiner').slideUp(animations_speed);
+      }
+
+      if(photos.length === 0) {
+        modal_thumbnails_paginate_next_button.addClass('disabled').animate({opacity:0}, animations_speed);
+        modal_thumbnails_paginate_prev_button.addClass('disabled').animate({opacity:0}, animations_speed).slideUp(animations_speed);
+
+        next_callback(); // Loads all data, sunce it cant find minTimestamp
+
+        return;
       }
 
       $.each(photos, function(index, photo) {
