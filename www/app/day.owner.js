@@ -575,6 +575,8 @@ $(function() {
 
           next_callback().success(function(tmp) {
             console.log(tmp);
+            modal_container.modal('hide');
+            alert("Its seems that you dont have puctures in " + flickr);
           });
         });
 
