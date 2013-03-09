@@ -614,10 +614,12 @@ $(function() {
         modal_thumbnails_paginate_prev_button.addClass('disabled').animate({opacity:0}, animations_speed).slideUp(animations_speed);
 
         next_callback().success(function(response) {
-          if(response.data.result.length === 0) {
-            modal_container.modal('hide');
-            alert("Its seems that you dont have puctures in " + flickr);
-          }
+          setProgress(100, function() {
+            if(response.data.result.length === 0) {
+              modal_container.modal('hide');
+              alert("It seems that you dont have puctures in " + source);
+            }
+          });
         });
 
         return;
