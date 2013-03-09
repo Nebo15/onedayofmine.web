@@ -573,7 +573,11 @@ $(function() {
 
           modal_thumbnails_paginate_next_button.addClass('disabled show-spiner');
 
-          next_callback().success(function(tmp) {
+          console.log('ld nxt');
+          var nxt = next_callback();
+          console.log(nxt);
+
+          nxt.success(function(tmp) {
             console.log(tmp);
             modal_container.modal('hide');
             alert("Its seems that you dont have puctures in " + flickr);
