@@ -573,15 +573,7 @@ $(function() {
 
           modal_thumbnails_paginate_next_button.addClass('disabled show-spiner');
 
-          console.log('ld nxt');
-          var nxt = next_callback();
-          console.log(nxt);
-
-          nxt.success(function(tmp) {
-            console.log(tmp);
-            modal_container.modal('hide');
-            alert("Its seems that you dont have puctures in " + flickr);
-          });
+          next_callback();
         });
 
         modal_body_container.scroll(function() {
@@ -621,7 +613,16 @@ $(function() {
         modal_thumbnails_paginate_next_button.addClass('disabled').animate({opacity:0}, animations_speed);
         modal_thumbnails_paginate_prev_button.addClass('disabled').animate({opacity:0}, animations_speed).slideUp(animations_speed);
 
-        next_callback(); // Loads all data, sunce it cant find minTimestamp
+        // next_callback(); // Loads all data, sunce it cant find minTimestamp
+        console.log('ld nxt');
+        var nxt = next_callback();
+        console.log(nxt);
+
+        nxt.success(function(tmp) {
+          console.log(tmp);
+          modal_container.modal('hide');
+          alert("Its seems that you dont have puctures in " + flickr);
+        });
 
         return;
       }
