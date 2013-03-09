@@ -362,7 +362,7 @@ input[subtype=time] {
 .moment-image-holder img {
   max-width: 100%;
   width: 420px;
-  min-height: 420px;
+  /*min-height: 420px;*/
 }
 
 .moment-image-holder a,
@@ -693,7 +693,7 @@ ol.inline >li:first-child {
   .moment-image-holder,
   .moment-image-holder img {
     width: 230px;
-    min-height: 230px;
+    /*min-height: 230px;*/
     margin-left: 0;
     margin-right: 0;
   }
