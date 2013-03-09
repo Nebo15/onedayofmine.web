@@ -58,7 +58,7 @@ var Importer = function(source) {
 
     photo_request.success(function(response) {
       var next_callback = function(onNextPhotosRecieved) {
-        response.loadNext(typeof onNextPhotosRecieved === 'function' ? onNextPhotosRecieved : callbacks.onNextPhotosRecieved, function(data) {
+        return response.loadNext(typeof onNextPhotosRecieved === 'function' ? onNextPhotosRecieved : callbacks.onNextPhotosRecieved, function(data) {
           if(data.result.length === 0) {
             console.log("Result list is empty, loadNext will take 0 as param");
             return 0;
@@ -68,7 +68,7 @@ var Importer = function(source) {
       };
 
       var prev_callback = function(onPrevPhotosRecieved) {
-        response.loadPrev(typeof onPrevPhotosRecieved === 'function' ? onPrevPhotosRecieved : callbacks.onPrevPhotosRecieved, function(data) {
+        return response.loadPrev(typeof onPrevPhotosRecieved === 'function' ? onPrevPhotosRecieved : callbacks.onPrevPhotosRecieved, function(data) {
           if(data.result.length === 0) {
             console.error("Can't find minId");
           }

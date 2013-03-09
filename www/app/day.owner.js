@@ -573,7 +573,9 @@ $(function() {
 
           modal_thumbnails_paginate_next_button.addClass('disabled show-spiner');
 
-          next_callback();
+          next_callback().success(function(tmp) {
+            console.log(tmp);
+          });
         });
 
         modal_body_container.scroll(function() {

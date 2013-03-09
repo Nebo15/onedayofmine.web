@@ -58,6 +58,8 @@ var Response = function(data, jqXHR, request) {
         callback(data, response.data.result);
     }, typeof callback === 'function' ? true : false);
     request.send();
+
+    return request;
   };
 
   this.loadPrev = function(callback, minId) {
@@ -93,6 +95,8 @@ var Response = function(data, jqXHR, request) {
         callback(data, response.data.result);
     }, typeof callback === 'function' ? true : false);
     request.send();
+
+    return request;
   };
 
   // Don't select more than server return in one response!
