@@ -140,7 +140,7 @@ $(function() {
   // Likes
   (function() {
     // Like toggle
-    if(day_data.is_liked) {
+    if(day_data.is_liked !== undefined) {
       var likes_count = day_data.likes_count;
 
       var like_button = $('button#toggle_like');
