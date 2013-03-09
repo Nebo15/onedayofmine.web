@@ -5,11 +5,11 @@ $this->menu = 'me';
 {{wrap with="layout.phtml"}}
 {{into slot="content"}}
 <div class="row">
-    <div class="span5 offset1" style="margin-right:30px">
+    <div class="span6" style="margin-right:30px">
 		    <h1>Followers <small><?= count($this->followers); ?> people</small></h1>
 	      {{apply template="users_list" users="{$#followers}"/}}
     </div>
-    <div class="span5">
+    <div class="span6">
         <h1>Following <small><?= count($this->following); ?> people</small></h1>
         {{apply template="users_list" users="{$#following}"/}}
     </div>
