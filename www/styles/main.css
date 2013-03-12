@@ -531,10 +531,6 @@ ol.inline >li:first-child {
   padding-left: 0;
 }
 
-.show-on-mobile {
-  display:none;
-}
-
 .thumbnails .thumbnail .bage-bottom-right {
   bottom: 0px;
   right: 3px;
@@ -666,14 +662,6 @@ ol.inline >li:first-child {
   .day-date {
     display: block;
     float: none !important;
-  }
-
-  .hidden-on-mobile {
-    display:none !important;
-  }
-
-  .show-on-mobile {
-    display:block !important;
   }
 
   ul.inline >li,

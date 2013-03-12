@@ -58,10 +58,10 @@
 
         <div class="timepicker text-center with-shadow">
           <span class="input-prepend input-append">
-            <span class="add-on add-on-small hidden-on-mobile"><i class="icon-calendar"></i></span>
+            <span class="add-on add-on-small hidden-phone"><i class="icon-calendar"></i></span>
             <input type="text" subtype="date" class="add-on-small" value="[[moment.date]]" />
 
-            <span class="add-on add-on-small hidden-on-mobile"><i class="icon-time"></i></span>
+            <span class="add-on add-on-small hidden-phone"><i class="icon-time"></i></span>
             <input type="text" subtype="time" class="add-on-small" value="[[moment.time]]" seconds="[[moment.time_seconds]]" timezone="[[moment.timezone]]" />
 
             <button id="trigger_save_time" class="btn btn-small disabled" type="button">Save</button>
@@ -193,7 +193,7 @@
                   </a>
                 </span>
 
-                <div class="day-controls-group">
+                <div class="day-controls-group control-group">
                   <div id="day_title_selector" class="row">
                     <h5>Day title:</h5>
                     <span class="input-append span12">
@@ -201,7 +201,7 @@
                       <button class="btn disabled btn-small span2" type="submit" style="height:30px">Save</button>
                     </span>
                     <br />
-                    <small class="alert-small" style="display:none">
+                    <small class="alert-small help-block" style="display:none">
                       * <span class="contents"></span>
                     </small>
                   </div>
@@ -288,10 +288,10 @@
                         <div class="timepicker text-center with-shadow">
                           <? if($this->is_owner) { ?>
                             <span class="input-prepend input-append">
-                              <span class="add-on add-on-small hidden-on-mobile"><i class="icon-calendar"></i></span>
+                              <span class="add-on add-on-small hidden-phone"><i class="icon-calendar"></i></span>
                               <input type="text" subtype="date" class="add-on-small" value="{$item->date}" />
 
-                              <span class="add-on add-on-small hidden-on-mobile"><i class="icon-time"></i></span>
+                              <span class="add-on add-on-small hidden-phone"><i class="icon-time"></i></span>
                               <input type="text" subtype="time" class="add-on-small" value="{$item->time}" seconds="{$item->time_seconds}" timezone="{$item->timezone}" />
 
                               <button id="trigger_save_time" class="btn btn-small disabled" type="button">Save</button>
