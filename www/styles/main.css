@@ -585,7 +585,8 @@ ol.inline >li:first-child {
 }
 
 .import-modal .thumbnails > li {
-  margin-left: 20px !important;
+  margin-left: 15px !important;
+	margin-bottom: 15px !important;
 }
 
 .day .alert {
