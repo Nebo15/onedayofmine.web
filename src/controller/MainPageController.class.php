@@ -5,6 +5,12 @@ lmb_require('src/Json.class.php');
 
 class MainPageController extends lmbController
 {
+	function doDisplay()
+	{
+		if(!$this->toolkit->getUser())
+			$this->setTemplate('main_page/display_guest.phtml');
+	}
+
   function doDeploy()
   {
     echo '<pre>';
