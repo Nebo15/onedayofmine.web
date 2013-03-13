@@ -5,13 +5,7 @@ lmb_require('src/Json.class.php');
 
 class MainPageController extends lmbController
 {
-	function doDisplay()
-	{
-		if(!$this->toolkit->getUser())
-			$this->setTemplate('main_page/display_guest.phtml');
-	}
-
-  function doDeploy()
+	function doDeploy()
   {
     echo '<pre>';
     system(lmb_env_get('APP_DIR').'/cli/update.sh');
