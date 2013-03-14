@@ -190,12 +190,12 @@
     </div><!-- /navbar -->
 	  <?php } ?>
 	  <? if(($cu = $this->toolkit->getUser()) && !$cu->getImage()) { ?>
-		  <div class="alert">
+		  <div class="alert no-userpic-tooltip">
 			  Upload a <a href="/pages/profile">profile</a> picture so your friends know it's you.
 		  </div>
 	  <? } ?>
 	  <? if(($cu = $this->current_user) && (!$cu['occupation'] || !$cu['birthday'] || !$cu['location'])) { ?>
-		  <div class="alert">
+		  <div class="alert no-userdata-tooltip">
 			  Update a <a href="/pages/profile">profile</a> so we can make a better recommendations for you.
 		  </div>
 	  <? } ?>

@@ -4,6 +4,7 @@ $this->menu = 'me';
 ?>
 {{wrap with="layout.phtml"}}
 {{into slot="content"}}
+<? $user = $this->current_user; ?>
 <div class="row">
 	<div class="span2"><h1>Profile</h1></div>
 	<div class="span5"></div>
@@ -11,38 +12,42 @@ $this->menu = 'me';
 </div>
 <div class="row">
 	<div class="span2">
-		<div style="width:192px;margin:0 auto;background-color:#fff">
-			<img class="change_photo" src="{$#current_user.image_192}"/>
-			<small>Tap photo if you want</small>
+		<div class="user-image-holder friend">
+			<img id="userpic" src="{$user.image_192}" width="192" height="192" class="pull-left img-rounded"/>
+			<button class="btn btn-block btn-file">
+        Change photo
+				<input class="change-userpic-action" type="file" />
+			</button>
 		</div>
 	</div>
 	<div class="span5">
-		<form class="form-horizontal">
-			<div class="control-group">
+		<form id="profile-form" class="form-horizontal">
+
+			<div class="control-group <?= $user['name'] ?: 'error' ?>">
 				<label class="control-label" for="inputName">Name</label>
-
 				<div class="controls">
-					<input type="text" id="inputName" placeholder="Name" value="{$#current_user.name}">
+					<input type="text" id="inputName" placeholder="Name" value="{$user.name}">
 				</div>
 			</div>
-			<div class="control-group">
+
+			<div class="control-group <?= $user['occupation'] ?: 'error' ?>">
 				<label class="control-label" for="inputOccupation">Occupation</label>
-
 				<div class="controls">
-					<input type="text" id="inputOccupation" placeholder="Occupation" value="{$#current_user.occupation}">
+					<input type="text" id="inputOccupation" placeholder="Occupation" value="{$user.occupation}">
 				</div>
 			</div>
-			<div class="control-group">
+
+			<div class="control-group <?= $user['location'] ?: 'error' ?>">
 				<label class="control-label" for="inputLocation">Location</label>
-
 				<div class="controls">
-					<input type="text" id="inputLocation" placeholder="location" value="{$#current_user.location}">
+					<input type="text" id="inputLocation" placeholder="location" value="{$user.location}">
 				</div>
 			</div>
-			<div class="control-group">
+
+			<div class="control-group <?= $user['birthday'] ?: 'error' ?>">
 				<label class="control-label" for="inputBirthday">Birthday</label>
 				<div class="controls">
-					<input id="inputBirthday" type="date" placeholder="dd/mm/yyyy" value="{$#current_user.birthday}">
+					<input id="inputBirthday" type="date" placeholder="dd/mm/yyyy" value="{$user.birthday}">
 				</div>
 			</div>
 
@@ -55,7 +60,10 @@ $this->menu = 'me';
 			</div>
 			<div class="control-group">
 				<div class="controls">
-					<button type="submit" class="btn btn-large btn-success update-action">
+					<?
+						$full_info = $user['name'] && $user['occupation'] && $user['location'] && $user['birthday'];
+					?>
+					<button type="submit" class="btn btn-large update-action" <?= $full_info ?: 'disabled' ?>>
 						<i class="icon icon-ok"></i> Update
 					</button>
 				</div>
@@ -63,18 +71,69 @@ $this->menu = 'me';
 		</form>
 	</div>
 	<div class="span3">
-		<button type="submit" class="btn <?= $this->current_user['instagram_connected'] ? 'btn-danger' : '' ?> btn-large instagram-action">
-			<i class="icon icon-sign<?= $this->current_user['instagram_connected'] ? 'out' : 'in' ?>"></i> Instagram
+		<button class="btn <?= $user['instagram_connected'] ? 'btn-danger' : '' ?> btn-large instagram-action">
+			<i class="icon icon-sign<?= $user['instagram_connected'] ? 'out' : 'in' ?>"></i> Instagram
 		</button>
 
 		<br/><br/>
-		<button type="submit" class="btn <?= $this->current_user['flickr_connected'] ? 'btn-danger' : '' ?> btn-large flickr-action">
-			<i class="icon icon-sign<?= $this->current_user['flickr_connected'] ? 'out' : 'in' ?>"></i> Flickr
+		<button class="btn <?= $user['flickr_connected'] ? 'btn-danger' : '' ?> btn-large flickr-action">
+			<i class="icon icon-sign<?= $user['flickr_connected'] ? 'out' : 'in' ?>"></i> Flickr
 		</button>
 	</div>
 </div>
 {{/into}}
 {{into slot="js_ready"}}
+
+	$('.change-userpic-action').on('change', function(event) {
+		var $this = $(this);
+		var reader = new FileReader();
+		var FileReaderFilter = /^(?:image\/bmp|image\/cis\-cod|image\/gif|image\/ief|image\/jpeg|image\/jpeg|image\/jpeg|image\/pipeg|image\/png|image\/svg\+xml|image\/tiff|image\/x\-cmu\-raster|image\/x\-cmx|image\/x\-icon|image\/x\-portable\-anymap|image\/x\-portable\-bitmap|image\/x\-portable\-graymap|image\/x\-portable\-pixmap|image\/x\-rgb|image\/x\-xbitmap|image\/x\-xpixmap|image\/x\-xwindowdump)$/i;
+		var file = event.target.files !== undefined ? event.target.files[0] : (event.target.value ? { name: event.target.value.replace(/^.+\\/, '') } : null);
+
+		$(reader).load(function() {
+			var image64 = this.result
+			var image = image64.substring(image64.indexOf('base64')+7);
+			API.request('POST', 'my/profile', {image_content: image}).complete(function() {
+				$('#userpic').attr('src', image64);
+			}).send();
+		});
+
+		if (!FileReaderFilter.test(file.type)) {
+			alert("Currently we support only images!");
+			return;
+		}
+
+		reader.readAsDataURL(file);
+	});
+
+	$('#profile-form').find('input').on('keyup', function() {
+		var valid = true;
+
+		$.each(['#inputName', '#inputOccupation', '#inputLocation', '#inputBirthday'], function(i, name) {
+			if('' != $(name).val())
+			{
+				$(name).parent().parent().removeClass('error');
+			}
+			else
+			{
+				valid = false;
+				$(name).parent().parent().addClass('error');
+			}
+		});
+
+		var submit_btn = $('button[type=submit]');
+
+		if(valid)
+			submit_btn.addClass('btn-success');
+		else
+			submit_btn.removeClass('btn-success');
+
+		if(valid && submit_btn.attr('disabled'))
+			submit_btn.removeAttr('disabled');
+		else if(!valid && !submit_btn.attr('disabled'))
+			submit_btn.attr('disabled', 'disabled');
+	});
+
 	$('.update-action').click(function(event) {
 		var data = {
 			name: $('#inputName').val(),
@@ -84,6 +143,7 @@ $this->menu = 'me';
 		};
 		var req = API.request('POST', 'my/profile', data).complete(function() {
 			$('.alert-success').show();
+
 		}).send();
 		return false;
 	});
