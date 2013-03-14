@@ -86,8 +86,8 @@ $this->menu = 'me';
 		$(reader).load(function() {
 			var image64 = this.result
 			var image = image64.substring(image64.indexOf('base64')+7);
-			API.request('POST', 'my/profile', {image_content: image}).complete(function() {
-				$('#userpic').attr('src', image64);
+			API.post('my/profile', {image_content: image}).success(function(response) {
+				$('#userpic').attr('src', response.data.result.image_192);
 			}).send();
 		});
 
