@@ -115,6 +115,12 @@ class PagesController extends lmbController
 		$this->following = $this->_toFlatArray($this->toolkit->getExportHelper()->exportUserItems($user->getFollowingUsers()));
 	}
 
+	function doProfile()
+	{
+		if (!$user = lmbToolkit::instance()->getUser())
+			return $this->forwardToUnauthorized();
+	}
+
 	function doDay()
 	{
 		if (!$day = Day::findById($this->request->id))
@@ -271,7 +277,7 @@ class PagesController extends lmbController
 	{
 		$this->current_user = $this->toolkit->getUser()
 				? (array) $this->toolkit->getExportHelper()->exportUser($this->toolkit->getUser())
-				: new stdClass;
+				: [];
 		return parent::performAction();
 	}
 

@@ -189,6 +189,16 @@
       </div><!-- /navbar-inner -->
     </div><!-- /navbar -->
 	  <?php } ?>
+	  <? if(($cu = $this->toolkit->getUser()) && !$cu->getImage()) { ?>
+		  <div class="alert">
+			  Upload a <a href="/pages/profile">profile</a> picture so your friends know it's you.
+		  </div>
+	  <? } ?>
+	  <? if(($cu = $this->current_user) && (!$cu['occupation'] || !$cu['birthday'] || !$cu['location'])) { ?>
+		  <div class="alert">
+			  Update a <a href="/pages/profile">profile</a> so we can make a better recommendations for you.
+		  </div>
+	  <? } ?>
     {{slot id='content'/}}
     {{slot id='content_zone'/}}
 	</div>

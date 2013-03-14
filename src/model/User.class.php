@@ -73,7 +73,7 @@ class User extends BaseModel
     $result->name = $this->name;
     $result->sex = $this->sex;
     foreach ($this->getImages() as $image_width => $image) {
-      $result->$image_width = $image ?: lmbToolkit::instance()->getStaticUrl("default_{$image_width}.png");
+      $result->$image_width = $image ?: lmbToolkit::instance()->getStaticUrl("users/default_{$image_width}.png");
     }
     $result->birthday = $this->birthday;
     $result->occupation = $this->occupation;
