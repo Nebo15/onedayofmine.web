@@ -53,13 +53,6 @@ $this->menu = 'me';
 
 			<div class="control-group">
 				<div class="controls">
-					<div class="alert alert-success hide">
-						Profile saved!
-					</div>
-				</div>
-			</div>
-			<div class="control-group">
-				<div class="controls">
 					<?
 						$full_info = $user['name'] && $user['occupation'] && $user['location'] && $user['birthday'];
 					?>
@@ -142,8 +135,7 @@ $this->menu = 'me';
 			birthday: $('#inputBirthday').val(),
 		};
 		var req = API.request('POST', 'my/profile', data).complete(function() {
-			$('.alert-success').show();
-
+			$('button[type=submit]').removeClass('btn-success');
 		}).send();
 		return false;
 	});
