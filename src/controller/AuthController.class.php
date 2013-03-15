@@ -3,6 +3,7 @@ lmb_require('src/controller/BaseJsonController.class.php');
 lmb_require('src/model/Day.class.php');
 lmb_require('src/model/DeviceToken.class.php');
 lmb_require('src/model/Day.class.php');
+lmb_require('src/model/Invitation.class.php');
 
 class AuthController extends BaseJsonController
 {
@@ -34,6 +35,16 @@ class AuthController extends BaseJsonController
     }
   }
 
+	function doGuestCheckInvitation()
+	{
+		if (!$this->request->isPost())
+			return $this->_answerNotPost();
+
+		if(!$invitation = Invitation::findOneByCode($this->request->getSafe('code')))
+			return $this->_answerOk(false);
+		return $this->_answerOk($invitation->max_count > $invitation->taken_count);
+	}
+
   function doGuestLogin()
   {
     if (!$this->request->isPost())
@@ -47,7 +58,12 @@ class AuthController extends BaseJsonController
 
     $is_new_user = false;
     if (!$user = User::findByFacebookUid($uid)) {
-      $user = $this->_register($facebook_access_token);
+	    if (!$invitation_code = $this->request->get('invitation_code'))
+		    return $this->_answerWithError('Invitation not given', null, 412);
+
+      $user = $this->_register($facebook_access_token, $invitation_code);
+	    if(!$this->error_list->isEmpty())
+		    return $this->_answerWithError($this->error_list->export(), null, 412);
       $is_new_user = true;
     } else {
       $user->facebook_access_token = $facebook_access_token;
@@ -65,9 +81,16 @@ class AuthController extends BaseJsonController
     return $this->_answerOk($this->toolkit->getExportHelper()->exportUser($user));
   }
 
-  function _register($facebook_access_token)
+  function _register($facebook_access_token, $invitation_code)
   {
+	  $invitation = Invitation::findOneByCode($invitation_code);
+	  if($invitation->max_count <= $invitation->taken_count)
+		  return $this->error_list->addError('Invitation code expired');
+	  $invitation->taken_count++;
+	  $invitation->save();
+
     $user = new User();
+	  $user->setInvitation($invitation);
     $user->facebook_access_token = $facebook_access_token;
     $profile = $this->toolkit->getFacebookProfile($user);
     $user->import($profile->getInfo());

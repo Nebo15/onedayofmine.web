@@ -6,15 +6,29 @@ var Auth = {
         console.log('FB token already set: ' + token);
         return onLoginSuccess(token);
       } else {
-        FB.login(function(response) {
-          if(response.authResponse) {
-            var token = response.authResponse.accessToken;
-            console.log('FB token recieved: ' + token);
-            return onLoginSuccess(token);
-          } else {
-            alert('You need to authorize application to continue using it');
-          }
-        });
+
+				$('#invite_modal').modal('show');
+				$('#invite_modal').find('button').click(function() {
+					var code = $('#invite_modal').find('input[type=text]').val();
+					API.post('auth/check_invitation', {code: code}).success(function(resp) {
+						if(false == resp.data.result)
+						{
+							$('#invite_modal').find('input').parent().parent().addClass('error');
+							return;
+						}
+						FB.login(function(response) {
+          		if(response.authResponse) {
+								var token = response.authResponse.accessToken;
+								console.log('FB token recieved: ' + token);
+								new Request('POST', 'auth/login', {token:token, invitation_code:code}, {async:false}).success(function(){
+									return onLoginSuccess(token, code);
+								}).send();
+							} else {
+								alert('You need to authorize application to continue using it');
+							}
+						});
+					}).send();
+				});
       }
     });
   },

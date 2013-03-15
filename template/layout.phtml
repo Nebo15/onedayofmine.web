@@ -199,6 +199,27 @@
 			  Update a <a href="/pages/profile">profile</a> so we can make a better recommendations for you.
 		  </div>
 	  <? } ?>
+	  <div id="invite_modal" class="modal hide fade import-modal" tabindex="-1" role="dialog" aria-labelledby="invite_modal_label" aria-hidden="true">
+		  <div class="modal-header">
+			  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+			  <h3 id="import_modal_label">Check invitation</h3>
+		  </div>
+		  <div class="modal-body modal-body-main">
+			  <div class="alert alert-error hide">Wrong invitation code</div>
+			  <div class="control-group">
+				  <div class="controls">
+					  <input type="text" class="input-block-level" id="inputName" placeholder="Code">
+				  </div>
+			  </div>
+			  <div class="control-group">
+				  <div class="controls">
+					  <button class="btn btn-block update-action">
+						  <i class="icon icon-signin"></i> Sign in
+					  </button>
+				  </div>
+			  </div>
+		  </div>
+	  </div>
     {{slot id='content'/}}
     {{slot id='content_zone'/}}
 	</div>

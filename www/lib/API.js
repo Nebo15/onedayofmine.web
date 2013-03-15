@@ -37,7 +37,7 @@ var API = (function() {
 
     login: function(onLoginComplete, onLoginFail) {
       console.log('Logging in');
-      var login_request = new Request('POST', 'auth/login', {async:false});
+      var login_request = new Request('POST', 'auth/login', {},{async:false});
 
       login_request.success(function(response) {
         console.log('Logged in');
@@ -55,16 +55,16 @@ var API = (function() {
         Auth.login(function(token) {
           $.cookie('token', token, {
             expires: 31,
-            // secure: true, // TODO: turn this on for security
             path: '/'
           });
           login_request.send();
         });
       };
 
-      login_request.error(function() {
+      login_request.error(function(xhr) {
+				if(412 == xhr.status)
+					alert(response.data);
         login_request.error(onLoginFail, true);
-
         console.log('Login attempt failed');
         makeTry();
       }, true);

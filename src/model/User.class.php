@@ -29,6 +29,7 @@ class User extends BaseModel
 
   protected $_db_table_name = 'user';
 
+	public $invitation_id, $current_day_id, $user_settings_id;
   public $name;
   public $sex;
   public $birthday;
@@ -46,8 +47,7 @@ class User extends BaseModel
 	public $instagram_token;
 	public $flickr_uid;
 	public $flickr_token;
-  public $current_day_id;
-  public $user_settings_id;
+
   public $ctime;
   public $utime;
   public $cip;
@@ -80,6 +80,19 @@ class User extends BaseModel
     $result->location = $this->location;
     return $result;
   }
+
+	function setInvitation(Invitation $invitation)
+	{
+		$this->invitation_id = $invitation->id;
+	}
+
+	/**
+	 * @return Invitation
+	 */
+	function getInvitation()
+	{
+		return Invitation::findById($this->invitation_id);
+	}
 
   function setSettings(UserSettings $settings)
   {
