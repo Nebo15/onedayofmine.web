@@ -58,13 +58,8 @@ class lmbMailTools extends lmbAbstractTools
       $conf = $this->toolkit->getConf('mail');
       $mailer_class = 'lmbMailer';
 
-      if(isset($conf['mode']))
-      {
-        if ($conf['mode'] == 'testing')
-          $mailer_class = 'lmbMemoryMailer';
-        elseif ($conf['mode'] == 'devel')
-          $mailer_class = 'lmbResponseMailer';
-      }
+      if(isset($conf['mailer']))
+        $mailer_class = $conf['mailer'];
 
       $mailer = new $mailer_class;
       $mailer->setConfig($conf);
