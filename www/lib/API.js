@@ -37,7 +37,7 @@ var API = (function() {
 
     login: function(onLoginComplete, onLoginFail) {
       console.log('Logging in');
-      var login_request = new Request('POST', 'auth/login', {},{async:false});
+      var login_request = new Request('POST', 'auth/login', {async:false});
 
       login_request.success(function(response) {
         console.log('Logged in');
