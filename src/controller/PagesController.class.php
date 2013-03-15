@@ -119,6 +119,7 @@ class PagesController extends lmbController
 	{
 		if (!$user = lmbToolkit::instance()->getUser())
 			return $this->forwardToUnauthorized();
+		return $this->redirect('/pages/'.$user->id.'/user');
 	}
 
 	function doDay()
@@ -191,6 +192,12 @@ class PagesController extends lmbController
 
 		if(!$user = User::findById($id))
 			return $this->forwardTo404();
+
+		if($this->_getUser() && $this->_getUser()->id == $id)
+		{
+			$this->setTemplate('pages/user_owner.phtml');
+			return;
+		}
 
 		$this->user = (array) $this->toolkit->getExportHelper()->exportUser($user);
 
