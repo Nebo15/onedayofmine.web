@@ -9,7 +9,7 @@ var Importer = function(source) {
   };
 
   this.isConnected = function() {
-    return source == 'facebook' || API.getCurrentUser() && API.getCurrentUser()[source + '_connected'] === true;
+    return source == 'facebook' || source == 'import' || API.getCurrentUser() && API.getCurrentUser()[source + '_connected'] === true;
   };
 
   this.loginDirect = function(redirect_uri) {

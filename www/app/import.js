@@ -268,5 +268,9 @@ $(function() {
   };
 
   // Running inital step
-  step1();
+	console.log(importer.isConnected());
+	if(!importer.isConnected())
+  	step1();
+	else
+		step2();
 });

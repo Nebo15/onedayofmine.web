@@ -59,7 +59,8 @@ class FlickrPhotoSource extends BaseSocialPhotoSource
 			'extras' => 'date_taken,geo,tags,url_l,url_q',
 			'content_type' => 1,
 			'media' => 'photos',
-			'sort' => 'date-taken-desc'
+			'sort' => 'date-taken-desc',
+			'per_page' => self::LIMIT
 		];
 
 

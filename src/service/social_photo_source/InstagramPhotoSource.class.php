@@ -66,6 +66,7 @@ class InstagramPhotoSource extends BaseSocialPhotoSource
 			throw new lmbException("Instagram info not found for user #".$this->user->id);
 
 		$url = "https://api.instagram.com/v1/users/{$this->uid}/media/recent/?access_token={$this->token}";
+		$url .= '&count='.self::LIMIT;
 		$url .= "&max_timestamp=".$from_stamp;
 		if($to_stamp)
 			$url .= "&min_timestamp=".($to_stamp + 1);

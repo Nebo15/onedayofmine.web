@@ -2,6 +2,7 @@
 
 abstract class BaseSocialPhotoSource
 {
+	const LIMIT = 40;
 	/**
 	 * @var User
 	 */
