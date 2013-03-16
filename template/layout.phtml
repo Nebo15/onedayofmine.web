@@ -189,15 +189,17 @@
       </div><!-- /navbar-inner -->
     </div><!-- /navbar -->
 	  <?php } ?>
-	  <? if(($cu = $this->toolkit->getUser()) && !$cu->getImage()) { ?>
-		  <div class="alert no-userpic-tooltip">
-			  Upload a <a href="/pages/profile">profile</a> picture so your friends know it's you.
-		  </div>
-	  <? } ?>
-	  <? if(($cu = $this->current_user) && (!$cu['occupation'] || !$cu['birthday'] || !$cu['location'])) { ?>
-		  <div class="alert no-userdata-tooltip">
-			  Update a <a href="/pages/profile">profile</a> so we can make a better recommendations for you.
-		  </div>
+	  <?php if(!property_exists($this, 'menu_disabled') || !$this->menu_disabled) { ?>
+		  <? if(($cu = $this->toolkit->getUser()) && !$cu->getImage()) { ?>
+			  <div class="alert no-userpic-tooltip">
+				  Upload a <a href="/pages/profile">profile</a> picture so your friends know it's you.
+			  </div>
+		  <? } ?>
+		  <? if(($cu = $this->current_user) && (!$cu['occupation'] || !$cu['birthday'] || !$cu['location'])) { ?>
+			  <div class="alert no-userdata-tooltip">
+				  Update a <a href="/pages/profile">profile</a> so we can make a better recommendations for you.
+			  </div>
+		  <? } ?>
 	  <? } ?>
 	  <div id="invite_modal" class="modal hide fade import-modal" tabindex="-1" role="dialog" aria-labelledby="invite_modal_label" aria-hidden="true">
 		  <div class="modal-header">

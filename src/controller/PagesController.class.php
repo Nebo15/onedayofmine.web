@@ -181,8 +181,15 @@ class PagesController extends lmbController
 
 	function doImport()
 	{
-		$this->facebook_app_id = $this->toolkit->getConf('facebook')->appId;
-		$this->instagram = $this->toolkit->getConf('common')->instagram;
+		if($this->_getUser())
+		{
+			$this->facebook_app_id = $this->toolkit->getConf('facebook')->appId;
+			$this->instagram = $this->toolkit->getConf('common')->instagram;
+		}
+		else
+		{
+			$this->setTemplate('pages/import_guest.phtml');
+		}
 	}
 
 	function doUser()
