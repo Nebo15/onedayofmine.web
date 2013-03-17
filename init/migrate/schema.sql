@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 5.5.29, for osx10.8 (i386)
+-- MySQL dump 10.13  Distrib 5.6.10, for osx10.8 (x86_64)
 --
 -- Host: localhost    Database: one_day
 -- ------------------------------------------------------
--- Server version	5.5.29
+-- Server version	5.6.10
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -48,6 +48,7 @@ CREATE TABLE `day` (
   `final_description` varchar(1023) DEFAULT NULL,
   `type` enum('Working day','Day off','Holiday','Trip','Special event') NOT NULL,
   `image_ext` enum('jpg','png','gif','jpeg') DEFAULT NULL,
+  `is_gathering_enabled` int(1) unsigned NOT NULL DEFAULT '0',
   `is_deleted` int(1) unsigned NOT NULL DEFAULT '0',
   `views_count` int(11) unsigned NOT NULL DEFAULT '0',
   `ctime` int(10) unsigned NOT NULL,
@@ -56,7 +57,7 @@ CREATE TABLE `day` (
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`),
   KEY `is_deleted` (`is_deleted`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2131353 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -140,10 +141,8 @@ CREATE TABLE `device_notification` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `device_token_id` int(11) unsigned NOT NULL DEFAULT '0',
   `text` varchar(256) CHARACTER SET armscii8 NOT NULL DEFAULT '',
-  `icon` int(2) unsigned DEFAULT NULL,
-  `sound` varchar(63) CHARACTER SET armscii8 DEFAULT NULL,
-  `is_sended` int(1) unsigned NOT NULL DEFAULT '0',
-  `ctime` int(11) unsigned NOT NULL,
+  `icon` int(2) unsigned NOT NULL DEFAULT '0',
+  `sound` varchar(63) CHARACTER SET armscii8 NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -164,6 +163,25 @@ CREATE TABLE `device_token` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `token` (`token`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Table structure for table `invitation`
+--
+
+DROP TABLE IF EXISTS `invitation`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `invitation` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `code` varchar(20) NOT NULL,
+  `max_count` int(11) unsigned NOT NULL,
+  `taken_count` int(11) unsigned DEFAULT '0',
+  `ctime` int(11) unsigned DEFAULT NULL,
+  `utime` int(11) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `code` (`code`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -268,6 +286,11 @@ CREATE TABLE `moment` (
   `timezone` int(4) NOT NULL,
   `facebook_id` char(20) DEFAULT NULL,
   `twitter_id` char(20) DEFAULT NULL,
+  `instagram_id` char(32) DEFAULT NULL,
+  `flickr_id` char(20) DEFAULT NULL,
+  `facebook_post_id` char(20) DEFAULT NULL,
+  `twitter_post_id` char(20) DEFAULT NULL,
+  `is_hidden` int(1) unsigned NOT NULL DEFAULT '0',
   `is_deleted` int(1) unsigned NOT NULL DEFAULT '0',
   `ctime` int(10) unsigned NOT NULL,
   `utime` int(10) unsigned NOT NULL,
@@ -338,7 +361,7 @@ CREATE TABLE `news` (
   `ctime` int(11) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `user_id_id` (`sender_id`,`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2131344 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -414,6 +437,7 @@ DROP TABLE IF EXISTS `user`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `user` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `invitation_id` int(11) unsigned DEFAULT NULL,
   `user_settings_id` int(11) unsigned DEFAULT NULL,
   `name` char(100) NOT NULL DEFAULT '',
   `email` varchar(255) DEFAULT NULL,
@@ -425,6 +449,10 @@ CREATE TABLE `user` (
   `twitter_uid` char(20) DEFAULT NULL,
   `twitter_access_token` char(255) DEFAULT NULL,
   `twitter_access_token_secret` char(255) DEFAULT NULL,
+  `instagram_uid` char(64) NOT NULL DEFAULT '',
+  `instagram_token` char(64) NOT NULL DEFAULT '',
+  `flickr_uid` char(64) NOT NULL DEFAULT '',
+  `flickr_token` char(64) NOT NULL DEFAULT '',
   `location` char(255) NOT NULL DEFAULT '',
   `occupation` char(255) NOT NULL DEFAULT '',
   `birthday` date NOT NULL,
@@ -436,7 +464,7 @@ CREATE TABLE `user` (
   PRIMARY KEY (`id`),
   KEY `facebook_uid` (`facebook_uid`),
   KEY `facebook_access_token` (`facebook_access_token`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2131520 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -487,12 +515,12 @@ CREATE TABLE `user_settings` (
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-02-21 21:24:55
--- MySQL dump 10.13  Distrib 5.5.29, for osx10.8 (i386)
+-- Dump completed on 2013-03-17 15:36:25
+-- MySQL dump 10.13  Distrib 5.6.10, for osx10.8 (x86_64)
 --
 -- Host: localhost    Database: one_day
 -- ------------------------------------------------------
--- Server version	5.5.29
+-- Server version	5.6.10
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -511,7 +539,7 @@ CREATE TABLE `user_settings` (
 
 LOCK TABLES `schema_info` WRITE;
 /*!40000 ALTER TABLE `schema_info` DISABLE KEYS */;
-INSERT INTO `schema_info` (`version`) VALUES (1359155327);
+INSERT INTO `schema_info` (`version`) VALUES (1363379859);
 /*!40000 ALTER TABLE `schema_info` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -524,4 +552,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2013-02-21 21:24:55
+-- Dump completed on 2013-03-17 15:36:26
