@@ -1,0 +1,9 @@
+{
+	"name": "odom/backend",
+	"type": "application",
+	"description": "ODOM project backend",
+	"require": {
+		"php": ">=5.3.0",
+		"limb/limb": "1"
+	}
+}
