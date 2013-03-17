@@ -13,6 +13,7 @@ lmb_require('limb/macro/src/lmbMacroException.class.php');
 lmb_require('limb/macro/src/lmbMacroConfig.class.php');
 lmb_require('limb/macro/src/compiler/lmbMacroTagDictionary.class.php');
 lmb_require('limb/macro/src/compiler/lmbMacroFilterDictionary.class.php');
+lmb_require('limb/macro/src/compiler/lmbMacroRuntimeWidgetTag.class.php');
 lmb_require('limb/macro/src/compiler/lmbMacroCompiler.class.php');
 
 /**
