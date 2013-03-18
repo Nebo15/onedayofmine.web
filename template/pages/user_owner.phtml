@@ -75,6 +75,9 @@ $this->menu = 'me';
 	</div>
 </div>
 {{/into}}
+{{into slot="js_include"}}
+	<script src="/lib/Importer.js"></script>
+{{/into}}
 {{into slot="js_ready"}}
 
 	$('.change-userpic-action').on('change', function(event) {
@@ -151,7 +154,12 @@ $this->menu = 'me';
 		}
 		else
 		{
-			alert('Здесь будет привязка аккаунта');
+			var $el = $(this);
+			var importer = new Importer('instagram');
+			importer.login(function() {
+				$el.addClass('btn-danger');
+				$el.find('i').removeClass('icon-signin').addClass('icon-signout');
+			});
 		}
 	});
 
@@ -166,7 +174,12 @@ $this->menu = 'me';
 		}
 		else
 		{
-			alert('Здесь будет привязка аккаунта');
+			var $el = $(this);
+			var importer = new Importer('flickr');
+			importer.login(function() {
+				$el.addClass('btn-danger');
+				$el.find('i').removeClass('icon-signin').addClass('icon-signout');
+			});
 		}
 	});
 {{/into}}
