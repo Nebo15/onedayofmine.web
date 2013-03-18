@@ -3,6 +3,20 @@ $this->title = "Discover days";
 $this->menu = 'discover';
 ?>
 {{wrap with="layout.phtml"}}
+{{into slot="css"}}
+.days li dd .day-desc-alter {
+	display:none;
+}
+.days li dd .day-desc {
+	display:block;
+}
+.days li:hover dd .day-desc-alter {
+	display:block;
+}
+.days li:hover dd .day-desc {
+	display:none;
+}
+{{/into}}
 {{into slot="content"}}
   <div class="row">
     <div class="span11">
@@ -22,6 +36,20 @@ $this->menu = 'discover';
 							    <i class="icon icon-large icon-comments"></i> {$item.comments_count}
 					    </span>
 						</dt>
+						<dd>
+							<div class="day-desc">
+									{$item.user.occupation|i18n_clip:25,0,"&hellip;"} from {$item.user.location}
+							</div>
+							<div class="day-desc-alter">
+								<a href="/pages/{$item.id}/day">
+									{$item.title|i18n_clip:25,0,"&hellip;"}
+								</a>
+								<br/>
+								<a href="/pages/{$item.user.id}/user">
+									<small>{$item.user.name}</small>
+								</a>
+							</div>
+						</dd>
 					</dl>
 				</li>
 				{{/list:item}}
