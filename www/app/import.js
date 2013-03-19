@@ -114,6 +114,11 @@ var ImportController = function($wizard, $steps_content) {
 
     // Helpers
     var attachThumbnailsEvents = function(day_container) {
+
+			day_container.find('.step5-action').click(function(e) {
+				_instance.step5();
+			});
+
       var analyze_button = day_container.find('.analyze-action');
 
       day_container.find('li').click(function() {

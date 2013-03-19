@@ -24,9 +24,17 @@ $this->instagram = $this->toolkit->getConf('common')->instagram;
 <script id="template_import_day" type="text/x-handlebars-template">
 	<li class="day well" style="opacity:0">
 		<ul class="thumbnails"></ul>
-		<button class="btn btn-success analyze-action skip-action">
+		<button class="btn step3-action">
+			<i class="icon icon-arrow-left"/></i>
+			&nbsp;Back
+		</button>
+		<button class="btn btn-large btn-success analyze-action skip-action">
 			<i class="show-when-parent-disabled icon icon-spin icon-refresh"></i>
 			Publish!
+		</button>
+		<button class="btn step5-action">
+			Skip&nbsp;
+			<i class="icon icon-arrow-right"/></i>
 		</button>
 	</li>
 </script>
@@ -98,12 +106,8 @@ $this->instagram = $this->toolkit->getConf('common')->instagram;
 				</div>
 			</div>
 
-			<button class="btn step3-action">
-				<i class="icon icon-arrow-left"/></i>
-				&nbsp;Back
-			</button>
-
 			<ul class="import_days unstyled"></ul>
+
 			<button class="btn btn-block paginate" style="margin: 10px 0; opacity:0;">
 				<i class="show-when-parent-disabled icon icon-spin icon-refresh"></i>
 				Load more
@@ -151,7 +155,7 @@ $this->instagram = $this->toolkit->getConf('common')->instagram;
 					<button class="btn btn-success export-action">
 						<i class="show-when-parent-disabled icon icon-spin icon-refresh"></i>
 						Save day
-						<i class="icon-white icon-forward"></i>
+						<i class="icon-white icon-arrow-right"></i>
 					</button>
 				</div>
 			</form>
