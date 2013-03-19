@@ -430,7 +430,7 @@ ul.with-separators li .btn-small {
 }
 
 /* >> Pages titles */
-.page-title {
+/*.page-title {
   text-align: center;
 }
 
@@ -442,7 +442,7 @@ ul.with-separators li .btn-small {
   border: 0;
   background: black;
   background: -webkit-gradient(linear, 0 0, 100% 0, from(#f6f6f6), to(#f6f6f6), color-stop(50%, gray));
-}
+}*/
 
 /* >> Users lists */
 .users-list li {
