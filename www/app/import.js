@@ -1,4 +1,4 @@
-var ImportController = function($wizard) {
+var ImportController = function($wizard, $steps_content) {
 	var _instance = this;
   // Creating import source
   var importer = new Importer('import');
@@ -11,6 +11,18 @@ var ImportController = function($wizard) {
   var moment_template  = Template.prepareTemplate($('#template_import_moment'));
 
 	$wizard.wizard();
+
+	$steps_content.find('.step2-action').click(function(e) {
+		_instance.step2();
+	});
+
+	$steps_content.find('.step3-action').click(function(e) {
+		_instance.step3();
+	});
+
+	$steps_content.find('.step4-action').click(function(e) {
+		_instance.step4();
+	});
 
   // Helpers
   var showError = function(message) {
@@ -30,7 +42,7 @@ var ImportController = function($wizard) {
   };
 
 	this.step1 = function() {
-		$('#wizard').wizard('step', 0);
+		$wizard.wizard('step', 0);
 		$('.facebook-action').click(function(e) {
 			$(this).off('click').html('<i class="icon-large icon-refresh icon-spin"></i> Login with Facebook');
 			API.login(function() {
@@ -40,31 +52,37 @@ var ImportController = function($wizard) {
 	};
 
 	this.step2 = function() {
-		$('#wizard').wizard('step', 1);
-		$('.instagram-action').click(function(e) {
-			var importer = new Importer('instagram');
-			if(!importer.isConnected()) {
-				importer.login(function() {
+		$wizard.wizard('step', 1);
+		var importer = new Importer('instagram');
+		if(importer.isConnected())
+		{
+			$('.instagram-action').html('Instagram connected').attr('disabled', 'disabled');
+		}
+		else
+		{
+			$('.instagram-action').click(function(e) {
+				(new Importer('instagram')).login(function() {
 					_instance.step3();
 				});
-			}
-			else
-				_instance.step3();
-		});
+			});
+		};
 	};
 
 	this.step3 = function() {
-		$('#wizard').wizard('step', 2);
-		$('.flickr-action').click(function(e) {
-			var importer = new Importer('flickr');
-			if(!importer.isConnected()) {
-				importer.login(function() {
+		$wizard.wizard('step', 2);
+		var importer = new Importer('flickr');
+		if(importer.isConnected())
+		{
+			$('.flickr-action').html('Flickr connected').attr('disabled', 'disabled');
+		}
+		else
+		{
+			$('.flickr-action').click(function(e) {
+				(new Importer('flickr')).login(function() {
 					_instance.step4();
 				});
-			}
-			else
-				_instance.step4();
-		});
+			});
+		};
 	};
 
   // Step 4
@@ -207,7 +225,7 @@ var ImportController = function($wizard) {
 
   // Step 5
   this.step5 = function(day_container) {
-		$('#wizard').wizard('step', 4);
+		$wizard.wizard('step', 4);
     var selected_shots = [];
     day_container.find('li').has('.thumbnail:not(.ignored)').each(function(index, element) {
       selected_shots.push($(element).data('description'));
@@ -228,7 +246,7 @@ var ImportController = function($wizard) {
 
         var progress = day_container.find('.progress');
 
-        day_container.find('form').submit(function() {
+        day_container.find('.export-action').click(function() {
           if($(this).find('.export-action').hasClass('disabled')) {
             return;
           }

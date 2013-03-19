@@ -72,13 +72,13 @@ $this->instagram = $this->toolkit->getConf('common')->instagram;
 				<img src="http://instagram.com/favicon.ico"/>
 				&nbsp;Connect to instagram
 			</button>
-			<button class="btn disabled skip-action">
+			<button class="btn step3-action">
 				Skip&nbsp;<i class="icon icon-arrow-right"/></i>
 			</button>
 		</div>
 
 		<div class="step-pane" id="step3">
-			<button class="btn disabled back-action">
+			<button class="btn step2-action">
 				<i class="icon icon-arrow-left"/></i>
 				&nbsp;Back
 			</button>
@@ -86,7 +86,7 @@ $this->instagram = $this->toolkit->getConf('common')->instagram;
 				<img src="http://l.yimg.com/g/favicon.ico" width="16"/>
 				&nbsp;Connect to Flickr
 			</button>
-			<button class="btn disabled skip-action">
+			<button class="btn step4-action">
 				Skip&nbsp;<i class="icon icon-arrow-right"/></i>
 			</button>
 		</div>
@@ -98,7 +98,7 @@ $this->instagram = $this->toolkit->getConf('common')->instagram;
 				</div>
 			</div>
 
-			<button class="btn disabled back-action">
+			<button class="btn step3-action">
 				<i class="icon icon-arrow-left"/></i>
 				&nbsp;Back
 			</button>
@@ -144,7 +144,7 @@ $this->instagram = $this->toolkit->getConf('common')->instagram;
 				</div>
 
 				<div class="text-center">
-					<button class="btn disabled back-action">
+					<button class="btn step4-action">
 						<i class="icon icon-arrow-left"/></i>
 						&nbsp;Back
 					</button>
@@ -159,7 +159,7 @@ $this->instagram = $this->toolkit->getConf('common')->instagram;
 	</div>
 {{/into}}
 {{into slot="js_ready"}}
-	var controller = new ImportController($('#wizard'));
+	var controller = new ImportController($('#wizard'), $('.step-content'));
 	<? if($this->steps[0]) { ?>
 		controller.step1();
 	<? } elseif($this->steps[1]) { ?>
