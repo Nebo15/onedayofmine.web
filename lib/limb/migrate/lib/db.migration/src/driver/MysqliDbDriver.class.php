@@ -6,7 +6,7 @@ class MysqliDbDriver extends DbDriver
 	function _connect_string($dsn)
 	{
 		$password = ($dsn['password']) ? '-p' . $dsn['password'] : '';
-		return "mysql -h{$dsn['host']} -u{$dsn['user']} {$dsn['password']}";
+		return "mysql -h{$dsn['host']} -u{$dsn['user']} $password";
 	}
 
 	function _nondb_exec($dsn, $cmd)
