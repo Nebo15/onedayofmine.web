@@ -62,9 +62,6 @@ $this->menu = 'discover';
 						</dt>
 						<dd>
 							<div class="day-desc">
-									{$item.user.occupation|i18n_clip:25,0,"&hellip;"} from {$item.user.location}
-							</div>
-							<div class="day-desc-alter">
 								<a href="/pages/{$item.id}/day">
 									{$item.title|i18n_clip:25,0,"&hellip;"}
 								</a>
@@ -72,6 +69,9 @@ $this->menu = 'discover';
 								<a href="/pages/{$item.user.id}/user">
 									<small>{$item.user.name}</small>
 								</a>
+							</div>
+							<div class="day-desc-alter">
+								{$item.user.occupation|i18n_clip:25,0,"&hellip;"} from {$item.user.location}
 							</div>
 						</dd>
 					</dl>
