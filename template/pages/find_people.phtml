@@ -4,25 +4,6 @@ $this->menu = 'me';
 ?>
 {{wrap with="layout.phtml"}}
   {{into slot="templates"}}
-    <script id="users_list_template" type="text/x-handlebars-template">
-      <ul class="unstyled users-list users-search-list with-separators">
-        [[#users]]
-          <li class="clearfix pull-left">
-            <img src="[[image_72]]" class="img-rounded" />
-            <span class="friend-name">[[name]]</span>
-
-            <button class="btn btn-small btn-danger pull-right unfollow-action[[#unless following]] hide[[/unless]]" data-user-id="[[id]]">
-              Unfollow
-            </button>
-
-            <button class="btn btn-small btn-success pull-right follow-action[[#if following]] hide[[/if]]" data-user-id="[[id]]">
-              Follow
-            </button>
-          </li>
-        [[/users]]
-      </ul>
-    </script>
-
     <script id="facebook_users_list_template" type="text/x-handlebars-template">
       <h2>[[title]]</h2>
       <ul class="unstyled users-list users-search-list with-separators">
@@ -47,7 +28,7 @@ $this->menu = 'me';
       </ul>
     </script>
   {{/into}}
-  <script type="text/javascript">
+
   {{into slot="js_ready"}}
     var users_search_block = $('#users_search');
     var users_list_template = Template.prepareTemplate($('#users_list_template'));
@@ -195,7 +176,7 @@ $this->menu = 'me';
 
     friends_request.send();
   {{/into}}
-  </script>
+
   {{into slot="content"}}
     <div class="row-fluid">
       <div class="span12" id="users_search">
