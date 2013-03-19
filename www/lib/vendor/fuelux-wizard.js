@@ -23,7 +23,7 @@
 		// handle events
 		this.$prevBtn.on('click', $.proxy(this.previous, this));
 		this.$nextBtn.on('click', $.proxy(this.next, this));
-		this.$element.on('click', 'li.complete', $.proxy(this.stepclicked, this));
+		//this.$element.on('click', 'li.complete', $.proxy(this.stepclicked, this));
 	};
 
 	Wizard.prototype = {
@@ -76,10 +76,15 @@
 		},
 
 		stepclicked: function (e) {
-			var li = $(e.currentTarget);
+			var evt = $.Event('stepclick');
+			this.$element.trigger(evt, {step: index + 1});
+			if (evt.isDefaultPrevented()) return;
 
-			var index = $('.steps li').index(li);
+			this.currentStep = (index + 1);
+			this.setState();
+		},
 
+		step: function (index) {
 			var evt = $.Event('stepclick');
 			this.$element.trigger(evt, {step: index + 1});
 			if (evt.isDefaultPrevented()) return;

@@ -16,6 +16,8 @@ class PagesController extends lmbController
 
 	function doDayCreate()
 	{
+		if (!$user = lmbToolkit::instance()->getUser())
+			return $this->forwardToUnauthorized();
 		return $this->doImport();
 	}
 
@@ -84,6 +86,9 @@ class PagesController extends lmbController
 
 	function doDaysDiscover()
 	{
+		if (!$user = lmbToolkit::instance()->getUser())
+			return $this->forwardToUnauthorized();
+
 		$days_ratings = (new InterestCalculator())->getDaysRatings();
 
 		$this->days = [];
@@ -172,6 +177,9 @@ class PagesController extends lmbController
 
 	function doMoment()
 	{
+		if (!$user = lmbToolkit::instance()->getUser())
+			return $this->forwardToUnauthorized();
+
 		$id = $this->request->get('id');
 
 		$this->moment = Moment::findById($id);
@@ -186,14 +194,13 @@ class PagesController extends lmbController
 			$this->facebook_app_id = $this->toolkit->getConf('facebook')->appId;
 			$this->instagram = $this->toolkit->getConf('common')->instagram;
 		}
-		else
-		{
-			$this->setTemplate('pages/import_guest.phtml');
-		}
 	}
 
 	function doUser()
 	{
+		if (!$user = lmbToolkit::instance()->getUser())
+			return $this->forwardToUnauthorized();
+
 		if(!$id = $this->request->get('id'))
 			return $this->forwardTo404();
 

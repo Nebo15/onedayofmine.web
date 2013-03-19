@@ -20,6 +20,30 @@ $this->menu = 'discover';
 {{into slot="content"}}
   <div class="row">
     <div class="span11">
+	    <h1>I want to see a
+		    <select>
+			    <option>working day</option>
+			    <option>day off</option>
+			    <option>holiday</option>
+			    <option>trip</option>
+		    </select>
+		    of
+		    <select>
+			    <option>designer</option>
+			    <option>business analyst</option>
+			    <option>artist</option>
+			    <option>courier</option>
+			    <option>plumber</option>
+		    </select>
+		    from
+		    <select>
+			    <option>New-York</option>
+			    <option>Paris</option>
+			    <option>Moscow</option>
+			    <option>Tokio</option>
+			    <option>Shanghai</option>
+		    </select>
+	    </h1>
 			{{list using="$#days"}}
 			<ul class="days">
 				{{list:item}}

@@ -1,23 +1,16 @@
-$(function() {
-  "use strict";
-
+var ImportController = function($wizard) {
+	var _instance = this;
   // Creating import source
-  var importer = new Importer(window.location.hash.substring(1));
-
+  var importer = new Importer('import');
   // Config
   var animations_speed = 300;
-
   // Selectors
   var error_container = $('#error_container');
-  var step_container  = $('#step_container');
-
   // Templates
   var day_template     = Template.prepareTemplate($('#template_import_day'));
   var moment_template  = Template.prepareTemplate($('#template_import_moment'));
-  var step1_template   = Template.prepareTemplate($('#template_step1'));
-  var step2_template   = Template.prepareTemplate($('#template_step2'));
-  var step3_template   = Template.prepareTemplate($('#template_step3'));
-  var step4_template   = Template.prepareTemplate($('#template_step4'));
+
+	$wizard.wizard();
 
   // Helpers
   var showError = function(message) {
@@ -36,32 +29,56 @@ $(function() {
     }
   };
 
-  // Step 1
-  var step1 = function() {
-    step_container.html(step1_template);
+	this.step1 = function() {
+		$('#wizard').wizard('step', 0);
+		$('.facebook-action').click(function(e) {
+			$(this).off('click').html('<i class="icon-large icon-refresh icon-spin"></i> Login with Facebook');
+			API.login(function() {
+				_instance.step2();
+			});
+		});
+	};
 
-    if(!importer.isConnected()) {
-      step_container.find('.btn').click(function() {
-        importer.loginDirect(function() {
-          step2();
-        });
-      });
-    } else {
-      step2();
-    }
-  };
+	this.step2 = function() {
+		$('#wizard').wizard('step', 1);
+		$('.instagram-action').click(function(e) {
+			var importer = new Importer('instagram');
+			if(!importer.isConnected()) {
+				importer.login(function() {
+					_instance.step3();
+				});
+			}
+			else
+				_instance.step3();
+		});
+	};
 
-  // Step 2
-  var step2 = function() {
-    // Prepare container
-    step_container.html(step2_template);
+	this.step3 = function() {
+		$('#wizard').wizard('step', 2);
+		$('.flickr-action').click(function(e) {
+			var importer = new Importer('flickr');
+			if(!importer.isConnected()) {
+				importer.login(function() {
+					_instance.step4();
+				});
+			}
+			else
+				_instance.step4();
+		});
+	};
+
+  // Step 4
+  this.step4 = function() {
+		$wizard.wizard('step', 3);
 
     // Days counter
     var total_days_count = 0;
 
+		var step_container = $('#step4');
+
     // Selectors
     var days_container = step_container.find('.import_days');
-    var step2_paginate_button = step_container.find('.paginate');
+    var step4_paginate_button = step_container.find('.paginate');
     var loader_container = step_container.find('#loader_container');
     var progress = loader_container.find('.progress');
 
@@ -100,7 +117,7 @@ $(function() {
 
         $(this).addClass('disabled show-spiner');
 
-        step3(day_container);
+        _instance.step5(day_container);
       });
     };
 
@@ -137,23 +154,23 @@ $(function() {
     var onDataRetrieved = function(days, next_callback) {
       handleProgressBar(function() {
         if(next_callback && days.length > 0) {
-          step2_paginate_button.removeClass('disabled show-spiner').animate({opacity:1}, animations_speed);
+					step4_paginate_button.removeClass('disabled show-spiner').animate({opacity:1}, animations_speed);
 
           var load_next = function() {
-            if(step2_paginate_button.hasClass('disabled')) {
+            if(step4_paginate_button.hasClass('disabled')) {
               return;
             }
 
-            step2_paginate_button.addClass('disabled show-spiner');
+						step4_paginate_button.addClass('disabled show-spiner');
 
             next_callback();
           };
 
           // Events to load next page
-          step2_paginate_button.off().click(load_next);
+					step4_paginate_button.off().click(load_next);
           $(window).off('scrollHitBottom').on('scrollHitBottom', load_next);
         } else {
-          step2_paginate_button.animate({opacity:0}, animations_speed);
+					step4_paginate_button.animate({opacity:0}, animations_speed);
         }
 
         total_days_count += days.length;
@@ -188,8 +205,9 @@ $(function() {
     importer.getUserDays(onDataRetrieved);
   };
 
-  // Step 3
-  var step3 = function(day_container) {
+  // Step 5
+  this.step5 = function(day_container) {
+		$('#wizard').wizard('step', 4);
     var selected_shots = [];
     day_container.find('li').has('.thumbnail:not(.ignored)').each(function(index, element) {
       selected_shots.push($(element).data('description'));
@@ -200,9 +218,12 @@ $(function() {
     });
 
     analyze_request.success(function (response) {
+			day_container = $('#step5');
       day_container.find('>').slideUp(animations_speed, function() {
-        day_container.html(Template.compileElement(step3_template, response.data.result));
-
+				console.log(response.data.result);
+        day_container.find('.title').val(response.data.result.title);
+				day_container.find('.type').val(response.data.result.type);
+				day_container.find('.description').val(response.data.result.description);
         day_container.find('>').slideDown(animations_speed);
 
         var progress = day_container.find('.progress');
@@ -251,7 +272,7 @@ $(function() {
 
             $.when.apply($, requests).then(function() {
               day_container.find('>').slideUp(animations_speed, function() {
-                day_container.html(Template.compileElement(step4_template, day));
+                window.location.href = "/pages/" + response.data.result.id + '/day';
               });
             });
           });
@@ -266,11 +287,4 @@ $(function() {
 
     analyze_request.send();
   };
-
-  // Running inital step
-	console.log(importer.isConnected());
-	if(!importer.isConnected())
-  	step1();
-	else
-		step2();
-});
+}
