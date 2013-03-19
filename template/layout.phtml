@@ -49,6 +49,7 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.0-rc.3/handlebars.min.js"></script>
   <script src="/lib/vendor/jquery.scrollTo-1.4.3.1-min.js"></script>
   <script src="/lib/vendor/jquery.cookie.js"></script>
+  <script src="//cdn.jsdelivr.net/masonry/2.1.08/jquery.masonry.min.js"></script>
 
   <script>
     $(function() {
@@ -70,6 +71,7 @@
   <script src="/lib/Request.js"></script>
   <script src="/lib/Template.js"></script>
   <script src="/lib/API.js"></script>
+  <script src="/lib/UI.js"></script>
   <script src="/lib/Override.js"></script>
 
   <!-- Data from backend -->
@@ -105,6 +107,14 @@
         });
       <? } ?>
 
+      // Init mansory for all days lists
+      $('.days').masonry({
+        itemSelector: '.days > li',
+        columnWidth: 261,
+        rowHeight: 261,
+        isFitWidth: true
+      });
+
       // Init global tooltips
       $('.with-tooltip').tooltip({
         placement: 'bottom'
@@ -132,7 +142,7 @@
     <div id="fb-root"></div>
   <?php } ?>
   <div class="container">
-    <div class="navbar navbar-static-top">
+    <header class="navbar navbar-static-top">
       <div class="navbar-inner">
         <div class="container">
           <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-responsive-collapse">
@@ -143,54 +153,53 @@
           <a class="brand" href="/pages/">OneDayOfMine</a>
           <?php if(!property_exists($this, 'menu_disabled') || !$this->menu_disabled) { ?>
             <div class="nav-collapse collapse navbar-responsive-collapse">
-                <ul class="nav">
-                    <li class="<?= ($this->menu == 'create_day' || $this->menu == 'import') ? 'active' : '';?>">
-                        <a href="/pages/day_create" class="trigger_login"><i class="icon-large icon-camera"></i> Start day</a>
-                    </li>
-                    <li class="<?= ($this->menu == 'discover') ? 'active' : '';?>">
-                        <a href="/pages/days_discover"><i class="icon-large icon-group"></i> Discover</a>
-                    </li>
-                    <li class="<?= ($this->menu == 'search') ? 'active' : '';?>">
-                        <a href="/pages/days_search"><i class="icon-large icon-search"></i> Search</a>
-                    </li>
-                </ul>
+              <ul class="nav">
+                  <li class="<?= ($this->menu == 'create_day' || $this->menu == 'import') ? 'active' : '';?>">
+                      <a href="/pages/day_create" class="trigger_login"><i class="icon-large icon-camera"></i> Start day</a>
+                  </li>
+                  <li class="<?= ($this->menu == 'discover') ? 'active' : '';?>">
+                      <a href="/pages/days_discover"><i class="icon-large icon-group"></i> Discover</a>
+                  </li>
+                  <li class="<?= ($this->menu == 'search') ? 'active' : '';?>">
+                      <a href="/pages/days_search"><i class="icon-large icon-search"></i> Search</a>
+                  </li>
+              </ul>
+              <ul class="nav pull-right">
+                <li class="dropdown <?= ($this->menu == 'me') ? 'active' : '';?>">
+                  <? if(!$this->toolkit->getUser()) { ?>
+                    <a class="trigger_login">
+                      <i class="icon-large icon-facebook-sign"></i> Login with Facebook
+                    </a>
+                  <? } else { ?>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        {$#current_user.name}
+                        <img src="{$#current_user.image_36}" width="24" height="24" class="img-rounded" />
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/pages/my_days"><i class="icon icon-camera"></i> My days</a></li>
+                        <li><a href="/pages/my_followers"><i class="icon icon-hand-right"></i> My followers &amp; following</a></li>
+                        <li class="divider"></li>
+                        <li><a href="/pages/profile"><i class="icon icon-cog"></i> Profile</a></li>
+                        <li class="divider"></li>
+                        <li><a href="/pages/find_people"><i class="icon icon-search"></i> Find and invite people</a></li>
 
-                <div class="nav pull-right">
-                  <ul class="nav">
-                    <li id="menu_me" class="dropdown <?= ($this->menu == 'me') ? 'active' : '';?>">
-                      <? if(!$this->toolkit->getUser()) { ?>
-                        <a class="trigger_login">
-                          <i class="icon-large icon-facebook-sign"></i> Login with Facebook
-                        </a>
-                      <? } else { ?>
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                            {$#current_user.name}
-                            <img src="{$#current_user.image_36}" width="24" height="24" class="img-rounded" />
-                            <b class="caret"></b>
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a href="/pages/my_days"><i class="icon icon-camera"></i> My days</a></li>
-                            <li><a href="/pages/my_followers"><i class="icon icon-hand-right"></i> My followers &amp; following</a></li>
-                            <li class="divider"></li>
-                            <li><a href="/pages/profile"><i class="icon icon-cog"></i> Profile</a></li>
-                            <li class="divider"></li>
-                            <li><a href="/pages/find_people"><i class="icon icon-search"></i> Find and invite people</a></li>
-
-                            <li class="divider"></li>
-                            <li><a class="trigger_logout"><i class="icon icon-signout"></i> Logout</a></li>
-                        </ul>
-                      <? } ?>
-                    </li>
-                    <li class="divider-vertical"></li>
-                  </ul>
-                </div>
+                        <li class="divider"></li>
+                        <li><a class="trigger_logout"><i class="icon icon-signout"></i> Logout</a></li>
+                    </ul>
+                  <? } ?>
+                </li>
+              </ul>
             </div><!-- /.nav-collapse -->
           <?php } ?>
         </div>
       </div><!-- /navbar-inner -->
-    </div><!-- /navbar -->
-    {{slot id='content'/}}
-    {{slot id='content_zone'/}}
+    </header><!-- /navbar -->
+
+    <section class="content">
+      {{slot id='content'/}}
+      {{slot id='content_zone'/}}
+    </section>
 	</div>
 </body>
 </html>
