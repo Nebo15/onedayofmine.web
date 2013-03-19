@@ -2,107 +2,96 @@
 $this->menu = '';
 ?>
 {{wrap with="layout.phtml"}}
-{{into slot="css"}}
-.followers-list li {
-  float:left;
-  margin-right:3px;
-}
-.followers-list li img {
-	width:36px;
-	height:36px;
-}
-
-.comment-item img {
-  margin:0px;
-}
-
-{{/into}}
-{{into slot="content"}}
-<div class="row">
-		<div class="span8">
+  {{into slot="content"}}
+    <div class="row">
+  		<div class="span8">
 				<h1>News</h1>
         <div class="comments">
-            <span class="pull-right not-decorated with-shadow"></span>
-            <ul class="unstyled">
+          <span class="pull-right not-decorated text-gray"></span>
+          <ul class="unstyled">
             {{list using="$#news"}}
-	              {{list:item}}
-		                <li class="comment-item">
-		                    <img src="{$item.sender.image_72}" width="72" class="pull-left img-rounded" alt="" />
-		                    <div class="bubble left">
-		                        <p class="text">
-		                            {$item.text|raw}
-		                            <br />
-			                          {{list using="{$item.days}" as="$day"}}
-				                            {{list:item}}
-                                        <a href="/pages/{$day.id}/day">
-                                            <img src="{$day.image_266}" width="72">
-	                                      </a>
-                                    {{/list:item}}
-                                {{/list}}
-		                            {{list using="{$item.moments}" as="$moment"}}
-		                                {{list:item}}
-		                                    <a href="/pages/{$item.day.id}/day">
-				                                    <img src="{$moment.image_266}" width="72">
-		                                    </a>
-		                                {{/list:item}}
-		                            {{/list}}
-		                            {{list using="{$item.day_comments}" as="$comment"}}
-		                                {{list:item}}
-			                                  <blockquote>{$comment.text}</blockquote>
-		                                {{/list:item}}
-		                            {{/list}}
-		                            {{list using="{$item.moment_comments}" as="$comment"}}
-				                            {{list:item}}
-				                                <blockquote>{$comment.text}</blockquote>
-				                            {{/list:item}}
-		                            {{/list}}
-		                            <small><b>{$item.time|date:'M j \a\t g:m a'}</b></small>
-		                        </p>
-		                    </div>
-		                </li>
-                {{/list:item}}
-                {{list:empty}}
-                    <p>You don't have news. Try to <a href="/pages/find_people">follow</a> more people.</p>
-                {{/list:empty}}
+              {{list:item}}
+                <li class="comment-item">
+                  <img src="{$item.sender.image_72}" width="72" class="pull-left img-rounded" alt="" />
+                  <div class="bubble left">
+                    <p class="text">
+                      {$item.text|raw}
+                      <br />
+                      {{list using="{$item.days}" as="$day"}}
+                        {{list:item}}
+                          <a href="/pages/{$day.id}/day">
+                            <img src="{$day.image_266}" width="72">
+                          </a>
+                        {{/list:item}}
+                      {{/list}}
+                      {{list using="{$item.moments}" as="$moment"}}
+                        {{list:item}}
+                          <a href="/pages/{$item.day.id}/day">
+                            <img src="{$moment.image_266}" width="72">
+                          </a>
+                        {{/list:item}}
+                      {{/list}}
+                      {{list using="{$item.day_comments}" as="$comment"}}
+                        {{list:item}}
+                          <blockquote>{$comment.text}</blockquote>
+                        {{/list:item}}
+                      {{/list}}
+                      {{list using="{$item.moment_comments}" as="$comment"}}
+                        {{list:item}}
+                          <blockquote>{$comment.text}</blockquote>
+                        {{/list:item}}
+                      {{/list}}
+                      <small><b>{$item.time|date:'M j \a\t g:m a'}</b></small>
+                    </p>
+                  </div>
+                </li>
+              {{/list:item}}
+              {{list:empty}}
+                <p>You don't have news. Try to <a href="/pages/find_people">follow</a> more people.</p>
+              {{/list:empty}}
             {{/list}}
-            </ul>
+          </ul>
         </div>
-		</div>
-		<div class="span3 hidden-on-mobile">
+  		</div>
+
+  		<div class="span3 hide-phone">
 				<div class="row">
-						<h3>Following&nbsp;&nbsp;<small>{$#current_user.following_count}</small></h3>
-						{{list using="{$#following}"}}
-                <ul class="unstyled  followers-list">
-								{{list:item}}
-                    <li><a href="/pages/{$item.id}/user">
-		                    <img src="{$item.image_72}" class="img-rounded with-tooltip" data-original-title="{$item.name}" />
-                    </a></li>
-		            {{/list:item}}
-                </ul>
-								{{list:empty}}
-                    <p>You have no following users. But you can <a href="/pages/find_people">find</a> em!</p>
-								{{/list:empty}}
-						{{/list}}
+					<h3>Following&nbsp;&nbsp;<small>{$#current_user.following_count}</small></h3>
+					{{list using="{$#following}"}}
+            <ul class="unstyled  followers-list">
+							{{list:item}}
+                <li>
+                  <a href="/pages/{$item.id}/user">
+                    <img src="{$item.image_72}" class="img-rounded with-tooltip" data-original-title="{$item.name}" />
+                  </a>
+                </li>
+	            {{/list:item}}
+            </ul>
+
+						{{list:empty}}
+              <p>You have no following users. But you can <a href="/pages/find_people">find</a> em!</p>
+						{{/list:empty}}
+					{{/list}}
 				</div>
+
         <div class="row">
-		        <h3>Followers&nbsp;&nbsp;<small>{$#current_user.followers_count}</small></h3>
-            {{list using="{$#followers}"}}
-		            <ul class="unstyled followers-list">
-		                {{list:item}}
-		                <li><a href="/pages/{$item.id}/user">
-		                    <img src="{$item.image_72}" class="img-rounded with-tooltip" data-original-title="{$item.name}" />
-		                </a></li>
-		                {{/list:item}}
-		            </ul>
-		            {{list:empty}}
-                    <p>You have no followers. <a href="/pages/find_people">Invite friends</a> that can follow you!</p>
-		            {{/list:empty}}
-            {{/list}}
+	        <h3>Followers&nbsp;&nbsp;<small>{$#current_user.followers_count}</small></h3>
+          {{list using="{$#followers}"}}
+            <ul class="unstyled followers-list">
+              {{list:item}}
+                <li>
+                  <a href="/pages/{$item.id}/user">
+                    <img src="{$item.image_72}" class="img-rounded with-tooltip" data-original-title="{$item.name}" />
+	                </a>
+                </li>
+              {{/list:item}}
+            </ul>
+            {{list:empty}}
+              <p>You have no followers. <a href="/pages/find_people">Invite friends</a> that can follow you!</p>
+            {{/list:empty}}
+          {{/list}}
         </div>
-		</div>
-</div>
-<script>
-    $('.tool').tooltip();
-</script>
-{{/into}}
+  		</div>
+    </div>
+  {{/into}}
 {{/wrap}}

@@ -2,16 +2,6 @@
 $this->menu = '';
 ?>
 {{wrap with="layout.phtml"}}
-  {{into slot="css"}}
-    .followers-list li {
-    	float:left;
-    	margin-right:3px;
-    }
-    .followers-list li img {
-    	width:36px;
-    	height:36px;
-    }
-  {{/into}}
   <script type="text/javascript">
   {{into slot="js_ready"}}
     <? if($this->toolkit->getUser() && $this->user['id'] != $this->toolkit->getUser()->id) { ?>
