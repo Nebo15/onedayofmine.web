@@ -3,12 +3,8 @@ $this->title = "Discover days";
 $this->menu = 'discover';
 ?>
 {{wrap with="layout.phtml"}}
-{{into slot="content"}}
-  <div class="row">
-    <div class="span11">
-      <h1>Discover days</h1>
-    	{{apply template="days_list" days="$#days"/}}
-    </div>
-  </div>
-{{/into}}
+  {{into slot="content"}}
+    <h1 class="page-title">Discover days</h1>
+  	{{apply template="days_list" days="$#days"/}}
+  {{/into}}
 {{/wrap}}

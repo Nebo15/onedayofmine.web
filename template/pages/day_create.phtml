@@ -40,27 +40,36 @@ $this->menu = 'create_day';
   {{into slot="content"}}
     <div class="hero-unit">
       <h1>Import days from&hellip;</h1>
-      <div class="text-center" style="padding-top: 50px;">
-        <a class="btn btn-large btn-main" id="import_instagram" href="/pages/import#instagram">
-          <i class="icon icon-large icon-camera-retro"></i>
-          Instagram
-        </a>
-        <a class="btn btn-large btn-main" id="import_flickr" href="/pages/import#flickr">
-          <i class="icon icon-large icon-camera"></i>
-          Flickr
-        </a>
-        <a class="btn btn-large btn-main" id="import_facebook" href="/pages/import#facebook">
-          <i class="icon icon-large icon-facebook-sign"></i>
-          Facebook
-        </a>
-      </div>
+      <ul class="inline unstyled text-center" style="padding-top: 50px;">
+        <li>
+          <a class="btn btn-large btn-main" id="import_instagram" href="/pages/import#instagram">
+            <i class="icon icon-large icon-camera-retro"></i>
+            Instagram
+          </a>
+        </li>
+        <li>
+          <a class="btn btn-large btn-main" id="import_flickr" href="/pages/import#flickr">
+            <i class="icon icon-large icon-camera"></i>
+            Flickr
+          </a>
+        </li>
+        <li>
+          <a class="btn btn-large btn-main" id="import_facebook" href="/pages/import#facebook">
+            <i class="icon icon-large icon-facebook-sign"></i>
+            Facebook
+          </a>
+        </li>
+      </ul>
+
       <h1>or &hellip;</h1>
-      <div class="text-center" style="padding-top: 50px;">
-        <a class="btn btn-large btn-main" id="day_create">
-          <i class="icon icon-large icon-edit"></i>
-          Create day from scratch
-        </a>
-      </div>
+      <ul class="inline unstyled text-center" style="padding-top: 50px;">
+        <li>
+          <a class="btn btn-large btn-main" id="day_create">
+            <i class="icon icon-large icon-edit"></i>
+            Create day from scratch
+          </a>
+        </li>
+      </ul>
     </div>
   {{/into}}
 {{/wrap}}

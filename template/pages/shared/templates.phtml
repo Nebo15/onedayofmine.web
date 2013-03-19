@@ -1,39 +1,43 @@
 {{template name='days_list'}}
-		{{list using="$days"}}
-				<ul class="days">
-				    {{list:item}}
-				    <li>
-						    <dl class="with-box-shadow">
-								    <dt>
-                        <a href="/pages/{$item.id}/day">
-                            <img src="{$item.image_532|default:'/img/no_photo.png'}" alt="{$item.final_description}">
-                        </a>
-									      <span class="day-controls-overlay-left">
-												    <i class="icon icon-heart"></i> {$item.likes_count}
-										    </span>
-										    <span class="day-controls-overlay-right">
-												    <i class="icon icon-large icon-comments"></i> {$item.comments_count}
-										    </span>
-								    </dt>
-								    <dd>
-                        <div>
-                            <a href="/pages/{$item.id}/day">
-		                            {$item.title|i18n_clip:25,0,"&hellip;"}
-	                          </a>
-	                          <br/>
-		                        <a href="/pages/{$item.user.id}/user">
-                                <small>{$item.user.name}</small>
-                            </a>
-                        </div>
-								    </dd>
-						    </dl>
-				    </li>
-				    {{/list:item}}
-				</ul>
-				{{list:default}}
-						No days found
-				{{/list:default}}
-		{{/list}}
+	{{list using="$days"}}
+		<ul class="days clearfix block-center">
+	    {{list:item}}
+		    <li>
+			    <dl class="with-box-shadow">
+				    <dt>
+              <a href="/pages/{$item.id}/day">
+                <img src="{$item.image_532|default:'/img/no_photo.png'}" alt="{$item.final_description}">
+              </a>
+				    </dt>
+				    <dd class="animated">
+              <ul class="unstyled">
+                <li>
+                  <a href="/pages/{$item.id}/day">
+                    {$item.title|i18n_clip:25,0,"&hellip;"}
+                  </a>
+                </li>
+                <li class="small">
+                  <a href="/pages/{$item.user.id}/user">
+                    {$item.user.name}
+                  </a>
+                </li>
+                <li class="small">
+                  <ul class="inline unstyled">
+                    <li><i class="icon icon-heart"></i> <small>{$item.likes_count}</small></li>
+                    <li><i class="icon icon-large icon-comments"></i> {$item.comments_count}</li>
+                    <li><i class="icon icon-large icon-eye-open"></i> {$item.views_count}</li>
+                  </ul>
+                </li>
+              </ul>
+				    </dd>
+			    </dl>
+		    </li>
+	    {{/list:item}}
+		</ul>
+		{{list:default}}
+			No days found
+		{{/list:default}}
+	{{/list}}
 {{/template}}
 
 <script id="days_list" type="text/x-handlebars-template">

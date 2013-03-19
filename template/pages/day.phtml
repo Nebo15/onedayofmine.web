@@ -37,7 +37,7 @@
             <p class="text">
               <? if($this->toolkit->getUser()) { ?>
                 [[#if-eq user.id <?= $this->toolkit->getUser()->id ?>]]
-                  <a class="pull-right not-decorated with-shadow btn-comment-delete"><i class="icon-trash with-tooltip" data-original-title="Delete"></i></a>
+                  <a class="pull-right not-decorated text-gray btn-comment-delete"><i class="icon-trash with-tooltip" data-original-title="Delete"></i></a>
                 [[/if-eq]]
               <? } ?>
 
@@ -53,10 +53,10 @@
     <script id="template_moment" type="text/x-handlebars-template">
       <li class="well moment-item moment-item-new info">
         <span class="moment-controls-overlay">
-          <a class="not-decorated with-shadow" id="trigger_moment_delete"><i class="icon-trash with-tooltip" data-original-title="Delete"></i></a>
+          <a class="not-decorated text-gray" id="trigger_moment_delete"><i class="icon-trash with-tooltip" data-original-title="Delete"></i></a>
         </span>
 
-        <div class="timepicker text-center with-shadow">
+        <div class="timepicker text-center text-gray">
           <span class="input-prepend input-append">
             <span class="add-on add-on-small hidden-phone"><i class="icon-calendar"></i></span>
             <input type="text" subtype="date" class="add-on-small" value="[[moment.date]]" />
@@ -68,7 +68,7 @@
           </span>
         </div>
 
-        <div class="moment-image-holder">
+        <div class="moment-image-holder block-center">
           <img src="[[#if moment.image]][[moment.image]][[else]]http://placehold.it/532x532&text=Select+image[[/if]]" class="img-polaroid" alt="" />
         </div>
 
@@ -81,7 +81,7 @@
       </li>
 
       <li class="well moment-item-placeholder">
-        <a class="not-decorated with-shadow"><i class="icon-plus-sign icon-2x with-tooltip" data-original-title="Click or drag files here to add moments"></i></a>
+        <a class="not-decorated text-gray"><i class="icon-plus-sign icon-2x with-tooltip" data-original-title="Click or drag files here to add moments"></i></a>
       </li>
     </script>
 
@@ -185,10 +185,10 @@
           <div class="span6 offset3">
               <? if($this->is_owner) { ?>
                 <span class="day-controls pull-right">
-                  <a class="not-decorated with-shadow" href="/pages/{$#day->id}/day?previev">
+                  <a class="not-decorated text-gray" href="/pages/{$#day->id}/day?previev">
                     <i class="icon-eye-open with-tooltip" data-original-title="Enter preview mode"></i>
                   </a>
-                  <a class="not-decorated with-shadow" id="trigger_day_delete" day_id="{$#day->id}">
+                  <a class="not-decorated text-gray" id="trigger_day_delete" day_id="{$#day->id}">
                     <i class="icon-trash with-tooltip" data-original-title="Delete day"></i>
                   </a>
                 </span>
@@ -208,7 +208,7 @@
 
                   <div id="day_type_selector" class="row">
                     <h5>Day type:</h5>
-                    <div class="btn-group span12">
+                    <div class="btn-group span12">  <!-- todo  data-toggle="buttons-radio" -->
                       <button class="btn btn-small<? if($this->day->type == 'Working day') {?> active btn-success<? } ?>">Working day</button>
                       <button class="btn btn-small<? if($this->day->type == 'Day off') {?> active btn-success<? } ?>">Day off</button>
                       <button class="btn btn-small<? if($this->day->type == 'Holiday') {?> active btn-success<? } ?>">Holiday</button>
@@ -274,7 +274,7 @@
 							<ul class="unstyled moments-list">
               <? if($this->is_owner) { ?>
 								<li class="well moment-item-placeholder">
-									<a class="not-decorated with-shadow"><i class="icon-plus-sign icon-2x with-tooltip" data-original-title="Click or drag files here to add moments"></i></a>
+									<a class="not-decorated text-gray"><i class="icon-plus-sign icon-2x with-tooltip" data-original-title="Click or drag files here to add moments"></i></a>
 								</li>
 	            <? } ?>
               {{list using="$#day->moments"}}
@@ -282,10 +282,10 @@
                     <li class="well moment-item {{if var='$item.is_hidden'}}moment-item-hidden{{/if}}" moment_id="{$item->id}" itemscope itemtype="http://schema.org/ImageObject">
                         <? if($this->is_owner || $this->day->is_gathering_enabled) { ?>
                           <span class="moment-controls-overlay">
-                            <a class="not-decorated with-shadow" id="trigger_moment_delete"><i class="icon-trash with-tooltip" data-original-title="Delete"></i></a>
+                            <a class="not-decorated text-gray" id="trigger_moment_delete"><i class="icon-trash with-tooltip" data-original-title="Delete"></i></a>
                           </span>
                         <? } ?>
-                        <div class="timepicker text-center with-shadow">
+                        <div class="timepicker text-center text-gray">
                           <? if($this->is_owner) { ?>
                             <span class="input-prepend input-append">
                               <span class="add-on add-on-small hidden-phone"><i class="icon-calendar"></i></span>
@@ -301,7 +301,7 @@
                           <? } ?>
                         </div>
 
-                        <div class="moment-image-holder">
+                        <div class="moment-image-holder block-center">
                           <img src="{$item->image_532}" width="400" class="img-polaroid" itemprop="contentUrl" alt="" />
                         </div>
 
@@ -326,7 +326,7 @@
                     </li>
                     <? if($this->is_owner) { ?>
                       <li class="well moment-item-placeholder">
-                        <a class="not-decorated with-shadow">
+                        <a class="not-decorated text-gray">
                           <i class="icon-plus-sign icon-2x with-tooltip" data-original-title="Click or drag files here to add moments"></i>
                         </a>
                       </li>
@@ -391,8 +391,9 @@
               <hr/>
 
               <? if($this->toolkit->getUser() || $this->day->comments_count > 0) { ?>
+                <a name="comments"></a>
                 <div class="comments">
-                  <span class="pull-right not-decorated with-shadow">
+                  <span class="pull-right not-decorated text-gray">
                     <i class="icon-comments"></i>
                     <span id="comments_counter"><? if($this->day->comments_count > 3) { ?>3/<? } ?>{$this->day->comments_count}</span>
                   </span>
@@ -406,7 +407,7 @@
                             <div class="bubble left">
                               <p class="text">
                                 <? if($this->toolkit->getUser() && $item->user->id == $this->toolkit->getUser()->id) { ?>
-                                  <a class="pull-right not-decorated with-shadow btn-comment-delete"><i class="icon-trash with-tooltip" data-original-title="Delete"></i></a>
+                                  <a class="pull-right not-decorated text-gray btn-comment-delete"><i class="icon-trash with-tooltip" data-original-title="Delete"></i></a>
                                 <? } ?>
 
                                 {$item->text}

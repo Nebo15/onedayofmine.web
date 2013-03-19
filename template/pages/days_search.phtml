@@ -3,35 +3,54 @@ $this->title = "Search for days";
 $this->menu = 'search';
 ?>
 {{wrap with="layout.phtml"}}
-{{into slot="content"}}
-  <div class="row">
-    <div class="span11">
-  		<h1>Search for days</h1>
-  		<form class="form-search" style="margin-top:15px">
-  		    <input type="text" class="input-xlarge search-query">
-  		    <button type="submit" class="btn">Search</button>
-  		</form>
-  		<div id="days"></div>
-    </div>
-  </div>
-{{/into}}
-{{into slot="js_ready"}}
-		$('.form-search').submit(function() {
-				if($('' == '.search-query').val())
-						return;
-				var req = API.request('POST', 'days/search', {query:$('.search-query').val()}).success(function(response) {
-						$('#days').html();
-						if(0 == response.data.result.length)
-						{
-								$('#days').html("<p>We can't find any days by your query</p>");
-						}
-						else
-						{
-								var source = Template.prepareTemplate($('#days_list'));
-								Template.renderElement(source, $('#days'), {days:response.data.result});
-						}
-				}).send();
-				return false;
-    });
-{{/into}}
+  {{into slot="js_ready"}}
+    (function() {
+      var search_form_selector = $('.form-search');
+      var search_form_query_selector = search_form_selector.find('.search-query');
+      var search_form_submit_selector = search_form_selector.find('button');
+      var search_result_selector = $('.search-result');
+
+      search_form_query_selector.attachValidator({
+        button: search_form_submit_selector,
+        maxLength: 100,
+        minLength: 5,
+        messages: {
+          empty: 'Search query is empty',
+          minLength: 'Search query is too short',
+          maxLength: 'Search query is too long'
+        }
+      });
+
+      search_form_selector.submit(function(event) {
+        var search_request = API.request('POST', 'days/search', {
+          query: search_form_query_selector.val()
+        });
+
+        search_request.success(function(response) {
+          search_result_selector.html();
+          if(response.data.result.length === 0)
+          {
+            search_result_selector.html("<p>We can't find any days by your query</p>");
+          }
+          else
+          {
+            var source = Template.prepareTemplate($('#days_list'));
+            Template.renderElement(source, search_result_selector, {days:response.data.result});
+          }
+        })
+
+        search_request.send();
+
+        return false;
+      });
+    })();
+  {{/into}}
+  {{into slot="content"}}
+    <h1 class="page-title">Search for days</h1>
+    <form class="form-search days-search-form text-center">
+      <input type="text" autofocus class="input-xlarge search-query">
+      <button type="submit" class="btn">Search</button>
+    </form>
+    <div class="search-result"></div>
+  {{/into}}
 {{/wrap}}
