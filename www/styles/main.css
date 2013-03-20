@@ -423,6 +423,10 @@ textarea.info:focus {
 }
 
 /* Main style */
+.content {
+  padding-top: 20px;
+}
+
 /* >> Lists titles */
 ul.with-separators li {
   border-bottom: 1px solid rgba(34,25,25,0.1);
@@ -431,6 +435,32 @@ ul.with-separators li {
 
 ul.with-separators li .btn-small {
   margin-top: 2px;
+}
+
+/* jQuery Mansory */
+.masonry,
+.masonry .masonry-brick {
+  -webkit-transition-duration: 0.7s;
+     -moz-transition-duration: 0.7s;
+      -ms-transition-duration: 0.7s;
+       -o-transition-duration: 0.7s;
+          transition-duration: 0.7s;
+}
+
+.masonry {
+  -webkit-transition-property: height, width;
+     -moz-transition-property: height, width;
+      -ms-transition-property: height, width;
+       -o-transition-property: height, width;
+          transition-property: height, width;
+}
+
+.masonry .masonry-brick {
+  -webkit-transition-property: left, right, top;
+     -moz-transition-property: left, right, top;
+      -ms-transition-property: left, right, top;
+       -o-transition-property: left, right, top;
+          transition-property: left, right, top;
 }
 
 /* >> Pages titles */
@@ -527,30 +557,38 @@ ul.with-separators li .btn-small {
   font-size: 85%;
 }
 
-/* jQuery Mansory */
-.masonry,
-.masonry .masonry-brick {
-  -webkit-transition-duration: 0.7s;
-     -moz-transition-duration: 0.7s;
-      -ms-transition-duration: 0.7s;
-       -o-transition-duration: 0.7s;
-          transition-duration: 0.7s;
+/* >> Comments */
+.comment-item {
+  margin-top: 20px;
+  clear: both;
 }
 
-.masonry {
-  -webkit-transition-property: height, width;
-     -moz-transition-property: height, width;
-      -ms-transition-property: height, width;
-       -o-transition-property: height, width;
-          transition-property: height, width;
+.img-polaroid {
+  margin: -5px;
 }
 
-.masonry .masonry-brick {
-  -webkit-transition-property: left, right, top;
-     -moz-transition-property: left, right, top;
-      -ms-transition-property: left, right, top;
-       -o-transition-property: left, right, top;
-          transition-property: left, right, top;
+.comment-item .text,
+.no-overflow {
+  overflow: hidden;
+}
+
+.comment-item .bubble {
+  padding-bottom: 1px;
+}
+
+.comment-item img {
+  margin-right: 20px;
+}
+
+.comment-item .bubble,
+.comments-loader {
+  margin-left: 100px;
+}
+
+.comments-loader {
+  clear: both;
+  margin-top: 10px;
+  margin-bottom: 15px;
 }
 
 /* > Main page */
@@ -604,6 +642,14 @@ ul.with-separators li .btn-small {
   .hero-unit {
     padding: 0;
     margin: 0;
+  }
+
+  .comment-item img {
+    width: 36px;
+  }
+
+  .comment-item .bubble {
+    margin-left: 50px;
   }
 }
 
