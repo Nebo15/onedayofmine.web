@@ -35,80 +35,97 @@
 	    {{/list:item}}
 		</ul>
 		{{list:default}}
-			No days found
+			User don't have any days yet.
 		{{/list:default}}
 	{{/list}}
 {{/template}}
-
-<script id="days_list" type="text/x-handlebars-template">
-		<ul class="days">
-				[[#days]]
-		    <li>
-		        <dl class="with-box-shadow">
-		            <dt>
-		                <a href="/pages/[[id]]/day">
-		                    <img src="[[image_532]]" alt="[[final_description]]">
-		                </a>
-		            </dt>
-		            <dd>
-		                <div>
-		                    <a href="/pages/[[id]]/day">
-		                        [[clip title 30]]
-		                    </a>
-		                    <br/>
-		                    <a href="/pages/[[user.id]]/user">
-		                        <small>[[user.name]]</small>
-		                    </a>
-		                </div>
-		            </dd>
-		        </dl>
-		    </li>
-        [[/days]]
-		</ul>
+<!-- TODO: Test this in days-search -->
+<script id="days_list_template" type="text/x-handlebars-template">
+  <ul class="days clearfix block-center">
+    [[#days]]
+      <li>
+        <dl class="with-box-shadow">
+          <dt>
+            <a href="/pages/[[id]]/day">
+              <img src="[[#if image_532]][[image_532]][[else]]/img/no_photo.png[[/if]]" alt="[[final_description]]">
+            </a>
+          </dt>
+          <dd class="animated">
+            <ul class="unstyled">
+              <li>
+                <a href="/pages/[[id]]/day">
+                  [[clip title 25]]
+                </a>
+              </li>
+              <li class="small">
+                <a href="/pages/[[user.id]]/user">
+                  [[user.name]]
+                </a>
+              </li>
+              <li class="small">
+                <ul class="inline unstyled">
+                  <li><i class="icon icon-heart"></i> <small>[[likes_count]]</small></li>
+                  <li><i class="icon icon-large icon-comments"></i> [[comments_count]]</li>
+                  <li><i class="icon icon-large icon-eye-open"></i> [[views_count]]</li>
+                </ul>
+              </li>
+            </ul>
+          </dd>
+        </dl>
+      </li>
+    [[/days]]
+  </ul>
 </script>
 
 {{template name='users_list'}}
-		{{list using="$users"}}
-		<div class="users">
-		    {{list:item}}
-		    <div class="row">
-		        <div class="left">
-		            <a href="/pages/{$item.id}/user">
-		                <img src="{$item.image_72}"/>
-		            </a>
-		        </div>
-		        <div class="middle">
-		            <a href="/pages/{$item.id}/user">{$item.name}</a>
-		            <br/>
-		            <small>{$item.occupation} <? if($item['location']) { ?>{$item.location}<? } ?></small>
-		        </div>
-		        <div class="right">
-		            <a href="#" user_id="{$item.id}" class="follow-action btn btn-info <? if($item['following']) { ?>hide<? } ?>">Follow</a>
-		            <a href="#" user_id="{$item.id}" class="unfollow-action btn btn-danger <? if(!$item['following']) { ?>hide<? } ?>">Unfollow</a>
-		        </div>
-		    </div>
-		    {{/list:item}}
-		</div>
-		{{/list}}
+
+{{/template}}
+<script id="users_list_template" type="text/x-handlebars-template">
+  <ul class="unstyled users-list users-search-list with-separators">
+    [[#users]]
+      <li class="clearfix pull-left">
+        <img src="[[image_72]]" class="img-rounded" />
+        <span class="friend-name">[[name]]</span>
+
+        <button class="btn btn-small btn-danger pull-right unfollow-action[[#unless following]] hide[[/unless]]" data-user-id="[[id]]">
+          Unfollow
+        </button>
+
+        <button class="btn btn-small btn-success pull-right follow-action[[#if following]] hide[[/if]]" data-user-id="[[id]]">
+          Follow
+        </button>
+      </li>
+    [[/users]]
+  </ul>
+</script>
+
+{{template name='users_thumb_list'}}
+  {{list using="$users"}}
+    <ul class="unstyled inline users-thumb-list">
+      {{list:item}}
+        <li>
+          <a href="/pages/{$item.id}/user">
+            <img src="{$item.image_72}" class="img-rounded with-tooltip" data-original-title="{$item.name}" />
+          </a>
+        </li>
+      {{/list:item}}
+    </ul>
+
+    {{list:empty}}
+      {$empty_message|raw}
+    {{/list:empty}}
+  {{/list}}
+{{/template}}
+<script id="users_thumb_list_template" type="text/x-handlebars-template">
+
+</script>
+
+{{template name='following_thumb_list'}}
+  <h3>Following&nbsp;&nbsp;<small><?= count($users) ?></small></h3>
+  {{apply template="users_thumb_list" users="{$users}" empty_message="<p>You have no following users. But you can <a href=\'/pages/find_people\'>find</a> em!</p>" /}}
 {{/template}}
 
-<script id="users_list" type="text/x-handlebars-template">
-    <ul class="unstyled">
-        [[#users]]
-        <li style="background-color:#eeeeee; margin-top:10px">
-            <div class="row" >
-                <div class="span1">
-                    <img src="[[image]]"/>
-                </div>
-                <div class="span5">
-                    <a href="">[[name]]</a>
-                    <small>[[text]]</small>
-                    <div class="pull-right" style="height:70px;">
-                        <a href="#" class="btn [[btn_class]]" style="margin:17px 10px 0 0" [[btn_attr]]="[[btn_value]]">[[btn_text]]</a>
-                    </div>
-                </div>
-            </div>
-        </li>
-        [[/users]]
-    </ul>
-</script>
+{{template name='followers_thumb_list'}}
+  <h3>Followers&nbsp;&nbsp;<small><?= count($users) ?></small></h3>
+  {{apply template="users_thumb_list" users="{$users}" empty_message="<p>You have no followers. <a href=\'/pages/find_people\'>Invite friends</a> that can follow you!</p>" /}}
+{{/template}}

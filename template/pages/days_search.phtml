@@ -34,7 +34,7 @@ $this->menu = 'search';
           }
           else
           {
-            var source = Template.prepareTemplate($('#days_list'));
+            var source = Template.prepareTemplate($('#days_list_template'));
             Template.renderElement(source, search_result_selector, {days:response.data.result});
           }
         })

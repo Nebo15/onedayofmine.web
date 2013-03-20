@@ -56,40 +56,11 @@ $this->menu = '';
 
   		<div class="span3 hide-phone">
 				<div class="row">
-					<h3>Following&nbsp;&nbsp;<small>{$#current_user.following_count}</small></h3>
-					{{list using="{$#following}"}}
-            <ul class="unstyled  followers-list">
-							{{list:item}}
-                <li>
-                  <a href="/pages/{$item.id}/user">
-                    <img src="{$item.image_72}" class="img-rounded with-tooltip" data-original-title="{$item.name}" />
-                  </a>
-                </li>
-	            {{/list:item}}
-            </ul>
-
-						{{list:empty}}
-              <p>You have no following users. But you can <a href="/pages/find_people">find</a> em!</p>
-						{{/list:empty}}
-					{{/list}}
+          {{apply template="following_thumb_list" users="{$#following}" /}}
 				</div>
 
         <div class="row">
-	        <h3>Followers&nbsp;&nbsp;<small>{$#current_user.followers_count}</small></h3>
-          {{list using="{$#followers}"}}
-            <ul class="unstyled followers-list">
-              {{list:item}}
-                <li>
-                  <a href="/pages/{$item.id}/user">
-                    <img src="{$item.image_72}" class="img-rounded with-tooltip" data-original-title="{$item.name}" />
-	                </a>
-                </li>
-              {{/list:item}}
-            </ul>
-            {{list:empty}}
-              <p>You have no followers. <a href="/pages/find_people">Invite friends</a> that can follow you!</p>
-            {{/list:empty}}
-          {{/list}}
+          {{apply template="followers_thumb_list" users="{$#followers}" /}}
         </div>
   		</div>
     </div>
