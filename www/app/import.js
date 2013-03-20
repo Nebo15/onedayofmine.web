@@ -184,12 +184,9 @@ var ImportController = function($wizard, $steps_content) {
 					step4_paginate_button.removeClass('disabled show-spiner').animate({opacity:1}, animations_speed);
 
           var load_next = function() {
-            if(step4_paginate_button.hasClass('disabled')) {
+            if(step4_paginate_button.hasClass('disabled'))
               return;
-            }
-
 						step4_paginate_button.addClass('disabled show-spiner');
-
             next_callback();
           };
 
@@ -215,9 +212,7 @@ var ImportController = function($wizard, $steps_content) {
 
           $.each(day, function(photo_index, photo) {
             var tmp = $($.trim(Template.compileElement(moment_template, photo)));
-
             tmp.attr('data-description', JSON.stringify(photo));
-
             current_day_moments_container.append(tmp);
           });
 
@@ -229,7 +224,6 @@ var ImportController = function($wizard, $steps_content) {
         });
       });
     };
-
     // Start retrieving days
     importer.getUserDays(onDataRetrieved);
   };
@@ -259,20 +253,33 @@ var ImportController = function($wizard, $steps_content) {
 
         var progress = day_container.find('.progress');
 
-        day_container.find('.export-action').click(function() {
-          if($(this).find('.export-action').hasClass('disabled')) {
+        day_container.find('.export-action').click(function(e)
+				{
+          if($(this).find('.export-action').hasClass('disabled'))
             return;
-          }
-
           $(this).find('.export-action').addClass('disabled show-spiner');
 
-          var day_data = {
-            title: day_container.find('.title').val(),
-            type:  day_container.find('.type').val(),
-            final_description: day_container.find('.description').val()
-          };
+					var $title = day_container.find('.title'),
+							$type = day_container.find('.type'),
+							$desc = day_container.find('.description');
 
-          var day_export_request = API.request('POST', 'days/start', day_data);
+					if(!$title.val())
+						$title.parent().parent().addClass('error');
+					else
+						$title.parent().parent().removeClass('error');
+					if(!$desc.val())
+						$desc.parent().parent().addClass('error');
+					else
+						$desc.parent().parent().removeClass('error');
+
+					if(!$title.val() || !$desc.val())
+						return false;
+
+          var day_export_request = API.request('POST', 'days/start', {
+						title: $title.val(),
+						type:  $type.val(),
+						final_description: $desc.val()
+					});
 
           day_export_request.success(function(response) {
             var day = response.data.result;
