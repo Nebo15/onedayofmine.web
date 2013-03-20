@@ -50,10 +50,14 @@ h4 {
 
 .whithout-border-top {
   border-top: 0 !important;
+  border-top-right-radius: 0;
+  border-top-left-radius: 0;
 }
 
 .whithout-border-bottom {
   border-bottom: 0 !important;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
 }
 
 .whithout-border-right {
@@ -445,12 +449,14 @@ ul.with-separators li .btn-small {
 }*/
 
 /* >> Users lists */
-.users-list li {
+.users-list li,
+.users-thumb-list li {
   margin-right: 3px;
   margin-top: 3px;
 }
 
-.users-list li img {
+.users-list li img,
+.users-thumb-list li img {
   width: 36px;
   height: 36px;
 }
@@ -560,13 +566,18 @@ ul.with-separators li .btn-small {
 /* > Import page */
 /* > Day page */
 /* > User page */
-.users-search-list li {
-  width:355px;
-  margin-left:10px;
+.user-image-holder {
+  position: relative;
+  width: 192px;
+  min-height: 192px;
 }
 
 /* > Profile page */
 /* > Invites page */
+.users-search-list li {
+  width:355px;
+  margin-left:10px;
+}
 
 /* Responsive features */
 @media (max-width: 767px) { /* Phone */
