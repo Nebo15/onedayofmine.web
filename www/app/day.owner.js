@@ -718,7 +718,7 @@ $(function() {
       $(popover).bind('shown', function() {
         element.find('input[type=file]').on('change', popover_file_select_handler);
 
-        $('.import-select button').click(function() {
+        element.find('.import-select button').click(function() {
           if($(this).hasClass('disabled')) {
             return;
           }
