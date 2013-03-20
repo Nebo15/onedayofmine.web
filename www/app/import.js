@@ -115,6 +115,10 @@ var ImportController = function($wizard, $steps_content) {
     // Helpers
     var attachThumbnailsEvents = function(day_container) {
 
+			day_container.find('.step3-action').click(function(e) {
+				_instance.step3();
+			});
+
 			day_container.find('.step5-action').click(function(e) {
 				_instance.step5();
 			});
@@ -230,11 +234,13 @@ var ImportController = function($wizard, $steps_content) {
 
   // Step 5
   this.step5 = function(day_container) {
+
 		$wizard.wizard('step', 4);
     var selected_shots = [];
-    day_container.find('li').has('.thumbnail:not(.ignored)').each(function(index, element) {
-      selected_shots.push($(element).data('description'));
-    });
+		if(day_container)
+    	day_container.find('li').has('.thumbnail:not(.ignored)').each(function(index, element) {
+      	selected_shots.push($(element).data('description'));
+    	});
 
     var analyze_request = API.request('POST', 'days/analyze_external_day', {
       day: selected_shots
@@ -243,7 +249,7 @@ var ImportController = function($wizard, $steps_content) {
     analyze_request.success(function (response) {
 			day_container = $('#step5');
       day_container.find('>').slideUp(animations_speed, function() {
-				console.log(response.data.result);
+
         day_container.find('.title').val(response.data.result.title);
 				day_container.find('.type').val(response.data.result.type);
 				day_container.find('.description').val(response.data.result.description);
