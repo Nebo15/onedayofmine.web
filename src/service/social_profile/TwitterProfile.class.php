@@ -12,7 +12,7 @@ class TwitterProfile implements SocialProfileInterface, SharesInterface
    */
   protected $user;
   /**
-   * @var twitter
+   * @var odTwitter
    */
   protected $provider;
 
@@ -73,7 +73,7 @@ class TwitterProfile implements SocialProfileInterface, SharesInterface
       if ($cursor == '0')
         break;
 
-      $response = $this->provider->api('1/friends/ids', twitter::METHOD_GET, array(
+      $response = $this->provider->api('1/friends/ids', odTwitter::METHOD_GET, array(
         'cursor' => $cursor
       ));
 
@@ -98,7 +98,7 @@ class TwitterProfile implements SocialProfileInterface, SharesInterface
     for ($i=0; $i < $paging ; $i++) {
       $set = array_slice($ids, $i*$lookup, $lookup);
 
-      $response = $this->provider->api('1/users/lookup', twitter::METHOD_GET, array(
+      $response = $this->provider->api('1/users/lookup', odTwitter::METHOD_GET, array(
         'user_id' => implode(',', $set)
       ));
 
@@ -175,7 +175,7 @@ class TwitterProfile implements SocialProfileInterface, SharesInterface
    */
   protected function tweet($string)
   {
-    return $this->provider->api('1/statuses/update', twitter::METHOD_POST, array(
+    return $this->provider->api('1/statuses/update', odTwitter::METHOD_POST, array(
       'status' => $string
     ));
   }
