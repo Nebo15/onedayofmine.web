@@ -153,11 +153,27 @@ h4 {
 
 /* Loader spinner for buttons */
 .with-spinner .spinner {
-  display: none;
+  width: 0;
+  opacity: 0;
+
+  -webkit-transition: all 0.4s ease;
+  -moz-transition: all 0.4s ease;
+  -ms-transition: all 0.4s ease;
+  -o-transition: all 0.4s ease;
+  transform: all 0.4s ease;
 }
 
 .show-spinner .spinner {
-  display: inline-block;
+  width: auto;
+  opacity: 1;
+}
+
+.btn-small.show-spinner .spinner {
+  width: 15px;
+}
+
+.btn.show-spinner .spinner {
+  width: 20px;
 }
 
 .with-spinner .icon-spin {
@@ -252,7 +268,9 @@ body {
 
 .btn:hover,
 .not-decorated,
-.not-decorated a {
+.not-decorated:hover,
+.not-decorated a,
+.not-decorated a:hover {
   text-decoration: none;
 }
 

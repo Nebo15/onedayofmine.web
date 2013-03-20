@@ -1,32 +1,19 @@
 $(function() {
   $.fn.extend({
     findSpinner: function() {
+      if($(this).hasClass('with-spinner')) {
+        return $(this);
+      }
+
       return $(this).find('.with-spinner');
     },
 
     showSpinner: function() {
-      var $this = $(this);
-      var spinner = $this.children('.spinner');
-      $this.addClass('show-spinner');
-
-      var tmp = spinner.css('width'); // Dirty hack here
-      spinner.css('width', 'auto');
-      var width = spinner.width();
-      spinner.css('width', tmp);
-
-      spinner.finish().animate({width: width, opacity:1}, function() {
-        spinner.css('display', 'inline-block');
-      });
+      $(this).addClass('show-spinner');
     },
 
     hideSpinner: function() {
-      var $this = $(this);
-      var spinner = $this.children('.spinner');
-
-      $this.removeClass('show-spinner');
-      spinner.finish().animate({width: 0, opacity:0}, function() {
-        spinner.css('display', 'none');
-      });
+      $(this).removeClass('show-spinner');
     },
 
     makeInvisible: function() {
