@@ -2,6 +2,7 @@
 lmb_require('src/controller/BaseJsonController.class.php');
 lmb_require('src/model/User.class.php');
 lmb_require('src/service/social_photo_source/FlickrPhotoSource.class.php');
+lmb_require('src/service/social_photo_source/CachedPhotoSource.class.php');
 
 class FlickrController extends BaseJsonController
 {
@@ -42,7 +43,7 @@ class FlickrController extends BaseJsonController
 
 	function doPhotos()
 	{
-		$service = new FlickrPhotoSource($this->_getUser());
+		$service = new CachedPhotoSource(new FlickrPhotoSource($this->_getUser()));
 		return $this->_answerOk(
 			$service->getPhotos(
 				$this->request->getInteger('from'),
@@ -53,7 +54,7 @@ class FlickrController extends BaseJsonController
 
 	function doDays()
 	{
-		$service = new FlickrPhotoSource($this->_getUser());
+		$service = new CachedPhotoSource(new FlickrPhotoSource($this->_getUser()));
 		return $this->_answerOk($service->getDays($this->request->getInteger('from')));
 	}
 
