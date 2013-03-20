@@ -81,7 +81,16 @@ class FlickrPhotoSource extends BaseSocialPhotoSource
 		$photos = $provider->photos_search($options);
 
 		if($provider->getErrorMsg())
-			throw new lmbException('Flickr API answer: '.$provider->getErrorMsg());
+		{
+			lmbToolkit::instance()->getLog()->error('Flickr API answer: '.$provider->getErrorMsg());
+			return [];
+		}
+
+		if(!isset($photos['photo']))
+		{
+			lmbToolkit::instance()->getLog()->error("Flickr API answer without 'photo' section: ".$provider->getErrorMsg());
+			return [];
+		}
 
 		$result = [];
 		foreach($photos['photo'] as $raw_photo)
