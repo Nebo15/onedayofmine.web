@@ -209,6 +209,8 @@ var ImportController = function($wizard, $steps_content) {
 
         $.each(days, function(index, day) {
           var current_day_container = days_container.append(day_template).children().last();
+
+					current_day_container.find('h4').html(Tools.getDate(new Date(day[0].time * 1000)));
           var current_day_moments_container = current_day_container.find('.thumbnails');
 
           $.each(day, function(photo_index, photo) {
