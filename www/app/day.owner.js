@@ -390,6 +390,23 @@ $(function() {
       }
     });
 
+    // Select moment as cover
+    var cover_button = element.find('#trigger_moment_select_as_cover');
+
+    cover_button.click(function() {
+      if(confirm("Select this moment image as day cover?")) {
+        var cover_request = API.request('POST', '/days/' + day_data.id + '/update', {
+          cover_moment_id: id
+        });
+
+        cover_request.error(function() {
+          alert("We wasn't able to select day cover, try again later or try to contact us");
+        }, true);
+
+        cover_request.send();
+      }
+    });
+
     // Moment description edit
     var description = element.find(moment_description_selector);
     var description_input  = description.find('textarea');
