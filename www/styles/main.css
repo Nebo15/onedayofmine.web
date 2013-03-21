@@ -555,8 +555,9 @@ ul.with-separators li .btn-small {
 /* >> Users lists */
 .users-list li,
 .users-thumb-list li {
-  margin-right: 3px;
+  margin-right: 0px;
   margin-top: 3px;
+  padding: 0;
 }
 
 .users-list li {
