@@ -609,7 +609,7 @@ ul.with-separators li .btn-small {
 }
 
 .days > li:hover dl dd {
-  height: 75px;
+  height: 100px;
 }
 
 .days dd a {
