@@ -612,18 +612,22 @@ ul.with-separators li .btn-small {
   background: rgba(0, 0, 0, 0.6);
   margin:0;
   padding: 5px;
-  height: 50px;
+  height: 48px;
   color:#FFF;
   overflow: hidden;
 }
 
 .days > li:hover dl dd {
-  height: 100px;
+  height: 95px;
 }
 
 .days dd a {
   color:#fff;
   font-weight:lighter;
+}
+
+.days dd .user-name {
+  margin-top: -5px;
 }
 
 .days dd a:hover {

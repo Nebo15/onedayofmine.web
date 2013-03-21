@@ -17,12 +17,14 @@
                   </a>
                 </li>
                 <li class="small">
-                  <a href="/pages/{$item.user.id}/user">
-                    {$item.user.name}
-                  </a>
-                </li>
-                <li class="small">
-                  {$item.user.occupation|i18n_clip:25,0,"&hellip;"} from {$item.user.location}
+                  <div class="user-info">
+                    {$item.user.occupation|i18n_clip:25,0,"&hellip;"} from {$item.user.location}
+                  </div>
+                  <div class="user-name">
+                    <a href="/pages/{$item.user.id}/user">
+                      {$item.user.name}
+                    </a>
+                  </div>
                 </li>
                 <li class="small">
                   <ul class="inline unstyled">
