@@ -559,6 +559,15 @@ ul.with-separators li .btn-small {
   margin-top: 3px;
 }
 
+.users-thumb-list li {
+  padding: 0 !important;
+}
+
+.users-list li {
+  width:355px;
+  margin-left:10px;
+}
+
 .users-list li img,
 .users-thumb-list li img {
   width: 36px;
