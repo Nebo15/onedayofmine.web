@@ -279,14 +279,14 @@ class odTools extends lmbAbstractTools
   public function getTwitter($access_token = null, $access_token_secret = null)
   {
     if(!array_key_exists($access_token, $this->twitter_instances)) {
-      $config = twitter::getConfig();
+      $config = odTwitter::getConfig();
 
       if(!is_null($access_token) && !is_null($access_token_secret)) {
         $config['user_token']  = $access_token;
         $config['user_secret'] = $access_token_secret;
       }
 
-      $this->twitter_instances[$access_token] = new twitter($config);
+      $this->twitter_instances[$access_token] = new odTwitter($config);
     }
 
     return $this->twitter_instances[$access_token];

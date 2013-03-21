@@ -16,6 +16,8 @@ class PagesController extends lmbController
 
 	function doDayCreate()
 	{
+		if (!$user = lmbToolkit::instance()->getUser())
+			return $this->forwardToUnauthorized();
 		return $this->doImport();
 	}
 
@@ -115,6 +117,13 @@ class PagesController extends lmbController
 		$this->following = $this->_toFlatArray($this->toolkit->getExportHelper()->exportUserItems($user->getFollowingUsers()));
 	}
 
+	function doProfile()
+	{
+		if (!$user = lmbToolkit::instance()->getUser())
+			return $this->forwardToUnauthorized();
+		return $this->redirect('/pages/'.$user->id.'/user');
+	}
+
 	function doDay()
 	{
 		if (!$day = Day::findById($this->request->id))
@@ -165,6 +174,9 @@ class PagesController extends lmbController
 
 	function doMoment()
 	{
+		if (!$user = lmbToolkit::instance()->getUser())
+			return $this->forwardToUnauthorized();
+
 		$id = $this->request->get('id');
 
 		$this->moment = Moment::findById($id);
@@ -174,17 +186,29 @@ class PagesController extends lmbController
 
 	function doImport()
 	{
-		$this->facebook_app_id = $this->toolkit->getConf('facebook')->appId;
-		$this->instagram = $this->toolkit->getConf('common')->instagram;
+		if($this->_getUser())
+		{
+			$this->facebook_app_id = $this->toolkit->getConf('facebook')->appId;
+			$this->instagram = $this->toolkit->getConf('common')->instagram;
+		}
 	}
 
 	function doUser()
 	{
+		if (!$user = lmbToolkit::instance()->getUser())
+			return $this->forwardToUnauthorized();
+
 		if(!$id = $this->request->get('id'))
 			return $this->forwardTo404();
 
 		if(!$user = User::findById($id))
 			return $this->forwardTo404();
+
+		if($this->_getUser() && $this->_getUser()->id == $id)
+		{
+			$this->setTemplate('pages/user_owner.phtml');
+			return;
+		}
 
 		$this->user = (array) $this->toolkit->getExportHelper()->exportUser($user);
 
@@ -271,7 +295,7 @@ class PagesController extends lmbController
 	{
 		$this->current_user = $this->toolkit->getUser()
 				? (array) $this->toolkit->getExportHelper()->exportUser($this->toolkit->getUser())
-				: new stdClass;
+				: [];
 		return parent::performAction();
 	}
 

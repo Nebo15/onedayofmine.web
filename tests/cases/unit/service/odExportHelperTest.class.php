@@ -362,10 +362,6 @@ class odExportHelperTest extends odUnitTestCase
     for($i = 0; $i < 10; $i++) {
       $moment = $this->generator->momentWithImage();
       $moment->save();
-      for($j = 0; $j < rand(0, 10); $j++) {
-        $like = $this->generator->momentLike($moment);
-        $like->save();
-      }
       $moments[] = $moment;
     }
     $this->generator->momentLike($moments[0], $this->main_user);
@@ -374,6 +370,7 @@ class odExportHelperTest extends odUnitTestCase
 
     $exported = (new odExportHelper($this->main_user))->exportMomentItems($moments);
     $this->assertJsonMomentItems($exported, true);
+	  $this->assertEqual($exported[0]->id, $moments[0]->id);
     $this->assertTrue($exported[0]->is_liked);
     $this->assertFalse($exported[1]->is_liked);
 

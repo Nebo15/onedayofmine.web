@@ -123,7 +123,7 @@ function task_migrate_diff($argv)
 function task_migrate_create($argv)
 {
   $oMigration = migrate_factory();
-  $sName = (int)lmb_cli_ask_for_option('Migration name');
+  $sName = str_replace(' ', '_', lmb_cli_ask_for_option('Migration name'));
   $oMigration->createMigration($sName);
 }
 

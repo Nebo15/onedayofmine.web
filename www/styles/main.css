@@ -153,14 +153,28 @@ h4 {
 
 /* Loader spinner for buttons */
 .with-spinner .spinner {
-  width: 0;
+  width: 0 !important;
   opacity: 0;
 
-  -webkit-transition: width 0.4s ease, opacity 0.6s ease;
-  -moz-transition: width 0.4s ease, opacity 0.6s ease;
-  -ms-transition: width 0.4s ease, opacity 0.6s ease;
-  -o-transition: width 0.4s ease, opacity 0.6s ease;
-  transform: width 0.4s ease, opacity 0.6s ease;
+  -webkit-transition: width 0.6s ease, opacity 0.4s ease;
+  -moz-transition: width 0.6s ease, opacity 0.4s ease;
+  -ms-transition: width 0.6s ease, opacity 0.4s ease;
+  -o-transition: width 0.6s ease, opacity 0.4s ease;
+  transform: width 0.6s ease, opacity 0.4s ease;
+}
+
+.with-spinner [class*="icon"]:not(.spinner) {
+  opacity: 1;
+
+  -webkit-transition: opacity 0.6s ease;
+  -moz-transition: opacity 0.6s ease;
+  -ms-transition: opacity 0.6s ease;
+  -o-transition: opacity 0.6s ease;
+  transform: opacity 0.6s ease;
+}
+
+.show-spinner [class*="icon"]:not(.spinner) {
+  display: none;
 }
 
 .show-spinner .spinner {
@@ -168,12 +182,17 @@ h4 {
   opacity: 1;
 }
 
-.btn-small.show-spinner .spinner {
-  width: 15px;
+.btn-small.show-spinner .spinner,
+.trigger_login.show-spinner .spinner {
+  width: 15px !important;
 }
 
 .btn.show-spinner .spinner {
-  width: 20px;
+  width: 20px !important;
+}
+
+h1.show-spinner .spinner {
+  width: 25px !important;
 }
 
 .with-spinner .icon-spin {
@@ -502,6 +521,10 @@ hr {
 /* Main style */
 .content {
   padding-top: 20px;
+}
+
+.sitewide-notification {
+  margin-bottom: 0;
 }
 
 /* >> Lists titles */

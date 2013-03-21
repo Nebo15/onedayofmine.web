@@ -17,7 +17,8 @@ class odObjectMother
     $user->name = $name ?: $this->string(100);
     $user->timezone = $this->integer(1);
     $user->sex = 'female';
-    $user->occupation = $this->string(50);
+    $user->occupation = 'occupation_'.$this->string(50);
+	  $user->location = 'location_'.$this->string(50);
     $user->birthday = $this->date_sql();
     $user->save();
     return $user;

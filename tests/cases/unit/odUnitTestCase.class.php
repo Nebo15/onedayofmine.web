@@ -46,6 +46,5 @@ abstract class odUnitTestCase extends UnitTestCase
 
     $this->main_user = $this->generator->user('main_user');
     $this->additional_user = $this->generator->user('additional_user');
-
   }
 }

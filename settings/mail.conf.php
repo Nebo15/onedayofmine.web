@@ -1,6 +1,7 @@
 <?php
 
 $conf = array(
+	'mailer'                => 'lmbMailer', //can be lmbFileMailer, lmbResponseMailer
   'use_phpmail'           => false,
   'smtp_host'             => 'localhost',
   'smtp_port'             => 25,

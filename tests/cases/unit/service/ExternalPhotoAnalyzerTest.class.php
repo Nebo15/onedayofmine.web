@@ -18,13 +18,13 @@ class ExternalPhotoAnalyzerTest extends odUnitTestCase
 
 	function testTypeByDayOfWeek_Working()
 	{
-		$res = $this->service->analyze([$this->_createPhoto(null, strtotime('next Thursday'))]);
+		$res = $this->service->analyze([$this->_createPhoto(null, 1363816800)]); //"2013-03-21T00:00:00+02:00"
 		$this->assertEqual('Working day', $res['type']);
 	}
 
 	function testTypeByDayOfWeek_Dayoff()
 	{
-		$res = $this->service->analyze([$this->_createPhoto(null, strtotime('next Sunday'))]);
+		$res = $this->service->analyze([$this->_createPhoto(null, 1363471200)]); //2013-03-17T00:00:00+02:00
 		$this->assertEqual('Day off', $res['type']);
 	}
 

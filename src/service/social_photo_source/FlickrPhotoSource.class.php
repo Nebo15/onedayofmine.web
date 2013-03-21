@@ -59,7 +59,8 @@ class FlickrPhotoSource extends BaseSocialPhotoSource
 			'extras' => 'date_taken,geo,tags,url_l,url_q',
 			'content_type' => 1,
 			'media' => 'photos',
-			'sort' => 'date-taken-desc'
+			'sort' => 'date-taken-desc',
+			'per_page' => self::LIMIT
 		];
 
 
@@ -80,7 +81,16 @@ class FlickrPhotoSource extends BaseSocialPhotoSource
 		$photos = $provider->photos_search($options);
 
 		if($provider->getErrorMsg())
-			throw new lmbException('Flickr API answer: '.$provider->getErrorMsg());
+		{
+			lmbToolkit::instance()->getLog()->error('Flickr API answer: '.$provider->getErrorMsg());
+			return [];
+		}
+
+		if(!isset($photos['photo']))
+		{
+			lmbToolkit::instance()->getLog()->error("Flickr API answer without 'photo' section: ".$provider->getErrorMsg());
+			return [];
+		}
 
 		$result = [];
 		foreach($photos['photo'] as $raw_photo)

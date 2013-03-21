@@ -66,6 +66,7 @@ class InstagramPhotoSource extends BaseSocialPhotoSource
 			throw new lmbException("Instagram info not found for user #".$this->user->id);
 
 		$url = "https://api.instagram.com/v1/users/{$this->uid}/media/recent/?access_token={$this->token}";
+		$url .= '&count='.self::LIMIT;
 		$url .= "&max_timestamp=".$from_stamp;
 		if($to_stamp)
 			$url .= "&min_timestamp=".($to_stamp + 1);
@@ -73,7 +74,10 @@ class InstagramPhotoSource extends BaseSocialPhotoSource
 		$answer = (new HttpRequest($url))->send();
 
 		if($answer->getResponseCode() != 200)
-			throw new lmbException('Instagram API answer: '.json_decode($answer->getBody())->meta->error_message);
+		{
+			lmbToolkit::instance()->getLog()->warn('Instagram API answer: '.$answer->getBody());
+			return [];
+		}
 
 		$raw_info = json_decode($answer->getBody());
 		$url = $raw_info->pagination && property_exists($raw_info, 'next_url') ? $raw_info->pagination->next_url : null;

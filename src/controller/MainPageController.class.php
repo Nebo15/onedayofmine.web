@@ -5,7 +5,7 @@ lmb_require('src/Json.class.php');
 
 class MainPageController extends lmbController
 {
-  function doDeploy()
+	function doDeploy()
   {
     echo '<pre>';
     system(lmb_env_get('APP_DIR').'/cli/update.sh');

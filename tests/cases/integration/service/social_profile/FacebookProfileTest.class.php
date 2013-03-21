@@ -11,7 +11,7 @@ class FacebookProfileTest extends odIntegrationTestCase
   function setUp()
   {
     parent::setUp();
-    $this->proxy_client = new Client('http://stage.onedayofmine.com/proxy.php', 'http://onedayofmine.dev/');
+    $this->proxy_client = new Client('http://stage.onedayofmine.com/proxy.php', lmb_env_get('HOST_URL'));
   }
 
   function testGetInfoRaw()
@@ -195,6 +195,6 @@ class FacebookProfileForTests extends FacebookProfile
   protected function _getPageUrl($object)
   {
     $page_url = parent::_getPageUrl($object);
-    return str_replace('onedayofmine.dev', 'stage.onedayofmine.com', $page_url);
+    return str_replace(lmb_env_get('HOST_URL'), 'stage.onedayofmine.com', $page_url);
   }
 }

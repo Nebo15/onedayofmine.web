@@ -34,10 +34,10 @@ class FacebookPhotoSource extends BaseSocialPhotoSource
 		$profile = lmbToolkit::instance()->getFacebookProfile($this->user);
 		$fql = "SELECT "
 				."pid,caption,src_big,src_big_width,src_big_height,caption_tags,created,backdated_time "
-				." FROM photo WHERE owner = me() "
+				." FROM photo WHERE owner = me()"
 				.($from_stamp ? " AND created < ".$from_stamp : "")
 				.($to_stamp ? " AND created > ".$to_stamp : "")
-				."ORDER BY created DESC";
+				."ORDER BY created DESC LIMIT ".self::LIMIT;
 		$photos = $profile->getProvider()->makeQuery($fql);
 
 		$result = [];

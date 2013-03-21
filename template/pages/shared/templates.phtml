@@ -22,6 +22,9 @@
                   </a>
                 </li>
                 <li class="small">
+                  {$item.user.occupation|i18n_clip:25,0,"&hellip;"} from {$item.user.location}
+                </li>
+                <li class="small">
                   <ul class="inline unstyled">
                     <li><i class="icon icon-heart"></i> <small>{$item.likes_count}</small></li>
                     <li><i class="icon icon-large icon-comments"></i> {$item.comments_count}</li>

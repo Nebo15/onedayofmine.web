@@ -2,6 +2,7 @@
 lmb_require('src/controller/BaseJsonController.class.php');
 lmb_require('src/model/User.class.php');
 lmb_require('src/service/social_photo_source/FacebookPhotoSource.class.php');
+lmb_require('src/service/social_photo_source/CachedPhotoSource.class.php');
 
 class FacebookController extends BaseJsonController
 {
@@ -13,7 +14,7 @@ class FacebookController extends BaseJsonController
 
 	function doPhotos()
 	{
-		$service = new FacebookPhotoSource($this->_getUser());
+		$service = new CachedPhotoSource(new FacebookPhotoSource($this->_getUser()));
 		return $this->_answerOk(
 			$service->getPhotos(
 				$this->request->getInteger('from'),
@@ -24,7 +25,7 @@ class FacebookController extends BaseJsonController
 
 	function doDays()
 	{
-		$service = new FacebookPhotoSource($this->_getUser());
+		$service = new CachedPhotoSource(new FacebookPhotoSource($this->_getUser()));
 		return $this->_answerOk($service->getDays($this->request->getInteger('from')));
 	}
 }

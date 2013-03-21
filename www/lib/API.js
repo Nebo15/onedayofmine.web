@@ -55,15 +55,64 @@ var API = (function() {
         Auth.login(function(token) {
           $.cookie('token', token, {
             expires: 31,
-            // secure: true, // TODO: turn this on for security
             path: '/'
           });
           login_request.send();
         });
       };
 
-      login_request.error(function() {
+      login_request.error(function(jqXHR) {
         login_request.error(onLoginFail, true);
+
+				if(412 == jqXHR.status) {
+          var response = jQuery.parseJSON(jqXHR.responseText);
+          if(response.errors[0] === "Invitation not given") {
+            console.log('Invitation not given');
+            var modal_selector = $('#invite_modal');
+            modal_selector.modal('show');
+
+            modal_selector.on('hidden', function() {
+              if(typeof onLoginFail === 'function')
+                onLoginFail();
+            });
+
+            modal_selector.find('.action-sign-in').click(function() {
+              var $this = $(this);
+              $this.showSpinner();
+
+              var invitation_code = modal_selector.find('input[type=text]').val();
+
+              var invitation_code_request = API.post('/auth/check_invitation', {
+                code: invitation_code
+              });
+
+              invitation_code_request.success(function(invitation_code_response) {
+                $this.hideSpinner();
+                console.log(invitation_code_response.data);
+                if(invitation_code_response.data.result === false) {
+                  modal_selector.find('input[type=text]').addClass('error');
+                  modal_selector.find('.alert').removeClass('hide');
+                } else {
+                  modal_selector.find('input[type=text]').removeClass('error');
+                  modal_selector.find('.alert').addClass('hide');
+                  modal_selector.modal('hide');
+
+                  login_request.params.data.invitation_code = invitation_code;
+                  makeTry();
+                }
+              });
+
+              invitation_code_request.error(function() {
+                $this.hideSpinner();
+                alert("We wasnt able to validate you'r invitation code, try again later or write to us");
+              });
+
+              invitation_code_request.send();
+            });
+
+            return;
+          }
+        }
 
         console.log('Login attempt failed');
         makeTry();

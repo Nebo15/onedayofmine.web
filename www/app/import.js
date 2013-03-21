@@ -1,23 +1,28 @@
-$(function() {
-  "use strict";
-
+var ImportController = function($wizard, $steps_content) {
+	var _instance = this;
   // Creating import source
-  var importer = new Importer(window.location.hash.substring(1));
-
+  var importer = new Importer('import');
   // Config
   var animations_speed = 300;
-
   // Selectors
   var error_container = $('#error_container');
-  var step_container  = $('#step_container');
-
   // Templates
   var day_template     = Template.prepareTemplate($('#template_import_day'));
   var moment_template  = Template.prepareTemplate($('#template_import_moment'));
-  var step1_template   = Template.prepareTemplate($('#template_step1'));
-  var step2_template   = Template.prepareTemplate($('#template_step2'));
-  var step3_template   = Template.prepareTemplate($('#template_step3'));
-  var step4_template   = Template.prepareTemplate($('#template_step4'));
+
+	$wizard.wizard();
+
+	$steps_content.find('.step2-action').click(function(e) {
+		_instance.step2();
+	});
+
+	$steps_content.find('.step3-action').click(function(e) {
+		_instance.step3();
+	});
+
+	$steps_content.find('.step4-action').click(function(e) {
+		_instance.step4();
+	});
 
   // Helpers
   var showError = function(message) {
@@ -36,32 +41,66 @@ $(function() {
     }
   };
 
-  // Step 1
-  var step1 = function() {
-    step_container.html(step1_template);
-
-    if(!importer.isConnected()) {
-      step_container.find('.btn').click(function() {
-        importer.loginDirect(function() {
-          step2();
-        });
+	this.step1 = function() {
+		$wizard.wizard('step', 0);
+		$('.facebook-action').click(function(e) {
+      var $this = $(this);
+      $this.showSpinner();
+      API.login(function() {
+        $this.hideSpinner();
+        _instance.step2();
+      }, function() {
+        $this.hideSpinner();
       });
-    } else {
-      step2();
-    }
-  };
+		});
+	};
 
-  // Step 2
-  var step2 = function() {
-    // Prepare container
-    step_container.html(step2_template);
+	this.step2 = function() {
+		$wizard.wizard('step', 1);
+		var importer = new Importer('instagram');
+		if(importer.isConnected())
+		{
+			$('.instagram-action').html('Instagram connected').attr('disabled', 'disabled');
+		}
+		else
+		{
+			$('.instagram-action').click(function(e) {
+				(new Importer('instagram')).login(function() {
+					_instance.step3();
+				});
+			});
+		};
+	};
+
+	this.step3 = function() {
+		$wizard.wizard('step', 2);
+		var importer = new Importer('flickr');
+		if(importer.isConnected())
+		{
+			$('.flickr-action').html('Flickr connected').attr('disabled', 'disabled');
+		}
+		else
+		{
+			$('.flickr-action').click(function(e) {
+				(new Importer('flickr')).login(function() {
+					_instance.step4();
+				});
+			});
+		};
+	};
+
+  // Step 4
+  this.step4 = function() {
+		$wizard.wizard('step', 3);
 
     // Days counter
     var total_days_count = 0;
 
+		var step_container = $('#step4');
+
     // Selectors
     var days_container = step_container.find('.import_days');
-    var step2_paginate_button = step_container.find('.paginate');
+    var step4_paginate_button = step_container.find('.paginate');
     var loader_container = step_container.find('#loader_container');
     var progress = loader_container.find('.progress');
 
@@ -79,6 +118,15 @@ $(function() {
 
     // Helpers
     var attachThumbnailsEvents = function(day_container) {
+
+			day_container.find('.step3-action').click(function(e) {
+				_instance.step3();
+			});
+
+			day_container.find('.step5-action').click(function(e) {
+				_instance.step5();
+			});
+
       var analyze_button = day_container.find('.analyze-action');
 
       day_container.find('li').click(function() {
@@ -100,7 +148,7 @@ $(function() {
 
         $(this).addClass('disabled show-spiner');
 
-        step3(day_container);
+        _instance.step5(day_container);
       });
     };
 
@@ -137,23 +185,20 @@ $(function() {
     var onDataRetrieved = function(days, next_callback) {
       handleProgressBar(function() {
         if(next_callback && days.length > 0) {
-          step2_paginate_button.removeClass('disabled show-spiner').animate({opacity:1}, animations_speed);
+					step4_paginate_button.removeClass('disabled show-spiner').animate({opacity:1}, animations_speed);
 
           var load_next = function() {
-            if(step2_paginate_button.hasClass('disabled')) {
+            if(step4_paginate_button.hasClass('disabled'))
               return;
-            }
-
-            step2_paginate_button.addClass('disabled show-spiner');
-
+						step4_paginate_button.addClass('disabled show-spiner');
             next_callback();
           };
 
           // Events to load next page
-          step2_paginate_button.off().click(load_next);
+					step4_paginate_button.off().click(load_next);
           $(window).off('scrollHitBottom').on('scrollHitBottom', load_next);
         } else {
-          step2_paginate_button.animate({opacity:0}, animations_speed);
+					step4_paginate_button.animate({opacity:0}, animations_speed);
         }
 
         total_days_count += days.length;
@@ -165,13 +210,13 @@ $(function() {
 
         $.each(days, function(index, day) {
           var current_day_container = days_container.append(day_template).children().last();
+
+					current_day_container.find('h4').html(Tools.getDate(new Date(day[0].time * 1000)));
           var current_day_moments_container = current_day_container.find('.thumbnails');
 
           $.each(day, function(photo_index, photo) {
             var tmp = $($.trim(Template.compileElement(moment_template, photo)));
-
             tmp.attr('data-description', JSON.stringify(photo));
-
             current_day_moments_container.append(tmp);
           });
 
@@ -183,44 +228,62 @@ $(function() {
         });
       });
     };
-
     // Start retrieving days
     importer.getUserDays(onDataRetrieved);
   };
 
-  // Step 3
-  var step3 = function(day_container) {
+  // Step 5
+  this.step5 = function(day_container) {
+
+		$wizard.wizard('step', 4);
     var selected_shots = [];
-    day_container.find('li').has('.thumbnail:not(.ignored)').each(function(index, element) {
-      selected_shots.push($(element).data('description'));
-    });
+		if(day_container)
+    	day_container.find('li').has('.thumbnail:not(.ignored)').each(function(index, element) {
+      	selected_shots.push($(element).data('description'));
+    	});
 
     var analyze_request = API.request('POST', 'days/analyze_external_day', {
       day: selected_shots
     });
 
     analyze_request.success(function (response) {
+			day_container = $('#step5');
       day_container.find('>').slideUp(animations_speed, function() {
-        day_container.html(Template.compileElement(step3_template, response.data.result));
 
+        day_container.find('.title').val(response.data.result.title);
+				day_container.find('.type').val(response.data.result.type);
+				day_container.find('.description').val(response.data.result.description);
         day_container.find('>').slideDown(animations_speed);
 
         var progress = day_container.find('.progress');
 
-        day_container.find('form').submit(function() {
-          if($(this).find('.export-action').hasClass('disabled')) {
+        day_container.find('.export-action').click(function(e)
+				{
+          if($(this).find('.export-action').hasClass('disabled'))
             return;
-          }
-
           $(this).find('.export-action').addClass('disabled show-spiner');
 
-          var day_data = {
-            title: day_container.find('.title').val(),
-            type:  day_container.find('.type').val(),
-            final_description: day_container.find('.description').val()
-          };
+					var $title = day_container.find('.title'),
+							$type = day_container.find('.type'),
+							$desc = day_container.find('.description');
 
-          var day_export_request = API.request('POST', 'days/start', day_data);
+					if(!$title.val())
+						$title.parent().parent().addClass('error');
+					else
+						$title.parent().parent().removeClass('error');
+					if(!$desc.val())
+						$desc.parent().parent().addClass('error');
+					else
+						$desc.parent().parent().removeClass('error');
+
+					if(!$title.val() || !$desc.val())
+						return false;
+
+          var day_export_request = API.request('POST', 'days/start', {
+						title: $title.val(),
+						type:  $type.val(),
+						final_description: $desc.val()
+					});
 
           day_export_request.success(function(response) {
             var day = response.data.result;
@@ -251,7 +314,7 @@ $(function() {
 
             $.when.apply($, requests).then(function() {
               day_container.find('>').slideUp(animations_speed, function() {
-                day_container.html(Template.compileElement(step4_template, day));
+                window.location.href = "/pages/" + response.data.result.id + '/day';
               });
             });
           });
@@ -266,7 +329,4 @@ $(function() {
 
     analyze_request.send();
   };
-
-  // Running inital step
-  step1();
-});
+}

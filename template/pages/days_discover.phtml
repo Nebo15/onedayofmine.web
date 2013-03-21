@@ -5,6 +5,30 @@ $this->menu = 'discover';
 {{wrap with="layout.phtml"}}
   {{into slot="content"}}
     <h1 class="page-title">Discover days</h1>
+    <p>I want to see a
+      <select>
+        <option>working day</option>
+        <option>day off</option>
+        <option>holiday</option>
+        <option>trip</option>
+      </select>
+      of
+      <select>
+        <option>designer</option>
+        <option>business analyst</option>
+        <option>artist</option>
+        <option>courier</option>
+        <option>plumber</option>
+      </select>
+      from
+      <select>
+        <option>New-York</option>
+        <option>Paris</option>
+        <option>Moscow</option>
+        <option>Tokio</option>
+        <option>Shanghai</option>
+      </select>
+    </p>
   	{{apply template="days_list" days="$#days"/}}
   {{/into}}
 {{/wrap}}
