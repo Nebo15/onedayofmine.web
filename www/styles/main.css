@@ -156,11 +156,11 @@ h4 {
   width: 0;
   opacity: 0;
 
-  -webkit-transition: all 0.4s ease;
-  -moz-transition: all 0.4s ease;
-  -ms-transition: all 0.4s ease;
-  -o-transition: all 0.4s ease;
-  transform: all 0.4s ease;
+  -webkit-transition: width 0.4s ease, opacity 0.6s ease;
+  -moz-transition: width 0.4s ease, opacity 0.6s ease;
+  -ms-transition: width 0.4s ease, opacity 0.6s ease;
+  -o-transition: width 0.4s ease, opacity 0.6s ease;
+  transform: width 0.4s ease, opacity 0.6s ease;
 }
 
 .show-spinner .spinner {
@@ -440,19 +440,37 @@ textarea.info:focus {
   border-color: #3a87ad;
 }
 
-/* Main style */
-.content {
-  padding-top: 20px;
+.input-prepend.small .add-on,
+.input-append.small .add-on,
+.input-prepend.small input,
+.input-append.small input {
+  padding: 2px 7px;
+  height: 26px;
+  font-size: 14.45px;
 }
 
-/* >> Lists titles */
-ul.with-separators li {
-  border-bottom: 1px solid rgba(34,25,25,0.1);
-  padding-bottom: 3px;
+.input-append .btn {
+  border-top-left-radius: 3px;
+  border-bottom-left-radius: 3px;
 }
 
-ul.with-separators li .btn-small {
-  margin-top: 2px;
+.input-prepend .btn {
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+}
+
+.input-append,
+.input-prepend {
+  margin-bottom: 0;
+}
+
+.input-append[class*="span"] .btn-small,
+.input-prepend[class*="span"] .btn-small {
+  height:30px
+}
+
+hr {
+  margin: 13px 0;
 }
 
 /* jQuery Mansory */
@@ -479,6 +497,21 @@ ul.with-separators li .btn-small {
       -ms-transition-property: left, right, top;
        -o-transition-property: left, right, top;
           transition-property: left, right, top;
+}
+
+/* Main style */
+.content {
+  padding-top: 20px;
+}
+
+/* >> Lists titles */
+ul.with-separators li {
+  border-bottom: 1px solid rgba(34,25,25,0.1);
+  padding-bottom: 3px;
+}
+
+ul.with-separators li .btn-small {
+  margin-top: 2px;
 }
 
 /* >> Pages titles */
@@ -575,6 +608,36 @@ ul.with-separators li .btn-small {
   font-size: 85%;
 }
 
+/* >> Import thumbnails list */
+.thumbnails > li {
+  opacity: 0;
+  margin-left: 5px;
+  margin-bottom: 10px;
+
+  -webkit-transition: all 0.4s ease;
+  -moz-transition: all 0.4s ease;
+  -ms-transition: all 0.4s ease;
+  -o-transition: all 0.4s ease;
+  transform: all 0.4s ease;
+}
+
+.thumbnails > li.ignored {
+  opacity: 0.4;
+}
+
+.thumbnails > li.visible {
+  /*opacity: 1; Done via js*/
+}
+
+.thumbnails li .img-wrap {
+  width: 150px;
+  height: 150px;
+  overflow: hidden;
+  vertical-align: middle;
+  background-position: center;
+  background-size: cover;
+}
+
 /* >> Comments */
 .comment-item {
   margin-top: 20px;
@@ -621,6 +684,155 @@ ul.with-separators li .btn-small {
 /* > Start day page */
 /* > Import page */
 /* > Day page */
+.day-info {
+  font-size: 0.8em;
+}
+
+.day-controls-group div {
+  margin-bottom: 15px;
+}
+
+ul.controls li {
+  padding-right: 3px;
+  padding-left: 0;
+}
+
+.controls-absolute {
+  position:absolute;
+  top: 5px;
+  right: 5px;
+}
+
+.moment-item {
+  position: relative;
+}
+
+.moment-item.error,
+.moment-item-placeholder.error {
+  border-color:#ab0001;
+}
+
+.moment-item.success,
+.moment-item-placeholder.success {
+  border-color:rgb(30, 168, 77);
+}
+
+.moment-item.info{
+  border-style: dashed;
+}
+
+.moment-item-placeholder.info {
+  border-color: #49afcd;
+}
+
+.moment-item img {
+  max-width: 100%;
+}
+
+.moment-item .popover button {
+  margin-top: 8px;
+  width: 160px;
+}
+
+.moment-item .popover h5:first-child {
+  margin-top: 0px;
+}
+
+.moment-upload-progress {
+  position: absolute;
+  right: 35px;
+  left: 35px;
+  top: 200px;
+}
+
+.moment-upload-progress .progress {
+  background: rgba(0, 0, 0, 0.7);
+  height: 10px;
+}
+
+.moment-upload-progress .progress .bar {
+  background-color: #CCC;
+}
+
+.moment-item-placeholder {
+  text-align: center;
+  border-style: dashed;
+
+  -webkit-transition: all 0.4s ease;
+  -moz-transition: all 0.4s ease;
+  -ms-transition: all 0.4s ease;
+  -o-transition: all 0.4s ease;
+  transform: all 0.4s ease;
+}
+
+.moment-item-placeholder i {
+  vertical-align:middle
+}
+
+.moment-item-placeholder .message {
+  position: relative;
+}
+
+.moment-item-hidden {
+  background: #ffeeee;
+}
+
+.moment-time {
+  margin: -5px 0 10px 0;
+}
+
+.moment-time input[subtype=date] {
+  width: 80px;
+}
+
+.moment-time input[subtype=time] {
+  width: 40px;
+}
+
+.moment-item-new .moment-image-container,
+.moment-item-new .moment-image-container img {
+  min-height: 0;
+}
+
+.moment-item .visible-if-saved {
+  -webkit-transition: all 0.4s ease;
+  -moz-transition: all 0.4s ease;
+  -ms-transition: all 0.4s ease;
+  -o-transition: all 0.4s ease;
+  transform: all 0.4s ease;
+
+  opacity: 1;
+}
+
+.moment-item-new .visible-if-saved {
+  opacity: 0;
+}
+
+.moment-image-container {
+  position: relative;
+  clear: both;
+  max-width: 100%;
+  width: 400px;
+  font-size: 1em;
+}
+
+.moment-image-container img {
+  max-width: 100%;
+  width: 400px;
+  /*min-height: 420px;*/
+}
+
+.moment-description {
+  margin-top: 25px;
+  max-width: 100%;
+  width: 420px;
+}
+
+.day-bottom-actions {
+  padding-top: 13px;
+  margin-bottom: 0;
+}
+
 /* > User page */
 .user-image-holder {
   position: relative;
@@ -669,15 +881,37 @@ ul.with-separators li .btn-small {
   .comment-item .bubble {
     margin-left: 50px;
   }
+
+  .pull-right-on-phone {
+    float: right;
+  }
+
+  .pull-left-on-phone {
+    float: left;
+  }
 }
 
 @media (min-width: 768px) and (max-width: 979px) { /* Tablet */
+  .pull-right-on-tablet {
+    float: right;
+  }
 
+  .pull-left-on-tablet {
+    float: left;
+  }
 }
 
 @media (min-width: 980px) { /* Desktop */
   .content {
     padding-right: 20px;
     padding-left: 20px;
+  }
+
+  .pull-right-on-desktop {
+    float: right;
+  }
+
+  .pull-left-on-desktop {
+    float: left;
   }
 }

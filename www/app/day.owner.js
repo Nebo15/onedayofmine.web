@@ -43,7 +43,7 @@ $(function() {
       var moment = $this.closest(moments_selector);
       moment.find(moment_description_selector).find(moment_description_button_selector).addClass('btn-success').removeClass('disabled');
       moment.addClass('success').removeClass('info');
-      moment.find('.moment-image-holder img').attr('src', this.result);
+      moment.find('.moment-image-container img').attr('src', this.result);
     });
 
     if (!FileReaderFilter.test(file.type)) {
@@ -76,6 +76,8 @@ $(function() {
   };
 
   var init_placeholder_actions = function(placeholder) {
+    bindTooltips(placeholder);
+
     placeholder.bind('dragover', function(event) {
       event.stopPropagation();
       event.preventDefault();
@@ -211,18 +213,21 @@ $(function() {
     if(!day_title_button.hasClass('disabled')) {
       day_title_input.prop("disabled", true);
       day_title_button.addClass('disabled');
+      day_title_button.showSpinner();
 
-      var day_title_request = API.request('POST', '/days/'+day_data.id+'/update', {
+      var day_title_request = API.request('POST', '/days/' + day_data.id + '/update', {
         title: day_title_input.val()
       });
 
       day_title_request.success(function() {
+        day_title_button.hideSpinner();
         day_title_input.prop("disabled", false);
         day_title_button.text('Save');
         day_title_button.addClass('disabled').removeClass('btn-success');
       });
 
       day_title_request.error(function() {
+        day_title_button.hideSpinner();
         day_title_button.addClass('btn-danger').removeClass('btn-success');
         day_title_button.text('Retry');
       });
@@ -241,7 +246,7 @@ $(function() {
     day_type_buttons.removeClass('btn-success active');
     $this.addClass('active');
 
-    var day_type_request = API.request('POST', '/days/'+day_data.id+'/update', {
+    var day_type_request = API.request('POST', '/days/' + day_data.id + '/update', {
       type: $this.text()
     });
 
@@ -262,12 +267,12 @@ $(function() {
   $open_action.click(function() {
     $(this).addClass('active').addClass('btn-success');
     $close_action.removeClass('active').removeClass('btn-danger');
-    API.post('days/'+day_data.id+'/moments_gathering_enable').send();
+    API.post('days/' + day_data.id + '/moments_gathering_enable').send();
   });
   $close_action.click(function() {
     $(this).addClass('active').addClass('btn-danger');
     $open_action.removeClass('active').removeClass('btn-success');
-    API.post('days/'+day_data.id+'/moments_gathering_disable').send();
+    API.post('days/' + day_data.id + '/moments_gathering_disable').send();
   });
 
   // Moments
@@ -348,6 +353,7 @@ $(function() {
     datetime_button.click(function() {
       if(!datetime_button.hasClass('disabled')) {
         datetime_button.addClass('disabled');
+        datetime_button.showSpinner();
         time_input.prop('disabled', true);
         date_input.prop('disabled', true);
 
@@ -356,6 +362,7 @@ $(function() {
         });
 
         moment_time_request.success(function() {
+          datetime_button.hideSpinner();
           insert_moment(element, date_input.val(), time_input.val());
           $(window).scrollTo(element, 300);
 
@@ -365,6 +372,7 @@ $(function() {
         });
 
         moment_time_request.error(function() {
+          datetime_button.hideSpinner();
           datetime_button.addClass('btn-danger').removeClass('btn-success');
         });
 
@@ -423,17 +431,20 @@ $(function() {
 
       description_input.prop("disabled", true);
       description_button.addClass('disabled');
+      description_button.showSpinner();
 
       var description_request = API.request('POST', '/moments/' + id + '/update', {
         description: description_input.val()
       });
 
       description_request.success(function() {
+        description_button.hideSpinner();
         description_input.prop("disabled", false);
         description_button.addClass('disabled').removeClass('btn-success');
       });
 
       description_request.error(function() {
+        description_button.hideSpinner();
         description_button.addClass('btn-danger').removeClass('btn-success');
       });
 
@@ -518,7 +529,7 @@ $(function() {
         element.find(moment_description_selector).find(moment_description_button_selector).addClass('btn-success').removeClass('disabled');
         element.addClass('success').removeClass('info');
 
-        var img = element.find('.moment-image-holder img');
+        var img = element.find('.moment-image-container img');
         img.attr('src', data.image);
         img.attr(source + '_id', data.id);
 
@@ -535,8 +546,8 @@ $(function() {
     };
 
     var showNewMoments = function() {
-      var new_shots = modal_thumbnails_container.children('.new');
-      new_shots.removeClass('new');
+      var new_shots = modal_thumbnails_container.children().not('.visible');
+      new_shots.addClass('visible');
 
       attachThumbnailsEvents(new_shots);
 
@@ -550,8 +561,9 @@ $(function() {
     };
 
     var onPrevDataRetrieved = function(prev_photos) {
+      modal_thumbnails_paginate_prev_button.hideSpinner();
       if(prev_photos.length !== 0) {
-        modal_thumbnails_paginate_prev_button.removeClass('disabled show-spiner').slideDown(animations_speed).animate({opacity:1}, animations_speed);
+        modal_thumbnails_paginate_prev_button.removeClass('disabled').slideDown(animations_speed).animate({opacity:1}, animations_speed);
 
         $.each(prev_photos.reverse(), function(index, photo) {
           var tmp = $($.trim(Template.compileElement(modal_moment_template, photo)));
@@ -562,13 +574,14 @@ $(function() {
 
         showNewMoments();
       } else {
-        modal_thumbnails_paginate_prev_button.removeClass('show-spiner').slideUp(animations_speed);
+        modal_thumbnails_paginate_prev_button.slideUp(animations_speed);
       }
     };
 
     var onNextDataRetrieved = function(next_photos) {
+      modal_thumbnails_paginate_next_button.hideSpinner();
       if(next_photos.length !== 0) {
-        modal_thumbnails_paginate_next_button.removeClass('disabled show-spiner').animate({opacity:1}, animations_speed);
+        modal_thumbnails_paginate_next_button.removeClass('disabled').animate({opacity:1}, animations_speed);
 
         $.each(next_photos, function(index, photo) {
           var tmp = $($.trim(Template.compileElement(modal_moment_template, photo)));
@@ -581,20 +594,24 @@ $(function() {
           showNewMoments();
         });
       } else {
-        modal_thumbnails_paginate_next_button.removeClass('show-spiner').animate({opacity:0}, animations_speed);
+        modal_thumbnails_paginate_next_button.animate({opacity:0}, animations_speed);
       }
     };
 
     var onDataRetrieved = function(photos, next_callback, prev_callback) {
+      modal_thumbnails_paginate_next_button.hideSpinner();
+      modal_thumbnails_paginate_prev_button.hideSpinner();
+
       if(typeof next_callback === 'function') {
-        modal_thumbnails_paginate_next_button.removeClass('disabled show-spiner').animate({opacity:1}, animations_speed);
+        modal_thumbnails_paginate_next_button.removeClass('disabled').animate({opacity:1}, animations_speed);
 
         modal_thumbnails_paginate_next_button.click(function() {
           if(modal_thumbnails_paginate_next_button.hasClass('disabled')) {
             return;
           }
 
-          modal_thumbnails_paginate_next_button.addClass('disabled show-spiner');
+          modal_thumbnails_paginate_next_button.addClass('disabled');
+          modal_thumbnails_paginate_next_button.showSpinner();
 
           next_callback();
         });
@@ -608,28 +625,32 @@ $(function() {
           var scrollBottom = _this.outerHeight() - _this[0].scrollHeight + _this.scrollTop();
 
           if(scrollBottom >= -30) {
-            modal_thumbnails_paginate_next_button.addClass('disabled show-spiner');
+            modal_thumbnails_paginate_next_button.addClass('disabled');
+            modal_thumbnails_paginate_next_button.showSpinner();
+
             next_callback();
           }
         });
       } else {
-        modal_thumbnails_paginate_next_button.removeClass('show-spiner').animate({opacity:0}, animations_speed);
+        modal_thumbnails_paginate_next_button.hideSpinner();
+        modal_thumbnails_paginate_next_button.animate({opacity:0}, animations_speed);
       }
 
       if(typeof prev_callback === 'function') {
-        modal_thumbnails_paginate_prev_button.removeClass('disabled show-spiner').animate({opacity:1}, animations_speed);
+        modal_thumbnails_paginate_prev_button.removeClass('disabled').animate({opacity:1}, animations_speed);
 
         modal_thumbnails_paginate_prev_button.click(function() {
           if(modal_thumbnails_paginate_prev_button.hasClass('disabled')) {
             return;
           }
 
-          modal_thumbnails_paginate_prev_button.addClass('disabled show-spiner');
+          modal_thumbnails_paginate_prev_button.addClass('disabled');
+          modal_thumbnails_paginate_prev_button.showSpinner();
 
           prev_callback();
         });
       } else {
-        modal_thumbnails_paginate_prev_button.removeClass('show-spiner').slideUp(animations_speed);
+        modal_thumbnails_paginate_prev_button.slideUp(animations_speed);
       }
 
       if(photos.length === 0) {
@@ -834,7 +855,7 @@ $(function() {
         time_input.prop('disabled', true);
         date_input.prop('disabled', true);
 
-        var moment_image = element.find('.moment-image-holder img');
+        var moment_image = element.find('.moment-image-container img');
 
         var src = moment_image.attr('src');
         var params = {
@@ -842,7 +863,7 @@ $(function() {
           time: date_input.val() + 'T' + time_input.val() + ':' + time_input.attr('seconds') + time_input.attr('timezone')
         };
 
-        if(src.indexOf('http') === -1) {
+        if(src.substring(0, 6) === "base64") { // TODO: test new condition
           params.image_content = src.substring(src.indexOf('base64')+7);
         } else {
           params.image_url = src;
@@ -910,6 +931,8 @@ $(function() {
       }
     });
 
+    bindTooltips(element);
+
     insert_moment(element);
 
     if(do_scroll === undefined || do_scroll !== false) {
@@ -972,7 +995,7 @@ $(function() {
       final_description_input.prop("disabled", true);
       final_description_button.addClass('disabled');
 
-      var final_description_request = API.request('POST', '/days/'+day_data.id+'/update', {
+      var final_description_request = API.request('POST', '/days/' + day_data.id + '/update', {
         final_description: final_description_input.val()
       });
 
