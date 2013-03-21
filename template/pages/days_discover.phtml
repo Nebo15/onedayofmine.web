@@ -3,17 +3,26 @@ $this->title = "Discover days";
 $this->menu = 'discover';
 ?>
 {{wrap with="layout.phtml"}}
+  {{into slot="css_include"}}
+    <link href="/styles/vendor/bootstrap-select.min.css" rel="stylesheet">
+  {{/into}}
+  {{into slot="js_include"}}
+    <script src="/lib/vendor/bootstrap-select.min.js"></script>
+  {{/into}}
+  {{into slot="js_ready"}}
+    $('.selectpicker').selectpicker();
+  {{/into}}
   {{into slot="content"}}
     <h1 class="page-title">Discover days</h1>
     <p>I want to see a
-      <select>
+      <select class="selectpicker">
         <option>working day</option>
         <option>day off</option>
         <option>holiday</option>
         <option>trip</option>
       </select>
       of
-      <select>
+      <select class="selectpicker">
         <option>designer</option>
         <option>business analyst</option>
         <option>artist</option>
@@ -21,7 +30,7 @@ $this->menu = 'discover';
         <option>plumber</option>
       </select>
       from
-      <select>
+      <select class="selectpicker">
         <option>New-York</option>
         <option>Paris</option>
         <option>Moscow</option>
