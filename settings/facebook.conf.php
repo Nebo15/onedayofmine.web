@@ -1,8 +1,8 @@
 <?php
 $conf = array(
-  'appId'       => '395096410536617',
-  'secret'      => '67ffc19dd0fd52d953f92478f4663459',
-  'namespace'   => 'one-day-of-mine-test',
+  'appId'       => '272831442829439',
+  'secret'      => 'ca5aa92efdf25cd6689fb6f8168a25ae',
+  'namespace'   => 'one-day-of-mine',
   'permissions' => array(
     'email',
     'user_birthday',
