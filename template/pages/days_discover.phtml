@@ -14,7 +14,8 @@ $this->menu = 'discover';
   {{/into}}
   {{into slot="content"}}
     <h1 class="page-title">Discover days</h1>
-    <p>I want to see a
+    <div class="text-center">
+      I want to see a
       <select class="selectpicker">
         <option>working day</option>
         <option>day off</option>
@@ -37,7 +38,7 @@ $this->menu = 'discover';
         <option>Tokio</option>
         <option>Shanghai</option>
       </select>
-    </p>
+    </div>
   	{{apply template="days_list" days="$#days"/}}
   {{/into}}
 {{/wrap}}
