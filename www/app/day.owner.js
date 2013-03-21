@@ -91,9 +91,15 @@ $(function() {
       // console.log(event.originalEvent.dataTransfer.getData('text/html'));
 
       var files = event.originalEvent.dataTransfer.files; // FileList object.
+      var scroll_successed = false;
 
       for (var i = 0, file; file = files[i]; i++) {
-        create_moment_from_file(file);
+        create_moment_from_file(file, function(created_moment) {
+          if(scroll_successed === false) {
+            scroll_successed = true;
+            $(window).scrollTo(created_moment, 500);
+          }
+        });
       }
     });
 
@@ -896,7 +902,7 @@ $(function() {
     return element;
   };
 
-  var create_moment_from_file = function(file) {
+  var create_moment_from_file = function(file, onMomentCreated) {
     var reader = new FileReader();
 
     var file_date = Tools.getDate(file.lastModifiedDate);
@@ -914,7 +920,9 @@ $(function() {
         description:''
       }, false);
 
-      $(window).scrollTo($('.moment-item-new').first(), 500);
+      if(typeof onMomentCreated === 'function') {
+        onMomentCreated(element);
+      }
     });
 
     if (!FileReaderFilter.test(file.type)) {
