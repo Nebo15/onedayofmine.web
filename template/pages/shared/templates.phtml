@@ -92,7 +92,7 @@
       {{list:item}}
         <li class="clearfix pull-left">
           <img src="{$item.image_72}" class="img-rounded" />
-          <span class="friend-name">{$item.name}</span>
+          <a href="/pages/{$item.id}/user" class="friend-name">{$item.name}</a>
 
           <button class="btn btn-small btn-danger pull-right unfollow-action<?php if(!$item->following) { ?> hide<?php } ?>" data-user-id="{$item.id}">
             Unfollow
@@ -111,7 +111,7 @@
     [[#users]]
       <li class="clearfix pull-left">
         <img src="[[image_72]]" class="img-rounded" />
-        <span class="friend-name">[[name]]</span>
+        <a href="/pages/[[id]]/user" class="friend-name">[[name]]</a>
 
         <button class="btn btn-small btn-danger pull-right unfollow-action[[#unless following]] hide[[/unless]]" data-user-id="[[id]]">
           Unfollow
