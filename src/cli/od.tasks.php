@@ -30,7 +30,7 @@ function task_od_create_crontab($args = array())
 	$sphinx_config = "--config $project_dir/settings/third-party/sphinx/sphinx.conf";
 	$output .= "* * * * * sphinxsearch indexer $sphinx_config --rotate users_delta $log_str";
 	$output .= "* * * * * sphinxsearch indexer $sphinx_config --rotate --merge users users_delta $log_str";
-	$output .= "1 4 * * * sphinxsearch indexer $sphinx_config--rotate -users $log_str";
+	$output .= "1 4 * * * sphinxsearch indexer $sphinx_config --rotate users $log_str";
 	## Days
 	$output .= "* * * * * sphinxsearch indexer $sphinx_config --rotate days_delta $log_str";
 	$output .= "* * * * * sphinxsearch indexer $sphinx_config --rotate --merge days days_delta $log_str";
