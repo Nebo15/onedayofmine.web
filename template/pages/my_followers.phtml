@@ -3,28 +3,35 @@ $this->title = "My followers and following";
 $this->menu = 'me';
 ?>
 {{wrap with="layout.phtml"}}
-{{into slot="content"}}
-<div class="row">
-    <div class="span6" style="margin-right:30px">
-		    <h1>Followers <small><?= count($this->followers); ?> people</small></h1>
-	      {{apply template="users_list" users="{$#followers}"/}}
-    </div>
-    <div class="span6">
-        <h1>Following <small><?= count($this->following); ?> people</small></h1>
+  {{into slot="js_ready"}}
+    function attachFollowingListeners(container) {
+      container.find('.follow-action').click(function() {
+        var user_id = $(this).data('user-id');
+        $(this).addClass('hide');
+        $(this).parent().find('.unfollow-action').removeClass('hide');
+        API.post('users/' + user_id + '/follow').send();
+      });
+
+      container.find('.unfollow-action').click(function() {
+        var user_id = $(this).data('user-id');
+        $(this).addClass('hide');
+        $(this).parent().find('.follow-action').removeClass('hide');
+        API.post('users/' + user_id + '/unfollow').send();
+      });
+    }
+
+    attachFollowingListeners($('.user-relations'));
+  {{/into}}
+  {{into slot="content"}}
+    <div class="row-fluid user-relations">
+      <div class="span6">
+        <h1>Followers <small><?= count($this->followers); ?></small></h1>
+        {{apply template="users_list" users="{$#followers}"/}}
+      </div>
+      <div class="span6">
+        <h1>Following <small><?= count($this->following); ?></small></h1>
         {{apply template="users_list" users="{$#following}"/}}
+      </div>
     </div>
-</div>
-{{/into}}
-{{into slot="js_ready"}}
-	$('.follow-action').click(function() {
-		API.request('POST', 'users/'+$(this).attr('user_id')+'/follow').send();
-		$(this).hide();
-		$(this).parent().find('.unfollow-action').css('display', 'block');
-	});
-	$('.unfollow-action').click(function() {
-		API.request('POST', 'users/'+$(this).attr('user_id')+'/unfollow').send();
-		$(this).hide();
-		$(this).parent().find('.follow-action').css('display', 'block');
-	});
-{{/into}}
+  {{/into}}
 {{/wrap}}
