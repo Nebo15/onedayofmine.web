@@ -44,7 +44,6 @@
 		{{/list:default}}
 	{{/list}}
 {{/template}}
-<!-- TODO: Test this in days-search -->
 <script id="days_list_template" type="text/x-handlebars-template">
   <ul class="days clearfix block-center">
     [[#days]]
@@ -144,7 +143,19 @@
   {{/list}}
 {{/template}}
 <script id="users_thumb_list_template" type="text/x-handlebars-template">
-
+  [[#if users]]
+    <ul class="unstyled inline users-thumb-list">
+      [[#users]]
+        <li>
+          <a href="/pages/[[id]]/user">
+            <img src="[[image_72]]" class="img-rounded with-tooltip" data-original-title="[[name]]" />
+          </a>
+        </li>
+      [[/users]]
+    </ul>
+  [[else]]
+    [[empty_message]]
+  [[/if]]
 </script>
 
 {{template name='following_thumb_list'}}
