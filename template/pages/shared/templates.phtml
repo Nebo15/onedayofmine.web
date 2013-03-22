@@ -63,9 +63,14 @@
                 </a>
               </li>
               <li class="small">
-                <a href="/pages/[[user.id]]/user">
-                  [[user.name]]
-                </a>
+                <div class="user-info">
+                  [[clip user.occupation 25]] from [[user.location]]
+                </div>
+                <div class="user-name">
+                  <a href="/pages/[[user.id]]/user">
+                    [[user.name]]
+                  </a>
+                </div>
               </li>
               <li class="small">
                 <ul class="inline unstyled">
@@ -83,7 +88,24 @@
 </script>
 
 {{template name='users_list'}}
+  {{list using="$users"}}
+    <ul class="unstyled users-list with-separators clearfix">
+      {{list:item}}
+        <li class="clearfix pull-left">
+          <img src="{$item.image_72}" class="img-rounded" />
+          <span class="friend-name">{$item.name}</span>
 
+          <button class="btn btn-small btn-danger pull-right unfollow-action<?php if(!$item->following) { ?> hide<?php } ?>" data-user-id="{$item.id}">
+            Unfollow
+          </button>
+
+          <button class="btn btn-small btn-success pull-right follow-action<?php if($item->following) { ?> hide<?php } ?>" data-user-id="{$item.id}">
+            Follow
+          </button>
+        </li>
+      {{/list:item}}
+    </ul>
+  {{/list}}
 {{/template}}
 <script id="users_list_template" type="text/x-handlebars-template">
   <ul class="unstyled users-list with-separators clearfix">
