@@ -149,7 +149,7 @@ class MysqliDbDriver extends DbDriver
 			$this->_log("error!\n");
 	}
 
-	function _copy_schema($dsn_src, $dsn_dst)
+	function copySchema($dsn_src, $dsn_dst)
 	{
 		$tables = $this->_get_tables($dsn_src);
 
@@ -172,6 +172,11 @@ class MysqliDbDriver extends DbDriver
 				$this->_log("error while copying '$table'\n");
 		}
 		$this->_log("done\n");
+	}
+
+	function _copy_schema($dsn_src, $dsn_dst)
+	{
+		return $this->copySchema($dsn_src, $dsn_dst);
 	}
 
 	function _copy_schema_and_use_memory_engine($dsn_src, $dsn_dst)
@@ -203,8 +208,7 @@ class MysqliDbDriver extends DbDriver
 		$this->_log("done\n");
 	}
 
-
-	function _db_cleanup($dsn)
+	function cleanup($dsn)
 	{
 		$tables = $this->_get_tables($dsn);
 		$this->_drop_tables($dsn, $tables);
@@ -212,6 +216,11 @@ class MysqliDbDriver extends DbDriver
 		$this->_log("Starting clean up of '{$dsn['database']}' DB...\n");
 
 		$this->_log("done\n");
+	}
+
+	function _db_cleanup($dsn)
+	{
+		$this->cleanup($dsn);
 	}
 
 	function _drop_tables($dsn, $tables)
@@ -285,15 +294,19 @@ class MysqliDbDriver extends DbDriver
 		}
 	}
 
-	function _get_schema_version($dsn)
+	function getSchemaVersion($dsn)
 	{
 		if (!$this->_table_exists($dsn, 'schema_info'))
 			return null;
-
 		return (int)$this->_exec($dsn, 'SELECT version FROM schema_info');
 	}
 
-	function _set_schema_version($dsn, $since = 1)
+	function _get_schema_version($dsn)
+	{
+		return $this->getSchemaVersion($dsn);
+	}
+
+	function setSchemaVersion($dsn, $since = 1)
 	{
 		$this->_log('Setting schema version ' . (int)$since . PHP_EOL);
 		if (!$this->_table_exists($dsn, 'schema_info'))
@@ -305,6 +318,11 @@ class MysqliDbDriver extends DbDriver
 			$this->_exec($dsn, 'INSERT INTO schema_info VALUES (' . (int)$since . ');');
 
 		return (int)$this->_exec($dsn, 'SELECT version FROM schema_info');
+	}
+
+	function _set_schema_version($dsn, $since = 1)
+	{
+		return $this->setSchemaVersion($dsn, $since);
 	}
 
 	function _copy_tables_contents($dsn_src, $dsn_dst, $tables)

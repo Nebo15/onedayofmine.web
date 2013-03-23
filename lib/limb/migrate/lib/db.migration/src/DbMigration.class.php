@@ -43,7 +43,7 @@ class DbMigration
   public function dump($ignore = null)
   {
 
-    if (is_null($ignore) or 'schema'<>$ignore)
+    if (is_null($ignore) or 'schema' != $ignore)
     {
       $this->_writeable($this->_schemaPath);
       $this->getDb()->_dump_schema($this->_dsn, $this->_schemaPath);
@@ -54,7 +54,7 @@ class DbMigration
       fclose($ourFileHandle);
     }
 
-    if (is_null($ignore) or 'data'<>$ignore)
+    if (is_null($ignore) or 'data' != $ignore)
     {
       $this->_writeable($this->_dataPath);
       $this->getDb()->_dump_data($this->_dsn, $this->_dataPath);
@@ -74,7 +74,7 @@ class DbMigration
 
     $this->getDb()->_set_schema_version($this->_dsn, $version);
 
-    if (is_null($ignore) or 'schema'<>$ignore)
+    if (is_null($ignore) or 'schema' != $ignore)
     {
       $this->_writeable($this->_schemaPath);
       $this->getDb()->_dump_schema($this->_dsn, $this->_schemaPath);
@@ -85,7 +85,7 @@ class DbMigration
       fclose($ourFileHandle);
     }
 
-    if (is_null($ignore) or 'data'<>$ignore)
+    if (is_null($ignore) or 'data' != $ignore)
     {
       $this->_writeable($this->_dataPath);
       $this->getDb()->_dump_data($this->_dsn, $this->_dataPath);
@@ -149,6 +149,27 @@ class DbMigration
     );
   }
 
+	public function sync($dst_dsn)
+	{
+		if(is_string($dst_dsn))
+			$dst_dsn = new lmbDbDSN($dst_dsn);
+
+		$this->getDb()->cleanup($dst_dsn);
+		$this->getDb()->copySchema($this->_dsn, $dst_dsn);
+		$this->getDb()->setSchemaVersion($dst_dsn, $this->getDb()->getSchemaVersion($this->_dsn));
+	}
+
+	public function getSchemaVersion($dsn = null)
+	{
+		if(!$dsn)
+			$dsn = $this->_dsn;
+
+		if(is_string($dsn))
+			$dsn = new lmbDbDSN($dsn);
+
+		return $this->getDb()->getSchemaVersion($dsn);
+	}
+
   /**
    * Import DSN string
    * @param string $sDsn
@@ -164,15 +185,15 @@ class DbMigration
       throw new Exception("DSN '$sDsn' is not valid");
 
     $this->_dsn = array(
-        'sDsn'=>$sDsn,
-        'scheme'=>'',
-        'host'=>'',
-        'port'=>'',
-        'password'=>'',
-        'path'=>'',
-        'query'=>array(),
-        'charset'=>'utf8',
-        'fragment'=>'',
+        'sDsn'     => $sDsn,
+        'scheme'   => '',
+        'host'     => '',
+        'port'     => '',
+        'password' => '',
+        'path'     => '',
+        'query'    => array(),
+        'charset'  => 'utf8',
+        'fragment' => '',
     );
 
     foreach ($hUrl as $sKey=>$sValue)
