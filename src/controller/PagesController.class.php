@@ -86,7 +86,7 @@ class PagesController extends lmbController
 
 	function doDaysDiscover()
 	{
-		$days_ratings = (new InterestCalculator())->getDaysRatings(null, null, 2);
+		$days_ratings = (new InterestCalculator())->getDaysRatings(null, null, 20);
 
 		$this->days = [];
 		foreach ($days_ratings as $day_rating)
