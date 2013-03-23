@@ -518,6 +518,10 @@ hr {
           transition-property: left, right, top;
 }
 
+.masonry {
+  margin-bottom: 30px !important;
+}
+
 /* Main style */
 .content {
   padding-top: 20px;
