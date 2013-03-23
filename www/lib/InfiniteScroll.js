@@ -42,17 +42,21 @@ Selector chields should have ID's in data-attribute:
         var paginate_button = selector.find('.action-load-next');
 
         request.success(function(response) {
-          var days = Template.compileElement(template_list, {
-            days: response.data.result
-          });
+          if(response.data.result.length > 0) {
+            var days = Template.compileElement(template_list, {
+              days: response.data.result
+            });
 
-          days = $($.trim(days));
+            days = $($.trim(days));
 
-          selector.append(days).masonry( 'appended', days);
+            selector.append(days).masonry( 'appended', days);
 
-          setTimeout(function() {
-            paginate_button.removeClass('disabled');
-          }, 1000);
+            setTimeout(function() {
+              paginate_button.removeClass('disabled');
+            }, 1000);
+          } else {
+            paginate_button.animate({opacity:0});
+          }
           paginate_button.hideSpinner();
         });
 

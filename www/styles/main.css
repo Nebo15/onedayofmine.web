@@ -133,9 +133,17 @@ h4 {
   transform: all 0.4s ease;
 }
 
+.animated.slow {
+  -webkit-transition: all 0.8s ease;
+  -moz-transition: all 0.8s ease;
+  -ms-transition: all 0.8s ease;
+  -o-transition: all 0.8s ease;
+  transform: all 0.8s ease;
+}
+
 .hide,
 .invisible {
-  opacity: 0;
+  opacity: 0 !important;
 }
 
 .fadeIn {
