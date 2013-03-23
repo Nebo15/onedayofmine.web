@@ -8,9 +8,16 @@ $this->menu = 'discover';
   {{/into}}
   {{into slot="js_include"}}
     <script src="/lib/vendor/bootstrap-select.min.js"></script>
+    <script src="/lib/InfiniteScroll.js"></script>
   {{/into}}
   {{into slot="js_ready"}}
+    // Nice boostrap select's
     $('.selectpicker').selectpicker();
+
+    // Init paginator
+    $('.days').infiniteScroll({
+      request: API.get('days/interesting')
+    });
   {{/into}}
   {{into slot="content"}}
     <div class="text-center">

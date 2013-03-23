@@ -20,21 +20,6 @@ $(function() {
       $(this).addClass('invisible');
     },
 
-/*
-
- $('.search-query').attachValidator({
-  button: $('button'),
-  maxLength: 255,
-  minLength: 5,
-  canBeEmpty: false,
-  isLive: false,
-  messages: {
-    empty: 'Search query is empty',
-    minLength: 'Search query is too short',
-    maxLength: 'Search query is too long'
-  }
-});*/
-
     attachValidator: function(params) {
       params = params || {};
       params.messages = params.messages || {};

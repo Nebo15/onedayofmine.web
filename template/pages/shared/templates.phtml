@@ -2,7 +2,7 @@
 	{{list using="$days"}}
 		<ul class="days clearfix block-center">
 	    {{list:item}}
-		    <li>
+		    <li data-id="{$item.id}">
 			    <dl class="with-box-shadow">
 				    <dt>
               <a href="/pages/{$item.id}/day">
@@ -47,7 +47,7 @@
 <script id="days_list_template" type="text/x-handlebars-template">
   <ul class="days clearfix block-center">
     [[#days]]
-      <li>
+      <li data-id="[[id]]">
         <dl class="with-box-shadow">
           <dt>
             <a href="/pages/[[id]]/day">
@@ -84,6 +84,46 @@
       </li>
     [[/days]]
   </ul>
+</script>
+
+<script id="days_list_elements_template" type="text/x-handlebars-template">
+  [[#days]]
+    <li data-id="[[id]]">
+      <dl class="with-box-shadow">
+        <dt>
+          <a href="/pages/[[id]]/day">
+            <img src="[[#if image_532]][[image_532]][[else]]/img/no_photo.png[[/if]]" alt="[[final_description]]">
+          </a>
+        </dt>
+        <dd class="animated">
+          <ul class="unstyled">
+            <li>
+              <a href="/pages/[[id]]/day">
+                [[clip title 25]]
+              </a>
+            </li>
+            <li class="small">
+              <div class="user-info">
+                [[clip user.occupation 25]] from [[user.location]]
+              </div>
+              <div class="user-name">
+                <a href="/pages/[[user.id]]/user">
+                  [[user.name]]
+                </a>
+              </div>
+            </li>
+            <li class="small">
+              <ul class="inline unstyled">
+                <li><i class="icon icon-heart"></i> <small>[[likes_count]]</small></li>
+                <li><i class="icon icon-large icon-comments"></i> [[comments_count]]</li>
+                <li><i class="icon icon-large icon-eye-open"></i> [[views_count]]</li>
+              </ul>
+            </li>
+          </ul>
+        </dd>
+      </dl>
+    </li>
+  [[/days]]
 </script>
 
 {{template name='users_list'}}
@@ -167,3 +207,13 @@
   <h3>Followers&nbsp;&nbsp;<small><?= count($users) ?></small></h3>
   {{apply template="users_thumb_list" users="{$users}" empty_message="<p>You have no followers. <a href=\'/pages/find_people\'>Invite friends</a> that can follow you!</p>" /}}
 {{/template}}
+
+
+<script id="infiniteScroll_button_template" type="text/x-handlebars-template">
+  <li style="bottom:-60px; width:100%; position: absolute; margin-right:10px;">
+    <button class="btn btn-block with-spinner action-load-next">
+      <i class="spinner icon icon-spin icon-refresh"></i>
+      Load more
+    </button>
+  </li>
+</script>
