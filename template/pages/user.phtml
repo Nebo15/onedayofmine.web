@@ -37,7 +37,7 @@ $this->menu = '';
     // Init paginator
     var template_list = Template.prepareTemplate($('#days_list_elements_template'));
     $('.days').infiniteScroll({
-      request: API.get('days/interesting'),
+      request: API.get('users/{$#user.id}/days'),
       success: function(response) {
         var days = Template.compileElement(template_list, {
           days: response.data.result.reverse()
