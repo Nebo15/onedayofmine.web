@@ -15,8 +15,18 @@ $this->menu = 'discover';
     $('.selectpicker').selectpicker();
 
     // Init paginator
+    var template_list = Template.prepareTemplate($('#days_list_elements_template'));
     $('.days').infiniteScroll({
-      request: API.get('days/interesting')
+      request: API.get('days/interesting'),
+      success: function(response) {
+        var days = Template.compileElement(template_list, {
+          days: response.data.result
+        });
+
+        days = $($.trim(days));
+
+        $(this).append(days).masonry( 'appended', days);
+      }
     });
   {{/into}}
   {{into slot="content"}}

@@ -3,6 +3,25 @@ $this->title = "My days";
 $this->menu = 'me';
 ?>
 {{wrap with="layout.phtml"}}
+  {{into slot="js_include"}}
+    <script src="/lib/InfiniteScroll.js"></script>
+  {{/into}}
+  {{into slot="js_ready"}}
+    // Init paginator
+    var template_list = Template.prepareTemplate($('#days_list_elements_template'));
+    $('.days').infiniteScroll({
+      request: API.get('days/interesting'),
+      success: function(response) {
+        var days = Template.compileElement(template_list, {
+          days: response.data.result
+        });
+
+        days = $($.trim(days));
+
+        $(this).append(days).masonry( 'appended', days);
+      }
+    });
+  {{/into}}
   {{into slot="content"}}
     <h1 class="page-title">My days</h1>
     {{apply template="days_list" days="{$#days}"/}}

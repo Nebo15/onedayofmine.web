@@ -23,33 +23,28 @@ Selector chields should have ID's in data-attribute:
 
     Obj.prototype = {
       init: function() {
-        console.log(this.params);
         if(!this.params.request) {
           console.error('Request not specified');
           return;
         }
 
         var selector = this.$self;
-        var template_list = Template.prepareTemplate($('#days_list_elements_template'));
         var template_button = Template.prepareTemplate($('#infiniteScroll_button_template'));
         var request = this.params.request;
+        var onSuccess = this.params.success;
+        var order = this.params.order || 'ASC';
 
         if(this.params.step) {
           request.params.data.limit = this.params.step || 40;
         }
+
 
         selector.append(Template.compileElement(template_button));
         var paginate_button = selector.find('.action-load-next');
 
         request.success(function(response) {
           if(response.data.result.length > 0) {
-            var days = Template.compileElement(template_list, {
-              days: response.data.result
-            });
-
-            days = $($.trim(days));
-
-            selector.append(days).masonry( 'appended', days);
+            onSuccess.call(selector, response);
 
             setTimeout(function() {
               paginate_button.removeClass('disabled');
@@ -57,10 +52,11 @@ Selector chields should have ID's in data-attribute:
           } else {
             paginate_button.animate({opacity:0});
           }
+
           paginate_button.hideSpinner();
         });
 
-        $(window).on('scrollHitBottom', function() {
+        var paginate_callback = function() {
           if(paginate_button.hasClass('disabled')) {
             return;
 
@@ -68,11 +64,17 @@ Selector chields should have ID's in data-attribute:
           paginate_button.addClass('disabled');
           paginate_button.showSpinner();
 
-          var max_id = selector.find('[data-id]').last().data('id');
-          request.params.data.from = max_id;
+          var last_id = selector.find('[data-id]').last().data('id');
+          if(order == 'DESC') {
+            request.params.data.to = last_id;
+          } else {
+            request.params.data.from = last_id;
+          }
           request.send();
-        });
+        };
 
+        $(window).on('scrollHitBottom', paginate_callback);
+        paginate_button.click(paginate_callback);
       }
     };
 

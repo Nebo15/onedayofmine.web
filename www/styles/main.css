@@ -635,7 +635,7 @@ ul.with-separators li .btn-small {
 
 .days dd a {
   color:#fff;
-  font-weight:lighter;
+  font-weight: lighter;
 }
 
 .days dd .user-name {
@@ -654,6 +654,13 @@ ul.with-separators li .btn-small {
 
 .days dl dd ul li.small {
   font-size: 85%;
+}
+
+.days dl dd li,
+.days dl dd li div {
+  text-overflow: ellipsis; /* … */
+  overflow:hidden;
+  white-space: nowrap;
 }
 
 /* >> Import thumbnails list */
