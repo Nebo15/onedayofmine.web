@@ -107,6 +107,7 @@ class PagesController extends lmbController
 		if (!$user = lmbToolkit::instance()->getUser())
 			return $this->forwardToUnauthorized();
 
+    $this->user = $user;
 		$this->days = $this->_toFlatArray($this->toolkit->getExportHelper()->exportDayItems($user->getPublicDays()->paginate(0, $this->lists_limit)));
 	}
 
