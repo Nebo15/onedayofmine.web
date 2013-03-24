@@ -6,53 +6,51 @@ $this->menu = '';
     <div class="row">
   		<div class="span8">
 				<h1>News</h1>
-        <div class="news">
-          <ul class="unstyled">
-            {{list using="$#news"}}
-              {{list:item}}
-                <li>
-                  <a href="/pages/{$item.sender.id}/user">
-                    <img src="{$item.sender.image_72}" width="72" class="pull-left img-rounded" alt="" />
-                  </a>
-                  <div class="bubble left">
-                    <p class="text">
-                      {$item.text|raw}
-                      <br />
-                      {{list using="{$item.days}" as="$day"}}
-                        {{list:item}}
-                          <a href="/pages/{$day.id}/day">
-                            <img src="{$day.image_266}" width="72">
-                          </a>
-                        {{/list:item}}
-                      {{/list}}
-                      {{list using="{$item.moments}" as="$moment"}}
-                        {{list:item}}
-                          <a href="/pages/{$item.day.id}/day">
-                            <img src="{$moment.image_266}" width="72">
-                          </a>
-                        {{/list:item}}
-                      {{/list}}
-                      {{list using="{$item.day_comments}" as="$comment"}}
-                        {{list:item}}
-                          <blockquote>{$comment.text}</blockquote>
-                        {{/list:item}}
-                      {{/list}}
-                      {{list using="{$item.moment_comments}" as="$comment"}}
-                        {{list:item}}
-                          <blockquote>{$comment.text}</blockquote>
-                        {{/list:item}}
-                      {{/list}}
-                      <small><b>{$item.time|date:'M j \a\t g:m a'}</b></small>
-                    </p>
-                  </div>
-                </li>
-              {{/list:item}}
-              {{list:empty}}
-                <p>You don't have news. Try to <a href="/pages/find_people">follow</a> more people.</p>
-              {{/list:empty}}
-            {{/list}}
-          </ul>
-        </div>
+        <ul class="news unstyled">
+          {{list using="$#news"}}
+            {{list:item}}
+              <li>
+                <a href="/pages/{$item.sender.id}/user">
+                  <img src="{$item.sender.image_72}" width="72" class="pull-left img-rounded" alt="" />
+                </a>
+                <div class="bubble left">
+                  <p class="text">
+                    {$item.text|raw}
+                    <br />
+                    {{list using="{$item.days}" as="$day"}}
+                      {{list:item}}
+                        <a href="/pages/{$day.id}/day">
+                          <img src="{$day.image_266}" width="72">
+                        </a>
+                      {{/list:item}}
+                    {{/list}}
+                    {{list using="{$item.moments}" as="$moment"}}
+                      {{list:item}}
+                        <a href="/pages/{$item.day.id}/day">
+                          <img src="{$moment.image_266}" width="72">
+                        </a>
+                      {{/list:item}}
+                    {{/list}}
+                    {{list using="{$item.day_comments}" as="$comment"}}
+                      {{list:item}}
+                        <blockquote>{$comment.text}</blockquote>
+                      {{/list:item}}
+                    {{/list}}
+                    {{list using="{$item.moment_comments}" as="$comment"}}
+                      {{list:item}}
+                        <blockquote>{$comment.text}</blockquote>
+                      {{/list:item}}
+                    {{/list}}
+                    <small><b>{$item.time|date:'M j \a\t g:m a'}</b></small>
+                  </p>
+                </div>
+              </li>
+            {{/list:item}}
+            {{list:empty}}
+              <p>You don't have news. Try to <a href="/pages/find_people">follow</a> more people.</p>
+            {{/list:empty}}
+          {{/list}}
+        </ul>
   		</div>
 
   		<div class="span3 hide-phone">
