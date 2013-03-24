@@ -530,6 +530,13 @@ hr {
   margin-bottom: 30px !important;
 }
 
+.masonry .infiniteScroll_button {
+  bottom:-60px;
+  width:100%;
+  position: absolute;
+  margin-right:10px;
+}
+
 /* Main style */
 .content {
   padding-top: 20px;
