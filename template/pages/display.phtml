@@ -59,7 +59,7 @@ $this->menu = '';
 
         news = $($.trim(news));
 
-        $(this).append(news);
+        $(this).find('.infiniteScroll_button_container').before(news);
       }
     });
   {{/into}}
