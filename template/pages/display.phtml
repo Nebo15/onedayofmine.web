@@ -67,10 +67,10 @@ $this->menu = '';
     <div class="row">
   		<div class="span8">
 				<h1>News</h1>
-        <ul class="news unstyled">
-          {{list using="$#news"}}
+        {{list using="$#news"}}
+          <ul class="news unstyled">
             {{list:item}}
-              <li>
+              <li data-id="{$item.id}">
                 <a href="/pages/{$item.sender.id}/user">
                   <img src="{$item.sender.image_72}" width="72" class="pull-left img-rounded" alt="" />
                 </a>
@@ -110,8 +110,8 @@ $this->menu = '';
             {{list:empty}}
               <p>You don't have news. Try to <a href="/pages/find_people">follow</a> more people.</p>
             {{/list:empty}}
-          {{/list}}
-        </ul>
+          </ul>
+        {{/list}}
   		</div>
 
   		<div class="span3 hide-phone">
