@@ -38,7 +38,6 @@ Selector chields should have ID's in data-attribute:
           request.params.data.limit = this.params.step || 40;
         }
 
-
         selector.append(Template.compileElement(template_button));
         var paginate_button = selector.find('.action-load-next');
 
