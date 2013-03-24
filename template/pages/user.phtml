@@ -2,6 +2,9 @@
 $this->menu = '';
 ?>
 {{wrap with="layout.phtml"}}
+  {{into slot="js_include"}}
+    <script src="/lib/InfiniteScroll.js"></script>
+  {{/into}}
   {{into slot="js_ready"}}
     <? if($this->toolkit->getUser() && $this->user['id'] != $this->toolkit->getUser()->id) { ?>
       var follow_button = $('#trigger_user_follow');
@@ -30,8 +33,24 @@ $this->menu = '';
         }
       });
     <? } ?>
-  {{/into}}
 
+    // Init paginator
+    var template_list = Template.prepareTemplate($('#days_list_elements_template'));
+    $('.days').infiniteScroll({
+      request: API.get('users/{$#user.id}/days'),
+      success: function(response) {
+        var days = Template.compileElement(template_list, {
+          days: response.data.result.reverse()
+        });
+
+        days = $($.trim(days));
+
+        $(this).find('.infiniteScroll_button_container').before(days);
+        $(this).masonry('appended', days);
+      },
+      order: 'DESC'
+    });
+  {{/into}}
   {{into slot="content"}}
   	<div class="row">
   		<div class="span" style="width:192px">

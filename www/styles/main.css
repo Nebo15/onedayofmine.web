@@ -133,9 +133,17 @@ h4 {
   transform: all 0.4s ease;
 }
 
+.animated.slow {
+  -webkit-transition: all 0.8s ease;
+  -moz-transition: all 0.8s ease;
+  -ms-transition: all 0.8s ease;
+  -o-transition: all 0.8s ease;
+  transform: all 0.8s ease;
+}
+
 .hide,
 .invisible {
-  opacity: 0;
+  opacity: 0 !important;
 }
 
 .fadeIn {
@@ -518,6 +526,17 @@ hr {
           transition-property: left, right, top;
 }
 
+.masonry {
+  margin-bottom: 30px !important;
+}
+
+.masonry .infiniteScroll_button_container {
+  bottom:-60px;
+  width:100%;
+  position: absolute;
+  margin-right:10px;
+}
+
 /* Main style */
 .content {
   padding-top: 20px;
@@ -623,7 +642,7 @@ ul.with-separators li .btn-small {
 
 .days dd a {
   color:#fff;
-  font-weight:lighter;
+  font-weight: lighter;
 }
 
 .days dd .user-name {
@@ -642,6 +661,13 @@ ul.with-separators li .btn-small {
 
 .days dl dd ul li.small {
   font-size: 85%;
+}
+
+.days dl dd li,
+.days dl dd li div {
+  text-overflow: ellipsis; /* … */
+  overflow:hidden;
+  white-space: nowrap;
 }
 
 /* >> Import thumbnails list */
@@ -675,7 +701,8 @@ ul.with-separators li .btn-small {
 }
 
 /* >> Comments */
-.comment-item {
+.comment-item,
+.news > li {
   margin-top: 20px;
   clear: both;
 }
@@ -685,19 +712,23 @@ ul.with-separators li .btn-small {
 }
 
 .comment-item .text,
+.news > li .text,
 .no-overflow {
   overflow: hidden;
 }
 
-.comment-item .bubble {
+.comment-item .bubble,
+.news > li .bubble {
   padding-bottom: 1px;
 }
 
-.comment-item img {
+.comment-item img,
+.news > li img {
   margin-right: 20px;
 }
 
 .comment-item .bubble,
+.news > li .bubble,
 .comments-loader {
   margin-left: 100px;
 }
@@ -910,11 +941,13 @@ ul.controls li {
     margin: 0;
   }
 
-  .comment-item img {
+  .comment-item img,
+  .news > li img {
     width: 36px;
   }
 
-  .comment-item .bubble {
+  .comment-item .bubble,
+  .news > li .bubble {
     margin-left: 50px;
   }
 

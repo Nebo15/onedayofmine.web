@@ -8,9 +8,27 @@ $this->menu = 'discover';
   {{/into}}
   {{into slot="js_include"}}
     <script src="/lib/vendor/bootstrap-select.min.js"></script>
+    <script src="/lib/InfiniteScroll.js"></script>
   {{/into}}
   {{into slot="js_ready"}}
+    // Nice boostrap select's
     $('.selectpicker').selectpicker();
+
+    // Init paginator
+    var template_list = Template.prepareTemplate($('#days_list_elements_template'));
+    $('.days').infiniteScroll({
+      request: API.get('days/interesting'),
+      success: function(response) {
+        var days = Template.compileElement(template_list, {
+          days: response.data.result
+        });
+
+        days = $($.trim(days));
+
+        $(this).find('.infiniteScroll_button_container').before(days);
+        $(this).masonry('appended', days);
+      }
+    });
   {{/into}}
   {{into slot="content"}}
     <div class="text-center">

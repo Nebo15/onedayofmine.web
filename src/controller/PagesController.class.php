@@ -14,6 +14,8 @@ class PagesController extends lmbController
 	protected $toolkit;
 	protected $instagram_api_host = 'https://api.instagram.com';
 
+  protected $lists_limit = 20;
+
 	function doDayCreate()
 	{
 		if (!$user = lmbToolkit::instance()->getUser())
@@ -26,7 +28,7 @@ class PagesController extends lmbController
 		if($this->toolkit->getUser())
 		{
 			$user  = $this->toolkit->getUser();
-			$news = $user->getNews();
+			$news = $user->getNews(); //->paginate(0, $this->lists_limit);
 
 			$this->news = $this->_mergeNews($news);
 
@@ -86,7 +88,7 @@ class PagesController extends lmbController
 
 	function doDaysDiscover()
 	{
-		$days_ratings = (new InterestCalculator())->getDaysRatings();
+		$days_ratings = (new InterestCalculator())->getDaysRatings(null, null, $this->lists_limit);
 
 		$this->days = [];
 		foreach ($days_ratings as $day_rating)
@@ -105,7 +107,8 @@ class PagesController extends lmbController
 		if (!$user = lmbToolkit::instance()->getUser())
 			return $this->forwardToUnauthorized();
 
-		$this->days = $this->_toFlatArray($this->toolkit->getExportHelper()->exportDayItems($user->getPublicDays()));
+    $this->user = $user;
+		$this->days = $this->_toFlatArray($this->toolkit->getExportHelper()->exportDayItems($user->getPublicDays()->paginate(0, $this->lists_limit)));
 	}
 
 	function doMyFollowers()
@@ -204,7 +207,7 @@ class PagesController extends lmbController
 		if(!$user = User::findById($id))
 			return $this->forwardTo404();
 
-		if($this->_getUser() && $this->_getUser()->id == $id)
+		if($this->_getUser() && $this->_getUser()->id == $id && !$this->request->has('preview'))
 		{
 			$this->setTemplate('pages/user_owner.phtml');
 			return;
@@ -212,7 +215,7 @@ class PagesController extends lmbController
 
 		$this->user = (array) $this->toolkit->getExportHelper()->exportUser($user);
 
-		$this->user['days'] = $this->_toFlatArray($this->toolkit->getExportHelper()->exportDayItems($user->getPublicDays()));
+		$this->user['days'] = $this->_toFlatArray($this->toolkit->getExportHelper()->exportDayItems($user->getPublicDays()->paginate(0, $this->lists_limit)));
 		$followers = $user->getFollowersUsers();
 		$this->user['users_followers'] = $this->_toFlatArray($this->toolkit->getExportHelper()->exportUserItems($followers));
 

@@ -2,6 +2,14 @@ var Template = (function() {
   var templates_compiled = [];
 
   $(function() {
+    // Registering Handlebars helpers
+    Handlebars.registerHelper('include', function(name, context) {
+      var subTemplate = Handlebars.compile($(name));
+      var subTemplateContext = $.extend({}, this, context.hash);
+
+      return new Handlebars.SafeString(subTemplate(subTemplateContext));
+    });
+
     Handlebars.registerHelper('if-eq', function(first, second, options) {
       if(first == second) {
         return options.fn(this);
@@ -33,20 +41,6 @@ var Template = (function() {
         return options.inverse(this);
       }
     });
-
-    Handlebars.registerHelper('link', function(link)
-    {
-      link = link.replace('odom://', '#');
-      link = link.replace('?', ':');
-      return new Handlebars.SafeString(link);
-    });
-
-    Handlebars.registerHelper('clip', function(string, len) {
-      console.log(string, len);
-      if(null == string)
-        return '';
-      return new Handlebars.SafeString(string.substr(0, len - 1) + (string.length > len ? '&hellip;' : ''));
-    });
   });
 
   return {
@@ -61,22 +55,23 @@ var Template = (function() {
 
       var html = templates_compiled[source.hashCode()](data);
 
-      if(callback)
+      if(callback) {
         callback(html);
+      }
 
       return html;
     },
 
     renderElement: function(source, target, data, callback) {
-
         var tpl_code = typeof source == "string" ? source : source.html();
         var html = Template.compileElement(tpl_code, data);
 
         target.empty();
         target.html(html);
 
-        if(callback)
-            callback();
+        if(callback) {
+          callback();
+        }
     }
   };
 })();
