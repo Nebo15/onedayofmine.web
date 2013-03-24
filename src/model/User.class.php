@@ -163,22 +163,40 @@ class User extends BaseModel
     return DeviceToken::find(lmbSQLCriteria::equal('user_id', $this->id));
   }
 
-  function getFollowingUsers()
+  function getFollowingUsers($from_user_id = null, $to_user_id = null, $limit = null)
   {
-    $following = UserFollowing::find(lmbSQLCriteria::equal('follower_user_id', $this->id));
+	  $criteria = lmbSQLCriteria::equal('follower_user_id', $this->id);
+	  if($from_user_id)
+		  $criteria->add(lmbSQLCriteria::less('user_id', $from_user_id));
+	  if($to_user_id)
+		  $criteria->add(lmbSQLCriteria::greater('user_id', $to_user_id));
+	  if($limit > 100 || $limit < 0)
+		  $limit = 100;
+    $following = UserFollowing::find($criteria, ['user_id' => 'DESC']);
+	  if($limit)
+		  $following->paginate(0, $limit);
     $users_ids = lmbArrayHelper::getColumnValues('user_id', $following);
     if(!$users_ids)
       return new lmbCollection();
     return self::findByIds($users_ids);
   }
 
-  function getFollowersUsers()
+  function getFollowersUsers($from_user_id = null, $to_user_id = null, $limit = null)
   {
-    $followers = UserFollowing::find(lmbSQLCriteria::equal('user_id', $this->id));
-    $users_ids = lmbArrayHelper::getColumnValues('follower_user_id', $followers);
-    if(!$users_ids)
-      return new lmbCollection();
-    return self::findByIds($users_ids);
+	  $criteria = lmbSQLCriteria::equal('user_id', $this->id);
+	  if($from_user_id)
+		  $criteria->add(lmbSQLCriteria::less('follower_user_id', $from_user_id));
+	  if($to_user_id)
+		  $criteria->add(lmbSQLCriteria::greater('follower_user_id', $to_user_id));
+	  if($limit > 100 || $limit < 0)
+		  $limit = 100;
+	  $following = UserFollowing::find($criteria, ['follower_user_id' => 'DESC']);
+	  if($limit)
+		  $following->paginate(0, $limit);
+	  $users_ids = lmbArrayHelper::getColumnValues('follower_user_id', $following);
+	  if(!$users_ids)
+		  return new lmbCollection();
+	  return self::findByIds($users_ids);
   }
 
   static function getSexTypes()

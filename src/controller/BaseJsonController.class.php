@@ -112,7 +112,7 @@ abstract class BaseJsonController extends lmbController
     return array(
       $this->request->getFiltered('from', FILTER_SANITIZE_NUMBER_INT),
       $this->request->getFiltered('to', FILTER_SANITIZE_NUMBER_INT),
-      (!$limit || $limit > 100) ? 100 : $limit
+      (!$limit || $limit > 100 || $limit < 0) ? 100 : $limit
     );
   }
 

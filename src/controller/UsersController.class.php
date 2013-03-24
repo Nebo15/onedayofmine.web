@@ -27,7 +27,14 @@ class UsersController extends BaseJsonController
     if(!$user = User::findById($this->request->id))
       return $this->_answerModelNotFoundById('User', $this->request->id);
 
-    return $this->_answerOk($this->toolkit->getExportHelper()->exportDayItems($user->getDays()));
+	  list($from, $to, $limit) = $this->_getFromToLimitations();
+
+    return $this->_answerOk(
+	    $this
+			    ->toolkit
+			    ->getExportHelper()
+			    ->exportDayItems($user->getDaysWithLimitations($from, $to, $limit))
+    );
   }
 
   function doGuestFollowers()
@@ -35,7 +42,9 @@ class UsersController extends BaseJsonController
     if(!$user = User::findById($this->request->id))
       return $this->_answerModelNotFoundById('User', $this->request->id);
 
-    $followers = $user->getFollowersUsers();
+	  list($from, $to, $limit) = $this->_getFromToLimitations();
+
+    $followers = $user->getFollowersUsers($from, $to, $limit);
 
     return $this->_answerOk($this->toolkit->getExportHelper()->exportUserItems($followers));
   }
@@ -45,7 +54,9 @@ class UsersController extends BaseJsonController
     if(!$user = User::findById($this->request->id))
       return $this->_answerModelNotFoundById('User', $this->request->id);
 
-    $followed_users = $user->getFollowingUsers();
+	  list($from, $to, $limit) = $this->_getFromToLimitations();
+
+    $followed_users = $user->getFollowingUsers($from, $to, $limit);
 
     return $this->_answerOk($this->toolkit->getExportHelper()->exportUserItems($followed_users));
   }
