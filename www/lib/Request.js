@@ -145,13 +145,13 @@ var Request = function(method, path, data, params) {
       },
 
       success: function(data, textStatus, jqXHR) {
-        console.log('Request ' + textStatus + ' (' + jqXHR.status + '): ' + path);
+        console.log('Request (s) ' + textStatus + ' (' + jqXHR.status + '): ' + path);
 
         trigger(callbacks.success, [new Response(data, jqXHR, $this)], jqXHR.status);
       },
 
       error: function(jqXHR, textStatus, errorThrown) {
-        console.log('Request ' + textStatus + ' (' + jqXHR.status + '): ' + errorThrown);
+        console.log('Request (e) ' + textStatus + ' (' + jqXHR.status + '): ' + errorThrown);
 
         trigger(callbacks.error, [jqXHR, textStatus, errorThrown], jqXHR.status);
       },
