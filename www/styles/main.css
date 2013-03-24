@@ -694,7 +694,8 @@ ul.with-separators li .btn-small {
 }
 
 /* >> Comments */
-.comment-item {
+.comment-item,
+.news > li {
   margin-top: 20px;
   clear: both;
 }
@@ -704,19 +705,23 @@ ul.with-separators li .btn-small {
 }
 
 .comment-item .text,
+.news > li .text,
 .no-overflow {
   overflow: hidden;
 }
 
-.comment-item .bubble {
+.comment-item .bubble,
+.news > li .bubble {
   padding-bottom: 1px;
 }
 
-.comment-item img {
+.comment-item img,
+.news > li img {
   margin-right: 20px;
 }
 
 .comment-item .bubble,
+.news > li .bubble,
 .comments-loader {
   margin-left: 100px;
 }
@@ -929,11 +934,13 @@ ul.controls li {
     margin: 0;
   }
 
-  .comment-item img {
+  .comment-item img,
+  .news > li img {
     width: 36px;
   }
 
-  .comment-item .bubble {
+  .comment-item .bubble,
+  .news > li .bubble {
     margin-left: 50px;
   }
 

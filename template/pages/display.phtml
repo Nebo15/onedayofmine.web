@@ -6,13 +6,14 @@ $this->menu = '';
     <div class="row">
   		<div class="span8">
 				<h1>News</h1>
-        <div class="comments">
-          <span class="pull-right not-decorated text-gray"></span>
+        <div class="news">
           <ul class="unstyled">
             {{list using="$#news"}}
               {{list:item}}
-                <li class="comment-item">
-                  <img src="{$item.sender.image_72}" width="72" class="pull-left img-rounded" alt="" />
+                <li>
+                  <a href="/pages/{$item.sender.id}/user">
+                    <img src="{$item.sender.image_72}" width="72" class="pull-left img-rounded" alt="" />
+                  </a>
                   <div class="bubble left">
                     <p class="text">
                       {$item.text|raw}
