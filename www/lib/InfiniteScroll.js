@@ -43,7 +43,7 @@ Selector chields should have ID's in data-attribute:
 
         request.success(function(response) {
           console.log(response);
-          if(response.data.result.length > 0) {
+          if(response.data.code == 200 && response.data.result.length > 0) {
             onSuccess.call(selector, response);
 
             setTimeout(function() {
