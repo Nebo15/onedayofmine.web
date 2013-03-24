@@ -39,9 +39,10 @@ Selector chields should have ID's in data-attribute:
         }
 
         selector.append(Template.compileElement(template_button));
-        var paginate_button = selector.find('.action-load-next');
+        var paginate_button = selector.find('.infiniteScroll_button_container button');
 
         request.success(function(response) {
+          console.log(response);
           if(response.data.result.length > 0) {
             onSuccess.call(selector, response);
 

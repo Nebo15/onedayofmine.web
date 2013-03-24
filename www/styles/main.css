@@ -530,7 +530,7 @@ hr {
   margin-bottom: 30px !important;
 }
 
-.masonry .infiniteScroll_button {
+.masonry .infiniteScroll_button_container {
   bottom:-60px;
   width:100%;
   position: absolute;

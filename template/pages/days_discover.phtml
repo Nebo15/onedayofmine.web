@@ -25,7 +25,7 @@ $this->menu = 'discover';
 
         days = $($.trim(days));
 
-        $(this).append(days).masonry( 'appended', days);
+        $(this).find('.infiniteScroll_button_container').before(days).masonry('appended', days);
       }
     });
   {{/into}}
