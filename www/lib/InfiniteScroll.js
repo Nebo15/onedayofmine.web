@@ -42,7 +42,6 @@ Selector chields should have ID's in data-attribute:
         var paginate_button = selector.find('.infiniteScroll_button_container button');
 
         request.success(function(response) {
-          console.log(response);
           if(response.data.code == 200 && response.data.result.length > 0) {
             onSuccess.call(selector, response);
 
