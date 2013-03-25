@@ -199,6 +199,12 @@ function task_od_job_worker()
 {
   lmb_require('src/service/odAsyncJobs.class.php');
 
+	if(!lmbToolkit::instance()->getConf('common')->async_enabled)
+	{
+		taskman_sysmsg('Async disabled.');
+		return;
+	}
+
   $worker= new GearmanWorker();
   $worker->addServer();
   foreach(get_class_methods('odAsyncJobs') as $function)
