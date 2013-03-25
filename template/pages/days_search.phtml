@@ -40,7 +40,7 @@ $this->menu = 'search';
 						});
 						days = $($.trim(days));
 						$(search_result_selector).append(days);
-						$(search_result_selector).masonry('appended', days);
+						$(search_result_selector).masonry('reload', days);
           }
         })
 
