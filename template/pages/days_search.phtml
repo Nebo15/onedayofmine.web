@@ -39,8 +39,8 @@ $this->menu = 'search';
 							days: response.data.result.reverse()
 						});
 						days = $($.trim(days));
-						$(search_result_selector).append(days);
-						$(search_result_selector).masonry('appended', days);
+						$(search_result_selector).html(days);
+						$(search_result_selector).masonry('reload', days);
           }
         })
 
