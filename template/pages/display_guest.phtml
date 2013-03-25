@@ -2,33 +2,53 @@
 $this->menu = '';
 ?>
 {{wrap with="layout.phtml"}}
-{{into slot="content"}}
-<div class="hero-unit">
-    <h1>One Day Of Mine</h1>
-		<p class="lead">Live the life through other people's eyes</p>
-    <ul class="unstyled">
-        <li>
-            <i class="icon-large icon-camera-retro"></i>
-            new life for old photos
-        </li>
-        <li>
-            <i class="icon-large icon-magic"></i>
-            easy to use: just click next and enjoy our magic
-        </li>
-        <li>
-            <i class="icon-large icon-eye-open"></i>
-            look at life through the eyes of different people
-        </li>
-        <li>
-            <i class="icon-large icon-group"></i>
-            gain interest of other people by publishing days from your life
-        </li>
-        <li>
-            <hr/>
-            <a href="/pages/import" class="btn btn-large">Ready! Set! Go!</a>
-        </li>
-    </ul>
+  {{into slot="content"}}
+    <div class="hero-unit">
+      <h1>One Day Of Mine</h1>
+  		<p class="lead">Live the life through other people's eyes</p>
+      <ul class="unstyled">
+          <li>
+              <i class="icon-large icon-camera-retro"></i>
+              new life for old photos
+          </li>
+          <li>
+              <i class="icon-large icon-magic"></i>
+              easy to use: just click next and enjoy our magic
+          </li>
+          <li>
+              <i class="icon-large icon-eye-open"></i>
+              look at life through the eyes of different people
+          </li>
+          <li>
+              <i class="icon-large icon-group"></i>
+              gain interest of other people by publishing days from your life
+          </li>
+          <li>
+              <hr/>
+              <a href="/pages/import" class="btn btn-large">Ready! Set! Go!</a>
+          </li>
+      </ul>
 
-</div>
-{{/into}}
+      <div id="myCarousel" class="carousel slide">
+        <div class="carousel-inner">
+          <div class="item">
+            <img src="http://twitter.github.com/bootstrap/assets/img/bootstrap-mdo-sfmoma-01.jpg" alt="">
+            <div class="carousel-caption">
+              <h4>First Thumbnail label</h4>
+              <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+            </div>
+          </div>
+          <div class="item active">
+            <img src="http://twitter.github.com/bootstrap/assets/img/bootstrap-mdo-sfmoma-02.jpg" alt="">
+            <div class="carousel-caption">
+              <h4>Second Thumbnail label</h4>
+              <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+            </div>
+          </div>
+        </div>
+        <a class="left carousel-control" href="#myCarousel" data-slide="prev">‹</a>
+        <a class="right carousel-control" href="#myCarousel" data-slide="next">›</a>
+      </div>
+    </div>
+  {{/into}}
 {{/wrap}}
