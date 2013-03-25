@@ -27,7 +27,7 @@ $this->menu = 'search';
         });
 
         search_request.success(function(response) {
-          search_result_selector.html();
+          search_result_selector.html('');
           if(response.data.result.length === 0)
           {
             search_result_selector.html("<p>We can't find any days by your query</p>");
