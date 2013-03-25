@@ -8,7 +8,7 @@ $this->menu = 'search';
       var search_form_selector = $('.form-search');
       var search_form_query_selector = search_form_selector.find('.search-query');
       var search_form_submit_selector = search_form_selector.find('button');
-      var search_result_selector = $('.search-result');
+      var search_result_selector = $('.days');
 
       search_form_query_selector.attachValidator({
         button: search_form_submit_selector,
@@ -34,8 +34,13 @@ $this->menu = 'search';
           }
           else
           {
-            var source = Template.prepareTemplate($('#days_list_template'));
-            Template.renderElement(source, search_result_selector, {days:response.data.result});
+						var template_list = Template.prepareTemplate($('#days_list_elements_template'));
+						var days = Template.compileElement(template_list, {
+							days: response.data.result.reverse()
+						});
+						days = $($.trim(days));
+						$(search_result_selector).append(days);
+						$(search_result_selector).masonry('appended', days);
           }
         })
 
@@ -53,6 +58,6 @@ $this->menu = 'search';
         <button type="submit" class="btn btn-small">Search</button>
       </form>
     </div>
-    <div class="search-result"></div>
+	  <ul class="days clearfix block-center"><ul>
   {{/into}}
 {{/wrap}}
