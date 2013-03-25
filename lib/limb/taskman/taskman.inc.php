@@ -107,7 +107,8 @@ class TaskmanTask
 
       taskman_runtasks($this->_getDeps(), $this->args);
 
-      taskman_sysmsg("************************ Running task '" . $this->getName() . "' ************************\n");
+	    $time = date("M j Y H:i:s");
+      taskman_sysmsg("******************* Running task '".$this->getName() . "' at $time *******************\n");
 
       $bench = microtime(true);
 
