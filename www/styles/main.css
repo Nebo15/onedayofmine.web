@@ -711,6 +711,10 @@ ul.with-separators li .btn-small {
   margin: -5px;
 }
 
+.controls-absolute + .text {
+  margin-right: 20px;
+}
+
 .comment-item .text,
 .news > li .text,
 .no-overflow {
