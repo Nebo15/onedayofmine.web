@@ -41,8 +41,8 @@ class PagesController extends lmbController
         continue;
       if(!$item['image_266'])
         continue;
-      // if(count($item->moments) < 7)
-      //   continue;
+      if(count($item->moments) < 7)
+        continue;
 
       $item['final_description'] = $day->final_description;
       if(!$item['final_description'])
