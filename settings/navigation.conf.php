@@ -25,11 +25,16 @@ $only_admin = array(array('title' => 'Администрирование', 'icon
     'url' => '/admin_user',
     'icon' => '/shared/cms/images/icons/user.png',
   ),
-  array(
-    'title' => 'Requests log',
-    'url' => '/admin_requests_log',
-    'icon' => '/shared/cms/images/icons/page.png',
-  ),
+  [
+    'title' => 'Deploy',
+    'url' => '/admin_tools/deploy',
+    'icon' => '/shared/cms/images/icons/server_go.png',
+  ],
+	[
+		'title' => 'App log',
+		'url' => '/admin_tools/app_log',
+		'icon' => '/shared/cms/images/icons/server_error.png',
+	],
 )));
 
 $conf = array(
