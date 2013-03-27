@@ -18,6 +18,18 @@ $this->menu = '';
       top: 48%
     }
 
+    .carousel-blocks img {
+      width: 200px;
+      height: 200px;
+      float:left;
+      display:inline-block;
+    }
+
+    .carousel-blocks img.big {
+      width: 400px;
+      height: 400px;
+    }
+
     .carousel-caption,
     .carousel-caption-overlap,
     .day-final-comment a {
@@ -128,6 +140,10 @@ $this->menu = '';
 
       $(function() {
         fixFinalCommentEndings();
+
+        $('#days_carousel').carousel({
+          interval: 2000
+        })
       });
     })();
   {{/into}}
@@ -146,9 +162,9 @@ $this->menu = '';
                   {{list using="$item.moments" as="$moment" counter="$counter"}}
                     {{list:item}}
                       <?php if($counter == 1) { ?>
-                        <img src="{$moment.image_532}" width="400" alt="" style="float:left; display:inline-block">
+                        <img src="{$moment.image_532}" class="big" />
                       <? } else { ?>
-                        <img src="{$moment.image_266}" width="200" alt="" style="float:left; display:inline-block">
+                        <img src="{$moment.image_266}" />
                       <? } ?>
                     {{/list:item}}
                   {{/list}}
