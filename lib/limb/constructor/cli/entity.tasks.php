@@ -1,10 +1,10 @@
 <?php
-
 /**
  *@always
  */
 function task_entity_init_constructor()
 {
+	require_once('limb/constructor/common.inc.php');
   lmb_require('limb/constructor/src/lmbProjectConstructor.class.php');
   $override_files = taskman_propor('OVERRIDE', false);
   $project_constructor = new lmbProjectConstructor(taskman_prop('PROJECT_DIR'), $override_files);
