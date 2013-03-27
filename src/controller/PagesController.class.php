@@ -44,6 +44,8 @@ class PagesController extends lmbController
       if(count($item->moments) < 7)
         continue;
 
+      $item->moments = array_slice($item->moments, 0, 7);
+
       $item['final_description'] = $day->final_description;
       if(!$item['final_description'])
         continue;
