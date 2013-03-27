@@ -122,7 +122,21 @@ $this->menu = '';
 
         $.each(active_item.data(), function(key, value) {
           var select = carousel_caption_overlap.find('select[name='+key+']');
-          select.val(value)
+
+          var option_exists = false;
+          select.find('option').removeAttr('selected');
+          select.find('option').each(function() {
+            if($(this).text() == value) {
+              $(this).attr('selected', true);
+              option_exists = true;
+            }
+          });
+
+          if(!option_exists) {
+            select.append('<option selected>' + value + '</option>');
+          }
+
+          select.val(value);
           resetHiddenSelect(select.parent());
         });
       });
@@ -185,9 +199,9 @@ $this->menu = '';
             <div class="selector">
               <div class="select-wrap">
                 <select name="type">
-                  <option<?php if($item['type'] == 'Working day') { ?> selected<? } ?>>Working day</option>
                   <option<?php if($item['type'] == 'Day off') { ?> selected<? } ?>>Day off</option>
                   <option<?php if($item['type'] == 'Holiday') { ?> selected<? } ?>>Holiday</option>
+                  <option<?php if($item['type'] == 'Working day') { ?> selected<? } ?>>Working day</option>
                   <option<?php if($item['type'] == 'Trip') { ?> selected<? } ?>>Trip</option>
                 </select>
                 <div class="select-representation">
