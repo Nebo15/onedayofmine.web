@@ -116,13 +116,19 @@
             if($this.hasClass('with-spinner')) {
               $this.hideSpinner();
             }
-            window.location.reload();
+            if($this.attr('href')) {
+              window.location = $this.attr('href');
+            } else {
+              window.location.reload();
+            }
           }, function() {
             if($this.hasClass('with-spinner')) {
               $this.hideSpinner();
             }
             $('.trigger_login').click(doLogin);
           });
+
+          return false;
         };
 
         $('.trigger_login').click(doLogin);

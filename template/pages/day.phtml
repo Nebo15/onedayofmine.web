@@ -1,4 +1,7 @@
-<? $this->title = $this->day->title; ?>
+<?
+$this->title = $this->day->title;
+$this->day->is_gathering_enabled = false;
+?>
 {{wrap with="layout.phtml"}}
   {{into slot="og_meta"}}
     <meta property="og:type" content="{$#facebook_app_namespace}:day" />
