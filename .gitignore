@@ -10,6 +10,7 @@
 *.sublime*
 .tags
 .tags_sorted_by_file
+composer.lock
 
 var/*
 init/lj_data

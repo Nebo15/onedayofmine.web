@@ -32,8 +32,7 @@ class InterestCalculator
 	  $query->addCriteria(lmbSQLCriteria::notEqual('user.occupation', ''));
 	  $query->addCriteria(lmbSQLCriteria::notEqual('user.location', ''));
     $query->addCriteria(lmbSQLCriteria::equal('is_deleted', 0));
-    $query->addCriteria(lmbSQLCriteria::isNull('day_interest.day_id'));
-    $query->addRawOrder("rating DESC");
+    $query->addRawOrder("rating DESC, day.id DESC");
 
     $days_rating = lmbArrayHelper::convertToFlatArray($query->fetch()->paginate(0, 100));
 
@@ -61,7 +60,7 @@ class InterestCalculator
   {
     $query = new lmbSelectQuery('day_interest');
     $query->addField('*');
-    $query->addRawOrder("rating DESC");
+    $query->addRawOrder("rating DESC, day_id DESC");
     $info = $query->fetch();
 
     $ids = lmbArrayHelper::getColumnValues('day_id', $info);
@@ -77,7 +76,7 @@ class InterestCalculator
     if($to_day_id)
     {
       $founded_pos = array_search((string) $to_day_id, $ids);
-      $to_key =  false !== $founded_pos ? $founded_pos - 1: 0;
+	    $to_key =  false !== $founded_pos ? $founded_pos: 0;
     }
     else
       $to_key = count($ids);
@@ -85,7 +84,7 @@ class InterestCalculator
     if(!$limit)
       $limit = 100;
 
-    $ids = array_slice($ids, $from_key, $to_key);
+    $ids = array_slice($ids, $from_key, $to_key - $from_key);
     $ids = array_slice($ids, 0, $limit);
 
     if(!count($ids))
