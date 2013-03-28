@@ -6,8 +6,8 @@
   <div id="header">
     <h1>Interesting days</h1>
     <div class="header_actions">
-      {{apply template="object_action" action="interesting_recalc" is_link="true" title="Recalc"/}}
-      {{apply template="object_action" action="interesting_add" is_link="false" title="Add day"/}}
+	    <a href='/admin_day/interesting_recalc/' title="Recalc" class="thickbox"><img src='/shared/cms/images/icons/arrow_refresh.png'/> Recalc</a>
+	    <a href='/admin_day/interesting_add/' title="Add" class="thickbox"><img src='/shared/cms/images/icons/add.png'/> Add</a>
     </div>
   </div>
 
@@ -55,14 +55,14 @@
 
                 {{apply template="object_action" action="interesting_edit" title="edit" icon="pencil" item="{$item}"/}}
 
-                <a href='#' onclick="if(confirm('{{i18n text="Remove day from interesting" domain="cms"/}}?')) {jQuery.post('{{route_url params='action:interesting_delete'/}}', {ids:{$item.id}}, function(){document.location.reload()})}" title="Delete">
+                <a href='#' onclick="if(confirm('{{i18n text="Remove day from interesting" domain="cms"/}}?')) {jQuery.post('/admin_day/interesting_delete', {ids:{$item.id}}, function(){document.location.reload()})}" title="Delete">
                   <img src='/shared/cms/images/icons/cancel.png'/>
                 </a>
               </td>
             </tr>
           {{/list:item}}
           {{list:empty}}
-            <div class="empty_list">Day отсутствуют</div>
+            <div class="empty_list">Рейтинг пуст!</div>
           {{/list:empty}}
         </table>
         <div class='list_actions'>
