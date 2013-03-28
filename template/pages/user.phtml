@@ -38,7 +38,6 @@ $this->menu = '';
     var template_list = Template.prepareTemplate($('#days_list_elements_template'));
     $('.days').infiniteScroll({
       request: API.get('users/{$#user.id}/days'),
-      order: 'DESC',
       success: function(response) {
         var days = Template.compileElement(template_list, {
           days: response.data.result.reverse()
@@ -48,8 +47,7 @@ $this->menu = '';
 
         $(this).find('.infiniteScroll_button_container').before(days);
         $(this).masonry('appended', days);
-      },
-      order: 'DESC'
+      }
     });
   {{/into}}
   {{into slot="content"}}

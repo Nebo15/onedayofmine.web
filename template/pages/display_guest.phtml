@@ -2,53 +2,289 @@
 $this->menu = '';
 ?>
 {{wrap with="layout.phtml"}}
-  {{into slot="content"}}
-    <div class="hero-unit">
-      <h1>One Day Of Mine</h1>
-  		<p class="lead">Live the life through other people's eyes</p>
-      <ul class="unstyled">
-          <li>
-              <i class="icon-large icon-camera-retro"></i>
-              new life for old photos
-          </li>
-          <li>
-              <i class="icon-large icon-magic"></i>
-              easy to use: just click next and enjoy our magic
-          </li>
-          <li>
-              <i class="icon-large icon-eye-open"></i>
-              look at life through the eyes of different people
-          </li>
-          <li>
-              <i class="icon-large icon-group"></i>
-              gain interest of other people by publishing days from your life
-          </li>
-          <li>
-              <hr/>
-              <a href="/pages/import" class="btn btn-large">Ready! Set! Go!</a>
-          </li>
-      </ul>
+  {{into slot="css"}}
+    .sign-up-wrap {
+      padding-bottom: 100px;
+    }
 
-      <div id="myCarousel" class="carousel slide">
-        <div class="carousel-inner">
-          <div class="item">
-            <img src="http://twitter.github.com/bootstrap/assets/img/bootstrap-mdo-sfmoma-01.jpg" alt="">
-            <div class="carousel-caption">
-              <h4>First Thumbnail label</h4>
-              <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
+    .select-wrap {
+      margin-top: 1px;
+    }
+
+    .carousel-caption {
+      height: 50px;
+      padding-bottom: 0px;
+      padding-top: 40px;
+      bottom: -20px;
+    }
+
+    .carousel-control {
+      top: 48%
+    }
+
+    .carousel-inner {
+      width: 1000px;
+      max-width: 100%;
+    }
+
+    .carousel-blocks {
+      height:400px;
+      overflow:hidden;
+    }
+
+    .carousel-blocks {
+      width: 120%;
+    }
+
+    .carousel-blocks img {
+      width: 200px;
+      height: 200px;
+      float:left;
+      display:inline-block;
+    }
+
+    .carousel-blocks img.big {
+      width: 400px;
+      height: 400px;
+    }
+
+    .carousel-caption,
+    .carousel-caption-overlap,
+    .day-final-comment a {
+      color: #FFF;
+    }
+
+    .select-wrap .caret {
+      border-top: 4px solid #FFF;
+      vertical-align: 30%;
+      margin-right: 5px;
+    }
+
+    .select-wrap .select-representation {
+      border-bottom: 1px dotted #FFF;
+    }
+
+    .select-wrap .select-representation,
+    .select-wrap select {
+      height: 20px;
+    }
+
+    .select-wrap .select-representation,
+    .select-wrap .select-value {
+      display: inline-block;
+    }
+
+    .carousel-caption .day-final-comment {
+      text-overflow: ellipsis; /* … */
+      overflow:hidden;
+      white-space: nowrap;
+      display: inline-block;
+      max-width: 90%;
+      height: 20px;
+    }
+
+    .carousel-caption-overlap {
+      position: absolute;
+      bottom: 35px;
+      left: 80px;
+    }
+
+    .carousel-caption-overlap .icon-random {
+      vertical-align: middle;
+      margin-left: 10px;
+    }
+  {{/into}}
+  {{into slot="js"}}
+    var interesting_days = <?= json_encode($this->interesting_days); ?>;
+  {{/into}}
+  <script>
+  {{into slot="js_ready"}}
+    // Nice boostrap select's
+    $(function() {
+      function resetHiddenSelect(wrapper_selector) {
+        var $selector = wrapper_selector.find('select');
+        var $value_container = wrapper_selector.find('.select-representation');
+        var $value = wrapper_selector.find('.select-value');
+
+        $value.text($selector.val());
+        $selector.width($value_container.width());
+      }
+
+      var carousel_caption_overlap = $('.carousel-caption-overlap');
+
+      carousel_caption_overlap.find('.select-wrap').each(function() {
+        var $this = $(this);
+        resetHiddenSelect($this);
+
+        $this.find('select').change(function() {
+          resetHiddenSelect($this);
+        });
+      });
+
+      // $('#days_carousel').on('slide', function(event) {
+      //   carousel_caption_overlap.css('white-space', 'nowrap');
+      //   carousel_caption_overlap.animate({
+      //     left: '-50px'
+      //   }, function() {
+      //     carousel_caption_overlap.css('left', '100%').animate({
+      //       left: '80px'
+      //     }, function() {
+      //       carousel_caption_overlap.css('white-space', 'interhit');
+      //     });
+      //   });
+      // });
+
+      // TODO: animate change when next element have diffrent value
+      $('#days_carousel').on('slid', function(event) {
+        var active_item = $(this).find('.item.active');
+
+        $.each(active_item.data(), function(key, value) {
+          var select = carousel_caption_overlap.find('select[name='+key+']');
+
+          var option_exists = false;
+          select.find('option').removeAttr('selected');
+          select.find('option').each(function() {
+            if($(this).text() == value) {
+              $(this).attr('selected', true);
+              option_exists = true;
+            }
+          });
+
+          if(!option_exists) {
+            select.append('<option selected>' + value + '</option>');
+          }
+
+          select.val(value);
+          resetHiddenSelect(select.parent());
+        });
+      });
+    });
+
+    (function() {
+      function fixFinalCommentEndings() {
+        $('#days_carousel .day-final-comment small').each(function() {
+          var text = $(this).text().trim();
+          if(text.substring(text.length-1) !== '.') {
+            $(this).text(text + '.');
+          }
+        });
+      }
+
+      $(function() {
+        fixFinalCommentEndings();
+
+        // IDEA: animate all blocks separatedly with diffrent animation speed
+        $('#days_carousel').carousel({
+          interval: 5000
+        })
+      });
+    })();
+  {{/into}}
+  </script>
+  {{into slot="content"}}
+    <h1>One Day Of Mine</h1>
+    <p class="lead">Live the life through other people's eyes</p>
+
+    {{list using="$#interesting_days" counter="$i"}}
+      <div class="row-fluid">
+        <div id="days_carousel" class="carousel slide block-center span12">
+          <div class="carousel-inner block-center">
+            {{list:item}}
+              <div class="item<?php if($i == 1) { ?> active<? } ?>" data-type="{$item.type}" data-user-occupation="{$item.user.occupation}" data-user-location="{$item.user.location}">
+                <div class="carousel-blocks">
+                  {{list using="$item.moments" as="$moment" counter="$counter"}}
+                    {{list:item}}
+                      <?php if($counter == 1) { ?>
+                        <img src="{$moment.image_532}" class="big" />
+                      <? } else { ?>
+                        <img src="{$moment.image_266}" />
+                      <? } ?>
+                    {{/list:item}}
+                  {{/list}}
+                </div>
+                <div class="carousel-caption">
+                  <div class="day-final-comment">
+                    <a href="/pages/{$item.id}/day">
+                      <small>{$item.final_description}</small>
+                      →
+                    </a>
+                  </div>
+                </div>
+              </div>
+            {{/list:item}}
+          </div>
+          <div class="carousel-caption-overlap">
+            <div class="selector">
+              <div class="select-wrap">
+                <select name="type">
+                  <option<?php if($item['type'] == 'Day off') { ?> selected<? } ?>>Day off</option>
+                  <option<?php if($item['type'] == 'Holiday') { ?> selected<? } ?>>Holiday</option>
+                  <option<?php if($item['type'] == 'Working day') { ?> selected<? } ?>>Working day</option>
+                  <option<?php if($item['type'] == 'Trip') { ?> selected<? } ?>>Trip</option>
+                </select>
+                <div class="select-representation">
+                  <div class="select-value">{$item.type}</div>
+                  <b class="caret"></b>
+                </div>
+              </div>
+              of
+              <div class="select-wrap">
+                <select name="userOccupation">
+                  <option>designer</option>
+                  <option>business analyst</option>
+                  <option selected>{$item.user.occupation}</option>
+                  <option>artist</option>
+                  <option>courier</option>
+                  <option>plumber</option>
+                </select>
+                <div class="select-representation">
+                  <div class="select-value">{$item.user.occupation}</div>
+                  <b class="caret"></b>
+                </div>
+              </div>
+              from
+              <div class="select-wrap">
+                <select name="userLocation">
+                  <option>New-York</option>
+                  <option>Paris</option>
+                  <option>Moscow</option>
+                  <option selected>{$item.user.location}</option>
+                  <option>Tokio</option>
+                  <option>Shanghai</option>
+                </select>
+                <div class="select-representation">
+                  <div class="select-value">{$item.user.location}</div>
+                  <b class="caret"></b>
+                </div>
+              </div>
+              <i class="icon-random"></i>
             </div>
           </div>
-          <div class="item active">
-            <img src="http://twitter.github.com/bootstrap/assets/img/bootstrap-mdo-sfmoma-02.jpg" alt="">
-            <div class="carousel-caption">
-              <h4>Second Thumbnail label</h4>
-              <p>Cras justo odio, dapibus ac facilisis in, egestas eget quam. Donec id elit non mi porta gravida at eget metus. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>
-            </div>
-          </div>
+          <a class="left carousel-control" href="#days_carousel" data-slide="prev">‹</a>
+          <a class="right carousel-control" href="#days_carousel" data-slide="next">›</a>
         </div>
-        <a class="left carousel-control" href="#myCarousel" data-slide="prev">‹</a>
-        <a class="right carousel-control" href="#myCarousel" data-slide="next">›</a>
       </div>
+    {{/list}}
+
+    <hr>
+
+    <div class="row-fluid">
+     <div class="span4">
+        <h2>Share a story, not photo</h2>
+        <p>Phtos without story is just beautiful pictures, we like to share stories, best moments of your life: travels, birthday, parties and other meaningfull events. </p>
+     </div>
+      <div class="span4">
+        <h2>Give new life for old photos</h2>
+        <p>People have tons of photos that lost in time, give them new life, make stories out of them and share them with friends.</p>
+      </div>
+      <div class="span4">
+        <h2>Magic</h2>
+        <p>It’s an easy-to-use tool, just connect your social profiles and enjoy the magic.</p>
+     </div>
+    </div>
+
+    <div class="text-center sign-up-wrap">
+      <a class="btn btn-large btn-success trigger_login" href="/pages/import">Try this awesome features</a>
     </div>
   {{/into}}
 {{/wrap}}

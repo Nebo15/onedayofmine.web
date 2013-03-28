@@ -218,23 +218,40 @@ h1.show-spinner .spinner {
 }
 
 /* File uploader */
-.btn-file {
+.btn-file,
+.select-wrap {
   position: relative;
   overflow: hidden;
   vertical-align: middle;
 }
 
-.btn-file > input {
+.btn-file > input,
+.select-wrap > select {
   position: absolute;
   top: 0;
   right: 0;
   margin: 0;
-  font-size: 23px;
   cursor: pointer;
   opacity: 0;
   filter: alpha(opacity=0);
   transform: translate(-300px, 0) scale(4);
   direction: ltr;
+}
+
+.select-wrap > select {
+  width: auto;
+  top: 0;
+  right: 0;
+}
+
+.btn-file > input {
+  font-size: 23px;
+}
+
+/* Wrapped select */
+.select-wrap {
+  display: inline-block;
+  width: auto;
 }
 
 /* Speech bubbles */
@@ -500,6 +517,10 @@ hr {
   margin: 13px 0;
 }
 
+.carousel-control {
+  padding-top: 3px;
+}
+
 /* jQuery Mansory */
 .masonry,
 .masonry .masonry-brick {
@@ -744,6 +765,8 @@ ul.with-separators li .btn-small {
 }
 
 /* > Main page */
+
+
 /* > News page */
 /* > Discover page */
 
