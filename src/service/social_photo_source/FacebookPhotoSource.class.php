@@ -32,8 +32,13 @@ class FacebookPhotoSource extends BaseSocialPhotoSource
 	function getPhotos($from_stamp = null, $to_stamp = null)
 	{
 		$profile = lmbToolkit::instance()->getFacebookProfile($this->user);
+
+		$fql = "SELECT aid FROM album WHERE owner = me() AND name = 'Instagram Photos';";
+		$answer = $profile->getProvider()->makeQuery($fql);
+		$instagram_aid = count($answer) ? $answer[0]['aid'] : null;
+
 		$fql = "SELECT "
-				."pid,caption,src_big,src_big_width,src_big_height,caption_tags,created,backdated_time "
+				."aid, pid, link, caption, src_big, src_big_width, src_big_height, caption_tags, created, backdated_time "
 				." FROM photo WHERE owner = me()"
 				.($from_stamp ? " AND created < ".$from_stamp : "")
 				.($to_stamp ? " AND created > ".$to_stamp : "")
@@ -43,6 +48,8 @@ class FacebookPhotoSource extends BaseSocialPhotoSource
 		$result = [];
 		foreach($photos as $raw_photo)
 		{
+			if($instagram_aid && $raw_photo['aid'] == $instagram_aid)
+				continue;
 			$result[] = [
 				'id' => $raw_photo['pid'],
 				'title' => $raw_photo['caption'],
@@ -61,6 +68,7 @@ class FacebookPhotoSource extends BaseSocialPhotoSource
 			];
 		}
 		return $result;
+
 	}
 
 	function logout() {}
