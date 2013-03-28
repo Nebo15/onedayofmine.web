@@ -30,7 +30,12 @@ class InstagramPhotoSource extends BaseSocialPhotoSource
 		]);
 		$answer = $request->send();
 		if($answer->getResponseCode() != 200)
-			throw new lmbException('Instagram API answer: '.json_decode($answer->getBody())->meta->error_message);
+		{
+			$body = json_decode($answer->getBody());
+			$message = (property_exists($body, 'meta')) ? $body->meta->error_message : $body->error_message;
+			lmbToolkit::instance()->getLog()->error('Instagram API answer: '.$message);
+			return null;
+		}
 
 		$info = json_decode($answer->getBody());
 		$this->user->instagram_uid = $info->user->id;
