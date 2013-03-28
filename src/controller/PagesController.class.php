@@ -25,36 +25,6 @@ class PagesController extends lmbController
 
 	function doDisplay()
 	{
-		$ratings = (new InterestCalculator())->getDaysRatings(null, null, $this->lists_limit);
-
-    $top_days = array_map(function($day_rating) {
-	    return $day_rating->getDay();
-    }, $ratings);
-
-    $this->interesting_days = [];
-    foreach ($top_days as $day)
-    {
-      if($day->is_deleted)
-        continue;
-
-      $item = $this->_toFlatArray($this->toolkit->getExportHelper()->exportDay($day));
-
-      if(!$item['image_532'])
-        continue;
-      if(!$item['image_266'])
-        continue;
-      if(count($item->moments) < 7)
-        continue;
-
-      $item->moments = array_slice($item->moments, 0, 7);
-
-      $item['final_description'] = $day->final_description;
-      if(!$item['final_description'])
-        continue;
-
-      $this->interesting_days[] = $item;
-    }
-
 		if($this->toolkit->getUser())
 		{
 			$user  = $this->toolkit->getUser();
@@ -81,6 +51,36 @@ class PagesController extends lmbController
 		}
 		else
 		{
+      $ratings = (new InterestCalculator())->getDaysRatings(null, null, $this->lists_limit);
+
+      $top_days = array_map(function($day_rating) {
+        return $day_rating->getDay();
+      }, $ratings);
+
+      $this->interesting_days = [];
+      foreach ($top_days as $day)
+      {
+        if($day->is_deleted)
+          continue;
+
+        $item = $this->_toFlatArray($this->toolkit->getExportHelper()->exportDay($day));
+
+        if(!$item['image_532'])
+          continue;
+        if(!$item['image_266'])
+          continue;
+        if(count($item->moments) < 7)
+          continue;
+
+        $item->moments = array_slice($item->moments, 0, 8);
+
+        $item['final_description'] = $day->final_description;
+        if(!$item['final_description'])
+          continue;
+
+        $this->interesting_days[] = $item;
+      }
+
 			$this->setTemplate('pages/display_guest.phtml');
 		}
 	}
