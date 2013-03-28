@@ -29,7 +29,7 @@ class PagesController extends lmbController
 
     $top_days = array_map(function($day_rating) {
 	    return $day_rating->getDay();
-    }, $ratings->getArray());
+    }, $ratings);
 
     $this->interesting_days = [];
     foreach ($top_days as $day)

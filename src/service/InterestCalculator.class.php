@@ -88,9 +88,9 @@ class InterestCalculator
     $ids = array_slice($ids, 0, $limit);
 
     if(!count($ids))
-      return new lmbCollection();
+      return [];
 
-    $days_with_rating = new lmbCollection();
+    $days_with_rating = [];
     foreach(Day::findByIds($ids) as $day)
     {
       if(1 === $day->is_deleted)
