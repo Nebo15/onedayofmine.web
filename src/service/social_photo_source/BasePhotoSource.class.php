@@ -41,6 +41,12 @@ abstract class BasePhotoSource
 
 		if ($days && count($days[count($days) - 1]) < 3)
 			array_pop($days);
-		return array_values($days);
+
+		foreach(array_values($days) as $i => $day)
+		{
+			$days[$i] = array_reverse($day);
+		}
+
+		return $days;
 	}
 }
