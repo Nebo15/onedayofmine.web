@@ -5,18 +5,23 @@ $editor = array(array('title' => 'Контент', 'icon' => '/shared/cms/images
   array(
     'title' => 'Days',
     'url' => '/admin_day',
-    'icon' => '/shared/cms/images/icons/layout.png',
+    'icon' => '/shared/cms/images/icons/photos.png',
   ),
   array(
-    'title' => 'Interesting',
+    'title' => 'Rating',
     'url' => '/admin_day/interesting/',
-    'icon' => '/shared/cms/images/icons/layout.png',
+    'icon' => '/shared/cms/images/icons/photo_link.png',
   ),
   array(
     'title' => 'Users',
     'url' => '/admin_site_user',
-    'icon' => '/shared/cms/images/icons/layout.png',
+    'icon' => '/shared/cms/images/icons/user.png',
   ),
+	[
+		'title' => 'Invitations',
+		'url' => '/admin_invitation',
+		'icon' => '/shared/cms/images/icons/script.png',
+	],
 )));
 
 $only_admin = array(array('title' => 'Администрирование', 'icon' => '/shared/cms/images/icons/menu_service.png','children' => array(
