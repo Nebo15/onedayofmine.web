@@ -171,8 +171,8 @@ function task_migrate_sync($argv)
 	$dst_version = $srcMigration->getSchemaVersion($dst_dsn);
 	taskman_msg('Destination version: '.$dst_version.PHP_EOL);
 
-	if($src_version == $dst_version)
-		taskman_sysmsg("Sync don't you need, because equal schema versions.".PHP_EOL);
+	if($src_version <= $dst_version)
+		taskman_sysmsg("Sync don't you need.".PHP_EOL);
 	else
 		$srcMigration->sync($dst_dsn);
 }
