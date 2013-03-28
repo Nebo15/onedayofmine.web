@@ -67,9 +67,15 @@ var API = (function() {
 				if(412 == jqXHR.status) {
           var response = jQuery.parseJSON(jqXHR.responseText);
           if(response.errors[0] === "Invitation not given") {
-            console.log('Invitation not given');
+
+            console.log('Invitation not given. Try to show modal window.');
+
             var modal_selector = $('#invite_modal');
+
             modal_selector.modal('show');
+
+						//HACK
+						modal_selector.removeClass('hide');
 
             modal_selector.on('hidden', function() {
               if(typeof onLoginFail === 'function')

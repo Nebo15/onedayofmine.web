@@ -1,4 +1,5 @@
 <?php
+lmb_require('limb/macro/src/compiler/lmbMacroTag.class.php');
 /**
  * class lmbMacroTrimTag.
  * @tag trim

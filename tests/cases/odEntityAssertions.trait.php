@@ -208,7 +208,7 @@ trait odEntityAssertions
   }
 
   ########### Day ###########
-  protected function assertJsonDay(stdClass $day, $validate_images = false)
+  protected function assertJsonDay(stdClass $day, $validate_images = false, $message = '%s')
   {
     $this->assertJsonDayListItem($day, $validate_images);
 
@@ -230,7 +230,7 @@ trait odEntityAssertions
       $this->assertJsonMomentItems($day->moments);
   }
 
-  protected function assertJsonDayListItem(stdClass $day, $validate_images = false)
+  protected function assertJsonDayListItem(stdClass $day, $validate_images = false, $message = '%s')
   {
     $this->assertJsonDaySubentity($day, $validate_images);
 
@@ -253,7 +253,7 @@ trait odEntityAssertions
     $this->assertFalse(is_null($day->views_count), "Views count can't be null");
   }
 
-  protected function assertJsonDaySubentity(stdClass $day, $validate_images = false)
+  protected function assertJsonDaySubentity(stdClass $day, $validate_images = false, $message = '%s')
   {
     $this->assertPropertys($day, [
       "id",

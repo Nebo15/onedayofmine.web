@@ -64,6 +64,7 @@ class FlickrController extends BaseJsonController
 			return $this->_answerNotPost();
 
 		$service = new FlickrPhotoSource($this->_getUser());
+		(new CachedPhotoSource($service))->flush();
 		return $this->_answerOk($this->toolkit->getExportHelper()->exportUser($service->logout()));
 	}
 }
