@@ -3,6 +3,10 @@ $this->menu = '';
 ?>
 {{wrap with="layout.phtml"}}
   {{into slot="css"}}
+    .sign-up-wrap {
+      padding-bottom: 100px;
+    }
+
     .select-wrap {
       margin-top: 1px;
     }
@@ -16,6 +20,16 @@ $this->menu = '';
 
     .carousel-control {
       top: 48%
+    }
+
+    .carousel-inner {
+      width: 1000px;
+      max-width: 100%;
+    }
+
+    .carousel-blocks {
+      height:400px;
+      overflow:hidden;
     }
 
     .carousel-blocks img {
@@ -170,10 +184,10 @@ $this->menu = '';
     {{list using="$#interesting_days" counter="$i"}}
       <div class="row-fluid">
         <div id="days_carousel" class="carousel slide block-center span12">
-          <div class="carousel-inner block-center" style="width:1000px">
+          <div class="carousel-inner block-center">
             {{list:item}}
               <div class="item<?php if($i == 1) { ?> active<? } ?>" data-type="{$item.type}" data-user-occupation="{$item.user.occupation}" data-user-location="{$item.user.location}">
-                <div class="carousel-blocks" style="height:400px; overflow:hidden">
+                <div class="carousel-blocks">
                   {{list using="$item.moments" as="$moment" counter="$counter"}}
                     {{list:item}}
                       <?php if($counter == 1) { ?>
@@ -265,7 +279,7 @@ $this->menu = '';
      </div>
     </div>
 
-    <div class="text-center" style="padding-bottom: 100px">
+    <div class="text-center sign-up-wrap">
       <a class="btn btn-large btn-success trigger_login" href="/pages/import">Try this awesome features</a>
     </div>
   {{/into}}
