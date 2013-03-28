@@ -520,7 +520,6 @@ $(function() {
       }
     };
 
-    modal_container.removeClass('hide'); // Forse it, because of weird bug
     modal_container.modal('show');
 
     var attachThumbnailsEvents = function(photos) {
