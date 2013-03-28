@@ -62,7 +62,9 @@ class InstagramController extends BaseJsonController
 	{
 		if(!$this->request->isPost())
 			return $this->_answerNotPost();
+
 		$service = new InstagramPhotoSource($this->_getUser());
+		(new CachedPhotoSource($service))->flush();
 		return $this->_answerOk($this->toolkit->getExportHelper()->exportUser($service->logout()));
 	}
 }

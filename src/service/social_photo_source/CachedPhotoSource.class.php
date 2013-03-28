@@ -26,4 +26,9 @@ class CachedPhotoSource extends BasePhotoSource
 		}
 		return $result;
 	}
+
+	function flush()
+	{
+		lmbToolkit::instance()->getCache('photo_sources')->flush();
+	}
 }
