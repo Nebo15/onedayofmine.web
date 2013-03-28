@@ -25,9 +25,11 @@ class PagesController extends lmbController
 
 	function doDisplay()
 	{
+		$ratings = (new InterestCalculator())->getDaysRatings(null, null, $this->lists_limit);
+
     $top_days = array_map(function($day_rating) {
-      return $day_rating->getDay();
-    }, (array) (new InterestCalculator())->getDaysRatings(null, null, $this->lists_limit));
+	    return $day_rating->getDay();
+    }, $ratings->getArray());
 
     $this->interesting_days = [];
     foreach ($top_days as $day)
