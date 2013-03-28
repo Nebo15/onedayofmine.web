@@ -2,6 +2,7 @@
   $this->host_url = lmb_env_get('HOST_URL');
   $this->facebook_app_namespace = $this->toolkit->getConf('facebook')->namespace;
   $this->facebook_app_id = $this->toolkit->getConf('facebook')->appId;
+  $this->facebook_app_scope = implode(',', $this->toolkit->getConf('facebook')->permissions);
 
 	if(property_exists($this, 'title'))
 		$this->title = 'OneDayOfMine: '.$this->title;
@@ -80,6 +81,11 @@
       <? if($this->toolkit->getUser()) { ?>
         API.setCurrentUser(<?= json_encode($this->toolkit->getExportHelper()->exportUser($this->toolkit->getUser())); ?>);
       <? } ?>
+
+      Config.facebook = {
+        appId: '<?= $this->facebook_app_id; ?>',
+        scope: '<?= $this->facebook_app_scope ?>'
+      };
     });
   </script>
 

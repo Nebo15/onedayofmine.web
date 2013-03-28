@@ -7,6 +7,7 @@ $conf = array(
     'email',
     'user_birthday',
     'user_location',
+    'user_photos',
     'publish_actions',
     'publish_stream',
   ),

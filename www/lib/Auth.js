@@ -14,7 +14,7 @@ var Auth = {
           } else {
             alert('You need to authorize application to continue using it');
           }
-        });
+        }, {scope: Config.facebook.scope});
       }
     });
   },
