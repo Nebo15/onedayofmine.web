@@ -232,11 +232,8 @@ class PagesController extends lmbController
 		}
 	}
 
-	function doUser()
+	function doGuestUser()
 	{
-		if (!$user = lmbToolkit::instance()->getUser())
-			return $this->forwardToUnauthorized();
-
 		if(!$id = $this->request->get('id'))
 			return $this->forwardTo404();
 
