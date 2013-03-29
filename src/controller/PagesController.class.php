@@ -232,7 +232,7 @@ class PagesController extends lmbController
 		}
 	}
 
-	function doGuestUser()
+	function doUser()
 	{
 		if(!$id = $this->request->get('id'))
 			return $this->forwardTo404();
