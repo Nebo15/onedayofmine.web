@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>One Day Of Mine</title>
+	<link href="//netdna.bootstrapcdn.com/bootswatch/2.3.0/readable/bootstrap.min.css" rel="stylesheet">
+	<link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css" rel="stylesheet">
+	<link href="//netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css" rel="stylesheet">
+</head>
+<body>
+<div class="content">
+	<center>
+		<h2>OneDayOfMine is down for maintenance.</h2>
+		<iframe src="http://10k.aneventapart.com/2/Uploads/607/" height="450" width="620"></iframe>
+		<br/>
+		<a class="btn btn-info disabled">Check...</a>
+	</center>
+</div>
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script>
+	var timer = setInterval(function() {
+		$.ajax({
+			url: "/off.html"
+		}).always(function(data) {
+			if(typeof data == 'object' && data.status == 404)
+			{
+				clearInterval(timer);
+				$('.btn')
+						.html("Server is up! Yuhu!")
+						.addClass('btn-success')
+						.removeClass('btn-danger')
+						.removeClass('btn-info')
+						.removeClass('disabled')
+						.attr('href', '/');
+			}
+			else
+			{
+				$('.btn')
+						.html("Server is down! Don't move. Play game. We are watching you!")
+						.addClass('btn-danger')
+						.addClass('disabled')
+						.removeClass('btn-success')
+						.removeClass('btn-info');
+			}
+		});
+	}, 30000);
+</script>
+</body>
+</html>

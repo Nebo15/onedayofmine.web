@@ -17,8 +17,6 @@ $(function () {
 			picture: $('meta[property="og:image"]').prop('content')
 		};
 
-		console.log(obj);
-
 		FB.ui(obj, function () {
 			share_button.addClass('btn-success');
 		});
