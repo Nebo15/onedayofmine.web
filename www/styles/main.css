@@ -92,13 +92,16 @@ h4 {
 .with-bage .bage {
   position: absolute;
   color:#FFF;
-  border-radius: 4px;
-  background: rgba(0, 0, 0, 0.7);
-  padding: 0px 5px 0px 5px;
-  vertical-align: middle;
   text-align: center;
   font-weight: bold;
   font-size: 85%;
+  vertical-align: middle;
+}
+
+.with-bage .bage:not(.bage-transperent) {
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 0px 5px 0px 5px;
 }
 
 .bage-top-right {
@@ -151,12 +154,8 @@ h4 {
 }
 
 /* Visibility triggers */
-.show-when-parent-disabled {
-
-}
-
-.disabled > .show-when-parent-disabled {
-
+:not(.disabled) > .show-when-parent-disabled {
+  display: none;
 }
 
 /* Loader spinner for buttons */
@@ -195,6 +194,18 @@ h4 {
   width: 15px !important;
 }
 
+.show-spinner .add-on .spinner {
+  -webkit-transition: opacity 0.4s ease;
+  -moz-transition: opacity 0.4s ease;
+  -ms-transition: opacity 0.4s ease;
+  -o-transition: opacity 0.4s ease;
+  transform: opacity 0.4s ease;
+}
+
+.show-spinner .add-on .spinner {
+  width: 21px !important;
+}
+
 .btn.show-spinner .spinner {
   width: 20px !important;
 }
@@ -215,6 +226,19 @@ h1.show-spinner .spinner {
   -o-animation: spin 2s infinite linear;
   -webkit-animation: spin 2s infinite linear;
   animation: spin 2s infinite linear;
+}
+
+/* Social icons */
+@font-face {
+  font-family: 'WebIconFonts';
+  src: url('webiconfonts.eot');
+  src: url('WebIconFonts.eot?') format('eot'),
+       url('WebIconFonts.woff') format('woff'),
+       url('WebIconFonts.ttf') format('truetype');
+}
+
+.icon-social {
+    font-family: WebIconFonts;
 }
 
 /* File uploader */
@@ -493,6 +517,14 @@ textarea.info:focus {
   font-size: 14.45px;
 }
 
+.input-prepend.large .add-on,
+.input-append.large .add-on,
+.input-prepend.large input,
+.input-append.large input {
+  padding: 11px 19px;
+  font-size: 21.25px;
+}
+
 .input-append .btn {
   border-top-left-radius: 3px;
   border-bottom-left-radius: 3px;
@@ -511,6 +543,22 @@ textarea.info:focus {
 .input-append[class*="span"] .btn-small,
 .input-prepend[class*="span"] .btn-small {
   height:30px
+}
+
+.btn-group .active {
+  color: #fff;
+  text-shadow: 0 -1px 0 rgba(0,0,0,0.25);
+  background-color: #1ea84d;
+  background-image: -moz-linear-gradient(top,#20b151,#1c9b47);
+  background-image: -webkit-gradient(linear,0 0,0 100%,from(#20b151),to(#1c9b47));
+  background-image: -webkit-linear-gradient(top,#20b151,#1c9b47);
+  background-image: -o-linear-gradient(top,#20b151,#1c9b47);
+  background-image: linear-gradient(to bottom,#20b151,#1c9b47);
+  background-repeat: repeat-x;
+  border-color: #1c9b47 #1c9b47 #105a29;
+  border-color: rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff20b151',endColorstr='#ff1c9b47',GradientType=0);
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
 }
 
 hr {
@@ -704,12 +752,24 @@ ul.with-separators li .btn-small {
   transform: all 0.4s ease;
 }
 
+.thumbnails .bage {
+  color: #953b39;
+}
+
+.thumbnails > li.visible {
+  opacity: 1;
+}
+
+.thumbnails > li.visible .bage {
+  display: none;
+}
+
 .thumbnails > li.ignored {
   opacity: 0.4;
 }
 
-.thumbnails > li.visible {
-  /*opacity: 1; Done via js*/
+.thumbnails > li.ignored .bage {
+  display: block;
 }
 
 .thumbnails li .img-wrap {
@@ -777,6 +837,62 @@ ul.with-separators li .btn-small {
 
 /* > Start day page */
 /* > Import page */
+.wizard {
+  margin-bottom: 20px;
+}
+
+#step2 .connections {
+  margin-bottom: 30px;
+}
+
+#step2 .connections ul li {
+  margin-bottom: 15px;
+}
+
+#step2 .connections ul li:last-child {
+  margin-bottom: 0;
+}
+
+#step2 .connections .btn {
+  width: 200px;
+}
+
+#step2 .connections ul {
+  vertical-align: middle;
+}
+
+#step2 .connections ul {
+  margin-right: 40px;
+}
+
+#step2 .connections ul,
+#step2 .connections > div,
+#step2 .connections > button {
+  display: inline-block;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+#step2 .arrow,
+#step2 .braces {
+  font-size: 150px;
+  margin-bottom: 2px !important;
+  margin-right: 20px;
+}
+
+#step2 .arrow {
+  margin-right: -20px;
+}
+
+#step3 .progress,
+#step4 .progress {
+  margin: 0;
+}
+
+#step3 .thumbnails {
+  margin: 0;
+}
+
 /* > Day page */
 .day-info {
   font-size: 0.8em;
