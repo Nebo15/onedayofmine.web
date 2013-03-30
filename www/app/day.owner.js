@@ -222,6 +222,7 @@ $(function() {
       day_title_request.success(function() {
         day_title_button.hideSpinner();
         day_title_input.prop("disabled", false);
+				$('meta[property="og:title"]').prop('content', text);
         day_title_button.text('Save');
         day_title_button.addClass('disabled').removeClass('btn-success');
       });
@@ -406,6 +407,10 @@ $(function() {
         var cover_request = API.request('POST', '/days/' + day_data.id + '/update', {
           cover_moment_id: id
         });
+
+				cover_request.success(function(resp) {
+					$('meta[property="og:image"]').prop('content', resp.data.result.image_532);
+				});
 
         cover_request.error(function() {
           alert("We wasn't able to select day cover, try again later or try to contact us");

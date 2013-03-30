@@ -8,6 +8,7 @@ $this->day->is_gathering_enabled = false;
     <meta property="og:url" content="{$#host_url}pages/{$#day.id}/day" />
     <meta property="og:title" content="{$#day.title}" />
     <meta property="{$#facebook_app_namespace}:type" content="{$#day->type}" />
+		<meta property="og:image" content="{$#day.image_532}"/>
   {{/into}}
   {{into slot="js_include"}}
     <script src="/lib/vendor/bootstrap-datepicker.js"></script>
@@ -221,7 +222,7 @@ $this->day->is_gathering_enabled = false;
               <div id="day_title_selector" class="clearfix">
                 <h5>Day title:</h5>
                 <span class="input-append small span12">
-                  <input type="text" class=" day-title span9" value="{$#day->title}" />
+                  <input type="text" class="day-title span9" value="{$#day->title}" />
                   <button class="btn disabled btn-small span2 with-spinner" type="submit">
                     <i class="spinner icon icon-spin icon-refresh"></i>
                     Save
@@ -261,7 +262,7 @@ $this->day->is_gathering_enabled = false;
               </div>
             <? } ?>
 
-            <h2>{$#day->title}</h2>
+            <h2 class="day-title">{$#day->title}</h2>
           <? } ?>
 
           <div class="muted day-info">
