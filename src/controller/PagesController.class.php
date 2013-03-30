@@ -179,7 +179,7 @@ class PagesController extends lmbController
 
     $this->is_preview = false;
     $this->is_owner = false;
-    if($this->request->has('previev'))
+    if($this->request->has('preview'))
       $this->is_preview = true;
     else if ($this->toolkit->getUser() && $this->toolkit->getUser()->id == $day->user_id)
       $this->is_owner = true;
@@ -308,6 +308,54 @@ class PagesController extends lmbController
 		$user->save();
 
 		lmbToolkit::instance()->setUser($user);
+	}
+
+	function doLjPreview()
+	{
+		lmb_require('ljparse/ContentPageParser.class.php');
+		lmb_require('ljparse/MobilePageRegexpParser.class.php');
+		lmb_require('ljparse/ContentPage.class.php');
+
+		$parts = explode('/', $this->request->get('url'));
+		$id = explode('.', array_pop($parts))[0];
+		$context  = stream_context_create(['http' => ['timeout' => 120]]);
+		$content = file_get_contents('http://m.livejournal.com/read/user/odin_moy_den/'.$id, false, $context);
+
+		$page = new ContentPage(new MobilePageRegexpParser());
+		$page->setContent($content);
+
+		$this->is_preview = true;
+
+		$moments = $page->getMoments();
+		$this->day = new stdClass;
+		$this->day->id = null;
+		$this->day->title = $page->getTitle();
+		$this->day->type = '';
+		$this->day->date = $page->getDate();
+		$this->day->final_description = "It's just a preview";
+		$this->day->comments_count = 0;
+		$this->day->likes_count = 0;
+		$this->day->user = new stdClass;
+		$this->day->user->id = '';
+		$this->day->user->name = $page->getUsername();
+		$this->day->user->image_72 = $page->getUserpic();
+		$this->day->moments = [];
+		$time = 480;
+		$delta = (1440 - 640) / count($moments);
+		foreach($moments as $i => $moment_data)
+		{
+			$time += rand($delta - 5, $delta + 5);
+			$moment = new stdClass;
+			$moment->id = 1;
+			$moment->datetime_iso = 1;
+			$moment->time = str_pad(floor($time / 60), 2, '0', STR_PAD_LEFT).":".str_pad($time - floor($time / 60) * 60, 2, '0', STR_PAD_LEFT);
+			$moment->image_532 = $moment_data['img'];
+			$moment->description = $moment_data['description'];
+			$this->day->moments[] = $moment;
+		}
+
+		$this->setTemplate('pages/day.phtml');
+
 	}
 
 	function doNotFound()
