@@ -421,7 +421,7 @@ $this->day->is_gathering_enabled = false;
 
           <hr/>
 
-          <? if($this->toolkit->getUser() || $this->day->comments_count > 0) { ?>
+          <? if($this->day->comments_count > 0) { ?>
             <div class="comments">
               <a name="comments"></a>
               <span class="pull-right not-decorated text-gray">
@@ -469,6 +469,12 @@ $this->day->is_gathering_enabled = false;
                   Send comment
                 </button>
               <? } ?>
+            </div>
+          <? } ?>
+
+          <? if(!$this->toolkit->getUser()) { ?>
+            <div class="alert alert-block">
+              <a href="#" class="trigger_login">Sign up</a> to write comment
             </div>
           <? } ?>
         </div>
