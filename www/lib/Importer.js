@@ -97,8 +97,10 @@ var Importer = function(source) {
       });
     }, true);
 
-    days_request.error(function() {
-      alert("We wasn't able to recive user days, please try to reload the page");
+    days_request.error(function(jqXHR, textStatus, errorThrown) {
+      if(jqXHR.status !== 0) {
+        alert("We wasn't able to recive user days, please try to reload the page");
+      }
     }, true);
 
     days_request.send();

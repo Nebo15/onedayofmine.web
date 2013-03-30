@@ -94,7 +94,7 @@
 		},
 
 		previous: function () {
-			var canMovePrev = (this.currentStep > 1);
+      var canMovePrev = (this.currentStep > 1);
 			if (canMovePrev) {
 				var e = $.Event('change');
 				this.$element.trigger(e, {step: this.currentStep, direction: 'previous'});

@@ -13,6 +13,7 @@ Selector chields should have ID's in data-attribute:
   "use strict";
 
     var __pluginName = 'infiniteScroll';
+    var minimal_list_length = 20; // From backend, if les then inifinityscroll is not turing on
 
     var Obj = function($self, params) {
       this.$self = $self;
@@ -29,6 +30,11 @@ Selector chields should have ID's in data-attribute:
         }
 
         var selector = this.$self;
+        if(selector.find('[data-id]').length < minimal_list_length) {
+          console.log('List is too short to infiniteScroll it');
+          return;
+        }
+
         var template_button = Template.prepareTemplate($('#infiniteScroll_button_template'));
         var request = this.params.request;
         var onSuccess = this.params.success;
