@@ -13,7 +13,7 @@ function task_od_create_crontab($args = array())
 {
 	error_reporting(E_ALL);
 	ini_set('display_errors', true);
-	
+
 	if(count($args) == 1)
 		$output_file = array_shift($args);
 
@@ -241,4 +241,17 @@ function task_od_bundle()
   echo "Bundled $num_newlines lines".PHP_EOL;
 
 //  var_dump($bundler->getIncludes());
+}
+
+function task_od_deploy()
+{
+  if(lmb_app_mode() == 'production') {
+    $curl = curl_init("https://rpm.newrelic.com/deployments.xml");
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, false);
+    curl_setopt($curl, CURLOPT_POST, true);
+    curl_setopt($curl, CURLOPT_HTTPHEADER, ['x-api-key:'.lmbToolkit::instance()->getConf('new_relic')->api_key]);
+    curl_setopt($curl, CURLOPT_POSTFIELDS, 'deployment[app_name]=ODOM');
+    var_dump(curl_exec($curl));
+    curl_close($curl);
+  }
 }
