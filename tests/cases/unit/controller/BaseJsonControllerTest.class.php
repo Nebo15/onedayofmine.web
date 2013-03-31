@@ -99,7 +99,7 @@ class BaseJsonControllerTest extends odUnitTestCase
   {
     $response_json = lmbToolkit::instance()->getResponse()->getResponseString();
     $response = json_decode($response_json);
-    $this->assertEqual($code, $response->code);
+    return $this->assertEqual($code, $response->code);
   }
 
   function assertResponse($text)
