@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta charset="utf-8">
+	<style>
+		body{
+			margin:0px;
+		}
+		h1{
+			font-weight:normal;
+		}
+		#wrapper{
+			overflow: hidden;
+			width:920px;
+			margin:0px auto;
+		}
+		.container{
+			position: relative;
+			overflow: hidden;
+		}
+		ul.timeline{
+			width:920px; /* total width */
+			position: relative;
+			list-style:none;
+			overflow: hidden;
+			padding:0px;
+			margin: 0px ;
+		}
+		.timeline > li{
+			width:410px;
+			padding:10px 20px;
+			border-radius:4px;
+			background:#ff0;
+			position: relative; /* important to hold the absolute element */
+			margin:0px 0px 10px;
+		}
+		.timeline > li:before{
+			border:7px solid;
+			content:'';
+			display: block;
+			position: absolute;
+		}
+		.timeline > li:nth-child(even){
+			float:right;
+			clear:right;
+		}
+		.timeline > li:nth-child(odd){
+			float:left;
+			clear:left;
+		}
+		.timeline > li:nth-child(even):before{
+			border-color:#f00 #0f0 #f00 #f00;
+			right:100%;
+			top:10px;
+		}
+		.timeline > li:nth-child(odd):before{
+			border-color:#f00 #f00 #f00 #0f0;
+			left:100%;
+			top:10px;
+		}
+		.timeline > li p{
+			margin:10px 0px;
+			line-height:1.8em;
+		}
+		.margin{
+			height:100%;
+			position: absolute;
+			left:50%;
+			width:2px;
+			background:#00f;
+			bottom:10px;
+			margin-left:-1px;
+			z-index:1000;
+		}
+	</style>
+</head>
+<body>
+<div id="wrapper">
+	<div class="container">
+		<div class="margin"></div>
+		<ul class="timeline">
+			<li>111</li>
+			<li>222</li>
+			<li>333</li>
+			<li>444</li>
+			<li>555</li>
+		</ul>
+	</div>
+</div>
+</body>
+</html>
