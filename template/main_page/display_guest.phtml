@@ -215,49 +215,11 @@ $this->menu = '';
           </div>
           <div class="carousel-caption-overlap">
             <div class="selector">
-              <div class="select-wrap">
-                <select name="type">
-                  <option<?php if($item['type'] == 'Day off') { ?> selected<? } ?>>Day off</option>
-                  <option<?php if($item['type'] == 'Holiday') { ?> selected<? } ?>>Holiday</option>
-                  <option<?php if($item['type'] == 'Working day') { ?> selected<? } ?>>Working day</option>
-                  <option<?php if($item['type'] == 'Trip') { ?> selected<? } ?>>Trip</option>
-                </select>
-                <div class="select-representation">
-                  <div class="select-value">{$item.type}</div>
-                  <b class="caret"></b>
-                </div>
-              </div>
+              <span class="select-value">{$item.type}</span>
               of
-              <div class="select-wrap">
-                <select name="userOccupation">
-                  <option>designer</option>
-                  <option>business analyst</option>
-                  <option selected>{$item.user.occupation}</option>
-                  <option>artist</option>
-                  <option>courier</option>
-                  <option>plumber</option>
-                </select>
-                <div class="select-representation">
-                  <div class="select-value">{$item.user.occupation}</div>
-                  <b class="caret"></b>
-                </div>
-              </div>
+              <span name="userOccupation">{$item.user.occupation}</span>
               from
-              <div class="select-wrap">
-                <select name="userLocation">
-                  <option>New-York</option>
-                  <option>Paris</option>
-                  <option>Moscow</option>
-                  <option selected>{$item.user.location}</option>
-                  <option>Tokio</option>
-                  <option>Shanghai</option>
-                </select>
-                <div class="select-representation">
-                  <div class="select-value">{$item.user.location}</div>
-                  <b class="caret"></b>
-                </div>
-              </div>
-              <i class="icon-random"></i>
+              <span name="userLocation">{$item.user.location}</span>
             </div>
           </div>
           <a class="left carousel-control" href="#days_carousel" data-slide="prev">‹</a>

@@ -66,14 +66,10 @@ class MainPageController extends WebAppController
 					continue;
 				if(!$item['image_266'])
 					continue;
-				if(count($item->moments) < 7)
-					continue;
 
 				$item->moments = array_slice($item->moments, 0, 7);
 
-				$item['final_description'] = $day->final_description;
-				if(!$item['final_description'])
-					continue;
+				$item['final_description'] = $day->final_description ? $day->final_description : $day->title;
 
 				$this->interesting_days[] = $item;
 			}
