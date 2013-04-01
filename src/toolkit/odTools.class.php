@@ -4,12 +4,18 @@ lmb_require('src/service/social_provider/odFacebook.class.php');
 lmb_require('src/service/social_provider/odTwitter.class.php');
 lmb_require('src/service/social_profile/FacebookProfile.class.php');
 lmb_require('src/service/social_profile/TwitterProfile.class.php');
+lmb_require('src/service/social_profile/FakeProfile.class.php');
 lmb_require('src/service/odNewsService.class.php');
 lmb_require('src/service/ImageHelper.class.php');
-lmb_require('src/service/odPostingService.class.php');
 lmb_require('src/service/odExportHelper.class.php');
 lmb_require('src/service/odRequestsLog.class.php');
-require_once('amazon-sdk/sdk.class.php');
+lmb_require('src/service/odSearchService.class.php');
+lmb_require('src/service/odFakeSearchService.class.php');
+lmb_require('src/service/odAsyncJobs.class.php');
+lmb_require('tests/src/service/odJobQueueClientForTests.class.php');
+lmb_require('src/model/User.class.php');
+
+if(!class_exists('CFRuntime')) lmb_require('amazon-sdk/sdk.class.php');
 
 class odTools extends lmbAbstractTools
 {
@@ -21,28 +27,53 @@ class odTools extends lmbAbstractTools
    * @var odRequestsLog
    */
   protected $requests_log;
-
+  /**
+   * @var array
+   */
   protected $tests_users;
   /**
    * @var odPostingService
    */
   protected $posting_service;
-
-  protected $facebook_instances = array();
-
-  protected $twitter_instances = array();
-
-  protected $facebook_profiles = array();
-
+  /**
+   * @var array
+   */
+  protected $facebook_instances = [];
+  /**
+   * @var array
+   */
+  protected $twitter_instances = [];
+  /**
+   * @var array
+   */
+  protected $facebook_profiles = [];
+  /**
+   * @var array
+   */
+  protected $twitter_profiles = [];
+  /**
+   * @var array odSearchService
+   */
+  protected $search_clients = [];
+  /**
+   * @var GearmanClient
+   */
+  protected $job_queue_client;
   /**
    * @var Zend_Mobile_Push_Apns
    */
   protected $apns;
 
+	/**
+	 * @var phpFlickr
+	 */
+	protected $flickr;
+
+
   function setUser($user)
   {
     $this->user = $user;
-    lmbToolkit::instance()->getSession()->set('user_id', $user->getId());
+    $this->getSessionStorage()->set($this->getSessidFromRequest(), $user->id);
   }
 
   /**
@@ -53,10 +84,10 @@ class odTools extends lmbAbstractTools
     if(null != $this->user)
       return $this->user;
 
-    if(!lmbToolkit :: instance()->getSession()->get('user_id'))
+    if(!$user_id = $this->getSessionStorage()->get($this->getSessidFromRequest()))
       return null;
 
-    $this->user = User::findById(lmbToolkit :: instance()->getSession()->get('user_id'));
+    $this->user = User::findById($user_id);
 
     return $this->user;
   }
@@ -64,23 +95,43 @@ class odTools extends lmbAbstractTools
   function resetUser()
   {
     $this->user = null;
-    lmbToolkit :: instance()->getSession()->destroy('user_id');
+    $this->getSessionStorage()->delete($this->getSessidFromRequest());
   }
 
   /**
-   * @return odPostingService
+   * @return odSearchService
    */
-  function getPostingService()
+  function getSearchService($conf_name)
   {
-    if(!$this->posting_service)
-      $this->posting_service = new odPostingService();
+    if(!array_key_exists($conf_name, $this->search_clients)) {
 
-    return $this->posting_service;
+      $config = lmbToolkit::instance()->getConf('sphinx');
+
+      lmb_assert_true(array_key_exists($conf_name, $config), "Sphinx configuration not found for '{$conf_name}'");
+
+	    if(false == $config->enabled)
+	    {
+		    $fake = new odFakeSearchService($config);
+				$fake->model_name = $conf_name;
+		    return $fake;
+	    }
+
+	    $index_conf         = $config[$conf_name];
+      if(!array_key_exists('host', $index_conf))
+        $index_conf['host'] = $config['host'];
+
+      if(!array_key_exists('port', $index_conf))
+        $index_conf['port'] = $config['port'];
+
+      $this->search_clients[$conf_name] = new odSearchService($index_conf);
+    }
+
+    return $this->search_clients[$conf_name];
   }
 
-  function setPostingService($posting_service)
+  function setSearchService($conf_name, $obj)
   {
-    $this->posting_service = $posting_service;
+    $this->search_clients[$conf_name] = $obj;
   }
 
   /**
@@ -101,12 +152,7 @@ class odTools extends lmbAbstractTools
    */
   function getExportHelper()
   {
-    static $export_helper;
-
-    if(!$export_helper)
-      $export_helper = new odExportHelper();
-
-    return $export_helper;
+    return new odExportHelper($this->getUser());
   }
 
   /**
@@ -127,20 +173,31 @@ class odTools extends lmbAbstractTools
    */
   function getSessidFromRequest()
   {
+    if($token = $this->getTokenFromRequest())
+      return sha1($token);
+    else
+      return null;
+  }
+
+  function getTokenFromRequest()
+  {
     $request = $this->toolkit->getRequest();
+
     if($request->getPost('token'))
-      return sha1($request->getPost('token'));
-    if($request->getGet('token'))
-      return sha1($request->getGet('token'));
-    if($request->getCookie('token'))
-      return sha1($request->getCookie('token'));
-    return null;
+      return $request->getPost('token');
+    elseif($request->getGet('token'))
+      return $request->getGet('token');
+    elseif($request->getCookie('token'))
+      return $request->getCookie('token');
+    else
+      return null;
   }
 
   function getSiteUrl($path = '')
   {
     if(null === $path)
       return null;
+
     return lmb_env_get('HOST_URL').$path;
   }
 
@@ -154,13 +211,13 @@ class odTools extends lmbAbstractTools
 
   function getPagePath($object)
   {
-    if(!$object->getId())
+    if(!$object->id)
       throw new lmbException("Can't get object ID.");
 
     if('Day' == get_class($object))
-      return '/pages/'.$object->getId().'/day';
+      return '/pages/'.$object->id.'/day';
     if('Moment' == get_class($object))
-      return '/pages/'.$object->getId().'/moment';
+      return '/pages/'.$object->id.'/moment';
     throw new lmbException('Unknown object class');
   }
 
@@ -187,16 +244,25 @@ class odTools extends lmbAbstractTools
 
       if(!$users['data'])
       {
-        return array();
+        return [];
       }
 
       foreach ($users['data'] as $key => $value) {
         $user = new User();
-        // var_dump($value);
-        $user->setFacebookUid($value['id']);
-        $user->setFacebookAccessToken($value['access_token']);
-        $user->import((new FacebookProfile($user))->getInfo());
-        $users['data'][$key]['email'] = $user->getEmail();
+        $user->facebook_uid = $value['id'];
+        $user->facebook_access_token = $value['access_token'];
+
+        $info = $this->getFacebookProfile($user)->getInfo();
+        $user->email = $info['email'];
+        $user->name = $info['name'];
+        $user->sex = $info['sex'];
+        $user->timezone = $info['timezone'];
+        $user->facebook_profile_utime = $info['facebook_profile_utime'];
+        $user->occupation = $info['occupation'];
+        $user->location = $info['current_location'];
+        $user->birthday = $info['birthday'];
+
+        $users['data'][$key]['email'] = $user->email;
       }
       $this->tests_users = $users['data'];
     }
@@ -208,7 +274,7 @@ class odTools extends lmbAbstractTools
    *
    * @param  string $access_token
    * @param  string $access_token_secret
-   * @return odTwitter
+   * @return twitter
    */
   public function getTwitter($access_token = null, $access_token_secret = null)
   {
@@ -235,11 +301,11 @@ class odTools extends lmbAbstractTools
    * Create odFacebook instance with or without auth.
    *
    * @param  string $access_token
-   * @return odFacebook
+   * @return facebook
    */
   public function getFacebook($access_token_or_user = null)
   {
-    $access_token = is_object($access_token_or_user) ? $access_token_or_user->getFacebookAccessToken() : $access_token_or_user;
+    $access_token = is_object($access_token_or_user) ? $access_token_or_user->facebook_access_token : $access_token_or_user;
     if(!array_key_exists($access_token, $this->facebook_instances)) {
       $instance = new odFacebook(odFacebook::getConfig());
 
@@ -257,17 +323,55 @@ class odTools extends lmbAbstractTools
     $this->facebook_instances[$access_token] = $facebook;
   }
 
-  public function getFacebookProfile(User $user)
+	public function getFlickr()
+	{
+		if(!$this->flickr)
+		{
+			$conf = lmbToolkit::instance()->getConf('common')->flickr;
+			$this->flickr = new odFlickr($conf['key'], $conf['secret']);
+		}
+		return $this->flickr;
+	}
+
+  /**
+   * @param User $user
+   * @return FacebookProfile
+   */
+  public function getFacebookProfile(User $user = null)
   {
-    if(!array_key_exists($user->getFacebookAccessToken(), $this->facebook_profiles)) {
-      $this->facebook_profiles[$user->getFacebookAccessToken()] = new FacebookProfile($user);
+    if(!$user)
+      $user = $this->getUser();
+
+    if(!array_key_exists($user->facebook_access_token, $this->facebook_profiles)) {
+      $this->facebook_profiles[$user->facebook_access_token] = new FacebookProfile($user);
     }
-    return $this->facebook_profiles[$user->getFacebookAccessToken()];
+    return $this->facebook_profiles[$user->facebook_access_token];
   }
 
   function setFacebookProfile(User $user, $profile)
   {
-    $this->facebook_profiles[$user->getFacebookAccessToken()] = $profile;
+    $this->facebook_profiles[$user->facebook_access_token] = $profile;
+  }
+
+  /**
+   * @param User $user
+   * @return FacebookProfile
+   */
+  public function getTwitterProfile(User $user = null)
+  {
+    if(!$user)
+      $user = $this->getUser();
+
+    if(!array_key_exists($user->twitter_access_token, $this->twitter_profiles)) {
+      $profile = ($user->twitter_access_token) ? new TwitterProfile($user) : new FakeProfile($user);
+      $this->twitter_profiles[$user->twitter_access_token] = $profile;
+    }
+    return $this->twitter_profiles[$user->twitter_access_token];
+  }
+
+  function setTwitterProfile(User $user, $profile)
+  {
+    $this->twitter_profiles[$user->twitter_access_token] = $profile;
   }
 
   public function getConcreteAmazonServiceConfig($name)
@@ -294,13 +398,50 @@ class odTools extends lmbAbstractTools
   {
     if(!$this->apns)
     {
-      set_include_path(implode(PATH_SEPARATOR,
-        array('lib/Zend_Mobile/library', get_include_path())
-      ));
-      lmb_require('Zend_Mobile/library/Zend/Mobile/Push/Apns.php');
-      lmb_require('Zend_Mobile/library/Zend/Mobile/Push/Message/Apns.php');
+      lmb_require('Zend/Mobile/Push/Apns.php');
+      lmb_require('Zend/Mobile/Push/Message/Apns.php');
       $this->apns = new Zend_Mobile_Push_Apns();
     }
     return $this->apns;
+  }
+
+  function getSessionStorage()
+  {
+    if(lmbToolkit::instance()->getConf('cache')['cache_enabled'])
+      return lmbToolkit::instance()->getCache('session');
+    else
+    {
+      $session = lmbToolkit::instance()->getSession();
+      if(!$session->isStarted())
+        $session->start();
+      return $session;
+    }
+  }
+
+  function setJobQueueClient($client)
+  {
+    $this->job_queue_client = $client;
+  }
+
+  function getJobQueueClient()
+  {
+    if(!$this->job_queue_client)
+    {
+      $client = new odJobQueueClientForTests();
+      $this->job_queue_client = $client;
+    }
+    return $this->job_queue_client;
+  }
+
+  function doAsync($function_name, $param1)
+  {
+	  $params = array_slice(func_get_args(), 1);
+	  if(lmbToolkit::instance()->getConf('common')['async_enabled'])
+      return $this->getJobQueueClient()
+      ->doBackground($function_name, odAsyncJobs::encodeWorkload($params));
+	  else
+	  {
+		  return call_user_func_array(['odAsyncJobs', '_'.$function_name], $params);
+	  }
   }
 }

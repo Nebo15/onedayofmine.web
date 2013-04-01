@@ -6,9 +6,9 @@
  * @copyright  Copyright &copy; 2004-2009 BIT(http://bit-creative.com)
  * @license    LGPL http://www.gnu.org/copyleft/lesser.html
  */
-lmb_require(dirname(__FILE__) . '/lmbSQLBaseCriteria.class.php');
-lmb_require(dirname(__FILE__) . '/lmbSQLFieldBetweenCriteria.class.php');
-lmb_require(dirname(__FILE__) . '/lmbSQLFieldCriteria.class.php');
+lmb_require('limb/dbal/src/criteria/lmbSQLBaseCriteria.class.php');
+lmb_require('limb/dbal/src/criteria/lmbSQLFieldBetweenCriteria.class.php');
+lmb_require('limb/dbal/src/criteria/lmbSQLFieldCriteria.class.php');
 
 /**
  * class lmbSQLCriteria.

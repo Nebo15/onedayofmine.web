@@ -8,9 +8,9 @@
  */
 lmb_require('limb/toolkit/src/lmbAbstractTools.class.php');
 lmb_require('limb/cache2/src/lmbCacheFactory.class.php');
-lmb_require('limb/cache2/src/lmbMintCache.class.php');
-lmb_require('limb/cache2/src/lmbLoggedCache.class.php');
-lmb_require('limb/cache2/src/lmbTaggableCache.class.php');
+lmb_require('limb/cache2/src/wrappers/lmbMintCacheWrapper.class.php');
+lmb_require('limb/cache2/src/wrappers/lmbLoggedCacheWrapper.class.php');
+lmb_require('limb/cache2/src/wrappers/lmbTaggableCacheWrapper.class.php');
 lmb_require('limb/net/src/lmbUri.class.php');
 
 /**
@@ -59,33 +59,26 @@ class lmbCacheTools extends lmbAbstractTools
     }
     else
     {
-      try
-      {
-        $dsn = lmbToolkit::instance()->getConf('cache')->get($name.'_cache_dsn');
+      $dsn = lmbToolkit::instance()->getConf('cache')->get($name.'_cache_dsn');
 
-        if(!is_object($dsn))
-          $dsn = new lmbUri($dsn);
+      if(!is_object($dsn))
+        $dsn = new lmbUri($dsn);
 
-        if(!$wrapper = $dsn->getQueryItem('wrapper'))
-          $wrapper = array();
+      if(!$wrapper = $dsn->getQueryItem('wrapper'))
+        $wrapper = array();
 
-        if ($conf->get('taggable_cache_enabled', false))
-          $wrapper[] = 'taggable';
+      if ($conf->get('taggable_cache_enabled', false))
+        $wrapper[] = 'taggable';
 
-        if($conf->get('mint_cache_enabled', false))
-          $wrapper[] = 'mint';
+      if($conf->get('mint_cache_enabled', false))
+        $wrapper[] = 'mint';
 
-        if($conf->get('cache_log_enabled', false))
-          $wrapper[] = 'logged';
+      if($conf->get('cache_log_enabled', false))
+        $wrapper[] = 'logged';
 
-        $dsn->addQueryItem('wrapper', $wrapper);
+      $dsn->addQueryItem('wrapper', $wrapper);
 
-        return $this->createCacheConnectionByDSN($dsn);
-      }
-      catch (Exception $e)
-      {
-        return $this->createCacheFakeConnection();
-      }
+      return $this->createCacheConnectionByDSN($dsn);
     }
   }
 

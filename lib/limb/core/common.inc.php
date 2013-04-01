@@ -15,9 +15,8 @@ if(!isset($_ENV['LIMB_LAZY_CLASS_PATHS']))
   $_ENV['LIMB_LAZY_CLASS_PATHS'] = array();
 if(!isset($_ENV['LIMB_LAZY_TRIED']))
   $_ENV['LIMB_LAZY_TRIED'] = array();
+
 define('LIMB_UNDEFINED', 'undefined' . microtime());
-define('LIMB_PACKAGES_DIR', dirname(__FILE__) . '/../');
-define('LIMB_DUMP_MAX_DEPTH', 7);
 define('LIMB_APP_DEVELOPMENT', 'devel');
 define('LIMB_APP_PRODUCTION', 'production');
 
@@ -80,25 +79,10 @@ function lmb_is_path_absolute($path)
 
 function lmb_require($file_path, $class = '')
 {
-  if(isset($_ENV['LIMB_LAZY_TRIED'][$file_path . $class]))
-    return;
-  else
-    $_ENV['LIMB_LAZY_TRIED'][$file_path . $class] = true;
-
-  if(strpos($file_path, '*') !== false)
-  {
-    $file_paths = lmb_glob($file_path);
-    if(is_array($file_paths))
-      foreach($file_paths as $path)
-        lmb_require($path);
-
-    return;
-  }
-
   if(!$class)
   {
-    //autoguessing class or interface name by file
-    $file = basename($file_path);
+    $file = strrchr($file_path, DIRECTORY_SEPARATOR);
+    $file = substr($file, 1, -4);
     $items = explode('.', $file);
 
     if(isset($items[1]))
@@ -110,6 +94,11 @@ function lmb_require($file_path, $class = '')
 
   if($class)
   {
+    if(isset($_ENV['LIMB_LAZY_TRIED'][$file_path . $class]))
+      return;
+    else
+      $_ENV['LIMB_LAZY_TRIED'][$file_path . $class] = true;
+
     $_ENV['LIMB_LAZY_CLASS_PATHS'][$class] = $file_path;
     return;
   }
@@ -210,7 +199,6 @@ function lmb_var_export($arg, $level = 1)
   		if(is_resource($arg))
   		{
         $resource_id = strstr((string) $arg, '#');
-        $resource_type = get_resource_type($arg);
         return "RESOURCE($resource_id) of type (" . get_resource_type($arg) . ")";
   		}
   		else
@@ -329,6 +317,9 @@ function lmb_app_mode($new_value = null)
   else
     return lmb_env_get('LIMB_APP_MODE', LIMB_APP_PRODUCTION);
 }
+
+lmb_env_setor('LIMB_PACKAGES_DIR', dirname(__FILE__).'/../');
+lmb_env_setor('LIMB_DUMP_MAX_DEPTH', 7);
 
 spl_autoload_register('lmb_autoload');
 new lmbException('ugly hack');

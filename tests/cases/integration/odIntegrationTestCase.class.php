@@ -2,21 +2,16 @@
 lmb_require('limb/tests_runner/lib/simpletest/web_tester.php');
 lmb_require('lib/DocCommentParser/*.class.php');
 lmb_require('facebook-proxy/src/Client.php');
+lmb_require('tests/cases/odEntityAssertions.trait.php');
 
 abstract class odIntegrationTestCase extends WebTestCase
 {
+  use odEntityAssertions;
+
   /**
    * @var OdObjectMother
    */
   protected $generator;
-  /**
-   * @var lmbSimpleDb
-   */
-  protected $db;
-  /**
-   * @var [type]
-   */
-  protected $last_profile_info;
   /**
    * @var User
    */
@@ -35,89 +30,99 @@ abstract class odIntegrationTestCase extends WebTestCase
   {
     $this->generator = new odObjectMother();
     $this->toolkit = lmbToolkit::instance();
+
     $this->toolkit->setConfIncludePath('tests/cases/integration/settings;tests/settings;settings');
     $this->toolkit->resetConfs();
     $this->toolkit->resetFileLocators();
+
     parent::setUp();
+
     $this->toolkit->truncateDb();
+
     list($this->main_user, $this->additional_user) = $this->toolkit->getTestsUsers($quiet = false);
+  }
+
+  function assertResponse($code, $message = 'Expecting response in [%s] got [%s] in response: %s')
+  {
+    $response_code = $this->getBrowser()->getResponseCode();
+
+    return $this->assertEqual(
+      $code,
+      $response_code,
+      sprintf($message,
+        $code, $response_code, $this->getBrowser()->getContent()
+      )
+    );
+  }
+
+  protected function assertImageUrl($url, $message = "Invalid image url '%s'")
+  {
+    $this->assertTrue($url, sprintf('Empty image url', $url));
+
+    $handle = curl_init($url);
+    $this->assertTrue($handle, "Can't init cURL");
+
+    curl_setopt($handle, CURLOPT_HEADER, false);
+    curl_setopt($handle, CURLOPT_FAILONERROR, true);  // this works
+    curl_setopt($handle, CURLOPT_NOBODY, true);
+    curl_setopt($handle, CURLOPT_RETURNTRANSFER, false);
+    $connectable = curl_exec($handle);
+    curl_close($handle);
+
+    return $this->assertTrue(
+      $connectable,
+      sprintf($message, $url)
+    );
+  }
+
+  protected function assert404Url($url)
+  {
+    $r = new HttpRequest($url, HttpRequest::METH_GET);
+    try {
+      $r->send();
+      $this->assertEqual(404, $r->getResponseCode());
+    } catch (HttpException $ex) {
+      $this->fail($ex->getMessage());
+    }
   }
 
   function get($url, $params = array())
   {
-    $raw_response = parent::get(lmbToolkit::instance()->getSiteUrl($url), $params);
-    $result = $this->_decodeResponse($raw_response);
-    if(
-      !property_exists($result, 'result') ||
-      !property_exists($result, 'errors') ||
-      !property_exists($result, 'status') ||
-      !property_exists($result, 'code')
-    )
+    if(is_object($params))
+      $params = (array) $params;
 
-    $this->fail('Wrong response structure:'.PHP_EOL.$raw_response);
-    return $result;
+    $raw_response = parent::get(lmbToolkit::instance()->getSiteUrl($url), $params);
+    $response = $this->_decodeResponse($raw_response);
+
+    $this->assertResponseClass($response, "Wrong response structure: {$raw_response}.");
+
+    return $response;
   }
 
   function post($url, $params = array(), $content_type = false)
   {
     if(is_object($params))
       $params = (array) $params;
+
     $raw_response = parent::post(lmbToolkit::instance()->getSiteUrl($url), $params);
-    $result = $this->_decodeResponse($raw_response);
-    if(
-      !property_exists($result, 'result') ||
-      !property_exists($result, 'errors') ||
-      !property_exists($result, 'status') ||
-      !property_exists($result, 'code')
-    )
+    $response = $this->_decodeResponse($raw_response);
 
-    $this->fail('Wrong response structure:'.PHP_EOL.$raw_response);
-    return $result;
+    $this->assertResponseClass($response, "Wrong response structure: {$raw_response}.");
+
+    return $response;
   }
 
-  protected function _addRecordsToWriters($url_path, $params, $method, $response)
+  protected function _login(User $user)
   {
-    $trace = debug_backtrace();
-    $class_name = get_called_class();
-    $method_name = $trace[2]['function'];
-    $class_ref = new ReflectionClass($class_name);
-    $method_ref = $class_ref->getMethod($method_name);
-    $call_name = str_replace('AcceptanceTest', '', $class_name).' - '.str_replace('test', '', $method_name);
-
-    $doc_comment = DocCommentParser::tokenize($method_ref->getDocComment());
-
-    if(!$doc_comment->hasGroup('api'))
-      return;
-
-    lmbToolkit::instance()
-      ->getPostmanWriter()
-      ->addRequest($call_name, $url_path, $method, $params);
-
-    lmbToolkit::instance()
-      ->getApiToMarkdownWriter()
-      ->addRequest($call_name, $method, $url_path, $params, $response, $doc_comment);
-
-  }
-
-  protected function _loginAndSetCookie(User $user, $disable_sharing = true)
-  {
-    $res = $this->_login($user, $disable_sharing);
-    $this->setCookie('token', $user->getFacebookAccessToken());
-    return $res;
-  }
-
-  protected function _login(User $user, $disable_sharing = true)
-  {
-    $params = array(
-      'token' => $user->getFacebookAccessToken(),
+    $response = $this->post('auth/login/', [
+      'token'        => $user->facebook_access_token,
       'device_token' => $this->generator->string(64)
-    );
-    if($disable_sharing)
-      $params['disable_sharing'] = 1;
-    $res = $this->post('auth/login/', $params);
-    $this->assertResponse(200);
-    $this->assertProperty($res->result, 'name');
-    return $res;
+    ]);
+
+    if($this->assertResponse(200))
+      $this->assertProperty($response->result, 'name');
+
+    return $response;
   }
 
   protected function _decodeResponse($raw_response)
@@ -131,95 +136,5 @@ abstract class odIntegrationTestCase extends WebTestCase
     }
 
     return $decoded_body;
-  }
-
-  protected function _splitBodyAndProfile($raw_response)
-  {
-    $profile_info_begin = strpos($raw_response, "}{\"main\"");
-
-    if (false !== $profile_info_begin) {
-      $body = substr($raw_response, 0, $profile_info_begin + 1);
-      $profile = substr($raw_response, $profile_info_begin + 1);
-      return array($body, $profile);
-    } else {
-      return array($raw_response, '{}');
-    }
-  }
-
-  function assertValidUserJson(User $valid_user, stdClass $user_from_response)
-  {
-    $this->assertEqual($valid_user->id,
-      $user_from_response->id);
-    $this->assertEqual($valid_user->name, $user_from_response->name);
-    if($user_from_response->image_36)
-      $this->assertValidImageUrl($user_from_response->image_36);
-    if($user_from_response->image_72)
-      $this->assertValidImageUrl($user_from_response->image_72);
-    if($user_from_response->image_96)
-      $this->assertValidImageUrl($user_from_response->image_96);
-    if($user_from_response->image_192)
-      $this->assertValidImageUrl($user_from_response->image_192);
-    $this->assertEqual($valid_user->sex, $user_from_response->sex);
-    $this->assertEqual($valid_user->birthday, $user_from_response->birthday);
-    $this->assertEqual($valid_user->occupation, $user_from_response->occupation);
-    $this->assertEqual($valid_user->location, $user_from_response->location);
-    $this->assertEqual($valid_user->getFollowers()->count(), $user_from_response->followers_count);
-    $this->assertEqual($valid_user->getFollowing()->count(), $user_from_response->following_count);
-    $this->assertEqual($valid_user->getDays()->count(), $user_from_response->days_count);
-  }
-
-  function assertValidDayJson(Day $valid_day, stdClass $day_from_response)
-  {
-    $this->assertEqual($valid_day->getId(), $day_from_response->id);
-    if($this->assertProperty($day_from_response, 'user'))
-      $this->assertValidUserJson($valid_day->getUser(), $day_from_response->user);
-    $this->assertTrue($day_from_response->image_266);
-    $this->assertTrue($day_from_response->image_532);
-    $this->assertValidImageUrl($day_from_response->image_266);
-    $this->assertValidImageUrl($day_from_response->image_532);
-    $this->assertEqual($valid_day->title, $day_from_response->title);
-    $this->assertEqual($valid_day->occupation, $day_from_response->occupation);
-    $this->assertEqual($valid_day->location, $day_from_response->location);
-    $this->assertEqual($valid_day->type, $day_from_response->type);
-    $this->assertEqual($valid_day->likes_count, $day_from_response->likes_count);
-  }
-
-  function assertResponse($responses, $message = '%s')
-  {
-    $responses = (is_array($responses) ? $responses : array($responses));
-    $code = $this->getBrowser()->getResponseCode();
-    $message = sprintf('%s', "Expecting response in [" .
-      implode(", ", $responses) . "] got [$code] in response:".($this->getBrowser()->getContent()));
-    return $this->assertTrue(in_array($code, $responses), $message);
-  }
-
-  protected function assertProperty($obj, $property, $message = "Property '%s' not found")
-  {
-    if(!is_object($obj))
-      return $this->fail("Expected a object but '".gettype($obj)."' given");
-    return $this->assertTrue(
-      property_exists($obj, $property),
-      sprintf($message, $property)
-    );
-  }
-
-  protected function assertValidImageUrl($url)
-  {
-    $content = @file_get_contents($url);
-    return $this->assertTrue(
-      strlen($content),
-      "Invalid image url '{$url}'"
-    );
-  }
-
-  protected function assert404Url($url)
-  {
-    $r = new HttpRequest($url, HttpRequest::METH_GET);
-    try {
-      $r->send();
-      $this->assertEqual(404, $r->getResponseCode());
-    } catch (HttpException $ex) {
-      $this->fail($ex->getMessage());
-    }
   }
 }

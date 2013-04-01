@@ -1,0 +1,7 @@
+{{wrap with="admin_page_layout.phtml" into="content_zone"}}
+	<div id="body">
+		<h1>Deploy log:</h1>
+		<? $color = 0 == $this->status ? 'darkgreen' : 'darkred' ?>
+		<textarea style="color:{$color};font-size:16px;width:100%;height:500px">{$#out}</textarea>
+	</div>
+{{/wrap}}

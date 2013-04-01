@@ -1,4 +1,4 @@
-<? $this->title = $this->moment->getDay()->getTitle(); ?>
+<? $this->title = $this->moment->getDay()->title; ?>
 {{wrap with="layout.phtml"}}
 {{into slot="meta"}}
   <meta property="og:type"   content="{$#facebook_app_namespace}:moment" />
@@ -6,7 +6,7 @@
   <meta property="og:title"  content="{$#moment.description}" />
   <meta property="og:description"  content="{$#moment.description}" />
   <meta property="og:image"  content="<?= lmbToolkit::instance()->getStaticUrl($this->moment->getImage()); ?>" />
-  <meta property="{$#facebook_app_namespace}:day" content="{$#moment.day.facebook_id}" />
+  <meta property="{$#facebook_app_namespace}:day" content="<?= $this->moment->getDay()->facebook_id; ?>" />
   {{/into}}
   {{into slot="content"}}
 <h1>Moment #{$#moment.id}</h1>

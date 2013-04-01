@@ -1,8 +1,8 @@
 <?php
 $conf = array(
   'options' => array(
-    'key' => 'AKIAJ3P5JYW3VDZZGKYA',
-    'secret' => '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',
+    'key' => 'AKIAJVNSJIAS7VMCC4DA',
+    'secret' => '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',
     'default_cache_config' => __DIR__.'/../../var/',
     'certificate_authority' => true),
   'S3' => array(

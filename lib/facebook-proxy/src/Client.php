@@ -9,7 +9,8 @@ class Client
   function __construct($proxy_url, $local_host)
   {
     $this->proxy_url = $proxy_url;
-    $this->local_host = parse_url($local_host)['host'];
+	  $host_parts = parse_url($local_host);
+    $this->local_host = $host_parts['host'].(isset($host_parts['port']) ? $host_parts['port'] : '');
   }
 
   function copyObjectPageToProxy($path)

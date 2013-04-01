@@ -18,3 +18,5 @@ require_once(dirname(__FILE__) . '/simpletest.inc.php');
 require_once(dirname(__FILE__) . '/src/lmbTestGroup.class.php');
 
 
+define('tests_runner_version', '1.0.0-stable');
+

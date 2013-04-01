@@ -1,6 +1,7 @@
 <?php
 lmb_require('tests/cases/unit/controller/odControllerTestCase.class.php');
 lmb_require('src/controller/MyController.class.php');
+lmb_require('src/model/Day.class.php');
 
 class MyControllerTest extends odControllerTestCase
 {
@@ -16,21 +17,7 @@ class MyControllerTest extends odControllerTestCase
 
     $profile = $this->get('profile')->result;
     if($this->assertResponse(200))
-    {
-      $this->assertEqual($this->main_user->id, $profile->id);
-      $this->assertEqual($this->main_user->name, $profile->name);
-      $this->assertEqual($this->main_user->email, $profile->email);
-      $this->assertEqual($this->main_user->sex, $profile->sex);
-      $this->assertProperty($profile, 'image_36');
-      $this->assertProperty($profile, 'image_72');
-      $this->assertEqual($this->main_user->occupation, $profile->occupation);
-      $this->assertEqual($this->main_user->location, $profile->location);
-      $this->assertEqual($this->main_user->birthday, $profile->birthday);
-      $this->assertEqual($this->main_user->getFollowers()->count(), $profile->followers_count);
-      $this->assertEqual($this->main_user->getFollowing()->count(), $profile->following_count);
-      $this->assertEqual($this->main_user->getFavouriteDays()->count(), $profile->favourites_count);
-      $this->assertEqual($this->main_user->getDays()->count(), $profile->days_count);
-    }
+      $this->assertJsonUser($profile);
   }
 
   /**
@@ -50,25 +37,14 @@ class MyControllerTest extends odControllerTestCase
     $update->birthday = $this->generator->date_sql();
     $update->image_content = base64_encode($this->generator->image());
 
-    $updated_profile = $this->post('profile', $update)->result;
+    $response = $this->post('profile', $update);
     if($this->assertResponse(200))
     {
-      $this->assertEqual($update->name, $updated_profile->name);
-      $this->assertEqual($update->sex, $updated_profile->sex);
-      $this->assertEqual($update->occupation, $updated_profile->occupation);
-      $this->assertEqual($update->location, $updated_profile->location);
-      $this->assertEqual($update->birthday, $updated_profile->birthday);
-      $this->assertEqual($update->email, $updated_profile->email);
-      $this->assertValidImageUrl($updated_profile->image_36);
-      $this->assertValidImageUrl($updated_profile->image_72);
+      $updated_profile = $response->result;
+      $this->assertEqualPropertyValues($updated_profile, $update);
 
-      $loaded_user = User::findById($this->main_user->getId());
-
-      $this->assertEqual($loaded_user->name, $updated_profile->name);
-      $this->assertEqual($loaded_user->occupation, $updated_profile->occupation);
-      $this->assertEqual($loaded_user->location, $updated_profile->location);
-      $this->assertEqual($loaded_user->birthday, $updated_profile->birthday);
-      $this->assertEqual($loaded_user->email, $updated_profile->email);
+      $loaded_profile = User::findFirst()->exportForApi();
+      $this->assertEqualPropertyValues($loaded_profile, $update);
     }
   }
 
@@ -81,48 +57,47 @@ class MyControllerTest extends odControllerTestCase
     $update->name = $this->generator->string(25);
     $update->birthday = $this->generator->date_sql();
 
-    $updated_profile = $this->post('profile', $update)->result;
+    $response = $this->post('profile', $update);
 
     if($this->assertResponse(200))
     {
-      $this->assertEqual($update->name, $updated_profile->name);
-      $this->assertEqual($update->birthday, $updated_profile->birthday);
+      $updated_profile = $response->result;
+      $this->assertEqualPropertyValues($updated_profile, $update);
 
-      $loaded_user = User::findById($this->main_user->getId());
-
-      $this->assertEqual($loaded_user->name, $updated_profile->name);
-      $this->assertEqual($loaded_user->birthday, $updated_profile->birthday);
+      $loaded_profile = User::findFirst()->exportForApi();
+      $this->assertEqualPropertyValues($loaded_profile, $update);
     }
   }
+
   /**
    * @api Returns setting of current user.
    */
   function testSettings()
   {
-    $this->main_user->save();
-
     $settings = new UserSettings();
-    $settings->setNotificationsNewDays(1);
-    $settings->setNotificationsNewComments(0);
-    $settings->setNotificationsRelatedActivity(1);
-    $settings->setNotificationsShootingPhotos(0);
-    $settings->setPhotosSaveOriginal(1);
-    $settings->setPhotosSaveFiltered(0);
+    $settings->notifications_new_days = 1;
+    $settings->notifications_new_comments = 0;
+    $settings->notifications_related_activity = 1;
+    $settings->notifications_shooting_photos = 0;
+    $settings->photos_save_original = 1;
+    $settings->photos_save_filtered = 0;
 
     $this->main_user->setSettings($settings);
     $this->main_user->save();
 
     lmbToolkit::instance()->setUser($this->main_user);
 
-    $settings = $this->get("settings")->result;
+    $response = $this->get("settings");
+    if($this->assertResponse(200))
+    {
+      $settings_exported = $settings->exportForApi();
 
-    $this->assertEqual(1, $settings->notifications_new_days);
-    $this->assertEqual(0, $settings->notifications_new_comments);
-    $this->assertEqual(1, $settings->notifications_related_activity);
-    $this->assertEqual(0, $settings->notifications_shooting_photos);
-    $this->assertEqual(1, $settings->photos_save_original);
-    $this->assertEqual(0, $settings->photos_save_filtered);
+      $updated_settings = $response->result;
+      $this->assertJsonUserSettings($updated_settings);
+      $this->assertEqualPropertyValues($updated_settings, $settings_exported);
+    }
   }
+
   /**
    * @api Changes fields of current <a href="#Entity:UserSettings">user settings</a> and returns them (with new values). You are free to make selective changes.
    */
@@ -131,43 +106,50 @@ class MyControllerTest extends odControllerTestCase
     $this->toolkit->setUser($this->main_user);
 
     $settings = new UserSettings();
-    $settings->setNotificationsNewDays(1);
-    $settings->setNotificationsNewComments(1);
-    $settings->setNotificationsNewReplays(1);
-    $settings->setNotificationsRelatedActivity(1);
-    $settings->setNotificationsShootingPhotos(1);
-    $settings->setPhotosSaveOriginal(1);
-    $settings->setPhotosSaveFiltered(1);
-    $settings->setSocialShareFacebook(1);
-    $settings->setSocialShareTwitter(1);
+    $settings->notifications_new_days = 1;
+    $settings->notifications_new_comments = 1;
+    $settings->notifications_related_activity = 1;
+    $settings->notifications_shooting_photos = 1;
+    $settings->photos_save_original = 1;
+    $settings->photos_save_filtered = 1;
+    $settings->social_share_facebook = 1;
+    $settings->social_share_twitter = 1;
 
-    $settings = $this->post("settings", $settings->export())->result;
-    foreach($settings as $option => $value)
-      $this->assertEqual(1, $value, "Error in $option. 1 != $value");
+    $response = $this->post("settings", $settings->export());
+    if($this->assertResponse(200))
+    {
+      $settings_exported = $settings->exportForApi();
 
-    $real_settings = $this->main_user->getSettings();
-    $this->assertEqual($settings, $real_settings->exportForApi());
+      $updated_settings = $response->result;
+      $this->assertJsonUserSettings($updated_settings);
+      $this->assertEqualPropertyValues($updated_settings, $settings_exported);
+
+      $loaded_settings = $this->main_user->getSettings()->exportForApi();
+      $this->assertEqualPropertyValues($loaded_settings, $settings_exported);
+    }
 
     $settings = new UserSettings();
-    $settings->setNotificationsNewDays(0);
-    $settings->setNotificationsNewComments(0);
-    $settings->setNotificationsNewReplays(0);
-    $settings->setNotificationsRelatedActivity(0);
-    $settings->setNotificationsShootingPhotos(0);
-    $settings->setPhotosSaveOriginal(0);
-    $settings->setPhotosSaveFiltered(0);
-    $settings->setSocialShareFacebook(0);
-    $settings->setSocialShareTwitter(0);
+    $settings->notifications_new_days = 0;
+    $settings->notifications_new_comments = 0;
+    $settings->notifications_related_activity = 0;
+    $settings->notifications_shooting_photos = 0;
+    $settings->photos_save_original = 0;
+    $settings->photos_save_filtered = 0;
+    $settings->social_share_facebook = 0;
+    $settings->social_share_twitter = 0;
 
-    $this->toolkit->setUser($this->main_user);
-    $settings = $this->post("settings", $settings->export())->result;
+    $response = $this->post("settings", $settings->export());
+    if($this->assertResponse(200))
+    {
+      $settings_exported = $settings->exportForApi();
 
-    foreach($settings as $option => $value)
-      $this->assertEqual(0, $value, "Error in $option. 0 != $value");
+      $updated_settings = $response->result;
+      $this->assertJsonUserSettings($updated_settings);
+      $this->assertEqualPropertyValues($updated_settings, $settings_exported);
 
-    $real_settings_collection = UserSettings::find();
-    $this->assertEqual(1, count($real_settings_collection));
-    $this->assertEqual($settings, $real_settings_collection->at(0)->exportForApi());
+      $loaded_settings = $this->main_user->getSettings()->exportForApi();
+      $this->assertEqualPropertyValues($loaded_settings, $settings_exported);
+    }
   }
 
   /**
@@ -182,9 +164,10 @@ class MyControllerTest extends odControllerTestCase
     $this->main_user->save();
     $this->toolkit->setUser($this->main_user);
 
+    // News are empty
     $response = $this->get('news');
-    $this->assertResponse(200);
-    $this->assertEqual(0, count($response->result));
+    if($this->assertResponse(200))
+      $this->assertEqual(0, count($response->result));
 
     // Adding new news
     $news1 = $this->generator->news(null, $this->main_user);
@@ -203,51 +186,71 @@ class MyControllerTest extends odControllerTestCase
     $response = $this->get('news');
     if($this->assertResponse(200))
     {
-      $this->assertTrue(is_array($response->result));
-      $this->assertEqual(4, count($response->result));
-      $this->assertEqual($news4->getId(), $response->result[0]->id);
-      $this->assertEqual($news3->getId(), $response->result[1]->id);
-      $this->assertEqual($news2->getId(), $response->result[2]->id);
-      $this->assertEqual($news1->getId(), $response->result[3]->id);
+      $json_news = $response->result;
+      $this->assertTrue(is_array($json_news));
+      $this->assertEqual(4, count($json_news));
+
+      $this->assertJsonNewsItems($json_news);
+
+      $this->assertEqual($news4->id, $json_news[0]->id);
+      $this->assertEqual($news3->id, $json_news[1]->id);
+      $this->assertEqual($news2->id, $json_news[2]->id);
+      $this->assertEqual($news1->id, $json_news[3]->id);
     }
 
     // If there are no new news return shoud be empty with HTTP 304 status code
-    $response = $this->get('news', array('from' => $news1->getId()));
-    $this->assertResponse(304);
-    $this->assertEqual(0, count($response->result));
+    $response = $this->get('news', [
+      'from' => $news1->id
+    ]);
+    if($this->assertResponse(304))
+      $this->assertEqual(0, count($response->result));
 
-    $response = $this->get('news', array('from' => $news4->getId()));
+    $response = $this->get('news', [
+      'from' => $news4->id
+    ]);
     if($this->assertResponse(200))
     {
-      $this->assertTrue(is_array($response->result));
-      $this->assertEqual(3, count($response->result));
-      $this->assertEqual($news3->getId(), $response->result[0]->id);
-      $this->assertEqual($news2->getId(), $response->result[1]->id);
-      $this->assertEqual($news1->getId(), $response->result[2]->id);
+      $json_news = $response->result;
+      $this->assertTrue(is_array($json_news));
+      $this->assertEqual(3, count($json_news));
+
+      $this->assertJsonNewsItems($json_news);
+
+      $this->assertEqual($news3->id, $json_news[0]->id);
+      $this->assertEqual($news2->id, $json_news[1]->id);
+      $this->assertEqual($news1->id, $json_news[2]->id);
     }
 
     $response = $this->get('news', array(
-      'from' => $news4->getId(),
-      'to' => $news1->getId(),
+      'from' => $news4->id,
+      'to' => $news1->id,
     ));
     if($this->assertResponse(200))
     {
-      $this->assertTrue(is_array($response->result));
-      $this->assertEqual(2, count($response->result));
-      $this->assertEqual($news3->getId(), $response->result[0]->id);
-      $this->assertEqual($news2->getId(), $response->result[1]->id);
+      $json_news = $response->result;
+      $this->assertTrue(is_array($json_news));
+      $this->assertEqual(2, count($json_news));
+
+      $this->assertJsonNewsItems($json_news);
+
+      $this->assertEqual($news3->id, $json_news[0]->id);
+      $this->assertEqual($news2->id, $json_news[1]->id);
     }
 
     $response = $this->get('news', array(
-      'from' => $news4->getId(),
-      'to' => $news1->getId(),
+      'from' => $news4->id,
+      'to' => $news1->id,
       'limit' => 1
     ));
     if($this->assertResponse(200))
     {
-      $this->assertTrue(is_array($response->result));
-      $this->assertEqual(1, count($response->result));
-      $this->assertEqual($news3->getId(), $response->result[0]->id);
+      $json_news = $response->result;
+      $this->assertTrue(is_array($json_news));
+      $this->assertEqual(1, count($json_news));
+
+      $this->assertJsonNewsItems($json_news);
+
+      $this->assertEqual($news3->id, $response->result[0]->id);
     }
   }
 }

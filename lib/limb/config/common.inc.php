@@ -11,7 +11,6 @@
  * @package config
  * @version $Id: common.inc.php 8038 2010-01-19 20:19:00Z korchasa $
  */
-require_once('limb/core/common.inc.php');
 lmb_require('limb/config/toolkit.inc.php');
 
 lmb_package_register('config', dirname(__FILE__));

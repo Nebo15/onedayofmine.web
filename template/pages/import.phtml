@@ -1,0 +1,198 @@
+<?
+$this->title = 'Create a day';
+$this->menu = 'create_day';
+?>
+{{wrap with="layout.phtml"}}
+  {{into slot="css"}}
+  {{/into}}
+  {{into slot="css_include"}}
+    <link href="/styles/vendor/fuelux-wizard.css" rel="stylesheet">
+  {{/into}}
+  {{into slot="js_include"}}
+    <script src="/lib/vendor/fuelux-wizard.js"></script>
+    <script src="/lib/Importer.js"></script>
+    <script src="/app/import.js"></script>
+  {{/into}}
+  {{into slot="js_ready"}}
+    var controller = new ImportController($('#import_wizard'), $('.step-content'));
+    <? if(!((bool) $this->toolkit->getUser())) { ?>
+      controller.setStep(1);
+    <? } elseif(!($this->toolkit->getUser()->instagram_uid || $this->toolkit->getUser()->flickr_uid)) { ?>
+      controller.setStep(2);
+    <? } else { ?>
+      controller.setStep(3);
+    <? } ?>
+  {{/into}}
+  {{into slot="templates"}}
+    <script id="template_import_day" type="text/x-handlebars-template">
+    	<li class="day well" style="opacity:0">
+    		<ul class="thumbnails"></ul>
+        <div class="text-center">
+      		<button class="btn with-spinner action-descibe">
+      			<i class="spinner icon-spin icon-refresh"></i>
+      			Analyze &rarr;
+      		</button>
+    			<h4 class="pull-right muted"></h4>
+        </div>
+    	</li>
+    </script>
+
+    <script id="template_import_moment" type="text/x-handlebars-template">
+      <li>
+        <div class="thumbnail with-bage">
+          <div class="img-wrap img-rounded" style="background-image: url('[[image]]');"></div>
+  				<span class="bage bage-transperent bage-bottom-right"><i class="icon-remove"></i></span>
+        </div>
+      </li>
+    </script>
+  {{/into}}
+  {{into slot="content"}}
+    <div class="fuelux">
+      <div id="import_wizard" class="wizard">
+        <ul class="steps">
+          <li data-target="#step1" class="active disabled"><span class="badge badge-info">1</span>Sign up<span class="chevron"></span></li>
+          <li data-target="#step2" class="action-step-change"><span class="badge">2</span>Connect social profiles<span class="chevron"></span></li>
+          <li data-target="#step3" class="action-step-change"><span class="badge">3</span>Select a day<span class="chevron"></span></li>
+          <li data-target="#step4"><span class="badge">4</span>Publish<span class="chevron"></span></li>
+        </ul>
+      </div>
+
+      <div id="error_container" class="well alert alert-danger" style="display:none;"></div>
+
+    	<div class="step-content">
+    		<div class="step-pane text-center active" id="step1">
+          <p>
+            First of all you need to create account via Facebook:
+          </p>
+          <div class="input-prepend large">
+            <span class="add-on"><i class="icon-facebook-sign"></i></span>
+    				<button class="btn btn-large facebook-action with-spinner">
+              <i class="spinner icon-spin icon-refresh"></i>
+    					Sign up with Facebook
+    				</button>
+          </div>
+    		</div>
+
+    		<div class="step-pane text-center" id="step2">
+          <p>
+            You can use magic import feature, just connect social profiles:
+          </p>
+          <div class="connections">
+            <ul class="unstyled">
+              <li>
+                <div class="input-prepend with-spinner">
+                  <span class="add-on">
+                    <i class="spinner icon-spin icon-refresh"></i>
+                    <i class="icon-instagram"></i>
+                  </span>
+                  <button class="btn action-connect-instagram">
+                    Connect to instagram
+                  </button>
+                </div>
+              </li>
+              <li>
+                <div class="input-prepend with-spinner">
+                  <span class="add-on">
+                    <i class="spinner icon-spin icon-refresh"></i>
+                    <i class="icon-flickr"></i>
+                  </span>
+                  <button class="btn action-connect-flickr">
+                    Connect to Flickr
+                  </button>
+                </div>
+              </li>
+              <li>
+                <div class="input-prepend">
+                  <span class="add-on"><i class="icon-facebook-sign"></i></span>
+                  <button class="btn disabled">
+                    Facebook connected
+                  </button>
+                </div>
+              </li>
+            </ul>
+            <div class="braces">
+              &#125;
+            </div>
+            <button class="btn btn-large action-step-change" data-target="#step3">
+              Find days &rarr;
+            </button>
+          </div>
+
+          <hr />
+
+          <p>
+            Or create empty day and fill it manually:
+          </p>
+          <ul class="unstyled social-connect-list">
+            <li>
+              <button class="btn btn-large create-action">
+                &nbsp;Create day from scratch &rarr;
+              </button>
+            </li>
+          </ul>
+    		</div>
+
+    		<div class="step-pane" id="step3">
+    			<div id="loader_container" class="well text-center" style="display:none;">
+    				<div class="progress">
+    					<div class="bar bar-success" style="width: 0%;"></div>
+    				</div>
+    			</div>
+
+    			<ul class="import_days unstyled"></ul>
+
+    			<button class="btn btn-block paginate with-spinner">
+    				<i class="spinner icon-spin icon-refresh"></i>
+    				Load more
+    			</button>
+    		</div>
+
+    		<div class="step-pane" id="step4">
+          <div id="loader_container" class="well text-center" style="display:none;">
+            <div class="progress">
+              <div class="bar bar-success" style="width: 0%;"></div>
+            </div>
+          </div>
+
+          <form class="form-horizontal" style="display:none">
+    				<div class="control-group day-title-selector">
+    					<label class="control-label">Title</label>
+    					<div class="controls">
+    						<input type="text" class="title input-xxlarge">
+    					</div>
+    				</div>
+
+    				<div class="control-group day-type-selector">
+    					<label class="control-label">Day type</label>
+    					<div class="controls">
+    						<div class="btn-group" data-toggle="buttons-radio">
+                  <button type="button" class="btn btn-small">Working day</button>
+                  <button type="button" class="btn btn-small active">Day off</button>
+                  <button type="button" class="btn btn-small">Holiday</button>
+                  <button type="button" class="btn btn-small">Trip</button>
+                </div>
+    					</div>
+    				</div>
+
+    				<div class="control-group day-description-selector">
+    					<label class="control-label">Description</label>
+    					<div class="controls">
+    						<textarea class="input-xxlarge" rows="5"></textarea>
+    					</div>
+    				</div>
+
+    				<div class="text-center">
+    					<button type="button" class="btn action-step-change" data-target="#step3">
+    						<i class="icon icon-arrow-left"/></i>
+    						&nbsp;Back
+    					</button>
+    					<button type="submit" class="btn btn-success with-spinner">
+    						<i class="spinner icon-spin icon-refresh"></i>
+    						Publish
+    					</button>
+    				</div>
+    			</form>
+    		</div>
+    	</div>
+  {{/into}}
+{{/wrap}}

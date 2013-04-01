@@ -3,62 +3,76 @@ lmb_require('src/model/base/BaseModel.class.php');
 
 class UserFollowing extends BaseModel
 {
+  protected $_db_table_name = 'user_following';
   protected $_default_sort_params = array('ctime'=>'asc');
 
-  public static function isUserFollowUser(User $follower_user, User $followed_user) {
-    return !is_null(lmbActiveRecord::findOne('UserFollowing', array('follower_user_id=? AND user_id=?', $follower_user->getId(), $followed_user->getId())));
+  public $user_id;
+  public $follower_user_id;
+  public $ctime;
+
+  function setUser(User $user)
+  {
+    $this->user_id = $user->id;
   }
 
-  public static function isUsersFollowUser(lmbCollectionInterface $follower_users, User $followed_user) {
-    if(!$followed_user->getId())
+  function setFollowerUser(User $user)
+  {
+    $this->follower_user_id = $user->id;
+  }
+
+  public static function isUserFollowUser($follower_user, User $followed_user)
+  {
+	  $follower_id = is_object($follower_user) ? $follower_user->id : $follower_user;
+    $criteria = lmbSQLCriteria::create()
+      ->add(lmbSQLCriteria::equal('follower_user_id', $follower_id))
+      ->add(lmbSQLCriteria::equal('user_id', $followed_user->id));
+    return !is_null(UserFollowing::findFirst($criteria));
+  }
+
+  public static function isUsersFollowUser($follower_users, User $followed_user)
+  {
+    if(!$followed_user->id)
       throw new lmbException("Can't retrieve user id");
 
-    if(!$follower_users->count())
+    if(!count($follower_users))
       return [];
 
     $following_ids = [];
     foreach ($follower_users as $user) {
-      $following_ids[$user->getId()] = false;
+      $following_ids[$user->id] = false;
     }
 
     $criteria = lmbSQLCriteria::in('follower_user_id', array_keys($following_ids));
-    $criteria->add(lmbSQLCriteria::equal('user_id', $followed_user->getId()));
-    $following = UserFollowing::find(array(
-      'criteria' => $criteria
-    ));
+    $criteria->add(lmbSQLCriteria::equal('user_id', $followed_user->id));
+    $following = UserFollowing::find($criteria);
 
     foreach ($following as $following_item) {
-      $following_ids[$following_item->getFollowerUserId()] = true;
+      $following_ids[$following_item->follower_user_id] = true;
     }
 
     return $following_ids;
   }
 
-  public static function isUserFollowUsers(User $follower_user, lmbCollectionInterface $followed_users) {
-    if(!$follower_user->getId())
+  public static function isUserFollowUsers(User $follower_user, $followed_users)
+  {
+    if(!$follower_user->id)
       throw new lmbException("Can't retrieve user id");
 
-    if(!$followed_users->count())
+    if(!count($followed_users))
       return [];
 
-    $following_ids = [];
-    foreach ($followed_users as $user) {
-      if(!$user->getId())
-        throw new lmbException("Can't retrieve user id");
+    $following_ids = lmbArrayHelper::getColumnValues('id', $followed_users);
 
-      $following_ids[$user->getId()] = false;
-    }
+    $result = array_fill_keys($following_ids, false);
 
-    $criteria = lmbSQLCriteria::in('user_id', array_keys($following_ids));
-    $criteria->add(lmbSQLCriteria::equal('follower_user_id', $follower_user->getId()));
-    $following = UserFollowing::find(array(
-      'criteria' => $criteria
-    ));
+    $criteria = lmbSQLCriteria::in('user_id', $following_ids);
+    $criteria->add(lmbSQLCriteria::equal('follower_user_id', $follower_user->id));
+    $following = UserFollowing::find($criteria);
 
     foreach ($following as $following_item) {
-      $following_ids[$following_item->getUserId()] = true;
+      $result[$following_item->user_id] = true;
     }
 
-    return $following_ids;
+    return $result;
   }
 }

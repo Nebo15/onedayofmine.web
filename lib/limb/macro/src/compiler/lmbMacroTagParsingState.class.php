@@ -6,6 +6,11 @@
  * @copyright  Copyright &copy; 2004-2009 BIT(http://bit-creative.com)
  * @license    LGPL http://www.gnu.org/copyleft/lesser.html
  */
+lmb_require('limb/macro/src/compiler/lmbMacroBaseParsingState.class.php');
+lmb_require('limb/macro/src/compiler/lmbMacroTagInfo.class.php');
+lmb_require('limb/macro/src/compiler/lmbMacroTagAttribute.class.php');
+lmb_require('limb/macro/src/compiler/lmbMacroTagAttributeBlockAnalizerListener.class.php');
+lmb_require('limb/macro/src/compiler/lmbMacroBlockAnalizer.class.php');
 
 /**
  * class lmbMacroTagParsingState.
@@ -22,12 +27,12 @@ class lmbMacroTagParsingState extends lmbMacroBaseParsingState implements lmbMac
     parent :: __construct($parser, $tree_builder);
     $this->tag_dictionary = $tag_dictionary;
   }
-  
+
   function raiseNotSuchTagException($tag, $location)
   {
     $params = array('file', $location->getFile(),
                     'line', $location->getLine());
-    
+
     throw new lmbMacroException("Tag '$tag' not found in dictionary", $params);
   }
 
@@ -58,10 +63,10 @@ class lmbMacroTagParsingState extends lmbMacroBaseParsingState implements lmbMac
   function endElement($tag)
   {
     $location = $this->parser->getCurrentLocation();
-	
+
     if(!$tag_info = $this->tag_dictionary->findTagInfo($tag))
       $this->raiseNotSuchTagException($tag, $location);
-    
+
     if($tag_info->isEndTagForbidden())
     {
       throw new lmbMacroException('Closing tag forbidden',

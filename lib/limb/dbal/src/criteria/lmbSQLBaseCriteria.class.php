@@ -6,8 +6,6 @@
  * @copyright  Copyright &copy; 2004-2009 BIT(http://bit-creative.com)
  * @license    LGPL http://www.gnu.org/copyleft/lesser.html
  */
-//inspired by Propel Criteria(http://propel.phpdb.org)
-lmb_require('limb/dbal/src/criteria/lmbSQLCriteria.class.php');
 
 /**
  * abstract class lmbSQLBaseCriteria.

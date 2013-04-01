@@ -3,9 +3,16 @@
 lmb_require('limb/mail/src/lmbBaseMailerInterface.interface.php');
 
 class lmbResponseMailer implements lmbBaseMailerInterface
-{  
-  function sendHtmlMail($recipients, $sender, $subject, $html, $text = null, $charset = 'utf-8')
-  {    
+{
+  protected $config = array();
+
+  function setConfig($config)
+  {
+    $this->config = $config;
+  }
+
+  function sendHtmlMail($recipients, $subject, $html, $text = null, $charset = 'utf-8')
+  {
     $content = '<table cellspacing="5" cellpadding="8">';
     $content .= '<tr valign="top"><td bgcolor="#F8F8F8"><strong>Recipient:</strong></td><td><pre>'.print_r($recipients, true).'</pre></td></tr>';
     $content .= '<tr valign="top"><td bgcolor="#F8F8F8"><strong>Sender:</strong></td><td><pre>'.print_r($sender, true).'</pre></td></tr>';
@@ -16,15 +23,15 @@ class lmbResponseMailer implements lmbBaseMailerInterface
     $content .= '</table>';
     lmbToolkit::instance()->getResponse()->write($content);
   }
-  
-  function sendPlainMail($recipients, $sender, $subject, $body, $charset = 'utf-8')
-  { 
+
+  function sendPlainMail($recipients, $subject, $body, $charset = 'utf-8')
+  {
     $content = '';
     $content .= '<p>recipient: '.$recipients.'</p>';
-    $content .= '<p>sender: '.$sender.'</p>';
+    $content .= '<p>sender: '.$this->config['sender'].'</p>';
     $content .= '<p>subject: '.$subject.'</p>';
     $content .= '<pre>text: '.$body.'</pre>';
     $content .= '<p>charset: '.$charset.'</p>';
     lmbToolkit::instance()->getResponse()->write($content);
-  }  
+  }
 }

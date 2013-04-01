@@ -1,18 +1,32 @@
 <?php
 lmb_require('src/model/base/BaseModel.class.php');
+lmb_require('src/model/DeviceNotification.class.php');
 
 class DeviceToken extends BaseModel
 {
-  protected function _defineRelations()
+  protected $_db_table_name = 'device_token';
+
+  protected $user;
+  public $user_id;
+  public $token;
+  public $ctime;
+  public $logins_count;
+
+  protected function _createValidator()
   {
-    $this->_has_many = array (
-      'notifications' => array ('field' => 'device_token_id', 'class' => 'DeviceNotification'),
-    );
-    $this->_many_belongs_to['user'] = array ('field' => 'user_id', 'class' => 'User');
+    $validator = new lmbValidator();
+    $validator->addRequiredRule('user_id');
+    $validator->addRequiredRule('token');
+    return $validator;
+  }
+
+  function setUser(User $user)
+  {
+    $this->user_id = $user->id;
   }
 
   static function findOneByToken($token)
   {
-    return DeviceToken::findOne(array('criteria' => lmbSQLCriteria::equal('token', $token)));
+    return DeviceToken::findFirst(lmbSQLCriteria::equal('token', $token));
   }
 }

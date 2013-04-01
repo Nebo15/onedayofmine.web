@@ -36,7 +36,7 @@ class lmbI18NMacroClipFilter extends lmbMacroFilter
     if(count($this->params) > 3)
     {
       $this->chunk_var = $code->generateVar();
-      $code->writePhp($this->chunk_var . ' = lmb_substr('. $value .','. $this->params[1] .','. $this->params[0]. ');');
+      $code->writePhp($this->chunk_var . ' = trim(lmb_substr('. $value .','. $this->params[1] .','. $this->params[0]. '));');
     }
   }
 

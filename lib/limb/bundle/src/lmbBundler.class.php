@@ -4,7 +4,8 @@ require_once('limb/core/common.inc.php');
 
 class lmbBundler
 {
-  static public $regexp_for_requires = '/^\s*((lmb_)?require(_once)?)\s*\([\'|\"]([a-zA-z0-9\-_.\/]+).*$/m';
+  static public $regexp_for_requires = '/^\s*((lmb_)?require(_once)?)\s*\(?[\'|\"]([a-zA-z0-9\-_.\/]+).*$/m';
+  static public $regexp_for_package_requires = '/^\s*(lmb_package_require)\s*\([\'|\"]([a-zA-z0-9\-_.\/]+).*$/m';
   public $include_paths;
   protected $_includes = array();
   protected $_verbose;
@@ -21,23 +22,28 @@ class lmbBundler
     $this->_verbose = $verbose;
   }
 
-  static function getDependenciesFromFile($file)
+  static function getDependenciesFromFileSource($file_content)
   {
-    $file = trim($file);
-    $matches = array();
-    preg_match_all(self::$regexp_for_requires, file_get_contents($file), $matches);
-    if(!isset($matches[4]))
-      return array();
+    $file_content = trim($file_content);
+    $deps = array();
+    $files = array();
 
-    $matches = array_unique($matches[4]);
-    //array_walk($matches,'array_trim');
-    return $matches;
+    preg_match_all(self::$regexp_for_requires, $file_content, $files);
+    if(isset($files[4]))
+      $deps = array_merge($deps, $files[4]);
+
+    preg_match_all(self::$regexp_for_package_requires, $file_content, $files);
+    if(isset($files[2]))
+      foreach($files[2] as $dep_file)
+        $deps[] = 'limb/'.$dep_file.'/common.inc.php';
+
+    return $deps;
   }
 
   function resolvePath($file)
   {
     if($this->isPathAbsolute($file))
-    return $file;
+      return $file;
 
     $file_path = false;
     foreach($this->include_paths as $include_path)
@@ -45,7 +51,7 @@ class lmbBundler
       $full_path = $include_path . '/' . $file;
 
       if(file_exists($full_path)) {
-        return $full_path;
+        return realpath($full_path);
       }
     }
 
@@ -54,24 +60,28 @@ class lmbBundler
 
   function isPathAbsolute($path)
   {
-    //return ('/' === $path{0});
     return lmb_is_path_absolute($path);
   }
 
   function add($file)
   {
-    $file = realpath(trim($file));
-    if(in_array($file, $this->_includes))
+    $resolved_file = $this->resolvePath(trim($file));
+    if(!$resolved_file)
+    {
+      die('File not found: '.$file.PHP_EOL);
+    }
+
+    if(in_array($resolved_file, $this->_includes))
     {
       if($this->_verbose)
-        echo 'exist: '.$file.PHP_EOL;
+        echo 'exist: '.$resolved_file.PHP_EOL;
       return;
     }
 
     if($this->_verbose)
-      echo 'add: '.$file.PHP_EOL;
+      echo 'add: '.$resolved_file.PHP_EOL;
 
-    $deps = self::getDependenciesFromFile($file);
+    $deps = self::getDependenciesFromFileSource(file_get_contents($resolved_file));
 
     foreach($deps as $dependency)
     {
@@ -81,54 +91,70 @@ class lmbBundler
         continue;
 
       if($this->_verbose)
-        echo 'dependency: '.$dependency_path.PHP_EOL;
+        echo 'dependency: '.$dependency_path.' ('.$dependency.')'.PHP_EOL;
 
       $this->add($dependency_path);
     }
 
     if($this->_verbose)
-      echo 'pushed: '.$file.PHP_EOL;
+      echo 'pushed: '.$resolved_file.PHP_EOL;
 
-    if(!in_array($file, $this->_includes))
-      array_push($this->_includes, $file);
+    if(!in_array($resolved_file, $this->_includes))
+      $this->_includes[] = $resolved_file;
   }
 
-  function getIncludes()
+  function getIncludes($path_prefix = null)
   {
-    return $this->_includes;
+    if(!$path_prefix)
+      return $this->_includes;
+
+    $result = array();
+    foreach($this->_includes as $include)
+    {
+      if(0 === strpos($include, $path_prefix))
+        $result[] = $include;
+      elseif($this->_verbose)
+        echo 'excluded: '.$include.PHP_EOL;
+    }
+    return $result;
   }
 
   static function cleanUpFile($file)
   {
-    $lines = file(trim($file));
+    if(is_dir($file))
+      return;
 
-     if(!is_array($lines))
-        return '';
-    //removing <?php stuff
-    array_shift($lines);
+    $fileStr = file_get_contents($file);
+    $fileStr = preg_replace(self::$regexp_for_requires, '', $fileStr);
 
-    if(false !== strpos($lines[count($lines)-1], '?>'))
-      array_pop($lines);
-
-    $lines_count = count($lines);
-
-    //filter unneccessary require's
-    for($i = 0;$i<$lines_count;$i++)
+    $newStr  = '';
+    $tokens = token_get_all($fileStr);
+    foreach ($tokens as $token)
     {
-      if(preg_match(self::$regexp_for_requires, $lines[$i]))
-        unset($lines[$i]);
+      if (is_array($token))
+      {
+        $type = $token[0];
+        if ($type == T_DOC_COMMENT || $type == T_COMMENT || $type == T_OPEN_TAG || $type == T_CLOSE_TAG)
+          continue;
+
+        $token = $token[1];
+      }
+      $newStr .= $token;
     }
 
-    return implode("", $lines);
+    while(false !== strpos($newStr, PHP_EOL.PHP_EOL.PHP_EOL))
+      $newStr = str_replace(PHP_EOL.PHP_EOL.PHP_EOL, PHP_EOL.PHP_EOL, $newStr);
+
+    return $newStr;
   }
 
-  function makeBundle($without_tags = false)
+  function makeBundle($without_tags = false, $include_dir = null)
   {
-    echo $without_tags ? '' : "<?php\n";
-    foreach(array_unique($this->_includes) as $file)
+    $result = $without_tags ? '' : "<?php\n";
+    foreach(array_unique($this->getIncludes($include_dir)) as $file)
     {
-//      echo "//-----------".$file."------------".PHP_EOL;
-      echo self::cleanUpFile($file);
+      $result .= self::cleanUpFile($file);
     }
+    return $result;
   }
 }

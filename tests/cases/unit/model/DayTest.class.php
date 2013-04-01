@@ -1,4 +1,6 @@
 <?php
+lmb_require('src/model/Day.class.php');
+lmb_require('src/model/User.class.php');
 lmb_require('tests/cases/unit/odUnitTestCase.class.php');
 
 class DayTest extends odUnitTestCase
@@ -8,19 +10,15 @@ class DayTest extends odUnitTestCase
     $this->assertTrue($this->_createValidDay()->validate());
 
     $day = $this->_createValidDay();
-    $day->setTitle(null);
+    $day->title = null;
     $this->assertFalse($day->validate());
 
     $day = $this->_createValidDay();
-    $day->setType(null);
+    $day->type = null;
     $this->assertFalse($day->validate());
 
     $day = $this->_createValidDay();
-    $day->setUser(null);
-    $this->assertFalse($day->validate());
-
-    $day = $this->_createValidDay();
-    $day->setUser(new Day());
+    $day->user_id = null;
     $this->assertFalse($day->validate());
   }
 
@@ -30,18 +28,18 @@ class DayTest extends odUnitTestCase
     $day->save();
 
     $last_moment = $this->generator->moment($day);
-    list($time, $zone) = Moment::isoToStamp("1970-01-01T23:00:02+01:00");
-    $last_moment->setTime($time);
+    list($time, $zone) = Moment::isoToStamp("2010-01-01T23:00:02+01:00");
+    $last_moment->time = $time;
     $last_moment->save();
 
     $middle_moment = $this->generator->moment($day);
-    list($time, $zone) = Moment::isoToStamp("1970-01-02T02:00:01-02:00");
-    $middle_moment->setTime($time);
+    list($time, $zone) = Moment::isoToStamp("2010-01-02T02:00:01-02:00");
+    $middle_moment->time = $time;
     $middle_moment->save();
 
     $first_moment = $this->generator->moment($day);
-    list($time, $zone) = Moment::isoToStamp("1970-01-01T23:59:59+00:00:00");
-    $first_moment->setTime($time);
+    list($time, $zone) = Moment::isoToStamp("2010-01-01T23:59:59+00:00:00");
+    $first_moment->time = $time;
     $first_moment->save();
 
     $moments = $day->getMoments();

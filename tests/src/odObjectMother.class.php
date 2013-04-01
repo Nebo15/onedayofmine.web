@@ -2,13 +2,7 @@
 
 class odObjectMother
 {
-  protected $generate_random = false;
-
-  public function __construct()
-  {
-    // TODO when its better to have static values?
-    $this->generate_random = (lmb_env_get('LIMB_APP_MODE') != 'devel');
-  }
+  protected $generate_random = true;
 
   /**
    * @return User
@@ -16,50 +10,99 @@ class odObjectMother
   function user($name = null)
   {
     $user = new User();
-    $user->setFacebookUid($this->string(5));
-    $user->setFacebookAccessToken($this->string(50));
-    $user->setEmail($this->email());
-    $user->setFacebookProfileUtime($this->integer(11));
-    $user->setFacebookPicBig($this->string(50));
-    $user->setFacebookPicSquare($this->string(50));
-    $user->setFacebookPicSmall($this->string(50));
-    $user->setName($name ?: $this->string(100));
-    $user->setTimezone($this->integer(1));
-    $user->setSex('female');
-    $user->setOccupation($this->string(50));
-    $user->setBirthday($this->date_sql());
-
+    $user->facebook_uid = $this->string(5);
+    $user->facebook_access_token = $this->string(50);
+    $user->email = $this->email();
+    $user->facebook_profile_utime = $this->integer(11);
+    $user->name = $name ?: $this->string(100);
+    $user->timezone = $this->integer(1);
+    $user->sex = 'female';
+    $user->occupation = 'occupation_'.$this->string(50);
+	  $user->location = 'location_'.$this->string(50);
+    $user->birthday = $this->date_sql();
+    $user->save();
     return $user;
+  }
+
+  function follow(User $user, User $follower)
+  {
+    $link = new UserFollowing();
+    $link->setUser($user);
+    $link->setFollowerUser($follower);
+    return $link->save();
   }
 
   /**
    * @param null|User $user
    * @return Day
    */
-  function day(User $user = null, $with_comments = false, $title = null)
+  function day(User $user = null, $title = null)
   {
     $day = new Day();
-    $day->setTitle($title ?: $this->string(25));
-    $day->setOccupation($this->string(255));
-    $day->setTimezone(0);
-    $day->setLocation($this->string(25));
-    $types = Day::getTypes();
 
-    if(!$this->generate_random)
-      $day->setType($types[0]);
-    else
-      $day->setType($types[array_rand($types)]);
-
-    if($with_comments)
-    {
-      for($i = 0; $i < lmbToolkit::instance()->getConf('common')->default_comments_count+1; $i++)
-      {
-        $day->addToComments($this->dayComment($day, $day->getUser()));
-      }
-    }
-
+    $day->title = $title ?: $this->string(25);
     $day->setUser($user ?: $this->user());
+
+    $types = Day::getTypes();
+    if(!$this->generate_random)
+      $day->type = $types[0];
+    else
+      $day->type = $types[array_rand($types)];
+
+    $day->views_count = rand(0, 100);
+
+    $day->save();
+
     return $day;
+  }
+
+  function dayWithMoments(User $user = null, $title = null, Day $day = null)
+  {
+    $day = $day ?: $this->day($user, $title);
+    $this->moment($day);
+    $day->attachImage($this->image());
+    $day->save();
+
+    return $day;
+  }
+
+  function dayWithComments(User $user = null, $title = null, Day $day = null)
+  {
+    $day = $day ?: $this->day($user, $title);
+
+    for($i = 0; $i < lmbToolkit::instance()->getConf('common')->default_comments_count + 1; $i++)
+      $this->dayComment($day, User::findById($day->user_id));
+
+    $day->save();
+
+    return $day;
+  }
+
+  function dayWithLikes(User $user, $count)
+  {
+    $day = $this->day($user);
+    $this->dayLikes($day, $count);
+    return $day;
+  }
+
+  function dayWithMomentsAndComments(User $user = null, $title = null, Day $day = null)
+  {
+    $day = $day ?: $this->day($user, $title);
+
+    $day = $this->dayWithMoments($user, null, $day);
+    $day = $this->dayWithComments($user, null, $day);
+
+    $day->save();
+
+    return $day;
+  }
+
+  function favorite(Day $day, User $user)
+  {
+    $link = new DayFavorite();
+    $link->setDay($day);
+    $link->setUser($user);
+    return $link->save();
   }
 
   /**
@@ -70,9 +113,10 @@ class odObjectMother
   function dayComment(Day $day = null, User $user = null)
   {
     $comment = new DayComment();
-    $comment->setDay($day ?: $this->day());
-    $comment->setUser($user ?: $this->user());
-    $comment->setText($this->string(255));
+    $comment->setDay($day ?: $this->day()->save());
+    $comment->setUser($user ?: $this->user()->save());
+    $comment->text = $this->string(255);
+    $comment->save();
     return $comment;
   }
 
@@ -86,7 +130,7 @@ class odObjectMother
     $like = new DayLike();
     $like->setDay($day);
     $like->setUser($user ?: $this->user());
-    return $like;
+    return $like->save();
   }
 
   function dayLikes(Day $day, $likes_count)
@@ -103,28 +147,45 @@ class odObjectMother
    */
   function moment(Day $day = null, $with_comments = false)
   {
+    $day = $day ? $day : $this->day();
     $moment = new Moment();
-    $moment->setDescription('description '.$this->string(125));
-    $moment->setDay($day ?: $this->day());
+    $moment->description = 'description '.$this->string(125);
+	  $moment->time = time() - 60 * 60;
+	  $moment->timezone = 0;
+	  $moment->setDay($day);
+    $moment->save();
 
     if($with_comments)
     {
       for($i = 0; $i < lmbToolkit::instance()->getConf('common')->default_comments_count+1; $i++)
       {
-        $moment->addToComments($this->momentComment($moment, $moment->getDay()->getUser()));
+        $this->momentComment($moment, User::findById($day->user_id));
       }
     }
+    return $moment;
+  }
+
+  function momentWithImage(Day $day = null, $likes_count = 0)
+  {
+    $moment = $this->moment($day);
+    $moment->save();
+    $moment->attachImage($this->image());
+    $moment->save();
+
+    for($i = 0; $i < $likes_count; $i++)
+      $this->momentLike($moment);
 
     return $moment;
   }
 
-  function momentSavedWithImage(Day $day = null)
+  function momentWithImageAndComments(Day $day = null, Moment $moment = null)
   {
-    $moment = $this->moment($day);
-    $moment->save();
-    $moment->attachImage('foo.gif', file_get_contents('http://placehold.it/300x300'));
-    $moment->save();
-    return $moment;
+    $moment = $moment ?: $this->moment($day);
+
+    $day = $this->momentWithImage($user, null, $day);
+    $day = $this->dayWithComments($user, null, $day);
+
+    return $day;
   }
 
   /**
@@ -136,8 +197,9 @@ class odObjectMother
   {
     $comment = new MomentComment();
     $comment->setMoment($moment ?: $this->moment());
-    $comment->setText($this->string(255));
+    $comment->text = $this->string(255);
     $comment->setUser($user ?: $this->user());
+    $comment->save();
     return $comment;
   }
 
@@ -151,6 +213,7 @@ class odObjectMother
     $like = new MomentLike();
     $like->setMoment($moment);
     $like->setUser($user ?: $this->user());
+    $like->save();
     return $like;
   }
 
@@ -158,7 +221,7 @@ class odObjectMother
   {
     $complaint = new Complaint();
     $complaint->setDay($day ?: $this->day());
-    $complaint->setText($this->string(522));
+    $complaint->text = $this->string(522);
     return $complaint;
   }
 
@@ -167,19 +230,25 @@ class odObjectMother
     $recipient = $recipient ?: $this->user();
 
     $news = new News();
-    $news->setRecipients(array($recipient));
     $news->setSender($creator);
-    $news->setText($creator->name . ' likes ' . $recipient->name);
-    $news->setLink($this->string());
+    $news->text = $creator->name . ' likes ' . $recipient->name;
+    $news->link = $this->string();
+    $news->save();
+
+    $reception = new NewsRecipient();
+    $reception->setNews($news);
+    $reception->setUser($recipient);
+    $reception->save();
+
     return $news;
   }
 
   function deviceToken(User $user = null)
   {
     $device_token = new DeviceToken();
-    $device_token->setToken($this->string(64));
+    $device_token->token = $this->string(64);
     $device_token->setUser($user ?: $this->user());
-    return $device_token;
+    return $device_token->save();
   }
 
   function deviceNotification(DeviceToken $token = null)
@@ -190,7 +259,7 @@ class odObjectMother
     $notification->icon = $this->integer(1);
     $notification->sound = $this->string();
     $notification->is_sended = 0;
-    return $notification;
+    return $notification->save();
   }
 
   function string($length = 6)
@@ -217,7 +286,10 @@ class odObjectMother
 
   function image()
   {
-    return file_get_contents(__DIR__.'/../init/image_800x800.jpg');
+    static $contents;
+    if(!$contents)
+      $contents = file_get_contents(__DIR__.'/../init/image_128x128.jpg');
+    return $contents;
   }
 
   function image_name()
@@ -256,16 +328,33 @@ class odObjectMother
   function facebookInfo($uid = null)
   {
     return array(
-     'facebook_uid'           => $uid ?: $this->string(5),
+      'facebook_uid'      => $uid ?: $this->integer(20),
       'email'            => $this->email(),
-      'name'             => $this->string(10),
+      'name'             => $this->userName(),
       'sex'              => User::SEX_MALE,
       'timezone'         => $this->integer(1),
       'facebook_profile_utime' => $this->integer(11),
-      'pic'              => $this->string(),
+      'pic'              => 'http://fbcdn.com/'.$this->image_name(),
+      'pic_big'          => 'http://fbcdn.com/'.$this->image_name(),
+	    'pic_square'       => 'http://fbcdn.com/'.$this->image_name(),
       'occupation'       => $this->string(),
       'current_location' => $this->string(),
       'birthday'         => $this->date_sql()
     );
+  }
+
+  function userName()
+  {
+    $names = [
+      'Matt', 'Stew', 'Andrew', 'Mike', 'Josh', 'Joe', 'Drew'
+    ];
+    $surnames = [
+      'Romanova', 'Steinheart', 'Johnson', 'Williams', 'Smith', 'Brown', 'Davis', 'Moore'
+    ];
+
+    if($this->generate_random)
+      return $names[array_rand($names)] . ' ' . $surnames[array_rand($surnames)];
+    else
+      return $names[0] . ' ' . $surnames[0];
   }
 }

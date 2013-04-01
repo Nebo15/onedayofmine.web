@@ -1,5 +1,6 @@
 <?php
 lmb_require('src/controller/BaseJsonController.class.php');
+lmb_require('src/model/News.class.php');
 
 class MyController extends BaseJsonController
 {
@@ -8,7 +9,7 @@ class MyController extends BaseJsonController
     $user = $this->_getUser();
     if($this->request->isPost())
     {
-      $properties = array('name', 'sex', 'email', 'location', 'occupation', 'birthday');
+      $properties = array('name', 'sex', 'location', 'occupation', 'birthday');
       foreach($properties as $property)
       {
         if($this->request->has($property))
@@ -55,7 +56,7 @@ class MyController extends BaseJsonController
     $user  = $this->toolkit->getUser();
 
     list($from, $to, $limit) = $this->_getFromToLimitations();
-    $news = News::findNewsForUser($user, $from, $to, $limit);
+    $news = $user->getNewsWithLimitation($from, $to, $limit);
 
     if($from && !$to && !count($news))
       return $this->_answerOk($news, 'Not Modified', 304);

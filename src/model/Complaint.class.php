@@ -7,22 +7,22 @@ lmb_require('src/model/base/BaseModel.class.php');
 class Complaint extends BaseModel
 {
   protected $_db_table_name = 'complaint';
-
   protected $_default_sort_params = array('id'=>'asc');
 
-  protected $_lazy_attributes = array('text');
+  public $text;
+  public $day_id;
+  public $ctime;
+  public $cip;
 
-  protected function _defineRelations()
+  function setDay(Day $day)
   {
-    $this->_many_belongs_to = array (
-      'day' => array ('field' => 'day_id', 'class' => 'Day', 'can_be_null' => true),
-    );
+    $this->day_id = $day->id;
   }
 
   function exportForApi(array $properties = null)
   {
-    $exported = $this->export($properties);
-    unset($exported['cip']);
-    return (object) $exported;
+    return parent::exportForApi(array(
+      'id', 'text', 'day_id', 'ctime'
+    ));
   }
 }

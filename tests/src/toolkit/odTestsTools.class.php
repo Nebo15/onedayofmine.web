@@ -80,19 +80,28 @@ class odTestsTools extends lmbAbstractTools
     {
       $user_info = (object) $user_info;
       $user = new User();
-      $user->setFacebookUid($user_info->id);
-      $user->setFacebookAccessToken($user_info->access_token);
-      $user->import((new FacebookProfile($user))->getInfo());
+      $user->facebook_uid = $user_info->id;
+      $user->facebook_access_token = $user_info->access_token;
+
+      $info = (new FacebookProfile($user))->getInfo();
+      $user->email = $info['email'];
+      $user->name = $info['name'];
+      $user->sex = $info['sex'];
+      $user->timezone = $info['timezone'];
+      $user->facebook_profile_utime = $info['facebook_profile_utime'];
+      $user->occupation = $info['occupation'];
+      $user->location = $info['current_location'];
+      $user->birthday = $info['birthday'];
 
       $settings = $user->getSettings();
-      $settings->setSocialShareFacebook(1);
-      $settings->setSocialShareTwitter(1);
+      $settings->social_share_facebook = 1;
+      $settings->social_share_twitter = 1;
       $user->setSettings($settings);
 
       $twitter_credentials = (new odObjectMother())->twitter_credentials()[$key % 2];
-      $user->setTwitterUid($twitter_credentials['uid']);
-      $user->setTwitterAccessToken($twitter_credentials['access_token']);
-      $user->setTwitterAccessTokenSecret($twitter_credentials['access_token_secret']);
+      $user->twitter_uid = $twitter_credentials['uid'];
+      $user->twitter_access_token = $twitter_credentials['access_token'];
+      $user->twitter_access_token_secret = $twitter_credentials['access_token_secret'];
       $users[] = $user;
     }
     return $users;
@@ -138,5 +147,19 @@ class odTestsTools extends lmbAbstractTools
     } else {
       fclose($fp);
     }
+  }
+
+  /**
+   * @return lmbAuditDbConnection
+   */
+  function wrapDefaultDbConnectionWithProfiler()
+  {
+    $connection = lmbToolkit::instance()->getDefaultDbConnection();
+    if('lmbAuditDbConnection' != get_class($connection))
+    {
+      $connection = new lmbAuditDbConnection($connection);
+      lmbToolkit::instance()->setDefaultDbConnection($connection);
+    }
+    return $connection;
   }
 }

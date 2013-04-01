@@ -6,7 +6,7 @@
  * @copyright  Copyright &copy; 2004-2009 BIT(http://bit-creative.com)
  * @license    LGPL http://www.gnu.org/copyleft/lesser.html
  */
-
+lmb_require('limb/macro/src/compiler/lmbMacroPassiveTag.class.php');
 /**
  * @tag template
  * @req_attributes name
@@ -17,7 +17,7 @@ class lmbMacroTemplateTag extends lmbMacroPassiveTag
 {
   protected $method;
   protected $current_apply_tag = null;
-  
+
   function preParse($compiler)
   {
     if($this->has('name'))
@@ -25,7 +25,7 @@ class lmbMacroTemplateTag extends lmbMacroPassiveTag
 
     parent :: preParse($compiler);
   }
-  
+
   function generateNow($code, $wrap_with_method = true)
   {
     if($wrap_with_method)
@@ -55,12 +55,12 @@ class lmbMacroTemplateTag extends lmbMacroPassiveTag
   {
     $this->current_apply_tag = $apply_tag;
   }
-  
+
   function getCurrentApplyTag()
   {
     return $this->current_apply_tag;
   }
-  
+
   function getMethod()
   {
     return $this->method;

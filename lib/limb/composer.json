@@ -1,0 +1,11 @@
+{
+	"name": "limb/limb",
+	"type": "framework",
+	"description": "Library of Interdependent Modules and Blocks",
+	"keywords": ["limb"],
+	"homepage": "http://limb-project.com",
+	"license": "LGPL",
+	"require": {
+		"php": ">=5.2.4"
+	}
+}

@@ -1,166 +1,128 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <title>OneDayOfMine API</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Le styles -->
-    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.1.0/css/bootstrap.min.css" rel="stylesheet">
-    <link href="//current.bootstrapcdn.com/bootstrap-v204/css/bootstrap-responsive.css" rel="stylesheet">
-    <link href="//twitter.github.com/bootstrap/assets/css/docs.css" rel="stylesheet">
-
-    <!--[if lt IE 9]>
-    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
-    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.1.0/js/bootstrap.min.js"></script>
-    <script src="//pagedown.googlecode.com/hg/Markdown.Converter.js"></script>
-    <script type="text/javascript">
-      $(document).ready(function () {
-        $.get('/api_doc/doc.markdown', function (data) {
-          var converter = new Markdown.Converter();
-          $("#main-content").html(converter.makeHtml(data));
-        });
-
-        $.get('/api_doc/examples.markdown', function (data) {
-          var converter = new Markdown.Converter();
-          $("#api-content").html(converter.makeHtml(data));
-        });
-
-        $.get('/api_doc/entities.markdown', function (data) {
-          var converter = new Markdown.Converter();
-          $("#entities-content").html(converter.makeHtml(data));
-        });
-
-        // side bar
-        $('.bs-docs-sidenav').affix({
-          offset: {
-            top: 245,
-            bottom: 350
-          }
-        })
-
-      })();
+<?
+$this->menu = '';
+?>
+{{wrap with="layout.phtml"}}
+  {{into slot="templates"}}
+    <script id="news_list_template" type="text/x-handlebars-template">
+      <ul class="news unstyled">
+        [[#news]]
+          [[#include news_list_elements_template]]
+        [[/news]]
+      </ul>
     </script>
-  </head>
 
-  <body data-spy="scroll" data-target=".bs-docs-sidebar">
-    <div class="navbar navbar-inverse navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <div class="nav-collapse collapse">
-            <ul class="nav">
-              <li class="">
-                <a href="http://api.onedayofmine.com/">Production docs</a>
-              </li>
-              <li class="">
-                <a href="http://stage.onedayofmine.com/">Stage docs</a>
-              </li>
-              <li class="">
-                <a href="http://docs.onedayofmine.apiary.io/">Apiary docs</a>
-              </li>
-            </ul>
+    <script id="news_list_elements_template" type="text/x-handlebars-template">
+      [[#news]]
+        <li data-id="[[id]]">
+          <a href="/pages/[[sender.id]]/user">
+            <img src="[[sender.image_72]]" width="72" class="pull-left img-rounded" alt="" />
+          </a>
+          <div class="bubble left">
+            <p class="text">
+              [[text]]
+              <br />
+              [[#days]]
+                  <a href="/pages/[[id]]/day">
+                    <img src="[[day.image_266]]" width="72">
+                  </a>
+              [[/days]]
+              [[#moments]]
+                  <a href="/pages/[[day.id]]/day">
+                    <img src="[[moment.image_266]]" width="72">
+                  </a>
+              [[/moments]]
+              [[#day_comments]]
+                  <blockquote>[[comment.text]]</blockquote>
+              [[/day_comments]]
+              [[#moment_comments]]
+                  <blockquote>[[comment.text]]</blockquote>
+              [[/moment_comments]]
+              <small><b>[[time]]</b></small>
+            </p>
           </div>
-        </div>
-      </div>
-    </div>
+        </li>
+      [[/news]]
+    </script>
+  {{/into}}
+  {{into slot="js_include"}}
+    <script src="/lib/InfiniteScroll.js"></script>
+  {{/into}}
+  {{into slot="js_ready"}}
+    // Init paginator
+    var template_list = Template.prepareTemplate($('#news_list_elements_template'));
+    $('.news').infiniteScroll({
+      request: API.get('my/news'),
+      success: function(response) {
+        var news = Template.compileElement(template_list, {
+          news: response.data.result
+        });
 
-    <header class="jumbotron subhead">
-      <div class="container">
-        <h1>One Day of Mine Dev API</h1>
-        <p>
-          <small>
-            <?php
-            $commit_id = trim(file_get_contents(lmb_env_get('APP_DIR').'/.git/refs/heads/master'));
-            echo "Commit: <a href='//github.com/daeq/one-day-of-mine/commit/{$commit_id}'>{$commit_id}</a><br />";
-            echo "Deployed at ".date("y.m.d H:i:s", filemtime(lmb_env_get('APP_DIR').'/.git/refs/heads/master'));
-            ?>
-          </small>
-        </p>
-      </div>
-    </header>
+        news = $($.trim(news));
 
-    <div class="container">
-      <div class="row">
-        <div class="span3 bs-docs-sidebar">
-          <ul class="nav nav-list bs-docs-sidenav">
-            <li><a href="#main"><i class="icon-chevron-right"></i> Core concepts</a></li>
-            <li><a href="#api"><i class="icon-chevron-right"></i> API methods</a></li>
-            <li><a href="#entities"><i class="icon-chevron-right"></i> DB entities</a></li>
-            <li><a href="#testing"><i class="icon-chevron-right"></i> Testing instruction</a></li>
+        $(this).find('.infiniteScroll_button_container').before(news);
+      }
+    });
+  {{/into}}
+  {{into slot="content"}}
+    <div class="row">
+  		<div class="span8">
+				<h1>News</h1>
+        {{list using="$#news"}}
+          <ul class="news unstyled">
+            {{list:item}}
+              <li data-id="{$item.id}">
+                <a href="/pages/{$item.sender.id}/user">
+                  <img src="{$item.sender.image_72}" width="72" class="pull-left img-rounded" alt="" />
+                </a>
+                <div class="bubble left">
+                  <p class="text">
+                    {$item.text|raw}
+                    <br />
+                    {{list using="{$item.days}" as="$day"}}
+                      {{list:item}}
+                        <a href="/pages/{$day.id}/day">
+                          <img src="{$day.image_266}" width="72">
+                        </a>
+                      {{/list:item}}
+                    {{/list}}
+                    {{list using="{$item.moments}" as="$moment"}}
+                      {{list:item}}
+                        <a href="/pages/{$item.day.id}/day">
+                          <img src="{$moment.image_266}" width="72">
+                        </a>
+                      {{/list:item}}
+                    {{/list}}
+                    {{list using="{$item.day_comments}" as="$comment"}}
+                      {{list:item}}
+                        <blockquote>{$comment.text}</blockquote>
+                      {{/list:item}}
+                    {{/list}}
+                    {{list using="{$item.moment_comments}" as="$comment"}}
+                      {{list:item}}
+                        <blockquote>{$comment.text}</blockquote>
+                      {{/list:item}}
+                    {{/list}}
+                    <small><b>{$item.time|date:'M j \a\t g:m a'}</b></small>
+                  </p>
+                </div>
+              </li>
+            {{/list:item}}
+            {{list:empty}}
+              <p>You don't have news. Try to <a href="/pages/find_people">follow</a> more people.</p>
+            {{/list:empty}}
           </ul>
+        {{/list}}
+  		</div>
+
+  		<div class="span3 hide-phone">
+				<div>
+          {{apply template="following_thumb_list" users="{$#following}" /}}
+				</div>
+
+        <div>
+          {{apply template="followers_thumb_list" users="{$#followers}" /}}
         </div>
-        <div class="span9">
-          <section id="main">
-            <div class="page-header">
-              <h1>Core concepts</h1>
-            </div>
-            <div id="main-content"></div>
-          </section>
-          <section id="api">
-            <div class="page-header">
-              <h1>API methods</h1>
-            </div>
-            <div id="api-content"></div>
-          </section>
-          <section id="entities">
-            <div class="page-header">
-              <h1>DB entities</h1>
-            </div>
-            <div id="entities-content"></div>
-          </section>
-          <section id="testing">
-            <div class="page-header">
-              <h1>Testing</h1>
-            </div>
-            <div id="testing-content">
-              <h3>Установка:</h3>
-              <ul>
-                <li>
-                  устанавливаем <a href="//chrome.google.com/webstore/detail/fdmmgilgnpjigdojojpjoooidkmcomcm">приложение</a>
-                  для хрома
-                </li>
-                <li>сохраняем и импортируем в него <a href="/api_doc/postman.json">файлик</a></li>
-                <li>в окружении(в центре шапки, справа от глазика) задаем переменную host = '//api.onedayofmine.com/' именно со слешем в конце</li>
-              </ul>
-
-              <h3>Аутентификация:</h3>
-              <ul>
-                <li>выбираем Auth-Login и меняем параметр access_token на один из преведенных ниже</li>
-                <li>запускаем Auth-Login</li>
-                <li>теперь можно вызывать пользовательские методы</li>
-              </ul>
-
-              <h3>Пользователи для тестирования:</h3>
-              <?php $users = $this->toolkit->loadTestsUsersInfo(); ?>
-
-              {{list using="{$users}"}}
-              <ul>
-                {{list:item}}
-                <li>
-                  ID: {$item.id}
-                  <ul>
-                    <li>Email: {$item.email}</li>
-                    <li>Password: secret</li>
-                    <li>Access_token: {$item.access_token}</li>
-                    <?php if(lmb_env_get('LIMB_APP_MODE') != 'devel') { ?>
-                    <li><a href="{$item.login_url}">login by user</a></li>
-                    <?php } ?>
-                  </ul>
-                </li>
-                {{/list:item}}
-                {{list:empty}}
-                  <p>Facebook не захотел показывать тестовых пользователей. Try to F5 later.</p>
-                  <img src="//gifsforum.com/images/gif/F5/grand/rafresh-refresh-F5-eccbc87e4b5ce2fe28308fd9f2a7baf3-185.gif"/>
-                {{/list:empty}}
-              </ul>
-              {{/list}}
-            </div>
-          </section>
-        </div>
-      </div>
+  		</div>
     </div>
-  </body>
-</html>
+  {{/into}}
+{{/wrap}}

@@ -2,18 +2,286 @@
   $this->host_url = lmb_env_get('HOST_URL');
   $this->facebook_app_namespace = $this->toolkit->getConf('facebook')->namespace;
   $this->facebook_app_id = $this->toolkit->getConf('facebook')->appId;
+  $this->facebook_app_scope = implode(',', $this->toolkit->getConf('facebook')->permissions);
+
+	if(property_exists($this, 'title'))
+		$this->title = 'OneDayOfMine: '.$this->title;
+	else
+		$this->title = 'OneDayOfMine';
 ?>
 <!DOCTYPE html>
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
   <title>{$#title}</title>
+
+  <!-- Use edge version of IE rendering engine, of Google Chome Frame rendering engine, if exists -->
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  <!-- Ajust to mobile devices -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Open Graph integration -->
   <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# {$#facebook_app_namespace}: http://ogp.me/ns/fb/{$#facebook_app_namespace}#">
   <meta property="fb:app_id" content="{$#facebook_app_id}" />
+  {{slot id='og_meta'/}}
+
+  <!-- Vendor style sheets -->
+  <link href="//netdna.bootstrapcdn.com/bootswatch/2.3.0/readable/bootstrap.min.css" rel="stylesheet">
+  <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-responsive.min.css" rel="stylesheet">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css" rel="stylesheet">
+  <link href="/styles/social-icons.css" rel="stylesheet">
+  {{slot id='css_include'/}}
+
+  <!-- Application style sheets -->
+  <link href="/styles/main.css" rel="stylesheet">
+  <style>
+    {{slot id="css"/}}
+  </style>
+
+  <!-- Additional meta tags -->
   {{slot id='meta'/}}
+
+  <!-- Vendor scripts -->
+  <?php if(!property_exists($this, 'fb_disabled') || !$this->fb_disabled) { ?>
+    <script src="//connect.facebook.net/en_US/all.js"></script>
+  <?php } ?>
+  <script src="/lib/vendor/jquery.min.js"></script>
+  <script src="/lib/vendor/bootstrap.min.js"></script>
+  <script src="/lib/vendor/handlebars.js"></script>
+  <script src="/lib/vendor/jquery.scrollTo-1.4.3.1-min.js"></script>
+  <script src="/lib/vendor/jquery.cookie.js"></script>
+  <script src="/lib/vendor/jquery.masonry.min.js"></script>
+
+  <script>
+    $(function() {
+      FB.init({
+        appId: <?= $this->facebook_app_id; ?>,
+        status:true,
+        cookie:true,
+        xfbml:false
+      });
+    });
+  </script>
+
+  <!-- Application scripts -->
+  <script src="/lib/Tools.js"></script>
+  <script src="/lib/Storage.js"></script>
+  <script src="/lib/Config.js"></script>
+  <script src="/lib/Auth.js"></script>
+  <script src="/lib/Response.js"></script>
+  <script src="/lib/Request.js"></script>
+  <script src="/lib/Template.js"></script>
+  <script src="/lib/API.js"></script>
+  <script src="/lib/UI.js"></script>
+  <script src="/lib/Override.js"></script>
+
+  <!-- Data from backend -->
+  <script>
+    $(function() {
+      <? if($this->toolkit->getUser()) { ?>
+        API.setCurrentUser(<?= json_encode($this->toolkit->getExportHelper()->exportUser($this->toolkit->getUser())); ?>);
+      <? } ?>
+
+      Config.facebook = {
+        appId: '<?= $this->facebook_app_id; ?>',
+        scope: '<?= $this->facebook_app_scope ?>'
+      };
+    });
+  </script>
+
+  <!-- Per-page scripts -->
+  {{slot id="js_include"/}}
+
+  <script>
+    {{slot id="js"/}}
+  </script>
+
+  <script>
+    function bindTooltips(selector) {
+      selector.find('.with-tooltip').tooltip({
+        placement: 'bottom'
+      });
+    }
+
+    $(function() {
+      <? if($this->toolkit->getUser()) { ?>
+        $('.trigger_logout').click(function() {
+          API.logout(function() {
+            window.location.reload();
+          });
+        });
+      <? } else { ?>
+        var doLogin = function() {
+          var $this = $(this);
+
+          if($this.hasClass('with-spinner')) {
+            $this.showSpinner();
+          }
+
+          API.login(function() {
+            if($this.hasClass('with-spinner')) {
+              $this.hideSpinner();
+            }
+            if($this.attr('href') && $this.attr('href') != '#') {
+              window.location = $this.attr('href');
+            } else {
+              window.location.reload();
+            }
+          }, function() {
+            if($this.hasClass('with-spinner')) {
+              $this.hideSpinner();
+            }
+            $('.trigger_login').click(doLogin);
+          });
+
+          return false;
+        };
+
+        $('.trigger_login').click(doLogin);
+      <? } ?>
+
+      // Init mansory for all days lists
+      $('.days').masonry({
+        itemSelector: '.days > li',
+        columnWidth: 261,
+        rowHeight: 261,
+        isFitWidth: true
+      });
+
+      // Init global tooltips
+      bindTooltips($('body'));
+
+      // Trigger scrollHitBottom when scroll hits end
+      $(window).scroll(function() {
+        if($(window).scrollTop() + $(window).height() > $(document).height() - 50) {
+          $.event.trigger({
+            type: 'scrollHitBottom'
+          });
+        }
+      });
+
+      {{slot id="js_ready"/}}
+    });
+  </script>
+
+  {{include file="pages/shared/templates.phtml" /}}
+
+  {{slot id='templates'/}}
 </head>
 <body>
-  {{slot id='content'/}}
-  {{slot id='content_zone'/}}
+  <?php if(!property_exists($this, 'fb_disabled') || !$this->fb_disabled) { ?>
+    <div id="fb-root"></div>
+  <?php } ?>
+  <div class="container">
+	  <?php if(!property_exists($this, 'menu_disabled') || !$this->menu_disabled) { ?>
+    <header class="navbar navbar-static-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="/">
+	          OneDayOfMine
+            <?= 'devel' == lmb_app_mode() ? '<span style="font-size:12px;color:#ab0001">devel</span>' : '' ?>
+            <?= 'testing' == lmb_app_mode() ? '<span style="font-size:12px;color:#006cbb">stage</span>' : '' ?>
+          </a>
+          <div class="nav-collapse collapse navbar-responsive-collapse">
+            <ul class="nav">
+                <li class="<?= ($this->menu == 'create_day' || $this->menu == 'import') ? 'active' : '';?>">
+                    <a href="/pages/import" class="trigger_login"><i class="icon-large icon-camera"></i> Start day</a>
+                </li>
+                <li class="<?= ($this->menu == 'discover') ? 'active' : '';?>">
+                    <a href="/pages/days_discover"><i class="icon-large icon-group"></i> Discover</a>
+                </li>
+                <li class="<?= ($this->menu == 'search') ? 'active' : '';?>">
+                    <a href="/pages/days_search"><i class="icon-large icon-search"></i> Search</a>
+                </li>
+            </ul>
+            <ul class="nav pull-right">
+              <li class="dropdown <?= ($this->menu == 'me') ? 'active' : '';?>">
+                <? if(!$this->toolkit->getUser()) { ?>
+                  <a class="trigger_login with-spinner" href="#">
+                    <i class="icon-large icon-facebook-sign"></i>
+                    <i class="spinner icon icon-spin icon-refresh"></i>
+                    Login with Facebook
+                  </a>
+                <? } else { ?>
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                      {$#current_user.name}
+                      <img src="{$#current_user.image_36}" width="24" height="24" class="img-rounded" />
+                      <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                      <li><a href="/pages/my_days"><i class="icon icon-camera"></i> My days</a></li>
+                      <li><a href="/pages/my_followers"><i class="icon icon-hand-right"></i> My followers &amp; following</a></li>
+                      <li class="divider"></li>
+                      <li><a href="/pages/profile"><i class="icon icon-cog"></i> Profile</a></li>
+                      <li class="divider"></li>
+                      <li><a href="/pages/find_people"><i class="icon icon-search"></i> Find and invite people</a></li>
+
+                      <li class="divider"></li>
+                      <li><a class="trigger_logout"><i class="icon icon-signout"></i> Logout</a></li>
+                  </ul>
+                <? } ?>
+              </li>
+            </ul>
+          </div><!-- /.nav-collapse -->
+        </div>
+      </div><!-- /navbar-inner -->
+    </header><!-- /navbar -->
+	  <?php } ?>
+
+	  <?php if(!property_exists($this, 'menu_disabled') || !$this->menu_disabled) { ?>
+		  <? if(($cu = $this->toolkit->getUser()) && !$cu->getImage()) { ?>
+			  <div class="alert sitewide-notification no-userpic-tooltip">
+				  Upload a <a href="/pages/profile">profile</a> picture so your friends know it's you.
+			  </div>
+		  <? } ?>
+		  <? if(($cu = $this->current_user) && (!$cu['occupation'] || !$cu['birthday'] || !$cu['location'])) { ?>
+			  <div class="alert sitewide-notification no-userdata-tooltip">
+				  Update a <a href="/pages/profile">profile</a> so we can make a better recommendations for you.
+			  </div>
+		  <? } ?>
+	  <? } ?>
+
+    <section class="content">
+      {{slot id='content'/}}
+      {{slot id='content_zone'/}}
+    </section>
+	</div>
+
+  <div id="invite_modal" class="modal hide fade import-modal" tabindex="-1" role="dialog" aria-labelledby="invite_modal_label" aria-hidden="true">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+      <h3 id="import_modal_label">Enter invitation code</h3>
+    </div>
+    <div class="modal-body modal-body-main">
+      <div class="alert alert-error hide">
+        <strong>Error!</strong>
+        Invitation code is already used or invalid.
+      </div>
+      <p>
+        Enter your invitation code to sign in:
+      </p>
+      <input type="text" class="input-block-level" placeholder="Invitation code">
+    </div>
+    <div class="modal-footer">
+      <button class="btn action-close" data-dismiss="modal" aria-hidden="true">Cancel</button>
+      <button class="btn btn-primary btn-success with-spinner action-sign-in">
+        <i class="spinner icon icon-spin icon-refresh"></i>
+        Sign in
+      </button>
+    </div>
+  </div>
+
+	<? if('production' == lmb_app_mode()) { ?>
+    <!-- Yandex.Metrika counter --><script type="text/javascript">(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter20613685 = new Ya.Metrika({id:20613685, trackLinks:true, accurateTrackBounce:true, trackHash:true}); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</script><noscript><div><img src="//mc.yandex.ru/watch/20613685" style="position:absolute; left:-9999px;" alt="" /></div></noscript><!-- /Yandex.Metrika counter -->
+	<? } elseif('testing' == lmb_app_mode()) { ?>
+    <!-- Yandex.Metrika counter --><script type="text/javascript">(function (d, w, c) { (w[c] = w[c] || []).push(function() { try { w.yaCounter20613721 = new Ya.Metrika({id:20613721, clickmap:true, trackLinks:true, accurateTrackBounce:true, trackHash:true}); } catch(e) { } }); var n = d.getElementsByTagName("script")[0], s = d.createElement("script"), f = function () { n.parentNode.insertBefore(s, n); }; s.type = "text/javascript"; s.async = true; s.src = (d.location.protocol == "https:" ? "https:" : "http:") + "//mc.yandex.ru/metrika/watch.js"; if (w.opera == "[object Opera]") { d.addEventListener("DOMContentLoaded", f, false); } else { f(); } })(document, window, "yandex_metrika_callbacks");</script><noscript><div><img src="//mc.yandex.ru/watch/20613721" style="position:absolute; left:-9999px;" alt="" /></div></noscript><!-- /Yandex.Metrika counter -->
+	<? } ?>
+	<!-- <?= lmb_app_mode(); ?> -->
 </body>
 </html>

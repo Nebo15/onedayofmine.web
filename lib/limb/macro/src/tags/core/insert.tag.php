@@ -6,7 +6,7 @@
  * @copyright  Copyright &copy; 2004-2009 BIT(http://bit-creative.com)
  * @license    LGPL http://www.gnu.org/copyleft/lesser.html
  */
-
+lmb_require('limb/macro/src/compiler/lmbMacroTag.class.php');
 /**
  * class lmbMacroWrapTag.
  *
@@ -34,7 +34,7 @@ class lmbMacroInsertTag extends lmbMacroTag
     }
 
     parent :: preParse($compiler);
-    
+
     if($this->isDynamic('file'))
       $this->is_dynamic = true;
 
@@ -87,27 +87,27 @@ class lmbMacroInsertTag extends lmbMacroTag
   {
     $handlers_str = 'array(';
     $slots = array();
-    
+
     if($this->getBool('inline'))
-      $this->raise('Inline is not supported for dynamic case');      
+      $this->raise('Inline is not supported for dynamic case');
 
     //collecting {{into}} tags
     if($intos = $this->_collectIntos())
     {
       foreach($intos as $into)
       {
-        $args = $code->generateVar(); 
+        $args = $code->generateVar();
         $slots[$into->get('slot')][] = $code->beginMethod('__slotHandler'. self::generateUniqueId(), array($args . '= array()'));
-        $code->writePHP("if($args) extract($args);"); 
+        $code->writePHP("if($args) extract($args);");
         $into->generateNow($code);
         $code->endMethod();
       }
     }
     elseif($this->has('into'))
     {
-      $args = $code->generateVar(); 
+      $args = $code->generateVar();
       $slots[$this->get('into')][] = $code->beginMethod('__slotHandler'. self::generateUniqueId(), array($args . '= array()'));
-      $code->writePHP("if($args) extract($args);"); 
+      $code->writePHP("if($args) extract($args);");
       parent :: _generateContent($code);
       $code->endMethod();
     }
@@ -117,7 +117,7 @@ class lmbMacroInsertTag extends lmbMacroTag
       $handlers_str .= '"' . $slot . '"' . ' => array( ';
       foreach($methods as $method)
         $handlers_str .= 'array($this, "' . $method . '"),';
-      
+
       $handlers_str .= '),';
     }
 
@@ -126,8 +126,8 @@ class lmbMacroInsertTag extends lmbMacroTag
     $arg_str = $this->attributesIntoArrayString();
 
     $code->writePHP('$this->includeTemplate(' . $this->get('file') . ', ' . $arg_str . ','. $handlers_str . ');');
-  }  
-  
+  }
+
   function _generateStaticaly($code)
   {
     if($this->getBool('inline'))
@@ -135,11 +135,11 @@ class lmbMacroInsertTag extends lmbMacroTag
     else
     {
       list($keys, $vals) = $this->attributesIntoArgs();
-  
+
       $method = $code->beginMethod('__staticInclude' . (++self :: $static_includes_counter), $keys);
       parent :: _generateContent($code);
       $code->endMethod();
-  
+
       $code->writePHP('$this->' . $method . '(' . implode(', ', $vals) . ');');
     }
   }

@@ -12,6 +12,9 @@ class odFacebookTest extends odIntegrationTestCase
       $fb->api('/me');
       $this->fail();
     }
-    catch(odFacebookApiExpiredTokenException $e) {}
+    catch(odFacebookApiExpiredTokenException $e)
+    {
+      $this->pass();
+    }
   }
 }

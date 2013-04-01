@@ -1,5 +1,6 @@
 <?php
 lmb_require('src/controller/BaseJsonController.class.php');
+lmb_require('src/model/Day.class.php');
 lmb_require('src/model/MomentComment.class.php');
 
 class MomentCommentsController extends BaseJsonController
@@ -12,10 +13,10 @@ class MomentCommentsController extends BaseJsonController
     if(!$comment = MomentComment::findById($this->request->id))
       return $this->_answerModelNotFoundById('Moment comment', $this->request->id);
 
-    if($comment->getUserId() != $this->_getUser()->getId())
+    if($comment->user_id != $this->_getUser()->id)
       return $this->_answerNotOwner();
 
-    $comment->setText($this->request->get('text'));
+    $comment->text = $this->request->get('text');
     $comment->save();
 
     return $this->_answerOk($this->toolkit->getExportHelper()->exportMomentComment($comment));
@@ -29,10 +30,10 @@ class MomentCommentsController extends BaseJsonController
     if(!$comment = MomentComment::findById($this->request->id))
       return $this->_answerModelNotFoundById('Moment comment', $this->request->id);
 
-    if($comment->getUserId() != $this->_getUser()->getId())
+    if($comment->user_id != $this->_getUser()->id)
       return $this->_answerNotOwner();
 
-    $this->toolkit->getNewsObserver()->onMomentCommentDelete($comment);
+    $this->toolkit->doAsync('momentCommentDelete', $comment->id);
 
     $comment->destroy();
 

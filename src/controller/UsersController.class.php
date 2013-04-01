@@ -17,62 +17,85 @@ class UsersController extends BaseJsonController
     return $this->_answerOk($this->toolkit->getExportHelper()->exportUser($user));
   }
 
+  function doMe()
+  {
+    return $this->_answerOk($this->toolkit->getExportHelper()->exportUser($this->toolkit->getUser()));
+  }
+
   function doGuestDays()
   {
     if(!$user = User::findById($this->request->id))
       return $this->_answerModelNotFoundById('User', $this->request->id);
 
-    return $this->_answerOk($this->toolkit->getExportHelper()->exportDayItems($user->getDays()));
+	  list($from, $to, $limit) = $this->_getFromToLimitations();
+
+    return $this->_answerOk(
+	    $this
+			    ->toolkit
+			    ->getExportHelper()
+			    ->exportDayItems($user->getDaysWithLimitations($from, $to, $limit))
+    );
   }
 
-  function doFollowers()
+  function doGuestFollowers()
   {
     if(!$user = User::findById($this->request->id))
       return $this->_answerModelNotFoundById('User', $this->request->id);
 
-    $followers = $user->getFollowers();
+	  list($from, $to, $limit) = $this->_getFromToLimitations();
+
+    $followers = $user->getFollowersUsers($from, $to, $limit);
 
     return $this->_answerOk($this->toolkit->getExportHelper()->exportUserItems($followers));
   }
 
-  function doFollowing()
+  function doGuestFollowing()
   {
     if(!$user = User::findById($this->request->id))
       return $this->_answerModelNotFoundById('User', $this->request->id);
 
-    $followed_users = $user->getFollowing();
+	  list($from, $to, $limit) = $this->_getFromToLimitations();
+
+    $followed_users = $user->getFollowingUsers($from, $to, $limit);
 
     return $this->_answerOk($this->toolkit->getExportHelper()->exportUserItems($followed_users));
   }
 
   function doFollow()
   {
-    if($this->_getUser()->getId() == $this->request->id)
+    if($this->_getUser()->id == $this->request->id)
       return $this->_answerWithError("You can't follow youself");
 
     if(!$user = User::findById($this->request->id))
       return $this->_answerModelNotFoundById('User', $this->request->id);
 
-    $following = $this->_getUser()->getFollowing();
-    $following->add($user);
+    if(UserFollowing::isUserFollowUser($this->_getUser(), $user))
+      return $this->_answerConflict();
+
+    $following = new UserFollowing();
+    $following->setUser($user);
+    $following->setFollowerUser($this->_getUser());
     $following->save();
 
-    $this->toolkit->getNewsObserver()->onFollow($user);
+    $this->toolkit->doAsync('userFollow', $user->id);
 
     return $this->_answerOk();
   }
 
   function doUnfollow()
   {
-    if($this->_getUser()->getId() == $this->request->id)
+    if($this->_getUser()->id == $this->request->id)
       return $this->_answerWithError("You can't unfollow youself");
 
     if(!$user = User::findById($this->request->id))
       return $this->_answerModelNotFoundById('User', $this->request->id);
 
-    $following = $this->_getUser()->getFollowing();
-    $following->remove($user);
-    $following->save();
+    $criteria = lmbSQLCriteria::equal('user_id', $user->id)
+      ->add(lmbSQLCriteria::equal('follower_user_id', $this->_getUser()->id));
+    $link = UserFollowing::findFirst($criteria);
+
+    if($link)
+      $link->destroy();
 
     return $this->_answerOk();
   }
@@ -82,16 +105,17 @@ class UsersController extends BaseJsonController
     list($from, $to, $limit) = $this->_getFromToLimitations();
     $query = $this->request->getFiltered('query', FILTER_SANITIZE_STRING);
     $users = User::findByString($query, $from, $to, $limit);
-
     return $this->_answerOk($this->toolkit->getExportHelper()->exportUserItems($users));
   }
 
-  function doUserActivity()
+  function doGuestActivity()
   {
     if(!$user = User::findById($this->request->id))
       return $this->_answerModelNotFoundById('User', $this->request->id);
 
     list($from, $to, $limit) = $this->_getFromToLimitations();
-    return $this->_answerOk($user->getActivitiesWithLimitation($from, $to, $limit));
+    return $this->_answerOk(
+	    $this->toolkit->getExportHelper()->exportNewsItems($user->getActivityWithLimitation($from, $to, $limit))
+    );
   }
 }

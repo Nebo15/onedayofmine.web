@@ -1,44 +1,38 @@
 <?php
 lmb_require('tests/cases/unit/odUnitTestCase.class.php');
+lmb_require('src/model/User.class.php');
+lmb_require('src/model/Day.class.php');
+lmb_require('src/model/News.class.php');
 
 class RelationsTest extends odUnitTestCase
 {
-
   function testUserToDayRelation()
   {
     $user = $this->generator->user();
-    $user->save();
-
     $day1 = $this->generator->day($user);
-    $day1->save();
-
     $day2 = $this->generator->day($user);
-    $day2->save();
-
     $day3 = $this->generator->day();
-    $day3->save();
 
-    $loaded_user = User::findById($user->getId());
+    $loaded_user = User::findById($user->id);
     $this->assertEqual(2, $loaded_user->getDays()->count());
-    $this->assertEqual($loaded_user->getDays()->at(0)->getId(), $day2->getId());
+    $this->assertEqual($loaded_user->getDays()[0]->id, $day2->id);
 
-    $loaded_day1 = Day::findById($day1->getId());
-    $this->assertEqual($loaded_day1->getUser()->getId(), $user->getId());
+    $loaded_day1 = Day::findById($day1->id);
+    $this->assertEqual($loaded_day1->user_id, $user->id);
   }
 
   function testUserToDaysCommentsRelations()
   {
     $user = $this->generator->user();
-    $user->save();
 
     $comment = $this->generator->dayComment(null, $user);
-    $comment->save();
 
-    $loaded_user = User::findById($user->getId());
-    $this->assertEqual($loaded_user->getDaysComments()->at(0)->getId(), $comment->getId());
+    /** @var $loaded_user User */
+    $loaded_user = User::findById($user->id);
+    $this->assertEqual($loaded_user->getDaysComments()->at(0)->id, $comment->id);
 
-    $loaded_comment = DayComment::findById($comment->getId());
-    $this->assertEqual($loaded_comment->getUser()->getId(), $user->getId());
+    $loaded_comment = DayComment::findById($comment->id);
+    $this->assertEqual($loaded_comment->user_id, $user->id);
   }
 
   function testUserToMomentsCommentsRelations()
@@ -49,11 +43,12 @@ class RelationsTest extends odUnitTestCase
     $comment = $this->generator->momentComment(null, $user);
     $comment->save();
 
-    $loaded_user = User::findById($user->getId());
-    $this->assertEqual($loaded_user->getMomentsComments()->at(0)->getId(), $comment->getId());
+    /** @var $loaded_user User */
+    $loaded_user = User::findById($user->id);
+    $this->assertEqual($loaded_user->getMomentsComments()->at(0)->id, $comment->id);
 
-    $loaded_comment = MomentComment::findById($comment->getId());
-    $this->assertEqual($loaded_comment->getUser()->getId(), $user->getId());
+    $loaded_comment = MomentComment::findById($comment->id);
+    $this->assertEqual($loaded_comment->user_id, $user->id);
   }
 
   function testDayToMomentsRelations()
@@ -70,35 +65,18 @@ class RelationsTest extends odUnitTestCase
     $moment3 = $this->generator->moment();
     $moment3->save();
 
-    $loaded_day = Day::findById($day->getId());
+    /** @var $loaded_day Day */
+    $loaded_day = Day::findById($day->id);
     $this->assertEqual(2, $loaded_day->getMoments()->count());
-    $this->assertEqual($moment1->getId(), $loaded_day->getMoments()->at(0)->getId());
+    $this->assertEqual($moment2->id, $loaded_day->getMoments()->at(0)->id);
+    $this->assertEqual($moment1->id, $loaded_day->getMoments()->at(1)->id);
 
-    $loaded_moment = Moment::findById($moment1->getId());
-    $this->assertEqual($day->getId(), $loaded_moment->getDay()->getId());
+    $loaded_moment = Moment::findById($moment1->id);
+    $this->assertEqual($day->id, $loaded_moment->day_id);
   }
 
-  function testUserWithNewsRelations() { // With is used because im testing relation in both sides
-    $creator = $this->generator->user();
-    $creator->save();
-
-    $recipient = $this->generator->user();
-    $recipient->save();
-
-    $news = $this->generator->news($creator, $recipient);
-    $news->save();
-
-    // User to News
-    $this->assertEqual(count($recipient->getNews()), 1);
-    $this->assertEqual(count($creator->getCreatedNews()), 1);
-    $this->assertEqual($creator->getCreatedNews()->at(0)->getId(), $news->getId());
-    $this->assertEqual($creator->getCreatedNews()->at(0)->getId(), $recipient->getNews()->at(0)->getId());
-
-    // News to User
-    $this->assertEqual($news->getRecipients()->at(0)->getId(), $recipient->getId());
-  }
-
-  function testNewsToDayRelations() {
+  function testNewsToDayRelations()
+  {
     $day = $this->generator->day();
     $day->save();
 
@@ -106,21 +84,17 @@ class RelationsTest extends odUnitTestCase
     $news->setDay($day);
     $news->save();
 
-    $this->assertEqual($news->getDay()->getId(), $day->getId());
+    $this->assertEqual($news->day_id, $day->id);
   }
 
-  function testNewsToMomentRelations() {
+  function testNewsToMomentRelations()
+  {
     $day = $this->generator->day();
-    $day->save();
-
     $moment = $this->generator->moment();
-    $moment->save();
-
     $news = $this->generator->news();
     //$news->setDay($day);
     $news->setMoment($moment);
-    $news->save();
 
-    $this->assertEqual($news->getMoment()->getId(), $moment->getId());
+    $this->assertEqual($news->moment_id, $moment->id);
   }
 }

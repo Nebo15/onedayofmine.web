@@ -10,6 +10,7 @@
 *.sublime*
 .tags
 .tags_sorted_by_file
+composer.lock
 
 var/*
 init/lj_data
@@ -20,6 +21,10 @@ www/tests
 www/users/*/
 www/shared
 www/pages
+www/days
+www/off.html
+
+www/lib/Override.js
 
 nbproject
 .sublime*

@@ -1,5 +1,6 @@
 <?php
 lmb_require('src/controller/BaseJsonController.class.php');
+lmb_require('src/model/Day.class.php');
 lmb_require('src/model/DayComment.class.php');
 
 class DayCommentsController extends BaseJsonController
@@ -12,10 +13,10 @@ class DayCommentsController extends BaseJsonController
     if(!$comment = DayComment::findById($this->request->id))
       return $this->_answerModelNotFoundById('Day comment', $this->request->id);
 
-    if($comment->getUser()->getId() != $this->toolkit->getUser()->getId())
+    if($comment->user_id != $this->toolkit->getUser()->id)
       return $this->_answerNotOwner();
 
-    $this->toolkit->getNewsObserver()->onDayCommentDelete($comment);
+    $this->toolkit->doAsync('dayCommentDelete', $comment->id);
 
     $comment->destroy();
 

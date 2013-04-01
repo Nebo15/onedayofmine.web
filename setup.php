@@ -8,6 +8,9 @@ set_include_path(implode(PATH_SEPARATOR,
   array($app_dir, $libs_dir, get_include_path())
 ));
 
+if(!defined('LIMB_PACKAGES_DIR'))
+  define('LIMB_PACKAGES_DIR', dirname(__FILE__) . '/lib/limb');
+
 require_once('limb/core/common.inc.php');
 
 if(file_exists(dirname(__FILE__) . '/setup.override.php'))
@@ -18,18 +21,18 @@ lmb_package_require('cache2');
 lmb_package_require('profile');
 lmb_package_require('mail');
 
+lmb_package_require('i18n');
+lmb_require('limb/i18n/utf8.inc.php');
+
 lmb_env_setor('APP_DIR', $app_dir);
 lmb_env_setor('LIBS_DIR', $libs_dir);
 lmb_env_setor('LIMB_VAR_DIR', $app_dir . '/var/');
 
 if(array_key_exists('HTTP_NAME', $_SERVER))
   lmb_env_setor('HOST_URL', 'http://'.$_SERVER['HTTP_HOST'].'/');
+lmb_env_set('LIMB_HTTP_OFFSET_PATH', '');
 
 lmb_env_setor('LIMB_APP_MODE' , 'production');
-
-lmb_require('src/model/traits/*.trait.php');
-lmb_require('src/model/base/*.class.php');
-lmb_require('src/model/*.class.php');
 
 lmb_require('limb/toolkit/src/lmbToolkit.class.php');
 lmb_require('src/toolkit/odTools.class.php');
@@ -38,17 +41,14 @@ lmb_require('limb/dbal/src/toolkit/lmbDbTools.class.php');
 lmbToolkit :: merge(new lmbDbTools());
 
 lmb_require('limb/core/src/lmbSys.class.php');
+lmb_require('src/model/base/BaseModel.class.php');
 
-if(extension_loaded('newrelic'))
+lmb_env_set('AIRBRAKE_KEY', '5593098eb4afcadead3f0e02014baa52');
+lmb_require('src/service/AirBrakeErrorHandler.class.php');
+
+if(lmb_env_get('LIMB_APP_MODE') != 'devel')
 {
-  newrelic_set_appname(lmb_app_mode());
-  newrelic_name_transaction(isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : 'CLI');
-  lmbErrorGuard :: registerExceptionHandler(function($e)
-  {
-    $message = ($e instanceof lmbException) ? $e->getOriginalMessage() : $e->getMessage();
-    $string = ($e instanceof lmbException) ? $e->toNiceString() : (string) $e;
-    newrelic_notice_error($message, $e);
-    if(lmbSys::isCli())
-      print($string);
-  });
+  lmbErrorGuard::registerExceptionHandler(['AirBrakeErrorHandler', 'onException']);
+  lmbErrorGuard::registerErrorHandler(['lmbErrorGuard', 'convertErrorsToExceptions']);
+	lmbErrorGuard::registerFatalErrorHandler(['AirBrakeErrorHandler', 'onError']);
 }

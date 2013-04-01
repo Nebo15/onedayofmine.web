@@ -1,0 +1,124 @@
+<?
+$this->menu = '';
+?>
+{{wrap with="layout.phtml"}}
+  {{into slot="js_include"}}
+    <script src="/lib/InfiniteScroll.js"></script>
+  {{/into}}
+  {{into slot="js_ready"}}
+    <? if($this->toolkit->getUser() && $this->user['id'] != $this->toolkit->getUser()->id) { ?>
+      var follow_button = $('#trigger_user_follow');
+
+      follow_button.click(function() {
+        if(!follow_button.hasClass('disabled')) {
+          follow_button.addClass('disabled');
+
+          if(follow_button.text() == 'Follow') {
+            var user_follow_request = API.request('POST', '/users/{$#user.id}/follow');
+
+            user_follow_request.success(function() {
+              follow_button.removeClass('disabled btn-success').addClass('btn-danger').text('Unfollow');
+            });
+
+            user_follow_request.send();
+          } else {
+            var user_follow_request = API.request('POST', '/users/{$#user.id}/unfollow');
+
+            user_follow_request.success(function() {
+              follow_button.removeClass('disabled btn-danger').addClass('btn-success').text('Follow');;
+            });
+
+            user_follow_request.send();
+          }
+        }
+      });
+    <? } ?>
+
+    // Init paginator
+    var template_list = Template.prepareTemplate($('#days_list_elements_template'));
+    $('.days').infiniteScroll({
+      request: API.get('users/{$#user.id}/days'),
+      success: function(response) {
+        var days = Template.compileElement(template_list, {
+          days: response.data.result.reverse()
+        });
+
+        days = $($.trim(days));
+
+        $(this).find('.infiniteScroll_button_container').before(days);
+        $(this).masonry('appended', days);
+      }
+    });
+  {{/into}}
+  {{into slot="content"}}
+  	<div class="row">
+  		<div class="span" style="width:192px">
+        <div class="user-image-holder">
+          <img src="{$#user.image_192}" width="192" class="img-rounded"/>
+        </div>
+
+        <div style="margin:15px 0 0 0;">
+          <? if($this->toolkit->getUser() && $this->user['id'] != $this->toolkit->getUser()->id) { ?>
+            <? if($this->user['following']) { ?>
+              <button class="btn btn-block btn-danger" id="trigger_user_follow">Unfollow</button>
+            <? } else { ?>
+              <button class="btn btn-block btn-success" id="trigger_user_follow">Follow</button>
+            <? } ?>
+          <? } ?>
+        </div>
+
+        <?php if(count($this->user['users_following'])) { ?>
+          <div style="margin:15px 0 0 0;">
+            {{apply template="following_thumb_list" users="{$#user.users_following}" /}}
+          </div>
+        <?php } ?>
+
+        <?php if(count($this->user['users_followers'])) { ?>
+          <div style="margin:15px 0 0 0;">
+            {{apply template="followers_thumb_list" users="{$#user.users_followers}" /}}
+          </div>
+        <?php } ?>
+  		</div>
+
+  		<div class="span9">
+        <h1 style="margin-top:0">{$#user.name}</h1>
+        <?php if(array_key_exists('location', $this->user) && $this->user['location'] || array_key_exists('occupation', $this->user) && $this->user['occupation']) { ?>
+          <p>
+            <small>
+              {$#user.occupation}
+              <?php if(array_key_exists('location', $this->user) && $this->user['location']) { ?>
+                from {$#user.location}
+              <? } ?>
+            </small>
+          </p>
+        <? } ?>
+        <!--
+        <h3>5 bages</h3>
+        <div class="whithout-decoration">
+            <a href="/andrew_dryga/badge/50ccfde3046a13cd68fb97da">
+              <img src="https://playfoursquare.s3.amazonaws.com/badge/57/2KKQ4FII01YK1TYK.png" height="57">
+            </a>
+
+            <a href="/andrew_dryga/badge/50ccfca1e4b0d07027060f3e">
+              <img src="https://playfoursquare.s3.amazonaws.com/badge/57/YBOOA2FZ35D5E2QA.png" height="57">
+            </a>
+
+            <a href="/andrew_dryga/badge/50ccaa1fe4b0a8af857612fb">
+              <img src="https://playfoursquare.s3.amazonaws.com/badge/57/adventurer.png" height="57">
+            </a>
+
+            <a href="/andrew_dryga/badge/50ccaa1fe4b0a8af857612f2">
+              <img src="https://playfoursquare.s3.amazonaws.com/badge/57/swarm.png" alt="Swarm" width="57" height="57">
+            </a>
+
+            <a href="/andrew_dryga/badge/50af9d84e4b00d9395e34122">
+              <img src="https://playfoursquare.s3.amazonaws.com/badge/57/newbie.png" alt="Newbie" width="57" height="57">
+            </a>
+        </div>-->
+
+        <h3>Day<?= $this->user['days_count'] == 1 ? '' : 's'; ?>&nbsp;&nbsp;<small>{$#user.days_count}</small></h3>
+        {{apply template="days_list" days="$#user.days"/}}
+  		</div>
+		</div>
+  {{/into}}
+{{/wrap}}

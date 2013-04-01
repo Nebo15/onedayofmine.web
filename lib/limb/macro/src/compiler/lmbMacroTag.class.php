@@ -6,6 +6,7 @@
  * @copyright  Copyright &copy; 2004-2009 BIT(http://bit-creative.com)
  * @license    LGPL http://www.gnu.org/copyleft/lesser.html
  */
+lmb_require('limb/macro/src/compiler/lmbMacroNode.class.php');
 
 /**
  * class lmbMacroTag.
@@ -208,7 +209,7 @@ class lmbMacroTag extends lmbMacroNode
 
   function raiseRequiredAttribute($attribute_name)
   {
-    $this->raise('Missing required attribute', array('attribute' => $attribute_name));
+    $this->raise("Missing required attribute '$attribute_name'", array('attribute' => $attribute_name));
   }
 
   function preParse($compiler)

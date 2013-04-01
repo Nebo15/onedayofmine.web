@@ -3,6 +3,8 @@ lmb_require('limb/core/src/lmbArrayHelper.class.php');
 lmb_require('limb/dbal/src/query/lmbSelectQuery.class.php');
 lmb_require('limb/dbal/src/query/lmbDeleteQuery.class.php');
 lmb_require('limb/dbal/src/query/lmbInsertQuery.class.php');
+lmb_require('src/model/DayInterestRecord.class.php');
+lmb_require('src/model/Day.class.php');
 
 class InterestCalculator
 {
@@ -25,11 +27,13 @@ class InterestCalculator
 
     $query = new lmbSelectQuery('day');
     $query->addField('day.id');
-    $query->addRawField("(SELECT COUNT(*) FROM `day_like` WHERE `day_like`.`day_id` = `day`.`id`)/(1+SQRT(($current_time-`ctime`)/86400)) as rating");
+    $query->addRawField("(SELECT COUNT(*) FROM `day_like` WHERE `day_like`.`day_id` = `day`.`id`)/(1+SQRT(($current_time-`day`.`ctime`)/86400)) as rating");
     $query->addLeftJoin('day_interest', 'day_id', 'day', 'id');
+	  $query->addLeftJoin('user', 'id', 'day', 'user_id');
+	  $query->addCriteria(lmbSQLCriteria::notEqual('user.occupation', ''));
+	  $query->addCriteria(lmbSQLCriteria::notEqual('user.location', ''));
     $query->addCriteria(lmbSQLCriteria::equal('is_deleted', 0));
-    $query->addCriteria(lmbSQLCriteria::isNull('day_interest.day_id'));
-    $query->addRawOrder("rating DESC");
+    $query->addRawOrder("rating DESC, day.id DESC");
 
     $days_rating = lmbArrayHelper::convertToFlatArray($query->fetch()->paginate(0, 100));
 
@@ -57,7 +61,7 @@ class InterestCalculator
   {
     $query = new lmbSelectQuery('day_interest');
     $query->addField('*');
-    $query->addRawOrder("rating DESC");
+    $query->addRawOrder("rating DESC, day_id DESC");
     $info = $query->fetch();
 
     $ids = lmbArrayHelper::getColumnValues('day_id', $info);
@@ -73,7 +77,7 @@ class InterestCalculator
     if($to_day_id)
     {
       $founded_pos = array_search((string) $to_day_id, $ids);
-      $to_key =  false !== $founded_pos ? $founded_pos - 1: 0;
+	    $to_key =  false !== $founded_pos ? $founded_pos: 0;
     }
     else
       $to_key = count($ids);
@@ -81,27 +85,31 @@ class InterestCalculator
     if(!$limit)
       $limit = 100;
 
-    $ids = array_slice($ids, $from_key, $to_key);
+    $ids = array_slice($ids, $from_key, $to_key - $from_key);
     $ids = array_slice($ids, 0, $limit);
 
-    $days_with_rating = array();
+    if(!count($ids))
+      return [];
+
+    $days_with_rating = [];
     foreach(Day::findByIds($ids) as $day)
     {
-      if(1 === $day->getIsDeleted())
+      if(1 === $day->is_deleted)
         continue;
       foreach($info as $record)
       {
-        if($record['day_id'] != $day->getId())
+        if($record['day_id'] != $day->id)
           continue;
 
-        $recordObj = new DayInterestRecord($record);
+        $recordObj = new DayInterestRecord();
+        $recordObj->import($record->export());
         $recordObj->setDay($day);
-        // $recordObj->setRating(array_search($day->getId(), $ids)); useless as DayInterestRecord
-        $days_with_rating[array_search($day->getId(), $ids)] = $recordObj;
+        // $recordObj->setRating(array_search($day->id, $ids)); useless as DayInterestRecord
+        $days_with_rating[array_search($day->id, $ids)] = $recordObj;
       }
     }
 
-    sort($days_with_rating);
+    ksort($days_with_rating);
 
     return $days_with_rating;
   }

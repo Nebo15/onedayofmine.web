@@ -1,0 +1,63 @@
+@font-face {
+  font-family: 'social-icons';
+  src: url("/font/social-icons.eot?62050318");
+  src: url("/font/social-icons.eot?62050318#iefix") format('embedded-opentype'),
+       url("/font/social-icons.woff?62050318") format('woff'),
+       url("/font/social-icons.ttf?62050318") format('truetype'),
+       url("/font/social-icons.svg?62050318#social-icons") format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.icon-mobile-android:before {
+  font-family: 'social-icons';
+  content: '\26';
+}
+.icon-gplus:before {
+  font-family: 'social-icons';
+  content: '\2b';
+}
+.icon-html5:before {
+  font-family: 'social-icons';
+  content: '\35';
+}
+.icon-mobile-apple:before {
+  font-family: 'social-icons';
+  content: '\41';
+}
+.icon-licence-cc:before {
+  font-family: 'social-icons';
+  content: '\43';
+}
+.icon-flickr:before {
+  font-family: 'social-icons';
+  content: '\46';
+}
+.icon-vk:before {
+  font-family: 'social-icons';
+  content: '\4e';
+}
+.icon-skype:before {
+  font-family: 'social-icons';
+  content: '\53';
+}
+.icon-mobile-windows:before {
+  font-family: 'social-icons';
+  content: '\57';
+}
+.icon-dropbox:before {
+  font-family: 'social-icons';
+  content: '\64';
+}
+.icon-picasa:before {
+  font-family: 'social-icons';
+  content: '\f31c';
+}
+.icon-instagram:before {
+  font-family: 'social-icons';
+  content: '\f31e';
+}
+.icon-instagram-filled:before {
+  font-family: 'social-icons';
+  content: '\f31f';
+}

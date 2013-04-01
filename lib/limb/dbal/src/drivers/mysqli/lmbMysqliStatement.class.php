@@ -14,7 +14,4 @@ lmb_require('limb/dbal/src/drivers/mysql/lmbMysqlStatement.class.php');
  * @package dbal
  * @version $Id: lmbMysqliStatement.class.php 6848 2008-03-21 13:44:08Z svk $
  */
-class lmbMysqliStatement extends lmbMysqlStatement
-{
-  
-}
+class lmbMysqliStatement extends lmbMysqlStatement {}

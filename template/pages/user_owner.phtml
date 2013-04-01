@@ -1,0 +1,189 @@
+<?
+$this->title = "Profile";
+$this->menu = 'me';
+?>
+{{wrap with="layout.phtml"}}
+{{into slot="content"}}
+<? $user = $this->current_user; ?>
+<div class="row">
+	<div class="span2"><h1>Profile</h1></div>
+	<div class="span5"></div>
+	<div class="span3"><h3>Connected accounts:</h3></div>
+</div>
+<div class="row">
+	<div class="span2">
+		<div class="user-image-holder friend">
+			<img id="userpic" src="{$user.image_192}" width="192" height="192" class="pull-left img-rounded"/>
+			<button class="btn btn-block btn-file">
+        Change photo
+				<input class="change-userpic-action" type="file" />
+			</button>
+		</div>
+	</div>
+	<div class="span5">
+		<form id="profile-form" class="form-horizontal">
+
+			<div class="control-group <?= $user['name'] ?: 'error' ?>">
+				<label class="control-label" for="inputName">Name</label>
+				<div class="controls">
+					<input type="text" id="inputName" placeholder="Name" value="{$user.name}">
+				</div>
+			</div>
+
+			<div class="control-group <?= $user['occupation'] ?: 'error' ?>">
+				<label class="control-label" for="inputOccupation">Occupation</label>
+				<div class="controls">
+					<input type="text" id="inputOccupation" placeholder="Occupation" value="{$user.occupation}">
+				</div>
+			</div>
+
+			<div class="control-group <?= $user['location'] ?: 'error' ?>">
+				<label class="control-label" for="inputLocation">Location</label>
+				<div class="controls">
+					<input type="text" id="inputLocation" placeholder="location" value="{$user.location}">
+				</div>
+			</div>
+
+			<div class="control-group <?= $user['birthday'] ?: 'error' ?>">
+				<label class="control-label" for="inputBirthday">Birthday</label>
+				<div class="controls">
+					<input id="inputBirthday" type="date" placeholder="dd/mm/yyyy" value="{$user.birthday}">
+				</div>
+			</div>
+
+			<div class="control-group">
+				<div class="controls">
+					<?
+						$full_info = $user['name'] && $user['occupation'] && $user['location'] && $user['birthday'];
+					?>
+					<button type="submit" class="btn btn-large update-action" <?= $full_info ?: 'disabled' ?>>
+						<i class="icon icon-ok"></i> Update
+					</button>
+          <a href="/pages/{$user.id}/user?preview" class="btn btn-large">
+            <i class="icon icon-info-sign"></i> Preview
+          </a>
+				</div>
+			</div>
+		</form>
+	</div>
+	<div class="span3">
+		<button class="btn <?= $user['instagram_connected'] ? 'btn-danger' : '' ?> btn-large instagram-action">
+			<i class="icon icon-sign<?= $user['instagram_connected'] ? 'out' : 'in' ?>"></i> Instagram
+		</button>
+
+		<br/><br/>
+		<button class="btn <?= $user['flickr_connected'] ? 'btn-danger' : '' ?> btn-large flickr-action">
+			<i class="icon icon-sign<?= $user['flickr_connected'] ? 'out' : 'in' ?>"></i> Flickr
+		</button>
+	</div>
+</div>
+{{/into}}
+{{into slot="js_include"}}
+	<script src="/lib/Importer.js"></script>
+{{/into}}
+{{into slot="js_ready"}}
+
+	$('.change-userpic-action').on('change', function(event) {
+		var $this = $(this);
+		var reader = new FileReader();
+		var FileReaderFilter = /^(?:image\/bmp|image\/cis\-cod|image\/gif|image\/ief|image\/jpeg|image\/jpeg|image\/jpeg|image\/pipeg|image\/png|image\/svg\+xml|image\/tiff|image\/x\-cmu\-raster|image\/x\-cmx|image\/x\-icon|image\/x\-portable\-anymap|image\/x\-portable\-bitmap|image\/x\-portable\-graymap|image\/x\-portable\-pixmap|image\/x\-rgb|image\/x\-xbitmap|image\/x\-xpixmap|image\/x\-xwindowdump)$/i;
+		var file = event.target.files !== undefined ? event.target.files[0] : (event.target.value ? { name: event.target.value.replace(/^.+\\/, '') } : null);
+
+		$(reader).load(function() {
+			var image64 = this.result
+			var image = image64.substring(image64.indexOf('base64')+7);
+			API.post('my/profile', {image_content: image}).success(function(response) {
+				$('#userpic').attr('src', response.data.result.image_192);
+			}).send();
+		});
+
+		if (!FileReaderFilter.test(file.type)) {
+			alert("Currently we support only images!");
+			return;
+		}
+
+		reader.readAsDataURL(file);
+	});
+
+	$('#profile-form').find('input').on('keyup', function() {
+		var valid = true;
+
+		$.each(['#inputName', '#inputOccupation', '#inputLocation', '#inputBirthday'], function(i, name) {
+			if('' != $(name).val())
+			{
+				$(name).parent().parent().removeClass('error');
+			}
+			else
+			{
+				valid = false;
+				$(name).parent().parent().addClass('error');
+			}
+		});
+
+		var submit_btn = $('button[type=submit]');
+
+		if(valid)
+			submit_btn.addClass('btn-success');
+		else
+			submit_btn.removeClass('btn-success');
+
+		if(valid && submit_btn.attr('disabled'))
+			submit_btn.removeAttr('disabled');
+		else if(!valid && !submit_btn.attr('disabled'))
+			submit_btn.attr('disabled', 'disabled');
+	});
+
+	$('.update-action').click(function(event) {
+		var data = {
+			name: $('#inputName').val(),
+			location: $('#inputLocation').val(),
+			occupation: $('#inputOccupation').val(),
+			birthday: $('#inputBirthday').val(),
+		};
+		var req = API.request('POST', 'my/profile', data).complete(function() {
+			$('button[type=submit]').removeClass('btn-success');
+		}).send();
+		return false;
+	});
+
+	$('.instagram-action').click(function() {
+		if($(this).hasClass('btn-danger'))
+		{
+			if(!confirm("Are you sure want to remove Instagram connection?"))
+				return;
+			$(this).removeClass('btn-danger').removeAttr('disabled');
+			$(this).find('i').removeClass('icon-signout').addClass('icon-signin');
+			var req = API.post('instagram/logout').send();
+		}
+		else
+		{
+			var $el = $(this);
+			var importer = new Importer('instagram');
+			importer.login(function() {
+				$el.addClass('btn-danger');
+				$el.find('i').removeClass('icon-signin').addClass('icon-signout');
+			});
+		}
+	});
+
+	$('.flickr-action').click(function() {
+		if($(this).hasClass('btn-danger'))
+		{
+			if(!confirm("Are you sure want to remove Flickr connection?"))
+			return;
+			$(this).removeClass('btn-danger').removeAttr('disabled');
+			$(this).find('i').removeClass('icon-signout').addClass('icon-signin');
+			var req = API.post('flickr/logout').send();
+		}
+		else
+		{
+			var $el = $(this);
+			var importer = new Importer('flickr');
+			importer.login(function() {
+				$el.addClass('btn-danger');
+				$el.find('i').removeClass('icon-signin').addClass('icon-signout');
+			});
+		}
+	});
+{{/into}}
+{{/wrap}}

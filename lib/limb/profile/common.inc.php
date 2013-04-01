@@ -11,6 +11,5 @@
  * @package cms
  * @version $Id: common.inc.php 7743 2009-03-13 07:10:06Z momental $
  */
-require_once('limb/core/common.inc.php');
 require_once('limb/profile/toolkit.inc.php');
 require_once('limb/config/common.inc.php');

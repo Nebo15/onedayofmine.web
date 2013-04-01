@@ -1,9 +1,9 @@
 <?php
-lmb_require('lib/tmhOAuth/*.php');
-lmb_require('src/service/social_provider/odSocialServicesProviderInterface.class.php');
+lmb_require('lib/tmhOAuth/tmhOAuth.php');
+lmb_require('src/service/social_provider/SocialProviderInterface.class.php');
 lmb_require('src/service/social_provider/odTwitterException.class.php');
 
-class odTwitter extends tmhOAuth implements odSocialServicesProviderInterface
+class odTwitter extends tmhOAuth implements SocialProviderInterface
 {
   public static function getConfig()
   {

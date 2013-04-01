@@ -1,36 +1,43 @@
 <?php
 lmb_require('src/model/base/BaseModel.class.php');
-lmb_require('src/model/traits/Imageable.trait.php');
+lmb_require('src/model/traits/Imageable.class.php');
+lmb_require('src/model/Moment.class.php');
+lmb_require('src/model/DayComment.class.php');
+lmb_require('src/model/MomentComment.class.php');
+lmb_require('src/model/DayLike.class.php');
 
 /**
  * @api field int id User ID
- * @static Day findById()
  */
 class Day extends BaseModel
 {
   use Imageable;
-  use Likeable;
 
+  protected $_db_table_name = 'day';
   protected $_default_sort_params = array('id'=>'desc');
 
-  protected function _defineRelations()
-  {
-    $this->_many_belongs_to = array(
-      'user' => array( 'field' => 'user_id', 'class' => 'User'),
-    );
+	const TYPE_WORKING = 'Working day';
+	const TYPE_DAYOFF  = 'Day off';
+	const TYPE_HOLIDAY = 'Holiday';
+	const TYPE_TRIP    = 'Trip';
+	const TYPE_EVENT   = 'Special Event';
 
-    $this->_has_many = array(
-      'moments'  => array( 'field' => 'day_id', 'class' => 'Moment', 'criteria' => '`moment`.`is_deleted` = 0'),
-      'comments' => array( 'field' => 'day_id', 'class' => 'DayComment'),
-      'likes'    => array( 'field' => 'day_id', 'class' => 'DayLike'),
-    );
-  }
+  public $user_id;
+  public $type;
+  public $title;
+  public $final_description;
+  public $views_count;
+	public $is_gathering_enabled;
+  public $is_deleted;
+  public $facebook_id;
+  public $twitter_id;
+  public $ctime;
+  public $utime;
 
   protected function _createValidator()
   {
     $validator = new lmbValidator();
-    $validator->addRequiredRule('user');
-    $validator->addRequiredObjectRule('user', 'User');
+    $validator->addRequiredRule('user_id');
     $validator->addRequiredRule('title');
     $validator->addRequiredRule('type');
     $validator->addRule(new lmbValidValueRule('type', self::getTypes()));
@@ -40,53 +47,81 @@ class Day extends BaseModel
   function exportForApi(array $properties = null)
   {
     $export = new stdClass();
-    $export->id = $this->getId();
-    $export->user_id = $this->getUser()->getId();
-    $this->showImages($export);
-    $export->title = $this->getTitle();
-    // $export->occupation = $this->getOccupation();
-    // $export->location = $this->getLocation();
-    $export->final_description = $this->getFinalDescription();
-    $export->type = $this->getType();
-    $export->views_count = $this->views_count;
+    $export->id = $this->id;
+    $export->user_id = $this->user_id;
+    $export->type = $this->type;
+    $export->title = $this->title;
+	  if(!$this->showImages($export))
+	  {
+		  $moments = $this->getMoments();
+		  if(count($moments))
+			  $moments[0]->showImages($export);
+	  }
+    $export->final_description = $this->final_description;
+    $export->views_count = $this->views_count ?: 0;
+	  $export->ctime = (int) $this->ctime;
+	  $export->utime = (int) $this->utime;
 
     return $export;
   }
 
+  function setUser(User $user)
+  {
+    $this->user_id = $user->id;
+  }
+
+  function getMoments()
+  {
+    $criteria = lmbSQLCriteria::equal('day_id', $this->id)
+      ->add(lmbSQLCriteria::equal('is_deleted', 0))
+		  ->add(lmbSQLCriteria::equal('is_hidden', 0));
+
+    return Moment::find($criteria, ['id' => 'DESC']);
+  }
+
+	function getAllMoments()
+	{
+		$criteria = lmbSQLCriteria::equal('day_id', $this->id)
+				->add(lmbSQLCriteria::equal('is_deleted', 0));
+
+		return Moment::find($criteria, ['id' => 'DESC']);
+	}
+
+  function getComments()
+  {
+    return DayComment::find(lmbSQLCriteria::equal('day_id', $this->id));
+  }
+
+  function getLikes()
+  {
+    return DayLike::find(lmbSQLCriteria::equal('day_id', $this->id));
+  }
+
   protected function _getAdditionalPlaceholders(&$placeholders)
   {
-    if(!$this->getUser() || !$this->getUser()->getId())
-      throw new Exception("Can't create image path, because entity have no corresponding User.", array('class' => get_called_class()));
-
-    $placeholders[':user_id'] = $this->getUser()->getId();
-    $placeholders[':hash']    = sha1('s0l7&p3pp$r'.$this->getUser()->getId().$this->getId());
+    $placeholders[':hash'] = sha1('s0l7&p3pp$r'.$this->id);
   }
 
   function getCommentsWithLimitation($from_id = null, $to_id = null, $limit = null)
   {
-    $criteria = new lmbSQLCriteria();
+    $criteria = lmbSQLCriteria::equal('day_id', $this->id);
     if($from_id)
       $criteria->add(lmbSQLCriteria::greater('id', $from_id));
     if($to_id)
       $criteria->add(lmbSQLCriteria::less('id', $to_id));
     if(!$limit || $limit > 100)
       $limit = 100;
-    return $this->getComments()->find(array(
-      'criteria' => $criteria,
-      'sort' => array('id' => 'ASC')
-    ))->paginate(0, $limit);
+    return DayComment::find($criteria, ['id' => 'ASC'])->paginate(0, $limit);
+  }
+
+  function getUser()
+  {
+    return User::findById($this->user_id);
   }
 
   static function getTypes()
   {
-    $sql = "SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'day' AND COLUMN_NAME = 'type'";
-    $stmt = lmbToolkit::instance()->getDefaultDbConnection()->newStatement($sql);
-    $stmt->execute(); // выполнит запрос.
-    if(preg_match('/^enum\((.*)\)$/', $stmt->getOneRecord()->get('COLUMN_TYPE'), $matches) === 1) {
-      return str_getcsv($matches[1], ',', "'");
-    } else {
-      throw new lmbException("Can't allocate day types.", array('query_result' => $stmt->getOneRecord()->get('COLUMN_TYPE'), 'preg_matches' => $matches));
-    }
+    return ['Working day', 'Day off', 'Holiday', 'Trip'];
   }
 
   /**
@@ -100,11 +135,8 @@ class Day extends BaseModel
       $criteria->add(lmbSQLCriteria::less('id', $from_id));
     if($to_id)
       $criteria->add(lmbSQLCriteria::greater('id', $to_id));
-    return Day::find(array(
-      'criteria' => $criteria,
-      'limit' => (!$limit || $limit > 100) ? 100 : $limit,
-      'sort' => array('id' => 'DESC'),
-    ));
+    return Day::find($criteria, array('id' => 'DESC'))
+      ->paginate(0, (!$limit || $limit > 100) ? 100 : $limit);
   }
 
   /**
@@ -117,26 +149,25 @@ class Day extends BaseModel
       $criteria->add(lmbSQLCriteria::less('id', $from_id));
     if($to_id)
       $criteria->add(lmbSQLCriteria::greater('id', $to_id));
-    return Day::find(array(
-      'criteria' => $criteria,
-      'limit' => (!$limit || $limit > 100) ? 100 : $limit,
-      'sort' => array('id' => 'DESC')
-    ));
+
+    return Day::find($criteria, ['id' => 'DESC'])
+      ->paginate(0, (!$limit || $limit > 100) ? 100 : $limit);
   }
 
   static function findByString($query, $from_id = null, $to_id = null, $limit = null)
   {
-    $criteria = lmbSQLCriteria::equal('is_deleted', 0);
-    if($from_id)
-      $criteria->add(lmbSQLCriteria::less('id', $from_id));
-    if($to_id)
-      $criteria->add(lmbSQLCriteria::greater('id', $to_id));
-    $criteria->add(lmbSQLCriteria::like('title', '%'.$query.'%'));
-
-    return Day::find(array(
-      'criteria' => $criteria,
-      'limit' => (!$limit || $limit > 100) ? 100 : $limit,
-      'sort' => array('id' => 'DESC')
-    ));
+    $ids  = lmbToolkit::instance()->getSearchService('Day')->find($query, $from_id, $to_id, $limit);
+    if(!$ids)
+      return [];
+    $days = self::findByIds($ids);
+    $days = self::sortByIds($days, $ids);
+    return $days;
   }
+
+	static function findOldDeletedDays()
+	{
+		$criteria = lmbSQLCriteria::equal('is_deleted', 1)
+				->add(lmbSQLCriteria::less('utime', time() - 30 * 24 * 60 * 60));
+		return Day::find($criteria);
+	}
 }

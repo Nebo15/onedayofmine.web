@@ -1,7 +1,11 @@
 <?php
+lmb_require('tests/cases/odEntityAssertions.trait.php');
+lmb_require('limb/dbal/src/drivers/lmbAuditDbConnection.class.php');
 
 abstract class odUnitTestCase extends UnitTestCase
 {
+  use odEntityAssertions;
+
   /**
    * @var OdObjectMother
    */
@@ -19,6 +23,11 @@ abstract class odUnitTestCase extends UnitTestCase
    */
   protected $additional_user;
 
+  /**
+   * @var lmbDbConnection
+   */
+  protected $db_conn;
+
   function setUp()
   {
     $this->toolkit = lmbToolkit::instance();
@@ -26,41 +35,16 @@ abstract class odUnitTestCase extends UnitTestCase
     $this->toolkit->resetConfs();
     $this->toolkit->resetFileLocators();
 
+    $this->db_conn = $this->toolkit->getDefaultDbConnection();
+    $this->db = new lmbSimpleDb($this->db_conn);
+
     $this->generator = new odObjectMother();
 
     parent::setUp();
     $this->toolkit->truncateDb();
     $this->toolkit->resetUser();
 
-    $this->main_user = $this->generator->user();
-    $this->additional_user = $this->generator->user();
-  }
-
-  protected function assertProperty($obj, $property, $message = "Property '%s' not found")
-  {
-    if(!is_object($obj))
-      return $this->fail("Expected a object but '".gettype($obj)."' given");
-    return $this->assertTrue(
-      property_exists($obj, $property),
-      sprintf($message, $property)
-    );
-  }
-
-  protected function assertValidImageUrl($url)
-  {
-    return $this->assertTrue($this->_isUrlExists($url), "Invalid image url '{$url}'");
-  }
-
-  protected function assert404Url($url)
-  {
-    return $this->assertFalse($this->_isUrlExists($url), "Image exists '{$url}'");
-  }
-
-  protected function _isUrlExists($url)
-  {
-    $images_conf = lmbToolkit::instance()->getConf('images');
-    $rel_path = str_replace(lmbToolkit::instance()->getConf('common')['static_host'], '', $url);
-    $abs_path = lmb_env_get('APP_DIR').'/'.$images_conf['save_path'].'/'.$rel_path;
-    return file_exists($abs_path);
+    $this->main_user = $this->generator->user('main_user');
+    $this->additional_user = $this->generator->user('additional_user');
   }
 }

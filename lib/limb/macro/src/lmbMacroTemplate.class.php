@@ -11,6 +11,10 @@ lmb_require('limb/macro/src/lmbMacroTemplateLocatorInterface.interface.php');
 lmb_require('limb/macro/src/lmbMacroTemplateLocatorSimple.class.php');
 lmb_require('limb/macro/src/lmbMacroException.class.php');
 lmb_require('limb/macro/src/lmbMacroConfig.class.php');
+lmb_require('limb/macro/src/compiler/lmbMacroTagDictionary.class.php');
+lmb_require('limb/macro/src/compiler/lmbMacroFilterDictionary.class.php');
+lmb_require('limb/macro/src/compiler/lmbMacroRuntimeWidgetTag.class.php');
+lmb_require('limb/macro/src/compiler/lmbMacroCompiler.class.php');
 
 /**
  * class lmbMacroTemplate.
@@ -30,10 +34,10 @@ class lmbMacroTemplate
   function __construct($file, $config = array(), lmbMacroTemplateLocatorInterface $locator = null)
   {
     $this->file = $file;
-    if(is_object($config) && $config instanceof lmbMacroConfig) 
+    if(is_object($config) && $config instanceof lmbMacroConfig)
       $this->config = $config;
     else
-      $this->config = new lmbMacroConfig($config);        
+      $this->config = new lmbMacroConfig($config);
     $this->locator = $locator ? $locator : new lmbMacroTemplateLocatorSimple($this->config);
   }
 
@@ -53,13 +57,13 @@ class lmbMacroTemplate
   }
 
   function render($vars = array())
-  {     
+  {
     if(!$this->executor)
     {
       list($this->compiled_file, $macro_executor_class) = $this->compile($this->file);
 
       include($this->compiled_file);
-      
+
       $this->executor = new $macro_executor_class($this->config);
     }
 
@@ -75,7 +79,7 @@ class lmbMacroTemplate
     ob_end_clean();
     return $out;
   }
-  
+
   function compile($source_file)
   {
     $compiled_file = $this->locator->locateCompiledTemplate($source_file);
@@ -92,7 +96,7 @@ class lmbMacroTemplate
       file_put_contents($compiled_file, file_get_contents($compiled_file) .
                                         "\n\$macro_executor_class='$macro_executor_class';");
     }
-    
+
     return array($compiled_file, $macro_executor_class);
   }
 
@@ -114,4 +118,3 @@ class lmbMacroTemplate
     return basename(dirname($file_name)) . '-' . basename($file_name) . '.' . crc32($file_name) . '.php';
   }
 }
-

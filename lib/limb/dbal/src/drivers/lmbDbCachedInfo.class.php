@@ -2,9 +2,9 @@
 /*
  * Limb PHP Framework
  *
- * @link http://limb-project.com 
+ * @link http://limb-project.com
  * @copyright  Copyright &copy; 2004-2009 BIT(http://bit-creative.com)
- * @license    LGPL http://www.gnu.org/copyleft/lesser.html 
+ * @license    LGPL http://www.gnu.org/copyleft/lesser.html
  */
 lmb_require('limb/core/src/lmbSerializable.class.php');
 lmb_require('limb/core/src/lmbProxy.class.php');
@@ -18,21 +18,24 @@ lmb_require('limb/fs/src/lmbFs.class.php');
  */
 class lmbDbCachedInfo extends lmbProxy
 {
+  const CACHE_KEY = 'db_info';
+
   protected $conn;
   protected $db_info;
-  protected $cache_file;
+  /**
+   * @var lmbCacheAbstractConnection
+   */
+  protected $cache;
 
-  function __construct($conn, $cache_dir = null)
+  function __construct(lmbDbConnection $conn, $cache)
   {
     $this->conn = $conn;
-    if($cache_dir)
-      $this->cache_file = $cache_dir . '/db_info.' . $conn->getHash() . '.cache';
+    $this->cache = $cache;
   }
 
   function flushCache()
   {
-    if($this->cache_file && file_exists($this->cache_file))
-      unlink($this->cache_file);
+    $this->cache->delete(self::CACHE_KEY);
   }
 
   protected function _createOriginalObject()
@@ -52,52 +55,14 @@ class lmbDbCachedInfo extends lmbProxy
 
   protected function _readFromCache()
   {
-    if($db_info = $this->_readFromMemCache())
-      return $db_info;
-
-    if($db_info = $this->_readFromFileCache())
-    {
-      $this->_writeToMemCache($db_info);
-      return $db_info;
-    }
-  }
-
-  protected function _readFromMemCache()
-  {
-    if(isset($this->db_info))
-      return $this->db_info;
-  }
-
-  protected function _readFromFileCache()
-  {
-    if($this->_isFileCachingEnabled())
-    {
-      $container = unserialize(file_get_contents($this->cache_file));
-      $db_info = $container->getSubject();
-      return $db_info;
-    }
-  }
-
-  protected function _isFileCachingEnabled()
-  {
-    return (lmb_env_get('LIMB_CACHE_DB_META_IN_FILE', false) && file_exists($this->cache_file));
+    if($container = unserialize($this->cache->get(self::CACHE_KEY)))
+      return $container->getSubject();
   }
 
   protected function _writeToCache($db_info)
   {
-    $this->_writeToMemCache($db_info);
-    $this->_writeToFileCache($db_info);
+    $this->cache->set(self::CACHE_KEY, serialize(new lmbSerializable($db_info)));
   }
-
-  protected function _writeToMemCache($db_info)
-  {
-    $this->db_info = $db_info;
-  }
-
-  protected function _writeToFileCache($db_info)
-  {
-    lmbFs :: safeWrite($this->cache_file, serialize(new lmbSerializable($db_info)));
-  }  
 }
 
 

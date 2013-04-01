@@ -35,7 +35,7 @@ abstract class lmbAdminObjectController extends lmbObjectController
 
   function doDisplay()
   {
-    $this->items = lmbActiveRecord::find($this->_object_class_name);
+    $this->items = call_user_func([$this->_object_class_name, 'find']);
     $this->_applySortParams();
   }
 

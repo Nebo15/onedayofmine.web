@@ -6,6 +6,9 @@
  * @copyright  Copyright &copy; 2004-2009 BIT(http://bit-creative.com)
  * @license    LGPL http://www.gnu.org/copyleft/lesser.html
  */
+lmb_require('limb/macro/src/compiler/lmbMacroExpressionInterface.interface.php');
+lmb_require('limb/macro/src/compiler/lmbMacroExpression.class.php');
+lmb_require('limb/macro/src/compiler/lmbMacroFilterParser.class.php');
 
 /**
  * class lmbMacroExpressionNode.
@@ -48,7 +51,7 @@ class lmbMacroExpressionNode  implements lmbMacroExpressionInterface
       $base_expression = trim(substr($this->expression, 0, $pos));
       $filters_expression = trim(substr($this->expression, $pos + 1));
     }
-    
+
     $this->parsed = $this->createFilterChain($filters_expression, new lmbMacroExpression($base_expression));
   }
 

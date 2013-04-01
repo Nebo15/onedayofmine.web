@@ -1,0 +1,206 @@
+<?
+$this->title = "Find and invite people";
+$this->menu = 'me';
+?>
+{{wrap with="layout.phtml"}}
+  {{into slot="templates"}}
+    <script id="facebook_users_list_template" type="text/x-handlebars-template">
+      <h2>[[title]]</h2>
+      <ul class="unstyled users-list with-separators clearfix">
+        [[#friends]]
+          <li class="clearfix pull-left" data-uid="[[uid]]">
+            <img src="[[image_50]]" class="img-rounded" />
+            <span class="friend-name">[[name]]</span>
+
+            [[#if user]]
+              <button class="btn btn-small btn-danger pull-right unfollow-action[[#unless user.following]] hide[[/unless]]" data-user-id="[[user.id]]">
+                Unfollow
+              </button>
+
+              <button class="btn btn-small btn-success pull-right follow-action[[#if user.following]] hide[[/if]]" data-user-id="[[user.id]]">
+                Follow
+              </button>
+            [[else]]
+              <button class="btn btn-small btn-success pull-right invite-action">Invite</button>
+            [[/if]]
+          </li>
+        [[/friends]]
+      </ul>
+    </script>
+  {{/into}}
+
+  {{into slot="js_ready"}}
+    var users_search_block = $('#users_search');
+    var users_list_template = Template.prepareTemplate($('#users_list_template'));
+
+    users_search_block.find('.form-search').submit(function() {
+      var search_request = API.post('users/search', {query: $('.search-query').val()});
+      var search_result = users_search_block.find('.search-result');
+      search_result.html('');
+
+      users_search_block.findSpinner().showSpinner();
+
+      search_request.success(function(response) {
+        users_search_block.findSpinner().hideSpinner();
+
+        Template.renderElement(users_list_template, $('#search-result'), {
+          users:response.data.result
+        });
+        attachFollowingListeners(users_search_block);
+      });
+
+      search_request.send();
+      return false;
+    });
+
+    var facebook_friends_block = $('#facebook_friends');
+    var facebook_friends_list_template = Template.prepareTemplate($('#facebook_users_list_template'));
+    var friends_request = API.get('social/facebook_friends');
+
+    // TODO: generate all cases regexps
+    function transliterate_lowerCase(replaceString) {
+      var find = ["ь","ъ","ай","ей","ий","ой","кс","уй","ый","эй","юй","ей","ї","зг","а","б","в","г","ґ","д","е","ж","з","и","й","к","л","м","н","о","п","р","с","т","у","ф","х","ц","ч","ш","щ","ы","э","ю","я"];
+      var replace = ["","","ay","ey","iy","oy","x","uy","yy","ey","yuy","yay","yi","zgh","a","b","v","g","g","d","e","zh","z","i","y","k","l","m","n","o","p","r","s","t","u","f","kh","ts","ch","sh","sch","y","e","yu","ya"];
+
+      var regex;
+      for (var i = 0; i < find.length; i++) {
+        regex = new RegExp(find[i], "ig");
+        replaceString = replaceString.replace(regex, replace[i]);
+      }
+      return replaceString;
+    }
+
+    function attachFollowingListeners(container) {
+      container.find('.follow-action').click(function() {
+        var user_id = $(this).data('user-id');
+        $(this).addClass('hide');
+        $(this).parent().find('.unfollow-action').removeClass('hide');
+        API.post('users/' + user_id + '/follow').send();
+      });
+
+      container.find('.unfollow-action').click(function() {
+        var user_id = $(this).data('user-id');
+        $(this).addClass('hide');
+        $(this).parent().find('.follow-action').removeClass('hide');
+        API.post('users/' + user_id + '/unfollow').send();
+      });
+    }
+
+    friends_request.before(function() {
+      facebook_friends_block.findSpinner().showSpinner();
+    });
+
+    friends_request.success(function(response) {
+      var friends_registered = [];
+      var friends_unregistered = [];
+
+      $.each(response.data.result, function(index, user) {
+        if(user.user != null) {
+           friends_registered.push(user);
+        } else {
+           friends_unregistered.push(user);
+        }
+      });
+
+      if(friends_registered.length > 0) {
+        facebook_friends_block.append(Template.compileElement(facebook_friends_list_template, {
+          title: 'Friends already on OneDayOfMine',
+          friends: friends_registered
+        }));
+      }
+
+      if(friends_unregistered.length > 0) {
+        facebook_friends_block.append(Template.compileElement(facebook_friends_list_template, {
+          title: 'Invite friends',
+          friends: friends_unregistered
+        }));
+      }
+
+      facebook_friends_block.findSpinner().hideSpinner();
+
+      facebook_friends_block.find('.invite-action').click(function() {
+        var obj = {
+          method: 'feed',
+          to: $(this).closest('li').data('uid'),
+          redirect_uri: 'http://' + Config.host + '/pages/find_people',
+          link: 'http://' + Config.host + '/pages/{$#current_user.id}/user',
+          name: 'One Day of Mine invitation',
+          description: "Hi, come and check out my photos in One Day of Mine, where people share days of their lifes."
+        };
+
+  			function callback(response) {
+  				alert('User invited');
+  			}
+
+  			FB.ui(obj, callback);
+  		});
+
+      attachFollowingListeners(facebook_friends_block);
+
+      var search_query_input = facebook_friends_block.find('.search-query');
+      var filter_timeout;
+      var search_query_tmp;
+
+      search_query_input.bind('keyup', function() {
+        if(search_query_tmp == search_query_input.val().trim()) {
+          return;
+        }
+
+        search_query_tmp = search_query_input.val().trim();
+        var parts = search_query_tmp.split(' ');
+
+        clearTimeout(filter_timeout);
+        filter_timeout = setTimeout(function() {
+          facebook_friends_block.find('li').each(function(index, friend) {
+            $self = $(friend);
+
+            var friend_name = transliterate_lowerCase($(friend).find('.friend-name').text().toLowerCase());
+
+            var show = true;
+            $.each(parts, function(index, pattern) {
+              console.log(transliterate_lowerCase(pattern.toLowerCase()));
+              if(!new RegExp('(' + transliterate_lowerCase(pattern.toLowerCase()) + ')', 'gi').test(friend_name)) {
+                show = false;
+              }
+            });
+
+            if(show) {
+              $self.css('display', 'block');
+            } else {
+              $self.css('display', 'none');
+            }
+          });
+        }, 200);
+      });
+    });
+
+    friends_request.send();
+  {{/into}}
+
+  {{into slot="content"}}
+    <div class="row-fluid">
+      <div class="span12" id="users_search">
+        <h1 class="with-spinner">
+          <i class="spinner icon icon-spin icon-refresh"></i>
+          Find people
+        </h1>
+        <form class="form-search form-inline">
+          <input type="text" class="span5 search-query" placeholder="Enter user name...">
+          <button type="submit" class="btn btn-small">Search</button>
+        </form>
+        <div class="search-result"></div>
+      </div>
+    </div>
+    <?php if(count($this->friends) > 0) { ?>
+      <div class="row-fluid">
+        <div class="span12" id="facebook_friends">
+          <h1 class="with-spinner">
+            <i class="spinner icon icon-spin icon-refresh"></i>
+            Facebook friends
+          </h1>
+          <input type="text" class="span5 search-query" placeholder="Filter by friend name...">
+        </div>
+      </div>
+    <? } ?>
+  {{/into}}
+{{/wrap}}

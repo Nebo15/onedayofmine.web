@@ -7,6 +7,11 @@
  * @license    LGPL http://www.gnu.org/copyleft/lesser.html
  */
 lmb_require('limb/fs/src/lmbFs.class.php');
+lmb_require('limb/macro/src/compiler/lmbMacroTreeBuilder.class.php');
+lmb_require('limb/macro/src/compiler/lmbMacroNode.class.php');
+lmb_require('limb/macro/src/compiler/lmbMacroSourceLocation.class.php');
+lmb_require('limb/macro/src/compiler/lmbMacroParser.class.php');
+lmb_require('limb/macro/src/compiler/lmbMacroCodeWriter.class.php');
 
 /**
  * class lmbMacroCompiler.
@@ -57,7 +62,7 @@ class lmbMacroCompiler
     $this->parseTemplate($source_file, $root_node);
 
     $generated_code = $this->_generateTemplateCode($class, $render_func, $root_node);
-    $generated_code = '<?php /* This file is generated from ' . $source_file . '*/?>' . $generated_code; 
+    $generated_code = '<?php /* This file is generated from ' . $source_file . '*/?>' . $generated_code;
     self :: writeFile($compiled_file, $generated_code);
   }
 

@@ -1,0 +1,521 @@
+<?php
+lmb_require('tests/cases/unit/odUnitTestCase.class.php');
+lmb_require('src/request/RoutesRequestDispatcher.class.php');
+
+class RoutesRequestDispatcherTest extends odUnitTestCase
+{
+  protected function assertDispatchedWithParams($url, $params)
+  {
+    static $dispatcher;
+
+    if(!$dispatcher)
+      $dispatcher = new RoutesRequestDispatcher();
+
+    $request = new lmbHttpRequest($url);
+    $result = $dispatcher->dispatch($request);
+
+    $this->assertTrue(array_key_exists('controller', $result));
+    $this->assertTrue(array_key_exists('action',     $result));
+
+    $this->assertEqual($result['controller'], $params['controller']);
+    $this->assertEqual($result['action'],     $params['action']);
+
+    if(!is_null($params['id']))
+    {
+      if($this->assertTrue(array_key_exists('id', $result)))
+      {
+        $this->assertEqual($result['id'],       $params['id']);
+        $this->assertEqual($request->get('id'), $params['id']);
+      }
+    }
+  }
+
+  function testAuth_Parameters()
+  {
+    $this->assertDispatchedWithParams("/auth/parameters", [
+      'controller' => 'auth',
+      'action'     => 'parameters',
+      'id'         =>  null,
+    ]);
+  }
+
+  function testAuth_IsLoggedIn()
+  {
+    $this->assertDispatchedWithParams("/auth/is_logged_in", [
+      'controller' => 'auth',
+      'action'     => 'is_logged_in',
+      'id'         =>  null,
+    ]);
+  }
+
+  function testAuth_Login()
+  {
+    $this->assertDispatchedWithParams("/auth/login", [
+      'controller' => 'auth',
+      'action'     => 'login',
+      'id'         =>  null,
+    ]);
+  }
+
+  function testAuth_Logout()
+  {
+    $this->assertDispatchedWithParams("/auth/logout", [
+      'controller' => 'auth',
+      'action'     => 'logout',
+      'id'         =>  null,
+    ]);
+  }
+
+  function testDays_Interesting()
+  {
+    $this->assertDispatchedWithParams("/days/interesting", [
+      'controller' => 'days',
+      'action'     => 'interesting',
+      'id'         =>  null,
+    ]);
+  }
+
+  function testDays_New()
+  {
+    $this->assertDispatchedWithParams("/days/new", [
+      'controller' => 'days',
+      'action'     => 'new',
+      'id'         =>  null,
+    ]);
+  }
+
+  function testDays_Search()
+  {
+    $this->assertDispatchedWithParams("/days/search", [
+      'controller' => 'days',
+      'action'     => 'search',
+      'id'         =>  null,
+    ]);
+  }
+
+  function testDays_Following()
+  {
+    $this->assertDispatchedWithParams("/days/following", [
+      'controller' => 'days',
+      'action'     => 'following',
+      'id'         =>  null,
+    ]);
+  }
+
+  function testDays_My()
+  {
+    $this->assertDispatchedWithParams("/days/my", [
+      'controller' => 'days',
+      'action'     => 'my',
+      'id'         =>  null,
+    ]);
+  }
+
+  function testDays_Favourite()
+  {
+    $this->assertDispatchedWithParams("/days/favourite", [
+      'controller' => 'days',
+      'action'     => 'favourite',
+      'id'         =>  null,
+    ]);
+  }
+
+  function testDays_ById()
+  {
+    $id = $this->generator->integer();
+    $this->assertDispatchedWithParams("/days/{$id}", [
+      'controller' => 'days',
+      'action'     => 'item',
+      'id'         =>  $id,
+    ]);
+  }
+
+  function testDays_Current()
+  {
+    $this->assertDispatchedWithParams("/days/current", [
+      'controller' => 'days',
+      'action'     => 'current',
+      'id'         =>  null,
+    ]);
+  }
+
+  function testDays_ByIdComment()
+  {
+    $id = $this->generator->integer();
+    $this->assertDispatchedWithParams("/days/{$id}/comment", [
+      'controller' => 'days',
+      'action'     => 'comment',
+      'id'         => $id,
+    ]);
+  }
+
+  function testDays_ByIdComments()
+  {
+    $id = $this->generator->integer();
+    $this->assertDispatchedWithParams("/days/{$id}/comments", [
+      'controller' => 'days',
+      'action'     => 'comments',
+      'id'         => $id,
+    ]);
+  }
+
+  function testDays_ByIdShare()
+  {
+    $id = $this->generator->integer();
+    $this->assertDispatchedWithParams("/days/{$id}/share", [
+      'controller' => 'days',
+      'action'     => 'share',
+      'id'         => $id,
+    ]);
+  }
+
+  function testDays_ByIdLike()
+  {
+    $id = $this->generator->integer();
+    $this->assertDispatchedWithParams("/days/{$id}/like", [
+      'controller' => 'days',
+      'action'     => 'like',
+      'id'         => $id,
+    ]);
+  }
+
+  function testDays_ByIdUnlike()
+  {
+    $id = $this->generator->integer();
+    $this->assertDispatchedWithParams("/days/{$id}/unlike", [
+      'controller' => 'days',
+      'action'     => 'unlike',
+      'id'         => $id,
+    ]);
+  }
+
+  function testDays_Start()
+  {
+    $this->assertDispatchedWithParams("/days/start", [
+      'controller' => 'days',
+      'action'     => 'start',
+      'id'         =>  null,
+    ]);
+  }
+
+  function testDays_ByIdAddMoment()
+  {
+    $id = $this->generator->integer();
+    $this->assertDispatchedWithParams("/days/{$id}/add_moment", [
+      'controller' => 'days',
+      'action'     => 'add_moment',
+      'id'         => $id,
+    ]);
+  }
+
+  function testDays_ByIdFinish()
+  {
+    $id = $this->generator->integer();
+    $this->assertDispatchedWithParams("/days/{$id}/finish", [
+      'controller' => 'days',
+      'action'     => 'finish',
+      'id'         => $id,
+    ]);
+  }
+
+  function testDays_ByIdUpdate()
+  {
+    $id = $this->generator->integer();
+    $this->assertDispatchedWithParams("/days/{$id}/update", [
+      'controller' => 'days',
+      'action'     => 'update',
+      'id'         => $id,
+    ]);
+  }
+
+  function testDays_ByIdDelete()
+  {
+    $id = $this->generator->integer();
+    $this->assertDispatchedWithParams("/days/{$id}/delete", [
+      'controller' => 'days',
+      'action'     => 'delete',
+      'id'         => $id,
+    ]);
+  }
+
+  function testDays_ByIdRestore()
+  {
+    $id = $this->generator->integer();
+    $this->assertDispatchedWithParams("/days/{$id}/restore", [
+      'controller' => 'days',
+      'action'     => 'restore',
+      'id'         => $id,
+    ]);
+  }
+
+  function testDays_ByIdMarkCurrent()
+  {
+    $id = $this->generator->integer();
+    $this->assertDispatchedWithParams("/days/{$id}/mark_current", [
+      'controller' => 'days',
+      'action'     => 'mark_current',
+      'id'         => $id,
+    ]);
+  }
+
+  function testDays_ByIdMarkFavourite()
+  {
+    $id = $this->generator->integer();
+    $this->assertDispatchedWithParams("/days/{$id}/mark_favourite", [
+      'controller' => 'days',
+      'action'     => 'mark_favourite',
+      'id'         => $id,
+    ]);
+  }
+
+  function testDays_ByIdUnmarkFavourite()
+  {
+    $id = $this->generator->integer();
+    $this->assertDispatchedWithParams("/days/{$id}/unmark_favourite", [
+      'controller' => 'days',
+      'action'     => 'unmark_favourite',
+      'id'         => $id,
+    ]);
+  }
+
+  function testDays_ByIdComplain()
+  {
+    $id = $this->generator->integer();
+    $this->assertDispatchedWithParams("/days/{$id}/complain", [
+      'controller' => 'days',
+      'action'     => 'complain',
+      'id'         => $id,
+    ]);
+  }
+
+  function testDays_Types()
+  {
+    $this->assertDispatchedWithParams("/days/types", [
+      'controller' => 'days',
+      'action'     => 'types',
+      'id'         =>  null,
+    ]);
+  }
+
+  function testMoments_ByIdLike()
+  {
+    $id = $this->generator->integer();
+    $this->assertDispatchedWithParams("/moments/{$id}/like", [
+      'controller' => 'moments',
+      'action'     => 'like',
+      'id'         => $id,
+    ]);
+  }
+
+  function testMoments_ByIdUnlike()
+  {
+    $id = $this->generator->integer();
+    $this->assertDispatchedWithParams("/moments/{$id}/unlike", [
+      'controller' => 'moments',
+      'action'     => 'unlike',
+      'id'         => $id,
+    ]);
+  }
+
+  function testMoments_ByIdComment()
+  {
+    $id = $this->generator->integer();
+    $this->assertDispatchedWithParams("/moments/{$id}/comment", [
+      'controller' => 'moments',
+      'action'     => 'comment',
+      'id'         => $id,
+    ]);
+  }
+
+  function testMoments_ByIdComments()
+  {
+    $id = $this->generator->integer();
+    $this->assertDispatchedWithParams("/moments/{$id}/comments", [
+      'controller' => 'moments',
+      'action'     => 'comments',
+      'id'         => $id,
+    ]);
+  }
+
+  function testMoments_ByIdUpdate()
+  {
+    $id = $this->generator->integer();
+    $this->assertDispatchedWithParams("/moments/{$id}/update", [
+      'controller' => 'moments',
+      'action'     => 'update',
+      'id'         => $id,
+    ]);
+  }
+
+  function testMoments_ByIdDelete()
+  {
+    $id = $this->generator->integer();
+    $this->assertDispatchedWithParams("/moments/{$id}/delete", [
+      'controller' => 'moments',
+      'action'     => 'delete',
+      'id'         => $id,
+    ]);
+  }
+
+  function testDayComments_ByIdDelete()
+  {
+    $id = $this->generator->integer();
+    $this->assertDispatchedWithParams("/day_comments/{$id}/delete", [
+      'controller' => 'day_comments',
+      'action'     => 'delete',
+      'id'         => $id,
+    ]);
+  }
+
+  function testMomentComments_ByIdDelete()
+  {
+    $id = $this->generator->integer();
+    $this->assertDispatchedWithParams("/moment_comments/{$id}/delete", [
+      'controller' => 'moment_comments',
+      'action'     => 'delete',
+      'id'         => $id,
+    ]);
+  }
+
+  function testMy_Profile()
+  {
+    $this->assertDispatchedWithParams("/my/profile", [
+      'controller' => 'my',
+      'action'     => 'profile',
+      'id'         =>  null,
+    ]);
+  }
+
+  function testMy_Settings()
+  {
+    $this->assertDispatchedWithParams("/my/settings", [
+      'controller' => 'my',
+      'action'     => 'settings',
+      'id'         =>  null,
+    ]);
+  }
+
+  function testMy_News()
+  {
+    $this->assertDispatchedWithParams("/my/news", [
+      'controller' => 'my',
+      'action'     => 'news',
+      'id'         =>  null,
+    ]);
+  }
+
+  function testUsers_Search()
+  {
+    $this->assertDispatchedWithParams("/users/search", [
+      'controller' => 'users',
+      'action'     => 'search',
+      'id'         =>  null,
+    ]);
+  }
+
+  function testUsers_ById()
+  {
+    $id = $this->generator->integer();
+    $this->assertDispatchedWithParams("/users/{$id}", [
+      'controller' => 'users',
+      'action'     => 'item',
+      'id'         =>  $id,
+    ]);
+  }
+
+  function testUsers_ByIdDays()
+  {
+    $id = $this->generator->integer();
+    $this->assertDispatchedWithParams("/users/{$id}/days/", [
+      'controller' => 'users',
+      'action'     => 'days',
+      'id'         => $id,
+    ]);
+  }
+
+  function testUsers_ByIdFollowers()
+  {
+    $id = $this->generator->integer();
+    $this->assertDispatchedWithParams("/users/{$id}/followers", [
+      'controller' => 'users',
+      'action'     => 'followers',
+      'id'         => $id,
+    ]);
+  }
+
+  function testUsers_ByIdFollowing()
+  {
+    $id = $this->generator->integer();
+    $this->assertDispatchedWithParams("/users/{$id}/following", [
+      'controller' => 'users',
+      'action'     => 'following',
+      'id'         => $id,
+    ]);
+  }
+
+  function testUsers_ByIdFollow()
+  {
+    $id = $this->generator->integer();
+    $this->assertDispatchedWithParams("/users/{$id}/follow", [
+      'controller' => 'users',
+      'action'     => 'follow',
+      'id'         => $id,
+    ]);
+  }
+
+  function testUsers_ByIdUnfollow()
+  {
+    $id = $this->generator->integer();
+    $this->assertDispatchedWithParams("/users/{$id}/unfollow", [
+      'controller' => 'users',
+      'action'     => 'unfollow',
+      'id'         => $id,
+    ]);
+  }
+
+  function testUsers_ByIdActivity()
+  {
+    $id = $this->generator->integer();
+    $this->assertDispatchedWithParams("/users/{$id}/activity", [
+      'controller' => 'users',
+      'action'     => 'activity',
+      'id'         => $id,
+    ]);
+  }
+
+  function testSocial_FacebookFriends()
+  {
+    $this->assertDispatchedWithParams("/social/facebook_friends", [
+      'controller' => 'social',
+      'action'     => 'facebook_friends',
+      'id'         => null,
+    ]);
+  }
+
+  function testSocial_FacebookInvite()
+  {
+    $this->assertDispatchedWithParams("/social/facebook_invite", [
+      'controller' => 'social',
+      'action'     => 'facebook_invite',
+      'id'         => null,
+    ]);
+  }
+
+  function testSocial_TwitterConnect()
+  {
+    $this->assertDispatchedWithParams("/social/twitter_connect", [
+      'controller' => 'social',
+      'action'     => 'twitter_connect',
+      'id'         => null,
+    ]);
+  }
+
+  function testSocial_EmailInvite()
+  {
+    $this->assertDispatchedWithParams("/social/email_invite", [
+      'controller' => 'social',
+      'action'     => 'email_invite',
+      'id'         => null,
+    ]);
+  }
+}

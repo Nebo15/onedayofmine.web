@@ -15,15 +15,18 @@ lmb_require('src/model/base/BaseModel.class.php');
  */
 class UserSettings extends BaseModel
 {
-  protected function _defineRelations()
-  {
-    $this->_belongs_to = array (
-      'user' => array (
-        'field' => 'user_settings_id',
-        'class' => 'User',
-      )
-    );
-  }
+  protected $_db_table_name = 'user_settings';
+
+  public
+      $notifications_new_days,
+      $notifications_new_comments,
+      $notifications_new_replays,
+      $notifications_related_activity,
+      $notifications_shooting_photos,
+      $photos_save_original,
+      $photos_save_filtered,
+      $social_share_facebook,
+      $social_share_twitter;
 
   function exportForApi(array $properties = null)
   {
@@ -34,35 +37,33 @@ class UserSettings extends BaseModel
     ));
   }
 
-  static function createDefault(User $user)
+  static function createDefault()
   {
     $item = new UserSettings();
-    $item->setUser($user);
-    $item->setNotificationsNewDays(1);
-    $item->setNotificationsNewComments(1);
-    $item->setNotificationsNewReplays(1);
-    $item->setNotificationsRelatedActivity(1);
-    $item->setNotificationsShootingPhotos(1);
-    $item->setPhotosSaveOriginal(1);
-    $item->setPhotosSaveFiltered(1);
-    $item->setSocialShareFacebook(1);
-    $item->setSocialShareTwitter(0);
+    $item->notifications_new_days = 1;
+    $item->notifications_new_comments = 1;
+    $item->notifications_new_replays = 1;
+    $item->notifications_related_activity = 1;
+    $item->notifications_shooting_photos = 1;
+    $item->photos_save_original = 1;
+    $item->photos_save_filtered = 1;
+    $item->social_share_facebook = 1;
+    $item->social_share_twitter = 0;
     return $item;
   }
 
-  static function createQuiet(User $user)
+  static function createQuiet()
   {
     $item = new UserSettings();
-    $item->setUser($user);
-    $item->setNotificationsNewDays(0);
-    $item->setNotificationsNewComments(0);
-    $item->setNotificationsNewReplays(0);
-    $item->setNotificationsRelatedActivity(0);
-    $item->setNotificationsShootingPhotos(0);
-    $item->setPhotosSaveOriginal(0);
-    $item->setPhotosSaveFiltered(0);
-    $item->setSocialShareFacebook(0);
-    $item->setSocialShareTwitter(0);
+    $item->notifications_new_days = 0;
+    $item->notifications_new_comments = 0;
+    $item->notifications_new_replays = 0;
+    $item->notifications_related_activity = 0;
+    $item->notifications_shooting_photos = 0;
+    $item->photos_save_original = 0;
+    $item->photos_save_filtered = 0;
+    $item->social_share_facebook = 0;
+    $item->social_share_twitter = 0;
     return $item;
   }
 }

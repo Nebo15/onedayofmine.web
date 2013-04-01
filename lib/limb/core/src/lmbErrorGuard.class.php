@@ -16,12 +16,26 @@ lmb_require('limb/core/src/lmbDelegate.class.php');
  */
 class lmbErrorGuard
 {
+  static protected $exceptions_delegates = array();
   static protected $fatal_error_delegate;
 
   static function registerExceptionHandler()
   {
     $delegate = func_get_args();
-    set_exception_handler(array(lmbDelegate :: objectify($delegate), 'invoke'));
+    if(!self::$exceptions_delegates)
+      set_exception_handler(array(__CLASS__, 'onException'));
+    self::$exceptions_delegates[] = $delegate;
+  }
+
+  static function restoreExceptionHandlers()
+  {
+    restore_exception_handler();
+  }
+
+  static function onException($e)
+  {
+    foreach(self::$exceptions_delegates as $delegate)
+      lmbDelegate :: objectify($delegate)->invoke($e);
   }
 
   static function registerFatalErrorHandler()
@@ -57,18 +71,18 @@ class lmbErrorGuard
   }
 
   static function _shutdownHandler()
-  {   
-    if(session_id())   
-      session_write_close();    
-      
+  {
+    if(session_id())
+      session_write_close();
+
     if(!function_exists('error_get_last'))
-      return;          
+      return;
 
     if(!$error = error_get_last())
       return;
-      
+
     if($error['type'] & (E_ERROR | E_COMPILE_ERROR))
-      self :: $fatal_error_delegate->invoke($error);
+      self :: $fatal_error_delegate->invoke($error['type'], $error['message'], $error['file'], $error['line']);
   }
 }
 

@@ -1,9 +1,9 @@
 <?php
 lmb_require('src/service/social_provider/odFacebook.class.php');
-lmb_require('src/service/social_profile/SocialServicesProfileInterface.class.php');
+lmb_require('src/service/social_profile/SocialProfileInterface.class.php');
 lmb_require('src/service/social_profile/SharesInterface.class.php');
 
-class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
+class FacebookProfile implements SocialProfileInterface, SharesInterface
 {
   const ID = 'Facebook';
 
@@ -12,7 +12,7 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
    */
   protected $user;
   /**
-   * @var odFacebook
+   * @var Facebook
    */
   protected $provider;
 
@@ -31,13 +31,13 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
    */
   public function __construct(User $user)
   {
-    $access_token   = $user->getFacebookAccessToken();
+    $access_token    = $user->facebook_access_token;
 
     lmb_assert_true($user, 'Facebook profile user not specified.');
     lmb_assert_true($access_token, 'Facebook access token not specified.');
 
-    $this->provider = lmbToolkit::instance()->getFacebook($access_token);
-    $this->user     = $user;
+    $this->provider  = lmbToolkit::instance()->getFacebook($access_token);
+    $this->user      = $user;
     $this->namespace = lmbToolkit::instance()->getConf('facebook')->namespace;
   }
 
@@ -74,14 +74,16 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
   public function getFriends()
   {
     $fields = implode(',', self::_getUserFacebookFieldsMap());
-    $fql_result = $this->provider->makeQuery("SELECT {$fields} FROM user WHERE is_app_user AND uid IN (SELECT uid2 FROM friend WHERE uid1 = me())");
-    $friends = [];
+    $fql_result = $this->provider->makeQuery("SELECT {$fields} FROM user WHERE uid IN (SELECT uid2 FROM friend WHERE uid1 = me()) ORDER BY first_name");
 
+    $friends = [];
     if($fql_result)
+    {
       foreach($fql_result as $raw_info)
       {
         $friends[] = $this->_mapFacebookInfo($raw_info);
       }
+    }
 
     return $friends;
   }
@@ -91,16 +93,13 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
     $results = array();
     foreach($this->getFriends() as $info)
     {
-      if(!$user = User::findByFacebookUid($info['facebook_uid']))
-        continue;
-
-      // $user->setUserInfo($info);
-      $results[] = $user;
+      if($user = User::findByFacebookUid($info['facebook_uid']))
+        $results[] = $user;
     }
     return $results;
   }
 
-  public function getPictures()
+  public function getUserpic()
   {
     $info = $this->getInfo_Raw();
     // $pic_hash = sha1($this->getPictureContents($info['pic']));
@@ -149,7 +148,7 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
   public function shareDay(Day $day)
   {
     return $this->provider->api("/me/feed", "post", array(
-      'name'        => $day->getTitle(),
+      'name'        => $day->title,
       'picture'     => count($day->getMoments()) ? lmbToolkit::instance()->getStaticUrl($day->getImage()) : '',
       'link'        => $this->_getPageUrl($day),
       'description' => 'Visit onedayofmine.com for more info',
@@ -167,7 +166,8 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
 
   public function shareDayUnlike(Day $day, DayLike $like)
   {
-    return $this->_deleteBuiltInLike($like->getFacebookId());
+	  if($like->facebook_id)
+      return $this->_deleteBuiltInLike($like->facebook_id);
   }
 
   public function shareMomentAdd(Day $day, Moment $moment)
@@ -213,7 +213,7 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
   {
     return array(
       'uid', 'email', 'first_name', 'last_name', 'sex', 'timezone', 'profile_update_time',
-      'pic', 'pic_big', 'work', 'current_location', 'birthday_date'
+      'pic', 'pic_square', 'pic_big', 'work', 'current_location', 'birthday_date'
     );
   }
 
@@ -227,6 +227,7 @@ class FacebookProfile implements SocialServicesProfileInterface, SharesInterface
       'timezone'         => $fb['timezone'],
       'facebook_profile_utime' => $fb['profile_update_time'],
       'pic'              => $fb['pic'],
+	    'pic_square'       => $fb['pic_square'],
       'pic_big'          => $fb['pic_big'],
       'occupation'       => isset($fb['work']['position']['name'])
                                ? $fb['work']['position']['name']

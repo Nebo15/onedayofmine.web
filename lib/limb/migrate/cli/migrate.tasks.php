@@ -1,6 +1,6 @@
 <?php
 
-function prepare_project_params()
+function lmb_migrate_prepare_project_params()
 {
   lmb_package_require('config');
   lmb_package_require('fs');
@@ -8,7 +8,7 @@ function prepare_project_params()
   $migrate_conf = lmbToolkit::instance()->getConf('migrate');
 
   $params['dsn']    = $db_conf['dsn'];
-  $params = $params + (array)$migrate_conf;
+  $params = $params + (array) $migrate_conf;
   lmbFs::mkdir(dirname($params['schema']));
   lmbFs::mkdir(dirname($params['data']));
   lmbFs::mkdir($params['migrations']);
@@ -19,10 +19,10 @@ function prepare_project_params()
 /**
  * @return DbMigration
  */
-function migrate_factory()
+function lmb_migrate_factory($dsn_name = 'dsn')
 {
   require_once('limb/migrate/lib/db.migration/src/DbMigration.class.php');
-  $hParams = prepare_project_params();
+  $hParams = lmb_migrate_prepare_project_params($dsn_name);
   return new DbMigration($hParams['dsn'], $hParams['schema'], $hParams['data'], $hParams['migrations']);
 }
 
@@ -50,7 +50,7 @@ function task_migrate_init_config($argv)
  */
 function task_migrate_init($argv)
 {
-  $oMigration = migrate_factory();
+  $oMigration = lmb_migrate_factory();
   $iVersion = (int)lmb_cli_ask_for_option('Version number',1);
   $sIgnore = 'data';
   $oMigration->init($iVersion, $sIgnore);
@@ -63,7 +63,7 @@ function task_migrate_init($argv)
  */
 function task_migrate_dump_schema($argv)
 {
-  $oMigration = migrate_factory();
+  $oMigration = lmb_migrate_factory();
   $sIgnore = 'data';
   $oMigration->dump($sIgnore);
 }
@@ -75,7 +75,7 @@ function task_migrate_dump_schema($argv)
  */
 function task_migrate_dump_data($argv)
 {
-  $oMigration = migrate_factory();
+  $oMigration = lmb_migrate_factory();
   $sIgnore = 'schema';
   $oMigration->dump($sIgnore);
 }
@@ -87,7 +87,7 @@ function task_migrate_dump_data($argv)
  */
 function task_migrate_dump_all($argv)
 {
-  $oMigration = migrate_factory();
+  $oMigration = lmb_migrate_factory();
   $oMigration->dump();
 }
 
@@ -99,7 +99,7 @@ function task_migrate_dump_all($argv)
  */
 function task_migrate_load_all($argv)
 {
-  $oMigration = migrate_factory();
+  $oMigration = lmb_migrate_factory();
   $oMigration->load();
 }
 
@@ -110,7 +110,7 @@ function task_migrate_load_all($argv)
  */
 function task_migrate_diff($argv)
 {
-  $oMigration = migrate_factory();
+  $oMigration = lmb_migrate_factory();
   echo $oMigration->diff();
 }
 
@@ -122,8 +122,8 @@ function task_migrate_diff($argv)
  */
 function task_migrate_create($argv)
 {
-  $oMigration = migrate_factory();
-  $sName = (int)lmb_cli_ask_for_option('Migration name');
+  $oMigration = lmb_migrate_factory();
+  $sName = str_replace(' ', '_', lmb_cli_ask_for_option('Migration name'));
   $oMigration->createMigration($sName);
 }
 
@@ -134,7 +134,7 @@ function task_migrate_create($argv)
  */
 function task_migrate_run($argv)
 {
-  $oMigration = migrate_factory();
+  $oMigration = lmb_migrate_factory();
   $oMigration->migrate(false);
 }
 
@@ -145,6 +145,34 @@ function task_migrate_run($argv)
  */
 function task_migrate_dryrun($argv)
 {
-  $oMigration = migrate_factory();
+  $oMigration = lmb_migrate_factory();
   $oMigration->migrate(true);
+}
+
+/**
+ * @desc Sync schema from default dsn to another from args.
+ * @deps migrate_init_config
+ * @example migrate_sync tests_dsn
+ */
+function task_migrate_sync($argv)
+{
+	if(!isset($argv[0]))
+		taskman_sysmsg("Destination dsn not given.".PHP_EOL);
+
+	$db_conf = lmbToolkit::instance()->getConf('db');
+	$dst_dsn = $db_conf->get($argv[0], null);
+	if(!$dst_dsn)
+		taskman_sysmsg("{$argv[0]} not found in db config.".PHP_EOL);
+
+	$srcMigration = lmb_migrate_factory();
+
+	$src_version = $srcMigration->getSchemaVersion();
+	taskman_msg('Source version: '.$src_version.PHP_EOL);
+	$dst_version = $srcMigration->getSchemaVersion($dst_dsn);
+	taskman_msg('Destination version: '.$dst_version.PHP_EOL);
+
+	if($src_version <= $dst_version)
+		taskman_sysmsg("Sync don't you need.".PHP_EOL);
+	else
+		$srcMigration->sync($dst_dsn);
 }

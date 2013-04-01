@@ -2,9 +2,9 @@
 /*
  * Limb PHP Framework
  *
- * @link http://limb-project.com 
+ * @link http://limb-project.com
  * @copyright  Copyright &copy; 2004-2009 BIT(http://bit-creative.com)
- * @license    LGPL http://www.gnu.org/copyleft/lesser.html 
+ * @license    LGPL http://www.gnu.org/copyleft/lesser.html
  */
 lmb_require('limb/toolkit/src/lmbToolkit.class.php');
 lmb_require('limb/toolkit/src/lmbToolkitTools.interface.php');
@@ -17,7 +17,7 @@ lmb_require('limb/toolkit/src/lmbToolkitTools.interface.php');
  */
 abstract class lmbAbstractTools implements lmbToolkitTools
 {
-  protected $reserved_methods = array('__construct', '_setRaw', '_getRaw');
+  protected $reserved_methods = array('__construct', '_setRaw', '_getRaw', 'getToolsSignatures');
   /**
   * @var lmbToolkit reference of lmbToolkit instance
   */
@@ -34,7 +34,7 @@ abstract class lmbAbstractTools implements lmbToolkitTools
   */
   function getToolsSignatures()
   {
-    $methods = get_class_methods(get_class($this));
+    $methods = get_class_methods($this);
 
     $signatures = array();
     foreach($methods as $method)
@@ -42,11 +42,6 @@ abstract class lmbAbstractTools implements lmbToolkitTools
       if(in_array($method, $this->reserved_methods))
         continue;
       $signatures[$method] = $this;
-    }
-
-    foreach(get_class_methods('lmbToolkitTools') as $method)
-    {
-      unset($signatures[$method]);
     }
 
     return $signatures;

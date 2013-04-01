@@ -1,8 +1,9 @@
 <?php
 lmb_require('limb/web_app/src/controller/lmbController.class.php');
-lmb_require('src/odStaticObjectMother.class.php');
+lmb_require('tests/src/odStaticObjectMother.class.php');
 lmb_require('src/Json.class.php');
 lmb_require('src/service/social_provider/odFacebookApiExpiredTokenException.class.php');
+lmb_require('src/model/User.class.php');
 
 abstract class BaseJsonController extends lmbController
 {
@@ -46,16 +47,19 @@ abstract class BaseJsonController extends lmbController
         return $this->_answerUnauthorized();
       }
     }
-
     return $this->_runMethod($method);
   }
 
   protected function _runMethod($method)
   {
-    if($template_path = $this->findTemplateForAction($this->current_action))
-      $this->setTemplate($template_path);
-
-    $method_response = $this->$method();
+    try
+    {
+      $method_response = $this->$method();
+    }
+    catch(odFacebookApiExpiredTokenException $e)
+    {
+      $method_response = $this->_answerUnauthorized();
+    }
 
     $this->_passLocalAttributesToView();
 
@@ -104,10 +108,11 @@ abstract class BaseJsonController extends lmbController
 
   protected function _getFromToLimitations()
   {
+	  $limit = $this->request->getFiltered('limit', FILTER_SANITIZE_NUMBER_INT);
     return array(
       $this->request->getFiltered('from', FILTER_SANITIZE_NUMBER_INT),
       $this->request->getFiltered('to', FILTER_SANITIZE_NUMBER_INT),
-      $this->request->getFiltered('limit', FILTER_SANITIZE_NUMBER_INT),
+      (!$limit || $limit > 100 || $limit < 0) ? 100 : $limit
     );
   }
 
@@ -196,7 +201,7 @@ abstract class BaseJsonController extends lmbController
 
   protected function _answerNotFound($message = 'Not Found')
   {
-    return $this->_answer($message, array(), $message, 404);
+    return $this->_answerWithError([$message], null, 404);
   }
 
   protected function _answerModelNotFoundById($model_name, $id)
@@ -209,6 +214,11 @@ abstract class BaseJsonController extends lmbController
     return $this->_answerWithError("Current user don't have permission to perform this action", null, 401);
   }
 
+  protected function _answerConflict($result = null)
+  {
+    return $this->_answerOk($result, "Entity already exists", 200);
+  }
+
   protected function _answerNotPost($message = 'Not a POST request')
   {
     return $this->_answerWithError($message, null, 405);
@@ -216,19 +226,21 @@ abstract class BaseJsonController extends lmbController
 
   protected function _answer($result, array $errors, $status, $code)
   {
-    if($code)
-      $this->response->setCode($code);
-    if($status)
-      $this->response->setStatus($status);
+    if(lmb_app_mode() != 'production')
+    {
+      $this->response->addHeader('Access-Control-Allow-Origin: *');
+      $this->response->addHeader('Access-Control-Allow-Credentials: true');
+    }
 
+    $this->response->setCode($code);
+    $this->response->setStatus($status);
     $this->response->setContentType('application/json');
 
-    return Json::indent(json_encode(
-      array(
-        'code' => $code,
+    return json_encode([
+        'code'   => $this->response->getCode(),
         'status' => $this->response->getStatus(),
         'result' => $result,
-        'errors' => $errors)
-    ));
+        'errors' => $errors
+    ]);
   }
 }
