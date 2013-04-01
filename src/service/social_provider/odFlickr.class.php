@@ -91,7 +91,7 @@ class odFlickr {
 		return $response;
 	}
 
-	function request ($command, $args = array(), $nocache = false)
+	function request ($command, $args = array())
 	{
 		//Sends a request to Flickr's REST endpoint via POST.
 		if (substr($command,0,7) != "flickr.") {
