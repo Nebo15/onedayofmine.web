@@ -424,7 +424,7 @@ $this->day->is_gathering_enabled = false;
 
         <hr/>
 
-        <? if($this->day->comments_count > 0) { ?>
+        <? if($this->day->comments_count > 0 || $this->toolkit->getUser()) { ?>
           <div class="comments">
             <a name="comments"></a>
             <span class="pull-right not-decorated text-gray">
