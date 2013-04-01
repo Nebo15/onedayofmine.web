@@ -3,6 +3,9 @@ $this->title = "Search for days";
 $this->menu = 'search';
 ?>
 {{wrap with="layout.phtml"}}
+  {{into slot="js_include"}}
+    <script src="/lib/HarlemShake.js"></script>
+  {{/into}}
   {{into slot="js_ready"}}
     (function() {
       var search_form_selector = $('.form-search');
@@ -22,6 +25,11 @@ $this->menu = 'search';
       });
 
       search_form_selector.submit(function(event) {
+        if(search_form_query_selector.val() == 'My Harlem Shake day') {
+          HarlemShake();
+          return false;
+        }
+
         var search_request = API.request('POST', 'days/search', {
           query: search_form_query_selector.val()
         });
