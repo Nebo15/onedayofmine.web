@@ -47,7 +47,7 @@ class TwitterProfile implements SocialProfileInterface, SharesInterface
    */
   public function getInfo_Raw()
   {
-    return $this->provider->api('1/account/verify_credentials');;
+    return $this->provider->api('1/account/verify_credentials');
   }
 
   /**
