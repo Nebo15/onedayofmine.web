@@ -9,7 +9,7 @@ $(function () {
 
     var CSS_BASE_CLASS = "mw-harlem_shake_me"
     var CSS_FIRST_CLASS = "im_first";
-    var CSS_OTHER_CLASSES = ["im_drunk", "im_baked", "im_trippin", "im_blown", "im_spinning"];
+    var CSS_OTHER_CLASSES = ["im_drunk", "im_baked", "im_trippin", "im_blown"];
 
     var CSS_STROBE_CLASS = "mw-strobe_light";
 
