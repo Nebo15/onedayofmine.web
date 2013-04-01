@@ -15,7 +15,7 @@ lmb_require('src/service/odAsyncJobs.class.php');
 lmb_require('tests/src/service/odJobQueueClientForTests.class.php');
 lmb_require('src/model/User.class.php');
 
-if(!class_exists('CFRuntime')) lmb_require('amazon-sdk/sdk.class.php');
+if(!class_exists('CFRuntime')) require_once('amazon-sdk/sdk.class.php');
 
 class odTools extends lmbAbstractTools
 {
