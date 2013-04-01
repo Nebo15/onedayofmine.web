@@ -100,7 +100,6 @@ $this->menu = '';
   {{into slot="js"}}
     var interesting_days = <?= json_encode($this->interesting_days); ?>;
   {{/into}}
-  <script>
   {{into slot="js_ready"}}
     // Nice boostrap select's
     $(function() {
@@ -164,7 +163,6 @@ $this->menu = '';
       });
     })();
   {{/into}}
-  </script>
   {{into slot="content"}}
     <h1>One Day Of Mine</h1>
     <p class="lead">Live the life through other people's eyes</p>
@@ -229,6 +227,8 @@ $this->menu = '';
      </div>
     </div>
 
-    <div style="height:50px"></div>
+    <div class="text-center sign-up-wrap">
+      <a class="btn btn-large btn-success trigger_login" href="/pages/import">Try this awesome features</a>
+    </div>
   {{/into}}
 {{/wrap}}
