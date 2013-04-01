@@ -17,11 +17,7 @@
 	$.isMobile = function () {
 		var userAgent = window.navigator.userAgent;
 
-		if (userAgent.match(/iPad/i) || userAgent.match(/iPhone/i) || userAgent.match(/iPod/i)) {
-			return true;
-		} else {
-			return false;
-		}
+		return userAgent.match(/iPad/i) || userAgent.match(/iPhone/i) || userAgent.match(/iPod/i);
 	};
 })();
 
