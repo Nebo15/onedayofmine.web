@@ -135,10 +135,8 @@ $this->menu = '';
       // });
 
       // TODO: animate change when next element have different value
-      $('#days_carousel').on('slide', function(event) {
-
+      $('#days_carousel').on('slid', function(event) {
         var active_item = $(this).find('.item.active');
-
 	      $('.dayType').html(active_item.data().type);
 	      $('.userOccupation').html(active_item.data().userOccupation);
 	      $('.userLocation').html(active_item.data().userLocation);
@@ -200,9 +198,9 @@ $this->menu = '';
             <div class="selector">
               <span class="dayType">{$item.type}</span>
               of
-              <span class="userOccupation">{$item.user.occupation}</span>
+              <span class="userOccupation">{$#interesting_days[0].user.occupation}</span>
               from
-              <span class="userLocation">{$item.user.location}</span>
+              <span class="userLocation">{$#interesting_days[0].user.location}</span>
             </div>
           </div>
           <a class="left carousel-control" href="#days_carousel" data-slide="prev">‹</a>
