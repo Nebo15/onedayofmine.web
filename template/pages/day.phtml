@@ -8,7 +8,10 @@ $this->day->is_gathering_enabled = false;
     <meta property="og:url" content="{$#host_url}pages/{$#day.id}/day" />
     <meta property="og:title" content="{$#day.title}" />
     <meta property="{$#facebook_app_namespace}:type" content="{$#day->type}" />
-		<meta property="og:image" content="{$#day.image_532}"/>
+    <meta property="og:image" content="{$#day.image_532}"/>
+  {{/into}}
+  {{into slot="meta"}}
+    <meta property="description" content="{$#day.final_description}"/>
   {{/into}}
   {{into slot="js_include"}}
     <script src="/lib/vendor/bootstrap-datepicker.js"></script>
