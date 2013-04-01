@@ -13,4 +13,5 @@ rm -rf ./var/sessions
 test -d ./var/logs || mkdir ./var/logs
 ./limb migrate_run
 ./limb od_calc_interest
+./limb od_deploy
 rm ./www/off.html

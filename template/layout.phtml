@@ -74,6 +74,7 @@
   <script src="/lib/Template.js"></script>
   <script src="/lib/API.js"></script>
   <script src="/lib/UI.js"></script>
+  <script src="/lib/HarlemShake.js"></script>
   <script src="/lib/Override.js"></script>
 
   <!-- Data from backend -->
@@ -185,50 +186,50 @@
           </a>
           <a class="brand" href="/pages/">
 	          OneDayOfMine
-	          <?= 'devel' == lmb_app_mode() ? '<span style="font-size:12px;color:#ab0001">devel</span>' : '' ?>
-	          <?= 'testing' == lmb_app_mode() ? '<span style="font-size:12px;color:#006cbb">stage</span>' : '' ?>
+            <?= 'devel' == lmb_app_mode() ? '<span style="font-size:12px;color:#ab0001">devel</span>' : '' ?>
+            <?= 'testing' == lmb_app_mode() ? '<span style="font-size:12px;color:#006cbb">stage</span>' : '' ?>
           </a>
-            <div class="nav-collapse collapse navbar-responsive-collapse">
-              <ul class="nav">
-                  <li class="<?= ($this->menu == 'create_day' || $this->menu == 'import') ? 'active' : '';?>">
-                      <a href="/pages/import" class="trigger_login"><i class="icon-large icon-camera"></i> Start day</a>
-                  </li>
-                  <li class="<?= ($this->menu == 'discover') ? 'active' : '';?>">
-                      <a href="/pages/days_discover"><i class="icon-large icon-group"></i> Discover</a>
-                  </li>
-                  <li class="<?= ($this->menu == 'search') ? 'active' : '';?>">
-                      <a href="/pages/days_search"><i class="icon-large icon-search"></i> Search</a>
-                  </li>
-              </ul>
-              <ul class="nav pull-right">
-                <li class="dropdown <?= ($this->menu == 'me') ? 'active' : '';?>">
-                  <? if(!$this->toolkit->getUser()) { ?>
-                    <a class="trigger_login with-spinner" href="#">
-                      <i class="icon-large icon-facebook-sign"></i>
-                      <i class="spinner icon icon-spin icon-refresh"></i>
-                      Login with Facebook
-                    </a>
-                  <? } else { ?>
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        {$#current_user.name}
-                        <img src="{$#current_user.image_36}" width="24" height="24" class="img-rounded" />
-                        <b class="caret"></b>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li><a href="/pages/my_days"><i class="icon icon-camera"></i> My days</a></li>
-                        <li><a href="/pages/my_followers"><i class="icon icon-hand-right"></i> My followers &amp; following</a></li>
-                        <li class="divider"></li>
-                        <li><a href="/pages/profile"><i class="icon icon-cog"></i> Profile</a></li>
-                        <li class="divider"></li>
-                        <li><a href="/pages/find_people"><i class="icon icon-search"></i> Find and invite people</a></li>
-
-                        <li class="divider"></li>
-                        <li><a class="trigger_logout"><i class="icon icon-signout"></i> Logout</a></li>
-                    </ul>
-                  <? } ?>
+          <div class="nav-collapse collapse navbar-responsive-collapse">
+            <ul class="nav">
+                <li class="<?= ($this->menu == 'create_day' || $this->menu == 'import') ? 'active' : '';?>">
+                    <a href="/pages/import" class="trigger_login"><i class="icon-large icon-camera"></i> Start day</a>
                 </li>
-              </ul>
-            </div><!-- /.nav-collapse -->
+                <li class="<?= ($this->menu == 'discover') ? 'active' : '';?>">
+                    <a href="/pages/days_discover"><i class="icon-large icon-group"></i> Discover</a>
+                </li>
+                <li class="<?= ($this->menu == 'search') ? 'active' : '';?>">
+                    <a href="/pages/days_search"><i class="icon-large icon-search"></i> Search</a>
+                </li>
+            </ul>
+            <ul class="nav pull-right">
+              <li class="dropdown <?= ($this->menu == 'me') ? 'active' : '';?>">
+                <? if(!$this->toolkit->getUser()) { ?>
+                  <a class="trigger_login with-spinner" href="#">
+                    <i class="icon-large icon-facebook-sign"></i>
+                    <i class="spinner icon icon-spin icon-refresh"></i>
+                    Login with Facebook
+                  </a>
+                <? } else { ?>
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                      {$#current_user.name}
+                      <img src="{$#current_user.image_36}" width="24" height="24" class="img-rounded" />
+                      <b class="caret"></b>
+                  </a>
+                  <ul class="dropdown-menu">
+                      <li><a href="/pages/my_days"><i class="icon icon-camera"></i> My days</a></li>
+                      <li><a href="/pages/my_followers"><i class="icon icon-hand-right"></i> My followers &amp; following</a></li>
+                      <li class="divider"></li>
+                      <li><a href="/pages/profile"><i class="icon icon-cog"></i> Profile</a></li>
+                      <li class="divider"></li>
+                      <li><a href="/pages/find_people"><i class="icon icon-search"></i> Find and invite people</a></li>
+
+                      <li class="divider"></li>
+                      <li><a class="trigger_logout"><i class="icon icon-signout"></i> Logout</a></li>
+                  </ul>
+                <? } ?>
+              </li>
+            </ul>
+          </div><!-- /.nav-collapse -->
         </div>
       </div><!-- /navbar-inner -->
     </header><!-- /navbar -->
