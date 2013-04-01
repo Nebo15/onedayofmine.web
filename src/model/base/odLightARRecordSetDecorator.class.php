@@ -1,6 +1,6 @@
 <?php
-require_once('limb/core/src/lmbCollectionDecorator.class.php');
-require_once('limb/core/src/lmbSet.class.php');
+lmb_require('limb/core/src/lmbCollectionDecorator.class.php');
+lmb_require('limb/core/src/lmbSet.class.php');
 
 class odLightARRecordSetDecorator extends lmbCollectionDecorator
 {

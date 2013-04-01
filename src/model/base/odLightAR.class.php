@@ -1,9 +1,9 @@
 <?php
-require_once('src/model/base/utils.inc.php');
-require_once('src/model/base/odLightARRecordSetDecorator.class.php');
-require_once('limb/validation/src/lmbValidator.class.php');
-require_once('limb/validation/src/lmbErrorList.class.php');
-require_once('limb/dbal/src/query/lmbSelectQuery.class.php');
+lmb_require('src/model/base/utils.inc.php');
+lmb_require('src/model/base/odLightARRecordSetDecorator.class.php');
+lmb_require('limb/validation/src/lmbValidator.class.php');
+lmb_require('limb/validation/src/lmbErrorList.class.php');
+lmb_require('limb/dbal/src/query/lmbSelectQuery.class.php');
 
 abstract class odLightAR extends odDirtableObject implements ArrayAccess
 {
