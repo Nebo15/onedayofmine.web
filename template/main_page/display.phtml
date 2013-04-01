@@ -1,97 +1,128 @@
 <?
-$this->title = "OneDayOfMine";
-$this->fb_disabled = true;
-$this->menu_disabled = true;
+$this->menu = '';
 ?>
 {{wrap with="layout.phtml"}}
-{{into slot="meta"}}
-<meta property="og:title" content="One Day of Mine - Live the life through other people's eyes"/>
-<meta property="og:type" content="company"/>
-<meta property="og:site_name" content="One Day of Mine - Live the life through other people's eyes"/>
-<meta property="og:description" content="<ul>
-	<li>new life for old photos</li>
-	<li>easy to use: just click next and enjoy our magic</li>
-	<li>look at life through the eyes of different people</li>
-	<li>gain interest of other people by publishing days from your life</li>
-</ul>"/>
-<meta property="og:url" content="onedayofmine.com"/>
-<meta property="og:image"
-			content="https://launchrock-assets.s3.amazonaws.com/facebook-files/LEKBNZBC_1363177046270.png?_=0"/>
-{{/into}}
-{{into slot="content"}}
-<div class="hero-unit">
-	<div class="row">
-		<div class="span6">
-			<h1>One Day Of Mine</h1>
-			<p class="lead">Live the life through other people's eyes</p>
-			<ul class="unstyled">
-				<li>
-					<i class="icon-large icon-camera-retro"></i>
-					new life for old photos
-				</li>
-				<li>
-					<i class="icon-large icon-magic"></i>
-					easy to use: just click next and enjoy our magic
-				</li>
-				<li>
-					<i class="icon-large icon-eye-open"></i>
-					look at life through the eyes of different people
-				</li>
-				<li>
-					<i class="icon-large icon-group"></i>
-					gain interest of other people by publishing days from your life
-				</li>
-				<li>
-					<i class="icon-large icon-hand-right"></i>
-					stay tuned
-					<div id="lr-widget" rel="LEKBNZBC"></div>
-					<script type="text/javascript" src="//ignition.launchrock.com/ignition-current.min.js"></script>
-				</li>
-				<li>
-					<hr/>
-					<i class="icon-large icon-question-sign"></i>
-					Do you have any questions? <a href="mailto:welcome@onedayofmine.com">welcome@onedayofmine.com</a>!
-				</li>
-			</ul>
-		</div>
-		<div class="span4">
-			<script src="http://widgets.twimg.com/j/2/widget.js"></script>
-			<script>
-				new TWTR.Widget({
-					version: 2,
-					type: 'user',
-					search: '@OneDayOfMine',
-					rpp: 5,
-					interval: 6000,
-					width:'100%',
-					height: 350,
-					footer: '',
-					theme: {
-						shell: {
-							background: '#eee',
-							color: '#000'
-						},
-						tweets: {
-							background: '#eee',
-							color: '#000',
-							links: '#9c0000'
-						}
-					},
-					features: {
-						scrollbar: true,
-						loop: false,
-						live: false,
-						hashtags: false,
-						timestamp: false,
-						avatars: true,
-						behavior: 'all'
-					}
-				}).render().start();
-			</script>
-		</div>
-		</div>
-	</div>
-	{{/into}}
-	{{into slot="js_ready"}}
-	{{/into}}
-	{{/wrap}}
+  {{into slot="templates"}}
+    <script id="news_list_template" type="text/x-handlebars-template">
+      <ul class="news unstyled">
+        [[#news]]
+          [[#include news_list_elements_template]]
+        [[/news]]
+      </ul>
+    </script>
+
+    <script id="news_list_elements_template" type="text/x-handlebars-template">
+      [[#news]]
+        <li data-id="[[id]]">
+          <a href="/pages/[[sender.id]]/user">
+            <img src="[[sender.image_72]]" width="72" class="pull-left img-rounded" alt="" />
+          </a>
+          <div class="bubble left">
+            <p class="text">
+              [[text]]
+              <br />
+              [[#days]]
+                  <a href="/pages/[[id]]/day">
+                    <img src="[[day.image_266]]" width="72">
+                  </a>
+              [[/days]]
+              [[#moments]]
+                  <a href="/pages/[[day.id]]/day">
+                    <img src="[[moment.image_266]]" width="72">
+                  </a>
+              [[/moments]]
+              [[#day_comments]]
+                  <blockquote>[[comment.text]]</blockquote>
+              [[/day_comments]]
+              [[#moment_comments]]
+                  <blockquote>[[comment.text]]</blockquote>
+              [[/moment_comments]]
+              <small><b>[[time]]</b></small>
+            </p>
+          </div>
+        </li>
+      [[/news]]
+    </script>
+  {{/into}}
+  {{into slot="js_include"}}
+    <script src="/lib/InfiniteScroll.js"></script>
+  {{/into}}
+  {{into slot="js_ready"}}
+    // Init paginator
+    var template_list = Template.prepareTemplate($('#news_list_elements_template'));
+    $('.news').infiniteScroll({
+      request: API.get('my/news'),
+      success: function(response) {
+        var news = Template.compileElement(template_list, {
+          news: response.data.result
+        });
+
+        news = $($.trim(news));
+
+        $(this).find('.infiniteScroll_button_container').before(news);
+      }
+    });
+  {{/into}}
+  {{into slot="content"}}
+    <div class="row">
+  		<div class="span8">
+				<h1>News</h1>
+        {{list using="$#news"}}
+          <ul class="news unstyled">
+            {{list:item}}
+              <li data-id="{$item.id}">
+                <a href="/pages/{$item.sender.id}/user">
+                  <img src="{$item.sender.image_72}" width="72" class="pull-left img-rounded" alt="" />
+                </a>
+                <div class="bubble left">
+                  <p class="text">
+                    {$item.text|raw}
+                    <br />
+                    {{list using="{$item.days}" as="$day"}}
+                      {{list:item}}
+                        <a href="/pages/{$day.id}/day">
+                          <img src="{$day.image_266}" width="72">
+                        </a>
+                      {{/list:item}}
+                    {{/list}}
+                    {{list using="{$item.moments}" as="$moment"}}
+                      {{list:item}}
+                        <a href="/pages/{$item.day.id}/day">
+                          <img src="{$moment.image_266}" width="72">
+                        </a>
+                      {{/list:item}}
+                    {{/list}}
+                    {{list using="{$item.day_comments}" as="$comment"}}
+                      {{list:item}}
+                        <blockquote>{$comment.text}</blockquote>
+                      {{/list:item}}
+                    {{/list}}
+                    {{list using="{$item.moment_comments}" as="$comment"}}
+                      {{list:item}}
+                        <blockquote>{$comment.text}</blockquote>
+                      {{/list:item}}
+                    {{/list}}
+                    <small><b>{$item.time|date:'M j \a\t g:m a'}</b></small>
+                  </p>
+                </div>
+              </li>
+            {{/list:item}}
+            {{list:empty}}
+              <p>You don't have news. Try to <a href="/pages/find_people">follow</a> more people.</p>
+            {{/list:empty}}
+          </ul>
+        {{/list}}
+  		</div>
+
+  		<div class="span3 hide-phone">
+				<div>
+          {{apply template="following_thumb_list" users="{$#following}" /}}
+				</div>
+
+        <div>
+          {{apply template="followers_thumb_list" users="{$#followers}" /}}
+        </div>
+  		</div>
+    </div>
+  {{/into}}
+{{/wrap}}

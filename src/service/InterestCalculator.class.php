@@ -4,6 +4,7 @@ lmb_require('limb/dbal/src/query/lmbSelectQuery.class.php');
 lmb_require('limb/dbal/src/query/lmbDeleteQuery.class.php');
 lmb_require('limb/dbal/src/query/lmbInsertQuery.class.php');
 lmb_require('src/model/DayInterestRecord.class.php');
+lmb_require('src/model/Day.class.php');
 
 class InterestCalculator
 {

@@ -2,6 +2,7 @@
 lmb_require('src/model/base/odLightAR.class.php');
 lmb_require('limb/net/src/lmbIp.class.php');
 lmb_require('limb/validation/src/rule/lmbValidValueRule.class.php');
+lmb_require('limb/dbal/src/criteria/lmbSQLCriteria.class.php');
 
 abstract class BaseModel extends odLightAR
 {
