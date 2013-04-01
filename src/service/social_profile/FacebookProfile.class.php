@@ -12,7 +12,7 @@ class FacebookProfile implements SocialProfileInterface, SharesInterface
    */
   protected $user;
   /**
-   * @var facebook
+   * @var Facebook
    */
   protected $provider;
 
