@@ -117,11 +117,11 @@ $this->menu = '';
 
       carousel_caption_overlap.find('.select-wrap').each(function() {
         var $this = $(this);
-        resetHiddenSelect($this);
-
-        $this.find('select').change(function() {
-          resetHiddenSelect($this);
-        });
+//        resetHiddenSelect($this);
+//
+//        $this.find('select').change(function() {
+//          resetHiddenSelect($this);
+//        });
       });
 
       // $('#days_carousel').on('slide', function(event) {
@@ -137,29 +137,12 @@ $this->menu = '';
       //   });
       // });
 
-      // TODO: animate change when next element have diffrent value
+      // TODO: animate change when next element have different value
       $('#days_carousel').on('slid', function(event) {
         var active_item = $(this).find('.item.active');
-
-        $.each(active_item.data(), function(key, value) {
-          var select = carousel_caption_overlap.find('select[name='+key+']');
-
-          var option_exists = false;
-          select.find('option').removeAttr('selected');
-          select.find('option').each(function() {
-            if($(this).text() == value) {
-              $(this).attr('selected', true);
-              option_exists = true;
-            }
-          });
-
-          if(!option_exists) {
-            select.append('<option selected>' + value + '</option>');
-          }
-
-          select.val(value);
-          resetHiddenSelect(select.parent());
-        });
+	      $('.dayType').html(active_item.data().type);
+	      $('.userOccupation').html(active_item.data().userOccupation);
+	      $('.userLocation').html(active_item.data().userLocation);
       });
     });
 
@@ -176,10 +159,8 @@ $this->menu = '';
       $(function() {
         fixFinalCommentEndings();
 
-        // IDEA: animate all blocks separatedly with diffrent animation speed
-        $('#days_carousel').carousel({
-          interval: 5000
-        })
+        // IDEA: animate all blocks with different animation speed
+        $('#days_carousel').carousel({ interval: 5000 });
       });
     })();
   {{/into}}
@@ -218,49 +199,11 @@ $this->menu = '';
           </div>
           <div class="carousel-caption-overlap">
             <div class="selector">
-              <div class="select-wrap">
-                <select name="type">
-                  <option<?php if($item['type'] == 'Day off') { ?> selected<? } ?>>Day off</option>
-                  <option<?php if($item['type'] == 'Holiday') { ?> selected<? } ?>>Holiday</option>
-                  <option<?php if($item['type'] == 'Working day') { ?> selected<? } ?>>Working day</option>
-                  <option<?php if($item['type'] == 'Trip') { ?> selected<? } ?>>Trip</option>
-                </select>
-                <div class="select-representation">
-                  <div class="select-value">{$item.type}</div>
-                  <b class="caret"></b>
-                </div>
-              </div>
+              <span class="dayType">{$item.type}</span>
               of
-              <div class="select-wrap">
-                <select name="userOccupation">
-                  <option>designer</option>
-                  <option>business analyst</option>
-                  <option selected>{$item.user.occupation}</option>
-                  <option>artist</option>
-                  <option>courier</option>
-                  <option>plumber</option>
-                </select>
-                <div class="select-representation">
-                  <div class="select-value">{$item.user.occupation}</div>
-                  <b class="caret"></b>
-                </div>
-              </div>
+              <span class="userOccupation">{$#interesting_days[0].user.occupation}</span>
               from
-              <div class="select-wrap">
-                <select name="userLocation">
-                  <option>New-York</option>
-                  <option>Paris</option>
-                  <option>Moscow</option>
-                  <option selected>{$item.user.location}</option>
-                  <option>Tokio</option>
-                  <option>Shanghai</option>
-                </select>
-                <div class="select-representation">
-                  <div class="select-value">{$item.user.location}</div>
-                  <b class="caret"></b>
-                </div>
-              </div>
-              <i class="icon-random"></i>
+              <span class="userLocation">{$#interesting_days[0].user.location}</span>
             </div>
           </div>
           <a class="left carousel-control" href="#days_carousel" data-slide="prev">‹</a>

@@ -345,7 +345,7 @@ $this->day->is_gathering_enabled = false;
                   <? if($this->is_owner || $item->description) { ?>
                     <div class="moment-description bubble block-center">
                       <? if($this->is_owner) { ?>
-                        <textarea rows="3" class="input-block-level" placeholder="Enter moment description...">{$item->description|default:""|nl2br}</textarea>
+                        <textarea rows="3" class="input-block-level" placeholder="Enter moment description...">{$item->description|default:""}</textarea>
                         {{if var='$item.is_hidden'}}
                           <button type="submit" class="btn btn-block btn-success approve-action">Approve</button>
                         {{else}}
@@ -372,7 +372,7 @@ $this->day->is_gathering_enabled = false;
         <? if($this->is_owner || $this->day->final_description) { ?>
           <div class="bubble final-description">
             <? if($this->is_owner) { ?>
-              <textarea rows="3" class="input-block-level" placeholder="Enter final description...">{$#day->final_description|default:""|nl2br}</textarea>
+              <textarea rows="3" class="input-block-level" placeholder="Enter final description...">{$#day->final_description|default:""}</textarea>
 
               <? if($this->day->final_description) { ?>
                 <button type="submit" class="btn btn-block disabled">Save changes</button>
