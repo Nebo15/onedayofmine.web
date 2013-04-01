@@ -92,7 +92,7 @@ var Importer = function(source) {
     days_request.success(function(response) {
       onPhotosRecieved(response.data.result, function() {
         response.loadNext(undefined, function(data) {
-          return data.result.slice(-1)[0].slice(-1)[0].time;
+          return data.result.slice(-1)[0][0].time;
         });
       });
     }, true);
