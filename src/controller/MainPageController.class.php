@@ -66,6 +66,8 @@ class MainPageController extends WebAppController
 					continue;
 				if(!$item['image_266'])
 					continue;
+        if(count($item->moments) < 7)
+          continue;
 
 				$item->moments = array_slice($item->moments, 0, 7);
 
