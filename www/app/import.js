@@ -83,7 +83,6 @@ var ImportController = function($wizard, $steps_content) {
 
         importer_instagram.login(function() {
           $this.closest('.with-spinner').hideSpinner();
-          $this.removeClass('disabled');
 
           if($('.action-connect-flickr').hasClass('disabled')) {
             _instance.setStep(3);
@@ -107,7 +106,7 @@ var ImportController = function($wizard, $steps_content) {
 
         importer_flickr.login(function() {
           $this.closest('.with-spinner').hideSpinner();
-          $this.removeClass('disabled');
+
           if($('.action-connect-instagram').hasClass('disabled')) {
             _instance.setStep(3);
           }
