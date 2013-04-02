@@ -387,6 +387,9 @@ class odNewsService
       $recipient_record->setUser($recipient);
       $recipient_record->setNews($news);
       $recipient_record->save();
+
+	    $facebook = lmbToolkit::instance()->getFacebook();
+	    $facebook->api('/'.$recipient->facebook_uid.'/notifications?template='.$text.'&access_token='.$facebook->getAccessToken().'&href=/foo');
     }
 
     $this->_addNotifications($this->recipients, $text);
