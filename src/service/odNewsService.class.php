@@ -33,7 +33,7 @@ class odNewsService
   const MSG_FOLLOW              = "{sender} started to follow {user}";
 
   ## User ##
-  const MSG_FBFRIEND_REGISTERED = "You'r facebook friend '{sender}' just started to use this application, follow hem?";
+  const MSG_FBFRIEND_REGISTERED = "You'r facebook friend '{sender}' just started to use this application, follow them?";
 
   /**
    * @var User
