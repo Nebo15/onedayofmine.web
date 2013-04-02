@@ -4,7 +4,7 @@ abstract class BasePhotoSource
 {
 	abstract function getPhotos($from_stamp = null, $to_stamp = null);
 
-	function getDays($from_stamp = null)
+	function getDays(User $filter_by_user , $from_stamp = null)
 	{
 		$days = [];
 		$photos = true;
@@ -42,11 +42,19 @@ abstract class BasePhotoSource
 		if ($days && count($days[count($days) - 1]) < 3)
 			array_pop($days);
 
-		foreach(array_values($days) as $i => $day)
-		{
+
+		foreach($days as $i => $day)
 			$days[$i] = array_reverse($day);
+
+		if($filter_by_user)
+		{
+			$day_begins = $filter_by_user->getDaysBeginTime();
+			foreach($days as $i => $day)
+				foreach($day_begins as $day_begin)
+					if(date('Y.m.d', $day[0]['time']) === date('Y.m.d', $day_begin))
+						unset($days[$i]);
 		}
 
-		return $days;
+		return array_values($days);
 	}
 }

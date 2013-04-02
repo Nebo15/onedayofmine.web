@@ -20,6 +20,6 @@ class ImportController extends BaseJsonController
 	function doDays()
 	{
 		$service = new MergedPhotoSource($this->_getUser());
-		return $this->_answerOk($service->getDays($this->request->getInteger('from')));
+		return $this->_answerOk($service->getDays($this->_getUser(), $this->request->getInteger('from')));
 	}
 }

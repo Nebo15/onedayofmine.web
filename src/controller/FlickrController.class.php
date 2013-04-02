@@ -52,12 +52,6 @@ class FlickrController extends BaseJsonController
 		);
 	}
 
-	function doDays()
-	{
-		$service = new CachedPhotoSource(new FlickrPhotoSource($this->_getUser()));
-		return $this->_answerOk($service->getDays($this->request->getInteger('from')));
-	}
-
 	function doLogout()
 	{
 		if(!$this->request->isPost())
