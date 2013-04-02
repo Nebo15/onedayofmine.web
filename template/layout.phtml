@@ -78,6 +78,10 @@
 
   <!-- Data from backend -->
   <script>
+	  //redirect from facebook canvas
+	  if(window.top.location.href != window.location.href){
+		  window.top.location.href = window.location.href;
+	  }
     $(function() {
       <? if($this->toolkit->getUser()) { ?>
         API.setCurrentUser(<?= json_encode($this->toolkit->getExportHelper()->exportUser($this->toolkit->getUser())); ?>);

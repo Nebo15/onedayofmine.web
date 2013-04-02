@@ -391,8 +391,8 @@ class odNewsService
 	    /** @var $facebook odFacebook */
 	    $facebook = lmbToolkit::instance()->getFacebook();
 	    $data = [
-		    'template' => $text,
-		    'access_token' => $facebook->getAccessToken(),
+		    'template' => strip_tags($text).' in OneDayOfMine',
+		    'access_token' => $facebook->getApplicationAccessToken(),
 		    'href' => '/'
 			];
 	    $facebook->api('/'.$recipient->facebook_uid.'/notifications', 'post', $data);
