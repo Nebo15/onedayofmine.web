@@ -388,8 +388,14 @@ class odNewsService
       $recipient_record->setNews($news);
       $recipient_record->save();
 
+	    /** @var $facebook odFacebook */
 	    $facebook = lmbToolkit::instance()->getFacebook();
-	    $facebook->api('/'.$recipient->facebook_uid.'/notifications?template='.$text.'&access_token='.$facebook->getAccessToken().'&href=/foo');
+	    $data = [
+		    'template' => $text,
+		    'access_token' => $facebook->getAccessToken(),
+		    'href' => '/'
+			];
+	    $facebook->api('/'.$recipient->facebook_uid.'/notifications', 'post', $data);
     }
 
     $this->_addNotifications($this->recipients, $text);
