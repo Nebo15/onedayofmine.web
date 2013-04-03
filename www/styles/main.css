@@ -1044,10 +1044,9 @@ ul.controls li {
 }
 
 /* > User page */
-.user-image-holder {
+.user-image-container {
   position: relative;
   width: 192px;
-  min-height: 192px;
 }
 
 /* > Profile page */
