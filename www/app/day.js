@@ -1,7 +1,11 @@
 $(function () {
 	// Share toggle
-	var share_button = $('button#toggle_share');
-	share_button.click(function () {
+	var fb_share_button = $('button#toggle_fb_share');
+	fb_share_button.click(function () {
+    if(fb_share_button.hasClass('disabled')) {
+      fb_share_button.addClass('disabled');
+    }
+
 		var description = $('.final-description');
 		if (description.find('textarea').length > 0) {
 			description = description.find('textarea').text();
@@ -17,9 +21,11 @@ $(function () {
 			picture: $('meta[property="og:image"]').prop('content')
 		};
 
-		FB.ui(obj, function () {
-			share_button.addClass('btn-success');
-		});
+		FB.ui(obj, function(response) {
+      if (!response || !response.post_id) {
+        fb_share_button.removeClass('disabled');
+      }
+    });
 	});
 
 	// Mobile nav comments
