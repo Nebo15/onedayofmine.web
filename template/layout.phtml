@@ -42,6 +42,13 @@
   <!-- Additional meta tags -->
   {{slot id='meta'/}}
 
+	<script>
+		//redirect from facebook canvas
+		if(window.top.location.href != window.location.href){
+			window.top.location.href = window.location.href;
+		}
+	</script>
+
   <!-- Vendor scripts -->
   <?php if(!property_exists($this, 'fb_disabled') || !$this->fb_disabled) { ?>
     <script src="//connect.facebook.net/en_US/all.js"></script>

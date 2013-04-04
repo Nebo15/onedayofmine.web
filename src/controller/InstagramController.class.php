@@ -52,12 +52,6 @@ class InstagramController extends BaseJsonController
 		);
 	}
 
-	function doDays()
-	{
-		$service = new CachedPhotoSource(new InstagramPhotoSource($this->_getUser()));
-		return $this->_answerOk($service->getDays($this->request->getInteger('from')));
-	}
-
 	function doLogout()
 	{
 		if(!$this->request->isPost())

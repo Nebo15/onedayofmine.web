@@ -219,6 +219,16 @@ class User extends BaseModel
     return Day::find($criteria, ['id' => 'DESC'])->paginate(0, $limit);
   }
 
+	function getDaysBeginTime()
+	{
+		$query = new lmbSelectQuery('moment');
+		$query->addRawField('min(moment.time) as start_time');
+		$query->addCriteria(lmbSQLCriteria::equal('is_deleted', 0));
+		$query->addGroupBy('day_id');
+		$query->addOrder('moment.time', 'ASC');
+		return lmbArrayHelper::getColumnValues('start_time', $query->fetch());
+	}
+
   function getFavoriteDaysWithLimitations($from_id = null, $to_id = null, $limit = null)
   {
     $query = new lmbSelectQuery('day_favorite');

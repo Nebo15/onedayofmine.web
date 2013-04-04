@@ -1,22 +1,22 @@
 <?php
 lmb_require('tests/cases/unit/odUnitTestCase.class.php');
-lmb_require('src/service/social_photo_source/BaseSocialPhotoSource.class.php');
+lmb_require('src/service/social_photo_source/BasePhotoSource.class.php');
 
-class BaseSocialPhotoSourceTest extends odUnitTestCase
+class BasePhotoSourceTest extends odUnitTestCase
 {
 	function testTestGetDays_NoPhotos()
 	{
-		Mock::generatePartial('SocialPhotoSourceForTests', 'PhotoSourceMock', ['getPhotos']);
+		Mock::generatePartial('BasePhotoSource', 'PhotoSourceMock', ['getPhotos']);
 		$mock = new PhotoSourceMock();
 		$mock->expectAt(0, 'getPhotos', [null]);
 		$mock->returnsAt(0, 'getPhotos', []);
 		$mock->expectCallCount('getPhotos', 1);
-		$mock->getDays();
+		$mock->getDays($this->main_user);
 	}
 
 	function testTestGetDays_AllPhotosInOneQuerySecondIsEmpty_WithoutDays()
 	{
-		Mock::generatePartial('SocialPhotoSourceForTests', 'PhotoSourceMock', ['getPhotos']);
+		Mock::generatePartial('BasePhotoSource', 'PhotoSourceMock', ['getPhotos']);
 		$mock = new PhotoSourceMock();
 		$mock->expectAt(0, 'getPhotos', [null]);
 		$mock->returnsAt(0, 'getPhotos', [
@@ -26,13 +26,13 @@ class BaseSocialPhotoSourceTest extends odUnitTestCase
 		$mock->expectAt(1, 'getPhotos', [99]);
 		$mock->returnsAt(1, 'getPhotos', []);
 		$mock->expectCallCount('getPhotos', 2);
-		$days = $mock->getDays();
+		$days = $mock->getDays($this->main_user);
 		$this->assertEqual(0, count($days));
 	}
 
 	function testTestGetDays_AllPhotosInOneQuerySecondIsEmpty_OneDays()
 	{
-		Mock::generatePartial('SocialPhotoSourceForTests', 'PhotoSourceMock', ['getPhotos']);
+		Mock::generatePartial('BasePhotoSource', 'PhotoSourceMock', ['getPhotos']);
 		$mock = new PhotoSourceMock();
 		$mock->expectAt(0, 'getPhotos', [null]);
 		$mock->returnsAt(0, 'getPhotos', [
@@ -43,38 +43,38 @@ class BaseSocialPhotoSourceTest extends odUnitTestCase
 		$mock->expectAt(1, 'getPhotos', [98]);
 		$mock->returnsAt(1, 'getPhotos', []);
 		$mock->expectCallCount('getPhotos', 2);
-		$days = $mock->getDays();
+		$days = $mock->getDays($this->main_user);
 		$this->assertEqual(1, count($days));
 	}
 
 	function testTestGetDays_DayInTwoQueries()
 	{
-		Mock::generatePartial('SocialPhotoSourceForTests', 'PhotoSourceMock', ['getPhotos']);
+		Mock::generatePartial('BasePhotoSource', 'PhotoSourceMock', ['getPhotos']);
 		$mock = new PhotoSourceMock();
 		$mock->expectAt(0, 'getPhotos', [null]);
 		$mock->returnsAt(0, 'getPhotos', [
-			['id' => 1, 'time' => 101000],
-			['id' => 2, 'time' => 100999],
+			['id' => 4, 'time' => 101000],
+			['id' => 3, 'time' => 100999],
 		]);
 		$mock->expectAt(1, 'getPhotos', [100999]);
 		$mock->returnsAt(1, 'getPhotos', [
-			['id' => 3, 'time' => 100998],
-			['id' => 4, 'time' => 1],
+			['id' => 2, 'time' => 100998],
+			['id' => 1, 'time' => 1],
 		]);
 		$mock->expectAt(2, 'getPhotos', [1]);
 		$mock->returnsAt(2, 'getPhotos', []);
 		$mock->expectCallCount('getPhotos', 3);
-		$days = $mock->getDays();
+		$days = $mock->getDays($this->main_user);
 		$this->assertEqual(1, count($days));
 		$this->assertEqual(3, count($days[0]));
-		$this->assertEqual(1, $days[0][0]['id']);
-		$this->assertEqual(2, $days[0][1]['id']);
-		$this->assertEqual(3, $days[0][2]['id']);
+		$this->assertEqual(2, $days[0][0]['id']);
+		$this->assertEqual(3, $days[0][1]['id']);
+		$this->assertEqual(4, $days[0][2]['id']);
 	}
 
 	function testTestGetDays_AlmostCompleteDays()
 	{
-		Mock::generatePartial('SocialPhotoSourceForTests', 'PhotoSourceMock', ['getPhotos']);
+		Mock::generatePartial('BasePhotoSource', 'PhotoSourceMock', ['getPhotos']);
 		$mock = new PhotoSourceMock();
 		$mock->expectAt(0, 'getPhotos', [null]);
 		$mock->returnsAt(0, 'getPhotos', [
@@ -93,22 +93,53 @@ class BaseSocialPhotoSourceTest extends odUnitTestCase
 		$mock->expectAt(2, 'getPhotos', [1]);
 		$mock->returnsAt(2, 'getPhotos', []);
 		$mock->expectCallCount('getPhotos', 3);
-		$days = $mock->getDays();
+		$days = $mock->getDays($this->main_user);
 		$this->assertEqual(1, count($days));
 		$this->assertEqual(4, count($days[0]));
-		$this->assertEqual(4, $days[0][0]['id']);
-		$this->assertEqual(5, $days[0][1]['id']);
-		$this->assertEqual(6, $days[0][2]['id']);
-		$this->assertEqual(7, $days[0][3]['id']);
+		$this->assertEqual(7, $days[0][0]['id']);
+		$this->assertEqual(6, $days[0][1]['id']);
+		$this->assertEqual(5, $days[0][2]['id']);
+		$this->assertEqual(4, $days[0][3]['id']);
 	}
-}
 
-class SocialPhotoSourceForTests extends BaseSocialPhotoSource
-{
-	protected function getConfig() {}
-	function getLoginUrl($redirect_url) {}
-	function login($code, $redirect_url) {}
-	function getUserInfo() {}
-	function getPhotos($from_stamp = null, $to_stamp = null) {}
-	function logout() {}
+	function testTestGetDays_SkipExistedDays()
+	{
+		$day = $this->generator->day($this->main_user)->save();
+		for($i = 0; $i < 10; $i++)
+		{
+			$moment = $this->generator->moment($day);
+			$moment->time = 2309998 + $i;
+			$moment->save();
+		}
+
+		$day = $this->generator->day($this->main_user)->save();
+		for($i = 0; $i < 10; $i++)
+		{
+			$moment = $this->generator->moment($day);
+			$moment->time = 1309998 + $i;
+			$moment->save();
+		}
+
+		Mock::generatePartial('BasePhotoSource', 'PhotoSourceMock', ['getPhotos']);
+		$mock = new PhotoSourceMock();
+		$mock->expectAt(0, 'getPhotos', [null]);
+		$mock->returnsAt(0, 'getPhotos', [
+			['id' => 50, 'time' => 2300000],
+
+			['id' => 41, 'time' => 1301000],
+			['id' => 42, 'time' => 1309999],
+			['id' => 43, 'time' => 1309998],
+
+			['id' => 30, 'time' => 301000],
+
+			['id' => 11, 'time' => 101000],
+			['id' => 12, 'time' => 100999],
+			['id' => 13, 'time' => 100998],
+
+			['id' => 1, 'time' => 1],
+		]);
+		$days = $mock->getDays($this->main_user);
+		$this->assertEqual(1, count($days));
+		$this->assertEqual(13, $days[0][0]['id']);
+	}
 }

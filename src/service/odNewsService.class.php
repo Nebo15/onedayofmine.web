@@ -33,7 +33,7 @@ class odNewsService
   const MSG_FOLLOW              = "{sender} started to follow {user}";
 
   ## User ##
-  const MSG_FBFRIEND_REGISTERED = "You'r facebook friend '{sender}' just started to use this application, follow hem?";
+  const MSG_FBFRIEND_REGISTERED = "You'r facebook friend '{sender}' just started to use this application, follow him/her?";
 
   /**
    * @var User
@@ -387,6 +387,15 @@ class odNewsService
       $recipient_record->setUser($recipient);
       $recipient_record->setNews($news);
       $recipient_record->save();
+
+	    /** @var $facebook odFacebook */
+	    $facebook = lmbToolkit::instance()->getFacebook();
+	    $data = [
+		    'template' => strip_tags($text).' in OneDayOfMine',
+		    'access_token' => $facebook->getApplicationAccessToken(),
+		    'href' => '/'
+			];
+	    $facebook->api('/'.$recipient->facebook_uid.'/notifications', 'post', $data);
     }
 
     $this->_addNotifications($this->recipients, $text);
