@@ -244,6 +244,7 @@ class PagesController extends WebAppController
 		$this->day->date = $page->getDate();
 		$this->day->final_description = "It's just a preview";
 		$this->day->comments_count = 0;
+    $this->day->comments =[];
 		$this->day->likes_count = 0;
 		$this->day->user = new stdClass;
 		$this->day->user->id = '';
