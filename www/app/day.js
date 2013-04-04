@@ -3,8 +3,9 @@ $(function () {
 	var fb_share_button = $('button#toggle_fb_share');
 	fb_share_button.click(function () {
     if(fb_share_button.hasClass('disabled')) {
-      fb_share_button.addClass('disabled');
+      return;
     }
+    fb_share_button.addClass('disabled');
 
 		var description = $('.final-description');
 		if (description.find('textarea').length > 0) {
