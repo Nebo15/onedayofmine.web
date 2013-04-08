@@ -615,6 +615,22 @@ hr {
   margin-bottom: 0;
 }
 
+.scrollHelper {
+  position: fixed;
+  bottom: 0px;
+  right: 5px;
+
+  -webkit-transition: all 0.2s ease;
+  -moz-transition: all 0.2s ease;
+  -ms-transition: all 0.2s ease;
+  -o-transition: all 0.2s ease;
+  transform: all 0.2s ease;
+}
+
+.scrollHelper ul {
+  margin: 0;
+}
+
 /* >> Lists titles */
 ul.with-separators li {
   border-bottom: 1px solid rgba(34,25,25,0.1);

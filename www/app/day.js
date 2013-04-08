@@ -29,8 +29,43 @@ $(function () {
     });
 	});
 
-	// Mobile nav comments
-	$('.mobile-nav #comments').click(function () {
-		$(document).scrollTo($('.comments'), 400);
-	});
+  // Scroll helpers
+  (function() {
+    var scrollContainer = $(document);
+    var scrollHelper = $('.scrollHelper');
+    var helperHeight = scrollHelper.height();
+    var helperDefaultOffset = -1*helperHeight/2;
+
+    function setBottomOffset(offset) {
+      var sign = offset ? offset < 0 ? -1 : 1 : 0;
+
+      scrollHelper.css('bottom', sign + offset + 'px');
+    }
+
+    setBottomOffset(helperDefaultOffset);
+
+    scrollContainer.scroll(function() {
+      var scrollTop = scrollContainer.scrollTop();
+
+      if(scrollTop > 500) {
+        var diff = scrollTop - 500;
+        if(diff < helperHeight) {
+          var shift = diff - helperHeight;
+          setBottomOffset(shift > helperDefaultOffset ? shift : helperDefaultOffset);
+        } else {
+          setBottomOffset(0);
+        }
+      } else {
+        setBottomOffset(helperDefaultOffset);
+      }
+    });
+
+    $('.scrollTo.comments').click(function() {
+      $(document).scrollTo($('a[name=comments]'), 200);
+    });
+
+    $('.scrollTo.top').click(function() {
+      $(document).scrollTo(0, 200);
+    });
+  })();
 });
