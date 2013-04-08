@@ -47,7 +47,7 @@ class lmbUniqueTableFieldRule extends lmbSingleFieldRule
     if($this->error_message)
       $this->error($this->error_message, array('Value' => $value));
     else
-      $this->error(lmb_i18n('{Field} must have other value since {Value} already exists', 'web_app'),
+      $this->error(lmb_i18n('{Field} must have other value since \'{Value}\' already exists', 'web_app'),
                    array('Value' => $value));
   }
 }

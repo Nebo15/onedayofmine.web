@@ -9,20 +9,29 @@ class odObjectMother
    */
   function user($name = null)
   {
-    $user = new User();
-    $user->facebook_uid = $this->string(5);
-    $user->facebook_access_token = $this->string(50);
-    $user->email = $this->email();
-    $user->facebook_profile_utime = $this->integer(11);
-    $user->name = $name ?: $this->string(100);
-    $user->timezone = $this->integer(1);
-    $user->sex = 'female';
-    $user->occupation = 'occupation_'.$this->string(50);
-	  $user->location = 'location_'.$this->string(50);
-    $user->birthday = $this->date_sql();
+    $user = $this->unsavedUser($name);
     $user->save();
     return $user;
   }
+
+	/**
+	 * @return User
+	 */
+	function unsavedUser($name = null)
+	{
+		$user = new User();
+		$user->facebook_uid = $this->string(10);
+		$user->facebook_access_token = $this->string(50);
+		$user->email = $this->email();
+		$user->facebook_profile_utime = $this->integer(11);
+		$user->name = $name ?: $this->string(100);
+		$user->timezone = $this->integer(1);
+		$user->sex = 'female';
+		$user->occupation = 'occupation_'.$this->string(50);
+		$user->location = 'location_'.$this->string(50);
+		$user->birthday = $this->date_sql();
+		return $user;
+	}
 
   function follow(User $user, User $follower)
   {
