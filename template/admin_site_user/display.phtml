@@ -4,11 +4,7 @@
   {{include file="_admin_object/actions.phtml"/}}
 
   <div id="header">
-    <h1>User</h1>
-    <div class="header_actions">
-      {{apply template="object_action" action="create" is_link="true" title="Создать User"/}}
-    </div>
-
+    <h1>Users</h1>
     {{include file='_admin/pager.phtml' items='{$this->items}'/}}
   </div>
 
@@ -17,9 +13,6 @@
     {{list using="{$this->items}" as="$item" counter="$counter" parity='$parity'}}
 
       <div class='list'>
-        <div class='list_actions'>
-          {{apply template="selectors_button" action="delete" title="Удалить" /}}
-        </div>
         <table>
           <tr>
             <th>{{apply template="selectors_toggler"/}}</th>
@@ -47,19 +40,13 @@
 	            </td>
               <td>
 	              <? if($item->facebook_uid) { ?>
-		              <a href="https://facebook.com/profile.php?id={$item.facebook_uid}">
-			              <img src="/img/icons/facebook.png" width="32" height="32"/>
-		              </a>
+		              <a href="https://facebook.com/profile.php?id={$item.facebook_uid}">facebook</a>
 	              <? } ?>
 	              <? if($item->instagram_uid) { ?>
-		              <a href="http://instagram.com/{$item.instagram_uid}">
-			              <img src="/img/icons/instagram.png" width="32" height="32"/>
-		              </a>
+		              <a href="http://instagram.com/{$item.instagram_uid}">instagram</a>
 	              <? } ?>
 	              <? if($item->flickr_uid) { ?>
-		              <a href="http://www.flickr.com/photos/{$item.flickr_uid}/">
-			              <img src="/img/icons/flickr.png" width="32" height="32"/>
-		              </a>
+		              <a href="http://www.flickr.com/photos/{$item.flickr_uid}/">flickr</a>
 	              <? } ?>
               </td>
 	            <td>{$item.sex}</td>
@@ -73,9 +60,6 @@
             <div class="empty_list">Пользователи отсутствуют</div>
           {{/list:empty}}
         </table>
-        <div class='list_actions'>
-          {{apply template="selectors_button" action="delete" title="Удалить" /}}
-        </div>
       </div>
 
     {{/list}}
