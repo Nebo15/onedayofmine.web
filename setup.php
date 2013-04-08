@@ -43,12 +43,18 @@ lmbToolkit :: merge(new lmbDbTools());
 lmb_require('limb/core/src/lmbSys.class.php');
 lmb_require('src/model/base/BaseModel.class.php');
 
-lmb_env_set('AIRBRAKE_KEY', '5593098eb4afcadead3f0e02014baa52');
-lmb_require('src/service/AirBrakeErrorHandler.class.php');
-
 if(lmb_env_get('LIMB_APP_MODE') != 'devel')
 {
-  lmbErrorGuard::registerExceptionHandler(['AirBrakeErrorHandler', 'onException']);
-  lmbErrorGuard::registerErrorHandler(['lmbErrorGuard', 'convertErrorsToExceptions']);
+	lmbErrorGuard::registerErrorHandler(['lmbErrorGuard', 'convertErrorsToExceptions']);
+
+	if (extension_loaded('newrelic')) {
+		lmb_require('src/service/NewRelicErrorHandler.class.php');
+		lmbErrorGuard::registerExceptionHandler(['NewRelicErrorHandler', 'onException']);
+		lmbErrorGuard::registerFatalErrorHandler(['NewRelicErrorHandler', 'onFatalError']);
+	}
+
+	lmb_env_set('AIRBRAKE_KEY', '5593098eb4afcadead3f0e02014baa52');
+	lmb_require('src/service/AirBrakeErrorHandler.class.php');
+	lmbErrorGuard::registerExceptionHandler(['AirBrakeErrorHandler', 'onException']);
 	lmbErrorGuard::registerFatalErrorHandler(['AirBrakeErrorHandler', 'onError']);
 }
