@@ -75,7 +75,7 @@ class PagesController extends WebAppController
 
 	function doDay()
 	{
-		if (!$day = Day::findById($this->request->id))
+		if (!$day = Day::findById($this->request->get('id')))
 			return $this->forwardTo404();
 
 		if ($day->is_deleted)
