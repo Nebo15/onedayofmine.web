@@ -22,39 +22,39 @@
         <table>
           <tr>
             <th>{{apply template="selectors_toggler"/}}</th>
-            <th>Id</th>
             <th>Day</th>
             <th>User</th>
             <th>Title</th>
-            <th>start_time</th>
-            <th>likes_count</th>
-            <th>Create time</th>
-            <th>Update time</th>
+            <th>Likes</th>
+	          <th>Age</th>
             <th>Rating</th>
-            <th>Actiioins</th>
+	          <th>Is pinned</th>
+            <th>Actions</th>
           </tr>
 
           {{list:item}}
             <tr class="{$parity}">
               <td>{{apply template="selector" value="{$item.id}"/}}</td>
               <td>{$item.id}</td>
-              <td>{$item.day.id}</td>
-              <td>{$item.day.user_id}</td>
-              <td>{$item.day.title}</td>
-              <td>{$item.day.start_time}</td>
-              <td>{$item.day.likes_count}</td>
-              <td>{$item.day.ctime|date:"d.m.Y"}</td>
-              <td>{$item.day.utime|date:"d.m.Y"}</td>
+              <td><a href="/pages/{$item->getDay()->getUser()->id}/user">{$item->getDay()->getUser()->name}</a></td>
+	            <td><a href="/pages/{$item->getDay().id}/day">{$item->getDay().title}</a></td>
+              <td>{$item->getDay().likes_count|default:0}</td>
+	            <td>{$item->getDay().ctime}</td>
               <td>{$item.rating}</td>
+	            <td>
+		            <?php if($item['is_pinned']) { ?>
+			            <img title="yes" src='/shared/cms/images/icons/lightbulb.png'/>
+		            <? } else { ?>
+			            <img title="no" src='/shared/cms/images/icons/lightbulb_off.png'/>
+		            <? } ?>
+	            </td>
               <td class='actions'>
                 <?php if($item['is_pinned']) { ?>
-                  {{apply template="object_action" action="interesting_unpin" title="unpin" icon="link_break" item="{$item}"/}}
+		              <a href='/admin_day/interesting_unpin/{$item.id}' title="unpin" class="thickbox"><img src='/shared/cms/images/icons/link_break.png'/></a>
                 <?php } else { ?>
-                  {{apply template="object_action" action="interesting_pin" title="pin" icon="link" item="{$item}"/}}
+		              <a href='/admin_day/interesting_pin/{$item.id}' title="pin" class="thickbox"><img src='/shared/cms/images/icons/link.png'/></a>
                 <?php } ?>
-
-                {{apply template="object_action" action="interesting_edit" title="edit" icon="pencil" item="{$item}"/}}
-
+	              <a href='/admin_day/interesting_edit/{$item.id}' title="edit" class="thickbox"><img src='/shared/cms/images/icons/pencil.png'/></a>
                 <a href='#' onclick="if(confirm('{{i18n text="Remove day from interesting" domain="cms"/}}?')) {jQuery.post('/admin_day/interesting_delete', {ids:{$item.id}}, function(){document.location.reload()})}" title="Delete">
                   <img src='/shared/cms/images/icons/cancel.png'/>
                 </a>

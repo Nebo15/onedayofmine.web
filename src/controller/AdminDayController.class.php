@@ -1,6 +1,7 @@
 <?php
 lmb_require('limb/cms/src/controller/lmbAdminObjectController.class.php');
 lmb_require('src/model/Day.class.php');
+lmb_require('src/model/DayInterestRecord.class.php');
 lmb_require('src/service/InterestCalculator.class.php');
 
 class AdminDayController extends lmbAdminObjectController
@@ -33,15 +34,34 @@ class AdminDayController extends lmbAdminObjectController
 
   function doInterestingEdit()
   {
-    $this->_object_class_name = 'DayInterestRecord';
-    return parent::doEdit();
+	  if(!$id = $this->request->get('id'))
+		  return $this->forwardTo404();
+	  if(!$this->item = DayInterestRecord::findById($id))
+		  return $this->forwardTo404();
+
+	  $this->useForm($this->_form_name);
+	  $this->setFormDatasource($this->item);
+
+	  if($this->request->hasPost())
+	  {
+		  $this->item->rating = $this->request->get('rating');
+		  $this->item->is_pinned = $this->request->get('is_pinned');
+		  $this->item->validate($this->error_list);
+		  if($this->error_list->isValid())
+			  $this->item->saveSkipValidation();
+		  $this->_endDialog();
+	  }
+	  else
+	  {
+		  $this->_initEditForm();
+	  }
   }
 
   function doInterestingPin()
   {
     if(!$record = DayInterestRecord::findById($this->request->get('id')))
       return $this->forwardTo404();
-    $record->setIsPinned(1);
+    $record->is_pinned = 1;
     $record->save();
     $this->_endDialog();
   }
@@ -50,7 +70,7 @@ class AdminDayController extends lmbAdminObjectController
   {
     if(!$record = DayInterestRecord::findById($this->request->get('id')))
       return $this->forwardTo404();
-    $record->setIsPinned(0);
+	  $record->is_pinned = 0;
     $record->save();
     $this->_endDialog();
   }
