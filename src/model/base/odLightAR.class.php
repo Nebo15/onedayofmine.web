@@ -212,6 +212,15 @@ abstract class odLightAR extends odDirtableObject implements ArrayAccess
     return true;
   }
 
+	function trySave(lmbErrorList $error_list = null)
+	{
+		try
+		{
+			return $this->save($error_list);
+		}
+		catch(lmbValidationException $e) {}
+	}
+
   function undirty()
   {
     $this->_changed_primary = array();

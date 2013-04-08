@@ -3,6 +3,7 @@ lmb_require('src/model/base/BaseModel.class.php');
 lmb_require('src/model/traits/Imageable.class.php');
 lmb_require('limb/imagekit/src/lmbConvertImageHelper.class.php');
 lmb_require('limb/validation/src/rule/lmbValidValueRule.class.php');
+lmb_require('limb/web_app/src/validation/rule/lmbUniqueTableFieldRule.class.php');
 lmb_require('src/model/UserFollowing.class.php');
 lmb_require('src/model/Day.class.php');
 lmb_require('src/model/UserSettings.class.php');
@@ -57,7 +58,11 @@ class User extends BaseModel
     $validator = new lmbValidator();
     $validator->addRequiredRule('name');
     $validator->addRequiredRule('facebook_uid');
+	  if($this->isNew())
+	    $validator->addRule(new lmbUniqueTableFieldRule('facebook_uid', 'user'));
     $validator->addRequiredRule('facebook_access_token');
+	  if($this->isNew())
+		  $validator->addRule(new lmbUniqueTableFieldRule('facebook_access_token', 'user'));
     $validator->addRequiredRule('facebook_profile_utime');
     $validator->addRequiredRule('timezone');
     $validator->addRequiredRule('sex');

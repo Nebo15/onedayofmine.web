@@ -4,6 +4,30 @@ lmb_require('src/model/User.class.php');
 
 class UserTest extends odUnitTestCase
 {
+	function testValidator_UniqueFacebookUid()
+	{
+		$user1 = $this->generator->user()->save();
+		$user2 = $this->generator->unsavedUser();
+		$user2->facebook_uid = $user1->facebook_uid;
+		$errors_list = new lmbErrorList();
+		$user2->trySave($errors_list);
+		$this->assertEqual(1, count($errors_list));
+		$this->assertPattern('/facebook_uid/', $errors_list[0]->getReadable());
+		$this->assertPattern('/already exists/', $errors_list[0]->getReadable());
+	}
+
+	function testValidator_UniqueFacebookAccessToken()
+	{
+		$user1 = $this->generator->user()->save();
+		$user2 = $this->generator->unsavedUser();
+		$user2->facebook_access_token = $user1->facebook_access_token;
+		$errors_list = new lmbErrorList();
+		$user2->trySave($errors_list);
+		$this->assertEqual(1, count($errors_list));
+		$this->assertPattern('/facebook_access_token/', $errors_list[0]->getReadable());
+		$this->assertPattern('/already exists/', $errors_list[0]->getReadable());
+	}
+
   function testGetUsersWithOldDays()
   {
     $time_current = time();
