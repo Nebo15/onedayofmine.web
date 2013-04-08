@@ -32,11 +32,7 @@
             <th>Name
               {{include file='_admin/sort_by_column.phtml' field='facebook_uid'/}}
             </th>
-            <th>ctime
-            {{include file='_admin/sort_by_column.phtml' field='ctime'/}}
-            </th>
-            <th>utime
-            {{include file='_admin/sort_by_column.phtml' field='utime'/}}
+            <th>Times
             </th>
             <th>cip
             {{include file='_admin/sort_by_column.phtml' field='cip'/}}
@@ -48,10 +44,12 @@
             <tr class="{$parity}">
               <td>{{apply template="selector" value="{$item.id}"/}}</td>
               <td>{$item.id}</td>
-              <td>{$item.facebook_uid}</td>
-              <td>{$item.name}</td>
-              <td>{$item.ctime|date:"d.m.Y H:i:s"}</td>
-              <td>{$item.utime|date:"d.m.Y H:i:s"}</td>
+              <td><a href="https://facebook.com/profile.php?id={$item.facebook_uid}">{$item.facebook_uid}</td>
+              <td><a href="/pages/{$item.id}/user/">{$item.name}</a></td>
+              <td>
+	              {$item.ctime|date:"d.m.Y H:i:s"} <br/>
+	              {$item.utime|date:"d.m.Y H:i:s"}
+              </td>
               <td>{$item.cip}</td>
               <td class='actions'>
                 {{apply template="object_action_edit" item="{$item}"/}}
