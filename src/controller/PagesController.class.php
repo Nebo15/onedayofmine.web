@@ -239,9 +239,9 @@ class PagesController extends WebAppController
 		$moments = $page->getMoments();
 		$this->day = new stdClass;
 		$this->day->id = null;
-		$this->day->title = $page->getTitle();
+		$this->day->title = $this->title = $page->getTitle();
 		$this->day->type = '';
-		$this->day->date = $page->getDate();
+		$this->day->date = date('Y-m-d', strtotime($page->getDate()));
 		$this->day->final_description = "It's just a preview";
 		$this->day->comments_count = 0;
     $this->day->comments =[];
@@ -266,6 +266,5 @@ class PagesController extends WebAppController
 		}
 
 		$this->setTemplate('pages/day.phtml');
-
 	}
 }
