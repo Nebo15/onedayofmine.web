@@ -17,7 +17,7 @@ var Request = function(method, path, data, params) {
 
   // URLs
   var host = Config.host;
-  var url  = 'http://' + host + '/' + path;
+  var url  = '//' + host + '/' + path;
 
   // Event callbacks
   var callbacks = {

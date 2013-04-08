@@ -122,8 +122,8 @@ $this->menu = 'me';
         var obj = {
           method: 'feed',
           to: $(this).closest('li').data('uid'),
-          redirect_uri: 'http://' + Config.host + '/pages/find_people',
-          link: 'http://' + Config.host + '/pages/{$#current_user.id}/user',
+          redirect_uri: '//' + Config.host + '/pages/find_people',
+          link: '//' + Config.host + '/pages/{$#current_user.id}/user',
           name: 'One Day of Mine invitation',
           description: "Hi, come and check out my photos in One Day of Mine, where people share days of their lifes."
         };
