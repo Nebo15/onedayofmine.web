@@ -16,7 +16,10 @@ $conf = [
     'ranking_mode'   => SPH_RANK_PROXIMITY_BM25,
     'index'          => 'days',
     'fields_weights' => [
+	    'type'             => 100,
       'title'             => 10,
+	    'occupation'        => 10,
+	    'location'          => 10,
       'final_description' => 1,
       'keywords'          => 1,
     ],
