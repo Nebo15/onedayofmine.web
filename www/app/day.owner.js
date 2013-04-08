@@ -222,7 +222,7 @@ $(function() {
       day_title_request.success(function() {
         day_title_button.hideSpinner();
         day_title_input.prop("disabled", false);
-				$('meta[property="og:title"]').prop('content', text);
+				$('meta[property="og:title"]').prop('content',  day_title_input.val());
         day_title_button.text('Save');
         day_title_button.addClass('disabled').removeClass('btn-success');
       });

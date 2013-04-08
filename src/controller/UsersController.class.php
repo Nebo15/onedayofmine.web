@@ -63,6 +63,9 @@ class UsersController extends BaseJsonController
 
   function doFollow()
   {
+	  if(!$this->request->isPost())
+		  return $this->_answerNotPost();
+
     if($this->_getUser()->id == $this->request->id)
       return $this->_answerWithError("You can't follow youself");
 
@@ -84,6 +87,9 @@ class UsersController extends BaseJsonController
 
   function doUnfollow()
   {
+	  if(!$this->request->isPost())
+		  return $this->_answerNotPost();
+
     if($this->_getUser()->id == $this->request->id)
       return $this->_answerWithError("You can't unfollow youself");
 
@@ -118,4 +124,11 @@ class UsersController extends BaseJsonController
 	    $this->toolkit->getExportHelper()->exportNewsItems($user->getActivityWithLimitation($from, $to, $limit))
     );
   }
+
+	function doGuestSearchOccupations()
+	{
+		$query = $this->request->getFiltered('query', FILTER_SANITIZE_STRING);
+		$occupations = User::findOccupationsByString($query, 10);
+		return $this->_answerOk($this->toolkit->getExportHelper()->exportOccupations($occupations));
+	}
 }
