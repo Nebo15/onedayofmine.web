@@ -23,20 +23,11 @@
         <table>
           <tr>
             <th>{{apply template="selectors_toggler"/}}</th>
-            <th>id
-            {{include file='_admin/sort_by_column.phtml' field='id'/}}
-            </th>
-            <th>FB uid
-            {{include file='_admin/sort_by_column.phtml' field='facebook_uid'/}}
-            </th>
-            <th>Name
-              {{include file='_admin/sort_by_column.phtml' field='facebook_uid'/}}
-            </th>
-            <th>Times
-            </th>
-            <th>cip
-            {{include file='_admin/sort_by_column.phtml' field='cip'/}}
-            </th>
+            <th>id {{include file='_admin/sort_by_column.phtml' field='id'/}}</th>
+	          <th>Profile</th>
+            <th>Name {{include file='_admin/sort_by_column.phtml' field='facebook_uid'/}}</th>
+            <th>Times</th>
+	          <th>External services</th>
             <th>Действия</th>
           </tr>
 
@@ -44,13 +35,34 @@
             <tr class="{$parity}">
               <td>{{apply template="selector" value="{$item.id}"/}}</td>
               <td>{$item.id}</td>
-              <td><a href="https://facebook.com/profile.php?id={$item.facebook_uid}">{$item.facebook_uid}</td>
-              <td><a href="/pages/{$item.id}/user/">{$item.name}</a></td>
+	            <td>
+		            <a href="/pages/{$item.id}/user/">
+			            <img src="<?= lmbToolkit::instance()->getStaticUrl($item->getImage(['width' => 36])); ?>"/>
+		            </a>
+	            </td>
+	            <td><a href="/pages/{$item.id}/user/">{$item.name}</a></td>
+	            <td>
+		            {$item.ctime|date:"d.m.Y H:i:s"} <br/>
+		            {$item.utime|date:"d.m.Y H:i:s"}
+	            </td>
               <td>
-	              {$item.ctime|date:"d.m.Y H:i:s"} <br/>
-	              {$item.utime|date:"d.m.Y H:i:s"}
+	              <? if($item->facebook_uid) { ?>
+		              <a href="https://facebook.com/profile.php?id={$item.facebook_uid}">
+			              <img src="/img/icons/facebook.png" width="32" height="32"/>
+		              </a>
+	              <? } ?>
+	              <? if($item->instagram_uid) { ?>
+		              <a href="http://instagram.com/{$item.instagram_uid}">
+			              <img src="/img/icons/instagram.png" width="32" height="32"/>
+		              </a>
+	              <? } ?>
+	              <? if($item->flickr_uid) { ?>
+		              <a href="http://www.flickr.com/photos/{$item.flickr_uid}/">
+			              <img src="/img/icons/flickr.png" width="32" height="32"/>
+		              </a>
+	              <? } ?>
+
               </td>
-              <td>{$item.cip}</td>
               <td class='actions'>
                 {{apply template="object_action_edit" item="{$item}"/}}
                 {{apply template="object_action_delete" item="{$item}"/}}
