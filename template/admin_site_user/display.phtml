@@ -27,10 +27,10 @@
 	          <th>Profile</th>
             <th>Name {{include file='_admin/sort_by_column.phtml' field='facebook_uid'/}}</th>
             <th>Times</th>
-	          <th>External services</th>
+	          <th>Profiles</th>
+	          <th>Sex</th>
             <th>Действия</th>
           </tr>
-
           {{list:item}}
             <tr class="{$parity}">
               <td>{{apply template="selector" value="{$item.id}"/}}</td>
@@ -61,8 +61,8 @@
 			              <img src="/img/icons/flickr.png" width="32" height="32"/>
 		              </a>
 	              <? } ?>
-
               </td>
+	            <td>{$item.sex}</td>
               <td class='actions'>
                 {{apply template="object_action_edit" item="{$item}"/}}
                 {{apply template="object_action_delete" item="{$item}"/}}
