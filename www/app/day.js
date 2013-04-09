@@ -34,7 +34,7 @@ $(function () {
     var scrollContainer = $(document);
     var scrollHelper = $('.scrollHelper');
     var helperHeight = scrollHelper.height();
-    var helperDefaultOffset = -1*helperHeight/2;
+    var helperDefaultOffset = -1*helperHeight;
 
     function setBottomOffset(offset) {
       var sign = offset ? offset < 0 ? -1 : 1 : 0;
