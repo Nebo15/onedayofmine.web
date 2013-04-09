@@ -18,7 +18,7 @@
                 </li>
                 <li class="small">
                   <div class="user-info">
-                    {$item.user.occupation|i18n_clip:25,0,"&hellip;"} from {$item.user.location}
+                    {$item.user.occupation|default:'someone'|i18n_clip:25,0,"&hellip;"} from {$item.user.location|default:'Somewhere'}
                   </div>
                   <div class="user-name">
                     <a href="/pages/{$item.user.id}/user">

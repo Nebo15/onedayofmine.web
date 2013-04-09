@@ -3,60 +3,93 @@ $this->title = "Discover days";
 $this->menu = 'discover';
 ?>
 {{wrap with="layout.phtml"}}
-  {{into slot="css_include"}}
-    <link href="/styles/vendor/bootstrap-select.min.css" rel="stylesheet">
-  {{/into}}
-  {{into slot="js_include"}}
-    <script src="/lib/vendor/bootstrap-select.min.js"></script>
-    <script src="/lib/InfiniteScroll.js"></script>
-  {{/into}}
-  {{into slot="js_ready"}}
-    // Nice boostrap select's
-    $('.selectpicker').selectpicker();
+{{into slot="js_ready"}}
+	(function() {
 
-    // Init paginator
-    var template_list = Template.prepareTemplate($('#days_list_elements_template'));
-    $('.days').infiniteScroll({
-      request: API.get('days/interesting'),
-      success: function(response) {
-        var days = Template.compileElement(template_list, {
-          days: response.data.result
-        });
+		var $search_form = $('.form-search');
+		var $search_form_query = $search_form.find('.search-query');
+		var $search_form_submit = $search_form.find('button');
+		var $search_result = $('.days');
+		var $popular_days = $('.popular');
 
-        days = $($.trim(days));
+		$('.links a').click(function() {
+			$search_form_query.val($(this).html());
+			$search_form.trigger('submit');
+		});
 
-        $(this).find('.infiniteScroll_button_container').before(days);
-        $(this).masonry('appended', days);
-      }
-    });
-  {{/into}}
-  {{into slot="content"}}
-<!--
-    <div class="text-center">
-      I want to see a
-      <select class="selectpicker">
-        <option>working day</option>
-        <option>day off</option>
-        <option>holiday</option>
-        <option>trip</option>
-      </select>
-      of
-      <select class="selectpicker">
-        <option>designer</option>
-        <option>business analyst</option>
-        <option>artist</option>
-        <option>courier</option>
-        <option>plumber</option>
-      </select>
-      from
-      <select class="selectpicker">
-        <option>New-York</option>
-        <option>Paris</option>
-        <option>Moscow</option>
-        <option>Tokio</option>
-        <option>Shanghai</option>
-      </select>
-    </div>-->
-  	{{apply template="days_list" days="$#days"/}}
-  {{/into}}
+		$search_form_query.attachValidator({
+			button: $search_form_submit,
+			maxLength: 100,
+			minLength: 3,
+			messages: {
+				empty: 'Search query is empty',
+				minLength: 'Search query is too short',
+				maxLength: 'Search query is too long'
+			}
+		});
+
+		$search_form.submit(function(event) {
+
+			var search_request = API.request('POST', 'days/search', {
+				query: $search_form_query.val()
+			});
+
+			search_request.success(function(response) {
+
+				$popular_days.html('');
+				$search_result.html();
+				if(response.data.result.length === 0)
+				{
+					$search_result.html("<p>We can't find any days by your query</p>");
+				}
+				else
+				{
+					var template_list = Template.prepareTemplate($('#days_list_elements_template'));
+					var days = Template.compileElement(template_list, {
+						days: response.data.result.reverse()
+					});
+
+					days = $($.trim(days));
+					$($search_result).html(days);
+					$($search_result).masonry('reload', days);
+				}
+			})
+
+			search_request.send();
+			return false;
+
+		});
+	})();
+{{/into}}
+
+{{into slot="content"}}
+	<div class="row-fluid">
+		<center>
+			<form class="form-search days-search-form">
+				<input type="search" autofocus class="input-xlarge search-query span5"
+				       placeholder="Occupation, place or something else">
+				<button type="submit" class="btn">Discover!</button>
+			</form>
+		</center>
+	</div>
+	<div class="row-fluid links">
+		<center>
+			<b>Places:</b>
+			<a href="#">Kiev</a>
+			<a href="#">London</a>
+			<a href="#">Telaviv</a>
+		</center>
+		<center>
+			<b>Occupations:</b>
+			<a href="#">filmmaker</a>
+			<a href="#">entrepreneur</a>
+			<a href="#">programmer</a>
+		</center>
+	</div>
+	<hr/>
+	<ul class="days clearfix block-center"></ul>
+	<div class="popular">
+		{{apply template="days_list" days="$#days"/}}
+	</div>
+{{/into}}
 {{/wrap}}

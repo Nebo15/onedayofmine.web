@@ -276,7 +276,7 @@ $this->day->is_gathering_enabled = false;
           <!-- @ {$#day.location} -->
         </div>
 
-        <div class="visible-phone visible-tablet">
+        <div>
           <h5>Go to:</h5>
           <ul class="unstyled">
             <li>
@@ -473,6 +473,10 @@ $this->day->is_gathering_enabled = false;
                 <i class="spinner icon icon-spin icon-refresh"></i>
                 Send comment
               </button>
+		          <button type="submit" class="btn btn-block scrollTo top hidden-desktop">
+			          <i class="icon-angle-up"></i>
+			          Back to top
+		          </button>
             <? } ?>
           </div>
         <? } ?>
@@ -493,21 +497,10 @@ $this->day->is_gathering_enabled = false;
       <div class="modal-body modal-body-main"></div>
     </div>
 
-    <section class="scrollHelper show-desktop">
-      <ul class="unstyled">
-        <li class="scrollTo comments">
-          <a>
-            Down to comments
-            <i class="icon-angle-down"></i>
-          </a>
-        </li>
-        <li class="scrollTo top">
-          <a>
-            Back to top
-            <i class="icon-angle-up"></i>
-          </a>
-        </li>
-      </ul>
+    <section class="scrollHelper show-desktop hidden-phone hidden-tablet">
+      <a href="#" class="scrollTo top">
+	      Back to top <i class="icon-angle-up"></i>
+      </a>
     </section>
   {{/into}}
 {{/wrap}}
