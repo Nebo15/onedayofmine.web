@@ -4,7 +4,13 @@ $this->title = "Live the life through other people's eyes";
 ?>
 {{wrap with="layout.phtml"}}
   {{into slot="meta"}}
-    <meta property="description" content="Photos without story is just beautiful pictures, we like to share stories, best moments of your life: travels, birthday, parties and other meaningfull events"/>
+    <meta property="description" content="Photos without story is just beautiful pictures, we like to share stories, best moments of your life: travels, birthday, parties and other meaningfull events" />
+
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:domain" content="OneDayOfMine.com" />
+    <meta name="twitter:title" content="OneDayOfMine.com" />
+    <meta name="twitter:description" content="Live the life through other people's eyes" />
+    <meta name="twitter:twitter:creator" content="OneDayOfMine" />
   {{/into}}
   {{into slot="css"}}
     .sign-up-wrap {

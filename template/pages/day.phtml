@@ -96,7 +96,7 @@ $this->day->is_gathering_enabled = false;
         </div>
 
         <div class="moment-image-container block-center">
-          <img src="[[#if moment.image]][[moment.image]][[else]]http://placehold.it/532x532&text=Select+image[[/if]]" class="img-polaroid" alt="" />
+          <img src="[[#if moment.image]][[moment.image]][[else]]//placehold.it/532x532&text=Select+image[[/if]]" class="img-polaroid" alt="" />
         </div>
 
         <div class="moment-description bubble block-center">
@@ -282,7 +282,7 @@ $this->day->is_gathering_enabled = false;
             <li>
               <div class="input-prepend small">
                 <span class="add-on "><i class="icon-comments"></i> {$this->day->comments_count}</span>
-                <button id="comments" class="btn btn-small" type="button">Comments</button>
+                <button class="btn btn-small scrollTo comments" type="button">Comments</button>
               </div>
             </li>
           </ul>
@@ -492,5 +492,22 @@ $this->day->is_gathering_enabled = false;
       </div>
       <div class="modal-body modal-body-main"></div>
     </div>
+
+    <section class="scrollHelper show-desktop">
+      <ul class="unstyled">
+        <li class="scrollTo comments">
+          <a>
+            Down to comments
+            <i class="icon-angle-down"></i>
+          </a>
+        </li>
+        <li class="scrollTo top">
+          <a>
+            Back to top
+            <i class="icon-angle-up"></i>
+          </a>
+        </li>
+      </ul>
+    </section>
   {{/into}}
 {{/wrap}}
