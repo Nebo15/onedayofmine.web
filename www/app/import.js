@@ -71,6 +71,12 @@ var ImportController = function($wizard, $steps_content) {
     },
 
     2: function() {
+      $('.create-action').off().click(function() {
+        API.post('days/start', {title:'My day', type:'Working day'}).success(function(resp) {
+          window.location.href= '/pages/'+resp.data.result.id+'/day';
+        }).send();
+      });
+
       $('.action-connect-instagram').click(function() {
         var $this = $(this);
 
