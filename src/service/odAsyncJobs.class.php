@@ -21,8 +21,11 @@ class odAsyncJobs
     self::toolkit()->getNewsObserver()->onDay($day);
 //    $this->job->sendStatus(1, 2);
 		if(!self::_isFacebookOGEnabled()) return;
-    self::toolkit()->getFacebookProfile()->shareDayBegin($day);
-    self::toolkit()->getTwitterProfile()->shareDayBegin($day);
+    if($facebook_share_id = self::toolkit()->getFacebookProfile()->shareDayBegin($day))
+	    $day->facebook_share_id = $facebook_share_id;
+    if($twitter_share_id = self::toolkit()->getTwitterProfile()->shareDayBegin($day))
+	    $day->twitter_share_id = $twitter_share_id;
+		$day->save();
   }
 
 	static function _shareDayEnd($day_id)
