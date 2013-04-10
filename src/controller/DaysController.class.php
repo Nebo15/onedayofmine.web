@@ -375,6 +375,8 @@ class DaysController extends BaseJsonController
 		}
 		$moment->save();
 
+		$moment->getDbConnection()->commitTransaction();
+
 		if($is_first_moment)
 			$this->toolkit->doAsync('shareDayStart', $day->id);
 
