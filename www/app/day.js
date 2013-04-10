@@ -7,18 +7,19 @@ $(function () {
     }
     fb_share_button.addClass('disabled');
 
-		var description = $('.final-description');
-		if (description.find('textarea').length > 0) {
-			description = description.find('textarea').text();
+		var desc = '';
+		var $description = $('.final-description');
+		if ($description.find('textarea').length > 0) {
+			desc = $description.find('textarea').val();
 		} else {
-			description = description.text();
+			desc = $description.text();
 		}
 
 		var obj = {
 			method: 'feed',
 			link: window.location.href,
 			name: $('meta[property="og:title"]').prop('content'),
-			description: description,
+			description: $description,
 			picture: $('meta[property="og:image"]').prop('content')
 		};
 
