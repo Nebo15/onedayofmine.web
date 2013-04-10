@@ -18,11 +18,11 @@ class odAsyncJobs
 	static function _shareDayStart($day_id)
   {
     $day = Day::findById($day_id);
-    self::toolkit()->getNewsObserver()->onDay($day);
+    //self::toolkit()->getNewsObserver()->onDay($day);
 //    $this->job->sendStatus(1, 2);
-		if(!self::_isFacebookOGEnabled()) return;
-    self::toolkit()->getFacebookProfile()->shareDayBegin($day);
-    self::toolkit()->getTwitterProfile()->shareDayBegin($day);
+		//if(!self::_isFacebookOGEnabled()) return;
+    //self::toolkit()->getFacebookProfile()->shareDayBegin($day);
+    //self::toolkit()->getTwitterProfile()->shareDayBegin($day);
   }
 
 	static function _shareDayEnd($day_id)
