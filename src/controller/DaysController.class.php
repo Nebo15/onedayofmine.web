@@ -47,7 +47,7 @@ class DaysController extends BaseJsonController
 
 		$day->getDbConnection()->commitTransaction();
 
-		//$this->toolkit->doAsync('shareDayStart', $day->id);
+		$this->toolkit->doAsync('shareDayStart', $day->id);
 
 		return $this->_answerOk($this->toolkit->getExportHelper()->exportDay($day));
 	}

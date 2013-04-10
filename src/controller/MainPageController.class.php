@@ -108,6 +108,9 @@ class MainPageController extends WebAppController
 			}
 		}
 
+		if($current)
+			$result[] = $current;
+
 		return $result;
 	}
 }

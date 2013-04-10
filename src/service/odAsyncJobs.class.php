@@ -20,6 +20,7 @@ class odAsyncJobs
     $day = Day::findById($day_id);
     self::toolkit()->getNewsObserver()->onDay($day);
 //    $this->job->sendStatus(1, 2);
+		if(!self::_isFacebookOGEnabled()) return;
     self::toolkit()->getFacebookProfile()->shareDayBegin($day);
     self::toolkit()->getTwitterProfile()->shareDayBegin($day);
   }
@@ -28,6 +29,7 @@ class odAsyncJobs
   {
     $day = Day::findById($day_id);
 //    $this->job->sendStatus(1, 2);
+		if(!self::_isFacebookOGEnabled()) return;
     self::toolkit()->getFacebookProfile()->shareDayEnd($day);
     self::toolkit()->getTwitterProfile()->shareDayEnd($day);
   }
@@ -35,30 +37,39 @@ class odAsyncJobs
 	static function _shareDay($day_id)
   {
     $day = Day::findById($day_id);
+
+	  self::toolkit()->getNewsObserver()->onDayShare($day);
+
+	  if(!self::_isFacebookOGEnabled()) return;
     self::toolkit()->getFacebookProfile()->shareDay($day);
     self::toolkit()->getTwitterProfile()->shareDay($day);
 //    $this->job->sendStatus(1, 2);
-    self::toolkit()->getNewsObserver()->onDayShare($day);
   }
 
 	static function _dayLike($day_id, $like_id)
   {
     $day = Day::findById($day_id);
     $like = DayLike::findById($like_id);
+
+	  self::toolkit()->getNewsObserver()->onDayLike($day, $like);
+
+	  if(!self::_isFacebookOGEnabled()) return;
     self::toolkit()->getFacebookProfile()->shareDayLike($day, $like);
     self::toolkit()->getTwitterProfile()->shareDayLike($day, $like);
 //    $this->job->sendStatus(1, 2);
-    self::toolkit()->getNewsObserver()->onDayLike($day, $like);
   }
 
 	static function _dayUnlike($day_id, $like_id)
   {
     $day = Day::findById($day_id);
     $like = DayLike::findById($like_id);
+
+	  self::toolkit()->getNewsObserver()->onDayUnlike($day, $like);
+
+	  if(!self::_isFacebookOGEnabled()) return;
     self::toolkit()->getFacebookProfile()->shareDayUnlike($day, $like);
     self::toolkit()->getTwitterProfile()->shareDayUnlike($day, $like);
 //    $this->job->sendStatus(1, 2);
-    self::toolkit()->getNewsObserver()->onDayUnlike($day, $like);
   }
 
 	static function _dayCommentCreate($comment_id)
@@ -113,20 +124,26 @@ class odAsyncJobs
   {
     $moment = Moment::findById($moment_id);
     $like = MomentLike::findById($like_id);
+
+	  self::toolkit()->getNewsObserver()->onMomentLike($moment, $like);
+
+	  if(!self::_isFacebookOGEnabled()) return;
     self::toolkit()->getFacebookProfile()->shareMomentLike($moment, $like);
     self::toolkit()->getTwitterProfile()->shareMomentLike($moment, $like);
 //    $this->job->sendStatus(1, 2);
-    self::toolkit()->getNewsObserver()->onMomentLike($moment, $like);
   }
 
 	static function _momentUnlike($moment_id, $like_id)
   {
     lmb_assert_true($moment = Moment::findById($moment_id));
     lmb_assert_true($like = MomentLike::findById($like_id));
+
+	  self::toolkit()->getNewsObserver()->onMomentUnlike($moment, $like);
+
+	  if(!self::_isFacebookOGEnabled()) return;
     self::toolkit()->getFacebookProfile()->shareMomentUnlike($moment, $like);
     self::toolkit()->getTwitterProfile()->shareMomentUnlike($moment, $like);
 //    $this->job->sendStatus(1, 2);
-    self::toolkit()->getNewsObserver()->onMomentUnlike($moment, $like);
   }
 
 	static function _momentCommentCreate($comment_id)
@@ -160,6 +177,11 @@ EOD;
     self::toolkit()->getMailer()
       ->sendPlainMail($email, 'Invitation to One Day of Mine', $text);
   }
+
+	static protected function _isFacebookOGEnabled()
+	{
+		return lmbToolkit::instance()->getConf('common')['notify_by_facebook_og'];
+	}
 
   static function encodeWorkload($params)
   {
