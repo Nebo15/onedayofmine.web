@@ -52,9 +52,4 @@ if(lmb_env_get('LIMB_APP_MODE') != 'devel')
 		lmbErrorGuard::registerExceptionHandler(['NewRelicErrorHandler', 'onException']);
 		lmbErrorGuard::registerFatalErrorHandler(['NewRelicErrorHandler', 'onFatalError']);
 	}
-
-	lmb_env_set('AIRBRAKE_KEY', '5593098eb4afcadead3f0e02014baa52');
-	lmb_require('src/service/AirBrakeErrorHandler.class.php');
-	lmbErrorGuard::registerExceptionHandler(['AirBrakeErrorHandler', 'onException']);
-	lmbErrorGuard::registerFatalErrorHandler(['AirBrakeErrorHandler', 'onError']);
 }
