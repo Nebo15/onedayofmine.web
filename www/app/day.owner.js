@@ -446,6 +446,19 @@ $(function() {
         description_button.hideSpinner();
         description_input.prop("disabled", false);
         description_button.addClass('disabled').removeClass('btn-success');
+				var next_moments = element.nextAll('.moment-item');
+				if(next_moments.length > 0)
+				{
+					$next_el = $(next_moments[0]);
+					$(window).scrollTo($next_el, 300);
+					$next_el.find('textarea').focus();
+				}
+				else
+				{
+					$desc = $('.final-description');
+					$(window).scrollTo($desc, 300);
+					$desc.find('textarea').focus();
+				}
       });
 
       description_request.error(function() {
@@ -454,20 +467,6 @@ $(function() {
       });
 
       description_request.send();
-
-      if(description_button.hasClass('approve-action'))
-      {
-        API.post('moments/' + id + '/approve')
-          .success(function() {
-            description.parents('.moment-item').removeClass('moment-item-hidden');
-            description_button.removeClass('approve-action');
-            description_button.html('Save description');
-          })
-          .error(function() {
-            description_button.addClass('btn-danger').removeClass('btn-success');
-          })
-          .send();
-      }
     });
   };
 
@@ -1007,6 +1006,7 @@ $(function() {
       final_description_request.success(function() {
         final_description_input.prop("disabled", false);
         final_description_button.addClass('disabled').removeClass('btn-success');
+				$('button#toggle_fb_share').click();
       });
 
       final_description_request.error(function() {
