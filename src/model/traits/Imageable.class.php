@@ -27,7 +27,9 @@ trait Imageable
 
       foreach ($this->_getAllSizes() as $size)
         lmbFs::rm($this->getImagePath($size));
-     }
+    }
+
+	  return $this;
   }
 
   protected function _onBeforeDestroy()
