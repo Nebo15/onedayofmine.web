@@ -88,6 +88,8 @@ class odNewsService
    */
   function onFollow(User $followed_user)
   {
+	  $this->pullNewsFrom($followed_user);
+
     foreach($this->sender->getFollowersUsers() as $recipient)
     {
       if($recipient->id != $followed_user->id)
@@ -102,8 +104,6 @@ class odNewsService
     ]);
 
     $this->send($news, self::MSG_USER_FOLLOW, ['user' => $followed_user]);
-
-	  $this->pullNewsFrom($followed_user);
   }
 
 	function pullNewsFrom(User $followed_user)
@@ -199,6 +199,7 @@ class odNewsService
    */
   function onMoment(Moment $moment)
   {
+	  return;
     lmb_assert_true($moment->id);
 
     $news = (new News)->import(['day_id' => $moment->day_id, 'moment_id' => $moment->id]);
