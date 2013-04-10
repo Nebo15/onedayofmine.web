@@ -4,6 +4,7 @@ lmb_require('src/service/odNewsService.class.php');
 lmb_require('src/model/Day.class.php');
 
 Mock::generate('FacebookProfile', 'FacebookProfileMock');
+Mock::generate('odFacebook', 'FacebookMock');
 
 class odNewsServiceTest extends odUnitTestCase
 {
@@ -28,6 +29,7 @@ class odNewsServiceTest extends odUnitTestCase
     $this->sender_service = new odNewsService($this->sender);
     $this->follower = $this->generator->user('follower');
     $this->generator->follow($this->sender, $this->follower);
+	  lmbToolkit::instance()->setFacebook(new FacebookMock);
   }
 
   function testGetMessage()
@@ -36,10 +38,8 @@ class odNewsServiceTest extends odUnitTestCase
     $user = (object) ['id' => 2, 'name' => 'bar'];
     $day = (object) ['id' => 3, 'title' => 'baz'];
     $params = ['sender' => $sender, 'user' => $user, 'day' => $day];
-    $expected = <<<EOD
-<a href="odom://users/1">foo</a>-<a href="odom://users/2">bar</a>-<a href="odom://days/3">baz</a>
-EOD;
-    $this->assertEqual(odNewsService::getMessage('{sender}-{user}-{day}', $params), $expected);
+    $expected = '<a href="odom://users/1">foo</a> just created day <a href="odom://days/3">baz</a>';
+    $this->assertEqual(odNewsService::getMessage(odNewsService::MSG_DAY_CREATED, $params), $expected);
   }
 
   function testOnDay()
@@ -328,7 +328,7 @@ EOD;
     $this->assertEqual(1, count($foo->getNews()));
     $news = $foo->getNews()->at(0);
     $this->assertNewsUsers($news, $foo, $bar);
-    $this->assertNewsText($news, odNewsService::MSG_FOLLOW, ['user' => $foo], $bar);
+    $this->assertNewsText($news, odNewsService::MSG_USER_FOLLOW, ['user' => $foo], $bar);
     $this->assertEqual($foo->id, $news->user_id);
     $this->assertEqual("odom://user/{$foo->id}", $news->link);
   }
@@ -349,7 +349,7 @@ EOD;
     $this->assertEqual(1, count($dum->getNews()));
     $news = $dum->getNews()->at(0);
     $this->assertNewsUsers($news, $dum, $foo);
-    $this->assertNewsText($news, odNewsService::MSG_FOLLOW, ['user' => $bar], $foo);
+    $this->assertNewsText($news, odNewsService::MSG_USER_FOLLOW, ['user' => $bar], $foo);
     $this->assertEqual("odom://user/{$bar->id}", $news->link);
   }
 
@@ -368,6 +368,41 @@ EOD;
 
     $this->assertNoNews($dum);
   }
+
+	function testPullNewsFrom()
+	{
+		$foo = $this->generator->user('foo');
+		$foo->save();
+		$this->generator->news($foo, $foo, odNewsService::MSG_USER_FOLLOW);
+		$bar = $this->generator->user('bar');
+		$bar->save();
+
+		(new odNewsService($bar))->pullNewsFrom($foo);
+
+		$this->assertEqual(1, count($bar->getNews()));
+		$news = $bar->getNews()->at(0);
+		$this->assertNewsUsers($news, $bar, $foo);
+		$this->assertNewsText($news, odNewsService::MSG_USER_FOLLOW, ['user' => $foo], $foo);
+	}
+
+	function testFollow_PullNews()
+	{
+		$top = $this->generator->user('top');
+		$top->save();
+		$middle = $this->generator->user('middle');
+		$middle->save();
+		$bottom = $this->generator->user('bottom');
+		$bottom->save();
+
+		(new odNewsService($middle))->onFollow($top);
+		(new odNewsService($bottom))->onFollow($middle);
+
+		$this->assertEqual(1, count($bottom->getNews()));
+		$news = $bottom->getNews()->at(0);
+		$this->assertNewsUsers($news, $bottom, $middle);
+		$this->assertNewsText($news, odNewsService::MSG_USER_FOLLOW, ['user' => $top], $middle);
+		$this->assertEqual("odom://user/{$top->id}", $news->link);
+	}
 
   function testUserRegister()
   {

@@ -12,28 +12,26 @@ lmb_require('src/model/MomentComment.class.php');
 class odNewsService
 {
   /*
-   * Messages text description.
-   *
-   * @todo move this to lang file
+   * News types.
    */
   ## Day ##
-  const MSG_DAY_CREATED         = "{sender} just created day {day}";
-  const MSG_DAY_COMMENT         = "{sender} has responded you in day {day}";
-  const MSG_DAY_LIKED           = "{sender} liked day {day}";
-  const MSG_DAY_SHARE           = "{sender} share day {day}";
-  const MSG_DAY_FAVORITE        = "{sender} added the day {day} to favorites";
-	const MSG_DAY_GATHERING       = "{sender} need your help! Add moments to day {day}";
+  const MSG_DAY_CREATED         = "day_created";
+  const MSG_DAY_COMMENT         = "day_comment";
+  const MSG_DAY_LIKED           = "day_liked";
+  const MSG_DAY_SHARE           = "day_shared";
+  const MSG_DAY_FAVORITE        = "day_favorite";
+	const MSG_DAY_GATHERING       = "day_gathering";
 
   ## Moment ##
-  const MSG_MOMENT_CREATED      = "{sender} created moment in day {day}";
-  const MSG_MOMENT_COMMENT      = "{sender} has responded you in moment of day {day}";
-  const MSG_MOMENT_LIKED        = "{sender} liked moment in day {day}";
+  const MSG_MOMENT_CREATED      = "moment_created";
+  const MSG_MOMENT_COMMENT      = "moment_commented";
+  const MSG_MOMENT_LIKED        = "moment_liked";
 
   ## Follow ##
-  const MSG_FOLLOW              = "{sender} started to follow {user}";
+  const MSG_USER_FOLLOW         = "user_followed";
 
   ## User ##
-  const MSG_FBFRIEND_REGISTERED = "You'r facebook friend '{sender}' just started to use this application, follow him/her?";
+  const MSG_FBFRIEND_REGISTERED = "user_fbfriend";
 
   /**
    * @var User
@@ -46,6 +44,28 @@ class odNewsService
   {
     $this->sender = $sender;
   }
+
+	static function getMessageByType($type)
+	{
+		$messages = [
+			self::MSG_DAY_CREATED         => "{sender} just created day {day}",
+			self::MSG_DAY_COMMENT         => "{sender} has responded you in day {day}",
+			self::MSG_DAY_LIKED           => "{sender} liked day {day}",
+			self::MSG_DAY_SHARE           => "{sender} share day {day}",
+			self::MSG_DAY_FAVORITE        => "{sender} added the day {day} to favorites",
+			self::MSG_DAY_GATHERING       => "{sender} need your help! Add moments to day {day}",
+
+			self::MSG_MOMENT_CREATED      => "{sender} created moment in day {day}",
+			self::MSG_MOMENT_COMMENT      => "{sender} has responded you in moment of day {day}",
+			self::MSG_MOMENT_LIKED        => "{sender} liked moment in day {day}",
+
+			self::MSG_USER_FOLLOW         => "{sender} started to follow {user}",
+			self::MSG_FBFRIEND_REGISTERED => "Your facebook friend '{sender}' just started to use this application, follow him/her?",
+		];
+		if(!isset($messages[$type]))
+			throw new lmbException("Unknown news type '$type'");
+		return $messages[$type];
+	}
 
   /**
    * @param User $user
@@ -80,8 +100,25 @@ class odNewsService
       'user_id' => $followed_user->id,
       'link' => "odom://user/{$followed_user->id}"
     ]);
-    $this->send($news, self::MSG_FOLLOW, ['user' => $followed_user]);
+
+    $this->send($news, self::MSG_USER_FOLLOW, ['user' => $followed_user]);
+
+	  $this->pullNewsFrom($followed_user);
   }
+
+	function pullNewsFrom(User $followed_user)
+	{
+		foreach($followed_user->getActivityWithLimitation() as $news)
+		{
+			$types_to_pull = [self::MSG_DAY_CREATED, self::MSG_DAY_LIKED, self::MSG_DAY_SHARE, self::MSG_DAY_FAVORITE, self::MSG_USER_FOLLOW];
+		  if(!in_array($news->type, $types_to_pull))
+			  continue;
+			$recipient = new NewsRecipient();
+			$recipient->news_id = $news->id;
+			$recipient->user_id = $this->sender->id;
+			$recipient->save();
+	  }
+	}
 
   /**
    * @param Day $day
@@ -321,8 +358,9 @@ class odNewsService
    * @param  array  $params
    * @return string
    */
-  public static function getMessage($tpl, array $params = array())
+  public static function getMessage($type, array $params = array())
   {
+	  $tpl = odNewsService::getMessageByType($type);
     if(false !== strpos($tpl, '{sender}'))
     {
       if(!isset($params['sender']))
@@ -378,6 +416,7 @@ class odNewsService
     $params['sender'] = $this->sender;
     $text = self::getMessage($type, $params);
     $news->setSender($this->sender);
+	  $news->type = $type;
     $news->text = $text;
     $news->save();
 

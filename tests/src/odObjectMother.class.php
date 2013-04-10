@@ -33,10 +33,10 @@ class odObjectMother
 		return $user;
 	}
 
-  function follow(User $user, User $follower)
+  function follow(User $followed, User $follower)
   {
     $link = new UserFollowing();
-    $link->setUser($user);
+    $link->setUser($followed);
     $link->setFollowerUser($follower);
     return $link->save();
   }
@@ -234,13 +234,16 @@ class odObjectMother
     return $complaint;
   }
 
-  function news(User $creator = null, User $recipient = null) {
+  function news(User $creator = null, User $recipient = null, $type = null, $params = null) {
     $creator   = $creator   ?: $this->user();
     $recipient = $recipient ?: $this->user();
+	  $type = $type ?: odNewsService::MSG_USER_FOLLOW;
+	  $params = $params ?: ['sender' => $creator, 'user' => $recipient];
 
     $news = new News();
     $news->setSender($creator);
-    $news->text = $creator->name . ' likes ' . $recipient->name;
+    $news->text = odNewsService::getMessage($type, $params);
+	  $news->type = $type;
     $news->link = $this->string();
     $news->save();
 

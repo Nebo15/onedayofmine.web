@@ -19,6 +19,7 @@ class News extends BaseModel
   public $sender_id;
   public $user_id;
   public $link;
+	public $type;
   public $text;
   public $day_id;
   public $moment_id;
@@ -32,6 +33,7 @@ class News extends BaseModel
   {
     $validator = new lmbValidator();
     $validator->addRequiredRule('sender_id');
+	  $validator->addRequiredRule('type');
     $validator->addRequiredRule('text');
     return $validator;
   }
@@ -70,7 +72,7 @@ class News extends BaseModel
   function exportForApi(array $properties = null)
   {
     $exported = parent::exportForApi(array(
-      'id', 'sender_id', 'text', 'user_id', 'day_id', 'day_comment_id', 'moment_id', 'moment_comment_id', 'link',
+      'id', 'sender_id', 'type', 'text', 'user_id', 'day_id', 'day_comment_id', 'moment_id', 'moment_comment_id', 'link',
     ));
 
     $exported->time = $this->ctime;
