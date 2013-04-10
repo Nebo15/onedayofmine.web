@@ -375,7 +375,7 @@ class DaysController extends BaseJsonController
 
 		$moment->getDbConnection()->commitTransaction();
 
-		if(!count($day->getMoments()))
+		if(1 == count($day->getMoments()))
 			$this->toolkit->doAsync('shareDayStart', $day->id);
 
 		if ($this->error_list->isEmpty())
