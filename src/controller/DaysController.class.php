@@ -337,9 +337,7 @@ class DaysController extends BaseJsonController
 		if (!$day = Day::findById($this->request->id))
 			return $this->_answerModelNotFoundById('Day', $this->request->id);
 
-		$is_first_moment = 0 == count($day->getMoments());
 		$is_owner = $day->user_id == $this->_getUser()->id;
-
 		if (!$is_owner)
 			if(!$day->is_gathering_enabled || !UserFollowing::isUserFollowUser($day->user_id, $this->_getUser()))
 				return $this->_answerNotOwner();
@@ -377,7 +375,7 @@ class DaysController extends BaseJsonController
 
 		$moment->getDbConnection()->commitTransaction();
 
-		if($is_first_moment)
+		if(!count($day->getMoments()))
 			$this->toolkit->doAsync('shareDayStart', $day->id);
 
 		if ($this->error_list->isEmpty())
