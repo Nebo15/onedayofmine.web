@@ -12,7 +12,7 @@ lmb_require('src/model/DayLike.class.php');
 class Day extends BaseModel
 {
   use Imageable {
-    getImage as getImageBase;
+    Imageable::getImage as getImageBase;
   }
 
   protected $_db_table_name = 'day';
@@ -68,7 +68,7 @@ class Day extends BaseModel
 		if(!$this->image_ext && count($moments))
 			return $moments[0]->getImage($size);
 		else
-			return $this->getImagesBase($size);
+			return $this->getImageBase($size);
 	}
 
   function setUser(User $user)
