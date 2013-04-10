@@ -366,11 +366,6 @@ class DaysController extends BaseJsonController
 		$moment->save();
 
 		$moment->attachImage($image_content);
-		if($is_first_moment)
-		{
-			$day->attachImage($image_content)->save();
-			$this->toolkit->doAsync('shareDayStart', $day->id);
-		}
 
 		if ($this->request->get('time'))
 		{
@@ -379,6 +374,9 @@ class DaysController extends BaseJsonController
 			$moment->timezone = $timezone;
 		}
 		$moment->save();
+
+		if($is_first_moment)
+			$this->toolkit->doAsync('shareDayStart', $day->id);
 
 		if ($this->error_list->isEmpty())
 		{
