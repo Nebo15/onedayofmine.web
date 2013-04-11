@@ -15,13 +15,17 @@ $this->menu = 'create_day';
   {{/into}}
   {{into slot="js_ready"}}
     var controller = new ImportController($('#import_wizard'), $('.step-content'));
-    <? if(!((bool) $this->toolkit->getUser())) { ?>
-      controller.setStep(1);
-    <? } elseif(!($this->toolkit->getUser()->instagram_uid || $this->toolkit->getUser()->flickr_uid)) { ?>
-      controller.setStep(2);
-    <? } else { ?>
-      controller.setStep(3);
-    <? } ?>
+    if(window.location.hash.substring(1,5) == 'step') {
+      controller.setStep(window.location.hash.substring(5));
+    } else {
+      <? if(!((bool) $this->toolkit->getUser())) { ?>
+        controller.setStep(1);
+      <? } elseif(!($this->toolkit->getUser()->instagram_uid || $this->toolkit->getUser()->flickr_uid)) { ?>
+        controller.setStep(2);
+      <? } else { ?>
+        controller.setStep(3);
+      <? } ?>
+    }
   {{/into}}
   {{into slot="templates"}}
     <script id="template_import_day" type="text/x-handlebars-template">
