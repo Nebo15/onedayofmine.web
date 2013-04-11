@@ -47,8 +47,6 @@ class DaysController extends BaseJsonController
 
 		$day->getDbConnection()->commitTransaction();
 
-		//$this->toolkit->doAsync('shareDayStart', $day->id);
-
 		return $this->_answerOk($this->toolkit->getExportHelper()->exportDay($day));
 	}
 
@@ -345,9 +343,13 @@ class DaysController extends BaseJsonController
 				return $this->_answerNotOwner();
 
 		if($this->request->get('image_content'))
+		{
 			$image_content = base64_decode($this->request->get('image_content'));
+		}
 		else
+		{
 			$image_content = file_get_contents($this->request->get('image_url'));
+		}
 
 		$moment = new Moment();
 		$moment->setDay($day);
@@ -362,6 +364,7 @@ class DaysController extends BaseJsonController
 		$moment->save();
 
 		$moment->attachImage($image_content);
+
 		if ($this->request->get('time'))
 		{
 			list($time, $timezone) = Moment::isoToStamp($this->request->get('time'));
@@ -369,6 +372,11 @@ class DaysController extends BaseJsonController
 			$moment->timezone = $timezone;
 		}
 		$moment->save();
+
+		$moment->getDbConnection()->commitTransaction();
+
+		if(1 == count($day->getMoments()) && $day)
+			$this->toolkit->doAsync('shareDayStart', $day->id);
 
 		if ($this->error_list->isEmpty())
 		{

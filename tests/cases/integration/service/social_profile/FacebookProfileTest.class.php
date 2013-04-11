@@ -116,7 +116,7 @@ class FacebookProfileTest extends odIntegrationTestCase
     $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($day));
 
     $facebook_id = (new FacebookProfileForTests($this->main_user))->shareDayBegin($day);
-    $day->facebook_id = $facebook_id;
+    $day->facebook_share_id = $facebook_id;
     $day->save();
 
     $moment = $this->generator->moment($day);
@@ -147,7 +147,7 @@ class FacebookProfileTest extends odIntegrationTestCase
     $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($day));
 
     $facebook_id = (new FacebookProfileForTests($this->main_user))->shareDayBegin($day);
-    $day->facebook_id = $facebook_id;
+    $day->facebook_share_id = $facebook_id;
     $day->save();
 
     $this->proxy_client->copyObjectPageToProxy($this->toolkit->getPagePath($day));

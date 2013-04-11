@@ -429,6 +429,8 @@ class odNewsService
       $recipient_record->save();
 
 	    /** @var $facebook odFacebook */
+	    if(!lmbToolkit::instance()->getConf('common')->notify_by_facebook)
+		    continue;
 	    $facebook = lmbToolkit::instance()->getFacebook();
 	    $data = [
 		    'template' => strip_tags($text).' in OneDayOfMine',

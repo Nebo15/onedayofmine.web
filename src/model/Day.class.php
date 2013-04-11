@@ -11,7 +11,9 @@ lmb_require('src/model/DayLike.class.php');
  */
 class Day extends BaseModel
 {
-  use Imageable;
+  use Imageable {
+    Imageable::getImage as getImageBase;
+  }
 
   protected $_db_table_name = 'day';
   protected $_default_sort_params = array('id'=>'desc');
@@ -29,8 +31,8 @@ class Day extends BaseModel
   public $views_count;
 	public $is_gathering_enabled;
   public $is_deleted;
-  public $facebook_id;
-  public $twitter_id;
+  public $facebook_share_id;
+  public $twitter_share_id;
   public $ctime;
   public $utime;
 
@@ -51,12 +53,7 @@ class Day extends BaseModel
     $export->user_id = $this->user_id;
     $export->type = $this->type;
     $export->title = $this->title;
-	  if(!$this->showImages($export))
-	  {
-		  $moments = $this->getMoments();
-		  if(count($moments))
-			  $moments[0]->showImages($export);
-	  }
+	  $this->showImages($export);
     $export->final_description = $this->final_description;
     $export->views_count = $this->views_count ?: 0;
 	  $export->ctime = (int) $this->ctime;
@@ -64,6 +61,15 @@ class Day extends BaseModel
 
     return $export;
   }
+
+	function getImage(array $size = null)
+	{
+		$moments = $this->getMoments();
+		if(!$this->image_ext && count($moments))
+			return $moments[0]->getImage($size);
+		else
+			return $this->getImageBase($size);
+	}
 
   function setUser(User $user)
   {

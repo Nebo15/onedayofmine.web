@@ -355,7 +355,7 @@ class odTools extends lmbAbstractTools
 
   /**
    * @param User $user
-   * @return FacebookProfile
+   * @return TwitterProfile
    */
   public function getTwitterProfile(User $user = null)
   {

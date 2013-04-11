@@ -7,6 +7,8 @@ $conf = array(
   'static_host' => 'https://onedayofmine.s3.amazonaws.com/',
   'requests_log_enabled' => false,
 	'async_enabled' => true,
+	'notify_by_facebook' => true,
+	'notify_by_facebook_og' => true,
 
 	'instagram' => [
 		'key' => 'd6a604d51f5a495e96f88048b98c6e22',
