@@ -43,7 +43,7 @@ $this->menu = 'me';
       search_request.success(function(response) {
         users_search_block.findSpinner().hideSpinner();
 
-        Template.renderElement(users_list_template, $('#search-result'), {
+        Template.renderElement(users_list_template, $('.search-result'), {
           users:response.data.result
         });
         attachFollowingListeners(users_search_block);
