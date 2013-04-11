@@ -140,6 +140,13 @@ var ImportController = function($wizard, $steps_content) {
 
       var step_container = $('#step3');
 
+      // Create empty day
+      $('.create-action').off().click(function() {
+        API.post('days/start', {title:'My day', type:'Working day'}).success(function(resp) {
+          window.location.href= '/pages/'+resp.data.result.id+'/day';
+        }).send();
+      });
+
       // Selectors
       var days_container = step_container.find('.import_days');
       var days_paginate_button = step_container.find('.paginate');
