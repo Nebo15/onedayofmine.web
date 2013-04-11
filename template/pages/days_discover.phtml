@@ -22,38 +22,42 @@ $this->menu = 'discover';
 		var $search_result = $('.days');
 		var $popular_days = $('.popular');
 
-		$('.top-action').click(function() {
+		function clearAndSpin()
+		{
 			$('.nav-pills li.active').removeClass('active');
-			$(this).addClass('active');
 			$search_form_query.val('');
+			$search_result.html('');
+			$('.with-spinner').showSpinner();
+		}
+
+		$('.top-action').click(function() {
+			clearAndSpin();
+			$(this).addClass('active');
 			API.request('GET', 'days/interesting').success(show_days_by_response).send();
 		});
 
 		$('.following-action').click(function() {
-			$('.nav-pills li.active').removeClass('active');
+			clearAndSpin();
 			$(this).addClass('active');
-			$search_form_query.val('');
 			API.request('GET', 'days/following').success(show_days_by_response).send();
 		});
 
 		$('.new-action').click(function() {
-			$('.nav-pills li.active').removeClass('active');
+			clearAndSpin();
 			$(this).addClass('active');
-			$search_form_query.val('');
 			API.request('GET', 'days/new').success(show_days_by_response).send();
 		});
 
 		$('.queries li').click(function() {
+			clearAndSpin();
 			$search_form_query.val($(this).find('a').html());
-			$search_form.trigger('submit');
-			$('.nav-pills li.active').removeClass('active');
+			$search_form.submit();
 			$(this).addClass('active');
 		});
 
 		function show_days_by_response(response)
 		{
-			$popular_days.html('');
-			$search_result.html();
+			$('.with-spinner').hideSpinner();
 			if(response.data.result.length === 0)
 			{
 				$search_result.html("<p>We can't find any days by your query</p>");
@@ -137,11 +141,14 @@ $this->menu = 'discover';
 	</div>
 
 	<hr/>
-	<ul class="days clearfix block-center">
-		<div class="popular">
-			{{apply template="days_list" days="$#days"/}}
-		</div>
-	</ul>
+	<div class="with-spinner">
+		<i class="spinner icon-spin icon-refresh"></i>
+		<ul class="days clearfix block-center">
+			<div class="popular">
+				{{apply template="days_list" days="$#days"/}}
+			</div>
+		</ul>
+	</div>
 
 {{/into}}
 {{/wrap}}
