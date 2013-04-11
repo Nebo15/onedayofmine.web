@@ -17,6 +17,10 @@ $this->title = "Live the life through other people's eyes";
       padding-bottom: 100px;
     }
 
+    .final-button {
+      margin-top: 40px;
+    }
+
     .header-container {
       margin-top: 45px;
       margin-bottom: 35px;
@@ -90,16 +94,17 @@ $this->title = "Live the life through other people's eyes";
 
       color: #FFF;
       font-weight: bold;
-      text-transform: uppercase;
       font-size: 20px;
       text-align: center;
-      padding-top: 150px;
+      padding-top: 110px;
     }
 
     .coming-soon-bage {
       border-radius: 4px;
       background: rgba(0, 0, 0, 0.8);
-      padding: 15px;
+      padding: 10px;
+      margin-right: 10px;
+      margin-left: 10px;
     }
 
     /* Give some space on the sides of the floated elements so text doesn't run right into it. */
@@ -164,7 +169,7 @@ $this->title = "Live the life through other people's eyes";
     </div>
 
     <div class="phone-container">
-      <div class="phone-content"><span class="coming-soon-bage">Coming soon</span></div>
+      <div class="phone-content"><div class="coming-soon-bage">iOS and Android applications are coming soon</div></div>
       <div class="phone-image"></div>
     </div>
 
@@ -211,27 +216,32 @@ $this->title = "Live the life through other people's eyes";
         <img class="featurette-image img-polaroid pull-left" src="/img/create-day-screen.png">
         <h2>Create day</h2>
         <p>You can <a class="trigger_login" href="/pages/import#create_empty_day">create empty day</a> or <a class="trigger_login" href="/pages/import">import your photo</a> from Flickr, Instagram and Facebook.</p>
-
      </div>
     </div>
     <div class="row-fluid featurette clearfix">
      <div class="span9 offset2">
         <hr />
-        <img class="featurette-image img-polaroid pull-right" src="/img/add-moment-screen.png">
-        <h2>Add moments</h2>
-        <p>You can upload pictures from PC, your cell phone, or import them from Flickr, Instagram and Facebook.</p>
-	      <p>Вы можете просто перетащить их на серую область</p>
+        <img class="featurette-image img-polaroid pull-right" src="/img/edit-day-screen.png">
+        <h2>Editing days is simple as never before</h2>
+        <p>You can arrange moments by changing time, select cover, edit images and many other.</p>
      </div>
     </div>
-		<div class="row-fluid featurette clearfix">
-			<div class="span9 offset2">
-				<hr />
-				<img class="featurette-image img-polaroid pull-right">
-				<h2>Add moments descriptions</h2>
-				<p></p>
-				<p>(переведи половину описания к https://onedayofmine.com/pages/7/day https://onedayofmine.s3.amazonaws.com/days/7/46cd427ef3dd5cd893971290919dbe92fcdf8d6f_532.jpeg на английский и сделай фотку с куском картинки)</p>
-			</div>
-		</div>
+    <div class="row-fluid featurette clearfix">
+     <div class="span9 offset2">
+        <hr />
+        <img class="featurette-image img-polaroid pull-left" src="/img/add-moment-screen.png">
+        <h2>Add moments</h2>
+        <p>You can upload pictures from PC, your cell phone, or import them from Flickr, Instagram and Facebook. You can even upload image by dragging it from your desktop onto empty moment.</p>
+     </div>
+    </div>
+    <div class="row-fluid featurette clearfix">
+      <div class="span9 offset2">
+        <hr />
+        <img class="featurette-image img-polaroid pull-right" src="/img/describe-moment-screen.png">
+        <h2>Add moments descriptions</h2>
+        <p>And we keep if short, so main idea of moment is always simple and clear.</p>
+      </div>
+    </div>
     <div class="row-fluid featurette clearfix">
      <div class="span9 offset2">
         <hr />
@@ -247,6 +257,9 @@ $this->title = "Live the life through other people's eyes";
         <h2>Get interest</h2>
         <p>Likes! Everybody loves them.</p>
      </div>
+    </div>
+    <div class="text-center final-button">
+      <a class="btn btn-large btn-success trigger_login" href="/pages/import">Awesome! I have stories to tell!</a>
     </div>
   {{/into}}
 {{/wrap}}
