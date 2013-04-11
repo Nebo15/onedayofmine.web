@@ -110,7 +110,9 @@ $this->menu = 'discover';
 		<div class="span12 centered-pills">
 			<ul class="nav nav-pills ratings">
 				<li class="active top-action"><a href="#">Top</a></li>
+				<? if($this->current_user) { ?>
 				<li class="following-action"><a href="#">Following</a></li>
+				<? } ?>
 				<li class="new-action"><a href="#">New</a></li>
 			</ul>
 		</div>
