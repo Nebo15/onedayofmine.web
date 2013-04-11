@@ -92,8 +92,10 @@ class InterestCalculator
     $days_with_rating = [];
     foreach(Day::findByIds($ids) as $day)
     {
-      if(1 === $day->is_deleted)
+      if(1 == $day->is_deleted)
         continue;
+	    if(!$day->getImage())
+		    continue;
       foreach($info as $record)
       {
         if($record['day_id'] != $day->id)
