@@ -34,7 +34,7 @@ class PagesController extends WebAppController
 		foreach ($days_ratings as $day_rating)
 			$days[] = $day_rating->getDay();
 
-		$this->days = $this->toolkit->getExportHelper()->exportDayItems($days);
+		$this->days = $this->_toFlatArray($this->toolkit->getExportHelper()->exportDayItems($days));
 	}
 
 	function doDaysSearch()
