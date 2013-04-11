@@ -43,7 +43,7 @@ lmbToolkit :: merge(new lmbDbTools());
 lmb_require('limb/core/src/lmbSys.class.php');
 lmb_require('src/model/base/BaseModel.class.php');
 
-if(lmb_env_get('LIMB_APP_MODE') != 'devel')
+if(lmb_env_get('LIMB_APP_MODE') != LIMB_APP_DEVELOPMENT)
 {
 	lmbErrorGuard::registerErrorHandler(['lmbErrorGuard', 'convertErrorsToExceptions']);
 
