@@ -96,7 +96,7 @@ $this->day->is_gathering_enabled = false;
         </div>
 
         <div class="moment-image-container block-center">
-          <img src="[[#if moment.image]][[moment.image]][[else]]//placehold.it/532x532&text=Select+image[[/if]]" class="img-polaroid" alt="" />
+          <img src="[[#if moment.image]][[moment.image]][[else]]/img/moment-placeholder.gif[[/if]]" class="img-polaroid" alt="" />
         </div>
 
         <div class="moment-description bubble block-center">
@@ -426,9 +426,9 @@ $this->day->is_gathering_enabled = false;
 
         <hr/>
 
+        <a name="comments"></a>
         <? if($this->day->comments && $this->day->comments_count > 0 || $this->toolkit->getUser()) { ?>
           <div class="comments">
-            <a name="comments"></a>
             <span class="pull-right not-decorated text-gray">
               <i class="icon-comments"></i>
               <span id="comments_counter"><? if($this->day->comments_count > 3) { ?>3/<? } ?>{$this->day->comments_count}</span>

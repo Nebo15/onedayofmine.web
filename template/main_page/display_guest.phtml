@@ -13,228 +13,228 @@ $this->title = "Live the life through other people's eyes";
     <meta name="twitter:twitter:creator" content="OneDayOfMine" />
   {{/into}}
   {{into slot="css"}}
-    .sign-up-wrap {
+    body {
       padding-bottom: 100px;
     }
 
-    .select-wrap {
-      margin-top: 1px;
-    }
-
-    .carousel-caption {
-      height: 50px;
-      padding-bottom: 0px;
-      padding-top: 40px;
-      bottom: -20px;
-    }
-
-    .carousel-control {
-      top: 48%
-    }
-
-    .carousel-inner {
-      width: 1000px;
-      max-width: 100%;
-    }
-
-    .carousel-blocks {
-      height:400px;
-      overflow:hidden;
-    }
-
-    .carousel-blocks {
-      /*width: 120%;*/
-    }
-
-    .carousel-blocks img {
-      width: 200px;
-      height: 200px;
-      float:left;
-      display:inline-block;
-    }
-
-    .carousel-blocks img.big {
-      width: 400px;
+    .header-container {
+      margin-top: 45px;
+      margin-bottom: 35px;
+      width:100%;
       height: 400px;
+      overflow: hidden;
+      background: url('/img/landing_title_bg.jpg');
+      background-size: cover;
+      position: relative;
     }
 
-    .carousel-caption,
-    .carousel-caption-overlap,
-    .day-final-comment a {
-      color: #FFF;
-    }
-
-    .select-wrap .caret {
-      border-top: 4px solid #FFF;
-      vertical-align: 30%;
-      margin-right: 5px;
-    }
-
-    .select-wrap .select-representation {
-      border-bottom: 1px dotted #FFF;
-    }
-
-    .select-wrap .select-representation,
-    .select-wrap select {
-      height: 20px;
-    }
-
-    .select-wrap .select-representation,
-    .select-wrap .select-value {
-      display: inline-block;
-    }
-
-    .carousel-caption .day-final-comment {
-      text-overflow: ellipsis; /* … */
-      overflow:hidden;
-      white-space: nowrap;
-      display: inline-block;
-      max-width: 90%;
-      height: 20px;
-    }
-
-    .carousel-caption-overlap {
+    .header-container .caption {
+      background-color: transparent;
       position: absolute;
-      bottom: 35px;
-      left: 80px;
+      padding: 20px;
+      right: 50%;
+      top: 25%;
+      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.8);
     }
 
-    .carousel-caption-overlap .icon-random {
-      vertical-align: middle;
-      margin-left: 10px;
+    .header-container .caption h1,
+    .header-container .caption .lead {
+      margin: 0;
+      line-height: 1.25;
+      color: #fff;
+      text-shadow: 0 1px 1px rgba(0,0,0,.4);
+    }
+
+    .header-container .caption .btn {
+      margin-top: 10px;
+      display: block;
+      width: 100px;
+    }
+
+    .phone-container {
+      margin-top: 80px;
+      width: 245px;
+      height: 520px;
+      position: absolute;
+      right: 10%;
+      top: 0;
+    }
+
+    .phone-container .phone-image {
+      background: url('/img/iphone.png');
+      background-size: contain;
+      background-repeat:no-repeat;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+
+    .phone-container .phone-content {
+      position: absolute;
+      /*top: 85px;
+      right: 15px;
+      left: 20px;
+      bottom: 80px;
+      background: #FFF;
+      padding: 5px;*/
+
+      background: url('/img/coming-soon-screen.jpg');
+      background-size: cover;
+      top: 76px;
+      right: 17px;
+      left: 21px;
+      bottom: 78px;
+
+      color: #FFF;
+      font-weight: bold;
+      text-transform: uppercase;
+      font-size: 20px;
+      text-align: center;
+      padding-top: 150px;
+    }
+
+    .coming-soon-bage {
+      border-radius: 4px;
+      background: rgba(0, 0, 0, 0.8);
+      padding: 15px;
+    }
+
+    /* Give some space on the sides of the floated elements so text doesn't run right into it. */
+    .featurette-image.pull-left {
+      margin-right: 40px;
+    }
+
+    .featurette-image.pull-right {
+      margin-left: 40px;
+    }
+
+    /* Thin out the marketing headings */
+    .features-heading {
+      font-size: 50px;
+      font-weight: 300;
+      line-height: 1;
+      letter-spacing: -1px;
     }
   {{/into}}
   {{into slot="js"}}
     var interesting_days = <?= json_encode($this->interesting_days); ?>;
   {{/into}}
   {{into slot="js_ready"}}
-    // Nice boostrap select's
-    $(function() {
-      function resetHiddenSelect(wrapper_selector) {
-        var $selector = wrapper_selector.find('select');
-        var $value_container = wrapper_selector.find('.select-representation');
-        var $value = wrapper_selector.find('.select-value');
-
-        $value.text($selector.val());
-        $selector.width($value_container.width());
+    jQuery.jQueryRandom = 0;
+    jQuery.extend(jQuery.expr[":"], {
+      random: function(a, i, m, r) {
+        if (i == 0) {
+          jQuery.jQueryRandom = Math.floor(Math.random() * r.length);
+        };
+        return i == jQuery.jQueryRandom;
       }
-
-      var carousel_caption_overlap = $('.carousel-caption-overlap');
-
-      carousel_caption_overlap.find('.select-wrap').each(function() {
-        var $this = $(this);
-//        resetHiddenSelect($this);
-//
-//        $this.find('select').change(function() {
-//          resetHiddenSelect($this);
-//        });
-      });
-
-      // $('#days_carousel').on('slide', function(event) {
-      //   carousel_caption_overlap.css('white-space', 'nowrap');
-      //   carousel_caption_overlap.animate({
-      //     left: '-50px'
-      //   }, function() {
-      //     carousel_caption_overlap.css('left', '100%').animate({
-      //       left: '80px'
-      //     }, function() {
-      //       carousel_caption_overlap.css('white-space', 'interhit');
-      //     });
-      //   });
-      // });
-
-      // TODO: animate change when next element have different value
-      $('#days_carousel').on('slid', function(event) {
-        var active_item = $(this).find('.item.active');
-	      $('.dayType').html(active_item.data().type);
-	      $('.userOccupation').html(active_item.data().userOccupation);
-	      $('.userLocation').html(active_item.data().userLocation);
-      });
     });
 
-    (function() {
-      function fixFinalCommentEndings() {
-        $('#days_carousel .day-final-comment small').each(function() {
-          var text = $(this).text().trim();
-          if(text.substring(text.length-1) !== '.') {
-            $(this).text(text + '.');
-          }
-        });
-      }
+    $('.wall-container').width(Math.ceil($(window).width()/200)*200);
 
-      $(function() {
-        fixFinalCommentEndings();
+    $('#wall').masonry({
+      itemSelector: '#wall > li',
+      columnWidth: 200
+    });
 
-        // IDEA: animate all blocks with different animation speed
-        $('#days_carousel').carousel({ interval: 5000 });
-      });
-    })();
+    /*var wall_selector = $('#wall');
+    var wall_moments_selector = wall_selector.children();
+    setInterval(function() {
+      var random_moment = $('#wall').children().sort(function(){
+        return Math.round(Math.random())-0.5
+      }).slice(0,1);
+      var random_moment_day = random_moment.data('day-id');
+
+      wall_moments_selector.removeClass('active');
+      wall_moments_selector.filter('[data-day-id='+random_moment_day+']').addClass('active');
+    }, 2000);*/
   {{/into}}
-  {{into slot="content"}}
-    <p class="lead">Live the life through other people's eyes</p>
-
-    {{list using="$#interesting_days" counter="$i"}}
-      <div class="row-fluid hide-phone">
-        <div id="days_carousel" class="carousel slide block-center span12">
-          <div class="carousel-inner block-center">
-            {{list:item}}
-              <div class="item<?php if($i == 1) { ?> active<? } ?>" data-type="{$item.type}" data-user-occupation="{$item.user.occupation}" data-user-location="{$item.user.location}">
-                <div class="carousel-blocks">
-                  {{list using="$item.moments" as="$moment" counter="$counter"}}
-                    {{list:item}}
-                      <?php if($counter == 1) { ?>
-                        <img src="{$moment.image_532}" class="big" />
-                      <? } else { ?>
-                        <img src="{$moment.image_266}" />
-                      <? } ?>
-                    {{/list:item}}
-                  {{/list}}
-                </div>
-                <div class="carousel-caption">
-                  <div class="day-final-comment">
-                    <a href="/pages/{$item.id}/day">
-                      <small>{$item.final_description}</small>
-                      &rarr;
-                    </a>
-                  </div>
-                </div>
-              </div>
-            {{/list:item}}
-          </div>
-          <div class="carousel-caption-overlap">
-            <div class="selector">
-              <span class="dayType">{$item.type}</span>
-              of
-              <span class="userOccupation">{$#interesting_days[0].user.occupation}</span>
-              from
-              <span class="userLocation">{$#interesting_days[0].user.location}</span>
-            </div>
-          </div>
-          <a class="left carousel-control" href="#days_carousel" data-slide="prev">‹</a>
-          <a class="right carousel-control" href="#days_carousel" data-slide="next">›</a>
-        </div>
+  {{into slot="content_fullwidth"}}
+    <div class="header-container">
+      <div class="caption">
+        <h1>One Day Of Mine</h1>
+        <p class="lead">
+          Live the life through other people's eyes
+          <a class="btn btn-large btn-success trigger_login" href="/pages/import">Try it</a>
+        </p>
       </div>
-    {{/list}}
+    </div>
+
+    <div class="phone-container">
+      <div class="phone-content"><span class="coming-soon-bage">Coming soon</span></div>
+      <div class="phone-image"></div>
+    </div>
 
     <hr />
 
     <div class="row-fluid">
-     <div class="span4">
+      <div class="span9 offset2">
+        <h1 class="features-heading">Our main features</h1>
+      </div>
+    </div>
+    <div class="row-fluid">
+      <div class="span3 offset2">
         <h2>Share a story, not photo</h2>
         <p>Photos without story is just beautiful pictures, we like to share stories, best moments of your life: travels, birthday, parties and other meaningfull events. </p>
-     </div>
-      <div class="span4">
+      </div>
+      <div class="span3">
         <h2>Give new life for old photos</h2>
         <p>People have tons of photos that lost in time, give them new life, make stories out of them and share them with friends.</p>
       </div>
-      <div class="span4">
+      <div class="span3">
         <h2>Magic</h2>
         <p>It’s an easy-to-use tool, just connect your social profiles and enjoy the magic.</p>
      </div>
     </div>
 
-    <div class="text-center sign-up-wrap">
-      <a class="btn btn-large btn-success trigger_login" href="/pages/import">Try this awesome features</a>
+    <hr />
+
+    <div class="row-fluid">
+      <div class="span9 offset2">
+        <h1 class="features-heading">How is it works?</h1>
+      </div>
+    </div>
+    <div class="row-fluid featurette clearfix">
+     <div class="span9 offset2">
+        <img class="featurette-image img-polaroid pull-right" src="/img/sign-up-screen.png">
+        <h2>Sign up</h2>
+        <p>No need to enter any information, we will use your Faceook profile</p>
+     </div>
+    </div>
+    <div class="row-fluid featurette clearfix">
+     <div class="span9 offset2">
+        <hr />
+        <img class="featurette-image img-polaroid pull-left" src="/img/import-screen.png">
+        <h2>Create day</h2>
+        <p>You can create empty day or import your photo shoots from Flickr, Instagram and Facebook.</p>
+     </div>
+    </div>
+    <div class="row-fluid featurette clearfix">
+     <div class="span9 offset2">
+        <hr />
+        <img class="featurette-image img-polaroid pull-right" src="/img/add-moment-screen.png">
+        <h2>Add moments</h2>
+        <p>You can upload pictures from PC, your cell phone, or import them from Flickr, Instagram and Facebook.</p>
+     </div>
+    </div>
+    <div class="row-fluid featurette clearfix">
+     <div class="span9 offset2">
+        <hr />
+        <img class="featurette-image img-polaroid pull-left" src="/img/share-screen.png">
+        <h2>Share it</h2>
+        <p>Post your day in Facebook and Twitter.</p>
+     </div>
+    </div>
+    <div class="row-fluid featurette clearfix">
+     <div class="span9 offset2">
+        <hr />
+        <img class="featurette-image img-polaroid pull-right" src="/img/likes-screen.png">
+        <h2>Get interest</h2>
+        <p>Likes! Everybody loves them.</p>
+     </div>
     </div>
   {{/into}}
 {{/wrap}}
