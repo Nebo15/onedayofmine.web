@@ -433,7 +433,7 @@ class odNewsService
 		    continue;
 	    $facebook = lmbToolkit::instance()->getFacebook();
 	    $data = [
-		    'template' => $news->getMessageWithSiteUrls().' in OneDayOfMine',
+		    'template' => strip_tags($text).' in OneDayOfMine',
 		    'access_token' => $facebook->getApplicationAccessToken(),
 		    'href' => '/'
 			];
