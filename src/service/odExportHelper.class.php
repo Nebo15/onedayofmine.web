@@ -425,17 +425,20 @@ class odExportHelper
 
   ############### News ###############
   ################ > News ###############
-  function exportNewsListItem(News $news)
+  function exportNewsListItem(News $news, $with_site_urls = false)
   {
     $exported = $news->exportForApi();
 
     if($news->sender_id)
       $exported->sender = $this->exportUserItem(User::findById($news->sender_id));
 
+	  if($with_site_urls)
+		  $exported->text = $news->getMessageWithSiteUrls();
+
     return $exported;
   }
 
-  function exportNewsItems($news, $with_site_url = false)
+  function exportNewsItems($news, $with_site_urls = false)
   {
     if(!count($news))
       return [];
@@ -463,9 +466,7 @@ class odExportHelper
 	  $moment_comments     = lmbArrayHelper::makeKeysFromColumnValues('id', $moment_comments);
 
     foreach ($news as $news_item) {
-      $news_item_exported = $news_item->exportForApi();
-	    if($with_site_url)
-		    $news_item_exported->text = $news_item->getMessageWithSiteUrls();
+      $news_item_exported = $this->exportNewsListItem($news_item, $with_site_urls);
       $news->sender = $this->exportUserSubentity($sender_users[$news_item->sender_id]);
 	    if($news_item->day_id)
 		    $news_item_exported->day = $this->exportDaySubentity($days[$news_item->day_id]);
