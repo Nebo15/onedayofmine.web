@@ -28,24 +28,13 @@ class PagesController extends WebAppController
 
 	function doDaysDiscover()
 	{
-		$top_days = array_map(function($day_rating) {
-      return $day_rating->getDay();
-    }, (array) (new InterestCalculator())->getDaysRatings(null, null, $this->lists_limit));
+		$days_ratings = (new InterestCalculator())->getDaysRatings(null, null, $this->lists_limit);
 
-    $top_days_exported = $this->toolkit->getExportHelper()->exportDayItems($top_days);
+		$days = [];
+		foreach ($days_ratings as $day_rating)
+			$days[] = $day_rating->getDay();
 
-		$this->days = [];
-		foreach ($top_days_exported as $day)
-		{
-			$item = $this->_toFlatArray($day);
-
-			if(!$item['image_532'])
-				continue;
-			if(!$item['image_266'])
-				continue;
-
-      $this->days[] = $item;
-		}
+		$this->days = $this->_toFlatArray($this->toolkit->getExportHelper()->exportDayItems($days));
 	}
 
 	function doDaysSearch()

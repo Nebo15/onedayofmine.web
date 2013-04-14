@@ -35,6 +35,7 @@ class Day extends BaseModel
   public $twitter_share_id;
   public $ctime;
   public $utime;
+	public $cip;
 
   protected function _createValidator()
   {
@@ -135,14 +136,22 @@ class Day extends BaseModel
    */
   static function findByUsersIds(array $ids, $from_id = null, $to_id = null, $limit = null)
   {
-    $criteria = lmbSQLCriteria::in('user_id', $ids);
-    $criteria->add('is_deleted = 0');
-    if($from_id)
-      $criteria->add(lmbSQLCriteria::less('id', $from_id));
-    if($to_id)
-      $criteria->add(lmbSQLCriteria::greater('id', $to_id));
-    return Day::find($criteria, array('id' => 'DESC'))
-      ->paginate(0, (!$limit || $limit > 100) ? 100 : $limit);
+	  $query = new lmbSelectQuery('day');
+	  $query->addField('day.*');
+	  $criteria = lmbSQLCriteria::equal('day.is_deleted', 0);
+	  $criteria->add(lmbSQLCriteria::isNotNull('moment.id'));
+	  $criteria->add(lmbSQLCriteria::in('user_id', $ids));
+	  if($from_id)
+		  $criteria->add(lmbSQLCriteria::less('day.id', $from_id));
+	  if($to_id)
+		  $criteria->add(lmbSQLCriteria::greater('day.id', $to_id));
+	  $query->addCriteria($criteria);
+	  $query->addLeftJoin('moment', 'day_id', 'day', 'id');
+	  $query->addGroupBy('day.id');
+	  $query->addOrder('day.id', 'DESC');
+
+	  return Day::findByQuery($query)
+			  ->paginate(0, (!$limit || $limit > 100) ? 100 : $limit);
   }
 
   /**
@@ -150,13 +159,20 @@ class Day extends BaseModel
    */
   static function findNew($from_id = null, $to_id = null, $limit = null)
   {
-    $criteria = lmbSQLCriteria::equal('is_deleted', 0);
-    if($from_id)
-      $criteria->add(lmbSQLCriteria::less('id', $from_id));
-    if($to_id)
-      $criteria->add(lmbSQLCriteria::greater('id', $to_id));
+	  $query = new lmbSelectQuery('day');
+	  $query->addField('day.*');
+	  $criteria = lmbSQLCriteria::equal('day.is_deleted', 0);
+	  $criteria->add(lmbSQLCriteria::isNotNull('moment.id'));
+	  if($from_id)
+		  $criteria->add(lmbSQLCriteria::less('day.id', $from_id));
+	  if($to_id)
+		  $criteria->add(lmbSQLCriteria::greater('day.id', $to_id));
+	  $query->addCriteria($criteria);
+	  $query->addLeftJoin('moment', 'day_id', 'day', 'id');
+	  $query->addGroupBy('day.id');
+	  $query->addOrder('day.id', 'DESC');
 
-    return Day::find($criteria, ['id' => 'DESC'])
+    return Day::findByQuery($query)
       ->paginate(0, (!$limit || $limit > 100) ? 100 : $limit);
   }
 

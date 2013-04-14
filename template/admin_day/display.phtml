@@ -5,10 +5,6 @@
 
   <div id="header">
     <h1>Days</h1>
-    <div class="header_actions">
-      {{apply template="object_action" action="create" is_link="true" title="Создать Day"/}}
-    </div>
-
     {{include file='_admin/pager.phtml' items='{$this->items}'/}}
   </div>
 
@@ -26,26 +22,27 @@
             <th>id
             {{include file='_admin/sort_by_column.phtml' field='id'/}}
             </th>
-            <th>user_id
+            <th>User
             {{include file='_admin/sort_by_column.phtml' field='user_id'/}}
             </th>
-            <th>title
+            <th>Title
             {{include file='_admin/sort_by_column.phtml' field='title'/}}
             </th>
-            <th>start_time
-            {{include file='_admin/sort_by_column.phtml' field='start_time'/}}
-            </th>
-            <th>likes_count
+	          <th>Moments Count</th>
+            <th>Likes count
             {{include file='_admin/sort_by_column.phtml' field='likes_count'/}}
             </th>
+	          <th>Views count
+		          {{include file='_admin/sort_by_column.phtml' field='views_count'/}}
+	          </th>
             <th>ctime
             {{include file='_admin/sort_by_column.phtml' field='ctime'/}}
             </th>
             <th>utime
             {{include file='_admin/sort_by_column.phtml' field='utime'/}}
             </th>
-            <th>cip
-            {{include file='_admin/sort_by_column.phtml' field='cip'/}}
+            <th>Deleted
+            {{include file='_admin/sort_by_column.phtml' field='is_deleted'/}}
             </th>
             <th>Действия</th>
           </tr>
@@ -54,16 +51,15 @@
             <tr class="{$parity}">
               <td>{{apply template="selector" value="{$item.id}"/}}</td>
               <td>{$item.id}</td>
-              <td>{$item.user_id}</td>
-              <td>{$item.title}</td>
-              <td>{$item.start_time}</td>
-              <td>{$item.likes_count}</td>
-              <td>{$item.ctime|date:"d.m.Y"}</td>
-              <td>{$item.utime|date:"d.m.Y"}</td>
-              <td>{$item.cip}</td>
+              <td><a href="/pages/{$item->getUser()->id}">{$item->getUser()->name}</a></td>
+              <td><a href="/pages/{$item.id}/day">{$item.title}</a></td>
+	            <td>{$item->getMoments()->count()}</td>
+              <td>{$item->getLikes()->count()}</td>
+	            <td>{$item.views_count}</td>
+              <td>{$item.ctime|date:"d.m.Y H:i:s"}</td>
+              <td>{$item.utime|date:"d.m.Y H:i:s"}</td>
+              <td>{$item.is_deleted}</td>
               <td class='actions'>
-                {{apply template="object_action_edit" item="{$item}"/}}
-
                 {{apply template="object_action_delete" item="{$item}"/}}
               </td>
             </tr>
