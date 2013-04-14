@@ -46,7 +46,7 @@ abstract class BasePhotoSource
 		foreach($days as $i => $day)
 			$days[$i] = array_reverse($day);
 
-		if($filter_by_user)
+		if($filter_by_user && false)
 		{
 			$day_begins = $filter_by_user->getDaysBeginTime();
 			foreach($days as $i => $day)
