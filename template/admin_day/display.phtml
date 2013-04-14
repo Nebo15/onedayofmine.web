@@ -41,8 +41,8 @@
             <th>utime
             {{include file='_admin/sort_by_column.phtml' field='utime'/}}
             </th>
-            <th>cip
-            {{include file='_admin/sort_by_column.phtml' field='cip'/}}
+            <th>Deleted
+            {{include file='_admin/sort_by_column.phtml' field='is_deleted'/}}
             </th>
             <th>Действия</th>
           </tr>
@@ -58,7 +58,7 @@
 	            <td>{$item.views_count}</td>
               <td>{$item.ctime|date:"d.m.Y H:i:s"}</td>
               <td>{$item.utime|date:"d.m.Y H:i:s"}</td>
-              <td>{$item.cip}</td>
+              <td>{$item.is_deleted}</td>
               <td class='actions'>
                 {{apply template="object_action_delete" item="{$item}"/}}
               </td>
