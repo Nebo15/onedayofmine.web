@@ -47,10 +47,7 @@ class MainPageController extends WebAppController
 
 	protected function _mergeNews($news)
 	{
-		foreach($news as $i => $news_item)
-			$news[$i]->text = $news_item->getMessageWithSiteUrls();
-
-		$news = $this->toolkit->getExportHelper()->exportNewsItems($news);
+		$news = $this->toolkit->getExportHelper()->exportNewsItems($news, true);
 
 		$result = [];
 		$current = null;
