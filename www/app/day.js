@@ -19,7 +19,7 @@ $(function () {
 			method: 'feed',
 			link: window.location.href,
 			name: $('meta[property="og:title"]').prop('content'),
-			description: $description,
+			description: desc,
 			picture: $('meta[property="og:image"]').prop('content')
 		};
 
