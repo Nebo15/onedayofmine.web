@@ -30,11 +30,7 @@ class MainPageController extends WebAppController
 			$this->news = $this->_mergeNews($news);
 
 			foreach($this->news as $i => $news_item)
-			{
-				$search = ['/odom:\/\/users\/(\d+)/', '/odom:\/\/days\/(\d+)/'];
-				$replace = ['/pages/$1/user', '/pages/$1/day'];
-				$this->news[$i]->text = preg_replace($search, $replace, $news_item->text);
-			}
+				$this->news[$i]->text = $news_item->getMessageWithSiteUrls();
 
 			$this->news = $this->_toFlatArray($this->news);
 
