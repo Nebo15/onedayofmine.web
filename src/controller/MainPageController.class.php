@@ -29,9 +29,6 @@ class MainPageController extends WebAppController
 
 			$this->news = $this->_mergeNews($news);
 
-			foreach($this->news as $i => $news_item)
-				$this->news[$i]->text = News::getMessageWithSiteUrls($news_item->text);
-
 			$this->news = $this->_toFlatArray($this->news);
 
 			$followers = $this->_getUser()->getFollowersUsers();
@@ -50,6 +47,9 @@ class MainPageController extends WebAppController
 
 	protected function _mergeNews($news)
 	{
+		foreach($news as $i => $news_item)
+			$news[$i]->text = $news_item->getMessageWithSiteUrls();
+
 		$news = $this->toolkit->getExportHelper()->exportNewsItems($news);
 
 		$result = [];
