@@ -435,7 +435,7 @@ class odNewsService
 	    $data = [
 		    'template' => strip_tags($text).' in OneDayOfMine',
 		    'access_token' => $facebook->getApplicationAccessToken(),
-		    'href' => '/'
+		    'href' => $news->getLinkWithSiteUrl()
 			];
 	    $facebook->api('/'.$recipient->facebook_uid.'/notifications', 'post', $data);
     }
