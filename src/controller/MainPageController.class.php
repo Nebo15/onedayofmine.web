@@ -30,7 +30,7 @@ class MainPageController extends WebAppController
 			$this->news = $this->_mergeNews($news);
 
 			foreach($this->news as $i => $news_item)
-				$this->news[$i]->text = $news_item->getMessageWithSiteUrls();
+				$this->news[$i]->text = News::getMessageWithSiteUrls($news_item->text);
 
 			$this->news = $this->_toFlatArray($this->news);
 
