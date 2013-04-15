@@ -85,11 +85,11 @@ h4 {
 }
 
 /* Bages */
-.with-bage {
+.has-bage {
   position: relative;
 }
 
-.with-bage .bage {
+.has-bage .bage {
   position: absolute;
   color:#FFF;
   text-align: center;
@@ -109,12 +109,12 @@ h4 {
   font-size: 115%;
 }
 
-.with-bage .bage a {
+.has-bage .bage a {
   color:#FFF;
   text-decoration: none;
 }
 
-.with-bage .bage-transperent {
+.has-bage .bage-transperent {
   border-radius: 0;
   background: none;
 }
