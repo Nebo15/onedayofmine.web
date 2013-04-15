@@ -29,6 +29,7 @@ class odNewsService
 
   ## Follow ##
   const MSG_USER_FOLLOW         = "user_followed";
+	const MSG_USER_FOLLOW_YOU     = "user_followed_you";
 
   ## User ##
   const MSG_FBFRIEND_REGISTERED = "user_fbfriend";
@@ -59,7 +60,8 @@ class odNewsService
 			self::MSG_MOMENT_COMMENT      => "{sender} has responded you in moment of day {day}",
 			self::MSG_MOMENT_LIKED        => "{sender} liked moment in day {day}",
 
-			self::MSG_USER_FOLLOW         => "{sender} started to follow {user}",
+			self::MSG_USER_FOLLOW         => "{sender} started to following {user}",
+			self::MSG_USER_FOLLOW_YOU     => "{sender} started to following you",
 			self::MSG_FBFRIEND_REGISTERED => "Your facebook friend '{sender}' just started to use this application, follow him/her?",
 		];
 		if(!isset($messages[$type]))
@@ -77,7 +79,7 @@ class odNewsService
     $this->addRecipients($profile->getRegisteredFriends());
 
     $news = (new News)->import([
-      'link' => "odom://user/{$user->id}"
+      'link' => "odom://users/{$user->id}"
     ]);
 
     $this->send($news, self::MSG_FBFRIEND_REGISTERED);
@@ -90,20 +92,26 @@ class odNewsService
   {
 	  $this->pullNewsFrom($followed_user);
 
+	  $news_for_followed = (new News)->import([
+		  'user_id' => $this->sender->id,
+		  'link' => "odom://users/{$this->sender->id}"
+	  ]);
+	  $this->addRecipient($followed_user);
+	  $this->send($news_for_followed, self::MSG_USER_FOLLOW_YOU, ['user' => $followed_user]);
+
     foreach($this->sender->getFollowersUsers() as $recipient)
     {
       if($recipient->id != $followed_user->id)
         if(1 == $recipient->getSettings()->notifications_related_activity)
           $this->addRecipient($recipient);
     }
-    $this->addRecipient($followed_user);
 
-    $news = (new News)->import([
+    $news_other = (new News)->import([
       'user_id' => $followed_user->id,
-      'link' => "odom://user/{$followed_user->id}"
+      'link' => "odom://users/{$followed_user->id}"
     ]);
 
-    $this->send($news, self::MSG_USER_FOLLOW, ['user' => $followed_user]);
+    $this->send($news_other, self::MSG_USER_FOLLOW, ['user' => $followed_user]);
   }
 
 	function pullNewsFrom(User $followed_user)
@@ -129,7 +137,7 @@ class odNewsService
     $news = (new News)->import([
       'user_id' => $this->sender->id,
       'day_id' => $day->id,
-      'link' => "odom://day/{$day->id}"
+      'link' => "odom://days/{$day->id}"
     ]);
     foreach($this->sender->getFollowersUsers() as $follower)
     {
@@ -153,7 +161,7 @@ class odNewsService
     lmb_assert_true($day->id);
     $news = (new News())->import([
       'day_id' => $day->id,
-      'link' => "odom://day/{$day->id}"
+      'link' => "odom://days/{$day->id}"
     ]);
     $user = User::findById($day->user_id);
     if(1 == $user->getSettings()->notifications_related_activity)
@@ -166,7 +174,7 @@ class odNewsService
     lmb_assert_true($day->id);
     $news = (new News)->import([
       'day_id' => $day->id,
-      'link' => "odom://day/{$day->id}"
+      'link' => "odom://days/{$day->id}"
     ]);
 
     if(1 == User::findById($day->user_id)->getSettings()->notifications_related_activity)
@@ -184,7 +192,7 @@ class odNewsService
 		lmb_assert_true($day->id);
 		$news = (new News)->import([
 			'day_id' => $day->id,
-			'link' => "odom://day/{$day->id}"
+			'link' => "odom://days/{$day->id}"
 		]);
 
 		foreach($this->sender->getFollowersUsers() as $follower)
@@ -226,7 +234,7 @@ class odNewsService
     $news = (new News)->import([
       'day_id' => $day->id,
       'day_like_id' => $like->id,
-      'link' => "odom://day/{$day->id}"
+      'link' => "odom://days/{$day->id}"
     ]);
     $owner = $day->getUser();
 
@@ -282,7 +290,7 @@ class odNewsService
     $news = new News;
     $news->day_comment_id = $comment->id;
     $news->day_id = $comment->day_id;
-    $news->link = "odom://day/{$comment->day_id}/comment/{$comment->id}";
+    $news->link = "odom://days/{$comment->day_id}/comment/{$comment->id}";
 
     $user = User::findById($day->user_id);
     if(1 == $user->getSettings()->notifications_new_comments)
