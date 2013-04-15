@@ -27,7 +27,7 @@ $this->menu = 'discover';
 			$('.nav-pills li.active').removeClass('active');
 			$search_form_query.val('');
 			$search_result.html('');
-			$('.with-spinner').showSpinner();
+			$('.has-spinner').showSpinner();
 		}
 
 		$('.top-action').click(function() {
@@ -57,7 +57,7 @@ $this->menu = 'discover';
 
 		function show_days_by_response(response)
 		{
-			$('.with-spinner').hideSpinner();
+			$('.has-spinner').hideSpinner();
 			if(response.data.result.length === 0)
 			{
 				$search_result.html("<p>We can't find any days by your query</p>");
@@ -141,7 +141,7 @@ $this->menu = 'discover';
 	</div>
 
 	<hr/>
-	<div class="with-spinner">
+	<div class="has-spinner">
 		<i class="spinner icon-spin icon-refresh"></i>
 		<ul class="days clearfix block-center">
 			<div class="popular">

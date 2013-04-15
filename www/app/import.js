@@ -85,17 +85,17 @@ var ImportController = function($wizard, $steps_content) {
         }
 
         $this.addClass('disabled');
-        $this.closest('.with-spinner').showSpinner();
+        $this.closest('.has-spinner').showSpinner();
 
         importer_instagram.login(function() {
-          $this.closest('.with-spinner').hideSpinner();
+          $this.closest('.has-spinner').hideSpinner();
           $this.text('Instagram connected');
 
           if($('.action-connect-flickr').hasClass('disabled')) {
             _instance.setStep(3);
           }
         }, function() {
-          $this.closest('.with-spinner').hideSpinner();
+          $this.closest('.has-spinner').hideSpinner();
           $this.removeClass('disabled');
           showError("It seems that you have canceled autorization");
         });
@@ -109,17 +109,17 @@ var ImportController = function($wizard, $steps_content) {
         }
 
         $this.addClass('disabled');
-        $this.closest('.with-spinner').showSpinner();
+        $this.closest('.has-spinner').showSpinner();
 
         importer_flickr.login(function() {
-          $this.closest('.with-spinner').hideSpinner();
+          $this.closest('.has-spinner').hideSpinner();
           $this.text('Flickr connected');
 
           if($('.action-connect-instagram').hasClass('disabled')) {
             _instance.setStep(3);
           }
         }, function() {
-          $this.closest('.with-spinner').hideSpinner();
+          $this.closest('.has-spinner').hideSpinner();
           $this.removeClass('disabled');
           showError("It seems that you have canceled autorization");
         });

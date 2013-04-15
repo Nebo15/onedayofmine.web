@@ -1,19 +1,19 @@
 $(function() {
   $.fn.extend({
     findSpinner: function() {
-      if($(this).hasClass('with-spinner')) {
+      if($(this).hasClass('has-spinner')) {
         return $(this);
       }
 
-      return $(this).find('.with-spinner');
+      return $(this).find('.has-spinner');
     },
 
     showSpinner: function() {
-      $(this).addClass('show-spinner');
+      $(this).addClass('active');
     },
 
     hideSpinner: function() {
-      $(this).removeClass('show-spinner');
+      $(this).removeClass('active');
     },
 
     makeInvisible: function() {

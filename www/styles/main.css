@@ -94,38 +94,50 @@ h4 {
   color:#FFF;
   text-align: center;
   font-weight: bold;
-  font-size: 85%;
   vertical-align: middle;
-}
-
-.with-bage .bage:not(.bage-transperent) {
+  padding: 3px 8px 3px 8px;
   border-radius: 4px;
   background: rgba(0, 0, 0, 0.7);
+}
+
+.bage-small {
+  font-size: 85%;
   padding: 0px 5px 0px 5px;
 }
 
+.bage-large {
+  font-size: 115%;
+}
+
+.with-bage .bage a {
+  color:#FFF;
+  text-decoration: none;
+}
+
+.with-bage .bage-transperent {
+  border-radius: 0;
+  background: none;
+}
+
 .bage-top-right {
-  top: 5px;
-  right: 5px;
+  top: 10px;
+  right: 10px;
 }
 
 .bage-top-left {
-  top: 5px;
-  left: 5px;
+  top: 10px;
+  left: 10px;
 }
 
 .bage-bottom-right {
-  bottom: 5px;
-  right: 5px;
+  bottom: 10px;
+  right: 10px;
 }
 
 .bage-bottom-left {
-  bottom: 5px;
-  left: 5px;
+  bottom: 10px;
+  left: 10px;
 }
-
-/* Shadows */
-
 
 /* Animations */
 .animated {
@@ -158,74 +170,69 @@ h4 {
   display: none;
 }
 
-/* Loader spinner for buttons */
-.with-spinner .spinner {
-  width: 0 !important;
+/* Hover bars */
+.has-hover-bar .hover-bar {
+  display: inline-block;
   opacity: 0;
-
-  -webkit-transition: width 0.6s ease, opacity 0.4s ease;
-  -moz-transition: width 0.6s ease, opacity 0.4s ease;
-  -ms-transition: width 0.6s ease, opacity 0.4s ease;
-  -o-transition: width 0.6s ease, opacity 0.4s ease;
-  transform: width 0.6s ease, opacity 0.4s ease;
+  max-width: 0;
+  white-space: nowrap;
 }
 
-.with-spinner [class*="icon"]:not(.spinner) {
+.has-hover-bar .hover-bar,
+.has-hover-bar .hover-bar-indicator {
+  -webkit-transition: opacity 0.65s, max-width 0.75s;
+  -moz-transition: opacity 0.65s, max-width 0.75s;
+  -o-transition: opacity 0.65s, max-width 0.75s;
+  transition: opacity 0.65s, max-width 0.75s; /* Duration fixed since we animate additional hidden width */
+}
+
+.has-hover-bar:hover .hover-bar-indicator {
+  opacity: 0.4;
+}
+
+.has-hover-bar:hover .hover-bar {
   opacity: 1;
-
-  -webkit-transition: opacity 0.6s ease;
-  -moz-transition: opacity 0.6s ease;
-  -ms-transition: opacity 0.6s ease;
-  -o-transition: opacity 0.6s ease;
-  transform: opacity 0.6s ease;
+  max-width: 100px; /* More than it will ever come, notice that this affects on animation duration */
 }
 
-.show-spinner [class*="icon"]:not(.spinner) {
-  display: none;
+/* Loader hover-bar for buttons */
+.has-spinner .spinner {
+  display: inline-block;
+  opacity: 0;
+  max-width: 0;
+
+  -webkit-transition: opacity 0.25s, max-width 0.45s;
+  -moz-transition: opacity 0.25s, max-width 0.45s;
+  -o-transition: opacity 0.25s, max-width 0.45s;
+  transition: opacity 0.25s, max-width 0.45s; /* Duration fixed since we animate additional hidden width */
 }
 
-.show-spinner .spinner {
-  width: auto;
+.has-spinner.active {
+  cursor:progress;
+}
+
+.has-spinner.active .spinner {
   opacity: 1;
+  max-width: 50px; /* More than it will ever come, notice that this affects on animation duration */
 }
 
-.btn-small.show-spinner .spinner,
-.trigger_login.show-spinner .spinner {
-  width: 15px !important;
+.has-spinner [class*="icon"]:not(.spinner) {
+  -webkit-transition: opacity 0.2s;
+  -moz-transition: opacity 0.2s;
+  -ms-transition: opacity 0.2s;
+  -o-transition: opacity 0.2s;
+  transform: opacity 0.2s;
 }
 
-.show-spinner .add-on .spinner {
-  -webkit-transition: opacity 0.4s ease;
-  -moz-transition: opacity 0.4s ease;
-  -ms-transition: opacity 0.4s ease;
-  -o-transition: opacity 0.4s ease;
-  transform: opacity 0.4s ease;
+.has-spinner.active [class*="icon"]:not(.spinner) {
+  opacity: 0;
 }
 
-.show-spinner .add-on .spinner {
-  width: 21px !important;
-}
-
-.btn.show-spinner .spinner {
-  width: 20px !important;
-}
-
-h1.show-spinner .spinner {
-  width: 25px !important;
-}
-
-.with-spinner .icon-spin {
+.has-spinner:not(.active) .icon-spin {
   -moz-animation: none;
   -o-animation: none;
   -webkit-animation: none;
   animation: none;
-}
-
-.show-spinner .icon-spin {
-  -moz-animation: spin 2s infinite linear;
-  -o-animation: spin 2s infinite linear;
-  -webkit-animation: spin 2s infinite linear;
-  animation: spin 2s infinite linear;
 }
 
 /* Social icons */
@@ -238,7 +245,7 @@ h1.show-spinner .spinner {
 }
 
 .icon-social {
-    font-family: WebIconFonts;
+  font-family: WebIconFonts;
 }
 
 /* File uploader */
@@ -332,6 +339,7 @@ body {
 
 .tooltip-inner {
   max-width: 250px !important;
+  white-space: nowrap;
 }
 
 .btn:hover,
@@ -559,6 +567,11 @@ textarea.info:focus {
   border-color: rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ff20b151',endColorstr='#ff1c9b47',GradientType=0);
   filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+}
+
+.btn-toolbar .input-append,
+.btn-toolbar .input-prepend {
+  margin-right: 10px;
 }
 
 hr {
