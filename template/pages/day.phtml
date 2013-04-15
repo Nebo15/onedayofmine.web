@@ -393,9 +393,9 @@ $this->day->is_gathering_enabled = false;
         <? } ?>
 
         <div class="clearfix">
-          <ul class="unstyled inline pull-right day-bottom-actions">
+          <ul class="unstyled inline day-bottom-actions">
             <? if($this->toolkit->getUser()) { ?>
-              <li class="like">
+              <li class="like pull-left">
                 <?php
                 $like_disabled = false;
                 if(!property_exists($this->day, 'is_liked')) {
@@ -415,8 +415,17 @@ $this->day->is_gathering_enabled = false;
                   <button id="toggle_like" class="btn btn-small<?= $like_disabled ? ' disabled' : '' ?>" type="button"> <?= $like_text ?></button>
                 </div>
               </li>
+		          <li>
+			          <small>
+				          {{list using="$#day_obj->getLikes()"}}
+				            {{list:item}}
+				              <small><a href="/pages/{$item->getUser()->id}/user">{$item->getUser()->name}</a></small>
+				            {{/list:item}}
+				          {{/list}}
+			          </small>
+		          </li>
             <? } ?>
-            <li class="share">
+            <li class="share pull-right">
               <button id="toggle_fb_share" class="btn btn-small" type="button">
                 <i class="icon-share"></i> Share
               </button>

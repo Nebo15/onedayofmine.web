@@ -112,7 +112,7 @@ class PagesController extends WebAppController
     $this->day->date = date('Y-m-d', $min_timestamp);
 
 		$this->day = $this->_toFlatArray($this->day);
-
+		$this->day_obj = $day;
 	}
 
 	function doMoment()
