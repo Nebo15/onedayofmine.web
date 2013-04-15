@@ -106,8 +106,13 @@
 
   <script>
     function bindTooltips(selector) {
-      selector.find('.with-tooltip').tooltip({
-        placement: 'bottom'
+      selector.find('.with-tooltip').each(function() {
+        var $this = $(this);
+        var placement = $this.data('placement') ? $this.data('placement') : 'bottom';
+        console.log(placement);
+        $this.tooltip({
+          placement: placement
+        });
       });
     }
 
@@ -122,12 +127,12 @@
         var doLogin = function() {
           var $this = $(this);
 
-          if($this.hasClass('with-spinner')) {
+          if($this.hasClass('has-spinner')) {
             $this.showSpinner();
           }
 
           API.login(function() {
-            if($this.hasClass('with-spinner')) {
+            if($this.hasClass('has-spinner')) {
               $this.hideSpinner();
             }
             if($this.attr('href') && $this.attr('href') != '#') {
@@ -136,7 +141,7 @@
               window.location.reload();
             }
           }, function() {
-            if($this.hasClass('with-spinner')) {
+            if($this.hasClass('has-spinner')) {
               $this.hideSpinner();
             }
             $('.trigger_login').click(doLogin);
@@ -208,7 +213,7 @@
             <ul class="nav pull-right">
               <li class="dropdown <?= ($this->menu == 'me') ? 'active' : '';?>">
                 <? if(!$this->toolkit->getUser()) { ?>
-                  <a class="trigger_login with-spinner" href="#">
+                  <a class="trigger_login has-spinner" href="#">
                     <i class="icon-large icon-facebook-sign"></i>
                     <i class="spinner icon icon-spin icon-refresh"></i>
                     Login with Facebook
@@ -279,7 +284,7 @@
       </div>
       <div class="modal-footer">
         <button class="btn action-close" data-dismiss="modal" aria-hidden="true">Cancel</button>
-        <button class="btn btn-primary btn-success with-spinner action-sign-in">
+        <button class="btn btn-primary btn-success has-spinner action-sign-in">
           <i class="spinner icon icon-spin icon-refresh"></i>
           Sign in
         </button>
