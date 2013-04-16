@@ -109,7 +109,6 @@
       selector.find('.with-tooltip').each(function() {
         var $this = $(this);
         var placement = $this.data('placement') ? $this.data('placement') : 'bottom';
-        console.log(placement);
         $this.tooltip({
           placement: placement
         });
@@ -255,6 +254,9 @@
 				  Update a <a href="/pages/profile">profile</a> so we can make a better recommendations for you.
 			  </div>
 		  <? } ?>
+      <div class="alert sitewide-notification show-phone">
+        Currently we are working on apps for iOS and Android, web version is not fully supported on mobile devices.
+      </div>
 	  <? } ?>
 
     <section class="content">
