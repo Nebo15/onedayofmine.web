@@ -231,6 +231,7 @@ class PagesController extends WebAppController
 		$this->is_preview = true;
 
 		$moments = $page->getMoments();
+		$this->day_obj = new Day();
 		$this->day = new stdClass;
 		$this->day->id = null;
 		$this->day->title = $this->title = $page->getTitle();
@@ -256,6 +257,56 @@ class PagesController extends WebAppController
 			$moment->time = str_pad(floor($time / 60), 2, '0', STR_PAD_LEFT).":".str_pad($time - floor($time / 60) * 60, 2, '0', STR_PAD_LEFT);
 			$moment->image_532 = $moment_data['img'];
 			$moment->description = $moment_data['description'];
+			$this->day->moments[] = $moment;
+		}
+
+		$this->setTemplate('pages/day.phtml');
+	}
+
+	function doDiaryPreview()
+	{
+		lmb_require('ljparse/ContentPageParser.class.php');
+		lmb_require('ljparse/DiaryMobilePageRegexpParser.class.php');
+		lmb_require('ljparse/DiaryContentPage.class.php');
+
+		$parts = explode('/', $this->request->get('url'));
+		$id = explode('.', array_pop($parts))[0];
+		$context  = stream_context_create(['http' => ['timeout' => 120]]);
+		$url = 'http://m.diary.ru/~adiml/'.$id.'.htm?oam#more1';
+		$content = file_get_contents($url, false, $context);
+
+		$page = new DiaryContentPage(new DiaryMobilePageRegexpParser());
+		$page->setContent($content);
+
+		$this->is_preview = true;
+
+		$moments = $page->getMoments();
+		$this->day_obj = new Day();
+		$this->day = new stdClass;
+		$this->day->id = null;
+		$this->day->title = $this->title = $page->getTitle();
+		$this->day->type = '';
+		$this->day->date = date('Y-m-d', strtotime($page->getDate()));
+		$this->day->final_description = "It's just a preview";
+		$this->day->comments_count = 0;
+		$this->day->comments =[];
+		$this->day->likes_count = 0;
+		$this->day->user = new stdClass;
+		$this->day->user->id = '';
+		$this->day->user->name = $page->getUsername();
+		$this->day->user->image_72 = $page->getUserpic();
+		$this->day->moments = [];
+		$time = 480;
+		$delta = (1440 - 640) / count($moments);
+		foreach($moments as $i => $moment_data)
+		{
+			$time += rand($delta - 5, $delta + 5);
+			$moment = new stdClass;
+			$moment->id = 1;
+			$moment->datetime_iso = 1;
+			$moment->time = str_pad(floor($time / 60), 2, '0', STR_PAD_LEFT).":".str_pad($time - floor($time / 60) * 60, 2, '0', STR_PAD_LEFT);
+			$moment->image_532 = $moment_data['img'];
+			$moment->description = iconv('cp1251', 'utf-8', $moment_data['description']);
 			$this->day->moments[] = $moment;
 		}
 
