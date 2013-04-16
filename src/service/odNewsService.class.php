@@ -290,7 +290,7 @@ class odNewsService
     $news = new News;
     $news->day_comment_id = $comment->id;
     $news->day_id = $comment->day_id;
-    $news->link = "odom://days/{$comment->day_id}/comment/{$comment->id}";
+    $news->link = "odom://days/{$comment->day_id}/";
 
     $user = User::findById($day->user_id);
     if(1 == $user->getSettings()->notifications_new_comments)
@@ -323,7 +323,7 @@ class odNewsService
     $news->moment_id = $moment->id;
     $news->moment_comment_id = $comment->id;
     $news->day_id = $day->id;
-    $news->link = "odom://moment/{$moment->id}/comment/{$comment->id}";
+    $news->link = "odom://moment/{$moment->id}/";
 
     $day_owner = User::findById($day->user_id);
     if(1 == $day_owner->getSettings()->notifications_new_comments)
