@@ -13,6 +13,7 @@ var Auth = {
             return onLoginSuccess(token);
           } else {
             alert('You need to authorize application to continue using it');
+						window.location.href = '/';
           }
         }, {scope: Config.facebook.scope});
       }

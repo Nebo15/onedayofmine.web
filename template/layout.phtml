@@ -119,6 +119,7 @@
           });
         });
       <? } else { ?>
+
         var doLogin = function() {
           var $this = $(this);
 
@@ -146,6 +147,9 @@
         };
 
         $('.trigger_login').click(doLogin);
+
+	      if('/' != window.location.pathname)
+		      doLogin();
       <? } ?>
 
       // Init mansory for all days lists

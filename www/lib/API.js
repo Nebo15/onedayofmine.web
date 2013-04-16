@@ -23,7 +23,7 @@ var API = (function() {
         console.log('Unauthorized access restricted');
 
         API.login(function() {
-          console.log('Sending request with new credetials');
+          console.log('Sending request with new credentials');
           request.send();
         }, function() {
           request.statusCode(401, function() {
@@ -104,7 +104,7 @@ var API = (function() {
 
               invitation_code_request.error(function() {
                 $this.hideSpinner();
-                alert("We wasnt able to validate you'r invitation code, try again later or write to us");
+                alert("We wasn't able to validate you're invitation code, try again later or write to us");
               });
 
               invitation_code_request.send();
