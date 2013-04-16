@@ -53,13 +53,16 @@ $this->menu = 'me';
 
 			<div class="control-group">
 				<div class="controls">
+					<div class="alert alert-error small">
+						All fields are <strong>required!</strong>
+					</div>
 					<?
 						$full_info = $user['name'] && $user['occupation'] && $user['location'] && $user['birthday'];
 					?>
 					<button type="submit" class="btn btn-large update-action" <?= $full_info ?: 'disabled' ?>>
 						<i class="icon icon-ok"></i> Update
 					</button>
-          <a href="/pages/{$user.id}/user?preview" class="btn btn-large">
+          <a href="/pages/{$user.id}/user?preview" class="btn btn-small">
             <i class="icon icon-info-sign"></i> Preview
           </a>
 				</div>
