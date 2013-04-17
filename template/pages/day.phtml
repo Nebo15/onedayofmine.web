@@ -12,7 +12,7 @@ $this->day->is_gathering_enabled = false;
     <meta property="og:image" content="{$unsafe_url}"/>
   {{/into}}
   {{into slot="meta"}}
-    <meta property="description" content="{$#day.final_description}"/>
+    <meta property="og:description" content="{$#day.final_description}"/>
   {{/into}}
   {{into slot="js_include"}}
     <script src="/lib/vendor/bootstrap-datepicker.js"></script>
