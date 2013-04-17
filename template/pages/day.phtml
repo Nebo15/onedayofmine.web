@@ -14,14 +14,13 @@ $this->day->is_gathering_enabled = false;
     <meta property="description" content="{$#day.final_description}"/>
   {{/into}}
   {{into slot="js_include"}}
-    <script src="/lib/vendor/bootstrap-datepicker.js"></script>
-    <script src="/lib/vendor/jquery.ajax-progress.js"></script>
-    <script src="/lib/vendor/bootstrap-timepicker.min.js"></script>
-
     <script src="/app/day.js"></script>
     <? if($this->toolkit->getUser()) { ?>
       <script src="/app/day.user.js"></script>
       <? if($this->is_owner || $this->day->is_gathering_enabled) { ?>
+        <script src="/lib/vendor/bootstrap-datepicker.js"></script>
+        <script src="/lib/vendor/jquery.ajax-progress.js"></script>
+        <script src="/lib/vendor/bootstrap-timepicker.min.js"></script>
         <script src="/lib/Importer.js"></script>
         <script src="/app/day.owner.js"></script>
       <? } ?>
