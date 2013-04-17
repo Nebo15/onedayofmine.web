@@ -23,6 +23,7 @@ $conf = array(
                      array('width' => 72, 'height'  => 72),
                      array('width' => 96, 'height'  => 96),
                      array('width' => 192, 'height' => 192),
+	                   array('width' => 384, 'height' => 384),
                    ),
   ),
 );
