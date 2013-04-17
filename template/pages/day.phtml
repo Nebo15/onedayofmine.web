@@ -4,6 +4,7 @@ $this->day->is_gathering_enabled = false;
 ?>
 {{wrap with="layout.phtml"}}
   {{into slot="og_meta"}}
+		<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# {$#facebook_app_namespace}: http://ogp.me/ns/fb/{$#facebook_app_namespace}#">
     <meta property="og:type" content="{$#facebook_app_namespace}:day" />
     <meta property="og:url" content="{$#host_url}pages/{$#day.id}/day" />
     <meta property="og:title" content="{$#day.title}" />
