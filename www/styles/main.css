@@ -351,10 +351,12 @@ body {
   text-decoration: none;
 }
 
-.row-fluid input + button[class*="span"] {
-    float: none;           /* Remove the */
-    display: inline-block; /* floating   */
-    margin-left: 0;        /* Stick it to the left */
+.row-fluid input[class*="span"] + button,
+.row-fluid .btn-addon {
+  float: none;           /* Remove the */
+  display: inline-block; /* floating   */
+  margin-left: 0;        /* Stick it to the left */
+  width: auto;
 }
 
 .navbar .nav.pull-right {
@@ -570,9 +572,19 @@ textarea.info:focus {
   filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
 }
 
-.btn-toolbar .input-append,
-.btn-toolbar .input-prepend {
-  margin-right: 10px;
+.btn-toolbar > .btn,
+.btn-toolbar > .btn-group,
+.btn-toolbar > .input-append,
+.btn-toolbar > .input-prepend {
+  margin-right: 0 !important;
+  margin-left: 10px !important;
+}
+
+.btn-toolbar > .btn:first-child,
+.btn-toolbar > .btn-group:first-child,
+.btn-toolbar > .input-append:first-child,
+.btn-toolbar > .input-prepend:first-child {
+  margin-left: 0 !important;
 }
 
 hr {
