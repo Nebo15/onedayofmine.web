@@ -26,6 +26,8 @@ $(function() {
 
       $this = $(this);
 
+      var initial_value = $this.val();
+
       var tooltip = $this.tooltip({
         placement: 'bottom',
         trigger: 'manual',
@@ -43,10 +45,16 @@ $(function() {
       };
 
       var resetControls = function() {
+        initial_value = $this.val();
+
+        if(params.saveValidationState === true) {
+          return;
+        }
+
         $this.removeClass('error');
 
         if(params.button !== undefined) {
-          params.button.removeClass('btn-error');
+          params.button.removeClass('btn-danger');
         }
       };
 
@@ -58,7 +66,7 @@ $(function() {
         }
 
         if(params.button !== undefined) {
-          params.button.addClass('btn-error disabled');
+          params.button.addClass('btn-danger disabled');
         }
 
         if(typeof params.onError === 'function') {
@@ -72,7 +80,7 @@ $(function() {
         $this.removeClass('error');
 
         if(params.button !== undefined) {
-          params.button.removeClass('btn-error disabled');
+          params.button.removeClass('btn-danger disabled');
         }
 
         if(typeof params.onSuccess === 'function') {
@@ -87,6 +95,9 @@ $(function() {
 
       var validate = function() {
         _value = $this.val();
+        if(_value == initial_value) {
+          return;
+        }
 
         if($.trim(_value) === '' && (params.canBeEmpty === undefined || params.canBeEmpty === false)) {
           onValidationError(params.messages.empty);
