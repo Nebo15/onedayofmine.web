@@ -60,6 +60,10 @@ $(function() {
         if(params.button !== undefined) {
           params.button.addClass('btn-error disabled');
         }
+
+        if(typeof params.onError === 'function') {
+          params.onError();
+        }
       };
 
       var onValidationSuccess = function() {
@@ -69,6 +73,10 @@ $(function() {
 
         if(params.button !== undefined) {
           params.button.removeClass('btn-error disabled');
+        }
+
+        if(typeof params.onSuccess === 'function') {
+          params.onSuccess();
         }
       };
 
