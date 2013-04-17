@@ -89,7 +89,7 @@ var Tools = {
 
 		if (timezone.substring(0, 1) == '+') {
 			obj.setUTCHours(parseInt(time_pieces[0], 10) - Math.abs(parseInt(timezone_pieces[0], 10)));
-			obj.setUTCMinutes(parseInt(time_pieces[1], 10) - Math.abs(parseInt(timezone_pieces[0], 10)));
+			obj.setUTCMinutes(parseInt(time_pieces[1], 10) - Math.abs(parseInt(timezone_pieces[1], 10)));
 		} else {
 			obj.setUTCHours(parseInt(time_pieces[0], 10) + Math.abs(parseInt(timezone_pieces[0], 10)));
 			obj.setUTCMinutes(parseInt(time_pieces[1], 10) + Math.abs(parseInt(timezone_pieces[1], 10)));
