@@ -7,7 +7,7 @@ $this->day->is_gathering_enabled = false;
     <meta property="og:type" content="{$#facebook_app_namespace}:day" />
     <meta property="og:url" content="{$#host_url}pages/{$#day.id}/day" />
     <meta property="og:title" content="{$#day.title}" />
-    <meta property="{$#facebook_app_namespace}:type" content="{$#day->type}" />
+    <meta property="{$#facebook_app_namespace}:day_type" content="{$#day->type}" />
 		<? $unsafe_url = str_replace('https://', 'http://', $this->day->image_532); ?>
     <meta property="og:image" content="{$unsafe_url}"/>
   {{/into}}
