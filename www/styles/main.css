@@ -201,10 +201,10 @@ h4 {
   opacity: 0;
   max-width: 0;
 
-  -webkit-transition: opacity 0.25s, max-width 0.45s;
-  -moz-transition: opacity 0.25s, max-width 0.45s;
-  -o-transition: opacity 0.25s, max-width 0.45s;
-  transition: opacity 0.25s, max-width 0.45s; /* Duration fixed since we animate additional hidden width */
+  -webkit-transition: opacity 0.45s, max-width 0.75s;
+  -moz-transition: opacity 0.45s, max-width 0.75s;
+  -o-transition: opacity 0.45s, max-width 0.75s;
+  transition: opacity 0.45s, max-width 0.75s; /* Duration fixed since we animate additional hidden width */
 }
 
 .has-spinner.active {
@@ -217,11 +217,11 @@ h4 {
 }
 
 .has-spinner [class*="icon"]:not(.spinner) {
-  -webkit-transition: opacity 0.2s;
-  -moz-transition: opacity 0.2s;
-  -ms-transition: opacity 0.2s;
-  -o-transition: opacity 0.2s;
-  transform: opacity 0.2s;
+  -webkit-transition: opacity 0.2s, max-width 0.2s;
+  -moz-transition: opacity 0.2s, max-width 0.2s;
+  -ms-transition: opacity 0.2s, max-width 0.2s;
+  -o-transition: opacity 0.2s, max-width 0.2s;
+  transform: opacity 0.2s, max-width 0.2s;
 }
 
 .has-spinner.active [class*="icon"]:not(.spinner) {
