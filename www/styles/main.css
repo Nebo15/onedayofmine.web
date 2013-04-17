@@ -226,6 +226,7 @@ h4 {
 
 .has-spinner.active [class*="icon"]:not(.spinner) {
   opacity: 0;
+  max-width: 0;
 }
 
 .has-spinner:not(.active) .icon-spin {
