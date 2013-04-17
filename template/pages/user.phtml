@@ -2,6 +2,11 @@
 $this->menu = '';
 ?>
 {{wrap with="layout.phtml"}}
+	{{into slot="og_meta"}}
+		<meta property="og:url" content="{$#host_url}pages/{$#user.id}/user" />
+		<meta property="og:title" content="{$#user.name}" />
+		<meta property="og:image" content="{$#user.image_192}"/>
+	{{/into}}
   {{into slot="js_include"}}
     <script src="/lib/InfiniteScroll.js"></script>
   {{/into}}
