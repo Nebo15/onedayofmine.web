@@ -46,12 +46,12 @@ abstract class BasePhotoSource
 		foreach($days as $i => $day)
 			$days[$i] = array_reverse($day);
 
-		if($filter_by_user && false)
+		if($filter_by_user)
 		{
 			$day_begins = $filter_by_user->getDaysBeginTime();
 			foreach($days as $i => $day)
 				foreach($day_begins as $day_begin)
-					if(date('Y.m.d', $day[0]['time']) === date('Y.m.d', $day_begin))
+					if(date('Y.m.d', $day[0]['time']) === date('Y.m.d', $day_begin['time']))
 						unset($days[$i]);
 		}
 

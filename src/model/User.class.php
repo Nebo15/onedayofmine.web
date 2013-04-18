@@ -227,11 +227,17 @@ class User extends BaseModel
 	function getDaysBeginTime()
 	{
 		$query = new lmbSelectQuery('moment');
-		$query->addRawField('min(moment.time) as start_time');
-		$query->addCriteria(lmbSQLCriteria::equal('is_deleted', 0));
+		$query->addRawField('day.id as day_id');
+		$query->addRawField('moment.id as moment_id');
+		$query->addRawField('min(moment.time) as time');
+		$query->addCriteria(
+			lmbSQLCriteria::equal('day.is_deleted', 0)
+			->add(lmbSQLCriteria::equal('day.user_id', $this->id))
+		);
 		$query->addGroupBy('day_id');
 		$query->addOrder('moment.time', 'ASC');
-		return lmbArrayHelper::getColumnValues('start_time', $query->fetch());
+		$query->addLeftJoin('day', 'id', 'moment', 'day_id');
+		return $query->fetch();
 	}
 
   function getFavoriteDaysWithLimitations($from_id = null, $to_id = null, $limit = null)

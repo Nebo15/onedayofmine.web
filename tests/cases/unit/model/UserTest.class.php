@@ -74,4 +74,21 @@ class UserTest extends odUnitTestCase
     // News to User
     $this->assertEqual($news->getRecipients()->at(0)->id, $recipient->id);
   }
+
+	function testGetDaysBeginTime()
+	{
+		$day = $this->generator->day($this->main_user);
+		$moment = $this->generator->moment($day);
+		$moment->time = time();
+		$moment->save();
+
+		$another_user_day = $this->generator->day($this->additional_user);
+		$this->generator->moment($another_user_day);
+
+		$times = $this->main_user->getDaysBeginTime();
+		$this->assertEqual(1, count($times));
+		$this->assertEqual($day->id, $times[0]['day_id']);
+		$this->assertEqual($moment->id, $times[0]['moment_id']);
+		$this->assertEqual($moment->time, $times[0]['time']);
+	}
 }
