@@ -18,15 +18,10 @@ class MomentsController extends BaseJsonController
     if($day->user_id != $this->_getUser()->id)
       return $this->_answerNotOwner();
 
-    if(!$this->request->get('image_content') && !$this->request->get('image_url'))
-      return $this->_answerWithError("image_content or image_url must be in request");
-
     if($this->request->get('image_content'))
-      $image_content = base64_decode($this->request->get('image_content'));
-    else
-      $image_content = file_get_contents($this->request->get('image_url'));
-
-    $moment->attachImage($image_content);
+      $moment->attachImage(base64_decode($this->request->get('image_content')));
+    elseif($this->request->get('image_url'))
+      $moment->attachImage(file_get_contents($this->request->get('image_url')));
 
     if($this->request->get('time'))
     {
