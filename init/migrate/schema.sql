@@ -553,7 +553,3 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2013-03-17 15:36:26
-
-INSERT INTO `invitation` (`id`, `code`, `max_count`, `taken_count`, `ctime`, `utime`)
-VALUES
-	(1,'They shall not pass',100,0,1363379351,1363379351);
