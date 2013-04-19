@@ -6,6 +6,7 @@
 class lmbMacroPrettyDateFilter extends lmbMacroFunctionBasedFilter
 {
 	protected $function = ['lmbMacroPrettyDateFilter', 'format'];
+	protected $include_file = 'src/macro/prettydate.filter.php';
 
 	static function format($stamp)
 	{
