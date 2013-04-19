@@ -2,6 +2,11 @@ var Template = (function() {
   var templates_compiled = [];
 
   $(function() {
+
+		Handlebars.registerHelper('raw', function(text, context) {
+			return new Handlebars.SafeString(text);
+		});
+
     // Registering Handlebars helpers
     Handlebars.registerHelper('include', function(name, context) {
       var subTemplate = Handlebars.compile($(name));
@@ -41,6 +46,11 @@ var Template = (function() {
         return options.inverse(this);
       }
     });
+
+		Handlebars.registerHelper('datetime', function(timestamp, options) {
+			return Tools.prettyDate(timestamp * 1000);
+		});
+
   });
 
   return {

@@ -25,7 +25,7 @@ class MainPageController extends WebAppController
 		if($this->toolkit->getUser())
 		{
 			$user  = $this->toolkit->getUser();
-			$news = $user->getNews(); //->paginate(0, $this->lists_limit);
+			$news = $user->getNews()->paginate(0, $this->lists_limit);
 
 			$this->news = $this->_mergeNews($news);
 
