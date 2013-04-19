@@ -24,7 +24,7 @@ class odObjectMother
 		$user->facebook_access_token = $this->string(50);
 		$user->email = $this->email();
 		$user->facebook_profile_utime = $this->integer(11);
-		$user->name = $name ?: $this->string(100);
+		$user->name = $name ?: $this->string(10);
 		$user->timezone = $this->integer(1);
 		$user->sex = 'female';
 		$user->occupation = 'occupation_'.$this->string(50);
