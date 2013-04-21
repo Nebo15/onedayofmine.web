@@ -122,31 +122,11 @@ $this->menu = 'me';
 	});
 
 	$('#profile-form').find('input').on('keyup', function() {
-		var valid = true;
+		validate();
+	});
 
-		$.each(['#inputName', '#inputOccupation', '#inputLocation', '#inputBirthday'], function(i, name) {
-			if('' != $(name).val())
-			{
-				$(name).parent().parent().removeClass('error');
-			}
-			else
-			{
-				valid = false;
-				$(name).parent().parent().addClass('error');
-			}
-		});
-
-		var submit_btn = $('button[type=submit]');
-
-		if(valid)
-			submit_btn.addClass('btn-success');
-		else
-			submit_btn.removeClass('btn-success');
-
-		if(valid && submit_btn.attr('disabled'))
-			submit_btn.removeAttr('disabled');
-		else if(!valid && !submit_btn.attr('disabled'))
-			submit_btn.attr('disabled', 'disabled');
+	$('#profile-form').find('select').on('change', function() {
+		validate();
 	});
 
 	$('.update-action').click(function(event) {
@@ -203,5 +183,34 @@ $this->menu = 'me';
 			});
 		}
 	});
+
+	function validate()
+	{
+		var valid = true;
+
+		$.each(['#inputName', '#inputOccupation', '#inputLocation', '#inputBirthday'], function(i, name) {
+			if('' != $(name).val())
+			{
+				$(name).parent().parent().removeClass('error');
+			}
+			else
+			{
+				valid = false;
+				$(name).parent().parent().addClass('error');
+			}
+		});
+
+		var submit_btn = $('button[type=submit]');
+
+		if(valid)
+			submit_btn.addClass('btn-success');
+		else
+			submit_btn.removeClass('btn-success');
+
+		if(valid && submit_btn.attr('disabled'))
+			submit_btn.removeAttr('disabled');
+		else if(!valid && !submit_btn.attr('disabled'))
+			submit_btn.attr('disabled', 'disabled');
+	}
 {{/into}}
 {{/wrap}}
