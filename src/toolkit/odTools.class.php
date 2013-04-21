@@ -301,7 +301,7 @@ class odTools extends lmbAbstractTools
    * Create odFacebook instance with or without auth.
    *
    * @param  string $access_token
-   * @return facebook
+   * @return odFacebook
    */
   public function getFacebook($access_token_or_user = null)
   {

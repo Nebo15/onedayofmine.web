@@ -28,7 +28,7 @@ class UserTest extends odUnitTestCase
 		$this->assertPattern('/already exists/', $errors_list[0]->getReadable());
 	}
 
-  function testGetUsersWithOldDays()
+  function testFindWithOldDays()
   {
     $time_current = time();
     $time_day_ago = $time_current - 24 * 60 * 60 - 1;
@@ -49,7 +49,7 @@ class UserTest extends odUnitTestCase
     $user_with_new_day->setCurrentDay($new_day);
     $user_with_new_day->save();
 
-    $users = User::findUsersWithOldDays();
+    $users = User::findWithOldDays();
     if($this->assertEqual(1, count($users)))
       $this->assertEqual($user_with_old_day->id, $users[0]->id);
   }
@@ -75,6 +75,28 @@ class UserTest extends odUnitTestCase
     $this->assertEqual($news->getRecipients()->at(0)->id, $recipient->id);
   }
 
+	function testMarkNewsAsRead()
+	{
+		// With is used because im testing relation in both sides
+		$recipient = $this->generator->user();
+		$another_recipient = $this->generator->user();
+
+		$first_news = $this->generator->news(null, [$recipient, $another_recipient]);
+		$second_news = $this->generator->news(null, [$recipient, $another_recipient]);
+
+		// User to News
+		$this->assertEqual(count($recipient->getNewsWithLimitation()), 2);
+		$this->assertEqual(count($recipient->getUnreadNewsWithLimitation()), 2);
+		$this->assertEqual(count($another_recipient->getNewsWithLimitation()), 2);
+		$this->assertEqual(count($another_recipient->getUnreadNewsWithLimitation()), 2);
+
+		$recipient->markNewsAsRead([$first_news]);
+		$this->assertEqual(count($recipient->getNewsWithLimitation()), 2);
+		$this->assertEqual(count($recipient->getUnreadNewsWithLimitation()), 1);
+		$this->assertEqual(count($another_recipient->getNewsWithLimitation()), 2);
+		$this->assertEqual(count($another_recipient->getUnreadNewsWithLimitation()), 2);
+	}
+
 	function testGetDaysBeginTime()
 	{
 		$day = $this->generator->day($this->main_user);
@@ -90,5 +112,34 @@ class UserTest extends odUnitTestCase
 		$this->assertEqual($day->id, $times[0]['day_id']);
 		$this->assertEqual($moment->id, $times[0]['moment_id']);
 		$this->assertEqual($moment->time, $times[0]['time']);
+	}
+
+	function testFindUsersWithUnreadNews()
+	{
+		$valid_notification_period = UserSettings::NOTIFICATIONS_PERIOD_DAILY;
+
+		$user = $this->_createUserWithNotificationPeriod($valid_notification_period);
+		$this->generator->news(null, $user);
+
+		$user_wrong_period = $valid_user = $this->_createUserWithNotificationPeriod(UserSettings::NOTIFICATIONS_PERIOD_TWICE_DAY);
+		$this->generator->news(null, $user_wrong_period);
+
+		$user_without_news = $this->_createUserWithNotificationPeriod($valid_notification_period);
+
+		$user_without_unread_news = $this->_createUserWithNotificationPeriod($valid_notification_period);
+		$news = $this->generator->news(null, $user_without_unread_news);
+		$user_without_unread_news->markNewsAsRead([$news]);
+
+		$this->assertEqual(1, count(User::findWithUnreadNews($valid_notification_period)));
+		die();
+	}
+
+	protected function _createUserWithNotificationPeriod($period)
+	{
+		$user = $this->generator->user();
+		$settings = $user->getSettings();
+		$settings->notifications_period_fb = $period;
+		$settings->save();
+		return $user;
 	}
 }

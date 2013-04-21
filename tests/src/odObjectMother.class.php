@@ -234,11 +234,16 @@ class odObjectMother
     return $complaint;
   }
 
-  function news(User $creator = null, User $recipient = null, $type = null, $params = null) {
-    $creator   = $creator   ?: $this->user();
-    $recipient = $recipient ?: $this->user();
+  function news(User $creator = null, $recipient_or_recipients = null, $type = null, $params = null)
+  {
+    $creator = $creator ?: $this->user();
+	  if(is_null($recipient_or_recipients))
+		  $recipient_or_recipients = [$this->user()];
+	  if(!is_array($recipient_or_recipients))
+		  $recipient_or_recipients = [$recipient_or_recipients];
 	  $type = $type ?: odNewsService::MSG_USER_FOLLOW;
-	  $params = $params ?: ['sender' => $creator, 'user' => $recipient];
+
+	  $params = $params ?: ['sender' => $creator, 'user' => $recipient_or_recipients[0]];
 
     $news = new News();
     $news->setSender($creator);
@@ -247,11 +252,13 @@ class odObjectMother
     $news->link = $this->string();
     $news->save();
 
-    $reception = new NewsRecipient();
-    $reception->setNews($news);
-    $reception->setUser($recipient);
-    $reception->save();
-
+	  foreach($recipient_or_recipients as $recipient)
+	  {
+      $reception = new NewsRecipient();
+      $reception->setNews($news);
+      $reception->setUser($recipient);
+      $reception->save();
+	  }
     return $news;
   }
 

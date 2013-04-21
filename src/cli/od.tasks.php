@@ -3,6 +3,7 @@ lmb_require(taskman_prop('PROJECT_DIR').'setup.php');
 
 lmb_require('src/model/Day.class.php');
 lmb_require('src/model/User.class.php');
+lmb_require('src/model/UserSettings.class.php');
 lmb_require('src/model/DeviceToken.class.php');
 lmb_require('src/model/DeviceNotification.class.php');
 
@@ -57,7 +58,7 @@ function task_od_calc_ratings()
 function task_od_close_old_days()
 {
   echo 'Search for old days...';
-  $users = User::findUsersWithOldDays();
+  $users = User::findWithOldDays();
   echo 'DONE'.PHP_EOL;
   foreach($users as $user)
   {
@@ -214,7 +215,7 @@ function task_od_bundle()
 
 function task_od_deploy()
 {
-  if(lmb_app_mode() == 'production') {
+  if(lmb_app_mode() == LIMB_APP_PRODUCTION) {
     $curl = curl_init("https://rpm.newrelic.com/deployments.xml");
     curl_setopt($curl, CURLOPT_RETURNTRANSFER, false);
     curl_setopt($curl, CURLOPT_POST, true);
@@ -223,4 +224,36 @@ function task_od_deploy()
     var_dump(curl_exec($curl));
     curl_close($curl);
   }
+}
+
+function task_od_notify($args = array())
+{
+	$valid_periods = [
+		UserSettings::NOTIFICATIONS_PERIOD_TWICE_DAY,
+		UserSettings::NOTIFICATIONS_PERIOD_DAILY,
+		UserSettings::NOTIFICATIONS_PERIOD_WEEKLY
+	];
+
+	if(1 != count($args))
+	{
+		taskman_sysmsg("Usage: od_notify (".implode('|', $valid_periods).")\n");
+		die();
+	}
+
+	$type = $args[0];
+	if(!in_array($type, $valid_periods))
+	{
+		taskman_sysmsg("Wrong notification type '$type'. Valid values: ".implode(', ', $valid_periods)." \n");
+		die();
+	}
+
+	$notifications_count = 0;
+	foreach(User::findWithUnreadNews($type) as $user)
+	{
+		lmbToolkit::instance()
+				->getFacebook($user)
+				->notify($user, "You have ".$user->getNews()->count()." news", "/");
+		$notifications_count++;
+	}
+	taskman_msg("Sended ".$notifications_count." notifications.\n");
 }

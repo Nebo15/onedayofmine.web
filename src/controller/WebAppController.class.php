@@ -6,6 +6,11 @@ abstract class WebAppController extends lmbController
 {
 	protected $lists_limit = 20;
 
+	/**
+	 * @var odTools
+	 */
+	protected $toolkit;
+
 	protected function _getUser()
 	{
 		return $this->toolkit->getUser();

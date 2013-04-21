@@ -437,15 +437,10 @@ class odNewsService
       $recipient_record->save();
 
 	    /** @var $facebook odFacebook */
-	    if(!lmbToolkit::instance()->getConf('common')->notify_by_facebook)
-		    continue;
-	    $facebook = lmbToolkit::instance()->getFacebook();
-	    $data = [
-		    'template' => strip_tags($text).' in OneDayOfMine',
-		    'access_token' => $facebook->getApplicationAccessToken(),
-		    'href' => $news->getLinkWithSiteUrl()
-			];
-	    $facebook->api('/'.$recipient->facebook_uid.'/notifications', 'post', $data);
+	    if($recipient->getSettings()->getSettings()->notifications_period_fb == UserSettings::NOTIFICATIONS_PERIOD_NOW)
+	    {
+        lmbToolkit::instance()->getFacebook()->notify($recipient->facebook_uid, $text, $news->getLinkWithSiteUrl());
+	    }
     }
 
     $this->_addNotifications($this->recipients, $text);

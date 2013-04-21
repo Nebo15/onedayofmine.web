@@ -31,7 +31,8 @@ class odFacebook extends BaseFacebook implements SocialProviderInterface
 		return $this->storage_key;
 	}
 
-  protected function setPersistentData($key, $value) {
+  protected function setPersistentData($key, $value)
+  {
     if (!in_array($key, $this->supported_keys)) {
       self::errorLog('Unsupported key passed to setPersistentData.');
       return;
@@ -95,6 +96,20 @@ class odFacebook extends BaseFacebook implements SocialProviderInterface
   {
     return file_get_contents($url);
   }
+
+	function notify($user_or_fb_uid, $text, $link)
+	{
+		if(!lmbToolkit::instance()->getConf('common')->notify_by_facebook)
+			return;
+		if(is_object($user_or_fb_uid))
+			$user_or_fb_uid = $user_or_fb_uid->facebook_uid;
+		$data = [
+			'template' => strip_tags($text).' in OneDayOfMine',
+			'access_token' => $this->getApplicationAccessToken(),
+			'href' => $link
+		];
+		$this->api('/'.$user_or_fb_uid.'/notifications', 'post', $data);
+	}
 
   protected function throwAPIException($result)
   {

@@ -64,6 +64,11 @@ $this->menu = '';
         });
         news = $($.trim(news));
         $(this).find('.infiniteScroll_button_container').before(news);
+
+				var news_ids = [];
+				for (var i in response.data.result)
+					news_ids.push(response.data.result[i].id);
+				API.post('my/mark_news_as_read', {news_ids: news_ids}).send();
       }
     });
   {{/into}}

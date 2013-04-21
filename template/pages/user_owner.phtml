@@ -52,6 +52,19 @@ $this->menu = 'me';
 			</div>
 
 			<div class="control-group">
+				<label class="control-label" for="notifications_period">Facebook notifications</label>
+				<div class="controls">
+					<select id="notifications_period">
+						<option value="<?= UserSettings::NOTIFICATIONS_PERIOD_NOW ?>">at the same moment</option>
+						<option value="<?= UserSettings::NOTIFICATIONS_PERIOD_TWICE_DAY ?>">twice a day</option>
+						<option value="<?= UserSettings::NOTIFICATIONS_PERIOD_DAILY ?>">one time a day</option>
+						<option value="<?= UserSettings::NOTIFICATIONS_PERIOD_WEEKLY ?>">one time a week</option>
+						<option value="<?= UserSettings::NOTIFICATIONS_PERIOD_NEVER ?>">never</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="control-group">
 				<div class="controls">
 					<div class="alert alert-error small">
 						All fields are <strong>required!</strong>
@@ -143,9 +156,11 @@ $this->menu = 'me';
 			occupation: $('#inputOccupation').val(),
 			birthday: $('#inputBirthday').val(),
 		};
-		var req = API.request('POST', 'my/profile', data).complete(function() {
-			$('button[type=submit]').removeClass('btn-success');
-		}).send();
+		API.request('POST', 'my/profile', data)
+			.complete(function() { $('button[type=submit]').removeClass('btn-success'); })
+			.send();
+		API.request('POST', 'my/settings', {notifications_period_fb: $('#notifications_period').val()})
+			.send();
 		return false;
 	});
 

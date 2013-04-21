@@ -9,6 +9,7 @@ lmb_require('src/model/Day.class.php');
 lmb_require('src/model/UserSettings.class.php');
 lmb_require('src/model/News.class.php');
 lmb_require('src/model/NewsRecipient.class.php');
+lmb_require('limb/dbal/src/query/lmbUpdateQuery.class.php');
 
 /**
  * @api
@@ -294,25 +295,54 @@ class User extends BaseModel
 
   function getNewsWithLimitation($from_id = null, $to_id = null, $limit = null)
   {
-    $query = new lmbSelectQuery('news_recipient');
-    $query->addField('news_id');
-    $query->addCriteria(lmbSQLCriteria::equal('user_id', $this->id));
-
-    $result = $query->fetch();
-    $ids = lmbArrayHelper::getColumnValues('news_id', $result);
-    if(!count($ids))
-      return new lmbCollection();
-
-    $criteria = lmbSQLCriteria::in('id', $ids);
-    if($from_id)
-      $criteria->add(lmbSQLCriteria::less('id', $from_id));
-    if($to_id)
-      $criteria->add(lmbSQLCriteria::greater('id', $to_id));
-
-    return News::find($criteria, ['id' => 'DESC'])->paginate(0, $limit ?: 100);
+	  return $this->_getNewsWithLimitation($from_id, $to_id, $limit, null);
   }
 
-  function getActivityWithLimitation($from_id = null, $to_id = null, $limit = null)
+	function getUnreadNewsWithLimitation($from_id = null, $to_id = null, $limit = null)
+	{
+		return $this->_getNewsWithLimitation($from_id, $to_id, $limit, 0);
+	}
+
+	protected function _getNewsWithLimitation($from_id, $to_id, $limit, $is_read)
+	{
+		$query = new lmbSelectQuery('news_recipient');
+		$query->addField('news_id');
+		$query->addCriteria(lmbSQLCriteria::equal('user_id', $this->id));
+		if(!is_null($is_read))
+			$query->addCriteria(lmbSQLCriteria::equal('is_read', $is_read));
+
+		$result = $query->fetch();
+		$ids = lmbArrayHelper::getColumnValues('news_id', $result);
+		if(!count($ids))
+			return new lmbCollection();
+
+		$criteria = lmbSQLCriteria::in('id', $ids);
+		if($from_id)
+			$criteria->add(lmbSQLCriteria::less('id', $from_id));
+		if($to_id)
+			$criteria->add(lmbSQLCriteria::greater('id', $to_id));
+
+		return News::find($criteria, ['id' => 'DESC'])->paginate(0, $limit ?: 100);
+	}
+
+	function markNewsAsRead($news_ids_or_models)
+	{
+		if(!count($news_ids_or_models))
+			return new lmbCollection();
+
+		if(is_object($news_ids_or_models[0]))
+			$news_ids = lmbArrayHelper::getColumnValues('id', $news_ids_or_models);
+		else
+			$news_ids = $news_ids_or_models;
+
+		$query = new lmbUpdateQuery('news_recipient');
+		$query->addField('is_read', '1');
+		$query->addCriteria(lmbSQLCriteria::in('news_id', $news_ids));
+		$query->addCriteria(lmbSQLCriteria::equal('user_id', $this->id));
+		$query->execute();
+	}
+
+	function getActivityWithLimitation($from_id = null, $to_id = null, $limit = null)
   {
     $criteria = lmbSQLCriteria::equal('sender_id', $this->id);
     if($from_id)
@@ -361,7 +391,7 @@ class User extends BaseModel
     return $users;
   }
 
-  static function findUsersWithOldDays()
+  static function findWithOldDays()
   {
     $criteria = lmbSQLCriteria::less('day.ctime', time() - 24 * 60 * 60);
     $criteria->add(lmbSQLCriteria::notEqual('user.current_day_id', '0'));
@@ -374,4 +404,19 @@ class User extends BaseModel
 
     return User::findByQuery($query);
   }
+
+	static function findWithUnreadNews($notification_period)
+	{
+		$criteria = lmbSQLCriteria::equal('user_settings.notifications_period_fb', $notification_period)
+			->add(lmbSQLCriteria::equal('news_recipient.is_read', 1));
+
+		$query = new lmbSelectQuery('user_settings');
+		$query
+				->addLeftJoin('user', 'user_settings_id', 'user_settings', 'id')
+				->addLeftJoin('news_recipient', 'user_id', 'user', 'id')
+				->addField('user.*')
+				->where($criteria);
+
+		return User::findByQuery($query);
+	}
 }
