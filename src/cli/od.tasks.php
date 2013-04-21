@@ -38,10 +38,10 @@ function task_od_create_crontab($args = array())
 	$output .= "1 4	* * *	sphinxsearch indexer $sphinx_config --rotate days $log_str";
 
 	##Notifications
-	$output .= "1 7	* * *	www-data cd $project_dir; ./limb od_notify ".UserSettings::NOTIFICATIONS_PERIOD_TWICE_DAY;
-	$output .= "1 17 * * *	www-data cd $project_dir; ./limb od_notify ".UserSettings::NOTIFICATIONS_PERIOD_TWICE_DAY;
-	$output .= "15 7 * * *	www-data cd $project_dir; ./limb od_notify ".UserSettings::NOTIFICATIONS_PERIOD_DAILY;
-	$output .= "15 7 * * 0 www-data cd $project_dir; ./limb od_notify ".UserSettings::NOTIFICATIONS_PERIOD_WEEKLY;
+	$output .= "1 7	* * *	www-data cd $project_dir; ./limb od_notify ".UserSettings::NOTIFICATIONS_PERIOD_TWICE_DAY." $log_str";
+	$output .= "1 17 * * *	www-data cd $project_dir; ./limb od_notify ".UserSettings::NOTIFICATIONS_PERIOD_TWICE_DAY." $log_str";
+	$output .= "15 7 * * *	www-data cd $project_dir; ./limb od_notify ".UserSettings::NOTIFICATIONS_PERIOD_DAILY." $log_str";
+	$output .= "15 7 * * 0 www-data cd $project_dir; ./limb od_notify ".UserSettings::NOTIFICATIONS_PERIOD_WEEKLY." $log_str";
 
 	if(isset($output_file))
 		file_put_contents($output_file, $output);
