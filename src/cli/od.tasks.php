@@ -37,6 +37,12 @@ function task_od_create_crontab($args = array())
 	$output .= "* * * * * sphinxsearch indexer $sphinx_config --rotate --merge days days_delta $log_str";
 	$output .= "1 4	* * *	sphinxsearch indexer $sphinx_config --rotate days $log_str";
 
+	##Notifications
+	$output .= "1 7	* * *	www-data cd $project_dir; ./limb od_notify ".UserSettings::NOTIFICATIONS_PERIOD_TWICE_DAY;
+	$output .= "1 17 * * *	www-data cd $project_dir; ./limb od_notify ".UserSettings::NOTIFICATIONS_PERIOD_TWICE_DAY;
+	$output .= "15 7 * * *	www-data cd $project_dir; ./limb od_notify ".UserSettings::NOTIFICATIONS_PERIOD_DAILY;
+	$output .= "15 7 * * 0 www-data cd $project_dir; ./limb od_notify ".UserSettings::NOTIFICATIONS_PERIOD_WEEKLY;
+
 	if(isset($output_file))
 		file_put_contents($output_file, $output);
 	else
