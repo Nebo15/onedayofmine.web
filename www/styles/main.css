@@ -1418,7 +1418,7 @@ ul.with-separators li .btn-small {
   }
 }
 
-@media (max-width: 1024px) { /* iPad&iPhone */
+@media (max-width: 1024px) and (orientation : portrait) { /* iPad&iPhone in portrait */
   .day-toolbar {
     text-align: center;
   }
