@@ -437,7 +437,7 @@ class odNewsService
       $recipient_record->save();
 
 	    /** @var $facebook odFacebook */
-	    if($recipient->getSettings()->getSettings()->notifications_period_fb == UserSettings::NOTIFICATIONS_PERIOD_NOW)
+	    if($recipient->getSettings()->notifications_period_fb == UserSettings::NOTIFICATIONS_PERIOD_NOW)
 	    {
         lmbToolkit::instance()->getFacebook()->notify($recipient->facebook_uid, $text, $news->getLinkWithSiteUrl());
 	    }
