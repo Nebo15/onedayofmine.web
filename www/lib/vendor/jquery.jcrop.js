@@ -1460,6 +1460,31 @@
       img.src = src;
     }
     //}}}
+    // This method is tweaked, don't update libruary
+    function ajustToImage(callback) //{{{
+    {
+      Selection.release();
+      disableCrop();
+
+      var iw = $img.width;
+      var ih = $img.height;
+      var bw = options.boxWidth;
+      var bh = options.boxHeight;
+      $img.width(iw).height(ih);
+      presize($img, bw, bh);
+      boundx = $img.width();
+      boundy = $img.height();
+      $img2.width(boundx).height(boundy);
+      $trk.width(boundx + (bound * 2)).height(boundy + (bound * 2));
+      $div.width(boundx).height(boundy);
+      Shade.resize(boundx, boundy);
+      enableCrop();
+
+      if (typeof(callback) === 'function') {
+        callback.call(api);
+      }
+    }
+    //}}}
     function colorChangeMacro($obj,color,now) {
       var mycolor = color || options.bgColor;
       if (options.bgFade && supportsColorFade() && options.fadeTime && !now) {
@@ -1541,6 +1566,7 @@
 
     var api = {
       setImage: setImage,
+      ajustToImage: ajustToImage,
       animateTo: animateTo,
       setSelect: setSelect,
       setOptions: setOptionsNew,
