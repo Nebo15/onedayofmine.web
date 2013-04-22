@@ -79,4 +79,21 @@ class News extends BaseModel
 
     return $exported;
   }
+
+	function getLinkWithSiteUrl()
+	{
+		return $this->_replaceAppLinks($this->link);
+	}
+
+	function getMessageWithSiteUrls()
+	{
+		return $this->_replaceAppLinks($this->text);
+	}
+
+	protected function _replaceAppLinks($text)
+	{
+		$search = ['/odom:\/\/users\/(\d+)/', '/odom:\/\/days\/(\d+)/'];
+		$replace = ['/pages/$1/user', '/pages/$1/day'];
+		return preg_replace($search, $replace, $text);
+	}
 }

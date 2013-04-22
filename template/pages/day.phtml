@@ -4,14 +4,16 @@ $this->day->is_gathering_enabled = false;
 ?>
 {{wrap with="layout.phtml"}}
   {{into slot="og_meta"}}
+		<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# {$#facebook_app_namespace}: http://ogp.me/ns/fb/{$#facebook_app_namespace}#">
     <meta property="og:type" content="{$#facebook_app_namespace}:day" />
     <meta property="og:url" content="{$#host_url}pages/{$#day.id}/day" />
     <meta property="og:title" content="{$#day.title}" />
-    <meta property="{$#facebook_app_namespace}:type" content="{$#day->type}" />
-    <meta property="og:image" content="{$#day.image_532}"/>
+    <meta property="{$#facebook_app_namespace}:day_type" content="{$#day->type}" />
+		<? $unsafe_url = str_replace('https://', 'http://', $this->day->image_532); ?>
+    <meta property="og:image" content="{$unsafe_url}"/>
   {{/into}}
   {{into slot="meta"}}
-    <meta property="description" content="{$#day.final_description}"/>
+    <meta property="og:description" content="{$#day.final_description}"/>
   {{/into}}
   {{into slot="js_include"}}
     <script src="/app/day.js"></script>
@@ -548,6 +550,13 @@ $this->day->is_gathering_enabled = false;
         <div class="clearfix">
           <div class="btn-toolbar pull-right">
             {{apply template="day_like_button" /}}
+            <small>
+              {{list using="$#day_obj->getLikes()"}}
+                {{list:item}}
+                  <small><a href="/pages/{$item->getUser()->id}/user">{$item->getUser()->name}</a></small>
+                {{/list:item}}
+              {{/list}}
+            </small>
             {{apply template="day_share_button" /}}
             {{apply template="day_report_button" /}}
           </div>

@@ -425,17 +425,20 @@ class odExportHelper
 
   ############### News ###############
   ################ > News ###############
-  function exportNewsListItem(News $news)
+  function exportNewsListItem(News $news, $with_site_urls = false)
   {
     $exported = $news->exportForApi();
 
     if($news->sender_id)
       $exported->sender = $this->exportUserItem(User::findById($news->sender_id));
 
+	  if($with_site_urls)
+		  $exported->text = $news->getMessageWithSiteUrls();
+
     return $exported;
   }
 
-  function exportNewsItems($news)
+  function exportNewsItems($news, $with_site_urls = false)
   {
     if(!count($news))
       return [];
@@ -463,17 +466,17 @@ class odExportHelper
 	  $moment_comments     = lmbArrayHelper::makeKeysFromColumnValues('id', $moment_comments);
 
     foreach ($news as $news_item) {
-      $news = $news_item->exportForApi();
+      $news_item_exported = $this->exportNewsListItem($news_item, $with_site_urls);
       $news->sender = $this->exportUserSubentity($sender_users[$news_item->sender_id]);
 	    if($news_item->day_id)
-	      $news->day = $this->exportDaySubentity($days[$news_item->day_id]);
+		    $news_item_exported->day = $this->exportDaySubentity($days[$news_item->day_id]);
 	    if($news_item->day_comment_id)
-		    $news->day_comment = $this->exportDayCommentSubentity($days_comments[$news_item->day_comment_id]);
+		    $news_item_exported->day_comment = $this->exportDayCommentSubentity($days_comments[$news_item->day_comment_id]);
 	    if($news_item->moment_id)
-		    $news->moment = $this->exportMomentSubentity($moments[$news_item->moment_id]);
+		    $news_item_exported->moment = $this->exportMomentSubentity($moments[$news_item->moment_id]);
 	    if($news_item->moment_comment_id)
-		    $news->moment_comment = $this->exportMomentSubentity($moment_comments[$news_item->moment_comment_id]);
-      $exported[] = $news;
+		    $news_item_exported->moment_comment = $this->exportMomentSubentity($moment_comments[$news_item->moment_comment_id]);
+      $exported[] = $news_item_exported;
     }
     return $exported;
   }

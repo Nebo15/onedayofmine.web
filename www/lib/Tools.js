@@ -56,7 +56,6 @@ var Tools = {
 	},
 
 	prettyDate: function (time) {
-		console.log(time);
 		var date = new Date(time),
 				diff = (((new Date()).getTime() - date.getTime()) / 1000),
 				day_diff = Math.floor(diff / 86400);
@@ -106,6 +105,7 @@ var Tools = {
 		return number;
 	},
 
+	// return yyyy-mm-dd by Date() obj
 	getDate: function (obj) {
 		if (obj === undefined) {
 			obj = new Date();

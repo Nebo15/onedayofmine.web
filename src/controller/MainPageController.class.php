@@ -25,17 +25,10 @@ class MainPageController extends WebAppController
 		if($this->toolkit->getUser())
 		{
 			$user  = $this->toolkit->getUser();
-			$news = $user->getNews(); //->paginate(0, $this->lists_limit);
+			$news = $user->getNews()->paginate(0, $this->lists_limit);
+			$user->markNewsAsRead($news);
 
 			$this->news = $this->_mergeNews($news);
-
-			foreach($this->news as $i => $news_item)
-			{
-				$search = ['/odom:\/\/users\/(\d+)/', '/odom:\/\/days\/(\d+)/'];
-				$replace = ['/pages/$1/user', '/pages/$1/day'];
-				$this->news[$i]->text = preg_replace($search, $replace, $news_item->text);
-			}
-
 			$this->news = $this->_toFlatArray($this->news);
 
 			$followers = $this->_getUser()->getFollowersUsers();
@@ -54,7 +47,7 @@ class MainPageController extends WebAppController
 
 	protected function _mergeNews($news)
 	{
-		$news = $this->toolkit->getExportHelper()->exportNewsItems($news);
+		$news = $this->toolkit->getExportHelper()->exportNewsItems($news, true);
 
 		$result = [];
 		$current = null;

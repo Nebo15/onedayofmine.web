@@ -63,4 +63,22 @@ class MyController extends BaseJsonController
 
     return $this->_answerOk($this->toolkit->getExportHelper()->exportNewsItems($news));
   }
+
+	function doMarkNewsAsRead()
+	{
+		if(!$this->request->isPost())
+			return $this->_answerUnauthorized();
+
+		$user  = $this->toolkit->getUser();
+
+		$news_ids = $this->request->get('news_ids');
+		array_walk($news_ids, function(&$id) {
+			$id = (int) $id;
+		});
+		$news_ids = array_unique($news_ids);
+
+		$user->markNewsAsRead($news_ids);
+
+		return $this->_answerOk();
+	}
 }

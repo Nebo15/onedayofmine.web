@@ -20,6 +20,11 @@ class DayLike extends BaseLike
     $this->user_id = $user->id;
   }
 
+	function getUser()
+	{
+		return User::findById($this->user_id);
+	}
+
   static function findByDayId($day_id)
   {
     return self::findFirst(array('day_id = ?', $day_id));

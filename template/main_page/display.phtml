@@ -19,7 +19,7 @@ $this->menu = '';
           </a>
           <div class="bubble left">
             <p class="text">
-              [[text]]
+              [[raw text]]
               <br />
               [[#days]]
                   <a href="/pages/[[id]]/day">
@@ -37,8 +37,9 @@ $this->menu = '';
               [[#moment_comments]]
                   <blockquote>[[comment.text]]</blockquote>
               [[/moment_comments]]
-              <small><b>[[time]]</b></small>
+	            <small>[[datetime time]]</small>
             </p>
+
           </div>
         </li>
       [[/news]]
@@ -47,19 +48,27 @@ $this->menu = '';
   {{into slot="js_include"}}
     <script src="/lib/InfiniteScroll.js"></script>
   {{/into}}
+	{{into slot="css"}}
+		.bubble small:before { content:''; }
+		.bubble small { float:right; }
+	{{/into}}
   {{into slot="js_ready"}}
     // Init paginator
     var template_list = Template.prepareTemplate($('#news_list_elements_template'));
     $('.news').infiniteScroll({
       request: API.get('my/news'),
-      success: function(response) {
+      success: function(response)
+			{
         var news = Template.compileElement(template_list, {
           news: response.data.result
         });
-
         news = $($.trim(news));
-
         $(this).find('.infiniteScroll_button_container').before(news);
+
+				var news_ids = [];
+				for (var i in response.data.result)
+					news_ids.push(response.data.result[i].id);
+				API.post('my/mark_news_as_read', {news_ids: news_ids}).send();
       }
     });
   {{/into}}
@@ -102,7 +111,7 @@ $this->menu = '';
                         <blockquote>{$comment.text}</blockquote>
                       {{/list:item}}
                     {{/list}}
-                    <small><b>{$item.time|date:'M j \a\t g:m a'}</b></small>
+                    <small>{$item.time|pretty_date}</small>
                   </p>
                 </div>
               </li>

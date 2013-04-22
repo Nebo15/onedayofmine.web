@@ -36,9 +36,12 @@ class BasePhotoSourceTest extends odUnitTestCase
 		$mock = new PhotoSourceMock();
 		$mock->expectAt(0, 'getPhotos', [null]);
 		$mock->returnsAt(0, 'getPhotos', [
-			['id' => 1, 'time' => 100],
-			['id' => 2, 'time' => 99],
-			['id' => 3, 'time' => 98],
+			['id' => 1, 'time' => 100100],
+			['id' => 2, 'time' => 10099],
+			['id' => 3, 'time' => 10098],
+			['id' => 4, 'time' => 200100],
+			['id' => 5, 'time' => 20099],
+			['id' => 6, 'time' => 20098],
 		]);
 		$mock->expectAt(1, 'getPhotos', [98]);
 		$mock->returnsAt(1, 'getPhotos', []);
@@ -102,6 +105,36 @@ class BasePhotoSourceTest extends odUnitTestCase
 		$this->assertEqual(4, $days[0][3]['id']);
 	}
 
+	function testTestGetDays_Minimum3DaysCount()
+	{
+		Mock::generatePartial('BasePhotoSource', 'PhotoSourceMock', ['getPhotos']);
+		$mock = new PhotoSourceMock();
+
+		$border_day_time = 1000000;
+
+		$photos = [];
+		for($i = 0; $i < 10; $i++)
+			$photos[] = ['id' => $i, 'time' => 4000000 - $i];
+		for(;$i < 20; $i++)
+			$photos[] = ['id' => $i, 'time' => 3000000 - $i];
+		for(;$i < 30; $i++)
+			$photos[] = ['id' => $i, 'time' => 2000000 - $i];
+		$mock->returnsAt(0, 'getPhotos', $photos);
+		$mock->returnsAt(1, 'getPhotos', []);
+
+		$mock->expectCallCount('getPhotos', 2);
+		$days = $mock->getDays($this->main_user);
+
+		for(;$i < 40; $i++)
+			$photos[] = ['id' => $i, 'time' => 1000000 - $i];
+		for(;$i < 50; $i++)
+			$photos[] = ['id' => $i, 'time' => 9000000 - $i];
+		$mock->returnsAt(2, 'getPhotos', $photos);
+
+		$mock->expectCallCount('getPhotos', 3);
+		$days = $mock->getDays($this->main_user);
+	}
+
 	function testTestGetDays_SkipExistedDays()
 	{
 		$day = $this->generator->day($this->main_user)->save();
@@ -141,5 +174,42 @@ class BasePhotoSourceTest extends odUnitTestCase
 		$days = $mock->getDays($this->main_user);
 		$this->assertEqual(1, count($days));
 		$this->assertEqual(13, $days[0][0]['id']);
+	}
+
+	/**
+	 * @ticket #351
+	 */
+	function testTestGetDays_OneDayInDifferentGetPhotosAnswers()
+	{
+		Mock::generatePartial('BasePhotoSource', 'PhotoSourceMock', ['getPhotos']);
+		$mock = new PhotoSourceMock();
+
+		$border_day_time = 1000000;
+
+		$photos = [];
+		for($i = 0; $i < 10; $i++)
+			$photos[] = ['id' => $i, 'time' => 4000000 - $i];
+		for(;$i < 20; $i++)
+			$photos[] = ['id' => $i, 'time' => 3000000 - $i];
+		for(;$i < 30; $i++)
+			$photos[] = ['id' => $i, 'time' => 2000000 - $i];
+		for(;$i < 40; $i++)
+			$photos[] = ['id' => $i, 'time' => $border_day_time - $i];
+		$mock->returnsAt(0, 'getPhotos', $photos);
+
+		$photos = [];
+		for(;$i < 50; $i++)
+			$photos[] = ['id' => $i, 'time' => $border_day_time - $i];
+		for(;$i < 60; $i++)
+			$photos[] = ['id' => $i, 'time' => 900000 - $i];
+		for(;$i < 70; $i++)
+			$photos[] = ['id' => $i, 'time' => 800000 - $i];
+		for(;$i < 80; $i++)
+			$photos[] = ['id' => $i, 'time' => 700000 - $i];
+		$mock->returnsAt(1, 'getPhotos', $photos);
+
+		$mock->expectCallCount('getPhotos', 1);
+		$days = $mock->getDays($this->main_user);
+		$this->assertEqual(3, count($days));
 	}
 }
