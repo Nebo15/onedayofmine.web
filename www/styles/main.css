@@ -1418,14 +1418,6 @@ ul.with-separators li .btn-small {
   .day .moments article .description {
     width: auto;
   }
-
-  .scrollHelper {
-    display: none;
-  }
-
-  .scrollHelperMobile {
-    display: inline;
-  }
 }
 
 @media (max-width: 1024px) and (orientation : portrait) { /* iPad&iPhone in portrait */

@@ -54,21 +54,25 @@ $(function () {
 
     setBottomOffset(helperDefaultOffset);
 
-    $scrollContainer.scroll(function() {
-      var scrollTop = $scrollContainer.scrollTop();
+    if($.isMobile()) {
+      setBottomOffset(0);
+    } else {
+      $scrollContainer.scroll(function() {
+        var scrollTop = $scrollContainer.scrollTop();
 
-      if(scrollTop > 500) {
-        var diff = scrollTop - 500;
-        if(diff < helperHeight) {
-          var shift = diff - helperHeight;
-          setBottomOffset(shift > helperDefaultOffset ? shift : helperDefaultOffset);
+        if(scrollTop > 500) {
+          var diff = scrollTop - 500;
+          if(diff < helperHeight) {
+            var shift = diff - helperHeight;
+            setBottomOffset(shift > helperDefaultOffset ? shift : helperDefaultOffset);
+          } else {
+            setBottomOffset(0);
+          }
         } else {
-          setBottomOffset(0);
+          setBottomOffset(helperDefaultOffset);
         }
-      } else {
-        setBottomOffset(helperDefaultOffset);
-      }
-    });
+      });
+    }
 
     $('.scrollTo.comments').click(function() {
       $(document).scrollTo($('a[name=comments]'), 200);
