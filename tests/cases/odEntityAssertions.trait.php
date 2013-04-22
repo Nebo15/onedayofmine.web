@@ -214,6 +214,8 @@ trait odEntityAssertions
 
     $this->assertProperty($day, "final_description");
 
+    $this->assertProperty($day, "likes");
+
     if($day->comments_count > 0)
     {
       $this->assertTrue(

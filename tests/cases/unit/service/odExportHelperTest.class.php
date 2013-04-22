@@ -69,6 +69,8 @@ class odExportHelperTest extends odUnitTestCase
       $this->assertTrue($exported->is_favorite);
     if($this->assertTrue(property_exists($exported, 'is_liked')))
       $this->assertTrue($exported->is_liked);
+    if($this->assertTrue(property_exists($exported, 'likes')))
+      $this->assertEqual($exported->likes[0]->user->id, $this->main_user->id);
   }
 
   function testExportDay_forOwner()
