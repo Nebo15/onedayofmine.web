@@ -543,7 +543,7 @@ $(function() {
         // Changing image
         $image.first().one('load', function() {
           $image.width($image.width());
-          $image.height($image.height);
+          $image.height($image.height());
 
           if(!is_converted) {
             $image_container.addClass(image_has_changes_class);
@@ -652,8 +652,10 @@ $(function() {
 
         $moment.on('imagechanged.cropper', function(event, data_url) {
           if(isAttached()) {
+            crop_api.redraw(function() {
+              crop_api.setSelect(cordsLoad($image));
+            });
             // crop_api.setImage(data_url); // This is right, but produce bugs
-            crop_api.setSelect(cordsLoad($image));
           } else {
             $moment.off('imagechanged.cropper');
           }
@@ -699,8 +701,8 @@ $(function() {
           $image.Jcrop({
             aspectRatio: image_width/image_height,
             keySupport: false,
-            boxWidth: image_width,
-            boxHeight: image_height,
+            boxWidth: $image.width(),
+            boxHeight: $image.width(),
             onSelect: cordsSave,
             onChange: cordsSave, // Remove to dont spam data-api
             allowSelect : false // This is undocumented feature

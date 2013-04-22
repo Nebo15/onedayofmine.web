@@ -1461,23 +1461,22 @@
     }
     //}}}
     // This method is tweaked, don't update libruary
-    function ajustToImage(callback) //{{{
+    function redraw(callback) //{{{
     {
       Selection.release();
       disableCrop();
 
-      var iw = $img.width;
-      var ih = $img.height;
-      var bw = options.boxWidth;
-      var bh = options.boxHeight;
-      $img.width(iw).height(ih);
-      presize($img, bw, bh);
-      boundx = $img.width();
-      boundy = $img.height();
-      $img2.width(boundx).height(boundy);
-      $trk.width(boundx + (bound * 2)).height(boundy + (bound * 2));
-      $div.width(boundx).height(boundy);
-      Shade.resize(boundx, boundy);
+      var image_width = $img.width();
+      var image_height = $img.height();
+
+      boundx = image_width;
+      boundy = image_height;
+
+      $img2.width(image_width).height(image_height);
+      $trk.width(image_width + (bound * 2)).height(image_height + (bound * 2));
+      $div.width(image_width).height(image_height);
+      Shade.resize(image_width, image_height);
+      Shade.refresh();
       enableCrop();
 
       if (typeof(callback) === 'function') {
@@ -1566,7 +1565,7 @@
 
     var api = {
       setImage: setImage,
-      ajustToImage: ajustToImage,
+      redraw: redraw,
       animateTo: animateTo,
       setSelect: setSelect,
       setOptions: setOptionsNew,
