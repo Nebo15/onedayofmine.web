@@ -376,8 +376,7 @@ $(function() {
     var image_has_changes_class = 'edited';
     var image_has_crop_tool_class = 'has-crop-tool';
     var image_toolbar_expanded_class = 'expanded';
-    var image_action_edit_confirm_btn_class = 'action-edit-confirm';
-    var image_action_edit_confirm_btn_selector = '.' + image_action_edit_confirm_btn_class;
+    var image_action_edit_confirm_btn_selector = '.action-edit-confirm';
 
     var image_action_use_as_cover_btn_selector = '.action-use-as-cover';
     var image_action_rotate_left_btn_selector = '.action-rotate-left';
@@ -551,6 +550,10 @@ $(function() {
             $submit_btn.removeClass('disabled');
           }
 
+          if($image_container.hasClass(image_has_crop_tool_class)) {
+            $submit_btn.removeClass('disabled');
+          }
+
           $moment.trigger('imagechanged', url_or_data_url, is_converted);
         });
 
@@ -591,6 +594,7 @@ $(function() {
       var $image_container = $moment.find(image_container_selector);
       var $image = $image_container.find(image_selector);
       var $crop_btn = $moment.find(image_action_crop_btn_selector);
+      var $submit_btn = $moment.find(image_action_edit_confirm_btn_selector);
 
       function isAttached() {
         return $moment.find(jcrop_holder_selector).length > 0;
@@ -620,10 +624,15 @@ $(function() {
       }
 
       var cropDismiss = function(crop_api) {
+        $moment.off('.cropper');
         cordsRemove();
         crop_api.destroy();
         $crop_btn.removeClass('disabled');
         $image_container.removeClass(image_has_crop_tool_class);
+
+        if(!$image_container.hasClass(image_has_changes_class)) {
+          $submit_btn.addClass('disabled');
+        }
       };
 
       var onCropReady = function() {
@@ -646,11 +655,15 @@ $(function() {
             // crop_api.setImage(data_url); // This is right, but produce bugs
             crop_api.setSelect(cordsLoad($image));
           } else {
-            $moment.off('.cropper');
+            $moment.off('imagechanged.cropper');
           }
         });
 
-        $moment.one('imagesave', function(event) {
+        $moment.one('imagesave.cropper', function(event) {
+          if(!isAttached()) {
+            return;
+          }
+
           // This code stops imagesave event and fies it again after crop tool removed, so saved data is always cropped
           event.stopImmediatePropagation();
 
@@ -681,7 +694,6 @@ $(function() {
       ImageTools.Convert.imageToDataURL($image.attr('src')).done(function(data_url) {
         // Enshure that cropped attached on data_url'ed image
         $moment.one('imagechanged', function() {
-          $image_container.addClass(image_has_crop_tool_class);
 
           // Show crop tool
           $image.Jcrop({
@@ -695,6 +707,7 @@ $(function() {
           }, onCropReady);
         });
 
+        $image_container.addClass(image_has_crop_tool_class);
         setImage($moment, data_url, true);
       });
     }
@@ -979,7 +992,14 @@ $(function() {
         });
 
         $moments.on('click', image_action_edit_confirm_btn_selector, function() {
-          getMomentByContext(this).trigger('imagesave');
+          var $moment = getMomentByContext(this);
+          var $submit_btn = $moment.find(image_action_edit_confirm_btn_selector);
+
+          if($submit_btn.hasClass('disabled')) {
+            return;
+          }
+
+          $moment.trigger('imagesave');
         });
 
         // Crop

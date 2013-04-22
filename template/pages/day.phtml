@@ -142,53 +142,59 @@ $this->day->is_gathering_enabled = false;
           </form>
         </div>
 
-        <div class="image has-bage block-center">
-          <div class="thumbnail">
-            <img src="[[#if moment.image]][[moment.image]][[else]]/img/moment-placeholder.gif[[/if]]" itemprop="contentUrl" />
-          </div>
+        <span class="bage bage-large bage-bottom-right visible-desktop image-toolbar">
+          <span class="hover-toggler">
+            <i class="icon-pencil"></i>
+            <i class="icon-caret-right"></i>
+          </span>
 
-          <span class="bage bage-large bage-bottom-right has-hover-bar visible-desktop image-toolbar">
-            <a class="hover-bar-indicator text-gray">
-              <i class="icon-pencil"></i>
-              <i class="icon-caret-right"></i>
+          <span class="hover-bar">
+            <a class="with-tooltip has-overlap action-use-as-cover disabled" data-original-title="Use as day cover">
+              <i class="icon-picture"></i>
+              <i class="overlap icon-ok"></i>
             </a>
-
-            <span class="hover-bar">
-              <a class="text-gray with-tooltip has-overlap action-use-as-cover disabled" data-original-title="Use as day cover">
-                <i class="icon-picture"></i>
-                <i class="overlap icon-ok"></i>
+            <span class="actions-block">
+              <a class="with-tooltip action-rotate-left" data-original-title="Rotate left">
+                <i class="icon-undo"></i>
               </a>
-              <span class="action-rotate">
-                <a class="text-gray with-tooltip action-rotate-left" data-original-title="Rotate left">
-                  <i class="icon-undo"></i>
-                </a>
-                <a class="text-gray with-tooltip action-rotate-right" data-original-title="Rotate right">
-                  <i class="icon-repeat"></i>
-                </a>
-              </span>
-              <a class="text-gray with-tooltip action-crop" data-original-title="Crop this image">
-                <i class="icon-cut"></i>
+              <a class="with-tooltip action-rotate-right" data-original-title="Rotate right">
+                <i class="icon-repeat"></i>
               </a>
             </span>
+            <a class="with-tooltip action-crop" data-original-title="Crop this image">
+              <i class="icon-cut"></i>
+            </a>
           </span>
-        </div>
 
-        <div class="btn-toolbar text-center hidden-desktop image-toolbar">
-          <a class="btn btn-small action-use-as-cover disabled">
-            <i class="icon-picture"></i> Use as cover
-          </a>
-          <span class="btn-group action-rotate">
-            <a class="btn btn-small action-rotate-left">
-              <i class="icon-undo"></i>
-            </a>
-            <a class="btn btn-small">
-              <i class="icon-repeat action-rotate-right"></i>
+          <span class="confirm-bar">
+            <i class="icon-caret-right"></i>
+            <a class="hover-bar-indicator btn btn-success btn-mini with-tooltip has-spinner action-edit-confirm" data-original-title="Save changes">
+              <span class="spinner icon-refresh icon-spin"></span>
+              Save
             </a>
           </span>
-          <a class="btn btn-small action-crop">
-            <i class="icon-cut"></i> Crop
-          </a>
-        </div>
+
+          <div class="btn-toolbar text-center hidden-desktop image-btn-toolbar">
+            <a class="btn btn-small action-use-as-cover disabled">
+              <i class="icon-picture"></i> Cover
+            </a>
+            <span class="btn-group action-rotate">
+              <a class="btn btn-small action-rotate-left">
+                <i class="icon-undo"></i>
+              </a>
+              <a class="btn btn-small action-rotate-right">
+                <i class="icon-repeat"></i>
+              </a>
+            </span>
+            <a class="btn btn-small action-crop">
+              <i class="icon-cut"></i> Crop
+            </a>
+            <a class="btn btn-small btn-success disabled action-edit-confirm">
+              <i class="icon-ok"></i> Save
+            </a>
+          </div>
+        </span>
+
 
         <div class="description bubble block-center">
           <form name="moment_description_form">
@@ -472,26 +478,29 @@ $this->day->is_gathering_enabled = false;
                       </span>
                     </span>
                   <? } ?>
-                </div>
 
-                <? if($this->is_owner) { ?>
-                  <div class="btn-toolbar text-center hidden-desktop image-toolbar">
-                    <a class="btn btn-small action-use-as-cover">
-                      <i class="icon-picture"></i> Use as cover
-                    </a>
-                    <span class="btn-group action-rotate">
-                      <a class="btn btn-small action-rotate-left">
-                        <i class="icon-undo"></i>
+                  <? if($this->is_owner) { ?>
+                    <div class="btn-toolbar text-center hidden-desktop image-btn-toolbar">
+                      <a class="btn btn-small action-use-as-cover">
+                        <i class="icon-picture"></i> Cover
                       </a>
-                      <a class="btn btn-small action-rotate-right">
-                        <i class="icon-repeat"></i>
+                      <span class="btn-group action-rotate">
+                        <a class="btn btn-small action-rotate-left">
+                          <i class="icon-undo"></i>
+                        </a>
+                        <a class="btn btn-small action-rotate-right">
+                          <i class="icon-repeat"></i>
+                        </a>
+                      </span>
+                      <a class="btn btn-small action-crop">
+                        <i class="icon-cut"></i> Crop
                       </a>
-                    </span>
-                    <a class="btn btn-small action-crop">
-                      <i class="icon-cut"></i> Crop
-                    </a>
-                  </div>
-                <? } ?>
+                      <a class="btn btn-small btn-success disabled action-edit-confirm">
+                        <i class="icon-ok"></i> Save
+                      </a>
+                    </div>
+                  <? } ?>
+                </div>
 
                 <? if($this->is_owner || $item->description) { ?>
                   <div class="description bubble block-center">
