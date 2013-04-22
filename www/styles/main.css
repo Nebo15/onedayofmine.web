@@ -1414,9 +1414,17 @@ ul.with-separators li .btn-small {
   }
 }
 
-@media (max-width: 1024px) { /* iPad&iPhone in portrait */
+@media (max-width: 1024px) { /* iPad&iPhone */
   .day .moments article .description {
     width: auto;
+  }
+
+  .scrollHelper {
+    display: none;
+  }
+
+  .scrollHelperMobile {
+    display: inline;
   }
 }
 
