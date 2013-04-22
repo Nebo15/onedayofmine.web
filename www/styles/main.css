@@ -1257,6 +1257,10 @@ ul.with-separators li .btn-small {
     margin-bottom: 10px;
   }
 
+  .image-btn-toolbar > :not(.action-edit-confirm):last-child {
+    margin-right: 0 !important;
+  }
+
   .image-btn-toolbar .action-edit-confirm {
     margin-top: 5px;
     margin-right: 0 !important;
