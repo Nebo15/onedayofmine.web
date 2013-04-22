@@ -1252,6 +1252,22 @@ ul.with-separators li .btn-small {
 }
 
 /* Responsive features */
+@media (max-width: 380px) { /* Tiny Phone screens */
+  .day-toolbar .btn-toolbar > * {
+    margin-bottom: 10px;
+  }
+
+  .image-btn-toolbar {
+    margin-left: 5px;
+  }
+
+  .image-btn-toolbar .action-edit-confirm {
+    margin-top: 5px;
+    margin-right: 5px !important;
+    display: block;
+  }
+}
+
 @media (max-width: 612px) { /* Small Phone screens */
   .form-inline .btn,
   .moments .time .btn[type=submit] {
@@ -1265,20 +1281,6 @@ ul.with-separators li .btn-small {
 
   .day .moments article .time input[type="time"] {
     max-width: 50px;
-  }
-
-  .day-toolbar .btn-toolbar > * {
-    margin-bottom: 10px;
-  }
-
-  .image-btn-toolbar {
-    margin-left: 5px;
-  }
-
-  .image-btn-toolbar .action-edit-confirm {
-    margin-top: 5px;
-    margin-right: 5px !important;
-    display: block;
   }
 }
 
