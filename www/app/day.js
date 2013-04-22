@@ -54,7 +54,7 @@ $(function () {
 
     setBottomOffset(helperDefaultOffset);
 
-    $scrollContainer.scroll(function() {
+    $scrollContainer.on('scroll touchmove', function() {
       var scrollTop = $scrollContainer.scrollTop();
 
       if(scrollTop > 500) {
