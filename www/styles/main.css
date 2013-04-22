@@ -170,32 +170,50 @@ h4 {
   display: none;
 }
 
-/* Hover bars */
-.has-hover-bar .hover-bar {
-  display: inline-block;
+/* Overlapping icons */
+.has-overlap {
+  position: relative;
+}
+
+.has-overlap .overlap {
+  -webkit-transition: opacity 0.7s;
+  -moz-transition: opacity 0.7s;
+  -o-transition: opacity 0.7s;
+  transition: opacity 0.7s;
+}
+
+.has-overlap :not(.overlap) {
+  -webkit-transition: opacity 0.35s;
+  -moz-transition: opacity 0.35s;
+  -o-transition: opacity 0.35s;
+  transition: opacity 0.35s;
+}
+
+.has-overlap .overlap {
   opacity: 0;
-  max-width: 0;
-  white-space: nowrap;
+  display: none;
 }
 
-.has-hover-bar .hover-bar,
-.has-hover-bar .hover-bar-indicator {
-  -webkit-transition: opacity 0.65s, max-width 0.75s;
-  -moz-transition: opacity 0.65s, max-width 0.75s;
-  -o-transition: opacity 0.65s, max-width 0.75s;
-  transition: opacity 0.65s, max-width 0.75s; /* Duration fixed since we animate additional hidden width */
-}
-
-.has-hover-bar:hover .hover-bar-indicator {
-  opacity: 0.4;
-}
-
-.has-hover-bar:hover .hover-bar {
+.show-overlap.disabled {
   opacity: 1;
-  max-width: 100px; /* More than it will ever come, notice that this affects on animation duration */
 }
 
-/* Loader hover-bar for buttons */
+.show-overlap .overlap {
+  opacity: 1;
+  display: inline;
+}
+
+.show-overlap :not(.overlap) {
+  opacity: 0.2;
+}
+
+.has-overlap .overlap {
+  position: absolute;
+  right: 5px;
+  top: 2px;
+}
+
+/* Loader spinner for any purposes */
 .has-spinner .spinner {
   display: inline-block;
   opacity: 0;
@@ -278,6 +296,10 @@ h4 {
 
 .btn-file > input {
   font-size: 23px;
+}
+
+.btn-file.disabled > input {
+  cursor: default;
 }
 
 /* Wrapped select */
@@ -657,6 +679,10 @@ hr {
   margin: 0;
 }
 
+.scrollHelperMobile {
+  margin-top: 5px;
+}
+
 /* >> Lists titles */
 ul.with-separators li {
   border-bottom: 1px solid rgba(34,25,25,0.1);
@@ -824,7 +850,7 @@ ul.with-separators li .btn-small {
 }
 
 /* >> Comments */
-.comment-item,
+.comments article,
 .news > li {
   margin-top: 20px;
   clear: both;
@@ -838,29 +864,30 @@ ul.with-separators li .btn-small {
   margin-right: 20px;
 }
 
-.comment-item .text,
+.comments article .text,
 .news > li .text,
 .no-overflow {
   overflow: hidden;
 }
 
-.comment-item .bubble,
+.comments article .bubble,
 .news > li .bubble {
   padding-bottom: 1px;
 }
 
-.comment-item img,
+.comments article img,
 .news > li img {
   margin-right: 20px;
 }
 
-.comment-item .bubble,
+.comments article .bubble,
 .news > li .bubble,
-.comments-loader {
+.comments .loader-wrap {
   margin-left: 100px;
+  width: auto;
 }
 
-.comments-loader {
+.comments .loader-wrap {
   clear: both;
   margin-top: 10px;
   margin-bottom: 15px;
@@ -936,79 +963,43 @@ ul.with-separators li .btn-small {
 }
 
 /* > Day page */
-.day-info {
+.day {
+  position:relative;
+}
+
+.day form {
+  margin: 0;
+}
+
+.day .alert {
+  margin-bottom: 5px;
+}
+
+.day header .info {
   font-size: 0.8em;
 }
 
-.day-controls-group div {
-  margin-bottom: 15px;
+.day header .info.short {
+  margin-bottom: 10px;
 }
 
-ul.controls li {
-  padding-right: 3px;
-  padding-left: 0;
+.day .day-toolbar .btn-toolbar {
+  margin-top: 0;
 }
 
-.controls-absolute {
-  position:absolute;
-  top: 5px;
-  right: 5px;
+.day .day-toolbar {
+  margin-top: 0;
+  margin-bottom: 10px;
 }
 
-.moment-item {
-  position: relative;
+.day-controls-group {
+  margin-bottom: 5px;
 }
 
-.moment-item.error,
-.moment-item-placeholder.error {
-  border-color:#ab0001;
-}
-
-.moment-item.success,
-.moment-item-placeholder.success {
-  border-color:rgb(30, 168, 77);
-}
-
-.moment-item.info{
-  border-style: dashed;
-}
-
-.moment-item-placeholder.info {
-  border-color: #49afcd;
-}
-
-.moment-item img {
-  max-width: 100%;
-}
-
-.moment-item .popover button {
-  margin-top: 8px;
-  width: 160px;
-}
-
-.moment-item .popover h5:first-child {
-  margin-top: 0px;
-}
-
-.moment-upload-progress {
-  position: absolute;
-  right: 35px;
-  left: 35px;
-  top: 200px;
-}
-
-.moment-upload-progress .progress {
-  background: rgba(0, 0, 0, 0.7);
-  height: 10px;
-}
-
-.moment-upload-progress .progress .bar {
-  background-color: #CCC;
-}
-
-.moment-item-placeholder {
+.day .moments .placeholder {
   text-align: center;
   border-style: dashed;
+  padding-top: 22px;
 
   -webkit-transition: all 0.4s ease;
   -moz-transition: all 0.4s ease;
@@ -1017,28 +1008,210 @@ ul.controls li {
   transform: all 0.4s ease;
 }
 
-.moment-item-placeholder i {
+.day .moments .placeholder i {
   vertical-align:middle
 }
 
-.moment-item-placeholder .message {
+.day .moments .placeholder .message {
   position: relative;
 }
 
+.day .moments article {
+  position:relative;
+}
+
+.day .moments article.info {
+  border-style: dashed;
+}
+
+.day .moments .placeholder.info {
+  border-color: #49afcd;
+}
+
+.day .moments article.error,
+.day .moments .placeholder.error {
+  border-color:#ab0001;
+}
+
+.day .moments article.success,
+.day .moments .placeholder.success {
+  border-color:rgb(30, 168, 77);
+}
+
+.day .moments article .time {
+  margin: -5px 0 5px 0;
+}
+
+.day .moments article .time form {
+  margin: 0;
+}
+
+.day .moments article .time input[subtype=date],
+.day .moments article .time input[subtype=time] {
+  text-align: center;
+}
+
+.day .moments article .time input[type=date] {
+  max-width: 130px;
+}
+
+.day .moments article .time input[type=time] {
+  max-width: 70px;
+}
+
+.day .moments article .time input[subtype=date] {
+  width: 85px;
+}
+
+.day .moments article .time input[subtype=time] {
+  width: 40px;
+}
+
+.day .moments article .image {
+  width: 542px;
+  max-width: 100%;
+}
+
+.day .moments article .thumbnail img {
+  width: 532px;
+}
+
+.day .moments article .thumbnail {
+  width: 532px;
+  max-width: 100%;
+
+  -webkit-transition: none;
+  -moz-transition: none;
+  -ms-transition: none;
+  -o-transition: none;
+  transform: none;
+}
+
+.day .moments article .thumbnail.error {
+  border-color:#ab0001;
+}
+
+.day .moments article .description {
+  margin-top: 25px;
+  width: 570px;
+  max-width: 100%;
+}
+
+.day .moments article .description .action-delete {
+  margin-top: 10px;
+}
+
+.day ul.controls li {
+  padding-right: 3px;
+  padding-left: 0;
+}
+
+.day .controls-absolute {
+  position:absolute;
+  top: 5px;
+  right: 5px;
+}
+
+.day .moments article .image .popover button {
+  white-space: nowrap;
+  margin-top: 8px;
+  width: 160px;
+}
+
+.day .moments article .image .popover h5:first-child {
+  margin-top: 0px;
+}
+
+.image-upload-progress {
+  position: absolute;
+  right: 35px;
+  left: 35px;
+  top: 200px;
+}
+
+.image-upload-progress .progress {
+  background: rgba(0, 0, 0, 0.7);
+  height: 10px;
+}
+
+.image-upload-progress .progress .bar {
+  background-color: #CCC;
+}
+
+/* Image edit hover bar */
+.image-toolbar  {
+  z-index: 1000; /* For jCrop */
+
+  -webkit-transition: opacity 0.65s, background-color 0.5s;
+  -moz-transition: opacity 0.65s, background-color 0.5s;
+  -o-transition: opacity 0.65s, background-color 0.5s;
+  transition: opacity 0.65s, background-color 0.5s;
+}
+
+.hover-toggler {
+  -webkit-transition: opacity 0.65s;
+  -moz-transition: opacity 0.65s;
+  -o-transition: opacity 0.65s;
+  transition: opacity 0.65s;
+}
+
+.hover-bar,
+.confirm-bar {
+  display: inline-block;
+  opacity: 0;
+  max-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+
+  -webkit-transition: opacity 0.65s, max-width 1s;
+  -moz-transition: opacity 0.65s, max-width 1s;
+  -o-transition: opacity 0.65s, max-width 1s;
+  transition: opacity 0.65s, max-width 1s; /* Duration fixed since we animate additional hidden width */
+}
+
+.confirm-bar .btn {
+  line-height: 22px;
+  margin-bottom: 2px;
+}
+
+.image-toolbar .hover-bar .disabled {
+  opacity: 0.3;
+}
+
+.image-toolbar.expanded .hover-toggler,
+.image-toolbar:hover .hover-toggler,
+.image.has-crop-tool .hover-toggler,
+.image.edited .hover-toggler {
+  opacity: 0.3;
+}
+
+.image-toolbar.expanded,
+.image.edited .image-toolbar,
+.image.has-crop-tool .image-toolbar {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.image-toolbar.expanded .hover-bar,
+.image-toolbar:hover .hover-bar,
+.image.has-crop-tool .hover-bar,
+.image.edited .hover-bar,
+.image.edited .confirm-bar,
+.image.has-crop-tool .confirm-bar {
+  opacity: 1;
+  max-width: 150px;
+}
+
+.noimage .image-toolbar,
+.image-toolbar.hide {
+  opacity: 0;
+  display: none;
+}
+
+
+
+/*
 .moment-item-hidden {
   background: #ffeeee;
-}
-
-.moment-time {
-  margin: -5px 0 10px 0;
-}
-
-.moment-time input[subtype=date] {
-  width: 80px;
-}
-
-.moment-time input[subtype=time] {
-  width: 40px;
 }
 
 .moment-item-new .moment-image-container,
@@ -1058,32 +1231,7 @@ ul.controls li {
 
 .moment-item-new .visible-if-saved {
   opacity: 0;
-}
-
-.moment-image-container {
-  position: relative;
-  clear: both;
-  max-width: 100%;
-  width: 400px;
-  font-size: 1em;
-}
-
-.moment-image-container img {
-  max-width: 100%;
-  width: 400px;
-  /*min-height: 420px;*/
-}
-
-.moment-description {
-  margin-top: 25px;
-  max-width: 100%;
-  width: 420px;
-}
-
-.day-bottom-actions {
-  padding-top: 13px;
-  margin-bottom: 0;
-}
+}*/
 
 /* > User page */
 .user-image-container {
@@ -1099,8 +1247,15 @@ ul.controls li {
 }
 
 /* Responsive features */
+@media (max-width: 612px) { /* Small Phone screens */
+  .day .moments article .image {
+    margin-left: -5px !important;
+    margin-right: 0 !important;
+  }
+}
+
 @media (max-width: 767px) { /* Phone */
-  h1 {
+  /*h1 {
     font-size: 38.25px;
   }
 
@@ -1118,6 +1273,24 @@ ul.controls li {
 
   h4 {
     font-size: 11.45px;
+  }*/
+
+  .day .moments article .thumbnail,
+  .day .moments article .thumbnail img {
+    width: auto;
+  }
+
+  .day .moments article .description {
+    width: auto;
+  }
+
+  .day .moments article.editable .bubble:after {
+    border: none;
+    display: none;
+  }
+
+  .day .moments article.editable .description {
+    margin-top: 0;
   }
 
   .hero-unit {
@@ -1125,14 +1298,34 @@ ul.controls li {
     margin: 0;
   }
 
-  .comment-item img,
+  .comments article img,
   .news > li img {
     width: 36px;
   }
 
-  .comment-item .bubble,
+  .comments article .bubble,
+  .comments .loader-wrap,
   .news > li .bubble {
     margin-left: 50px;
+  }
+
+  .bubble.left:after {
+    top:12px;
+    bottom:auto;
+    left:-15px;
+    border-width:6px 15px 6px 0;
+    border-color:transparent #eee;
+  }
+
+  .day header .info time {
+    margin-bottom: -2px;
+  }
+
+  .day .moments .time form .input-append input,
+  .day .moments .time form .input-prepend input {
+    -webkit-border-radius: 4px 4px 4px 4px;
+    -moz-border-radius: 4px 4px 4px 4px;
+    border-radius: 4px 4px 4px 4px;
   }
 
   .pull-right-on-phone {
@@ -1145,6 +1338,24 @@ ul.controls li {
 }
 
 @media (min-width: 768px) and (max-width: 979px) { /* Tablet */
+  .day .moments article .thumbnail,
+  .day .moments article .thumbnail img {
+    width: auto;
+  }
+
+  .day .moments article .description {
+    width: auto;
+  }
+
+  .day .moments article .bubble:after {
+    border: none;
+    display: none;
+  }
+
+  .day .moments article .description {
+    margin-top: 0;
+  }
+
   .pull-right-on-tablet {
     float: right;
   }

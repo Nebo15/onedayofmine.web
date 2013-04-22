@@ -17,10 +17,12 @@ $this->day->is_gathering_enabled = false;
     <script src="/app/day.js"></script>
     <? if($this->toolkit->getUser()) { ?>
       <script src="/app/day.user.js"></script>
-      <? if($this->is_owner || $this->day->is_gathering_enabled) { ?>
+      <? if($this->is_owner) { ?>
         <script src="/lib/vendor/bootstrap-datepicker.js"></script>
         <script src="/lib/vendor/jquery.ajax-progress.js"></script>
         <script src="/lib/vendor/bootstrap-timepicker.min.js"></script>
+        <script src="/lib/vendor/jquery.jcrop.js"></script>
+        <script src="/lib/vendor/jquery.exif.js"></script>
         <script src="/lib/Importer.js"></script>
         <script src="/app/day.owner.js"></script>
       <? } ?>
@@ -29,28 +31,69 @@ $this->day->is_gathering_enabled = false;
   {{into slot="css_include"}}
     <link href="/styles/vendor/bootstrap-datepicker.css" rel="stylesheet">
     <link href="/styles/vendor/bootstrap-timepicker.min.css" rel="stylesheet">
+    <link href="/styles/vendor/jquery.jcrop.min.css" rel="stylesheet">
   {{/into}}
   {{into slot="js"}}
     var day_data = <?= json_encode($this->day); ?>;
   {{/into}}
   {{template name='moment_item_placeholder'}}
-    <li class="well moment-item-placeholder">
-      <a class="not-decorated text-gray"><i class="icon-plus-sign icon-2x with-tooltip" data-original-title="Click or drag files here to add moments"></i></a>
-    </li>
+    <div class="well placeholder">
+      <a class="not-decorated text-gray action-create">
+        <i class="icon-plus-sign icon-2x with-tooltip" data-original-title="Click or drag files here to add moments"></i>
+      </a>
+    </div>
   {{/template}}
+
+  {{template name='day_like_button'}}
+    <? if($this->toolkit->getUser()) { ?>
+      <?php
+      $like_disabled = false;
+      if(!property_exists($this->day, 'is_liked')) {
+        $like_disabled = true;
+        $like_text = "Like";
+        $like_icon = "icon-heart";
+      } elseif($this->day->is_liked) {
+        $like_text = "Unlike";
+        $like_icon = "icon-heart";
+      } else {
+        $like_text = "Like";
+        $like_icon = "icon-heart-empty"; // TODO show message when user cant like
+      }
+      ?>
+      <div class="input-prepend small <?= $like_disabled ? ' with-tooltip" data-original-title="You can\'t vote for your own days' : '' ?>">
+        <span class="add-on"><i class="icon <?= $like_icon ?>"></i> {$this->day->likes_count}</span>
+        <button class="btn btn-small action-like<?= $like_disabled ? ' disabled' : '' ?>" type="button"> <?= $like_text ?></button>
+      </div>
+    <? } ?>
+  {{/template}}
+
+  {{template name='day_share_button'}}
+    <button class="btn btn-small action-share with-tooltip" data-original-title="Share this day with your Facebook friends" type="button">
+      <i class="icon-share"></i> Share
+    </button>
+  {{/template}}
+
+  {{template name='day_report_button'}}
+    <button class="btn btn-small action-complain with-tooltip" data-original-title="Report about inappropriate content" type="button">
+      <i class="icon-warning-sign"></i> Complain
+    </button>
+  {{/template}}
+
   {{into slot="templates"}}
     <script id="template_comments" type="text/x-handlebars-template">
       [[#comments]]
-        <li class="comment-item" style="display:none" comment_id="[[id]]">
-          <img src="[[user.image_72]]" width="72" class="pull-left img-rounded" alt="" />
+        <article class="new" style="display:none" data-comment-id="[[id]]">
+          <a href="/pages/[[user.id]]/user">
+            <img src="[[user.image_72]]" width="72" class="pull-left img-rounded" />
+          </a>
 
           <div class="bubble left">
             <? if($this->toolkit->getUser()) { ?>
               [[#if-eq user.id <?= $this->toolkit->getUser()->id ?>]]
-                <ul class="unstyled inline pull-right not-decorated">
+                <ul class="unstyled inline not-decorated controls-absolute">
                   <li>
-                    <a class="btn-comment-delete text-gray">
-                      <i class="icon-trash with-tooltip" data-original-title="Delete"></i>
+                    <a class="action-delete text-gray">
+                      <i class="icon-trash with-tooltip" data-original-title="Delete comment"></i>
                     </a>
                   </li>
                 </ul>
@@ -62,55 +105,109 @@ $this->day->is_gathering_enabled = false;
               <small>by <b><a href="/pages/[[user.id]]/user">[[user.name]]</a></b></small>
             </p>
           </div>
-        </li>
+        </article>
       [[/comments]]
     </script>
 
     <script id="template_moment" type="text/x-handlebars-template">
-      <li class="well moment-item moment-item-new info">
-        <ul class="unstyled inline not-decorated controls controls-absolute">
-          <li class="visible-if-saved">
-            <a id="trigger_moment_select_as_cover" class="text-gray with-tooltip" data-original-title="Select as day cover">
-              <i class="icon-picture"></i>
-            </a>
-          </li>
+      <article class="well editable template [[#unless moment.image]]noimage[[/unless]]" itemscope itemtype="http://schema.org/ImageObject">
+        <ul class="unstyled inline not-decorated controls controls-absolute visible-desktop">
           <li>
-            <a class="text-gray" id="trigger_moment_delete"><i class="icon-trash with-tooltip" data-original-title="Delete"></i></a>
+            <a class="text-gray with-tooltip action-delete" data-original-title="Delete moment">
+              <i class="icon-trash"></i>
+            </a>
           </li>
         </ul>
 
-        <div class="moment-time text-center text-gray">
-          <span class="input-prepend input-append small">
-            <span class="add-on hidden-phone"><i class="icon-calendar"></i></span>
-            <input type="text" subtype="date" value="[[moment.date]]" />
+        <div class="time text-center text-gray">
+          <form name="datetime_form" class="form-inline">
+            <span class="input-prepend small">
+              <span class="add-on hidden-phone"><i class="icon-calendar"></i></span>
+              <input type="date" name="date" value="[[moment.date]]" min="2001-01-01" max="<?php date("Y-m-d"); ?>" required="required" />
+            </span>
 
-            <span class="add-on hidden-phone"><i class="icon-time"></i></span>
-            <input type="text" subtype="time" value="[[moment.time]]" seconds="[[moment.time_seconds]]" timezone="[[moment.timezone]]" />
+            <span class="input-prepend small">
+              <span class="add-on hidden-phone"><i class="icon-time"></i></span>
+              <input type="time" name="time" value="[[moment.time]]" required="required" />
 
-            <button id="trigger_save_time" class="btn btn-small with-spinner disabled" type="button">
-              <i class="spinner icon icon-spin icon-refresh"></i>
+              <input type="hidden" name="seconds" value="[[moment.time_seconds]]" required="required" />
+            </span>
+
+            <input type="hidden" name="timezone" value="[[moment.timezone]]" required="required" />
+
+            <button class="btn btn-small has-spinner disabled" type="submit">
+              <span class="spinner icon-spin icon-refresh"></span>
               Save
             </button>
+          </form>
+        </div>
+
+        <div class="image has-bage block-center">
+          <div class="thumbnail">
+            <img src="[[#if moment.image]][[moment.image]][[else]]/img/moment-placeholder.gif[[/if]]" itemprop="contentUrl" />
+          </div>
+
+          <span class="bage bage-large bage-bottom-right has-hover-bar visible-desktop image-toolbar">
+            <a class="hover-bar-indicator text-gray">
+              <i class="icon-pencil"></i>
+              <i class="icon-caret-right"></i>
+            </a>
+
+            <span class="hover-bar">
+              <a class="text-gray with-tooltip has-overlap action-use-as-cover disabled" data-original-title="Use as day cover">
+                <i class="icon-picture"></i>
+                <i class="overlap icon-ok"></i>
+              </a>
+              <span class="action-rotate">
+                <a class="text-gray with-tooltip action-rotate-left" data-original-title="Rotate left">
+                  <i class="icon-undo"></i>
+                </a>
+                <a class="text-gray with-tooltip action-rotate-right" data-original-title="Rotate right">
+                  <i class="icon-repeat"></i>
+                </a>
+              </span>
+              <a class="text-gray with-tooltip action-crop" data-original-title="Crop this image">
+                <i class="icon-cut"></i>
+              </a>
+            </span>
           </span>
         </div>
 
-        <div class="moment-image-container block-center">
-          <img src="[[#if moment.image]][[moment.image]][[else]]/img/moment-placeholder.gif[[/if]]" class="img-polaroid" alt="" />
+        <div class="btn-toolbar text-center hidden-desktop image-toolbar">
+          <a class="btn btn-small action-use-as-cover disabled">
+            <i class="icon-picture"></i> Use as cover
+          </a>
+          <span class="btn-group action-rotate">
+            <a class="btn btn-small action-rotate-left">
+              <i class="icon-undo"></i>
+            </a>
+            <a class="btn btn-small">
+              <i class="icon-repeat action-rotate-right"></i>
+            </a>
+          </span>
+          <a class="btn btn-small action-crop">
+            <i class="icon-cut"></i> Crop
+          </a>
         </div>
 
-        <div class="moment-description bubble block-center">
-          <textarea rows="3" class="input-block-level" placeholder="Enter moment description...">[[moment.description]]</textarea>
-          <button type="submit" class="btn btn-block btn-success with-spinner">
-            <i class="spinner icon icon-spin icon-refresh"></i>
-            Add moment
+        <div class="description bubble block-center">
+          <form name="moment_description_form">
+            <textarea name="text" rows="4" class="input-block-level" placeholder="Enter moment description...">[[moment.description]]</textarea>
+            <button type="submit" class="btn btn-block has-spinner disabled">
+              <span class="spinner icon-spin icon-refresh"></span>
+              Create moment
+            </button>
+          </form>
+          <button type="button" class="btn btn-block btn-danger action-delete visible-phone visible-tablet">
+            Delete moment
           </button>
         </div>
-      </li>
+      </article>
 
       {{apply template="moment_item_placeholder" /}}
     </script>
 
-    <script id="template_image_select" type="text/x-handlebars-template">
+    <script id="template_image_select_popover" type="text/x-handlebars-template">
       <div class="file-selector">
         <h5>From PC:</h5>
         <div class="text-center">
@@ -145,7 +242,7 @@ $this->day->is_gathering_enabled = false;
       </div>
     </script>
 
-    <script id="template_image_select_mobile" type="text/x-handlebars-template">
+    <script id="template_image_select_popover_mobile" type="text/x-handlebars-template">
       <div class="file-selector">
         <div class="text-center">
           <div class="fileupload fileupload-new" data-provides="fileupload">
@@ -163,8 +260,8 @@ $this->day->is_gathering_enabled = false;
       </div>
     </script>
 
-    <script id="template_upload_progress" type="text/x-handlebars-template">
-      <div class="moment-upload-progress" style="display:none">
+    <script id="template_image_upload_progress" type="text/x-handlebars-template">
+      <div class="image-upload-progress" style="display:none">
         <div class="progress progress-striped active">
           <div class="bar" style="width: 1%;"></div>
         </div>
@@ -190,13 +287,13 @@ $this->day->is_gathering_enabled = false;
 
     <script id="template_import_moments_container" type="text/x-handlebars-template">
       <div class="import-container" style="display:none">
-        <button class="btn btn-block paginate-prev with-spinner" style="margin-bottom:25px;">
-          <i class="spinner icon icon-spin icon-refresh"></i>
+        <button class="btn btn-block paginate-prev has-spinner" style="margin-bottom:25px;">
+          <span class="spinner icon-spin icon-refresh"></span>
           Earlier
         </button>
         <ul class="thumbnails inline unstyled"></ul>
-        <button class="btn btn-block paginate-next with-spinner" style="margin-top:-15px;">
-          <i class="spinner icon icon-spin icon-refresh"></i>
+        <button class="btn btn-block paginate-next has-spinner" style="margin-top:-15px;">
+          <span class="spinner icon-spin icon-refresh"></span>
           Later
         </button>
       </div>
@@ -205,287 +302,336 @@ $this->day->is_gathering_enabled = false;
 
   {{into slot="content"}}
     <div class="row-fluid">
-      <div class="span6 offset3">
-        <? if($this->is_owner) { ?>
-          <ul class="unstyled inline not-decorated pull-right controls">
-            <li>
-              <a href="/pages/{$#day->id}/day?preview" class="text-gray">
-                <i class="icon-eye-open with-tooltip" data-original-title="Enter preview mode"></i>
-              </a>
-            </li>
-            <li>
-              <a id="trigger_day_delete" day_id="{$#day->id}" class="text-gray">
-                <i class="icon-trash with-tooltip" data-original-title="Delete day"></i>
-              </a>
-            </li>
-          </ul>
-
-          <div class="day-controls-group">
-            <div id="day_title_selector" class="clearfix">
-              <h5>Day title:</h5>
-              <span class="input-append small span12">
-                <input type="text" class="day-title span9" value="{$#day->title}" />
-                <button class="btn disabled btn-small span2 with-spinner" type="submit">
-                  <i class="spinner icon icon-spin icon-refresh"></i>
-                  Save
-                </button>
-              </span>
-              <small class="alert-small help-block" style="display:none">
-                * <span class="contents"></span>
-              </small>
-            </div>
-
-            <div id="day_type_selector">
-              <h5>Day type:</h5>
-              <div class="btn-group span12">  <!-- TODO: data-toggle="buttons-radio" -->
-                <button class="btn btn-small<? if($this->day->type == 'Working day') {?> active btn-success<? } ?>">Working day</button>
-                <button class="btn btn-small<? if($this->day->type == 'Day off') {?> active btn-success<? } ?>">Day off</button>
-                <button class="btn btn-small<? if($this->day->type == 'Holiday') {?> active btn-success<? } ?>">Holiday</button>
-                <button class="btn btn-small<? if($this->day->type == 'Trip') {?> active btn-success<? } ?>">Trip</button>
-              </div>
-            </div>
-
-            <!--
-            <div id="day_open_switch" class="row">
-              <h5>Friends can add moments:</h5>
-              <div class="btn-group span12">
-                <button class="btn btn-small open-action <? if($this->day->is_gathering_enabled) {?> active btn-success<? } ?>">Yes</button>
-                <button class="btn btn-small close-action <? if(!$this->day->is_gathering_enabled) {?> active btn-danger<? } ?>">No</button>
-              </div>
-            </div>
-            -->
+      <article class="span8 offset2 day">
+        <? if($this->is_preview) { ?>
+          <div class="alert">
+            <h2>This is preview page!</h2>
+            Here you can see how your day is displayed for other users! <br />
+            <a href="/pages/{$#day->id}/day" class="btn btn-small btn-success with-tooltip" data-original-title="Leave preview mode">
+              &larr; Back to edit
+            </a>
           </div>
-        <? } else { ?>
-          <? if($this->is_preview) { ?>
-            <div class="alert alert-block day-preview-alert">
-              <h3>This is preview page!</h3>
-              Here you can see how your day is displayed for other users!
-              <a href="/pages/{$#day->id}/day">Go back.</a>
+        <? } ?>
+
+        <header>
+          <? if($this->is_owner) { ?>
+            <div class="day-controls-group">
+              <div class="row-fluid">
+                <h5>Day title:</h5>
+                <form name="day_title_from" class="span12">
+                  <div class="span12 input-append small">
+                    <input type="text" name="title" value="{$#day->title}" class="day-title span9" style="min-width:80%;" />
+                    <button class="btn disabled btn-small btn-addon span2 has-spinner" type="submit">
+                      <span class="spinner icon-spin icon-refresh"></span>
+                      Save
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <div class="row-fluid">
+                <h5>Day type:</h5>
+                <form name="day_type_from" class="form-inline span12 btn-group span12" data-toggle="buttons-radio">
+                  <button class="btn btn-small<? if($this->day->type == 'Working day') {?> active<? } ?>">Working day</button>
+                  <button class="btn btn-small<? if($this->day->type == 'Day off') {?> active<? } ?>">Day off</button>
+                  <button class="btn btn-small<? if($this->day->type == 'Holiday') {?> active<? } ?>">Holiday</button>
+                  <button class="btn btn-small<? if($this->day->type == 'Trip') {?> active<? } ?>">Trip</button>
+                </form>
+              </div>
+
+              <div class="row-fluid">
+                <h5>Created at:</h5>
+                <span class="span12">
+                  <time class="with-tooltip" data-original-title="This is date of first moment in day">{$#day->date}</time>
+                </span>
+              </div>
+            </div>
+          <? } else { ?>
+            <h1 class="title">{$#day->title}</h1>
+
+            <div class="info muted">
+              <time class="pull-right-on-tablet pull-right-on-desktop">
+                <i class="icon icon-calendar hidden-phone"></i> {$#day->date}
+              </time>
+              <div>
+                {$#day->type} by <b><a href="/pages/{$#day->user->id}/user">{$#day->user->name}</a></b>
+              </div>
+            </div>
+          <? } ?>
+        </header>
+
+        <div class="day-toolbar">
+          <? if($this->is_owner) { ?>
+            <div class="pull-right-on-desktop day-controls-group btn-toolbar">
+              <div class="input-prepend small">
+                <span class="add-on"><i class="icon-eye-open"></i> {$this->day->views_count}</span>
+                <a href="/pages/{$#day->id}/day?preview" class="btn btn-small with-tooltip" data-original-title="Enter preview mode">
+                  Preview
+                </a>
+              </div>
+
+              <button type="button" class="btn btn-small btn-danger with-tooltip action-delete" data-original-title="Delete day">
+                Delete day
+              </button>
             </div>
           <? } ?>
 
-          <h2 class="day-title">{$#day->title}</h2>
-        <? } ?>
+          <div class="btn-toolbar">
+            <div class="input-prepend small with-tooltip" data-original-title="Scroll to comments">
+              <span class="add-on"><i class="icon-comments"></i> {$this->day->comments_count}</span>
+              <button class="btn btn-small scrollTo comments" type="button">Comments</button>
+            </div>
 
-        <div class="muted day-info">
-          <span class="pull-right-on-tablet pull-right-on-desktop">
-            <i class="icon icon-calendar"></i> {$#day->date}
-          </span>
-          {$#day->type} by <b><a href="/pages/{$#day->user->id}/user">{$#day->user->name}</a></b>
-          <!-- @ {$#day.location} -->
+            {{apply template="day_like_button" /}}
+
+            {{apply template="day_share_button" /}}
+          </div>
         </div>
 
-        <div>
-          <h5>Go to:</h5>
-          <ul class="unstyled">
-            <li>
-              <div class="input-prepend small">
-                <span class="add-on "><i class="icon-comments"></i> {$this->day->comments_count}</span>
-                <button class="btn btn-small scrollTo comments" type="button">Comments</button>
-              </div>
-            </li>
-          </ul>
-        </div>
-
-        <!--
-				<? if($this->day->is_gathering_enabled && !$this->is_owner) { ?>
-            <div class="alert alert-info">You can help {$#day->user->name} by adding new moments.</div>
-				<? } ?>
-				-->
-
-				<ul class="unstyled moments-list">
+        <section class="moments">
           <? if($this->is_owner) { ?>
-						{{apply template="moment_item_placeholder" /}}
+            {{apply template="moment_item_placeholder" /}}
           <? } ?>
 
           {{list using="$#day->moments"}}
             {{list:item}}
-              <li class="well moment-item {{if var='$item.is_hidden'}}moment-item-hidden{{/if}}" moment_id="{$item->id}" itemscope itemtype="http://schema.org/ImageObject">
-                  <? if($this->is_owner || $this->day->is_gathering_enabled) { ?>
-                    <ul class="unstyled inline not-decorated controls controls-absolute">
-                      <? if($this->is_owner) { ?>
-                        <li class="visible-if-saved">
-                          <a id="trigger_moment_select_as_cover" class="text-gray with-tooltip" data-original-title="Select as day cover">
-                            <i class="icon-picture"></i>
-                          </a>
-                        </li>
-                      <? } ?>
-                      <li>
-                        <a id="trigger_moment_delete" class="text-gray with-tooltip" data-original-title="Delete">
-                          <i class="icon-trash"></i>
-                        </a>
-                      </li>
-                    </ul>
-                  <? } ?>
+              <article class="well<? if($this->is_owner) {?> editable<? }?>" itemscope itemtype="http://schema.org/ImageObject" data-moment-id="{$item->id}">
+                <? if($this->is_owner) { ?>
+                  <ul class="unstyled inline not-decorated controls controls-absolute visible-desktop">
+                    <li>
+                      <a class="text-gray with-tooltip action-delete" data-original-title="Delete moment">
+                        <i class="icon-trash"></i>
+                      </a>
+                    </li>
+                  </ul>
+                <? } ?>
 
-                  <div class="moment-time text-center text-gray">
-                    <? if($this->is_owner) { ?>
-                      <span class="input-prepend input-append small">
+                <div class="time text-center text-gray">
+                  <? if($this->is_owner) { ?>
+                    <form name="datetime_form" class="form-inline">
+                      <span class="input-prepend small">
                         <span class="add-on hidden-phone"><i class="icon-calendar"></i></span>
-                        <input type="text" subtype="date" value="{$item->date}" />
-
-                        <span class="add-on hidden-phone"><i class="icon-time"></i></span>
-                        <input type="text" subtype="time" value="{$item->time}" seconds="{$item->time_seconds}" timezone="{$item->timezone}" />
-
-                        <button id="trigger_save_time" class="btn btn-small with-spinner disabled" type="button">
-                          <i class="spinner icon icon-spin icon-refresh"></i>
-                          Save
-                        </button>
+                        <input type="date" name="date" value="{$item->date}" min="2001-01-01" max="<?php date("Y-m-d"); ?>" required="required" />
                       </span>
+
+                      <span class="input-prepend small">
+                        <span class="add-on hidden-phone"><i class="icon-time"></i></span>
+                        <input type="time" name="time" value="{$item->time}" required="required" />
+
+                        <input type="hidden" name="seconds" value="{$item->time_seconds}" required="required" />
+                      </span>
+
+                      <input type="hidden" name="timezone" value="{$item->timezone}" required="required" />
+
+                      <button class="btn btn-small has-spinner disabled" type="submit">
+                        <span class="spinner icon-spin icon-refresh"></span>
+                        Save
+                      </button>
+                    </form>
+                  <? } else { ?>
+                    <time class="text-center text-gray" datetime="{$item->datetime_iso}"><i class="icon-time"></i> {$item->time}</time>
+                  <? } ?>
+                </div>
+
+                <div class="image has-bage block-center">
+                  <div class="thumbnail">
+                    <img src="{$item->image_532}" itemprop="contentUrl" />
+                  </div>
+
+                  <? if($this->is_owner) { ?>
+                    <span class="bage bage-large bage-bottom-right visible-desktop image-toolbar">
+                      <span class="hover-toggler">
+                        <i class="icon-pencil"></i>
+                        <i class="icon-caret-right"></i>
+                      </span>
+
+                      <span class="hover-bar">
+                        <a class="with-tooltip has-overlap action-use-as-cover" data-original-title="Use as day cover">
+                          <i class="icon-picture"></i>
+                          <i class="overlap icon-ok"></i>
+                        </a>
+                        <span class="actions-block">
+                          <a class="with-tooltip action-rotate-left" data-original-title="Rotate left">
+                            <i class="icon-undo"></i>
+                          </a>
+                          <a class="with-tooltip action-rotate-right" data-original-title="Rotate right">
+                            <i class="icon-repeat"></i>
+                          </a>
+                        </span>
+                        <a class="with-tooltip action-crop" data-original-title="Crop this image">
+                          <i class="icon-cut"></i>
+                        </a>
+                      </span>
+
+                      <span class="confirm-bar">
+                        <i class="icon-caret-right"></i>
+                        <a class="hover-bar-indicator btn btn-success btn-mini with-tooltip has-spinner action-edit-confirm" data-original-title="Save changes">
+                          <span class="spinner icon-refresh icon-spin"></span>
+                          Save
+                        </a>
+                      </span>
+                    </span>
+                  <? } ?>
+                </div>
+
+                <? if($this->is_owner) { ?>
+                  <div class="btn-toolbar text-center hidden-desktop image-toolbar">
+                    <a class="btn btn-small action-use-as-cover">
+                      <i class="icon-picture"></i> Use as cover
+                    </a>
+                    <span class="btn-group action-rotate">
+                      <a class="btn btn-small action-rotate-left">
+                        <i class="icon-undo"></i>
+                      </a>
+                      <a class="btn btn-small action-rotate-right">
+                        <i class="icon-repeat"></i>
+                      </a>
+                    </span>
+                    <a class="btn btn-small action-crop">
+                      <i class="icon-cut"></i> Crop
+                    </a>
+                  </div>
+                <? } ?>
+
+                <? if($this->is_owner || $item->description) { ?>
+                  <div class="description bubble block-center">
+                    <? if($this->is_owner) { ?>
+                      <form name="moment_description_form">
+                        <textarea name="text" rows="4" class="input-block-level" placeholder="Enter moment description...">{$item->description|default:""}</textarea>
+                        <button type="submit" class="btn btn-block has-spinner disabled">
+                          <span class="spinner icon-spin icon-refresh"></span>
+                          Save description
+                        </button>
+                      </form>
+                      <button type="button" class="btn btn-block btn-danger action-delete visible-phone visible-tablet">
+                        Delete moment
+                      </button>
                     <? } else { ?>
-                      <time datetime="{$item->datetime_iso}"><i class="icon-time"></i> {$item->time}</time>
+                      <div class="no-overflow" itemprop="description">
+                        {$item->description|nl2br}
+                      </div>
                     <? } ?>
                   </div>
-
-                  <div class="moment-image-container block-center">
-                    <img src="{$item->image_532}" class="img-polaroid" itemprop="contentUrl" alt="" />
-                  </div>
-
-                  <? if($this->is_owner || $item->description) { ?>
-                    <div class="moment-description bubble block-center">
-                      <? if($this->is_owner) { ?>
-                        <textarea rows="3" class="input-block-level" placeholder="Enter moment description...">{$item->description|default:""}</textarea>
-                        {{if var='$item.is_hidden'}}
-                          <button type="submit" class="btn btn-block btn-success approve-action">Approve</button>
-                        {{else}}
-                          <button type="submit" class="btn btn-block with-spinner disabled">
-                            <i class="spinner icon icon-spin icon-refresh"></i>
-                            Save description
-                          </button>
-                        {{/if}}
-                      <? } else { ?>
-                        <div class="no-overflow" itemprop="description">
-                          {$item->description|nl2br}
-                        </div>
-                      <? } ?>
-                    </div>
-                  <? } ?>
-              </li>
+                <? } ?>
+              </article>
               <? if($this->is_owner) { ?>
                 {{apply template="moment_item_placeholder" /}}
               <? } ?>
             {{/list:item}}
           {{/list}}
-				</ul>
+        </section>
 
         <? if($this->is_owner || $this->day->final_description) { ?>
-          <div class="bubble final-description">
+          <section class="final-description bubble">
             <? if($this->is_owner) { ?>
-              <textarea rows="3" class="input-block-level" placeholder="Enter final description...">{$#day->final_description|default:""}</textarea>
+              <form name="final_description_form">
+                <textarea name="text" rows="3" class="input-block-level" placeholder="Enter final description...">{$#day->final_description|default:""}</textarea>
 
-              <? if($this->day->final_description) { ?>
-                <button type="submit" class="btn btn-block disabled">Save changes</button>
-              <? } else { ?>
-                <button type="submit" class="btn btn-block<? if(count($this->day->moments) > 1) { ?> disabled<? } ?>">Close the day</button>
-              <? } ?>
+                <? if($this->day->final_description) { ?>
+                  <button type="submit" class="btn btn-block disabled">Save changes</button>
+                <? } else { ?>
+                  <button type="submit" class="btn btn-block<? if(count($this->day->moments) > 1) { ?> disabled<? } ?>">Close the day</button>
+                <? } ?>
+              </form>
             <? } else { ?>
               <div class="no-overflow">
                 {$#day->final_description|default:""|nl2br}
               </div>
             <? } ?>
-          </div>
+          </section>
         <? } else { ?>
           <div class="alert alert-block">
-            <h4>This day is live!</h4>
+            <h2>This day is live!</h2>
             Stay tuned for new moments in this day, it's not finished yet!
           </div>
         <? } ?>
 
         <div class="clearfix">
-          <ul class="unstyled inline pull-right day-bottom-actions">
-            <? if($this->toolkit->getUser()) { ?>
-              <li class="like">
-                <?php
-                $like_disabled = false;
-                if(!property_exists($this->day, 'is_liked')) {
-                  $like_disabled = true;
-                  $like_text = "Like";
-                  $like_icon = "icon-heart";
-                } elseif($this->day->is_liked) {
-                  $like_text = "Unlike";
-                  $like_icon = "icon-heart";
-                } else {
-                  $like_text = "Like";
-                  $like_icon = "icon-heart-empty";
-                }
-                ?>
-                <div class="input-prepend small">
-                  <span id="toggle_like_icon" class="add-on"><i class="icon <?= $like_icon ?>"></i> {$this->day->likes_count}</span>
-                  <button id="toggle_like" class="btn btn-small<?= $like_disabled ? ' disabled' : '' ?>" type="button"> <?= $like_text ?></button>
-                </div>
-              </li>
-            <? } ?>
-            <li class="share">
-              <button id="toggle_fb_share" class="btn btn-small" type="button">
-                <i class="icon-share"></i> Share
-              </button>
-            </li>
-          </ul>
+          <div class="btn-toolbar pull-right">
+            {{apply template="day_like_button" /}}
+            {{apply template="day_share_button" /}}
+            {{apply template="day_report_button" /}}
+          </div>
         </div>
 
-        <hr/>
+        <hr />
 
-        <a name="comments"></a>
-        <? if($this->day->comments && $this->day->comments_count > 0 || $this->toolkit->getUser()) { ?>
-          <div class="comments">
+        <section class="comments">
+          <a name="comments"></a>
+          <? if($this->day->comments && $this->day->comments_count > 0) { ?>
             <span class="pull-right not-decorated text-gray">
               <i class="icon-comments"></i>
-              <span id="comments_counter"><? if($this->day->comments_count > 3) { ?>3/<? } ?>{$this->day->comments_count}</span>
+              <span class="counter"><? if($this->day->comments_count > 3) { ?>3/<? } ?>{$this->day->comments_count}</span>
             </span>
-            <h2>Comments:</h2>
-              <ul class="unstyled">
-                {{list using="$#day->comments"}}
-                  {{list:item}}
-                    <li class="comment-item" comment_id="{$item->id}">
-                      <img src="{$item->user->image_72}" width="72" class="pull-left img-rounded" alt="" />
+          <? } ?>
+          <h2>Comments:</h2>
 
-                      <div class="bubble left">
-                        <? if($this->toolkit->getUser() && $item->user->id == $this->toolkit->getUser()->id) { ?>
-                          <ul class="unstyled inline not-decorated controls-absolute">
-                            <li>
-                              <a class="btn-comment-delete text-gray">
-                                <i class="icon-trash with-tooltip" data-original-title="Delete"></i>
-                              </a>
-                            </li>
-                          </ul>
-                        <? } ?>
-                        <p class="text">
-                          {$item->text}
+          <div class="articles">
+            <? if($this->day->comments && $this->day->comments_count > 0) { ?>
+              {{list using="$#day->comments"}}
+                {{list:item}}
+                  <article data-comment-id="{$item->id}">
+                    <a href="/pages/{$item->user->id}/user">
+                      <img src="{$item->user->image_72}" width="72" class="pull-left img-rounded" />
+                    </a>
 
-                          <small>by <b><a href="/pages/{$item->user->id}/user">{$item->user->name}</a></b></small>
-                        </p>
-                      </div>
-                    </li>
-                  {{/list:item}}
-                {{/list}}
-                <li class="comments-loader">
-                  <button class="btn btn-small btn-block with-spinner"<? if($this->day->comments_count < 4) { ?> style="display:none"<? } ?> type="button">
-                    <i class="spinner icon icon-spin icon-refresh"></i>
-                    Load more comments
-                  </button>
-                </li>
-              </ul>
+                    <div class="bubble left">
+                      <? if($this->toolkit->getUser() && $item->user->id == $this->toolkit->getUser()->id) { ?>
+                        <ul class="unstyled inline not-decorated controls-absolute">
+                          <li>
+                            <a class="action-delete text-gray">
+                              <i class="icon-trash with-tooltip" data-original-title="Delete comment"></i>
+                            </a>
+                          </li>
+                        </ul>
+                      <? } ?>
+                      <p class="text">
+                        {$item->text}
 
-            <? if($this->toolkit->getUser()) { ?>
-              <textarea rows="3" class="input-block-level"></textarea>
-              <button type="submit" class="btn btn-block with-spinner disabled">
-                <i class="spinner icon icon-spin icon-refresh"></i>
-                Send comment
-              </button>
-		          <button class="btn btn-block scrollTo top hidden-desktop">
-			          <i class="icon-angle-up"></i>
-			          Back to top
-		          </button>
+                        <small>by <b><a href="/pages/{$item->user->id}/user">{$item->user->name}</a></b></small>
+                      </p>
+                    </div>
+                  </article>
+                {{/list:item}}
+              {{/list}}
             <? } ?>
           </div>
-        <? } ?>
 
-        <? if(!$this->toolkit->getUser()) { ?>
-          <div class="alert alert-block">
-            <a href="#" class="trigger_login">Sign up</a> to write comment
+          <div class="loader-wrap">
+            <button class="btn btn-block action-load-next has-spinner<? if(!$this->day->comments || $this->day->comments_count < 4) { ?> disabled" style="opacity:0<? } ?>">
+              <span class="spinner icon-spin icon-refresh"></span>
+              Load more comments
+            </button>
           </div>
-        <? } ?>
-      </div>
+
+          <? if($this->toolkit->getUser()) { ?>
+            <form name="add_comment_form">
+              <textarea rows="3" class="input-block-level text"></textarea>
+              <button type="submit" class="btn btn-block has-spinner disabled">
+                <span class="spinner icon-spin icon-refresh"></span>
+                Send comment
+              </button>
+            </form>
+          <? } else { ?>
+            <div class="alert alert-block">
+              <a href="#" class="trigger_login">Sign up</a> to write comment
+            </div>
+          <? } ?>
+        </section>
+
+        <div class="visible-phone scrollHelperMobile">
+          <hr />
+          <button class="btn btn-block scrollTo top">
+            Back to top
+          </button>
+        </div>
+      </article>
+    </div>
+
+    <div class="scrollHelper visible-desktop visible-tablet">
+      <a href="#" class="scrollTo top">
+        Back to top <i class="icon-angle-up"></i>
+      </a>
     </div>
 
     <div id="import_modal" class="modal hide fade import-modal" tabindex="-1" role="dialog" aria-labelledby="import_modal_label" aria-hidden="true">
@@ -495,11 +641,5 @@ $this->day->is_gathering_enabled = false;
       </div>
       <div class="modal-body modal-body-main"></div>
     </div>
-
-    <section class="scrollHelper show-desktop hidden-phone hidden-tablet">
-      <a href="#" class="scrollTo top">
-	      Back to top <i class="icon-angle-up"></i>
-      </a>
-    </section>
   {{/into}}
 {{/wrap}}

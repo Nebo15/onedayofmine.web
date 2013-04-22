@@ -1,192 +1,268 @@
 $(function() {
+  "use strict";
+
+  // Day cointainer
+  var $day = $('.day');
+
   // Comments
   (function() {
-    // Comments updater
-    var comments = $('.comments');
-    var comments_input  = comments.find('textarea');
-    var comments_button = comments.find('button[type=submit]');
-    var comments_delete_button_selector = '.btn-comment-delete';
-    var comments_delete_button = comments.find(comments_delete_button_selector);
-    var comments_counter = comments.find('#comments_counter');
+    // Container
+    var $comments = $day.find('.comments');
+    var $comments_counter = $comments.find('.counter');
 
-    var comments_loader = $('.comments-loader');
-    var comments_loader_button = comments_loader.find('button[type=button]');
+    // List
+    var $comments_list = $comments.find('.articles');
+    var $comments_load_next_btn = $comments.find('.action-load-next');
+
+    var comment_delete_btn_selector = '.action-delete';
+    var $comment_delete_btn = $comments_list.find(comment_delete_btn_selector);
+
+    // JS Template
     var comments_template = Template.prepareTemplate($('#template_comments'));
 
-    var comment_storage_key = "days/"+day_data.id+"/comment";
-
-    var comment_saved_input = Storage.get(comment_storage_key);
-    if(comments_input.val() == '' && comment_saved_input !== undefined && comment_saved_input) {
-      comments_input.val(comment_saved_input);
-      comments_button.removeClass('disabled').addClass('btn-success');
-    }
-
+    // Comments counter helpers
     var getCommentsCounter = function() {
-      var text = comments_counter.text();
+      var text = $comments_counter.text();
       return parseInt(text.substring(text.indexOf('/')+1), 10);
     };
 
     var setCommentsCounter = function(value, callback) {
-      var real_count = $('.comment-item').length;
+      var real_count = $comments_list.children().length;
 
-      if(value < real_count) {
+      if(real_count > value) {
+        $comments_load_next_btn.animate({opacity: 0}, 500, function() {
+          $comments_load_next_btn.addClass('disabled');
+        });
         value = real_count;
-        if(typeof callback == 'function') {
-          callback();
-        }
-      } else if(value > real_count) {
-        if(comments_loader_button.css('display') == 'none') {
-          comments_loader_button.fadeIn(500);
-        }
+      } else if(real_count < value) {
+        $comments_load_next_btn.animate({opacity: 1}, 500, function() {
+          $comments_load_next_btn.removeClass('disabled');
+        });
         value = real_count + '/' + value;
-        if(typeof callback == 'function') {
-          callback();
-        }
-      } else if(value > 3 && comments_loader_button.css('display') == 'none') {
-        comments_loader_button.fadeIn(500, callback);
       } else {
-        comments_loader_button.fadeOut(500, callback);
+        $comments_load_next_btn.animate({opacity: 0}, 500, function() {
+          $comments_load_next_btn.addClass('disabled');
+        });
       }
 
-      comments_counter.text(value);
+      $comments_counter.text(value);
+
+      if(typeof callback == 'function') {
+        callback();
+      }
     };
 
-    var deleteComment = function() {
-      var element = $(this).closest('[comment_id]');
-      var id = element.attr('comment_id');
+    // Comments loader helper
+    var updateComments = function() {
+      $comments_load_next_btn.showSpinner();
+      $comments_load_next_btn.addClass('disabled');
+
+      var comments_request = API.request('GET', '/days/' + day_data.id + '/comments', {
+        from: $comments_list.children().last().data('comment-id')
+      });
+
+      comments_request.success(function(response) {
+        $comments_load_next_btn.removeClass('disabled btn-danger');
+        $comments_load_next_btn.hideSpinner();
+
+        var new_comments = $($.trim(Template.compileElement(comments_template, {comments:response.data.result})));
+        bindTooltips(new_comments);
+        $comments_list.append(new_comments);
+
+        setCommentsCounter(getCommentsCounter(), function() {
+          $comments_list.children('.new').removeClass('new').fadeIn();
+        });
+      });
+
+      comments_request.error(function() {
+        $comments_load_next_btn.addClass('btn-danger').removeClass('disabled');
+        $comments_load_next_btn.hideSpinner();
+      });
+
+      comments_request.send();
+    };
+
+    // Comment deletion
+    $comments_list.on('click', comment_delete_btn_selector, function() {
+      var $article = $(this).closest('article[data-comment-id]');
+      if(!$article.length) {
+        console.error('Check comment id selector');
+        return false;
+      }
+      var id = $article.data('comment-id');
 
       if(confirm("Do you really want to delete your comment?")) {
         var delete_request = API.request('POST', '/day_comments/' + id + '/delete');
+
         delete_request.success(function() {
-          element.fadeOut(500, function() {
-            element.remove();
+          $article.fadeOut(500, function() {
+            $article.remove();
 
             setCommentsCounter(getCommentsCounter()-1);
           });
         });
 
         delete_request.error(function() {
-          alert("We can't delete right now, please try again later or tell us about this issue");
+          alert("We can't delete comment right now, please try again later");
         }, true);
 
         delete_request.send();
       }
-    };
-
-    var updateComments = function() {
-      if(!comments_loader_button.hasClass('disabled')) {
-        var comments_request = API.request('GET', '/days/'+day_data.id+'/comments', {
-          from: comments.find('li[comment_id]').last().attr('comment_id')
-        });
-
-        comments_loader_button.showSpinner();
-        comments_loader_button.addClass('disabled');
-
-        comments_request.success(function(response) {
-          comments_loader_button.removeClass('disabled btn-danger');
-          comments_loader_button.hideSpinner();
-
-          var tmp = $($.trim(Template.compileElement(comments_template, {comments:response.data.result})));
-
-          tmp.find(comments_delete_button_selector).click(deleteComment);
-
-          bindTooltips(tmp);
-          comments_loader.before(tmp);
-
-          setCommentsCounter(getCommentsCounter(), function() {
-            $('.comment-item').fadeIn();
-          });
-        });
-
-        comments_request.error(function() {
-          comments_loader_button.addClass('btn-danger');
-          comments_loader_button.hideSpinner();
-        });
-
-        comments_request.send();
-      }
-    };
-
-    comments_loader_button.click(updateComments);
-
-    // Comments
-    comments_input.on('keyup', function(event) {
-      if($.trim(comments_input.val()) != '') {
-        comments_button.removeClass('disabled btn-danger').addClass('btn-success');
-        Storage.set(comment_storage_key, comments_input.val());
-      } else {
-        comments_button.addClass('disabled').removeClass('btn-success btn-danger');
-        Storage.remove(comment_storage_key);
-      }
     });
 
-    comments_button.click(function() {
-      if(!comments_button.hasClass('disabled')) {
-        comments_input.prop("disabled", true);
-        comments_button.addClass('disabled');
-        comments_button.showSpinner();
+    // Load new comments
+    $comments_load_next_btn.click(function() {
+      if($comments_load_next_btn.hasClass('disabled')) {
+        return false;
+      }
 
-        var comments_request = API.request('POST', '/days/'+day_data.id+'/comment', {
-          text: comments_input.val()
+      updateComments();
+    });
+
+    // Autoload new comments
+    /*setTimeInterval(function() {
+      if($comments_load_next_btn.hasClass('disabled')) {
+        return false;
+      }
+
+      updateComments();
+    }, 10000);*/
+
+    // Editor
+    (function() {
+      var $editor_form = $comments.find('form[name=add_comment_form]');
+      var $editor_form_input = $comments.find('textarea');
+      var $editor_form_submit_btn = $comments.find('button[type=submit]');
+
+      // We store comment text for page-reload accidents
+      var storage_key = "days/" + day_data.id + "/comment";
+
+      // Getting saved data
+      var saved_input = Storage.get(storage_key);
+      if(saved_input && $editor_form_input.val() == '') {
+        $editor_form_input.val(saved_input);
+        $editor_form_submit_btn.removeClass('disabled').addClass('btn-success');
+      }
+
+      // Save comment text and activate/deactivate button
+      $editor_form_input.on('keyup', function() {
+        if($.trim($editor_form_input.val()) != '') {
+          Storage.set(storage_key, $editor_form_input.val());
+          $editor_form_submit_btn.removeClass('disabled btn-danger').addClass('btn-success');
+        } else {
+          Storage.remove(storage_key);
+          $editor_form_submit_btn.removeClass('btn-success btn-danger').addClass('disabled');
+        }
+      });
+
+      // Creating new comments
+      $editor_form.submit(function() {
+        if($editor_form_submit_btn.hasClass('disabled')) {
+          return false;
+        }
+
+        $editor_form_input.prop("disabled", true);
+        $editor_form_submit_btn.addClass('disabled');
+        $editor_form_submit_btn.showSpinner();
+
+        var comments_request = API.request('POST', '/days/' + day_data.id + '/comment', {
+          text: $editor_form_input.val()
         });
 
         comments_request.success(function() {
-          comments_input.val('');
-          comments_input.prop("disabled", false);
-          comments_button.hideSpinner();
+          $editor_form_input.val('');
+          $editor_form_submit_btn.hideSpinner();
+          $editor_form_input.prop("disabled", false);
           updateComments();
-          comments_button.addClass('disabled').removeClass('btn-success');
-          Storage.remove(comment_storage_key);
+          $editor_form_submit_btn.addClass('disabled').removeClass('btn-success btn-danger');
+          Storage.remove(storage_key);
         });
 
         comments_request.error(function() {
-          comments_button.hideSpinner();
-          comments_button.addClass('btn-danger').removeClass('btn-success');
+          $editor_form_submit_btn.hideSpinner();
+          $editor_form_input.prop("disabled", false);
+          $editor_form_submit_btn.addClass('btn-danger').removeClass('btn-success disabled');
         });
 
         comments_request.send();
-      }
-    });
 
-    comments_delete_button.click(deleteComment);
+        return false;
+      });
+    })();
   })();
 
   // Likes
   (function() {
     // Like toggle
-    if(day_data.is_liked !== undefined) {
-      var likes_count = day_data.likes_count;
-
-      var like_button = $('button#toggle_like');
-      like_button.click(function() {
-        if(!like_button.hasClass('disabled')) {
-          like_button.addClass('disabled');
-
-          var like_request;
-          if(day_data.is_liked == true) {
-            like_request = API.request('POST', '/days/'+day_data.id+'/unlike');
-            like_request.success(function() {
-              day_data.is_liked = false;
-              likes_count--;
-
-              like_button.text('Like');
-              $('#toggle_like_icon').html('<i class="icon icon-heart-empty"></i> ' + likes_count);
-              like_button.removeClass('disabled');
-            });
-          } else {
-            like_request = API.request('POST', '/days/'+day_data.id+'/like');
-            like_request.success(function() {
-              day_data.is_liked = true;
-              likes_count++;
-
-              like_button.text('Unlike');
-              $('#toggle_like_icon').html('<i class="icon icon-heart"></i> ' + likes_count);
-              like_button.removeClass('disabled');
-            });
-          }
-          like_request.send();
-        }
-      });
+    if(day_data.is_liked === undefined) {
+      return false;
     }
+
+    var $like_btn = $day.find('.action-like');
+    var $like_btn_addon = $like_btn.prev();
+
+    // Helper for likes counters
+    function updateLikesBtn() {
+      var icon = day_data.is_liked ? '<i class="icon-heart"></i>' : '<i class="icon-heart-empty"></i>';
+      $like_btn_addon.html(icon + ' ' + day_data.likes_count);
+
+      $like_btn.html(day_data.is_liked ? 'Unlike' : 'Like');
+    }
+
+    $like_btn.click(function() {
+      if($like_btn.hasClass('disabled')) {
+        return false;
+      }
+      $like_btn.addClass('disabled');
+
+      if(day_data.is_liked) {
+        var like_request = API.request('POST', '/days/' + day_data.id + '/unlike');
+        like_request.success(function() {
+          day_data.is_liked = false;
+          day_data.likes_count--;
+
+          updateLikesBtn();
+          $like_btn.removeClass('disabled');
+        });
+        like_request.send();
+      } else {
+        var unlike_request = API.request('POST', '/days/' + day_data.id + '/like');
+        unlike_request.success(function() {
+          day_data.is_liked = true;
+          day_data.likes_count++;
+
+          updateLikesBtn();
+          $like_btn.removeClass('disabled');
+        });
+        unlike_request.send();
+      }
+    });
+  })();
+
+  // Complain
+  (function() {
+    var $complain_btn = $day.find('.action-complain');
+
+    $complain_btn.click(function() {
+      if($complain_btn.hasClass('disabled')) {
+        return false;
+      }
+
+      if(confirm("Do you really want to send complain?")) {
+        $complain_btn.addClass('disabled');
+
+        var message = prompt("Why do you think this day should be deleted?");
+
+        var complain_request = API.request('POST', '/days/' + day_data.id + '/complain', {
+          text: message
+        });
+
+        complain_request.success(function() {
+          $complain_btn.html('<i class="icon-warning-sign"></i> Complained');
+        });
+
+        complain_request.send();
+      }
+    });
   })();
 });

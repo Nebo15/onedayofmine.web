@@ -1,52 +1,61 @@
 $(function () {
-	// Share toggle
-	var fb_share_button = $('button#toggle_fb_share');
-	fb_share_button.click(function () {
-    if(fb_share_button.hasClass('disabled')) {
-      return;
-    }
-    fb_share_button.addClass('disabled');
+  "use strict";
 
-		var desc = '';
-		var $description = $('.final-description');
-		if ($description.find('textarea').length > 0) {
-			desc = $description.find('textarea').val();
-		} else {
-			desc = $description.text();
-		}
+  // Main container
+  var $day = $('.day');
 
-		var obj = {
-			method: 'feed',
-			link: window.location.href,
-			name: $('meta[property="og:title"]').prop('content'),
-			description: desc,
-			picture: $('meta[property="og:image"]').prop('content')
-		};
-
-		FB.ui(obj, function(response) {
-      if (!response || !response.post_id) {
-        fb_share_button.removeClass('disabled');
+  // Share
+  (function() {
+    var $share_btn = $day.find('.action-share');
+    $share_btn.click(function () {
+      if($share_btn.hasClass('disabled')) {
+        return false;
       }
+      $share_btn.addClass('disabled');
+
+      var final_description_text = '';
+
+      var $final_description = $day.find('.final-description');
+      var $final_description_form = $final_description.find('form[name=final_description_form]');
+      if ($final_description_form.length > 0) {
+        final_description_text = $final_description_form.find('textarea[name=text]').val();
+      } else {
+        final_description_text = $final_description.text();
+      }
+
+      var params = {
+        method: 'feed',
+        link: window.location.href,
+        name: $('meta[property="og:title"]').prop('content'),
+        description: final_description_text,
+        picture: $('meta[property="og:image"]').prop('content')
+      };
+
+      FB.ui(params, function(response) {
+        if (!response || !response.post_id) {
+          $share_btn.removeClass('disabled');
+        }
+      });
     });
-	});
+  })();
 
   // Scroll helpers
   (function() {
-    var scrollContainer = $(document);
-    var scrollHelper = $('.scrollHelper');
-    var helperHeight = scrollHelper.height();
+    var $scrollContainer = $(document);
+    var $scrollHelper = $('.scrollHelper');
+    var helperHeight = $scrollHelper.height();
     var helperDefaultOffset = -1*helperHeight;
 
     function setBottomOffset(offset) {
       var sign = offset ? offset < 0 ? -1 : 1 : 0;
 
-      scrollHelper.css('bottom', sign + offset + 'px');
+      $scrollHelper.css('bottom', sign + offset + 'px');
     }
 
     setBottomOffset(helperDefaultOffset);
 
-    scrollContainer.scroll(function() {
-      var scrollTop = scrollContainer.scrollTop();
+    $scrollContainer.scroll(function() {
+      var scrollTop = $scrollContainer.scrollTop();
 
       if(scrollTop > 500) {
         var diff = scrollTop - 500;
