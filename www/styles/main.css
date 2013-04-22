@@ -1384,10 +1384,6 @@ ul.with-separators li .btn-small {
     width: 100%;;
   }
 
-  .day .moments article .description {
-    width: auto;
-  }
-
   .day .moments article .bubble:after {
     border: none;
     display: none;
@@ -1415,6 +1411,12 @@ ul.with-separators li .btn-small {
   .time .btn {
     padding: 1px 5px !important;
     height: 28px !important;
+  }
+}
+
+@media (max-width: 1024px) { /* iPad&iPhone in portrait */
+  .day .moments article .description {
+    width: auto;
   }
 }
 
