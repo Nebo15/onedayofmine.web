@@ -569,7 +569,7 @@ $this->day->is_gathering_enabled = false;
           <h2>Comments:</h2>
 
           <div class="articles">
-            <? if($this->day->comments && $this->day->comments_count > 0) { ?>
+            <? if(property_exists($this->day, 'comments')) { ?>
               {{list using="$#day->comments"}}
                 {{list:item}}
                   <article data-comment-id="{$item->id}">
@@ -595,6 +595,21 @@ $this->day->is_gathering_enabled = false;
                     </div>
                   </article>
                 {{/list:item}}
+                {{list:default}}
+                  <? if($this->toolkit->getUser()){ ?>
+                    <article class="template">
+                      <img src="/users/default_image_72.png" width="72" class="pull-left img-rounded" />
+
+                      <div class="bubble left">
+                        <p class="text">
+                          You can be first, who wrote comment for this day!
+
+                          <small>by <b><a>Anonymous</a></b></small>
+                        </p>
+                      </div>
+                    </article>
+                  <? } ?>
+                {{/list:default}}
               {{/list}}
             <? } ?>
           </div>
