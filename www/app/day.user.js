@@ -199,7 +199,10 @@ $(function() {
     }
 
     var $like_btn = $day.find('.action-like');
+    var $like_btn_wrap = $like_btn.parent();
     var $like_btn_addon = $like_btn.prev();
+
+    var like_hide_timout;
 
     // Helper for likes counters
     function updateLikesBtn() {
@@ -207,7 +210,55 @@ $(function() {
       $like_btn_addon.html(icon + ' ' + day_data.likes_count);
 
       $like_btn.html(day_data.is_liked ? 'Unlike' : 'Like');
+      attachLikesTooltip();
+      $like_btn_wrap.tooltip('show');
+      clearTimeout(like_hide_timout);
     }
+
+    function attachLikesTooltip() {
+      var title = '';
+      $.each(day_data.likes, function(index, like) {
+        if(like) {
+          title += '<a href="/pages/' + like.user.id + '/user"><img src="' + like.user.image_36 + '" /></a>';
+        }
+      });
+
+      clearTimeout(like_hide_timout);
+      $like_btn_wrap.tooltip('destroy');
+      if(title) {
+        $like_btn_wrap.tooltip({
+          html: true,
+          trigger: 'manual',
+          placement: 'bottom',
+          title: '<div class="likes">' + title + '</div>'
+        });
+      }
+    }
+
+    attachLikesTooltip();
+
+    $like_btn_wrap.hover(function() {
+      $like_btn_wrap.tooltip('show');
+      clearTimeout(like_hide_timout);
+
+      $like_btn_wrap.next().filter('.tooltip').hover(function() {
+        clearTimeout(like_hide_timout);
+      }, function() {
+        like_hide_timout = setTimeout(function() {
+          $like_btn_wrap.tooltip('hide');
+        }, 400);
+      }).mouseover(function() {
+        clearTimeout(like_hide_timout);
+      });
+    }, function() {
+      like_hide_timout = setTimeout(function() {
+        $like_btn_wrap.tooltip('hide');
+      }, 400);
+    });
+
+    $like_btn_wrap.mouseover(function() {
+      clearTimeout(like_hide_timout);
+    });
 
     $like_btn.click(function() {
       if($like_btn.hasClass('disabled')) {

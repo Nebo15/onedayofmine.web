@@ -983,6 +983,24 @@ ul.with-separators li .btn-small {
   margin-bottom: 10px;
 }
 
+.day .tooltip .likes {
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+.day .tooltip .likes img {
+  width: 26px;
+}
+
+.day .tooltip .likes a {
+  margin-left: 3px;
+}
+
+.day .tooltip .likes a:first-child {
+  margin-left: 0;
+}
+
 .day .day-toolbar .btn-toolbar {
   margin-top: 0;
 }

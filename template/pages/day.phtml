@@ -59,10 +59,10 @@ $this->day->is_gathering_enabled = false;
         $like_icon = "icon-heart";
       } else {
         $like_text = "Like";
-        $like_icon = "icon-heart-empty"; // TODO show message when user cant like
+        $like_icon = "icon-heart-empty";
       }
       ?>
-      <div class="input-prepend small <?= $like_disabled ? ' with-tooltip" data-original-title="You can\'t vote for your own days' : '' ?>">
+      <div class="input-prepend small input-like">
         <span class="add-on"><i class="icon <?= $like_icon ?>"></i> {$this->day->likes_count}</span>
         <button class="btn btn-small action-like<?= $like_disabled ? ' disabled' : '' ?>" type="button"> <?= $like_text ?></button>
       </div>
