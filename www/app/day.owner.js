@@ -703,7 +703,6 @@ $(function() {
             aspectRatio: image_width/image_height,
             keySupport: false,
             boxWidth: $image.width(),
-            boxHeight: $image.width(),
             onSelect: cordsSave,
             onChange: cordsSave, // Remove to dont spam data-api
             allowSelect : false // This is undocumented feature
