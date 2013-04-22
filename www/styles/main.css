@@ -1220,6 +1220,7 @@ ul.with-separators li .btn-small {
 }
 
 .noimage .image-toolbar,
+.noimage .image-btn-toolbar,
 .image-toolbar.hide .image-toolbar{
   opacity: 0;
   display: none;
@@ -1270,11 +1271,6 @@ ul.with-separators li .btn-small {
     margin-bottom: 10px;
   }
 
-  .day .moments article .image {
-    margin-left: -5px !important;
-    margin-right: 0 !important;
-  }
-
   .image-btn-toolbar {
     margin-left: 5px;
   }
@@ -1310,19 +1306,6 @@ ul.with-separators li .btn-small {
   .day .moments article .thumbnail,
   .day .moments article .thumbnail img {
     width: 100%;;
-  }
-
-  .day .moments article .description {
-    width: auto;
-  }
-
-  .day .moments article.editable .bubble:after {
-    border: none;
-    display: none;
-  }
-
-  .day .moments article.editable .description {
-    margin-top: 0;
   }
 
   .hero-unit {
@@ -1379,20 +1362,6 @@ ul.with-separators li .btn-small {
 }
 
 @media (min-width: 768px) and (max-width: 979px) { /* Tablet */
-  .day .moments article .thumbnail,
-  .day .moments article .thumbnail img {
-    width: 100%;;
-  }
-
-  .day .moments article .bubble:after {
-    border: none;
-    display: none;
-  }
-
-  .day .moments article .description {
-    margin-top: 0;
-  }
-
   .pull-right-on-tablet {
     float: right;
   }
@@ -1415,8 +1384,22 @@ ul.with-separators li .btn-small {
 }
 
 @media (max-width: 1024px) { /* iPad&iPhone */
+  .day .moments article .thumbnail,
+  .day .moments article .thumbnail img {
+    width: auto;
+  }
+
   .day .moments article .description {
     width: auto;
+  }
+
+  .day .moments article .bubble:after {
+    border: none;
+    display: none;
+  }
+
+  .day .moments article .description {
+    margin-top: 10px;
   }
 }
 

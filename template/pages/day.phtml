@@ -184,6 +184,26 @@ $this->day->is_gathering_enabled = false;
           </span>
         </div>
 
+         <div class="btn-toolbar text-center hidden-desktop image-btn-toolbar">
+          <a class="btn btn-small action-use-as-cover">
+            <i class="icon-picture"></i> Cover
+          </a>
+          <span class="btn-group action-rotate">
+            <a class="btn btn-small action-rotate-left">
+              <i class="icon-undo"></i>
+            </a>
+            <a class="btn btn-small action-rotate-right">
+              <i class="icon-repeat"></i>
+            </a>
+          </span>
+          <a class="btn btn-small action-crop">
+            <i class="icon-cut"></i> Crop
+          </a>
+          <a class="btn btn-small btn-success disabled action-edit-confirm">
+            <i class="icon-ok"></i> Save
+          </a>
+        </div>
+
         <div class="description bubble block-center">
           <form name="moment_description_form">
             <textarea name="text" rows="4" class="input-block-level" placeholder="Enter moment description...">[[moment.description]]</textarea>
