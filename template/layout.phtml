@@ -162,7 +162,9 @@
       });
 
       // Init global tooltips
-      bindTooltips($('body'));
+      if(!$.isMobile()) {
+        bindTooltips($('body'));
+      }
 
       // Trigger scrollHitBottom when scroll hits end
       $(window).scroll(function() {
