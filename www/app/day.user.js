@@ -215,26 +215,39 @@ $(function() {
       }
       $like_btn.addClass('disabled');
 
+      var current_user = API.getCurrentUser();
+
       if(day_data.is_liked) {
-        var like_request = API.request('POST', '/days/' + day_data.id + '/unlike');
-        like_request.success(function() {
+        var unlike_request = API.request('POST', '/days/' + day_data.id + '/unlike');
+        unlike_request.success(function() {
           day_data.is_liked = false;
           day_data.likes_count--;
 
-          updateLikesBtn();
-          $like_btn.removeClass('disabled');
-        });
-        like_request.send();
-      } else {
-        var unlike_request = API.request('POST', '/days/' + day_data.id + '/like');
-        unlike_request.success(function() {
-          day_data.is_liked = true;
-          day_data.likes_count++;
+          $.each(day_data.likes, function(index, like) {
+            if(like && like.user.id == current_user.id) {
+              delete day_data.likes[index];
+            }
+          });
 
           updateLikesBtn();
           $like_btn.removeClass('disabled');
         });
         unlike_request.send();
+      } else {
+        var like_request = API.request('POST', '/days/' + day_data.id + '/like');
+        like_request.success(function() {
+          day_data.is_liked = true;
+          day_data.likes_count++;
+
+          day_data.likes.push({
+            id: 0,
+            user: current_user
+          });
+
+          updateLikesBtn();
+          $like_btn.removeClass('disabled');
+        });
+        like_request.send();
       }
     });
   })();
