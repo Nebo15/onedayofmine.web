@@ -142,59 +142,44 @@ $this->day->is_gathering_enabled = false;
           </form>
         </div>
 
-        <span class="bage bage-large bage-bottom-right visible-desktop image-toolbar">
-          <span class="hover-toggler">
-            <i class="icon-pencil"></i>
-            <i class="icon-caret-right"></i>
-          </span>
-
-          <span class="hover-bar">
-            <a class="with-tooltip has-overlap action-use-as-cover disabled" data-original-title="Use as day cover">
-              <i class="icon-picture"></i>
-              <i class="overlap icon-ok"></i>
-            </a>
-            <span class="actions-block">
-              <a class="with-tooltip action-rotate-left" data-original-title="Rotate left">
-                <i class="icon-undo"></i>
-              </a>
-              <a class="with-tooltip action-rotate-right" data-original-title="Rotate right">
-                <i class="icon-repeat"></i>
-              </a>
-            </span>
-            <a class="with-tooltip action-crop" data-original-title="Crop this image">
-              <i class="icon-cut"></i>
-            </a>
-          </span>
-
-          <span class="confirm-bar">
-            <i class="icon-caret-right"></i>
-            <a class="hover-bar-indicator btn btn-success btn-mini with-tooltip has-spinner action-edit-confirm" data-original-title="Save changes">
-              <span class="spinner icon-refresh icon-spin"></span>
-              Save
-            </a>
-          </span>
-
-          <div class="btn-toolbar text-center hidden-desktop image-btn-toolbar">
-            <a class="btn btn-small action-use-as-cover disabled">
-              <i class="icon-picture"></i> Cover
-            </a>
-            <span class="btn-group action-rotate">
-              <a class="btn btn-small action-rotate-left">
-                <i class="icon-undo"></i>
-              </a>
-              <a class="btn btn-small action-rotate-right">
-                <i class="icon-repeat"></i>
-              </a>
-            </span>
-            <a class="btn btn-small action-crop">
-              <i class="icon-cut"></i> Crop
-            </a>
-            <a class="btn btn-small btn-success disabled action-edit-confirm">
-              <i class="icon-ok"></i> Save
-            </a>
+        <div class="image has-bage block-center">
+          <div class="thumbnail">
+            <img src="[[#if moment.image]][[moment.image]][[else]]/img/moment-placeholder.gif[[/if]]" itemprop="contentUrl" />
           </div>
-        </span>
 
+          <span class="bage bage-large bage-bottom-right visible-desktop image-toolbar">
+            <span class="hover-toggler">
+              <i class="icon-pencil"></i>
+              <i class="icon-caret-right"></i>
+            </span>
+
+            <span class="hover-bar">
+              <a class="with-tooltip has-overlap action-use-as-cover disabled" data-original-title="Use as day cover">
+                <i class="icon-picture"></i>
+                <i class="overlap icon-ok"></i>
+              </a>
+              <span class="actions-block">
+                <a class="with-tooltip action-rotate-left" data-original-title="Rotate left">
+                  <i class="icon-undo"></i>
+                </a>
+                <a class="with-tooltip action-rotate-right" data-original-title="Rotate right">
+                  <i class="icon-repeat"></i>
+                </a>
+              </span>
+              <a class="with-tooltip action-crop" data-original-title="Crop this image">
+                <i class="icon-cut"></i>
+              </a>
+            </span>
+
+            <span class="confirm-bar">
+              <i class="icon-caret-right"></i>
+              <a class="hover-bar-indicator btn btn-success btn-mini with-tooltip has-spinner action-edit-confirm" data-original-title="Save changes">
+                <span class="spinner icon-refresh icon-spin"></span>
+                Save
+              </a>
+            </span>
+          </span>
+        </div>
 
         <div class="description bubble block-center">
           <form name="moment_description_form">
