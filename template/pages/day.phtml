@@ -550,13 +550,6 @@ $this->day->is_gathering_enabled = false;
         <div class="clearfix">
           <div class="btn-toolbar pull-right">
             {{apply template="day_like_button" /}}
-            <small>
-              {{list using="$#day_obj->getLikes()"}}
-                {{list:item}}
-                  <small><a href="/pages/{$item->getUser()->id}/user">{$item->getUser()->name}</a></small>
-                {{/list:item}}
-              {{/list}}
-            </small>
             {{apply template="day_share_button" /}}
             {{apply template="day_report_button" /}}
           </div>

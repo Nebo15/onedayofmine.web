@@ -25,12 +25,17 @@ class odExportHelper
     $comments->paginate(0, lmbToolkit::instance()->getConf('common')->default_comments_count);
     $exported_day->comments = $this->exportDayCommentItems($comments);
 
+    $likes = $day->getLikes();
+    $likes->paginate(0, lmbToolkit::instance()->getConf('common')->default_likes_count);
+    $exported_day->likes = $this->exportDayLikeItems($likes);
+
     $exported_day->final_description = $day->final_description;
 
     if($this->current_user && !$is_owner)
     {
       $liked_day = lmbDBAL::selectQuery('day_like')
         ->addField('day_id')
+        ->addField('user_id')
         ->addCriteria(lmbSQLCriteria::equal('user_id', $this->current_user->id))
         ->addCriteria(lmbSQLCriteria::equal('day_id', $day->id))
         ->fetch()->toFlatArray();
@@ -378,6 +383,28 @@ class odExportHelper
       $exported_comment->user = $this->exportUserSubentity($comment_users[$exported_comment->user_id]);
       unset($exported_comment->user_id);
       $exported[] = $exported_comment;
+    }
+    return $exported;
+  }
+
+  ################ > Likes ###############
+  function exportDayLikeItems($likes)
+  {
+    if(!count($likes))
+      return [];
+
+    $exported = [];
+
+    $like_users_ids = lmbArrayHelper::getColumnValues('user_id', $likes);
+    $like_users     = User::findByIds($like_users_ids);
+    $like_users     = lmbArrayHelper::makeKeysFromColumnValues('id', $like_users);
+
+    foreach ($likes as $like) {
+      $exported_like = $like->exportForApi();
+      $exported_like->user = $this->exportUserSubentity($like_users[$exported_like->user_id]);
+      unset($exported_like->user_id);
+      unset($exported_like->day_id);
+      $exported[] = $exported_like;
     }
     return $exported;
   }

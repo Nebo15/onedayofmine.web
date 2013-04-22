@@ -34,4 +34,14 @@ class DayLike extends BaseLike
   {
     return self::findFirst(array('day_id = ? AND user_id = ?', $day_id, $user_id));
   }
+
+  function exportForApi(array $properties = null)
+  {
+    $export = new stdClass();
+    $export->id = $this->id;
+    $export->user_id = $this->user_id;
+    $export->day_id = $this->user_id;
+
+    return $export;
+  }
 }
