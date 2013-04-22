@@ -1252,6 +1252,24 @@ ul.with-separators li .btn-small {
 
 /* Responsive features */
 @media (max-width: 612px) { /* Small Phone screens */
+  .form-inline .btn,
+  .moments .time .btn[type=submit] {
+    padding-left: 6px !important;
+    padding-right: 6px !important;
+  }
+
+  .day .moments article .time input[type="date"] {
+    max-width: 100px;
+  }
+
+  .day .moments article .time input[type="time"] {
+    max-width: 50px;
+  }
+
+  .day-toolbar .btn-toolbar > * {
+    margin-bottom: 5px;
+  }
+
   .day .moments article .image {
     margin-left: -5px !important;
     margin-right: 0 !important;
@@ -1259,6 +1277,12 @@ ul.with-separators li .btn-small {
 
   .image-btn-toolbar {
     margin-left: 5px;
+  }
+
+  .image-btn-toolbar .action-edit-confirm {
+    margin-top: 5px;
+    margin-right: 5px !important;
+    display: block;
   }
 }
 
@@ -1282,6 +1306,10 @@ ul.with-separators li .btn-small {
   h4 {
     font-size: 11.45px;
   }*/
+
+  .day-toolbar {
+    text-align: center;
+  }
 
   .day .moments article .thumbnail,
   .day .moments article .thumbnail img {
@@ -1334,6 +1362,10 @@ ul.with-separators li .btn-small {
     -webkit-border-radius: 4px 4px 4px 4px;
     -moz-border-radius: 4px 4px 4px 4px;
     border-radius: 4px 4px 4px 4px;
+  }
+
+  .btn-toolbar > .btn + .btn, .btn-toolbar > .btn-group + .btn, .btn-toolbar > .btn + .btn-group {
+    margin-left: 5px !important;
   }
 
   .pull-right-on-phone {

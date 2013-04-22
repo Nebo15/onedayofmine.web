@@ -906,6 +906,8 @@ $(function() {
           }, true);
 
           cover_request.send();
+        } else {
+          $(this).removeClass('disabled active');
         }
       });
 
