@@ -1709,6 +1709,8 @@ $(function() {
               });
 
               if(photos.length === 0) {
+                clearInterval(fake_progress_interval);
+
                 $paginate_next_btn.addClass('disabled').animate({opacity:0}, animations_speed);
                 $paginate_prev_btn.addClass('disabled').animate({opacity:0}, animations_speed).slideUp(animations_speed);
 
