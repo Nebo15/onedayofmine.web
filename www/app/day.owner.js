@@ -657,12 +657,13 @@ $(function() {
             });
             // crop_api.setImage(data_url); // This is right, but produce bugs
           } else {
-            $moment.off('imagechanged.cropper');
+            $moment.off('.cropper');
           }
         });
 
         $moment.one('imagesave.cropper', function(event) {
           if(!isAttached()) {
+            $moment.off('.cropper');
             return;
           }
 
