@@ -1202,7 +1202,7 @@ ul.with-separators li .btn-small {
 }
 
 .noimage .image-toolbar,
-.image-toolbar.hide {
+.image-toolbar.hide .image-toolbar{
   opacity: 0;
   display: none;
 }
@@ -1214,30 +1214,10 @@ ul.with-separators li .btn-small {
   white-space: nowrap;
 }
 
-
-/*
-.moment-item-hidden {
-  background: #ffeeee;
+.moments article.template .confirm-bar {
+  opacity: 0 !important;
+  max-width: 0 !important;
 }
-
-.moment-item-new .moment-image-container,
-.moment-item-new .moment-image-container img {
-  min-height: 0;
-}
-
-.moment-item .visible-if-saved {
-  -webkit-transition: all 0.4s ease;
-  -moz-transition: all 0.4s ease;
-  -ms-transition: all 0.4s ease;
-  -o-transition: all 0.4s ease;
-  transform: all 0.4s ease;
-
-  opacity: 1;
-}
-
-.moment-item-new .visible-if-saved {
-  opacity: 0;
-}*/
 
 /* > User page */
 .user-image-container {

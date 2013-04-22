@@ -216,16 +216,16 @@ $this->day->is_gathering_enabled = false;
         </div>
 
         <h5>Import from:</h5>
-        <div class="text-center import-select">
-          <button class="btn" data-value="instagram">
+        <div class="text-center">
+          <button class="btn action-import" data-source="instagram">
               <i class="icon-instagram"></i>
               Instagram
           </button>
-          <button class="btn" data-value="flickr">
+          <button class="btn action-import" data-source="flickr">
               <i class="icon-flickr"></i>
               Flickr
           </button>
-          <button class="btn" data-value="facebook">
+          <button class="btn action-import" data-source="facebook">
               <i class="icon-facebook-sign"></i>
               Facebook
           </button>
@@ -259,35 +259,40 @@ $this->day->is_gathering_enabled = false;
       </div>
     </script>
 
-    <script id="template_import_progress" type="text/x-handlebars-template">
-      <div class="import-progress">
-        <div class="text-center">Retrieving data...</div>
-        <div class="progress progress-striped active">
-          <div class="bar" style="width: 1%;"></div>
+    <script id="template_import_modal" type="text/x-handlebars-template">
+      <div class="modal hide fade import-modal" tabindex="-1" role="dialog" aria-labelledby="import_modal_label" aria-hidden="true">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+          <h3 id="import_modal_label">Import</h3>
+        </div>
+        <div class="modal-body">
+          <div class="import-progress" style="display:none">
+            <div class="text text-center">Retrieving data...</div>
+            <div class="progress progress-striped active">
+              <div class="bar" style="width: 1%;"></div>
+            </div>
+          </div>
+          <div class="import-container" style="display:none">
+            <button class="btn btn-block action-paginate-prev has-spinner" style="margin-bottom:25px;">
+              <span class="spinner icon-spin icon-refresh"></span>
+              Earlier
+            </button>
+            <ul class="thumbnails inline unstyled"></ul>
+            <button class="btn btn-block action-paginate-next has-spinner" style="margin-top:-15px;">
+              <span class="spinner icon-spin icon-refresh"></span>
+              Later
+            </button>
+          </div>
         </div>
       </div>
     </script>
 
-    <script id="template_import_moment" type="text/x-handlebars-template">
-      <li>
+    <script id="template_import_modal_shoot" type="text/x-handlebars-template">
+      <li style="opacity:0">
         <div class="thumbnail">
           <div class="img-wrap img-rounded" style="background-image: url('[[image]]');"></div>
         </div>
       </li>
-    </script>
-
-    <script id="template_import_moments_container" type="text/x-handlebars-template">
-      <div class="import-container" style="display:none">
-        <button class="btn btn-block paginate-prev has-spinner" style="margin-bottom:25px;">
-          <span class="spinner icon-spin icon-refresh"></span>
-          Earlier
-        </button>
-        <ul class="thumbnails inline unstyled"></ul>
-        <button class="btn btn-block paginate-next has-spinner" style="margin-top:-15px;">
-          <span class="spinner icon-spin icon-refresh"></span>
-          Later
-        </button>
-      </div>
     </script>
   {{/into}}
 
@@ -626,14 +631,6 @@ $this->day->is_gathering_enabled = false;
       <a href="#" class="scrollTo top">
         Back to top <i class="icon-angle-up"></i>
       </a>
-    </div>
-
-    <div id="import_modal" class="modal hide fade import-modal" tabindex="-1" role="dialog" aria-labelledby="import_modal_label" aria-hidden="true">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="import_modal_label">Import</h3>
-      </div>
-      <div class="modal-body modal-body-main"></div>
     </div>
   {{/into}}
 {{/wrap}}
