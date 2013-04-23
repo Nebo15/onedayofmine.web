@@ -18,7 +18,7 @@ function task_od_create_crontab($args = array())
 	if(count($args) == 1)
 		$output_file = array_shift($args);
 
-	$project_dir = taskman_prop('PROJECT_DIR');
+	$project_dir = realpath(taskman_prop('PROJECT_DIR'));
 	$log_str = " >> $project_dir/var/logs/cron.log 2>&1\n";
 	$output = '';
 
