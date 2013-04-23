@@ -736,13 +736,8 @@ ul.with-separators li .btn-small {
   margin:0;
 }
 
-.days > li {
-  float:left;
-}
-
-.days dl {
-  position: relative;
-  margin: 11px 11px 0 0;
+.days dl dt img  {
+  display: block;
 }
 
 .days dt {
@@ -754,42 +749,6 @@ ul.with-separators li .btn-small {
 .days > li.big dt {
   width:511px;
   height:511px;
-}
-
-.days dl dt img  {
-  display: block;
-}
-
-.days dl dd {
-  position: absolute;
-  left: 0em;
-  bottom: 0em;
-  right: 0em;
-  background: rgba(0, 0, 0, 0.6);
-  margin:0;
-  padding: 5px;
-  height: 48px;
-  color:#FFF;
-  overflow: hidden;
-}
-
-.days > li:hover dl dd {
-  height: 95px;
-}
-
-.days dd a {
-  color:#fff;
-  font-weight: lighter;
-}
-
-.days dd .user-name {
-  margin-top: -5px;
-}
-
-.days dd a:hover {
-  color:rgb(156, 0, 1);
-  text-decoration: none;
-  font-weight:lighter;
 }
 
 .days dl dd ul li .inline li:first-child {
@@ -1380,6 +1339,66 @@ ul.with-separators li .btn-small {
   .day .moments article .description {
     margin-top: 10px;
   }
+
+  .days dt {
+    width:211px;
+    height:211px;
+    overflow:hidden;
+  }
+
+  .days > li.big dt {
+    width:211px;
+    height:211px;
+  }
+
+  .days dl {
+    margin: 0;
+  }
+
+  .days > li {
+    background: #FEFEFE;
+    border: 2px solid #FAFAFA;
+    box-shadow: 0 1px 2px rgba(34, 25, 25, 0.4);
+    /*margin: 0 2px 15px;*/
+    padding: 15px;
+    padding-bottom: 5px;
+    background: -webkit-linear-gradient(45deg, #FFF, #F9F9F9);
+  }
+
+  .days dl dt {
+    display: block;
+    padding: 4px;
+    line-height: 26px;
+    border: 1px solid #ddd;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,0.055);
+    -moz-box-shadow: 0 1px 3px rgba(0,0,0,0.055);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.055);
+  }
+
+  .days dl dd {
+    margin-top: 5px;
+  }
+
+  .days > li:hover dl dd {
+    height: auto;
+  }
+
+  .days dd a {
+    color:#000;
+    font-weight: normal;
+  }
+
+  .days dd a:hover {
+    color:rgb(156, 0, 1);
+    text-decoration: none;
+  }
+
+  .days small {
+    line-height: 21px;
+  }
 }
 
 @media (max-width: 1024px) and (orientation : portrait) { /* iPad&iPhone in portrait */
@@ -1400,5 +1419,46 @@ ul.with-separators li .btn-small {
 
   .pull-left-on-desktop {
     float: left;
+  }
+
+  .days dl {
+    position: relative;
+    margin: 11px 11px 0 0;
+  }
+
+  .days > li {
+    float:left;
+  }
+
+  .days dl dd {
+    position: absolute;
+    left: 0em;
+    bottom: 0em;
+    right: 0em;
+    background: rgba(0, 0, 0, 0.6);
+    margin:0;
+    padding: 5px;
+    height: 48px;
+    color:#FFF;
+    overflow: hidden;
+  }
+
+  .days > li:hover dl dd {
+    height: 95px;
+  }
+
+  .days dd a {
+    color:#fff;
+    font-weight: lighter;
+  }
+
+  .days dd .user-name {
+    margin-top: -5px;
+  }
+
+  .days dd a:hover {
+    color:rgb(156, 0, 1);
+    text-decoration: none;
+    font-weight:lighter;
   }
 }
