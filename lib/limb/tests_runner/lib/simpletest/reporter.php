@@ -221,11 +221,11 @@ class TextReporter extends SimpleReporter {
      *    @access public
      */
     function paintFooter($test_name) {
-        if ($this->getFailCount() + $this->getExceptionCount() == 0) {
-            print "OK\n";
-        } else {
-            print "FAILURES!!!\n";
-        }
+//        if ($this->getFailCount() + $this->getExceptionCount() == 0) {
+//            print "OK\n";
+//        } else {
+//            print "FAILURES!!!\n";
+//        }
         print "Test cases run: " . $this->getTestCaseProgress() .
                 "/" . $this->getTestCaseCount() .
                 ", Passes: " . $this->getPassCount() .
