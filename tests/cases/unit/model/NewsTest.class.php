@@ -5,7 +5,6 @@ lmb_require('tests/cases/unit/odUnitTestCase.class.php');
 
 class NewsTest extends odUnitTestCase
 {
-
   function testCreatedCorrectly()
   {
     $creator = $this->generator->user();
@@ -14,11 +13,11 @@ class NewsTest extends odUnitTestCase
     $recipient = $this->generator->user();
     $recipient->save();
 
-    $news = $this->generator->news($creator, $recipient);
+    $news = $this->generator->news($creator, $recipient, odNewsService::MSG_USER_FOLLOW);
     $news->save();
 
-    $this->assertTrue(count(News::find()) == 1);
+    $this->assertEqual(1, count(News::find()));
     $this->assertEqual(News::findFirst()->text, $news->text);
-    $this->assertEqual(News::findFirst()->text, $creator->name . ' likes ' . $recipient->name);
+    $this->assertEqual(strip_tags(News::findFirst()->text), $creator->name . ' started to following ' . $recipient->name);
   }
 }
