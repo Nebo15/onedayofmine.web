@@ -1400,6 +1400,10 @@ ul.with-separators li .btn-small {
   .days small {
     line-height: 21px;
   }
+
+  .days small ul {
+    text-align: center;
+  }
 }
 
 @media (max-width: 1024px) and (orientation : portrait) { /* iPad&iPhone in portrait */
