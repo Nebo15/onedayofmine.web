@@ -17,7 +17,7 @@ $toolkit->resetFileLocators();
 
 lmb_require('limb/taskman/taskman.inc.php');
 lmb_require('limb/migrate/cli/migrate.tasks.php');
-task_migrate_sync(['tests_dsn']);
+task_migrate_sync(['tests_dsn', 'orig_dsn']);
 
 $uniq_hostname_hash = (base_convert(substr(md5(gethostname().time()), 0, 6), 16, 10));
 lmbToolkit::instance()->makeUniqueTablesIdsOffset($uniq_hostname_hash);
