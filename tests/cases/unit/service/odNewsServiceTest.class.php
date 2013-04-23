@@ -52,7 +52,7 @@ class odNewsServiceTest extends odUnitTestCase
 
     $this->assertNewsUsers($news, $this->follower, $this->sender);
     $this->assertNewsText($news, News::MSG_DAY_CREATED, ['day' => $day]);
-    $this->assertEqual("odom://day/{$day->id}", $news->link);
+    $this->assertEqual("odom://days/{$day->id}", $news->link);
     $this->assertEqual($day->id, $news->day_id);
   }
 
@@ -102,7 +102,7 @@ class odNewsServiceTest extends odUnitTestCase
     $this->assertNewsText($news, News::MSG_DAY_COMMENT, ['day' => $day], $commentator);
     $this->assertEqual($day->id, $news->day_id);
     $this->assertEqual($comment->id, $news->day_comment_id);
-    $this->assertEqual("odom://day/{$day->id}/comment/{$comment->id}", $news->link);
+    $this->assertEqual("odom://days/{$day->id}/", $news->link);
   }
 
   function testOnDayCommentDelete()
@@ -159,7 +159,7 @@ class odNewsServiceTest extends odUnitTestCase
     $news = $old_commentator->getNews()->at(0);
     $this->assertNewsUsers($news, $old_commentator, $new_commentator);
     $this->assertNewsText($news, News::MSG_DAY_COMMENT,  ['day' => $day], $new_commentator);
-    $this->assertEqual("odom://day/{$day->id}/comment/{$comment->id}", $news->link);
+    $this->assertEqual("odom://days/{$day->id}/", $news->link);
   }
 
   function testOnDayComment_OldCommentator_DisabledInSettings()
@@ -190,10 +190,7 @@ class odNewsServiceTest extends odUnitTestCase
     $this->sender_service->onMoment($moment);
 
     $news = News::findFirst();
-    $this->assertNewsUsers($news, $this->follower,$this->sender);
-    $this->assertNewsText($news, News::MSG_MOMENT_CREATED, ['day' => $day]);
-    $this->assertEqual($day->id, $news->day_id);
-    $this->assertEqual($moment->id, $news->moment_id);
+		$this->assertEqual(0, count($news));
   }
 
   function testOnMoment_DisabledInSettings()
@@ -239,7 +236,7 @@ class odNewsServiceTest extends odUnitTestCase
     $this->assertEqual($day->id, $news->day_id);
     $this->assertEqual($moment->id, $news->moment_id);
     $this->assertEqual($comment->id, $news->moment_comment_id);
-    $this->assertEqual("odom://moment/{$moment->id}/comment/{$comment->id}", $news->link);
+    $this->assertEqual("odom://moments/{$moment->id}/", $news->link);
   }
 
   function testOnMomentCommentDelete()
@@ -294,7 +291,7 @@ class odNewsServiceTest extends odUnitTestCase
     $news = $old_commentator->getNews()->at(0);
     $this->assertNewsUsers($news, $old_commentator, $new_commentator);
     $this->assertNewsText($news, News::MSG_MOMENT_COMMENT, ['day' => $day]);
-    $this->assertEqual("odom://moment/{$moment->id}/comment/{$comment->id}", $news->link);
+    $this->assertEqual("odom://moments/{$moment->id}/", $news->link);
   }
 
   function testOnMomentComment_OldCommentator_DisabledInSettings()
@@ -328,9 +325,9 @@ class odNewsServiceTest extends odUnitTestCase
     $this->assertEqual(1, count($foo->getNews()));
     $news = $foo->getNews()->at(0);
     $this->assertNewsUsers($news, $foo, $bar);
-    $this->assertNewsText($news, News::MSG_USER_FOLLOW, ['user' => $foo], $bar);
-    $this->assertEqual($foo->id, $news->user_id);
-    $this->assertEqual("odom://user/{$foo->id}", $news->link);
+    $this->assertNewsText($news, News::MSG_USER_FOLLOW_YOU, ['user' => $foo], $bar);
+    $this->assertEqual($bar->id, $news->user_id);
+    $this->assertEqual("odom://users/{$bar->id}", $news->link);
   }
 
   function testFollow_Followers()
@@ -350,7 +347,7 @@ class odNewsServiceTest extends odUnitTestCase
     $news = $dum->getNews()->at(0);
     $this->assertNewsUsers($news, $dum, $foo);
     $this->assertNewsText($news, News::MSG_USER_FOLLOW, ['user' => $bar], $foo);
-    $this->assertEqual("odom://user/{$bar->id}", $news->link);
+    $this->assertEqual("odom://users/{$bar->id}", $news->link);
   }
 
   function testFollow_Followers_DisableInSettings()
@@ -401,7 +398,7 @@ class odNewsServiceTest extends odUnitTestCase
 		$news = $bottom->getNews()->at(0);
 		$this->assertNewsUsers($news, $bottom, $middle);
 		$this->assertNewsText($news, News::MSG_USER_FOLLOW, ['user' => $top], $middle);
-		$this->assertEqual("odom://user/{$top->id}", $news->link);
+		$this->assertEqual("odom://users/{$top->id}", $news->link);
 	}
 
   function testUserRegister()
@@ -421,7 +418,7 @@ class odNewsServiceTest extends odUnitTestCase
     $news = $friend->getNews()->at(0);
     $this->assertNewsUsers($news, $friend, $new_user);
     $this->assertNewsText($news, News::MSG_FBFRIEND_REGISTERED, [], $new_user);
-    $this->assertEqual("odom://user/{$new_user->id}", $news->link);
+    $this->assertEqual("odom://users/{$new_user->id}", $news->link);
   }
 
   function testOnDayLike_byOwner()
@@ -439,7 +436,7 @@ class odNewsServiceTest extends odUnitTestCase
     $this->assertNewsText($news, News::MSG_DAY_LIKED, ['day' => $day]);
     $this->assertEqual($day->id, $news->day_id);
     $this->assertEqual($like->id, $news->day_like_id);
-    $this->assertEqual("odom://day/{$day->id}", $news->link);
+    $this->assertEqual("odom://days/{$day->id}", $news->link);
   }
 
   function testOnDayLike_byOwner_DisabledInSettings()
@@ -470,7 +467,7 @@ class odNewsServiceTest extends odUnitTestCase
     $this->assertNewsText($news, News::MSG_DAY_LIKED, ['day' => $day]);
     $this->assertEqual($day->id, $news->day_id);
     $this->assertEqual($like->id, $news->day_like_id);
-    $this->assertEqual("odom://day/{$day->id}", $news->link);
+    $this->assertEqual("odom://days/{$day->id}", $news->link);
   }
 
   function testOnDayLike_byFollowers_DisabledInSettings()
@@ -520,7 +517,7 @@ class odNewsServiceTest extends odUnitTestCase
     $this->assertNewsText($news, News::MSG_MOMENT_LIKED, ['day' => $day]);
     $this->assertEqual($moment->id, $news->moment_id);
     $this->assertEqual($like->id, $news->moment_like_id);
-    $this->assertEqual("odom://moment/{$moment->id}", $news->link);
+    $this->assertEqual("odom://moments/{$moment->id}", $news->link);
   }
 
   function testOnMomentLike_byOwner_DisabledInSettings()
@@ -555,7 +552,7 @@ class odNewsServiceTest extends odUnitTestCase
     $this->assertNewsText($news, News::MSG_MOMENT_LIKED, ['day' => $day]);
     $this->assertEqual($moment->id, $news->moment_id);
     $this->assertEqual($like->id, $news->moment_like_id);
-    $this->assertEqual("odom://moment/{$moment->id}", $news->link);
+    $this->assertEqual("odom://moments/{$moment->id}", $news->link);
   }
 
   function testOnMomentLike_byFollowers_DisabledInSettings()
@@ -608,7 +605,7 @@ class odNewsServiceTest extends odUnitTestCase
     $this->assertNewsUsers($news, $user_day_owner, $user_who_share);
     $this->assertNewsText($news, News::MSG_DAY_SHARE, ['day' => $day], $user_who_share);
     $this->assertEqual($day->id, $news->day_id);
-    $this->assertEqual("odom://day/{$day->id}", $news->link);
+    $this->assertEqual("odom://days/{$day->id}", $news->link);
   }
 
   function testOnDayShare_DisabledInSettings()
@@ -641,7 +638,7 @@ class odNewsServiceTest extends odUnitTestCase
     $this->assertNewsUsers($news, $user_day_owner, $user_who_favorite);
     $this->assertNewsText($news, News::MSG_DAY_FAVORITE, ['day' => $day], $user_who_favorite);
     $this->assertEqual($day->id, $news->day_id);
-    $this->assertEqual("odom://day/{$day->id}", $news->link);
+    $this->assertEqual("odom://days/{$day->id}", $news->link);
   }
 
   function testOnDayFavorite_UserContent_DisabledInSettings()
@@ -670,7 +667,7 @@ class odNewsServiceTest extends odUnitTestCase
     $this->assertNewsUsers($news, $this->follower, $this->sender);
     $this->assertNewsText($news, News::MSG_DAY_FAVORITE, ['day' => $day]);
     $this->assertEqual($day->id, $news->day_id);
-    $this->assertEqual("odom://day/{$day->id}", $news->link);
+    $this->assertEqual("odom://days/{$day->id}", $news->link);
   }
 
   function testOnDayFavorite_Followers_DisabledInSettings()

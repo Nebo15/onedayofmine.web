@@ -161,16 +161,6 @@ class odNewsService
    */
   function onMoment(Moment $moment)
   {
-	  return;
-    lmb_assert_true($moment->id);
-
-    $news = (new News)->import(['day_id' => $moment->day_id, 'moment_id' => $moment->id]);
-
-    foreach($this->sender->getFollowersUsers() as $follower)
-      if(1 == $follower->getSettings()->notifications_new_days)
-        $this->addRecipient($follower);
-
-    $this->send($news, News::MSG_MOMENT_CREATED, ['day' => $moment->getDay()]);
   }
 
   function onMomentDelete(Moment $moment)
@@ -215,7 +205,7 @@ class odNewsService
       'day_id' => $moment->day_id,
       'moment_id' => $moment->id,
       'moment_like_id' => $like->id,
-      'link' => "odom://moment/{$moment->id}"
+      'link' => "odom://moments/{$moment->id}"
     ]);
     $day = $moment->getDay();
     $owner = $moment->getDay()->getUser();
@@ -277,7 +267,7 @@ class odNewsService
     $news->moment_id = $moment->id;
     $news->moment_comment_id = $comment->id;
     $news->day_id = $day->id;
-    $news->link = "odom://moment/{$moment->id}/";
+    $news->link = "odom://moments/{$moment->id}/";
 
     $day_owner = User::findById($day->user_id);
     if(1 == $day_owner->getSettings()->notifications_new_comments)
