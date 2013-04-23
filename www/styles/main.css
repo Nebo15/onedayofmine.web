@@ -1237,11 +1237,11 @@ ul.with-separators li .btn-small {
   }
 
   .day .moments article .time input[type="date"] {
-    max-width: 100px;
+    max-width: 97px;
   }
 
   .day .moments article .time input[type="time"] {
-    max-width: 50px;
+    max-width: 45px;
   }
 }
 
