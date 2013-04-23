@@ -1412,7 +1412,7 @@ ul.with-separators li .btn-small {
   }
 }
 
-@media (min-width: 980px) { /* Desktop */
+@media (min-width: 1024px) { /* Desktop */
   .content {
     padding-right: 20px;
     padding-left: 20px;
