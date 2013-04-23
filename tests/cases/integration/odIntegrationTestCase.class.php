@@ -31,10 +31,6 @@ abstract class odIntegrationTestCase extends WebTestCase
     $this->generator = new odObjectMother();
     $this->toolkit = lmbToolkit::instance();
 
-    $this->toolkit->setConfIncludePath('tests/cases/integration/settings;tests/settings;settings');
-    $this->toolkit->resetConfs();
-    $this->toolkit->resetFileLocators();
-
     parent::setUp();
 
     $this->toolkit->truncateDb();

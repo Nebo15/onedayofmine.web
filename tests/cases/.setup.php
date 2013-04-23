@@ -10,6 +10,11 @@ lmb_env_set('LIMB_CACHE_DB_META_IN_FILE', false);
 lmb_require('tests/src/toolkit/odTestsTools.class.php');
 lmbToolkit :: merge(new odTestsTools());
 
+$toolkit = lmbToolkit::instance();
+$toolkit->setConfIncludePath('tests/settings;settings');
+$toolkit->resetConfs();
+$toolkit->resetFileLocators();
+
 lmb_require('limb/taskman/taskman.inc.php');
 lmb_require('limb/migrate/cli/migrate.tasks.php');
 task_migrate_sync(['tests_dsn']);

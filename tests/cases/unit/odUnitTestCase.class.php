@@ -31,9 +31,6 @@ abstract class odUnitTestCase extends UnitTestCase
   function setUp()
   {
     $this->toolkit = lmbToolkit::instance();
-    $this->toolkit->setConfIncludePath('tests/cases/unit/settings;tests/settings;settings');
-    $this->toolkit->resetConfs();
-    $this->toolkit->resetFileLocators();
 
     $this->db_conn = $this->toolkit->getDefaultDbConnection();
     $this->db = new lmbSimpleDb($this->db_conn);
