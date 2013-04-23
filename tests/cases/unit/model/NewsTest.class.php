@@ -13,7 +13,7 @@ class NewsTest extends odUnitTestCase
     $recipient = $this->generator->user();
     $recipient->save();
 
-    $news = $this->generator->news($creator, $recipient, odNewsService::MSG_USER_FOLLOW);
+    $news = $this->generator->news($creator, $recipient, News::MSG_USER_FOLLOW);
     $news->save();
 
     $this->assertEqual(1, count(News::find()));

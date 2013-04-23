@@ -11,29 +11,6 @@ lmb_require('src/model/MomentComment.class.php');
  */
 class odNewsService
 {
-  /*
-   * News types.
-   */
-  ## Day ##
-  const MSG_DAY_CREATED         = "day_created";
-  const MSG_DAY_COMMENT         = "day_comment";
-  const MSG_DAY_LIKED           = "day_liked";
-  const MSG_DAY_SHARE           = "day_shared";
-  const MSG_DAY_FAVORITE        = "day_favorite";
-	const MSG_DAY_GATHERING       = "day_gathering";
-
-  ## Moment ##
-  const MSG_MOMENT_CREATED      = "moment_created";
-  const MSG_MOMENT_COMMENT      = "moment_commented";
-  const MSG_MOMENT_LIKED        = "moment_liked";
-
-  ## Follow ##
-  const MSG_USER_FOLLOW         = "user_followed";
-	const MSG_USER_FOLLOW_YOU     = "user_followed_you";
-
-  ## User ##
-  const MSG_FBFRIEND_REGISTERED = "user_fbfriend";
-
   /**
    * @var User
    */
@@ -45,29 +22,6 @@ class odNewsService
   {
     $this->sender = $sender;
   }
-
-	static function getMessageByType($type)
-	{
-		$messages = [
-			self::MSG_DAY_CREATED         => "{sender} just created day {day}",
-			self::MSG_DAY_COMMENT         => "{sender} has responded you in day {day}",
-			self::MSG_DAY_LIKED           => "{sender} liked day {day}",
-			self::MSG_DAY_SHARE           => "{sender} share day {day}",
-			self::MSG_DAY_FAVORITE        => "{sender} added the day {day} to favorites",
-			self::MSG_DAY_GATHERING       => "{sender} need your help! Add moments to day {day}",
-
-			self::MSG_MOMENT_CREATED      => "{sender} created moment in day {day}",
-			self::MSG_MOMENT_COMMENT      => "{sender} has responded you in moment of day {day}",
-			self::MSG_MOMENT_LIKED        => "{sender} liked moment in day {day}",
-
-			self::MSG_USER_FOLLOW         => "{sender} started to following {user}",
-			self::MSG_USER_FOLLOW_YOU     => "{sender} started to following you",
-			self::MSG_FBFRIEND_REGISTERED => "Your facebook friend '{sender}' just started to use this application, follow him/her?",
-		];
-		if(!isset($messages[$type]))
-			throw new lmbException("Unknown news type '$type'");
-		return $messages[$type];
-	}
 
   /**
    * @param User $user
@@ -82,7 +36,7 @@ class odNewsService
       'link' => "odom://users/{$user->id}"
     ]);
 
-    $this->send($news, self::MSG_FBFRIEND_REGISTERED);
+    $this->send($news, News::MSG_FBFRIEND_REGISTERED);
   }
 
   /**
@@ -97,7 +51,7 @@ class odNewsService
 		  'link' => "odom://users/{$this->sender->id}"
 	  ]);
 	  $this->addRecipient($followed_user);
-	  $this->send($news_for_followed, self::MSG_USER_FOLLOW_YOU, ['user' => $followed_user]);
+	  $this->send($news_for_followed, News::MSG_USER_FOLLOW_YOU, ['user' => $followed_user]);
 
     foreach($this->sender->getFollowersUsers() as $recipient)
     {
@@ -111,14 +65,14 @@ class odNewsService
       'link' => "odom://users/{$followed_user->id}"
     ]);
 
-    $this->send($news_other, self::MSG_USER_FOLLOW, ['user' => $followed_user]);
+    $this->send($news_other, News::MSG_USER_FOLLOW, ['user' => $followed_user]);
   }
 
 	function pullNewsFrom(User $followed_user)
 	{
 		foreach($followed_user->getActivityWithLimitation() as $news)
 		{
-			$types_to_pull = [self::MSG_DAY_CREATED, self::MSG_DAY_LIKED, self::MSG_DAY_SHARE, self::MSG_DAY_FAVORITE, self::MSG_USER_FOLLOW];
+			$types_to_pull = [News::MSG_DAY_CREATED, News::MSG_DAY_LIKED, News::MSG_DAY_SHARE, News::MSG_DAY_FAVORITE, News::MSG_USER_FOLLOW];
 		  if(!in_array($news->type, $types_to_pull))
 			  continue;
 			$recipient = new NewsRecipient();
@@ -144,7 +98,7 @@ class odNewsService
       if(1 == $follower->getSettings()->notifications_new_days)
         $this->addRecipient($follower);
     }
-    $this->send($news, self::MSG_DAY_CREATED, ['day' => $day]);
+    $this->send($news, News::MSG_DAY_CREATED, ['day' => $day]);
   }
 
   function onDayDelete(Day $day)
@@ -166,7 +120,7 @@ class odNewsService
     $user = User::findById($day->user_id);
     if(1 == $user->getSettings()->notifications_related_activity)
       $this->addRecipient($user);
-    $this->send($news, self::MSG_DAY_SHARE, ['day' => $day]);
+    $this->send($news, News::MSG_DAY_SHARE, ['day' => $day]);
   }
 
   function onDayFavorite(Day $day)
@@ -184,7 +138,7 @@ class odNewsService
       if(1 == $follower->getSettings()->notifications_related_activity)
         $this->addRecipient($follower);
 
-    $this->send($news, self::MSG_DAY_FAVORITE, ['day' => $day]);
+    $this->send($news, News::MSG_DAY_FAVORITE, ['day' => $day]);
   }
 
 	function onDayEnableGathering(Day $day)
@@ -199,7 +153,7 @@ class odNewsService
 			if(1 == $follower->getSettings()->notifications_related_activity)
 				$this->addRecipient($follower);
 
-		$this->send($news, self::MSG_DAY_GATHERING, ['day' => $day]);
+		$this->send($news, News::MSG_DAY_GATHERING, ['day' => $day]);
 	}
 
   /**
@@ -216,7 +170,7 @@ class odNewsService
       if(1 == $follower->getSettings()->notifications_new_days)
         $this->addRecipient($follower);
 
-    $this->send($news, self::MSG_MOMENT_CREATED, ['day' => $moment->getDay()]);
+    $this->send($news, News::MSG_MOMENT_CREATED, ['day' => $moment->getDay()]);
   }
 
   function onMomentDelete(Moment $moment)
@@ -245,7 +199,7 @@ class odNewsService
       if(1 == $follower->getSettings()->notifications_related_activity)
         $this->addRecipient($follower);
 
-    $this->send($news, self::MSG_DAY_LIKED, ['day' => $day]);
+    $this->send($news, News::MSG_DAY_LIKED, ['day' => $day]);
   }
 
   function onDayUnlike(Day $day, DayLike $like)
@@ -273,7 +227,7 @@ class odNewsService
       if(1 == $follower->getSettings()->notifications_related_activity)
         $this->addRecipient($follower);
 
-    $this->send($news, self::MSG_MOMENT_LIKED, ['day' => $day]);
+    $this->send($news, News::MSG_MOMENT_LIKED, ['day' => $day]);
   }
 
   function onMomentUnlike(Moment $moment, MomentLike $like)
@@ -304,7 +258,7 @@ class odNewsService
           $this->addRecipient($comment_author);
     }
 
-    $this->send($news, self::MSG_DAY_COMMENT, ['day' => $day]);
+    $this->send($news, News::MSG_DAY_COMMENT, ['day' => $day]);
   }
 
   function onDayCommentDelete(DayComment $comment)
@@ -337,7 +291,7 @@ class odNewsService
           $this->addRecipient($comment_author);
     }
 
-    $this->send($news, self::MSG_MOMENT_COMMENT, ['day' => $day]);
+    $this->send($news, News::MSG_MOMENT_COMMENT, ['day' => $day]);
   }
 
   function onMomentCommentDelete(MomentComment $comment)
@@ -350,45 +304,14 @@ class odNewsService
    * Apply message with text $text to news $news. You can specify additional text $params.
    *
    * @param  News  $news
-   * @param  int   $type   One of {@see odNewsService::MSG_*} constants. Notice: type is text-string right now.
+   * @param  int   $type   One of {@see News::MSG_*} constants. Notice: type is text-string right now.
    * @param  array $params
    * @return void
    */
   public function applyText(News $news, $type, array $params = array())
   {
     lmb_assert_type($type, 'string');
-    $news->text = self::getMessage($type, $params);
-  }
-
-  /**
-   * Returns message based on it's $type and $params.
-   *
-   * @param  string $type      One of {@see odNewsService::MSG_*} constants. Notice: type is text-string right now.
-   * @param  array  $params
-   * @return string
-   */
-  public static function getMessage($type, array $params = array())
-  {
-	  $tpl = odNewsService::getMessageByType($type);
-    if(false !== strpos($tpl, '{sender}'))
-    {
-      if(!isset($params['sender']))
-        throw new lmbException('sender not found in params');
-      $tpl = str_replace('{sender}', "<a href=\"odom://users/{$params['sender']->id}\">{$params['sender']->name}</a>", $tpl);
-    }
-    if(false !== strpos($tpl, '{user}'))
-    {
-      if(!isset($params['user']))
-        throw new lmbException('user not found in params');
-      $tpl = str_replace('{user}', "<a href=\"odom://users/{$params['user']->id}\">{$params['user']->name}</a>", $tpl);
-    }
-    if(false !== strpos($tpl, '{day}'))
-    {
-      if(!isset($params['day']))
-        throw new lmbException('day not found in params');
-      $tpl = str_replace('{day}', "<a href=\"odom://days/{$params['day']->id}\">{$params['day']->title}</a>", $tpl);
-    }
-    return $tpl;
+    $news->text = News::getMessage($type, $params);
   }
 
   /**
@@ -423,7 +346,7 @@ class odNewsService
   protected function send(News $news, $type, array $params = array())
   {
     $params['sender'] = $this->sender;
-    $text = self::getMessage($type, $params);
+    $text = News::getMessage($type, $params);
     $news->setSender($this->sender);
 	  $news->type = $type;
     $news->text = $text;

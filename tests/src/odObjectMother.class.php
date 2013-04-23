@@ -241,13 +241,13 @@ class odObjectMother
 		  $recipient_or_recipients = [$this->user()];
 	  if(!is_array($recipient_or_recipients))
 		  $recipient_or_recipients = [$recipient_or_recipients];
-	  $type = $type ?: odNewsService::MSG_USER_FOLLOW;
+	  $type = $type ?: News::MSG_USER_FOLLOW;
 
 	  $params = $params ?: ['sender' => $creator, 'user' => $recipient_or_recipients[0]];
 
     $news = new News();
     $news->setSender($creator);
-    $news->text = odNewsService::getMessage($type, $params);
+    $news->text = News::getMessage($type, $params);
 	  $news->type = $type;
     $news->link = $this->string();
     $news->save();
