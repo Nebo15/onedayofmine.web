@@ -48,25 +48,31 @@ class InterestCalculatorTest extends odUnitTestCase
     $calc->fillRating();
 
     $days = $calc->getDaysRatings();
-    $this->assertEqual(4, count($days));
-    $this->assertEqual($day4->id, $days[0]->getDay()->id);
-    $this->assertEqual($day1->id, $days[1]->getDay()->id);
-    $this->assertEqual($day3->id, $days[2]->getDay()->id);
-    $this->assertEqual($day2->id, $days[3]->getDay()->id);
+    if($this->assertEqual(4, count($days)))
+    {
+      $this->assertEqual($day4->id, $days[0]->getDay()->id);
+      $this->assertEqual($day1->id, $days[1]->getDay()->id);
+      $this->assertEqual($day3->id, $days[2]->getDay()->id);
+      $this->assertEqual($day2->id, $days[3]->getDay()->id);
+    }
 
     $days = $calc->getDaysRatings($day4->id);
-    $this->assertEqual(3, count($days));
-    $this->assertEqual($day1->id, $days[0]->getDay()->id);
-    $this->assertEqual($day3->id, $days[1]->getDay()->id);
-    $this->assertEqual($day2->id, $days[2]->getDay()->id);
+    if($this->assertEqual(3, count($days)))
+    {
+      $this->assertEqual($day1->id, $days[0]->getDay()->id);
+      $this->assertEqual($day3->id, $days[1]->getDay()->id);
+      $this->assertEqual($day2->id, $days[2]->getDay()->id);
+    }
 
     $days = $calc->getDaysRatings($day4->id, $day2->id);
-    $this->assertEqual(2, count($days));
-    $this->assertEqual($day1->id, $days[0]->getDay()->id);
-    $this->assertEqual($day3->id, $days[1]->getDay()->id);
+    if($this->assertEqual(2, count($days)))
+    {
+      $this->assertEqual($day1->id, $days[0]->getDay()->id);
+      $this->assertEqual($day3->id, $days[1]->getDay()->id);
+    }
 
     $days = $calc->getDaysRatings($day4->id, $day2->id, 1);
-    $this->assertEqual(1, count($days));
-    $this->assertEqual($day1->id, $days[0]->getDay()->id);
+    if($this->assertEqual(1, count($days)))
+      $this->assertEqual($day1->id, $days[0]->getDay()->id);
   }
 }

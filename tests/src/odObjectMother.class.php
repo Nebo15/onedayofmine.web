@@ -20,7 +20,7 @@ class odObjectMother
 	function unsavedUser($name = null)
 	{
 		$user = new User();
-		$user->facebook_uid = $this->string(10);
+		$user->facebook_uid = $this->string(20);
 		$user->facebook_access_token = $this->string(50);
 		$user->email = $this->email();
 		$user->facebook_profile_utime = $this->integer(11);

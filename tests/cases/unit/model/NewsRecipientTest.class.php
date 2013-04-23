@@ -5,19 +5,4 @@ lmb_require('src/model/NewsRecipient.class.php');
 
 class NewsRecipientTest extends odUnitTestCase
 {
-	function testCreatedCorrectly()
-	{
-		$creator = $this->generator->user();
-		$creator->save();
-
-		$recipient = $this->generator->user();
-		$recipient->save();
-
-		$news = $this->generator->news($creator, $recipient);
-		$news->save();
-
-		$this->assertTrue(count(NewsRecipient::findUnread()) == 1);
-		$this->assertEqual(News::findFirst()->text, $news->text);
-		$this->assertEqual(News::findFirst()->text, $creator->name . ' likes ' . $recipient->name);
-	}
 }
