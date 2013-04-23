@@ -1233,7 +1233,8 @@ ul.with-separators li .btn-small {
   white-space: nowrap;
 }
 
-.moments article.template .confirm-bar {
+.moments article.template .confirm-bar,
+.moments article.template .btn.action-edit-confirm {
   opacity: 0 !important;
   max-width: 0 !important;
 }

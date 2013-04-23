@@ -1140,6 +1140,8 @@ $(function() {
                 showCropTool($moment);
               }
 
+              $moment.find(image_action_edit_confirm_btn_selector).addClass('disabled');
+
               // Fix image popover position
               var $popover = $image_container.find(image_select_popover_selector);
               $popover.css('top', ($image.height()/2 - $popover.height()/2) + 'px');
