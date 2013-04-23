@@ -1401,7 +1401,7 @@ ul.with-separators li .btn-small {
     line-height: 21px;
   }
 
-  .days small ul {
+  .days .small ul {
     text-align: center;
   }
 }
