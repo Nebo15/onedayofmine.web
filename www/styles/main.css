@@ -1363,6 +1363,7 @@ ul.with-separators li .btn-small {
     padding: 15px;
     padding-bottom: 5px;
     background: -webkit-linear-gradient(45deg, #FFF, #F9F9F9);
+    margin-bottom: 10px !important;
   }
 
   .days dl dt {
@@ -1428,7 +1429,6 @@ ul.with-separators li .btn-small {
 
   .days > li {
     float:left;
-    margin-bottom: 10px;
   }
 
   .days dl dd {
