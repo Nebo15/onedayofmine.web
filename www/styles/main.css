@@ -1392,6 +1392,10 @@ ul.with-separators li .btn-small {
     font-weight: normal;
   }
 
+  .days dd li {
+    max-width: 200px;
+  }
+
   .days dd a:hover {
     color:rgb(156, 0, 1);
     text-decoration: none;
