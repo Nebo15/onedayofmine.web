@@ -906,6 +906,8 @@ $(function() {
           }, true);
 
           cover_request.send();
+        } else {
+          $(this).removeClass('disabled active');
         }
       });
 
@@ -1137,6 +1139,8 @@ $(function() {
               if($image.width() / $image.height() != image_width / image_height) {
                 showCropTool($moment);
               }
+
+              $moment.find(image_action_edit_confirm_btn_selector).addClass('disabled');
 
               // Fix image popover position
               var $popover = $image_container.find(image_select_popover_selector);
@@ -1709,6 +1713,8 @@ $(function() {
               });
 
               if(photos.length === 0) {
+                clearInterval(fake_progress_interval);
+
                 $paginate_next_btn.addClass('disabled').animate({opacity:0}, animations_speed);
                 $paginate_prev_btn.addClass('disabled').animate({opacity:0}, animations_speed).slideUp(animations_speed);
 

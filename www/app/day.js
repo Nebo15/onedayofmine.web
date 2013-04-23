@@ -54,12 +54,12 @@ $(function () {
 
     setBottomOffset(helperDefaultOffset);
 
-    $scrollContainer.scroll(function() {
+    $scrollContainer.on('scroll touchmove', function() {
       var scrollTop = $scrollContainer.scrollTop();
 
       if(scrollTop > 500) {
         var diff = scrollTop - 500;
-        if(diff < helperHeight) {
+        if(diff < helperHeight && !$.isMobile()) {
           var shift = diff - helperHeight;
           setBottomOffset(shift > helperDefaultOffset ? shift : helperDefaultOffset);
         } else {

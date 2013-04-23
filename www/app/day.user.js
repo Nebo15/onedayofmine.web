@@ -62,6 +62,10 @@ $(function() {
       });
 
       comments_request.success(function(response) {
+        if(response.data.result.length > 0) {
+          $comments_list.children('.template').remove();
+        }
+
         $comments_load_next_btn.removeClass('disabled btn-danger');
         $comments_load_next_btn.hideSpinner();
 
@@ -70,7 +74,7 @@ $(function() {
         $comments_list.append(new_comments);
 
         setCommentsCounter(getCommentsCounter(), function() {
-          $comments_list.children('.new').removeClass('new').fadeIn();
+          $comments_list.children('.new').removeClass('new').fadeIn(500);
         });
       });
 

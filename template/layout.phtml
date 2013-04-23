@@ -162,7 +162,9 @@
       });
 
       // Init global tooltips
-      bindTooltips($('body'));
+      if(!$.isMobile()) {
+        bindTooltips($('body'));
+      }
 
       // Trigger scrollHitBottom when scroll hits end
       $(window).scroll(function() {
@@ -260,10 +262,10 @@
       </div>
 	  <? } ?>
 
-    <section class="content">
+    <div class="content">
       {{slot id='content'/}}
       {{slot id='content_zone'/}}
-    </section>
+    </div>
   </div>
 
   {{slot id='content_fullwidth'/}}
