@@ -23,23 +23,23 @@ class InterestCalculatorTest extends odUnitTestCase
     $time = time();
     $day = 86400;
 
-    $day1 = $this->generator->day();
+    $day1 = $this->generator->dayWithMoments();
     $this->generator->dayLikes($day1, 4);
     $day1->ctime = $time - $day;
     $day1->save();
-    $day2 = $this->generator->day($this->main_user);
+    $day2 = $this->generator->dayWithMoments($this->main_user);
     $this->generator->dayLikes($day2, 3);
     $day2->ctime = $time - $day;
     $day2->save();
-    $day3 = $this->generator->day($this->additional_user);
+    $day3 = $this->generator->dayWithMoments($this->additional_user);
     $this->generator->dayLikes($day3, 3);
     $day3->ctime = $time - $day + 1;
     $day3->save();
-    $day4 = $this->generator->day($this->main_user);
+    $day4 = $this->generator->dayWithMoments($this->main_user);
     $this->generator->dayLikes($day4, 10);
     $day4->ctime = $time - 2 * $day;
     $day4->save();
-    $day5 = $this->generator->day($this->additional_user);
+    $day5 = $this->generator->dayWithMoments($this->additional_user);
     $this->generator->dayLikes($day5, 100);
     $day5->ctime = $time - $day;
     $day5->is_deleted = 1;
