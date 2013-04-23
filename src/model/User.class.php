@@ -415,6 +415,7 @@ class User extends BaseModel
 				->addLeftJoin('user', 'user_settings_id', 'user_settings', 'id')
 				->addLeftJoin('news_recipient', 'user_id', 'user', 'id')
 				->addField('user.*')
+				->addGroupBy('user.id')
 				->where($criteria);
 
 		return User::findByQuery($query);

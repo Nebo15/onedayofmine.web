@@ -120,18 +120,20 @@ class UserTest extends odUnitTestCase
 
 		$user = $this->_createUserWithNotificationPeriod($valid_notification_period);
 		$this->generator->news(null, $user);
+		$this->generator->news(null, $user);
 
 		$user_wrong_period = $valid_user = $this->_createUserWithNotificationPeriod(UserSettings::NOTIFICATIONS_PERIOD_TWICE_DAY);
+		$this->generator->news(null, $user_wrong_period);
 		$this->generator->news(null, $user_wrong_period);
 
 		$user_without_news = $this->_createUserWithNotificationPeriod($valid_notification_period);
 
 		$user_without_unread_news = $this->_createUserWithNotificationPeriod($valid_notification_period);
-		$news = $this->generator->news(null, $user_without_unread_news);
-		$user_without_unread_news->markNewsAsRead([$news]);
+		$news1 = $this->generator->news(null, $user_without_unread_news);
+		$news2 = $this->generator->news(null, $user_without_unread_news);
+		$user_without_unread_news->markNewsAsRead([$news1, $news2]);
 
 		$this->assertEqual(1, count(User::findWithUnreadNews($valid_notification_period)));
-		die();
 	}
 
 	protected function _createUserWithNotificationPeriod($period)
