@@ -1428,6 +1428,7 @@ ul.with-separators li .btn-small {
 
   .days > li {
     float:left;
+    margin-bottom: 10px;
   }
 
   .days dl dd {
