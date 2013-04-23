@@ -670,5 +670,23 @@ $this->day->is_gathering_enabled = false;
         Back to top <i class="icon-angle-up"></i>
       </a>
     </div>
+
+    <?php if('production' != lmb_app_mode()) { ?>
+      <script src="/lib/vendor/jquery.sbl-scroll.js"></script>
+      <script type="text/javascript">
+        $(function() {
+          if(!$.isMobile()) {
+            $.sublimeScroll({
+              top: 120,
+              bottom: 200,
+              color: 'rgba(255, 255, 255, 0.8)',
+              content_width: function($el, settings, $scroll_wrapper) {
+                return $(".content").width();
+              }
+            });
+          }
+        });
+      </script>
+    <? } ?>
   {{/into}}
 {{/wrap}}
