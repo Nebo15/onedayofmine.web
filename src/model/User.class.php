@@ -371,7 +371,11 @@ class User extends BaseModel
   static function findByFacebookUid($facebook_uids_or_uid)
   {
     if(is_array($facebook_uids_or_uid))
+    {
+	    if(!count($facebook_uids_or_uid))
+		    return new lmbCollection();
       return User::find(lmbSQLCriteria::in('facebook_uid', $facebook_uids_or_uid));
+    }
     else
       return User::findFirst(lmbSQLCriteria::equal('facebook_uid', $facebook_uids_or_uid));
   }
