@@ -492,9 +492,12 @@ class odExportHelper
 	  $moment_comments     = MomentComment::findByIds($moment_comments_ids);
 	  $moment_comments     = lmbArrayHelper::makeKeysFromColumnValues('id', $moment_comments);
 
-    foreach ($news as $news_item) {
-      $news_item_exported = $this->exportNewsListItem($news_item, $with_site_urls);
-      $news->sender = $this->exportUserSubentity($sender_users[$news_item->sender_id]);
+    foreach ($news as $news_item)
+    {
+      $news_item_exported =  $news_item->exportForApi();
+	    if($with_site_urls)
+		    $news_item_exported->text = $news_item->getMessageWithSiteUrls();
+	    $news_item_exported->sender = $this->exportUserSubentity($sender_users[$news_item->sender_id]);
 	    if($news_item->day_id)
 		    $news_item_exported->day = $this->exportDaySubentity($days[$news_item->day_id]);
 	    if($news_item->day_comment_id)
