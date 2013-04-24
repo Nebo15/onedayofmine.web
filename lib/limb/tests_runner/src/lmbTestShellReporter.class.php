@@ -88,9 +88,13 @@ class lmbTestShellReporter extends TextReporter
 
     if($this->failed_tests)
     {
-      print "=========== FAILED TESTS  ===========\n";
+	    print "\e[41m\e[30m=========== TESTS HAD ERRORS(see above) ===========\e[0m\n";
       print implode("\n", $this->failed_tests) . "\n";
     }
+	  else
+	  {
+		  print "\e[42m\e[30m=========== ALL TESTS PASSED =========== \e[0m\n";
+	  }
   }
 
   function paintFail($message)

@@ -371,7 +371,11 @@ class User extends BaseModel
   static function findByFacebookUid($facebook_uids_or_uid)
   {
     if(is_array($facebook_uids_or_uid))
+    {
+	    if(!count($facebook_uids_or_uid))
+		    return new lmbCollection();
       return User::find(lmbSQLCriteria::in('facebook_uid', $facebook_uids_or_uid));
+    }
     else
       return User::findFirst(lmbSQLCriteria::equal('facebook_uid', $facebook_uids_or_uid));
   }
@@ -415,6 +419,7 @@ class User extends BaseModel
 				->addLeftJoin('user', 'user_settings_id', 'user_settings', 'id')
 				->addLeftJoin('news_recipient', 'user_id', 'user', 'id')
 				->addField('user.*')
+				->addGroupBy('user.id')
 				->where($criteria);
 
 		return User::findByQuery($query);

@@ -4,7 +4,7 @@ PROJECT_DIR=$(dirname $0)/../
 test -d $PROJECT_DIR || exit 0
 cd $PROJECT_DIR
 cp ./www/off_tpl.html ./www/off.html
-git pull origin develop
+git pull
 rm -rf ./var/compiled
 rm -rf ./var/db_info
 rm -rf ./var/default

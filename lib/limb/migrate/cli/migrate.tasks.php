@@ -1,13 +1,13 @@
 <?php
 
-function lmb_migrate_prepare_project_params()
+function lmb_migrate_prepare_project_params($dsn_name = 'dsn')
 {
   lmb_package_require('config');
   lmb_package_require('fs');
   $db_conf = lmbToolkit::instance()->getConf('db');
   $migrate_conf = lmbToolkit::instance()->getConf('migrate');
 
-  $params['dsn']    = $db_conf['dsn'];
+  $params['dsn']    = $db_conf[$dsn_name];
   $params = $params + (array) $migrate_conf;
   lmbFs::mkdir(dirname($params['schema']));
   lmbFs::mkdir(dirname($params['data']));
@@ -159,20 +159,24 @@ function task_migrate_sync($argv)
 	if(!isset($argv[0]))
 		taskman_sysmsg("Destination dsn not given.".PHP_EOL);
 
-	$db_conf = lmbToolkit::instance()->getConf('db');
-	$dst_dsn = $db_conf->get($argv[0], null);
-	if(!$dst_dsn)
-		taskman_sysmsg("{$argv[0]} not found in db config.".PHP_EOL);
+	$dst_dsn_name = $argv[0];
+	$src_dsn_name = (2 == count($argv)) ? $argv[1] : 'dsn';
 
-	$srcMigration = lmb_migrate_factory();
+	$db_conf = lmbToolkit::instance()->getConf('db');
+	$dst_dsn = $db_conf->get($dst_dsn_name, null);
+	if(!$dst_dsn)
+		taskman_sysmsg("{$dst_dsn_name} not found in db config.".PHP_EOL);
+
+	$srcMigration = lmb_migrate_factory($src_dsn_name);
 
 	$src_version = $srcMigration->getSchemaVersion();
-	taskman_msg('Source version: '.$src_version.PHP_EOL);
 	$dst_version = $srcMigration->getSchemaVersion($dst_dsn);
-	taskman_msg('Destination version: '.$dst_version.PHP_EOL);
 
 	if($src_version <= $dst_version)
-		taskman_sysmsg("Sync don't you need.".PHP_EOL);
+		taskman_msg("Database synchronization dont needed, versions are equal (".date('Y-m-d H:i:s', $src_version).") SKIP".PHP_EOL);
 	else
+	{
 		$srcMigration->sync($dst_dsn);
+
+	}
 }

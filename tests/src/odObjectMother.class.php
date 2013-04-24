@@ -20,7 +20,7 @@ class odObjectMother
 	function unsavedUser($name = null)
 	{
 		$user = new User();
-		$user->facebook_uid = $this->string(10);
+		$user->facebook_uid = $this->string(20);
 		$user->facebook_access_token = $this->string(50);
 		$user->email = $this->email();
 		$user->facebook_profile_utime = $this->integer(11);
@@ -241,13 +241,13 @@ class odObjectMother
 		  $recipient_or_recipients = [$this->user()];
 	  if(!is_array($recipient_or_recipients))
 		  $recipient_or_recipients = [$recipient_or_recipients];
-	  $type = $type ?: odNewsService::MSG_USER_FOLLOW;
+	  $type = $type ?: News::MSG_USER_FOLLOW;
 
 	  $params = $params ?: ['sender' => $creator, 'user' => $recipient_or_recipients[0]];
 
     $news = new News();
     $news->setSender($creator);
-    $news->text = odNewsService::getMessage($type, $params);
+    $news->text = News::getMessage($type, $params);
 	  $news->type = $type;
     $news->link = $this->string();
     $news->save();

@@ -27,8 +27,14 @@ interface lmbDbConnection
   function newStatement($sql);
   function execute($sql);
   function executeStatement($stmt);
-  function getTypeInfo();
-  function getDatabaseInfo();
+	/**
+	 * @return lmbDbTypeInfo
+	 */
+	function getTypeInfo();
+	/**
+	 * @return lmbDbInfo
+	 */
+	function getDatabaseInfo();
   function getSequenceValue($table, $colname);
   function quoteIdentifier($id);
   function escape($string);
