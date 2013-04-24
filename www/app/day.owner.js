@@ -408,7 +408,7 @@ $(function() {
 
     // Lookup methods
     function getMomentByContext(context) {
-      return $(context).closest('article');
+      return $(context).closest(moment_selector);
     }
 
     function findNextMoment(moment) {
@@ -714,7 +714,7 @@ $(function() {
           $image.Jcrop({
             aspectRatio: image_width/image_height,
             keySupport: false,
-            boxWidth: $image.width(),
+            boxWidth: image_width,
             onSelect: cordsSave,
             onChange: cordsSave, // Remove to dont spam data-api
             allowSelect : false // This is undocumented feature
