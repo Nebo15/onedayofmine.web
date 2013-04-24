@@ -709,12 +709,19 @@ $(function() {
       ImageTools.Convert.imageToDataURL($image.attr('src')).done(function(data_url) {
         // Enshure that cropped attached on data_url'ed image
         $moment.one('imagechanged', function() {
+					var frame_width = $image.width() <= $image.height()
+							? image_width : image_width / $image.width() * $image.height();
+					var frame_height = $image.width()  <= $image.height()
+							? image_height : image_height / $image.width() * $image.height();
+					var fx1 = $image.width() / 2 - frame_width / 2;
+					var fy1 = $image.height() / 2 - frame_height / 2;
 
           // Show crop tool
           $image.Jcrop({
             aspectRatio: image_width/image_height,
             keySupport: false,
             boxWidth: $image.width(),
+						setSelect: [fx1, fy1, fx1 + frame_width, fy1 + frame_height],
             onSelect: cordsSave,
             onChange: cordsSave, // Remove to dont spam data-api
             allowSelect : false // This is undocumented feature
