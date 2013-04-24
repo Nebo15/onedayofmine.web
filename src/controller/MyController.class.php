@@ -41,7 +41,7 @@ class MyController extends BaseJsonController
       foreach($this->request->export() as $property => $value)
       {
         if($settings->has($property))
-          $settings->set($property, (int) $value);
+          $settings->set($property, $value);
       }
       $settings->save($this->error_list);
       if($this->error_list->isValid())

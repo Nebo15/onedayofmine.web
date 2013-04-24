@@ -34,6 +34,22 @@ class UserSettings extends BaseModel
       $social_share_facebook,
       $social_share_twitter;
 
+	protected function _createValidator()
+	{
+		$validator = new lmbValidator();
+		$validator->addRule(new lmbValidValueRule('notifications_period_fb', self::getNotificationPeriods()));
+		$validator->addRule(new lmbValidValueRule('notifications_new_days', [0, 1]));
+		$validator->addRule(new lmbValidValueRule('notifications_new_comments', [0, 1]));
+		$validator->addRule(new lmbValidValueRule('notifications_new_replays', [0, 1]));
+		$validator->addRule(new lmbValidValueRule('notifications_related_activity', [0, 1]));
+		$validator->addRule(new lmbValidValueRule('notifications_shooting_photos', [0, 1]));
+		$validator->addRule(new lmbValidValueRule('photos_save_original', [0, 1]));
+		$validator->addRule(new lmbValidValueRule('photos_save_filtered', [0, 1]));
+		$validator->addRule(new lmbValidValueRule('social_share_facebook', [0, 1]));
+		$validator->addRule(new lmbValidValueRule('social_share_twitter', [0, 1]));
+		return $validator;
+	}
+
   function exportForApi(array $properties = null)
   {
     return parent::exportForApi([
