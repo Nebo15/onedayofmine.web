@@ -169,14 +169,14 @@ function task_migrate_sync($argv)
 
 	$srcMigration = lmb_migrate_factory($src_dsn_name);
 
-	taskman_msg('Database synchronization: ');
 	$src_version = $srcMigration->getSchemaVersion();
 	$dst_version = $srcMigration->getSchemaVersion($dst_dsn);
 
 	if($src_version <= $dst_version)
-		taskman_sysmsg("versions are equal (".date('Y-m-d H:i:s', $src_version).").".PHP_EOL);
+		taskman_msg("Database synchronization dont needed, versions are equal (".date('Y-m-d H:i:s', $src_version).") SKIP".PHP_EOL);
 	else
 	{
 		$srcMigration->sync($dst_dsn);
+
 	}
 }
