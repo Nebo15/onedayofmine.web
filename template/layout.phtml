@@ -131,11 +131,8 @@
           }
 
           API.login(function() {
-            if($this.hasClass('has-spinner')) {
-              $this.hideSpinner();
-            }
             if($this.attr('href') && $this.attr('href') != '#') {
-              window.location = $this.attr('href');
+              window.location.href = $this.attr('href');
             } else {
               window.location.reload();
             }
