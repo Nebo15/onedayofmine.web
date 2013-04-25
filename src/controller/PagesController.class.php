@@ -220,42 +220,66 @@ class PagesController extends WebAppController
 		lmb_require('ljparse/MobilePageRegexpParser.class.php');
 		lmb_require('ljparse/ContentPage.class.php');
 
-		$parts = explode('/', $this->request->get('url'));
-		$id = explode('.', array_pop($parts))[0];
+    if($this->request->has('id')) {
+      $id = $this->request->getFiltered('id', FILTER_SANITIZE_NUMBER_INT);
+    } elseif($this->request->has('url')) {
+  		$parts = explode('/', $this->request->get('url'));
+  		$id = (int) explode('.', array_pop($parts))[0];
+    } else {
+      return $this->forwardTo404();
+    }
+
 		$context  = stream_context_create(['http' => ['timeout' => 120]]);
 		$content = file_get_contents('http://m.livejournal.com/read/user/odin_moy_den/'.$id, false, $context);
 
 		$page = new ContentPage(new MobilePageRegexpParser());
 		$page->setContent($content);
 
-		$this->is_preview = true;
+		$this->is_import_preview = true;
+
+    $this->import_from = 'http://odin-moy-den.livejournal.com/'.$id.'.html';
 
 		$moments = $page->getMoments();
 		$this->day_obj = new Day();
 		$this->day = new stdClass;
+    $this->day->is_template = true;
 		$this->day->id = null;
 		$this->day->title = $this->title = $page->getTitle();
-		$this->day->type = '';
+		$this->day->type = 'Working day';
 		$this->day->date = date('Y-m-d', strtotime($page->getDate()));
-		$this->day->final_description = "It's just a preview";
+		$this->day->final_description = "It's just a preview!";
 		$this->day->comments_count = 0;
     $this->day->comments =[];
-		$this->day->likes_count = 0;
-		$this->day->user = new stdClass;
-		$this->day->user->id = '';
-		$this->day->user->name = $page->getUsername();
-		$this->day->user->image_72 = $page->getUserpic();
+    $this->day->likes_count = '∞';
+    $this->day->likes = [];
+    $this->day->views_count = 1;
+    $this->day->image_532 = '';
+    $this->day->image_266 = '';
+    if($this->toolkit->getUser()) {
+      $this->day->user = $this->toolkit->getExportHelper()->exportUserItem($this->toolkit->getUser());
+    } else {
+  		$this->day->user = new stdClass;
+  		$this->day->user->id = $this->toolkit->getUser() ? $this->toolkit->getUser()->id : '';
+  		$this->day->user->name = $page->getUsername();
+  		$this->day->user->image_72 = $page->getUserpic();
+    }
 		$this->day->moments = [];
 		$time = 480;
 		$delta = (1440 - 640) / count($moments);
 		foreach($moments as $i => $moment_data)
 		{
+      if($this->day->image_532 == '') {
+        $this->day->image_532 = $moment_data['img'];
+        $this->day->image_266 = $moment_data['img'];
+      }
+
 			$time += rand($delta - 5, $delta + 5);
 			$moment = new stdClass;
 			$moment->id = 1;
 			$moment->datetime_iso = 1;
 			$moment->time = str_pad(floor($time / 60), 2, '0', STR_PAD_LEFT).":".str_pad($time - floor($time / 60) * 60, 2, '0', STR_PAD_LEFT);
-			$moment->image_532 = $moment_data['img'];
+      $moment->image_532 = $moment_data['img'];
+			$moment->image_266 = $moment_data['img'];
 			$moment->description = $moment_data['description'];
 			$this->day->moments[] = $moment;
 		}
@@ -269,42 +293,64 @@ class PagesController extends WebAppController
 		lmb_require('ljparse/DiaryMobilePageRegexpParser.class.php');
 		lmb_require('ljparse/DiaryContentPage.class.php');
 
-		$parts = explode('/', $this->request->get('url'));
-		$id = explode('.', array_pop($parts))[0];
+    if($this->request->has('id')) {
+      $id = $this->request->getFiltered('id', FILTER_SANITIZE_NUMBER_INT);
+    } elseif($this->request->has('url')) {
+  		$parts = explode('/', $this->request->get('url'));
+  		$id = explode('.', array_pop($parts))[0];
+    } else {
+      return $this->forwardTo404();
+    }
+
 		$context  = stream_context_create(['http' => ['timeout' => 120]]);
-		$url = 'http://m.diary.ru/~adiml/'.$id.'.htm?oam#more1';
-		$content = file_get_contents($url, false, $context);
+		$content = file_get_contents('http://m.diary.ru/~adiml/'.$id.'.htm?oam#more1', false, $context);
+    $this->import_from = 'http://diary.ru/~adiml/'.$id.'.htm?oam#more1';
 
 		$page = new DiaryContentPage(new DiaryMobilePageRegexpParser());
 		$page->setContent($content);
 
-		$this->is_preview = true;
+		$this->is_import_preview = true;
 
 		$moments = $page->getMoments();
 		$this->day_obj = new Day();
 		$this->day = new stdClass;
+    $this->day->is_template = true;
 		$this->day->id = null;
 		$this->day->title = $this->title = $page->getTitle();
-		$this->day->type = '';
+		$this->day->type = 'Working day';
 		$this->day->date = date('Y-m-d', strtotime($page->getDate()));
-		$this->day->final_description = "It's just a preview";
+		$this->day->final_description = "It's just a preview!";
 		$this->day->comments_count = 0;
 		$this->day->comments =[];
-		$this->day->likes_count = 0;
-		$this->day->user = new stdClass;
-		$this->day->user->id = '';
-		$this->day->user->name = $page->getUsername();
-		$this->day->user->image_72 = $page->getUserpic();
+    $this->day->likes_count = '∞';
+    $this->day->likes = [];
+    $this->day->views_count = 1;
+    $this->day->image_532 = '';
+    $this->day->image_266 = '';
+    if($this->toolkit->getUser()) {
+      $this->day->user = $this->toolkit->getExportHelper()->exportUserItem($this->toolkit->getUser());
+    } else {
+      $this->day->user = new stdClass;
+      $this->day->user->id = $this->toolkit->getUser() ? $this->toolkit->getUser()->id : '';
+      $this->day->user->name = $page->getUsername();
+      $this->day->user->image_72 = $page->getUserpic();
+    }
 		$this->day->moments = [];
 		$time = 480;
 		$delta = (1440 - 640) / count($moments);
 		foreach($moments as $i => $moment_data)
 		{
+      if($this->day->image_532 == '') {
+        $this->day->image_532 = $moment_data['img'];
+        $this->day->image_266 = $moment_data['img'];
+      }
+
 			$time += rand($delta - 5, $delta + 5);
 			$moment = new stdClass;
 			$moment->id = 1;
 			$moment->datetime_iso = 1;
 			$moment->time = str_pad(floor($time / 60), 2, '0', STR_PAD_LEFT).":".str_pad($time - floor($time / 60) * 60, 2, '0', STR_PAD_LEFT);
+      $moment->image_266 = $moment_data['img'];
 			$moment->image_532 = $moment_data['img'];
 			$moment->description = iconv('cp1251', 'utf-8', $moment_data['description']);
 			$this->day->moments[] = $moment;

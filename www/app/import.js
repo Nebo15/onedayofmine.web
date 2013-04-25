@@ -382,7 +382,7 @@ var ImportController = function($wizard, $steps_content) {
 
           day_export_request.success(function(day_create_response) {
             var day = day_create_response.data.result;
-            var step_percentage = 100/selected_shots.length+1;
+            var step_percentage = 100/(selected_shots.length+1);
             setProgress(progress, step_percentage);
 
             var requests = [];

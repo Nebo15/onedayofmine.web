@@ -29,11 +29,16 @@ $this->day->is_gathering_enabled = false;
         <script src="/app/day.owner.js"></script>
       <? } ?>
     <? } ?>
+    <? if($this->is_import_preview) { ?>
+      <script src="/app/day.import.js"></script>
+    <? } ?>
   {{/into}}
   {{into slot="css_include"}}
-    <link href="/styles/vendor/bootstrap-datepicker.css" rel="stylesheet">
-    <link href="/styles/vendor/bootstrap-timepicker.min.css" rel="stylesheet">
-    <link href="/styles/vendor/jquery.jcrop.min.css" rel="stylesheet">
+    <? if($this->is_owner) { ?>
+      <link href="/styles/vendor/bootstrap-datepicker.css" rel="stylesheet">
+      <link href="/styles/vendor/bootstrap-timepicker.min.css" rel="stylesheet">
+      <link href="/styles/vendor/jquery.jcrop.min.css" rel="stylesheet">
+    <? } ?>
   {{/into}}
   {{into slot="js"}}
     var day_data = <?= json_encode($this->day); ?>;
@@ -112,211 +117,230 @@ $this->day->is_gathering_enabled = false;
       [[/comments]]
     </script>
 
-    <script id="template_moment" type="text/x-handlebars-template">
-      <article class="well editable template [[#unless moment.image]]noimage[[/unless]]" itemscope itemtype="http://schema.org/ImageObject">
-        <ul class="unstyled inline not-decorated controls controls-absolute visible-desktop">
-          <li>
-            <a class="text-gray with-tooltip action-delete" data-original-title="Delete moment">
-              <i class="icon-trash"></i>
-            </a>
-          </li>
-        </ul>
+    <? if($this->is_owner) { ?>
+      <script id="template_moment" type="text/x-handlebars-template">
+        <article class="well editable template [[#unless moment.image]]noimage[[/unless]]" itemscope itemtype="http://schema.org/ImageObject">
+          <ul class="unstyled inline not-decorated controls controls-absolute visible-desktop">
+            <li>
+              <a class="text-gray with-tooltip action-delete" data-original-title="Delete moment">
+                <i class="icon-trash"></i>
+              </a>
+            </li>
+          </ul>
 
-        <div class="time text-center text-gray">
-          <form name="datetime_form" class="form-inline">
-            <span class="input-prepend small">
-              <span class="add-on hidden-phone"><i class="icon-calendar"></i></span>
-              <input type="date" name="date" value="[[moment.date]]" min="2001-01-01" max="<?php date("Y-m-d"); ?>" required="required" />
-            </span>
+          <div class="time text-center text-gray">
+            <form name="datetime_form" class="form-inline">
+              <span class="input-prepend small">
+                <span class="add-on hidden-phone"><i class="icon-calendar"></i></span>
+                <input type="date" name="date" value="[[moment.date]]" min="2001-01-01" max="<?php date("Y-m-d"); ?>" required="required" />
+              </span>
 
-            <span class="input-prepend small">
-              <span class="add-on hidden-phone"><i class="icon-time"></i></span>
-              <input type="time" name="time" value="[[moment.time]]" required="required" />
+              <span class="input-prepend small">
+                <span class="add-on hidden-phone"><i class="icon-time"></i></span>
+                <input type="time" name="time" value="[[moment.time]]" required="required" />
 
-              <input type="hidden" name="seconds" value="[[moment.time_seconds]]" required="required" />
-            </span>
+                <input type="hidden" name="seconds" value="[[moment.time_seconds]]" required="required" />
+              </span>
 
-            <input type="hidden" name="timezone" value="[[moment.timezone]]" required="required" />
+              <input type="hidden" name="timezone" value="[[moment.timezone]]" required="required" />
 
-            <button class="btn btn-small has-spinner disabled" type="submit">
-              <span class="spinner icon-spin icon-refresh hidden-phone"></span>
-              Save
-            </button>
-          </form>
-        </div>
-
-        <div class="image has-bage block-center">
-          <div class="thumbnail">
-            <img src="[[#if moment.image]][[moment.image]][[else]]/img/moment-placeholder.gif[[/if]]" itemprop="contentUrl" />
+              <button class="btn btn-small has-spinner disabled" type="submit">
+                <span class="spinner icon-spin icon-refresh hidden-phone"></span>
+                Save
+              </button>
+            </form>
           </div>
 
-          <span class="bage bage-large bage-bottom-right visible-desktop image-toolbar">
-            <span class="hover-toggler">
-              <i class="icon-pencil"></i>
-              <i class="icon-caret-right"></i>
-            </span>
+          <div class="image has-bage block-center">
+            <div class="thumbnail">
+              <img src="[[#if moment.image]][[moment.image]][[else]]/img/moment-placeholder.gif[[/if]]" itemprop="contentUrl" />
+            </div>
 
-            <span class="hover-bar">
-              <a class="with-tooltip has-overlap action-use-as-cover disabled" data-original-title="Use as day cover">
-                <i class="icon-picture"></i>
-                <i class="overlap icon-ok"></i>
-              </a>
-              <span class="actions-block">
-                <a class="with-tooltip action-rotate-left" data-original-title="Rotate left">
-                  <i class="icon-undo"></i>
+            <span class="bage bage-large bage-bottom-right visible-desktop image-toolbar">
+              <span class="hover-toggler">
+                <i class="icon-pencil"></i>
+                <i class="icon-caret-right"></i>
+              </span>
+
+              <span class="hover-bar">
+                <a class="with-tooltip has-overlap action-use-as-cover disabled" data-original-title="Use as day cover">
+                  <i class="icon-picture"></i>
+                  <i class="overlap icon-ok"></i>
                 </a>
-                <a class="with-tooltip action-rotate-right" data-original-title="Rotate right">
-                  <i class="icon-repeat"></i>
+                <span class="actions-block">
+                  <a class="with-tooltip action-rotate-left" data-original-title="Rotate left">
+                    <i class="icon-undo"></i>
+                  </a>
+                  <a class="with-tooltip action-rotate-right" data-original-title="Rotate right">
+                    <i class="icon-repeat"></i>
+                  </a>
+                </span>
+                <a class="with-tooltip action-crop" data-original-title="Crop this image">
+                  <i class="icon-cut"></i>
                 </a>
               </span>
-              <a class="with-tooltip action-crop" data-original-title="Crop this image">
-                <i class="icon-cut"></i>
+
+              <span class="confirm-bar">
+                <i class="icon-caret-right"></i>
+                <a class="hover-bar-indicator btn btn-success btn-mini with-tooltip has-spinner action-edit-confirm" data-original-title="Save changes">
+                  <span class="spinner icon-refresh icon-spin"></span>
+                  Save
+                </a>
+              </span>
+            </span>
+          </div>
+
+           <div class="btn-toolbar text-center hidden-desktop image-btn-toolbar">
+            <a class="btn btn-small action-use-as-cover">
+              <i class="icon-picture"></i> Cover
+            </a>
+            <span class="btn-group action-rotate">
+              <a class="btn btn-small action-rotate-left">
+                <i class="icon-undo"></i>
+              </a>
+              <a class="btn btn-small action-rotate-right">
+                <i class="icon-repeat"></i>
               </a>
             </span>
-
-            <span class="confirm-bar">
-              <i class="icon-caret-right"></i>
-              <a class="hover-bar-indicator btn btn-success btn-mini with-tooltip has-spinner action-edit-confirm" data-original-title="Save changes">
-                <span class="spinner icon-refresh icon-spin"></span>
-                Save
-              </a>
-            </span>
-          </span>
-        </div>
-
-         <div class="btn-toolbar text-center hidden-desktop image-btn-toolbar">
-          <a class="btn btn-small action-use-as-cover">
-            <i class="icon-picture"></i> Cover
-          </a>
-          <span class="btn-group action-rotate">
-            <a class="btn btn-small action-rotate-left">
-              <i class="icon-undo"></i>
+            <a class="btn btn-small action-crop">
+              <i class="icon-cut"></i> Crop
             </a>
-            <a class="btn btn-small action-rotate-right">
-              <i class="icon-repeat"></i>
+            <a class="btn btn-small btn-success disabled action-edit-confirm">
+              <i class="icon-ok"></i> Save
             </a>
-          </span>
-          <a class="btn btn-small action-crop">
-            <i class="icon-cut"></i> Crop
-          </a>
-          <a class="btn btn-small btn-success disabled action-edit-confirm">
-            <i class="icon-ok"></i> Save
-          </a>
-        </div>
+          </div>
 
-        <div class="description bubble block-center">
-          <form name="moment_description_form">
-            <textarea name="text" rows="4" class="input-block-level" placeholder="Enter moment description...">[[moment.description]]</textarea>
-            <button type="submit" class="btn btn-block has-spinner disabled">
-              <span class="spinner icon-spin icon-refresh"></span>
-              Create moment
+          <div class="description bubble block-center">
+            <form name="moment_description_form">
+              <textarea name="text" rows="4" class="input-block-level" placeholder="Enter moment description...">[[moment.description]]</textarea>
+              <button type="submit" class="btn btn-block has-spinner disabled">
+                <span class="spinner icon-spin icon-refresh"></span>
+                Create moment
+              </button>
+            </form>
+            <button type="button" class="btn btn-block btn-danger action-delete visible-phone visible-tablet">
+              Delete moment
             </button>
-          </form>
-          <button type="button" class="btn btn-block btn-danger action-delete visible-phone visible-tablet">
-            Delete moment
-          </button>
+          </div>
+        </article>
+
+        {{apply template="moment_item_placeholder" /}}
+      </script>
+
+      <script id="template_image_select_popover" type="text/x-handlebars-template">
+        <div class="file-selector">
+          <h5>From PC:</h5>
+          <div class="text-center">
+            <div class="fileupload fileupload-new" data-provides="fileupload">
+              <div>
+                <button class="btn btn-file">
+                  <span class="fileupload-new">
+                    <i class="icon icon-large icon-cloud-upload"></i>
+                    Select image
+                  </span>
+                  <input type="file" />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <h5>Import from:</h5>
+          <div class="text-center">
+            <button class="btn action-import" data-source="instagram">
+                <i class="icon-instagram"></i>
+                Instagram
+            </button>
+            <button class="btn action-import" data-source="flickr">
+                <i class="icon-flickr"></i>
+                Flickr
+            </button>
+            <button class="btn action-import" data-source="facebook">
+                <i class="icon-facebook-sign"></i>
+                Facebook
+            </button>
+          </div>
         </div>
-      </article>
+      </script>
 
-      {{apply template="moment_item_placeholder" /}}
-    </script>
+      <script id="template_image_select_popover_mobile" type="text/x-handlebars-template">
+        <div class="file-selector">
+          <div class="text-center">
+            <div class="fileupload fileupload-new" data-provides="fileupload">
+              <div>
+                <button class="btn btn-file">
+                  <span class="fileupload-new">
+                    <i class="icon icon-large icon-cloud-upload"></i>
+                    Select image
+                  </span>
+                  <input type="file" />
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </script>
 
-    <script id="template_image_select_popover" type="text/x-handlebars-template">
-      <div class="file-selector">
-        <h5>From PC:</h5>
-        <div class="text-center">
-          <div class="fileupload fileupload-new" data-provides="fileupload">
-            <div>
-              <button class="btn btn-file">
-                <span class="fileupload-new">
-                  <i class="icon icon-large icon-cloud-upload"></i>
-                  Select image
-                </span>
-                <input type="file" />
+      <script id="template_image_upload_progress" type="text/x-handlebars-template">
+        <div class="image-upload-progress" style="display:none">
+          <div class="progress progress-striped active">
+            <div class="bar" style="width: 1%;"></div>
+          </div>
+        </div>
+      </script>
+
+      <script id="template_import_modal" type="text/x-handlebars-template">
+        <div class="modal hide fade import-modal" tabindex="-1" role="dialog" aria-labelledby="import_modal_label" aria-hidden="true">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="import_modal_label">Import</h3>
+          </div>
+          <div class="modal-body">
+            <div class="import-progress" style="display:none">
+              <div class="text text-center">Retrieving data...</div>
+              <div class="progress progress-striped active">
+                <div class="bar" style="width: 1%;"></div>
+              </div>
+            </div>
+            <div class="import-container" style="display:none">
+              <button class="btn btn-block action-paginate-prev has-spinner" style="margin-bottom:25px;">
+                <span class="spinner icon-spin icon-refresh"></span>
+                Earlier
+              </button>
+              <ul class="thumbnails inline unstyled"></ul>
+              <button class="btn btn-block action-paginate-next has-spinner" style="margin-top:-15px;">
+                <span class="spinner icon-spin icon-refresh"></span>
+                Later
               </button>
             </div>
           </div>
         </div>
+      </script>
 
-        <h5>Import from:</h5>
-        <div class="text-center">
-          <button class="btn action-import" data-source="instagram">
-              <i class="icon-instagram"></i>
-              Instagram
-          </button>
-          <button class="btn action-import" data-source="flickr">
-              <i class="icon-flickr"></i>
-              Flickr
-          </button>
-          <button class="btn action-import" data-source="facebook">
-              <i class="icon-facebook-sign"></i>
-              Facebook
-          </button>
-        </div>
-      </div>
-    </script>
-
-    <script id="template_image_select_popover_mobile" type="text/x-handlebars-template">
-      <div class="file-selector">
-        <div class="text-center">
-          <div class="fileupload fileupload-new" data-provides="fileupload">
-            <div>
-              <button class="btn btn-file">
-                <span class="fileupload-new">
-                  <i class="icon icon-large icon-cloud-upload"></i>
-                  Select image
-                </span>
-                <input type="file" />
-              </button>
+      <script id="template_import_modal_shoot" type="text/x-handlebars-template">
+        <li style="opacity:0">
+          <div class="thumbnail">
+            <div class="img-wrap img-rounded" style="background-image: url('[[image]]');"></div>
+          </div>
+        </li>
+      </script>
+    <? } ?>
+    <? if($this->is_import_preview) { ?>
+      <script id="template_day_import_modal" type="text/x-handlebars-template">
+        <div class="modal hide fade day-import-modal" tabindex="-1" role="dialog" aria-labelledby="day_import_modal_label" aria-hidden="true">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="day_import_modal_label">Import</h3>
+          </div>
+          <div class="modal-body">
+            <div class="import-progress" style="display:none">
+              <div class="text text-center">Retrieving data...</div>
+              <div class="progress progress-striped active">
+                <div class="bar" style="width: 1%;"></div>
+              </div>
             </div>
-          </div>
         </div>
-      </div>
-    </script>
-
-    <script id="template_image_upload_progress" type="text/x-handlebars-template">
-      <div class="image-upload-progress" style="display:none">
-        <div class="progress progress-striped active">
-          <div class="bar" style="width: 1%;"></div>
-        </div>
-      </div>
-    </script>
-
-    <script id="template_import_modal" type="text/x-handlebars-template">
-      <div class="modal hide fade import-modal" tabindex="-1" role="dialog" aria-labelledby="import_modal_label" aria-hidden="true">
-        <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-          <h3 id="import_modal_label">Import</h3>
-        </div>
-        <div class="modal-body">
-          <div class="import-progress" style="display:none">
-            <div class="text text-center">Retrieving data...</div>
-            <div class="progress progress-striped active">
-              <div class="bar" style="width: 1%;"></div>
-            </div>
-          </div>
-          <div class="import-container" style="display:none">
-            <button class="btn btn-block action-paginate-prev has-spinner" style="margin-bottom:25px;">
-              <span class="spinner icon-spin icon-refresh"></span>
-              Earlier
-            </button>
-            <ul class="thumbnails inline unstyled"></ul>
-            <button class="btn btn-block action-paginate-next has-spinner" style="margin-top:-15px;">
-              <span class="spinner icon-spin icon-refresh"></span>
-              Later
-            </button>
-          </div>
-        </div>
-      </div>
-    </script>
-
-    <script id="template_import_modal_shoot" type="text/x-handlebars-template">
-      <li style="opacity:0">
-        <div class="thumbnail">
-          <div class="img-wrap img-rounded" style="background-image: url('[[image]]');"></div>
-        </div>
-      </li>
-    </script>
+      </script>
+    <? } ?>
   {{/into}}
 
   {{into slot="content"}}
@@ -324,10 +348,18 @@ $this->day->is_gathering_enabled = false;
       <article class="span8 offset2 day">
         <? if($this->is_preview) { ?>
           <div class="alert">
-            <h2>This is preview page!</h2>
+            <h2>This is preview page</h2>
             Here you can see how your day is displayed for other users! <br />
             <a href="/pages/{$#day->id}/day" class="btn btn-small btn-success with-tooltip" data-original-title="Leave preview mode">
               &larr; Back to edit
+            </a>
+          </div>
+        <? } elseif($this->is_import_preview) { ?>
+          <div class="alert">
+            <h2>This is import preview page</h2>
+            Here you can take look how your <a href="{$#import_from}">story</a> would look like in OneDayOfMine.<br />
+            <a class="btn btn-small btn-success action-import">
+              Awesome, i like it, import this day
             </a>
           </div>
         <? } ?>
@@ -396,10 +428,12 @@ $this->day->is_gathering_enabled = false;
           <? } ?>
 
           <div class="btn-toolbar">
-            <div class="input-prepend small with-tooltip" data-original-title="Scroll to comments">
-              <span class="add-on"><i class="icon-comments"></i> {$this->day->comments_count}</span>
-              <button class="btn btn-small scrollTo comments" type="button">Comments</button>
-            </div>
+            <? if(!$this->is_import_preview) { ?>
+              <div class="input-prepend small with-tooltip" data-original-title="Scroll to comments">
+                <span class="add-on"><i class="icon-comments"></i> {$this->day->comments_count}</span>
+                <button class="btn btn-small scrollTo comments" type="button">Comments</button>
+              </div>
+            <? } ?>
 
             {{apply template="day_like_button" /}}
 
@@ -576,85 +610,88 @@ $this->day->is_gathering_enabled = false;
           </div>
         </div>
 
-        <hr />
+        <? if(!$this->is_import_preview) { ?>
+          <hr />
 
-        <section class="comments">
-          <a name="comments"></a>
-          <? if($this->day->comments && $this->day->comments_count > 0) { ?>
-            <span class="pull-right not-decorated text-gray">
-              <i class="icon-comments"></i>
-              <span class="counter"><? if($this->day->comments_count > 3) { ?>3/<? } ?>{$this->day->comments_count}</span>
-            </span>
-          <? } ?>
-          <h2>Comments:</h2>
+          <section class="comments">
+            <a name="comments"></a>
+            <? if($this->day->comments && $this->day->comments_count > 0) { ?>
+              <span class="pull-right not-decorated text-gray">
+                <i class="icon-comments"></i>
+                <span class="counter"><? if($this->day->comments_count > 3) { ?>3/<? } ?>{$this->day->comments_count}</span>
+              </span>
+            <? } ?>
+            <h2>Comments:</h2>
 
-          <div class="articles">
-            <? if(property_exists($this->day, 'comments')) { ?>
-              {{list using="$#day->comments"}}
-                {{list:item}}
-                  <article data-comment-id="{$item->id}">
-                    <a href="/pages/{$item->user->id}/user">
-                      <img src="{$item->user->image_72}" width="72" class="pull-left img-rounded" />
-                    </a>
-
-                    <div class="bubble left">
-                      <? if($this->toolkit->getUser() && $item->user->id == $this->toolkit->getUser()->id) { ?>
-                        <ul class="unstyled inline not-decorated controls-absolute">
-                          <li>
-                            <a class="action-delete text-gray">
-                              <i class="icon-trash with-tooltip" data-original-title="Delete comment"></i>
-                            </a>
-                          </li>
-                        </ul>
-                      <? } ?>
-                      <p class="text">
-                        {$item->text}
-
-                        <small>by <b><a href="/pages/{$item->user->id}/user">{$item->user->name}</a></b></small>
-                      </p>
-                    </div>
-                  </article>
-                {{/list:item}}
-                {{list:default}}
-                  <? if($this->toolkit->getUser()){ ?>
-                    <article class="template">
-                      <img src="/users/default_image_72.png" width="72" class="pull-left img-rounded" />
+            <div class="articles">
+              <? if(property_exists($this->day, 'comments')) { ?>
+                {{list using="$#day->comments"}}
+                  {{list:item}}
+                    <article data-comment-id="{$item->id}">
+                      <a href="/pages/{$item->user->id}/user">
+                        <img src="{$item->user->image_72}" width="72" class="pull-left img-rounded" />
+                      </a>
 
                       <div class="bubble left">
+                        <? if($this->toolkit->getUser() && $item->user->id == $this->toolkit->getUser()->id) { ?>
+                          <ul class="unstyled inline not-decorated controls-absolute">
+                            <li>
+                              <a class="action-delete text-gray">
+                                <i class="icon-trash with-tooltip" data-original-title="Delete comment"></i>
+                              </a>
+                            </li>
+                          </ul>
+                        <? } ?>
                         <p class="text">
-                          You can be first, who wrote comment for this day!
+                          {$item->text}
 
-                          <small>by <b><a>Anonymous</a></b></small>
+                          <small>by <b><a href="/pages/{$item->user->id}/user">{$item->user->name}</a></b></small>
                         </p>
                       </div>
                     </article>
-                  <? } ?>
-                {{/list:default}}
-              {{/list}}
-            <? } ?>
-          </div>
+                  {{/list:item}}
+                  {{list:default}}
+                    <? if($this->toolkit->getUser()){ ?>
+                      <article class="template">
+                        <img src="/users/default_image_72.png" width="72" class="pull-left img-rounded" />
 
-          <div class="loader-wrap">
-            <button class="btn btn-block action-load-next has-spinner<? if(!$this->day->comments || $this->day->comments_count < 4) { ?> disabled" style="opacity:0<? } ?>">
-              <span class="spinner icon-spin icon-refresh"></span>
-              Load more comments
-            </button>
-          </div>
+                        <div class="bubble left">
+                          <p class="text">
+                            You can be first, who wrote comment for this day!
 
-          <? if($this->toolkit->getUser()) { ?>
-            <form name="add_comment_form">
-              <textarea rows="3" class="input-block-level text"></textarea>
-              <button type="submit" class="btn btn-block has-spinner disabled">
-                <span class="spinner icon-spin icon-refresh"></span>
-                Send comment
-              </button>
-            </form>
-          <? } else { ?>
-            <div class="alert alert-block">
-              <a href="#" class="trigger_login">Sign up</a> to write comment
+                            <small>by <b><a>Anonymous</a></b></small>
+                          </p>
+                        </div>
+                      </article>
+                    <? } ?>
+                  {{/list:default}}
+                {{/list}}
+              <? } ?>
             </div>
-          <? } ?>
-        </section>
+
+            <div class="loader-wrap">
+              <button class="btn btn-block action-load-next has-spinner<? if(!$this->day->comments || $this->day->comments_count < 4) { ?> disabled" style="opacity:0<? } ?>">
+                <span class="spinner icon-spin icon-refresh"></span>
+                Load more comments
+              </button>
+            </div>
+
+            <? if($this->toolkit->getUser()) { ?>
+              <form name="add_comment_form">
+                <textarea rows="3" class="input-block-level text"></textarea>
+                <button type="submit" class="btn btn-block has-spinner disabled">
+                  <span class="spinner icon-spin icon-refresh"></span>
+                  Send comment
+                </button>
+              </form>
+            <? } else { ?>
+              <div class="alert alert-block">
+                <a href="#" class="trigger_login">Sign up</a> to write comment
+              </div>
+            <? } ?>
+          </section>
+        <? } ?>
+
 
         <div class="visible-phone scrollHelperMobile">
           <hr />
@@ -670,23 +707,5 @@ $this->day->is_gathering_enabled = false;
         Back to top <i class="icon-angle-up"></i>
       </a>
     </div>
-
-    <?php if('production' != lmb_app_mode()) { ?>
-      <script src="/lib/vendor/jquery.sbl-scroll.js"></script>
-      <script type="text/javascript">
-        $(function() {
-          if(!$.isMobile()) {
-            $.sublimeScroll({
-              top: 120,
-              bottom: 200,
-              color: 'rgba(255, 255, 255, 0.8)',
-              content_width: function($el, settings, $scroll_wrapper) {
-                return $(".content").width();
-              }
-            });
-          }
-        });
-      </script>
-    <? } ?>
   {{/into}}
 {{/wrap}}

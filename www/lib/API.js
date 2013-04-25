@@ -86,17 +86,15 @@ var API = (function() {
                 code: invitation_code
               });
 
-              invitation_code_request.success(function(invitation_code_response) {
-                $this.hideSpinner();
-                console.log(invitation_code_response.data);
+              invitation_code_request.success(function(invitation_code_response)
+							{
                 if(invitation_code_response.data.result === false) {
                   modal_selector.find('input[type=text]').addClass('error');
                   modal_selector.find('.alert').removeClass('hide');
+									$this.hideSpinner();
                 } else {
                   modal_selector.find('input[type=text]').removeClass('error');
                   modal_selector.find('.alert').addClass('hide');
-                  modal_selector.modal('hide');
-
                   login_request.params.data.invitation_code = invitation_code;
                   makeTry();
                 }

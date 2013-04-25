@@ -289,8 +289,8 @@ class odObjectMother
     srand((double) microtime() * 1000000);
     $max = $length / 2;
     for ($i = 1; $i <= $max; $i++) {
-      $password .= $conso[rand(0, 19)];
-      $password .= $vocal[rand(0, 4)];
+      $password .= rand(0, 1) ? $conso[rand(0, 19)] : strtoupper($conso[rand(0, 19)]);
+      $password .= rand(0, 1) ? $vocal[rand(0, 4)] : strtoupper($vocal[rand(0, 4)]);
     }
     return $password;
   }
