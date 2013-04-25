@@ -26,7 +26,7 @@ class MainPageController extends WebAppController
 		{
 			$user  = $this->toolkit->getUser();
 			$news = $user->getNews()->paginate(0, $this->lists_limit);
-			$user->markNewsAsRead($news);
+			$user->markAllNewsAsRead();
 
 			$this->news = $this->_mergeNews($news);
 			$this->news = $this->_toFlatArray($this->news);

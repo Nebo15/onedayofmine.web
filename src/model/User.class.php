@@ -342,6 +342,14 @@ class User extends BaseModel
 		$query->execute();
 	}
 
+	function markAllNewsAsRead()
+	{
+		$query = new lmbUpdateQuery('news_recipient');
+		$query->addField('is_read', '1');
+		$query->addCriteria(lmbSQLCriteria::equal('user_id', $this->id));
+		$query->execute();
+	}
+
 	function getActivityWithLimitation($from_id = null, $to_id = null, $limit = null)
   {
     $criteria = lmbSQLCriteria::equal('sender_id', $this->id);
