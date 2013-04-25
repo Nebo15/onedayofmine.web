@@ -253,6 +253,8 @@ class PagesController extends WebAppController
     $this->day->likes_count = '∞';
     $this->day->likes = [];
     $this->day->views_count = 1;
+    $this->day->image_532 = '';
+    $this->day->image_266 = '';
     if($this->toolkit->getUser()) {
       $this->day->user = $this->toolkit->getExportHelper()->exportUserItem($this->toolkit->getUser());
     } else {
@@ -266,7 +268,7 @@ class PagesController extends WebAppController
 		$delta = (1440 - 640) / count($moments);
 		foreach($moments as $i => $moment_data)
 		{
-      if(!property_exists($this->day, 'image_532')) {
+      if($this->day->image_532 == '') {
         $this->day->image_532 = $moment_data['img'];
         $this->day->image_266 = $moment_data['img'];
       }
@@ -323,6 +325,8 @@ class PagesController extends WebAppController
     $this->day->likes_count = '∞';
     $this->day->likes = [];
     $this->day->views_count = 1;
+    $this->day->image_532 = '';
+    $this->day->image_266 = '';
     if($this->toolkit->getUser()) {
       $this->day->user = $this->toolkit->getExportHelper()->exportUserItem($this->toolkit->getUser());
     } else {
@@ -336,7 +340,7 @@ class PagesController extends WebAppController
 		$delta = (1440 - 640) / count($moments);
 		foreach($moments as $i => $moment_data)
 		{
-      if(!property_exists($this->day, 'image_532')) {
+      if($this->day->image_532 == '') {
         $this->day->image_532 = $moment_data['img'];
         $this->day->image_266 = $moment_data['img'];
       }
