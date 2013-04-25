@@ -617,6 +617,17 @@ $(function() {
         $image.removeData('crop-select');
       }
 
+			function calculateSelectionInitialCoords(image_width, image_height)
+			{
+				var frame_width = $image.width() <= $image.height()
+						? image_width : image_width / $image.width() * $image.height();
+				var frame_height = $image.width()  <= $image.height()
+						? image_height : image_height / $image.width() * $image.height();
+				var fx1 = $image.width() / 2 - frame_width / 2;
+				var fy1 = $image.height() / 2 - frame_height / 2;
+				return [fx1, fy1, fx1 + frame_width, fy1 + frame_height];
+			}
+
       if($crop_btn.hasClass('disabled')) {
         def.reject();
         return def.promise();
@@ -663,7 +674,7 @@ $(function() {
         $moment.on('imagechanged.cropper', function(event, data_url) {
           if(isAttached()) {
             crop_api.redraw(function() {
-              crop_api.setSelect(cordsLoad($image));
+              crop_api.setSelect(calculateSelectionInitialCoords(image_width, image_height));
             });
             // crop_api.setImage(data_url); // This is right, but produce bugs
           } else {
@@ -709,19 +720,12 @@ $(function() {
       ImageTools.Convert.imageToDataURL($image.attr('src')).done(function(data_url) {
         // Enshure that cropped attached on data_url'ed image
         $moment.one('imagechanged', function() {
-					var frame_width = $image.width() <= $image.height()
-							? image_width : image_width / $image.width() * $image.height();
-					var frame_height = $image.width()  <= $image.height()
-							? image_height : image_height / $image.width() * $image.height();
-					var fx1 = $image.width() / 2 - frame_width / 2;
-					var fy1 = $image.height() / 2 - frame_height / 2;
-
           // Show crop tool
           $image.Jcrop({
             aspectRatio: image_width/image_height,
             keySupport: false,
             boxWidth: image_width,
-						setSelect: [fx1, fy1, fx1 + frame_width, fy1 + frame_height],
+						setSelect: calculateSelectionInitialCoords(image_width, image_height),
             onSelect: cordsSave,
             onChange: cordsSave, // Remove to dont spam data-api
             allowSelect : false // This is undocumented feature

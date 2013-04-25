@@ -190,7 +190,7 @@ class DaysGuestControllerTest extends odControllerTestCase
     $day4->ctime = $time - 2 * $day;
     $day4->save();
     $day5 = $this->generator->dayWithMoments();
-    $this->generator->dayLikes($day5, 1000);
+    $this->generator->dayLikes($day5, 100);
     $day5->ctime = $time - $day;
     $day5->is_deleted = 1;
     $day5->save();
