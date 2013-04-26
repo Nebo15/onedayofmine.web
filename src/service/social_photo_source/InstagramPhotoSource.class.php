@@ -95,15 +95,10 @@ class InstagramPhotoSource extends BaseSocialPhotoSource
 					? $raw_photo->location->longitude : null;
 			$location = $raw_photo->location && property_exists($raw_photo->location, 'name')
 					? $raw_photo->location->name : null;
-			$result[] = [
+
+			$one_result = [
 				'id' => $raw_photo->id,
 				'title' => $raw_photo->caption ? $raw_photo->caption->text : '',
-				'image' => $raw_photo->images->standard_resolution->url,
-				'image_width' => $raw_photo->images->standard_resolution->width,
-				'image_height' => $raw_photo->images->standard_resolution->height,
-				'thumb' => $raw_photo->images->thumbnail->url,
-				'thumb_width' => $raw_photo->images->thumbnail->width,
-				'thumb_height' => $raw_photo->images->thumbnail->height,
 				'description' => '',
 				'location_latitude' => $latitude,
 				'location_longitude' => $longitude,
@@ -111,6 +106,35 @@ class InstagramPhotoSource extends BaseSocialPhotoSource
 				'tags' => $raw_photo->tags,
 				'time' => (int) $raw_photo->created_time,
 			];
+
+			// instagram bug https://groups.google.com/forum/?fromgroups=#!topic/instagram-api-developers/ncB18unjqyg
+			if(property_exists($raw_photo->images->standard_resolution, 'url'))
+			{
+				$one_result['image'] = $raw_photo->images->standard_resolution->url;
+				$one_result['image_width'] = $raw_photo->images->standard_resolution->width;
+				$one_result['image_height'] = $raw_photo->images->standard_resolution->height;
+			}
+			else
+			{
+				$one_result['image'] = $raw_photo->images->standard_resolution;
+				$one_result['image_width'] = null;
+				$one_result['image_height'] = null;
+			}
+
+			if(property_exists($raw_photo->images->thumbnail, 'url'))
+			{
+				$one_result['thumb'] = $raw_photo->images->thumbnail->url;
+				$one_result['thumb_width'] = $raw_photo->images->thumbnail->width;
+				$one_result['thumb_height'] = $raw_photo->images->thumbnail->height;
+			}
+			else
+			{
+				$one_result['thumb'] = $raw_photo->images->standard_resolution;
+				$one_result['thumb_width'] = null;
+				$one_result['thumb_height'] = null;
+			}
+
+			$result[] = $one_result;
 		}
 		return $result;
 	}
