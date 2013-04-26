@@ -607,14 +607,17 @@ $this->day->is_gathering_enabled = false;
           </div>
         <? } ?>
 
-        <div class="alert alert-block">
-	        <h2>This is import preview page</h2>
-	        Here you can take look how your <a href="{$#import_from}">story</a> would look like in OneDayOfMine.<br />
-	        <br/>
-	        <a class="btn btn-block btn-success action-import">
-		        Import!
-	        </a>
-        </div>
+        <? if($this->is_import_preview) { ?>
+          <br />
+          <div class="alert alert-block">
+  	        <h2>This is import preview page</h2>
+  	        Here you can take look how your <a href="{$#import_from}">story</a> would look like in OneDayOfMine.<br />
+  	        <br/>
+  	        <a class="btn btn-block btn-success action-import">
+  		        Import!
+  	        </a>
+          </div>
+        <? } ?>
 
         <div class="clearfix">
           <div class="btn-toolbar pull-right-on-tablet pull-right-on-desktop text-center">
