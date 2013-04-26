@@ -1,0 +1,137 @@
+<?
+$this->menu = 'news';
+?>
+{{wrap with="layout.phtml"}}
+{{into slot="templates"}}
+<script id="news_list_template" type="text/x-handlebars-template">
+	<ul class="news unstyled">
+		[[#news]]
+		[[#include news_list_elements_template]]
+		[[/news]]
+	</ul>
+</script>
+
+<script id="news_list_elements_template" type="text/x-handlebars-template">
+	[[#news]]
+	<li data-id="[[id]]">
+		<a href="/pages/[[sender.id]]/user">
+			<img src="[[sender.image_72]]" width="72" class="pull-left img-rounded" alt="" />
+		</a>
+		<div class="bubble left">
+			<p class="text">
+				[[raw text]]
+				<br />
+				[[#days]]
+				<a href="/pages/[[id]]/day">
+					<img src="[[day.image_266]]" width="72">
+				</a>
+				[[/days]]
+				[[#moments]]
+				<a href="/pages/[[day.id]]/day">
+					<img src="[[moment.image_266]]" width="72">
+				</a>
+				[[/moments]]
+				[[#day_comments]]
+			<blockquote>[[comment.text]]</blockquote>
+			[[/day_comments]]
+			[[#moment_comments]]
+			<blockquote>[[comment.text]]</blockquote>
+			[[/moment_comments]]
+			<small>[[datetime time]]</small>
+			</p>
+
+		</div>
+	</li>
+	[[/news]]
+</script>
+{{/into}}
+{{into slot="js_include"}}
+<script src="/lib/InfiniteScroll.js"></script>
+{{/into}}
+{{into slot="css"}}
+.bubble small:before { content:''; }
+.bubble small { float:right; }
+{{/into}}
+{{into slot="js_ready"}}
+// Init paginator
+var template_list = Template.prepareTemplate($('#news_list_elements_template'));
+$('.news').infiniteScroll({
+request: API.get('my/news'),
+success: function(response)
+{
+var news = Template.compileElement(template_list, {
+news: response.data.result
+});
+news = $($.trim(news));
+$(this).find('.infiniteScroll_button_container').before(news);
+
+var news_ids = [];
+for (var i in response.data.result)
+news_ids.push(response.data.result[i].id);
+API.post('my/mark_news_as_read', {news_ids: news_ids}).send();
+}
+});
+{{/into}}
+{{into slot="content"}}
+<div class="row">
+	<div class="span8">
+		<h1>News</h1>
+		{{list using="$#news"}}
+		<ul class="news unstyled">
+			{{list:item}}
+			<li data-id="{$item.id}">
+				<a href="/pages/{$item.sender.id}/user">
+					<img src="{$item.sender.image_72}" width="72" class="pull-left img-rounded" alt="" />
+				</a>
+				<div class="bubble left">
+					<p class="text">
+						{$item.text|raw}
+						<br />
+						{{list using="{$item.days}" as="$day"}}
+						{{list:item}}
+						<a href="/pages/{$day.id}/day">
+							<img src="{$day.image_266}" width="72">
+						</a>
+						{{/list:item}}
+						{{/list}}
+						{{list using="{$item.moments}" as="$moment"}}
+						{{list:item}}
+						<a href="/pages/{$item.day.id}/day">
+							<img src="{$moment.image_266}" width="72">
+						</a>
+						{{/list:item}}
+						{{/list}}
+						{{list using="{$item.day_comments}" as="$comment"}}
+						{{list:item}}
+					<blockquote>{$comment.text}</blockquote>
+					{{/list:item}}
+					{{/list}}
+					{{list using="{$item.moment_comments}" as="$comment"}}
+					{{list:item}}
+					<blockquote>{$comment.text}</blockquote>
+					{{/list:item}}
+					{{/list}}
+					<small>{$item.time|pretty_date}</small>
+					</p>
+				</div>
+			</li>
+			{{/list:item}}
+			{{list:empty}}
+			<p>You don't have news. Try to <a href="/pages/find_people">follow</a> more people.</p>
+			{{/list:empty}}
+		</ul>
+		{{/list}}
+	</div>
+
+	<div class="span3 hidden-phone">
+		<div>
+			{{apply template="following_thumb_list" users="{$#following}" /}}
+		</div>
+
+		<div>
+			{{apply template="followers_thumb_list" users="{$#followers}" /}}
+		</div>
+	</div>
+</div>
+{{/into}}
+{{/wrap}}
