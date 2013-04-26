@@ -172,105 +172,77 @@ $(function() {
   var $day = $('.day');
 
   // Selector string that is used globally
-  var day_final_description_form_selector = 'form[name=final_description_form]';
-  var day_final_description_form_input_selector = 'textarea[name=text]';
-  var day_final_description_form_submit_btn_selector = '.btn[type=submit]';
+  var day_description_form_input_selector = 'input[name=description]';
+  var day_description_form_submit_btn_selector = '.btn[type=submit]';
 
   // Day info editing
   (function() {
+
     // Controls containers
     var $controls = $day.find('header .day-controls-group');
     var $toolbar = $day.find('.day-toolbar');
 
-    // Day title
-    var $title_form = $controls.find('form[name=day_title_from]');
-    var $title_form_input = $title_form.find('input[name=title]');
-    var $title_form_submit_btn = $title_form.find('button[type=submit]');
 
-    $title_form_input.attachValidator({
-      button: $title_form_submit_btn,
+    // Day form
+    var $day_form = $controls.find('form[name=day]');
+		var $day_form_submit = $day_form.find('button[type=submit]');
+    var $title_input = $day_form.find('input[name=title]');
+		var $description_input = $day_form.find('textarea[name=description]');
+		var is_form_valid = true;
+
+		$title_input.attachValidator({
+      button: $day_form_submit,
       saveValidationState: true,
       minLength: 3,
       maxLength: 100,
       messages: {
-        empty: "Day title should not be empty",
-        minLength: "Day title should be longer than 3 characters",
-        maxLength: "Day title should not be longer than 100 characters"
+        empty: "Title should not be empty",
+        minLength: "Title should be longer than 3 characters",
+        maxLength: "Title should not be longer than 100 characters"
       },
       onError: function() {
-        $title_form_submit_btn.removeClass('btn-success');
+				$day_form_submit.prop("disabled", true);
+				$day_form_submit.removeClass('btn-success').addClass('disabled');
       },
       onSuccess: function() {
-        $title_form_submit_btn.addClass('btn-success');
+				$day_form_submit.prop("disabled", false);
+				$day_form_submit.addClass('btn-success').removeClass('disabled');
       }
     });
 
-    $title_form.submit(function(event) {
-      if($title_form_submit_btn.hasClass('disabled')) {
+		$day_form.find(':input').on('keyup', function() {
+			$day_form_submit.removeClass('disabled').addClass('btn-success');
+		});
+
+		$day_form.submit(function(event)
+		{
+      if($day_form_submit.hasClass('disabled')) {
         return false;
       }
 
-      $title_form_input.prop("disabled", true);
-      $title_form_submit_btn.addClass('disabled');
-      $title_form_submit_btn.showSpinner();
+			$title_input.prop("disabled", true);
+			$day_form_submit.addClass('disabled');
+			$day_form_submit.showSpinner();
 
       var day_title_request = API.request('POST', '/days/' + day_data.id + '/update', {
-        title: $title_form_input.val()
+        title: $title_input.val(),
+				final_description: $description_input.val()
       });
 
       day_title_request.success(function() {
-        $title_form_submit_btn.hideSpinner();
-        $title_form_input.prop("disabled", false);
-        $('meta[property="og:title"]').prop('content',  $title_form_input.val());
-        $title_form_submit_btn.addClass('disabled').removeClass('btn-success btn-danger');
+				$day_form_submit.hideSpinner();
+				$title_input.prop("disabled", false);
+        $('meta[property="og:title"]').prop('content',  $title_input.val());
+				$day_form_submit.addClass('disabled').removeClass('btn-success btn-danger');
       });
 
       day_title_request.error(function() {
-        $title_form_submit_btn.hideSpinner();
-        $title_form_input.prop("disabled", false);
-        $title_form_submit_btn.addClass('btn-danger').removeClass('btn-success disabled');
+				$day_form_submit.hideSpinner();
+				$title_input.prop("disabled", false);
+				$day_form_submit.addClass('btn-danger').removeClass('btn-success disabled');
       });
 
       day_title_request.send();
-
-      return false;
-    });
-
-    // Day type
-    var $type_form = $controls.find('form[name=day_type_from]');
-    var $type_form_btns = $type_form.find('.btn');
-
-    var $type_form_default_btn = $type_form_btns.filter('.active');
-    // var type_request_timeout;
-
-    $type_form.submit(function() {
-      var $active_btn = $type_form_btns.filter('.active');
-
-      if($type_form_default_btn.is($active_btn)) {
-        return false;
-      }
-
-      if($active_btn.length !== 1) {
-        console.error("Can't find day type active button");
-      }
-
-      var type_request = API.request('POST', '/days/' + day_data.id + '/update', {
-        type: $active_btn.text()
-      });
-
-      type_request.success(function() {
-        $active_btn.removeClass('btn-danger');
-        $type_form_default_btn = $active_btn;
-      });
-
-      type_request.error(function() {
-        $active_btn.addClass('btn-danger').removeClass('btn-success');
-      });
-
-      // clearTimeout(type_request_timeout);
-      // type_request_timeout = setTimeout(function() {
-      type_request.send();
-      // }, 500);
 
       return false;
     });
@@ -292,52 +264,6 @@ $(function() {
 
         delete_request.send();
       }
-    });
-
-    // Day final description edit
-    var $final_description_form = $day.find(day_final_description_form_selector);
-    var $final_description_form_input = $final_description_form.find(day_final_description_form_input_selector);
-    var $final_description_form_submit_btn = $final_description_form.find(day_final_description_form_submit_btn_selector);
-
-    $final_description_form_input.on('keyup', function() {
-      $final_description_form_submit_btn.removeClass('disabled').addClass('btn-success');
-    });
-
-    $final_description_form.submit(function() {
-      if($final_description_form_submit_btn.hasClass('disabled')) {
-        return false;
-      }
-
-      $final_description_form_input.prop("disabled", true);
-      $final_description_form_submit_btn.addClass('disabled');
-
-      var final_description_request = API.request('POST', '/days/' + day_data.id + '/update', {
-        final_description: $final_description_form_input.val()
-      });
-
-      final_description_request.success(function() {
-        $final_description_form_input.prop("disabled", false);
-        $final_description_form_submit_btn.addClass('disabled').removeClass('btn-success');
-
-        // Promt user to share day (1 time for each day)
-        var share_helper_key = 'days/' + day_data.id + '/share_promted';
-        if(!Storage.get(share_helper_key)) {
-          Storage.set(share_helper_key, true);
-          var $share_btn = $('.action-share');
-          if($share_btn.length > 0) {
-            $share_btn[0].click();
-          }
-        }
-      });
-
-      final_description_request.error(function() {
-        $final_description_form_input.prop("disabled", false);
-        $final_description_form_submit_btn.addClass('btn-danger').removeClass('btn-success');
-      });
-
-      final_description_request.send();
-
-      return false;
     });
   })();
 
