@@ -9,7 +9,12 @@ $this->day->is_gathering_enabled = false;
     <meta property="og:url" content="{$#host_url}pages/{$#day.id}/day" />
     <meta property="og:title" content="{$#day.title}" />
     <meta property="{$#facebook_app_namespace}:day_type" content="{$#day->type}" />
-		<? $unsafe_url = str_replace('https://', 'http://', $this->day->image_532); ?>
+		<?
+			if(property_exists($this->day, 'image_532'))
+				$unsafe_url = str_replace('https://', 'http://', $this->day->image_532);
+			else
+				$unsafe_url = '';
+		?>
     <meta property="og:image" content="{$unsafe_url}"/>
   {{/into}}
   {{into slot="meta"}}
@@ -358,8 +363,8 @@ $this->day->is_gathering_enabled = false;
           <div class="alert">
             <h2>This is import preview page</h2>
             Here you can take look how your <a href="{$#import_from}">story</a> would look like in OneDayOfMine.<br />
-            <a class="btn btn-small btn-success action-import">
-              Awesome, i like it, import this day
+            <a class="btn btn-block btn-success action-import">
+              Import!
             </a>
           </div>
         <? } ?>
@@ -602,6 +607,15 @@ $this->day->is_gathering_enabled = false;
           </div>
         <? } ?>
 
+        <div class="alert alert-block">
+	        <h2>This is import preview page</h2>
+	        Here you can take look how your <a href="{$#import_from}">story</a> would look like in OneDayOfMine.<br />
+	        <br/>
+	        <a class="btn btn-block btn-success action-import">
+		        Import!
+	        </a>
+        </div>
+
         <div class="clearfix">
           <div class="btn-toolbar pull-right-on-tablet pull-right-on-desktop text-center">
             {{apply template="day_like_button" /}}
@@ -658,7 +672,6 @@ $this->day->is_gathering_enabled = false;
                         <div class="bubble left">
                           <p class="text">
                             You can be first, who wrote comment for this day!
-
                             <small>by <b><a>Anonymous</a></b></small>
                           </p>
                         </div>
@@ -691,7 +704,6 @@ $this->day->is_gathering_enabled = false;
             <? } ?>
           </section>
         <? } ?>
-
 
         <div class="visible-phone scrollHelperMobile">
           <hr />
