@@ -8,6 +8,8 @@ class MainPageController extends WebAppController
 {
 	function doDeploy()
 	{
+		if (extension_loaded('newrelic'))
+			newrelic_ignore_transaction();
 		if('production' == lmb_app_mode())
 			return $this->forwardTo404();
 		echo '<pre>';

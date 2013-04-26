@@ -82,12 +82,23 @@ class odTools extends lmbAbstractTools
   function getUser()
   {
     if(null != $this->user)
+    {
+	    if (extension_loaded('newrelic'))
+		    newrelic_custom_metric ("user_id", $this->user->id);
       return $this->user;
+    }
 
     if(!$user_id = $this->getSessionStorage()->get($this->getSessidFromRequest()))
+    {
+	    if (extension_loaded('newrelic'))
+		    newrelic_custom_metric ("user_id", null);
       return null;
+    }
 
     $this->user = User::findById($user_id);
+
+	  if (extension_loaded('newrelic'))
+	    newrelic_custom_metric ("user_id", $this->user->id);
 
     return $this->user;
   }

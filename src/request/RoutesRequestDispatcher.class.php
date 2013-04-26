@@ -29,6 +29,9 @@ class RoutesRequestDispatcher implements lmbRequestDispatcher
     if($controller = $request->get('controller'))
       $result['controller'] = $controller;
 
+	  if (extension_loaded('newrelic'))
+	    newrelic_name_transaction($result['controller'].":".$result['action']);
+
     return $result;
   }
 }
