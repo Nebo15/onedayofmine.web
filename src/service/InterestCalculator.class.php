@@ -23,6 +23,7 @@ class InterestCalculator
 
   function fillRating()
   {
+	  $current_days_ids = lmbArrayHelper::getColumnValues('day_id', DayInterestRecord::find());
     $current_time = time();
 
     $query = new lmbSelectQuery('day');
@@ -30,7 +31,10 @@ class InterestCalculator
     $query->addRawField("(SELECT COUNT(*) FROM `day_like` WHERE `day_like`.`day_id` = `day`.`id`)/(1+SQRT(($current_time-`day`.`ctime`)/86400)) as rating");
     $query->addLeftJoin('day_interest', 'day_id', 'day', 'id');
 	  $query->addLeftJoin('user', 'id', 'day', 'user_id');
-    $query->addCriteria(lmbSQLCriteria::equal('is_deleted', 0));
+    $query->addCriteria(
+	    lmbSQLCriteria::equal('is_deleted', 0)
+			    ->add(lmbSQLCriteria::notIn('day.id', $current_days_ids))
+    );
     $query->addRawOrder("rating DESC, day.id DESC");
 
     $days_rating = lmbArrayHelper::convertToFlatArray($query->fetch()->paginate(0, 100));
@@ -47,13 +51,25 @@ class InterestCalculator
 
   function pinDay($day_id)
   {
-
+	  $this->_changePin($day_id, 1);
   }
 
   function unpinDay($day_id)
   {
-
+	  $this->_changePin($day_id, 0);
   }
+
+	protected function _changePin($day_id, $is_pinned)
+	{
+		if(!$record = DayInterestRecord::findByDayId($day_id))
+		{
+			$record = new DayInterestRecord();
+			$record->day_id = $day_id;
+			$record->rating = 1;
+		}
+		$record->is_pinned = $is_pinned;
+		$record->save();
+	}
 
   function getDaysRatings($from_day_id = null, $to_day_id = null, $limit = null)
   {
