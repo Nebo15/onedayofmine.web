@@ -398,7 +398,6 @@ $this->day->is_gathering_enabled = false;
                 </form>
               </div>
             </div>
-
           <? } else { ?>
             <h1 class="title">{$#day->title}</h1>
             <div class="info muted">
@@ -409,11 +408,13 @@ $this->day->is_gathering_enabled = false;
                 {$#day->type} by <b><a href="/pages/{$#day->user->id}/user">{$#day->user->name}</a></b>
               </div>
             </div>
-	          <section class="final-description">
-		          <div class="no-overflow">
-			          {$#day->final_description|default:""|nl2br}
-		          </div>
-	          </section>
+            <? if($this->day->final_description) { ?>
+  	          <section class="final-description">
+  		          <div class="no-overflow">
+  			          {$#day->final_description|default:""|nl2br}
+  		          </div>
+  	          </section>
+            <? } ?>
           <? } ?>
         </header>
 
