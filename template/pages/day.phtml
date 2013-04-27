@@ -3,6 +3,18 @@ $this->title = $this->day->title;
 $this->day->is_gathering_enabled = false;
 ?>
 {{wrap with="layout.phtml"}}
+	{{into slot="css"}}
+		.final-description {
+			padding:15px;
+			margin:15px 0;
+			color:#333;
+			background:#eee;
+			/* css3 */
+			-webkit-border-radius:10px;
+			-moz-border-radius:10px;
+			border-radius:10px;
+		}
+	{{/into}}
   {{into slot="og_meta"}}
 		<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# {$#facebook_app_namespace}: http://ogp.me/ns/fb/{$#facebook_app_namespace}#">
     <meta property="og:type" content="{$#facebook_app_namespace}:day" />
@@ -370,40 +382,25 @@ $this->day->is_gathering_enabled = false;
 
         <header>
           <? if($this->is_owner) { ?>
-            <div class="day-controls-group">
+            <div class="day-controls-group well" style="margin-bottom:30px">
               <div class="row-fluid">
-                <h5>Day title:</h5>
-                <form name="day_title_from" class="span12">
-                  <div class="span12 input-append small">
-                    <input type="text" name="title" value="{$#day->title}" class="day-title span9" style="min-width:80%;" />
-                    <button class="btn disabled btn-small btn-addon span2 has-spinner" type="submit">
-                      <span class="spinner icon-spin icon-refresh"></span>
-                      Save
-                    </button>
-                  </div>
+                <form name="day">
+                  <input type="text" name="title" value="{$#day->title}"
+                         class="day-title input-large input-block-level"
+                         placeholder="Write a day title"
+                         style="font-size:32px;height:40px;line-height:40px"/>
+	                <textarea rows="5" name="description" class="input-block-level" placeholder="Enter description...">{$#day->final_description|default:""}</textarea>
+	                <? if($this->day->final_description) { ?>
+		                <button type="submit" class="btn btn-block disabled">Save</button>
+	                <? } else { ?>
+		                <button type="submit" class="btn btn-block<? if(count($this->day->moments) > 1) { ?> disabled<? } ?>">Save</button>
+	                <? } ?>
                 </form>
-              </div>
-
-              <div class="row-fluid">
-                <h5>Day type:</h5>
-                <form name="day_type_from" class="form-inline span12 btn-group span12" data-toggle="buttons-radio">
-                  <button class="btn btn-small<? if($this->day->type == 'Working day') {?> active<? } ?>">Working day</button>
-                  <button class="btn btn-small<? if($this->day->type == 'Day off') {?> active<? } ?>">Day off</button>
-                  <button class="btn btn-small<? if($this->day->type == 'Holiday') {?> active<? } ?>">Holiday</button>
-                  <button class="btn btn-small<? if($this->day->type == 'Trip') {?> active<? } ?>">Trip</button>
-                </form>
-              </div>
-
-              <div class="row-fluid">
-                <h5>Created at:</h5>
-                <span class="span12">
-                  <time class="with-tooltip" data-original-title="This is date of first moment in day">{$#day->date}</time>
-                </span>
               </div>
             </div>
+
           <? } else { ?>
             <h1 class="title">{$#day->title}</h1>
-
             <div class="info muted">
               <time class="pull-right-on-tablet pull-right-on-desktop">
                 <i class="icon icon-calendar hidden-phone"></i> {$#day->date}
@@ -412,6 +409,11 @@ $this->day->is_gathering_enabled = false;
                 {$#day->type} by <b><a href="/pages/{$#day->user->id}/user">{$#day->user->name}</a></b>
               </div>
             </div>
+	          <section class="final-description">
+		          <div class="no-overflow">
+			          {$#day->final_description|default:""|nl2br}
+		          </div>
+	          </section>
           <? } ?>
         </header>
 
@@ -424,7 +426,6 @@ $this->day->is_gathering_enabled = false;
                   Preview
                 </a>
               </div>
-
               <button type="button" class="btn btn-small btn-danger with-tooltip action-delete" data-original-title="Delete day">
                 Delete day
               </button>
@@ -438,9 +439,7 @@ $this->day->is_gathering_enabled = false;
                 <button class="btn btn-small scrollTo comments" type="button">Comments</button>
               </div>
             <? } ?>
-
             {{apply template="day_like_button" /}}
-
             {{apply template="day_share_button" /}}
           </div>
         </div>
@@ -474,7 +473,6 @@ $this->day->is_gathering_enabled = false;
                       <span class="input-prepend small">
                         <span class="add-on hidden-phone"><i class="icon-time"></i></span>
                         <input type="time" name="time" value="{$item->time}" required="required" />
-
                         <input type="hidden" name="seconds" value="{$item->time_seconds}" required="required" />
                       </span>
 
@@ -581,41 +579,16 @@ $this->day->is_gathering_enabled = false;
           {{/list}}
         </section>
 
-        <? if($this->is_owner || $this->day->final_description) { ?>
-          <section class="final-description bubble">
-            <? if($this->is_owner) { ?>
-              <form name="final_description_form">
-                <textarea name="text" rows="3" class="input-block-level" placeholder="Enter final description...">{$#day->final_description|default:""}</textarea>
-
-                <? if($this->day->final_description) { ?>
-                  <button type="submit" class="btn btn-block disabled">Save changes</button>
-                <? } else { ?>
-                  <button type="submit" class="btn btn-block<? if(count($this->day->moments) > 1) { ?> disabled<? } ?>">Close the day</button>
-                <? } ?>
-              </form>
-            <? } else { ?>
-              <div class="no-overflow">
-                {$#day->final_description|default:""|nl2br}
-              </div>
-            <? } ?>
-          </section>
-        <? } else { ?>
-          <div class="alert alert-block">
-            <h2>This day is live!</h2>
-            Stay tuned for new moments in this day, it's not finished yet!
-          </div>
-        <? } ?>
-
         <? if($this->is_import_preview) { ?>
           <br />
-          <div class="alert alert-block">
-  	        <h2>This is import preview page</h2>
-  	        Here you can take look how your <a href="{$#import_from}">story</a> would look like in OneDayOfMine.<br />
-  	        <br/>
-  	        <a class="btn btn-block btn-success action-import">
-  		        Import!
-  	        </a>
-          </div>
+	        <div class="alert alert-block">
+		        <h2>This is import preview page</h2>
+		        Here you can take look how your <a href="{$#import_from}">story</a> would look like in OneDayOfMine.<br />
+		        <br/>
+		        <a class="btn btn-block btn-success action-import">
+			        Import!
+		        </a>
+	        </div>
         <? } ?>
 
         <div class="clearfix">
