@@ -291,6 +291,10 @@ $(function() {
       }
 
       $this.click(function() {
+        if($this.hasClass('disabled')) {
+          return;
+        }
+
         day_data.is_liked = !day_data.is_liked;
         updateLikes();
 
