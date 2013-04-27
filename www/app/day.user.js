@@ -219,6 +219,8 @@ $(function() {
       $likes.find(like_counter_selector).find(like_counter_state_selector).css("transform", "translateX(" + length + "px)");
     }
 
+    day_data.likes_count = parseInt(day_data.likes_count, 10);
+
     var $likes = $(like_selector);
 
     $likes.each(function() {
