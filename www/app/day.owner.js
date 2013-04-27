@@ -1088,10 +1088,6 @@ $(function() {
             // Edit moment description
             $description_form_input.on('keyup.adder', function() {
               event.stopPropagation();
-              if(!$description_form_input.val()) {
-                $description_form_submit_btn.addClass('disabled').removeClass('btn-success');
-                return;
-              }
 
               if(!$moment.hasClass(moment_without_image_class)) {
                 $description_form_submit_btn.removeClass('disabled').addClass('btn-success');

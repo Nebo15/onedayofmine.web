@@ -197,113 +197,115 @@ $(function() {
 
   // Likes
   (function() {
-    // Like toggle
-    if(day_data.is_liked === undefined) {
-      return false;
+    var like_selector = '.like';
+    var like_counter_selector = '.counter';
+    var like_counter_state_selector = '.state';
+
+    var like_active_class = 'liked';
+
+    var current_user = API.getCurrentUser();
+
+    function slideLikes($likes, length) {
+      if(day_data.is_liked) {
+        $likes.addClass(like_active_class);
+      } else {
+        $likes.removeClass(like_active_class);
+      }
+      $likes.find(like_counter_selector).find(like_counter_state_selector).css("transform", "translateX(" + length + "px)");
     }
 
-    var $like_btn = $day.find('.action-like');
-    var $like_btn_wrap = $like_btn.parent();
-    var $like_btn_addon = $like_btn.prev();
+    day_data.likes_count = parseInt(day_data.likes_count, 10);
 
-    var like_hide_timout;
+    var $likes = $(like_selector);
 
-    // Helper for likes counters
-    function updateLikesBtn() {
-      var icon = day_data.is_liked ? '<i class="icon-heart"></i>' : '<i class="icon-heart-empty"></i>';
-      $like_btn_addon.html(icon + ' ' + day_data.likes_count);
+    $likes.each(function() {
+      var $this = $(this);
+      var $counter = $this.find(like_counter_selector);
+      var $counter_count = $counter.find(like_counter_state_selector);
+      var $counter_count_addon = $counter_count.clone();
 
-      $like_btn.html(day_data.is_liked ? 'Unlike' : 'Like');
-      attachLikesTooltip();
-      $like_btn_wrap.tooltip('show');
-      clearTimeout(like_hide_timout);
-    }
+      if(day_data.is_liked) {
+        $counter.prepend($counter_count_addon.text(day_data.likes_count-1));
+      } else {
+        $counter.append($counter_count_addon.text(day_data.likes_count+1));
+      }
 
-    function attachLikesTooltip() {
-      var title = '';
+      var counters_width = Math.max($counter_count.width(), $counter_count_addon.width());
+      var $states = $counter_count.add($counter_count_addon);
+      $states.add($counter).width(counters_width);
+
+      slideLikes($likes, day_data.is_liked ?  -1*(counters_width+5) : 0);
+
+      var title = '<a href="/pages/' + current_user.id + '/user" class="current-user"><img src="' + current_user.image_36 + '" /></a>';
       $.each(day_data.likes, function(index, like) {
-        if(like) {
+        if(like && like.user.id != current_user.id) {
           title += '<a href="/pages/' + like.user.id + '/user"><img src="' + like.user.image_36 + '" /></a>';
         }
       });
 
-      clearTimeout(like_hide_timout);
-      $like_btn_wrap.tooltip('destroy');
-      if(title) {
-        $like_btn_wrap.tooltip({
-          html: true,
-          trigger: 'manual',
-          placement: 'bottom',
-          title: '<div class="likes">' + title + '</div>'
-        });
-      }
-    }
-
-    attachLikesTooltip();
-
-    $like_btn_wrap.hover(function() {
-      $like_btn_wrap.tooltip('show');
-      clearTimeout(like_hide_timout);
-
-      $like_btn_wrap.next().filter('.tooltip').hover(function() {
-        clearTimeout(like_hide_timout);
-      }, function() {
-        like_hide_timout = setTimeout(function() {
-          $like_btn_wrap.tooltip('hide');
-        }, 400);
-      }).mouseover(function() {
-        clearTimeout(like_hide_timout);
+      $this.tooltip({
+        html: true,
+        trigger: 'manual',
+        placement: 'bottom',
+        title: '<div class="likes">' + title + '</div>'
       });
-    }, function() {
-      like_hide_timout = setTimeout(function() {
-        $like_btn_wrap.tooltip('hide');
-      }, 400);
-    });
 
-    $like_btn_wrap.mouseover(function() {
-      clearTimeout(like_hide_timout);
-    });
+      var timeout_id;
 
-    $like_btn.click(function() {
-      if($like_btn.hasClass('disabled')) {
+      var showLikes = function(event) {
+        clearTimeout(timeout_id);
+        if(!$this.next().hasClass('tooltip')) {
+          $this.tooltip('show');
+        }
+      };
+
+      var hideLikes = function() {
+        timeout_id = setTimeout(function() {
+          $this.tooltip('hide');
+        }, 400);
+      };
+
+      var updateLikes = function() {
+        day_data.likes_count = parseInt(day_data.likes_count, 10) + (day_data.is_liked ? 1 : -1);
+        slideLikes($likes, day_data.is_liked ? -1*(counters_width+5) : 0);
+        showLikes();
+        if(day_data.likes_count < 1) {
+          $this.tooltip('hide');
+        }
+      };
+
+      $this.on('shown', function() {
+        var $tooltip = $this.next().filter('.tooltip');
+        if(!$this.hasClass('liked') && $tooltip.find('.likes').children().not('.current-user').length == 0) {
+          $this.tooltip('hide');
+          return;
+        }
+        $tooltip.hover(showLikes, hideLikes);
+      });
+
+      $this.hover(showLikes, hideLikes);
+      $this.mousemove(showLikes);
+
+      if(day_data.is_liked === undefined) {
         return false;
       }
-      $like_btn.addClass('disabled');
 
-      var current_user = API.getCurrentUser();
+      $this.click(function() {
+        if($this.hasClass('disabled')) {
+          return;
+        }
 
-      if(day_data.is_liked) {
-        var unlike_request = API.request('POST', '/days/' + day_data.id + '/unlike');
-        unlike_request.success(function() {
-          day_data.is_liked = false;
-          day_data.likes_count--;
+        day_data.is_liked = !day_data.is_liked;
+        updateLikes();
 
-          $.each(day_data.likes, function(index, like) {
-            if(like && like.user.id == current_user.id) {
-              delete day_data.likes[index];
-            }
-          });
+        var like_request = API.request('POST', '/days/' + day_data.id + '/' + (day_data.is_liked ? 'like' : 'unlike'));
 
-          updateLikesBtn();
-          $like_btn.removeClass('disabled');
+        like_request.error(function() {
+          alert("Can't submit like state, try to reload the page");
         });
-        unlike_request.send();
-      } else {
-        var like_request = API.request('POST', '/days/' + day_data.id + '/like');
-        like_request.success(function() {
-          day_data.is_liked = true;
-          day_data.likes_count++;
 
-          day_data.likes.push({
-            id: 0,
-            user: current_user
-          });
-
-          updateLikesBtn();
-          $like_btn.removeClass('disabled');
-        });
         like_request.send();
-      }
+      });
     });
   })();
 
