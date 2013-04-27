@@ -58,23 +58,22 @@ $this->day->is_gathering_enabled = false;
 
   {{template name='day_like_button'}}
     <? if($this->toolkit->getUser()) { ?>
-      <?php
-      $like_disabled = false;
-      if(!property_exists($this->day, 'is_liked')) {
-        $like_disabled = true;
-        $like_text = "Like";
-        $like_icon = "icon-heart";
-      } elseif($this->day->is_liked) {
-        $like_text = "Unlike";
-        $like_icon = "icon-heart";
-      } else {
-        $like_text = "Like";
-        $like_icon = "icon-heart-empty";
-      }
-      ?>
-      <div class="input-prepend small input-like">
-        <span class="add-on"><i class="icon <?= $like_icon ?>"></i> {$this->day->likes_count}</span>
-        <button class="btn btn-small action-like<?= $like_disabled ? ' disabled' : '' ?>" type="button"> <?= $like_text ?></button>
+      <div class="input-prepend small like<?= property_exists($this->day, 'is_liked') ? ($this->day->is_liked ? ' liked' : '')  : ' disabled' ?>">
+        <span class="add-on">
+          <span class="heart toggle">
+            <span class="state"><i class="icon icon-heart-empty"></i></span>
+            <span class="state"><i class="icon icon-heart"></i></span>
+          </span>
+          <span class="counter toggle">
+            <span class="state">{$this->day->likes_count}</span>
+          </span>
+        </span>
+        <button class="btn btn-small action-like" type="button"<?= !property_exists($this->day, 'is_liked') ? ' disabled' : '' ?>>
+          <span class="text toggle">
+            <span class="state">Like</span>
+            <span class="state">Unlike</span>
+          </span>
+        </button>
       </div>
     <? } ?>
   {{/template}}
