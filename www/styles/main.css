@@ -928,15 +928,17 @@ ul.with-separators li .btn-small {
 
 .like + .tooltip .likes .current-user {
   margin-left: -30px !important;
+  opacity: 0;
 
-  -webkit-transition: margin-left 0.65s;
-  -moz-transition: margin-left 0.65s;
-  -o-transition: margin-left 0.65s;
-  transition: margin-left 0.65s;
+  -webkit-transition: margin-left 0.65s, opacity 0.65s;
+  -moz-transition: margin-left 0.65s, opacity 0.65s;
+  -o-transition: margin-left 0.65s, opacity 0.65s;
+  transition: margin-left 0.65s, opacity 0.65s;
 }
 
 .liked + .tooltip .likes .current-user {
   margin-left: 0 !important;
+  opacity: 1;
 }
 
 /* > Main page */
