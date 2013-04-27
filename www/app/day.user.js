@@ -197,11 +197,6 @@ $(function() {
 
   // Likes
   (function() {
-    // Like toggle
-    if(day_data.is_liked === undefined) {
-      return false;
-    }
-
     var like_selector = '.like';
     var like_counter_selector = '.counter';
     var like_counter_state_selector = '.state';
@@ -290,6 +285,10 @@ $(function() {
 
       $this.hover(showLikes, hideLikes);
       $this.mousemove(showLikes);
+
+      if(day_data.is_liked === undefined) {
+        return false;
+      }
 
       $this.click(function() {
         day_data.is_liked = !day_data.is_liked;
