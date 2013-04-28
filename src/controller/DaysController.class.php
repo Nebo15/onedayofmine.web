@@ -327,7 +327,7 @@ class DaysController extends BaseJsonController
 		if (!$this->request->isPost())
 			return $this->_answerNotPost();
 
-		$errors = $this->_checkPropertiesInRequest(array('time'));
+		$errors = $this->_checkPropertiesInRequest(['time', 'position']);
 		if (count($errors))
 			return $this->_answerWithError($errors);
 
@@ -355,6 +355,7 @@ class DaysController extends BaseJsonController
 		$moment->setDay($day);
 		$moment->description = $this->request->get('description', '');
 		$moment->time = time();
+		$moment->position = $this->request->getInteger('position');
 		$moment->timezone = $this->toolkit->getUser()->timezone;
 		$moment->instagram_id = $this->request->get('instagram_id', '');
 		$moment->flickr_id = $this->request->get('flickr_id', '');

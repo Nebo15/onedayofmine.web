@@ -74,6 +74,7 @@ class DaysOwnerControllerTest extends odControllerTestCase
         'description'   => $description = $this->generator->string(200),
         'time'          => $time        = '2010-08-09T18:31:42+03:00',
         'image_content' => $image       = base64_encode($this->generator->image()),
+	      'position'      => 0
     ], $day->id);
 
     if($this->assertResponse(200))
@@ -100,6 +101,7 @@ class DaysOwnerControllerTest extends odControllerTestCase
 		$response = $this->post('add_moment', [
 			'description'        => $description = $this->generator->string(200),
 			'time'               => $time        = '2010-08-09T18:31:42+03:00',
+			'position'           => 0,
 			'image_content'      => $image       = base64_encode($this->generator->image()),
 			'location_latitude'  => $time        = $lat = '24',
 			'location_longitude' => $time        = $long = '42',
@@ -128,6 +130,7 @@ class DaysOwnerControllerTest extends odControllerTestCase
     $response = $this->post('add_moment', [
         'description'   => $description = $this->generator->string(200),
         'time'          => $time        = '2010-08-09T18:31:42+03:00',
+	      'position'      => 0,
         'image_content' => $image       = base64_encode(file_get_contents(lmb_env_get('APP_DIR').'/tests/init/image_with_exif.jpeg'))
     ], $day->id);
 
@@ -150,6 +153,41 @@ class DaysOwnerControllerTest extends odControllerTestCase
     }
   }
 
+	function testAddMoment_withPositionExists()
+	{
+		$this->main_user->save();
+
+		$day = $this->generator->day($this->main_user);
+		$first_existed_moment = $this->generator->moment($day);
+		$this->assertEqual(0, $first_existed_moment->position);
+		$second_existed_moment = $this->generator->moment($day);
+		$this->assertEqual(1, $second_existed_moment->position);
+
+		lmbToolkit::instance()->setUser($this->main_user);
+
+		$response = $this->post('add_moment', [
+			'description'   => $description = $this->generator->string(200),
+			'time'          => $time        = '2010-08-09T18:31:42+03:00',
+			'position'      => 0,
+			'image_content' => $image       = base64_encode($this->generator->image()),
+		], $day->id);
+
+		if($this->assertResponse(200))
+		{
+			$new_moment = $response->result;
+			$this->assertEqual(0, $new_moment->position);
+
+			$this->assertEqual($new_moment->id, $day->getMoments()->at(0)->id);
+			$this->assertEqual(0, $day->getMoments()->at(0)->position);
+
+			$this->assertEqual($first_existed_moment->id, $day->getMoments()->at(1)->id);
+			$this->assertEqual(1, $day->getMoments()->at(1)->position);
+
+			$this->assertEqual($second_existed_moment->id, $day->getMoments()->at(2)->id);
+			$this->assertEqual(2, $day->getMoments()->at(2)->position);
+		}
+	}
+
   function testAddMoment_WithoutDescription()
   {
     $this->main_user->timezone = $this->generator->integer(3);
@@ -161,6 +199,7 @@ class DaysOwnerControllerTest extends odControllerTestCase
     lmbToolkit::instance()->setUser($this->main_user);
     $response = $this->post('add_moment', [
         'time'          => $time        = '2010-08-09T18:31:42+03:00',
+	      'position'      => 0,
         'image_content' => $image       = base64_encode(file_get_contents(lmb_env_get('APP_DIR').'/tests/init/image_with_exif.jpeg'))
     ], $day->id);
 
@@ -219,6 +258,7 @@ class DaysOwnerControllerTest extends odControllerTestCase
     $response = $this->post('add_moment', [
         'description'   => $description = $this->generator->string(200),
         'time'          => $time        = '2010-08-09T18:31:42+03:00',
+	      'position'      => 0,
         'image_content' => $image       = base64_encode($this->generator->image()),
     ], $day->id);
 

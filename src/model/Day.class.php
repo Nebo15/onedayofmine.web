@@ -83,7 +83,7 @@ class Day extends BaseModel
       ->add(lmbSQLCriteria::equal('is_deleted', 0))
 		  ->add(lmbSQLCriteria::equal('is_hidden', 0));
 
-    return Moment::find($criteria, ['id' => 'DESC']);
+    return Moment::find($criteria, ['position' => 'ASC']);
   }
 
 	function getAllMoments()
