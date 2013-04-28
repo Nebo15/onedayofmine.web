@@ -854,6 +854,91 @@ ul.with-separators li .btn-small {
   margin-bottom: 15px;
 }
 
+/* Likes */
+.like .toggle,
+.like .state {
+  overflow: hidden;
+  white-space: nowrap;
+  display: inline-block;
+}
+
+.like .heart,
+.like .heart .state {
+  width: 14px;
+}
+
+.like .text,
+.like .text .state {
+  width: 44px;
+}
+
+.like .text,
+.like .text .state {
+  width: 44px;
+}
+
+.like .state {
+  -moz-transition: -moz-transform 0.1s ease-in-out, border 0.1s ease-in-out;
+  -o-transition: -o-transform 0.1s ease-in-out, border 0.1s ease-in-out;
+  -webkit-transition: -webkit-transform 0.1s ease-in-out, border 0.1s ease-in-out;
+  transition: transform 0.1s ease-in-out, border 0.1s ease-in-out;
+}
+
+.like .heart,
+.like .text,
+.like .counter {
+  -webkit-transform: translateZ(0); /* Fix perfomance issues in webkit */
+}
+
+.like.liked .heart .state {
+  -moz-transform: translateX(-18px);
+  -ms-transform: translateX(-18px);
+  -o-transform: translateX(-18px);
+  -webkit-transform: translateX(-18px);
+  transform: translateX(-18px);
+}
+
+.like.liked .text .state {
+  -moz-transform: translateX(-47px);
+  -ms-transform: translateX(-47px);
+  -o-transform: translateX(-47px);
+  -webkit-transform: translateX(-47px);
+  transform: translateX(-47px);
+}
+
+.like + .tooltip .likes {
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+.like + .tooltip .likes img,
+.like + .tooltip .likes a {
+  width: 26px;
+  height: 26px;
+}
+
+.like + .tooltip .likes a {
+  margin-left: 3px;
+}
+
+.like + .tooltip .likes a:first-child {
+  margin-left: 0;
+}
+
+.like + .tooltip .likes .current-user {
+  margin-left: -30px !important;
+
+  -webkit-transition: margin-left 0.65s;
+  -moz-transition: margin-left 0.65s;
+  -o-transition: margin-left 0.65s;
+  transition: margin-left 0.65s;
+}
+
+.liked + .tooltip .likes .current-user {
+  margin-left: 0 !important;
+}
+
 /* > Main page */
 
 
@@ -942,24 +1027,6 @@ ul.with-separators li .btn-small {
 
 .day header .info.short {
   margin-bottom: 10px;
-}
-
-.day .tooltip .likes {
-  white-space: nowrap;
-  overflow: hidden;
-  max-width: 100%;
-}
-
-.day .tooltip .likes img {
-  width: 26px;
-}
-
-.day .tooltip .likes a {
-  margin-left: 3px;
-}
-
-.day .tooltip .likes a:first-child {
-  margin-left: 0;
 }
 
 .day .day-toolbar .btn-toolbar {

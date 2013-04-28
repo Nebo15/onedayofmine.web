@@ -70,23 +70,22 @@ $this->day->is_gathering_enabled = false;
 
   {{template name='day_like_button'}}
     <? if($this->toolkit->getUser()) { ?>
-      <?php
-      $like_disabled = false;
-      if(!property_exists($this->day, 'is_liked')) {
-        $like_disabled = true;
-        $like_text = "Like";
-        $like_icon = "icon-heart";
-      } elseif($this->day->is_liked) {
-        $like_text = "Unlike";
-        $like_icon = "icon-heart";
-      } else {
-        $like_text = "Like";
-        $like_icon = "icon-heart-empty";
-      }
-      ?>
-      <div class="input-prepend small input-like">
-        <span class="add-on"><i class="icon <?= $like_icon ?>"></i> {$this->day->likes_count}</span>
-        <button class="btn btn-small action-like<?= $like_disabled ? ' disabled' : '' ?>" type="button"> <?= $like_text ?></button>
+      <div class="input-prepend small like<?= property_exists($this->day, 'is_liked') ? ($this->day->is_liked ? ' liked' : '')  : ' disabled' ?>">
+        <span class="add-on">
+          <span class="heart toggle">
+            <span class="state"><i class="icon icon-heart-empty"></i></span>
+            <span class="state"><i class="icon icon-heart"></i></span>
+          </span>
+          <span class="counter toggle">
+            <span class="state">{$this->day->likes_count}</span>
+          </span>
+        </span>
+        <button class="btn btn-small action-like" type="button"<?= !property_exists($this->day, 'is_liked') ? ' disabled' : '' ?>>
+          <span class="text toggle">
+            <span class="state">Like</span>
+            <span class="state">Unlike</span>
+          </span>
+        </button>
       </div>
     <? } ?>
   {{/template}}
@@ -399,7 +398,6 @@ $this->day->is_gathering_enabled = false;
                 </form>
               </div>
             </div>
-
           <? } else { ?>
             <h1 class="title">{$#day->title}</h1>
             <div class="info muted">
@@ -410,11 +408,13 @@ $this->day->is_gathering_enabled = false;
                 {$#day->type} by <b><a href="/pages/{$#day->user->id}/user">{$#day->user->name}</a></b>
               </div>
             </div>
-	          <section class="final-description">
-		          <div class="no-overflow">
-			          {$#day->final_description|default:""|nl2br}
-		          </div>
-	          </section>
+            <? if($this->day->final_description) { ?>
+  	          <section class="final-description">
+  		          <div class="no-overflow">
+  			          {$#day->final_description|default:""|nl2br}
+  		          </div>
+  	          </section>
+            <? } ?>
           <? } ?>
         </header>
 
@@ -581,6 +581,7 @@ $this->day->is_gathering_enabled = false;
         </section>
 
         <? if($this->is_import_preview) { ?>
+          <br />
 	        <div class="alert alert-block">
 		        <h2>This is import preview page</h2>
 		        Here you can take look how your <a href="{$#import_from}">story</a> would look like in OneDayOfMine.<br />

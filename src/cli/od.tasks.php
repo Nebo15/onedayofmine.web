@@ -258,7 +258,7 @@ function task_od_notify($args = array())
 	{
 		lmbToolkit::instance()
 				->getFacebook($user)
-				->notify($user, "You have ".$user->getNews()->count()." news", "/");
+				->notify($user, "You have ".$user->getNews()->count()." news", "/pages/news");
 		$notifications_count++;
 	}
 	taskman_msg("Sended ".$notifications_count." notifications.\n");

@@ -19,4 +19,9 @@ class DayInterestRecord extends BaseModel
   {
     return Day::findById($this->day_id);
   }
+
+	static function findByDayId($day_id)
+	{
+		return DayInterestRecord::findFirst(lmbSQLCriteria::equal('day_id', $day_id));
+	}
 }
