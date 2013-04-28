@@ -20,18 +20,8 @@ class Moment extends BaseModel
   use Imageable;
 
   public $day_id;
-  public $location_latitude;
-  public $location_longitude;
-  public $description;
-  public $time;
-  public $timezone;
-	public $is_hidden;
-  public $is_deleted;
-
-	public $instagram_id;
-	public $flickr_id;
-  public $facebook_id;
-  public $twitter_id;
+  public $location_latitude, $location_longitude, $description, $time, $position, $timezone, $is_hidden, $is_deleted;
+	public $instagram_id, $flickr_id, $facebook_id, $twitter_id;
 
   protected $_default_sort_params = array('time' => 'ASC');
   protected $_db_table_name = 'moment';
@@ -45,6 +35,7 @@ class Moment extends BaseModel
 		  $validator->addRule(new lmbPatternRule('instagram_id', '/[0-9]_/'));
 
 	  $validator->addRequiredRule('time');
+	  $validator->addRequiredRule('position');
 	  $validator->addRequiredRule('timezone');
 	  if($this->time)
 	    $validator->addRule(new lmbNumericValueRangeRule('time', 0, time() + $this->timezone * 60 * 60));
@@ -55,6 +46,7 @@ class Moment extends BaseModel
   function exportForApi(array $properties = null)
   {
     $moment = parent::exportForApi(['id', 'day_id', 'description', 'location_latitude', 'location_longitude']);
+	  $moment->position = (int) $this->position;
     $this->showImages($moment);
     $moment->time = BaseModel::stampToIso($this->time, $this->timezone);
 
@@ -76,6 +68,25 @@ class Moment extends BaseModel
   {
     return Day::findById($this->day_id);
   }
+
+	function _onBeforeSave()
+	{
+		foreach($this->getDay()->getMoments() as $pos => $moment)
+		{
+			if($moment->position == $this->position && $moment->id != $this->id)
+			{
+				$query = new lmbUpdateQuery($this->_db_table_name);
+				$query->addRawField('`position` = `position` + 1');
+				$query->addCriteria(
+					lmbSQLCriteria::equal('day_id', $this->day_id)->add(
+						lmbSQLCriteria::greaterOrEqual('position', $this->position)
+					)
+				);
+				$query->execute();
+				return;
+			}
+		}
+	}
 
   function getComments()
   {
