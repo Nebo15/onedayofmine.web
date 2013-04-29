@@ -5,6 +5,8 @@ $(function() {
   var FileReaderFilter = /^(?:image\/bmp|image\/cis\-cod|image\/gif|image\/ief|image\/jpeg|image\/jpeg|image\/jpeg|image\/pipeg|image\/png|image\/svg\+xml|image\/tiff|image\/x\-cmu\-raster|image\/x\-cmx|image\/x\-icon|image\/x\-portable\-anymap|image\/x\-portable\-bitmap|image\/x\-portable\-graymap|image\/x\-portable\-pixmap|image\/x\-rgb|image\/x\-xbitmap|image\/x\-xpixmap|image\/x\-xwindowdump)$/i;
 
   var proxy_path = '/proxy?source=';
+	var min_width = 532;
+	var min_height = 532;
 
   var ImageTools = {
     Convert: {
@@ -468,6 +470,12 @@ $(function() {
         // Reset element styles
         $image.css('width', '');
         $image.css('height', '');
+
+				if(tmp.width < min_width || tmp.height < min_height)
+				{
+					alert('Too small image. We need at least 532x532 pixels.');
+					return;
+				}
 
         // Changing image
         $image.first().one('load', function() {
