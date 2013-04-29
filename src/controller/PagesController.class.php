@@ -93,13 +93,21 @@ class PagesController extends WebAppController
 		$this->days = $this->_toFlatArray($this->toolkit->getExportHelper()->exportDayItems($user->getPublicDays()->paginate(0, $this->lists_limit)));
 	}
 
-	function doMyFollowers()
+	function doPeoples()
 	{
-		if (!$user = lmbToolkit::instance()->getUser())
-			return $this->forwardToUnauthorized();
+		if ($user = lmbToolkit::instance()->getUser())
+		{
+			$this->followers = $this->_sortUsersByNames($user->getFollowingUsers());
+			$this->following = $this->_sortUsersByNames($user->getFollowersUsers());
+		}
+	}
 
-		$this->followers = $this->_toFlatArray($this->toolkit->getExportHelper()->exportUserItems($user->getFollowersUsers()));
-		$this->following = $this->_toFlatArray($this->toolkit->getExportHelper()->exportUserItems($user->getFollowingUsers()));
+	protected function _sortUsersByNames($users)
+	{
+		$users = $this->_toFlatArray($this->toolkit->getExportHelper()->exportUserItems($users));
+		foreach($users as $i => $user)
+			$users[$i]->lower_name = strtolower($user->name);
+		return lmbArrayHelper::sortArray($users, ['lower_name' => 'ASC']);
 	}
 
 	function doProfile()
