@@ -1203,6 +1203,7 @@ $(function() {
                   var create_request_params = {
                     description: $description_form_input.val(),
                     time: getDatetimeISOString($moment),
+										position: $moments.find('article.well').index($moment),
                     image_content: base64
                   };
 
