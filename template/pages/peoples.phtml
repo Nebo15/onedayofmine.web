@@ -124,18 +124,20 @@ $this->menu = 'me';
 
       facebook_friends_block.findSpinner().hideSpinner();
 
-      facebook_friends_block.find('.invite-action').click(function() {
+      facebook_friends_block.find('.invite-action').click(function()
+			{
+				var $item = $(this).closest('li');
         var obj = {
           method: 'feed',
-          to: $(this).closest('li').data('uid'),
-          redirect_uri: 'http://' + Config.host + '/pages/find_people',
+          to: $item.data('uid'),
           link: 'http://' + Config.host + '/pages/{$#current_user.id}/user',
           name: 'One Day of Mine invitation',
           description: "Hi, come and check out my photos in One Day of Mine, where people share days of their lifes."
         };
 
   			function callback(response) {
-  				alert('User invited');
+					if(null != response)
+						$item.find('.btn').removeClass('btn-success').addClass('disabled').html('invited');;
   			}
 
   			FB.ui(obj, callback);
