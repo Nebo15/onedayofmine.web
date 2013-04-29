@@ -428,6 +428,7 @@ class DaysController extends BaseJsonController
 		if ($this->error_list->isValid())
 		{
 			$complaint->saveSkipValidation();
+			$this->toolkit->getMailService('complain')->set('complain', $complaint)->send('support@onedayofmine.com');
 			return $this->_answerOk($this->toolkit->getExportHelper()->exportComplaint($complaint));
 		}
 		else

@@ -68,4 +68,9 @@ class lmbMailTools extends lmbAbstractTools
     }
     return $this->mailer;
   }
+
+	function getMailService($template_id)
+	{
+		return $service = new lmbMailService($template_id);
+	}
 }
