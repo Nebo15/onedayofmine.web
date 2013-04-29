@@ -154,12 +154,13 @@ class odObjectMother
    * @param Day|null $day
    * @return Moment
    */
-  function moment(Day $day = null, $with_comments = false)
+  function moment(Day $day = null, $with_comments = false, $description = null)
   {
     $day = $day ? $day : $this->day();
     $moment = new Moment();
-    $moment->description = 'description '.$this->string(125);
+    $moment->description = $description ?: 'description '.$this->string(125);
 	  $moment->time = time() - 60 * 60;
+	  $moment->position = count($day->getMoments());
 	  $moment->timezone = 0;
 	  $moment->setDay($day);
     $moment->save();

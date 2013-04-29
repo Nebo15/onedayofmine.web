@@ -5,6 +5,8 @@ $(function() {
   var FileReaderFilter = /^(?:image\/bmp|image\/cis\-cod|image\/gif|image\/ief|image\/jpeg|image\/jpeg|image\/jpeg|image\/pipeg|image\/png|image\/svg\+xml|image\/tiff|image\/x\-cmu\-raster|image\/x\-cmx|image\/x\-icon|image\/x\-portable\-anymap|image\/x\-portable\-bitmap|image\/x\-portable\-graymap|image\/x\-portable\-pixmap|image\/x\-rgb|image\/x\-xbitmap|image\/x\-xpixmap|image\/x\-xwindowdump)$/i;
 
   var proxy_path = '/proxy?source=';
+	var min_width = 532;
+	var min_height = 532;
 
   var ImageTools = {
     Convert: {
@@ -468,6 +470,12 @@ $(function() {
         // Reset element styles
         $image.css('width', '');
         $image.css('height', '');
+
+				if(tmp.width < min_width || tmp.height < min_height)
+				{
+					alert('Too small image. We need at least 532x532 pixels.');
+					return;
+				}
 
         // Changing image
         $image.first().one('load', function() {
@@ -1009,7 +1017,7 @@ $(function() {
                 });
 
                 converter.fail(function() {
-                  alert("Can't recieve local image contents, try again later or try to pick diffrent image");
+                  alert("Can't receive local image contents, try again later or try to pick different image");
                 });
               } else {
                 console.log('File not selected');
@@ -1203,6 +1211,7 @@ $(function() {
                   var create_request_params = {
                     description: $description_form_input.val(),
                     time: getDatetimeISOString($moment),
+										position: $moments.find('article.well').index($moment),
                     image_content: base64
                   };
 
@@ -1221,12 +1230,12 @@ $(function() {
 
                   save_request.params.progress = function(event) {
                     if(event.lengthComputable) {
-                      $upload_progress_bar.css('width', ((event.loaded / event.total) * 100) + '%');
+                      $upload_progress_bar.css('width', ((event.loaded / event.total) * 95) + '%');
                     }
                   };
 
                   save_request.success(function(response) {
-                    $upload_progress_bar.css('width', '100%');
+                    $upload_progress_bar.css('width', '95%');
 
                     $upload_progress.fadeOut(animations_speed, function() {
                       $upload_progress.detach();

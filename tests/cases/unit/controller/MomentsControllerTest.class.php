@@ -37,6 +37,29 @@ class MomentsControllerTest extends odControllerTestCase
     }
   }
 
+	function testUpdate_ChangePosition()
+	{
+		$day = $this->generator->day($this->main_user);
+		$top_moment = $this->generator->moment($day, false, 'top');
+		$middle_moment = $this->generator->moment($day, false, 'middle');
+		$bottom_moment = $this->generator->moment($day, false, 'bottom');
+
+		lmbToolkit::instance()->setUser($this->main_user);
+
+		$response = $this->post('update', [
+			'position' => 0
+		], $bottom_moment->id);
+		if($this->assertResponse(200))
+		{
+			$updated_bottom_moment = $response->result;
+
+			$loaded_updated_bottom_moment = Moment::findById($updated_bottom_moment->id);
+			$this->assertEqual(0, $loaded_updated_bottom_moment->position);
+			$this->assertEqual(1, Moment::findById($top_moment->id)->position);
+			$this->assertEqual(2, Moment::findById($middle_moment->id)->position);
+		}
+	}
+
   function testUpdate_MomentNotFound()
   {
     lmbToolkit::instance()->setUser($this->main_user);

@@ -211,9 +211,7 @@ trait odEntityAssertions
   protected function assertJsonDay(stdClass $day, $validate_images = false, $message = '%s')
   {
     $this->assertJsonDayListItem($day, $validate_images);
-
     $this->assertProperty($day, "final_description");
-
     $this->assertProperty($day, "likes");
 
     if($day->comments_count > 0)
@@ -313,6 +311,7 @@ trait odEntityAssertions
     $this->assertPropertys($moment, [
       "id",
       "time",
+	    "position",
       "image_266",
       "image_532",
       "likes_count",
