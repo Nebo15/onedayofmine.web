@@ -1009,7 +1009,7 @@ $(function() {
                 });
 
                 converter.fail(function() {
-                  alert("Can't recieve local image contents, try again later or try to pick diffrent image");
+                  alert("Can't receive local image contents, try again later or try to pick different image");
                 });
               } else {
                 console.log('File not selected');
@@ -1222,12 +1222,12 @@ $(function() {
 
                   save_request.params.progress = function(event) {
                     if(event.lengthComputable) {
-                      $upload_progress_bar.css('width', ((event.loaded / event.total) * 100) + '%');
+                      $upload_progress_bar.css('width', ((event.loaded / event.total) * 95) + '%');
                     }
                   };
 
                   save_request.success(function(response) {
-                    $upload_progress_bar.css('width', '100%');
+                    $upload_progress_bar.css('width', '95%');
 
                     $upload_progress.fadeOut(animations_speed, function() {
                       $upload_progress.detach();
