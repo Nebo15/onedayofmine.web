@@ -88,6 +88,25 @@ class Moment extends BaseModel
 		}
 	}
 
+	function _onAfterDestroy()
+	{
+		foreach($this->getDay()->getMoments() as $pos => $moment)
+		{
+			if($moment->position == $this->position && $moment->id != $this->id)
+			{
+				$query = new lmbUpdateQuery($this->_db_table_name);
+				$query->addRawField('`position` = `position` - 1');
+				$query->addCriteria(
+					lmbSQLCriteria::equal('day_id', $this->day_id)->add(
+						lmbSQLCriteria::greaterOrEqual('position', $this->position)
+					)
+				);
+				$query->execute();
+				return;
+			}
+		}
+	}
+
   function getComments()
   {
     return MomentComment::find(lmbSQLCriteria::equal('moment_id', $this->id));
