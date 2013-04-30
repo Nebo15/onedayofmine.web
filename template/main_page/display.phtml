@@ -1,154 +1,113 @@
 <?
 $this->title = "Live the life through other people's eyes";
-$this->menu = 'discover';
+$this->menu = 'journal';
 ?>
 {{wrap with="layout.phtml"}}
-{{into slot="css"}}
-.nav { margin-bottom:0px; }
-.centered-pills { text-align:center; }
-.centered-pills ul.nav-pills { display:inline-block; }
-.centered-pills li { display:inline; }
-.centered-pills a { float:left; }
-* html .centered-pills ul.nav-pills { display:inline; } /* IE6 */
-*+html .centered-pills ul.nav-pills { display:inline; } /* IE7 */
-.ratings li a { font-size:24px }
-{{/into}}
-{{into slot="js_ready"}}
-(function() {
+  {{into slot="js_include"}}
+    <script src="/app/journal.js"></script>
+    <script src="/lib/vendor/jquery.imagesloaded.min.js"></script>
+  {{/into}}
 
-var $search_form = $('.form-search');
-var $search_form_query = $search_form.find('.search-query');
-var $search_form_submit = $search_form.find('button');
-var $search_result = $('.days');
-var $popular_days = $('.popular');
+  {{into slot="js"}}
+    var days_data = <?= json_encode($this->days); ?>;
+  {{/into}}
 
-function clearAndSpin()
-{
-$('.nav-pills li.active').removeClass('active');
-$search_form_query.val('');
-$search_result.html('');
-$('.has-spinner').showSpinner();
-}
+  {{template name='day_expand_button'}}
+    <div class="input-prepend small with-tooltip" data-original-title="Read full day">
+      <span class="add-on">
+        <i class="icon-eye-open"></i>
+        {$day->views_count}
+      </span>
+      <a class="btn btn-small has-spinner action-expand" href="/pages/{$day.id}/day">
+        <span class="spinner icon-spin icon-refresh"></span>
+        Read this day &darr;
+      </a>
+    </div>
+  {{/template}}
 
-$('.top-action').click(function() {
-clearAndSpin();
-$(this).addClass('active');
-API.request('GET', 'days/interesting').success(show_days_by_response).send();
-});
+  {{template name='day_comments_button'}}
+    <div class="input-prepend small with-tooltip" data-original-title="Scroll to comments">
+      <span class="add-on"><i class="icon-comments"></i> {$day->comments_count}</span>
+      <a class="btn btn-small" href="/pages/{$day.id}/day#comments">Comments</a>
+    </div>
+  {{/template}}
 
-$('.following-action').click(function() {
-clearAndSpin();
-$(this).addClass('active');
-API.request('GET', 'days/following').success(show_days_by_response).send();
-});
+  {{into slot="templates"}}
+    <script id="template_moments" type="text/x-handlebars-template">
+      [[#moments]]
+        <article class="well">
+          <div class="time text-center text-gray">
+            <time class="text-center text-gray"><i class="icon-time"></i> [[time]]</time>
+          </div>
 
-$('.new-action').click(function() {
-clearAndSpin();
-$(this).addClass('active');
-API.request('GET', 'days/new').success(show_days_by_response).send();
-});
+          <div class="image block-center">
+            <div class="thumbnail">
+              <img src="[[image_532]]" />
+            </div>
+          </div>
+          [[#if description]]
+            <div class="description bubble block-center">
+              <div class="no-overflow">
+                [[description]]
+              </div>
+            </div>
+          [[/if]]
+        </article>
+      [[/moments]]
+    </script>
+  {{/into}}
 
-$('.queries li').click(function() {
-clearAndSpin();
-$search_form_query.val($(this).find('a').html());
-$search_form.submit();
-$(this).addClass('active');
-});
+  {{into slot="content"}}
+    {{list using="$#days"}}
+      <div class="journal">
+        {{list:item}}
+          <div class="row-fluid">
+            <article class="span8 offset2 day" data-id="{$item->id}" data-cover-image="{$item->image_532}">
+              <header>
+                <h1 class="title">{$item->title}</h1>
+                <div class="info muted">
+                  <time class="pull-right-on-tablet pull-right-on-desktop">
+                    <i class="icon icon-calendar hidden-phone"></i> {$item->date}
+                  </time>
+                  <div>
+                    {$item->type} by <b><a href="/pages/{$item->user->id}/user">{$item->user->name}</a></b>
+                  </div>
+                </div>
+              </header>
 
-function show_days_by_response(response)
-{
-$('.has-spinner').hideSpinner();
-if(response.data.result.length === 0)
-{
-$search_result.html("<p>We can't find any days by your query</p>");
-}
-else
-{
-var template_list = Template.prepareTemplate($('#days_list_elements_template'));
-var days = Template.compileElement(template_list, {
-days: response.data.result
-});
+              <div class="cover">
+                <div class="image block-center">
+                  <div class="thumbnail">
+                    <img src="{$item->image_532}" />
+                  </div>
+                </div>
+                <? if($item->final_description) { ?>
+                  <div class="description bubble block-center">
+                    <div class="no-overflow">
+                      {$item->final_description|nl2br}
+                    </div>
+                  </div>
+                <? } ?>
+              </div>
 
-days = $($.trim(days));
-$($search_result).html(days);
-$($search_result).masonry('reload', days);
-}
-}
+              <section class="moments"></section>
 
-$search_form_query.attachValidator({
-button: $search_form_submit,
-maxLength: 100,
-minLength: 3,
-messages: {
-empty: 'Search query is empty',
-minLength: 'Search query is too short',
-maxLength: 'Search query is too long'
-}
-});
+              <div class="clearfix">
+                <div class="btn-toolbar text-center">
+                  {{apply template="day_like_button" day="$item" /}}
+                  {{apply template="day_share_button" day="$item" /}}
+                  {{apply template="day_comments_button" day="$item" /}}
+                  {{apply template="day_expand_button" day="$item" /}}
+                </div>
+              </div>
+            </article>
+          </div>
+        {{/list:item}}
+      </div>
 
-$search_form.submit(function(event) {
-
-var search_request = API.request('POST', 'days/search', {
-query: $search_form_query.val()
-});
-
-search_request.success(show_days_by_response);
-search_request.send();
-return false;
-});
-
-})();
-{{/into}}
-
-{{into slot="content"}}
-<div class="row-fluid">
-	<center>
-		<form class="form-search days-search-form">
-			<input type="search" autofocus class="input-xlarge search-query span5"
-			       placeholder="Occupation, place or something else">
-			<button type="submit" class="btn">Discover!</button>
-		</form>
-	</center>
-</div>
-<div class="row">
-	<div class="span12 centered-pills">
-		<ul class="nav nav-pills ratings">
-			<li class="active top-action"><a href="#">Top</a></li>
-			<? if($this->current_user) { ?>
-				<li class="following-action"><a href="#">Following</a></li>
-			<? } ?>
-			<li class="new-action"><a href="#">New</a></li>
-		</ul>
-	</div>
-</div>
-<div class="row">
-	<div class="span12 centered-pills">
-		<ul class="nav nav-pills queries">
-			<li><a href="#">filmmaker</a></li>
-			<li><a href="#">entrepreneur</a></li>
-			<li><a href="#">programmer</a></li>
-		</ul>
-	</div>
-</div>
-<div class="row">
-	<div class="span12 centered-pills">
-		<ul class="nav nav-pills queries">
-			<li><a href="#">Kiev</a></li>
-			<li><a href="#">London</a></li>
-			<li><a href="#">Tel Aviv</a></li>
-		</ul>
-	</div>
-</div>
-
-<hr/>
-<div class="has-spinner">
-	<i class="spinner icon-spin icon-refresh"></i>
-	<ul class="days clearfix block-center">
-		<div class="popular">
-			{{apply template="days_list" days="$#days"/}}
-		</div>
-	</ul>
-</div>
-
-{{/into}}
+      {{list:default}}
+        Journal is empty.
+      {{/list:default}}
+    {{/list}}
+  {{/into}}
 {{/wrap}}

@@ -79,9 +79,16 @@ class PagesController extends WebAppController
 		return;
 	}
 
-	function doDaysSearch()
+  function doDaysSearch()
+  {
+    $this->redirect('/pages/days/discover');
+    return;
+  }
+
+  function doDiscover()
 	{
-		return $this->doDaysDiscover();
+    $this->redirect('/pages/days/discover');
+    return;
 	}
 
 	function doMyDays()
@@ -426,5 +433,14 @@ class PagesController extends WebAppController
     }
   }
 
+  function doDaysDiscover()
+  {
+    $days_ratings = (new InterestCalculator())->getDaysRatings(null, null, $this->lists_limit);
 
+    $days = [];
+    foreach ($days_ratings as $day_rating)
+      $days[] = $day_rating->getDay();
+
+    $this->days = $this->_toFlatArray($this->toolkit->getExportHelper()->exportDayItems($days));
+  }
 }

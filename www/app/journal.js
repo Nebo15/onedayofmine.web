@@ -14,7 +14,7 @@ $(function () {
   (function() {
     var moments_template = Template.prepareTemplate($('#template_moments'));
 
-    $journal.on('click', '.action-expand', function() {
+    $journal.one('click', '.action-expand', function() {
       var $btn = $(this);
       if($btn.hasClass('disabled')) {
         return false;
@@ -55,6 +55,8 @@ $(function () {
           $day.find('.cover').find('.image').slideUp(animations_speed, function() {
             $day.addClass('expanded');
             $btn.hideSpinner();
+            $btn.removeClass('disabled');
+            $btn.html("Go to this day &rarr;");
           });
         });
       });

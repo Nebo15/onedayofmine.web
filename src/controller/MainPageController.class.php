@@ -24,13 +24,19 @@ class MainPageController extends WebAppController
 
 	function doDisplay()
 	{
-		$days_ratings = (new InterestCalculator())->getDaysRatings(null, null, $this->lists_limit);
+    $days_ratings = (new InterestCalculator())->getDaysRatings(null, null, $this->lists_limit);
 
-		$days = [];
-		foreach ($days_ratings as $day_rating)
-			$days[] = $day_rating->getDay();
+    $days = [];
+    foreach ($days_ratings as $day_rating)
+      $days[$day_rating->day_id] = $day_rating->getDay();
 
-		$this->days = $this->_toFlatArray($this->toolkit->getExportHelper()->exportDayItems($days));
+    $this->days = $this->_toFlatArray($this->toolkit->getExportHelper()->exportDayItems($days));
+
+    foreach ($this->days as $id => $day) {
+      $day->date = date('Y-m-d', $day->utime);
+
+      $day->final_description = $days[$day->id]->final_description;
+    }
 	}
 
 
