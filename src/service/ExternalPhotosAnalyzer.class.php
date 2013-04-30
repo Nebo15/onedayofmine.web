@@ -94,12 +94,10 @@ class ExternalPhotosAnalyzer
 		if($day_of_week == 6 || $day_of_week == 0)
 		{
 			$this->addType('Day off', 20);
-			$this->addTitle('My interesting day off', 20);
 		}
 		else
 		{
 			$this->addType('Working day', 20);
-			$this->addTitle('My interesting work', 20);
 		}
 	}
 

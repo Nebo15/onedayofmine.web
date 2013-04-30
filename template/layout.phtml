@@ -8,6 +8,11 @@
 	if(LIMB_APP_PRODUCTION != lmb_app_mode())
 		$base_title .= '-'.lmb_app_mode();
 	$this->title = property_exists($this, 'title') ? $base_title.': '.$this->title : $base_title;
+
+	$this->current_user = $this->toolkit->getUser()
+		? (array) $this->toolkit->getExportHelper()->exportUser($this->toolkit->getUser())
+		: [];
+	$this->current_user_json = json_encode($this->current_user);
 ?>
 <!DOCTYPE html>
 <html>

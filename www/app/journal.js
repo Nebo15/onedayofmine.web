@@ -52,10 +52,12 @@ $(function () {
             height: total_height
           }, Math.max(total_height/10000, animations_speed));
 
-          $day.find('.cover').find('.image').slideUp(animations_speed, function() {
-            $day.addClass('expanded');
-            $btn.hideSpinner();
-          });
+					//$day.find('.cover').find('.image').css('display', 'none');
+
+//          $day.find('.cover').find('.image').slideUp(animations_speed, function() {
+//            $day.addClass('expanded');
+//            $btn.hideSpinner();
+//          });
         });
       });
 
