@@ -5,10 +5,6 @@
 
   <div id="header">
     <h1>Complaint</h1>
-    <div class="header_actions">
-      {{apply template="object_action" action="create" is_link="true" title="Создать Complaint"/}}
-    </div>
-
     {{include file='_admin/pager.phtml' items='{$this->items}'/}}
   </div>
 
@@ -26,15 +22,10 @@
             <th>id
             {{include file='_admin/sort_by_column.phtml' field='id'/}}
             </th>
-            <th>user_id
-            {{include file='_admin/sort_by_column.phtml' field='user_id'/}}
-            </th>
-            <th>day_id
+            <th>day
             {{include file='_admin/sort_by_column.phtml' field='day_id'/}}
             </th>
-            <th>moment_id
-            {{include file='_admin/sort_by_column.phtml' field='moment_id'/}}
-            </th>
+            <th>text</th>
             <th>ctime
             {{include file='_admin/sort_by_column.phtml' field='ctime'/}}
             </th>
@@ -48,15 +39,17 @@
             <tr class="{$parity}">
               <td>{{apply template="selector" value="{$item.id}"/}}</td>
               <td>{$item.id}</td>
-              <td>{$item.user_id}</td>
-              <td>{$item.day_id}</td>
-              <td>{$item.moment_id}</td>
+              <td>
+	              <a href="/pages/{$item.day_id}/day">
+		              <?= $item->getDay()->title; ?>
+	              </a>
+	              by <a href="/pages/<?= $item->getDay()->user_id; ?>"><?= $item->getDay()->getUser()->name; ?></a>
+              </td>
+              <td>{$item.text}</td>
               <td>{$item.ctime|date:"d.m.Y"}</td>
               <td>{$item.cip}</td>
               <td class='actions'>
-                {{apply template="object_action_edit" item="{$item}"/}}
-                
-                {{apply template="object_action_delete" item="{$item}"/}}
+
               </td>
             </tr>
           {{/list:item}}
