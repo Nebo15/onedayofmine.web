@@ -7,10 +7,15 @@ lmb_require('src/service/InterestCalculator.class.php');
 class AdminDayController extends lmbAdminObjectController
 {
   protected $_object_class_name = 'Day';
+	/**
+	 * @var InterestCalculator
+	 */
+	protected $interest_calculator;
 
   function doInteresting()
   {
-    $this->items = (new InterestCalculator())->getDaysRatings();
+	  $this->interest_calculator = new InterestCalculator();
+    $this->items = $this->interest_calculator->getDaysRatings();
   }
 
   function doInterestingAdd()
@@ -59,20 +64,14 @@ class AdminDayController extends lmbAdminObjectController
 
   function doInterestingPin()
   {
-    if(!$record = DayInterestRecord::findById($this->request->get('id')))
-      return $this->forwardTo404();
-    $record->is_pinned = 1;
-    $record->save();
+	  $this->interest_calculator->pinDay($this->request->get('id'));
     $this->_endDialog();
   }
 
   function doInterestingUnpin()
   {
-    if(!$record = DayInterestRecord::findById($this->request->get('id')))
-      return $this->forwardTo404();
-	  $record->is_pinned = 0;
-    $record->save();
-    $this->_endDialog();
+	  $this->interest_calculator->unpinDay($this->request->get('id'));
+	  $this->_endDialog();
   }
 
   function doInterestingDelete()

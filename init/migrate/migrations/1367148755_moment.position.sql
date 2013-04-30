@@ -1,0 +1,3 @@
+SET FOREIGN_KEY_CHECKS = 0;
+ALTER TABLE `moment` ADD `position` int(3) unsigned NOT NULL DEFAULT 0 AFTER image_ext;
+SET FOREIGN_KEY_CHECKS = 1;

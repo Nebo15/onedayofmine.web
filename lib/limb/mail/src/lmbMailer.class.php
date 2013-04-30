@@ -34,12 +34,7 @@ class lmbMailer implements lmbBaseMailerInterface
   {
     $conf = lmbToolkit::instance()->getConf('mail');
 
-    $this->use_phpmail = $conf['use_phpmail'];
-    $this->smtp_host = $conf['smtp_host'];
-    $this->smtp_port = $conf['smtp_port'];
-    $this->smtp_auth = $conf['smtp_auth'];
-    $this->smtp_user = $conf['smtp_user'];
-    $this->smtp_password = $conf['smtp_password'];
+    $this->use_phpmail = true;
     $this->sender = $conf['sender'];
 
     $this->setConfig($config);

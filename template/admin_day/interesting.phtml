@@ -50,9 +50,9 @@
 	            </td>
               <td class='actions'>
                 <?php if($item['is_pinned']) { ?>
-		              <a href='/admin_day/interesting_unpin/{$item.id}' title="unpin" class="thickbox"><img src='/shared/cms/images/icons/link_break.png'/></a>
+		              <a href='/admin_day/interesting_unpin/{$item.day_id}' title="unpin" class="thickbox"><img src='/shared/cms/images/icons/link_break.png'/></a>
                 <?php } else { ?>
-		              <a href='/admin_day/interesting_pin/{$item.id}' title="pin" class="thickbox"><img src='/shared/cms/images/icons/link.png'/></a>
+		              <a href='/admin_day/interesting_pin/{$item.day_id}' title="pin" class="thickbox"><img src='/shared/cms/images/icons/link.png'/></a>
                 <?php } ?>
 	              <a href='/admin_day/interesting_edit/{$item.id}' title="edit" class="thickbox"><img src='/shared/cms/images/icons/pencil.png'/></a>
                 <a href='#' onclick="if(confirm('{{i18n text="Remove day from interesting" domain="cms"/}}?')) {jQuery.post('/admin_day/interesting_delete', {ids:{$item.id}}, function(){document.location.reload()})}" title="Delete">

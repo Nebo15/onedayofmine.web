@@ -1,10 +1,10 @@
 <?php
 
-lmb_require('limb/mail/src/lmbBaseMailerInterface.interface.php');
+lmb_require('limb/mail/src/lmbMailer.class.php');
 
-class lmbFileMailer implements lmbBaseMailerInterface
+class lmbFileMailer extends lmbMailer
 {
-  function sendHtmlMail($recipients, $sender, $subject, $html, $text = null, $charset = 'utf-8')
+  function sendHtmlMail($recipients, $subject, $html, $text = null, $charset = 'utf-8')
   {
     $content =<<<EOD
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -13,33 +13,33 @@ class lmbFileMailer implements lmbBaseMailerInterface
 <body>
 EOD;
     $content .= '<p>recipient: '.$recipients.'</p>';
-    $content .= '<p>sender: '.$sender.'</p>';
+    $content .= '<p>sender: '.$this->sender.'</p>';
     $content .= '<p>subject: '.$subject.'</p>';
+	  $content .= '<p>charset: '.$charset.'</p>';
     $content .= '<pre>html: '.$html.'</pre>';
     $content .= '<pre>text: '.$text.'</pre>';
-    $content .= '<p>charset: '.$charset.'</p>';
 
     $content .= '</body></html>';
 
-    $this->_send($recipients,$content);
+    $this->_send($recipients, $subject, $content, 'html');
   }
 
-  function sendPlainMail($recipients, $sender, $subject, $body, $charset = 'utf-8')
+  function sendPlainMail($recipients, $subject, $body, $charset = 'utf-8')
   {
     $content = '';
-    $content .= '<p>recipient: '.$recipients.'</p>';
-    $content .= '<p>sender: '.$sender.'</p>';
-    $content .= '<p>subject: '.$subject.'</p>';
-    $content .= '<pre>text: '.$body.'</pre>';
-    $content .= '<p>charset: '.$charset.'</p>';
+    $content .= 'recipient: '.$recipients.PHP_EOL;
+    $content .= 'sender: '.$this->sender.PHP_EOL;
+    $content .= 'subject: '.$subject.PHP_EOL;
+    $content .= 'text: '.$body.PHP_EOL;
+    $content .= 'charset: '.$charset.PHP_EOL;
 
-    $this->_send($recipients,$content);
+    $this->_send($recipients, $subject, $content, 'txt');
   }
 
   function setConfig($config)  {}
     
-  protected function _send($recipients, $content)
+  protected function _send($recipients, $subject, $content, $ext)
   {
-    lmbFs::safeWrite(lmb_env_get('LIMB_VAR_DIR').'/mail/'.(pow(2,31) - time()).'_'.$recipients.'_'.microtime(true).'.txt', $content);
+    lmbFs::safeWrite(lmb_env_get('LIMB_VAR_DIR').'/mail/'.$recipients.'_'.$subject.'.'.$ext, $content);
   }
 }

@@ -120,7 +120,7 @@ abstract class BaseJsonController extends lmbController
   {
     foreach($properties as $property)
     {
-      if(!$this->request->get($property))
+      if(null === $this->request->get($property, null))
         $this->error_list->addError("Property '$property' not found in request");
     }
     return $this->error_list->getReadable();

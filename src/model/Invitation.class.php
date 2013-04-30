@@ -13,6 +13,6 @@ class Invitation extends BaseModel
 	 */
 	static function findOneByCode($invitation_code)
 	{
-		return Invitation::findFirst(['code = ?', $invitation_code]);
+		return Invitation::findFirst(['LOWER(code) = LOWER(?)', $invitation_code]);
 	}
 }

@@ -30,6 +30,12 @@ $this->menu = 'me';
   {{/into}}
 
   {{into slot="js_ready"}}
+
+		$('#myTab a').click(function (e) {
+			e.preventDefault();
+			$(this).tab('show');
+		});
+
     var users_search_block = $('#users_search');
     var users_list_template = Template.prepareTemplate($('#users_list_template'));
 
@@ -118,24 +124,28 @@ $this->menu = 'me';
 
       facebook_friends_block.findSpinner().hideSpinner();
 
-      facebook_friends_block.find('.invite-action').click(function() {
+      facebook_friends_block.find('.invite-action').click(function()
+			{
+				var $item = $(this).closest('li');
         var obj = {
           method: 'feed',
-          to: $(this).closest('li').data('uid'),
-          redirect_uri: 'http://' + Config.host + '/pages/find_people',
+          to: $item.data('uid'),
           link: 'http://' + Config.host + '/pages/{$#current_user.id}/user',
           name: 'One Day of Mine invitation',
           description: "Hi, come and check out my photos in One Day of Mine, where people share days of their lifes."
         };
 
   			function callback(response) {
-  				alert('User invited');
+					if(null != response)
+						$item.find('.btn').removeClass('btn-success').addClass('disabled').html('invited');;
   			}
 
   			FB.ui(obj, callback);
   		});
 
       attachFollowingListeners(facebook_friends_block);
+			attachFollowingListeners($('#followers'));
+			attachFollowingListeners($('#followed'));
 
       var search_query_input = facebook_friends_block.find('.search-query');
       var filter_timeout;
@@ -158,7 +168,6 @@ $this->menu = 'me';
 
             var show = true;
             $.each(parts, function(index, pattern) {
-              console.log(transliterate_lowerCase(pattern.toLowerCase()));
               if(!new RegExp('(' + transliterate_lowerCase(pattern.toLowerCase()) + ')', 'gi').test(friend_name)) {
                 show = false;
               }
@@ -179,28 +188,47 @@ $this->menu = 'me';
 
   {{into slot="content"}}
     <div class="row-fluid">
-      <div class="span12" id="users_search">
-        <h1 class="has-spinner">
-          <span class="spinner icon-spin icon-refresh"></span>
-          Find people
-        </h1>
-        <form class="form-search form-inline">
-          <input type="text" class="span5 search-query" placeholder="Enter user name...">
-          <button type="submit" class="btn btn-small">Search</button>
-        </form>
-        <div class="search-result"></div>
+      <div class="span12 " id="users_search">
+
+	      <h1>Peoples</h1>
+	      <br/>
+
+	      <ul class="nav nav-tabs" id="myTab">
+		      <li class="active"><a href="#facebook"><i class="icon icon-facebook-sign"></i>Invite from Facebook</a></li>
+		      <li><a href="#followers"><i class="icon icon-circle-arrow-down"></i>Followers</a></li>
+		      <li><a href="#followed"><i class="icon icon-circle-arrow-up"></i>Followed</a></li>
+		      <li><a href="#search"><i class="icon icon-search"></i>Search</a></li>
+	      </ul>
+
+	      <div class="tab-content">
+		      <div class="tab-pane active" id="facebook">
+			      <?php if(count($this->friends) > 0) { ?>
+				      <div class="row-fluid">
+					      <div class="span12" id="facebook_friends">
+						      <input type="text" class="span5 search-query" placeholder="Filter by friend name...">
+					      </div>
+				      </div>
+			      <? } ?>
+		      </div>
+
+		      <div class="tab-pane" id="followers">
+			      {{apply template="users_list" users="{$#followers}"/}}
+			    </div>
+
+		      <div class="tab-pane" id="followed">
+			      {{apply template="users_list" users="{$#following}"/}}
+		      </div>
+
+		      <div class="tab-pane" id="search">
+			      <form class="form-search form-inline">
+				      <input type="text" class="span5 search-query" placeholder="Enter user name...">
+				      <button type="submit" class="btn btn-small">Search</button>
+			      </form>
+			      <div class="search-result"></div>
+		      </div>
+
+	      </div>
       </div>
     </div>
-    <?php if(count($this->friends) > 0) { ?>
-      <div class="row-fluid">
-        <div class="span12" id="facebook_friends">
-          <h1 class="has-spinner">
-            <span class="spinner icon-spin icon-refresh"></span>
-            Facebook friends
-          </h1>
-          <input type="text" class="span5 search-query" placeholder="Filter by friend name...">
-        </div>
-      </div>
-    <? } ?>
   {{/into}}
 {{/wrap}}

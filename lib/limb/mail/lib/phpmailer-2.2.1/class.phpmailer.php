@@ -477,18 +477,18 @@ class PHPMailer {
       ini_set('sendmail_from', $this->Sender);
       if ($this->SingleTo === true && count($toArr) > 1) {
         foreach ($toArr as $key => $val) {
-          $rt = @mail($val, $this->EncodeHeader($this->SecureHeader($this->Subject)), $body, $header, $params);
+          $rt = mail($val, $this->EncodeHeader($this->SecureHeader($this->Subject)), $body, $header, $params);
         }
       } else {
-        $rt = @mail($to, $this->EncodeHeader($this->SecureHeader($this->Subject)), $body, $header, $params);
+        $rt = mail($to, $this->EncodeHeader($this->SecureHeader($this->Subject)), $body, $header, $params);
       }
     } else {
       if ($this->SingleTo === true && count($toArr) > 1) {
         foreach ($toArr as $key => $val) {
-          $rt = @mail($val, $this->EncodeHeader($this->SecureHeader($this->Subject)), $body, $header, $params);
+          $rt = mail($val, $this->EncodeHeader($this->SecureHeader($this->Subject)), $body, $header, $params);
         }
       } else {
-        $rt = @mail($to, $this->EncodeHeader($this->SecureHeader($this->Subject)), $body, $header);
+        $rt = mail($to, $this->EncodeHeader($this->SecureHeader($this->Subject)), $body, $header);
       }
     }
 

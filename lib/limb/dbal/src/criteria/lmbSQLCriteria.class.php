@@ -86,6 +86,8 @@ class lmbSQLCriteria extends lmbSQLBaseCriteria
    */
   static function notIn($column, $values, $handler = null)
   {
+	  if(!count($values))
+		  return null;
     if($handler)
       $values = array_map($handler, $values);
     return new lmbSQLFieldCriteria($column, $values, lmbSQLFieldCriteria :: NOT_IN);
