@@ -225,11 +225,11 @@ h4 {
   transition: opacity 0.45s, max-width 0.75s; /* Duration fixed since we animate additional hidden width */
 }
 
-.has-spinner.active {
+.has-spinner.show-spinner {
   cursor:progress;
 }
 
-.has-spinner.active .spinner {
+.has-spinner.show-spinner .spinner {
   opacity: 1;
   max-width: 50px; /* More than it will ever come, notice that this affects on animation duration */
 }
@@ -242,12 +242,12 @@ h4 {
   transform: opacity 0.2s, max-width 0.2s;
 }
 
-.has-spinner.active [class*="icon"]:not(.spinner) {
+.has-spinner.show-spinner [class*="icon"]:not(.spinner) {
   opacity: 0;
   max-width: 0;
 }
 
-.has-spinner:not(.active) .icon-spin {
+.has-spinner:not(.show-spinner) .icon-spin {
   -moz-animation: none;
   -o-animation: none;
   -webkit-animation: none;

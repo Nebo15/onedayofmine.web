@@ -9,11 +9,11 @@ $(function() {
     },
 
     showSpinner: function() {
-      $(this).addClass('active');
+      $(this).addClass('show-spinner');
     },
 
     hideSpinner: function() {
-      $(this).removeClass('active');
+      $(this).removeClass('show-spinner');
     },
 
     makeInvisible: function() {
