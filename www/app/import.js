@@ -391,6 +391,7 @@ var ImportController = function($wizard, $steps_content) {
             $.each(selected_shots, function(index, shot) {
               var shot_data = {
                 time:         Tools.getISODate(new Date(shot.time * 1000)),
+								position:			index,
                 image_url:    shot.image,
                 description:  shot.title
               };
