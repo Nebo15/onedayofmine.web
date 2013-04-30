@@ -982,18 +982,15 @@ ul.with-separators li .btn-small {
 
 .journal .image {
   width: 542px;
-  height: 542px;
   max-width: 100%;
 }
 
 .journal .thumbnail img {
   width: 532px;
-  height: 532px;
 }
 
 .journal .thumbnail {
   width: 532px;
-  height: 532px;
   max-width: 100%;
 
   -webkit-transition: none;
