@@ -1,0 +1,129 @@
+<?
+$this->title = "Live the life through other people's eyes";
+$this->menu = 'discover';
+?>
+{{wrap with="layout.phtml"}}
+  {{into slot="js_include"}}
+    <script src="/app/journal.js"></script>
+    <script src="/lib/vendor/jquery.imagesloaded.min.js"></script>
+  {{/into}}
+
+  {{into slot="js"}}
+    var days_data = <?= json_encode($this->days); ?>;
+  {{/into}}
+
+  {{template name='day_expand_button'}}
+    <div class="input-prepend small with-tooltip" data-original-title="Read full day">
+      <span class="add-on">
+        <i class="icon-eye-open"></i>
+        {$day->views_count}
+      </span>
+      <a class="btn btn-small has-spinner action-expand" href="/pages/{$day.id}/day">
+        <span class="spinner icon-spin icon-refresh"></span>
+        Read this day &darr;
+      </a>
+    </div>
+  {{/template}}
+
+  {{template name='day_comments_button'}}
+    <div class="input-prepend small with-tooltip" data-original-title="Scroll to comments">
+      <span class="add-on"><i class="icon-comments"></i> {$day->comments_count}</span>
+      <a class="btn btn-small" href="/pages/{$day.id}/day#comments">Comments</a>
+    </div>
+  {{/template}}
+
+  {{into slot="templates"}}
+    <script id="template_moments" type="text/x-handlebars-template">
+      [[#moments]]
+        <article class="well">
+          <div class="time text-center text-gray">
+            <time class="text-center text-gray"><i class="icon-time"></i> [[time]]</time>
+          </div>
+
+          <div class="image block-center">
+            <div class="thumbnail">
+              <img src="[[image_532]]" />
+            </div>
+          </div>
+          [[#if description]]
+            <div class="description bubble block-center">
+              <div class="no-overflow">
+                [[description]]
+              </div>
+            </div>
+          [[/if]]
+        </article>
+      [[/moments]]
+    </script>
+  {{/into}}
+
+  {{into slot="content"}}
+    {{list using="$#days"}}
+      <div class="journal">
+        {{list:item}}
+          <div class="row-fluid">
+            <article class="span8 offset2 day" data-id="{$item->id}" data-cover-image="{$item->image_532}">
+              <header>
+                <h1 class="title">{$item->title}</h1>
+                <div class="info muted">
+                  <time class="pull-right-on-tablet pull-right-on-desktop">
+                    <i class="icon icon-calendar hidden-phone"></i> {$item->date}
+                  </time>
+                  <div>
+                    {$item->type} by <b><a href="/pages/{$item->user->id}/user">{$item->user->name}</a></b>
+                  </div>
+                </div>
+              </header>
+
+              <div class="cover">
+                <div class="image block-center">
+                  <div class="thumbnail">
+                    <img src="{$item->image_532}" />
+                  </div>
+                </div>
+                <? if($item->final_description) { ?>
+                  <div class="description bubble block-center">
+                    <div class="no-overflow">
+                      {$item->final_description|nl2br}
+                    </div>
+                  </div>
+                <? } ?>
+              </div>
+
+              <section class="moments"></section>
+
+              <div class="clearfix">
+                <div class="btn-toolbar text-center">
+                  {{apply template="day_like_button" day="$item" /}}
+                  {{apply template="day_share_button" day="$item" /}}
+                  {{apply template="day_comments_button" day="$item" /}}
+                  {{apply template="day_expand_button" day="$item" /}}
+                </div>
+              </div>
+            </article>
+          </div>
+        {{/list:item}}
+      </div>
+
+      {{list:default}}
+        Journal is empty.
+      {{/list:default}}
+    {{/list}}
+  {{/into}}
+{{/wrap}}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

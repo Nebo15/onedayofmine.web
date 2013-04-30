@@ -225,11 +225,11 @@ h4 {
   transition: opacity 0.45s, max-width 0.75s; /* Duration fixed since we animate additional hidden width */
 }
 
-.has-spinner.active {
+.has-spinner.show-spinner {
   cursor:progress;
 }
 
-.has-spinner.active .spinner {
+.has-spinner.show-spinner .spinner {
   opacity: 1;
   max-width: 50px; /* More than it will ever come, notice that this affects on animation duration */
 }
@@ -242,12 +242,12 @@ h4 {
   transform: opacity 0.2s, max-width 0.2s;
 }
 
-.has-spinner.active [class*="icon"]:not(.spinner) {
+.has-spinner.show-spinner [class*="icon"]:not(.spinner) {
   opacity: 0;
   max-width: 0;
 }
 
-.has-spinner:not(.active) .icon-spin {
+.has-spinner:not(.show-spinner) .icon-spin {
   -moz-animation: none;
   -o-animation: none;
   -webkit-animation: none;
@@ -940,7 +940,65 @@ ul.with-separators li .btn-small {
 }
 
 /* > Main page */
+.journal .day {
+  background: #FEFEFE;
+  border: 2px solid #FAFAFA;
+  box-shadow: 0 1px 2px rgba(34, 25, 25, 0.4);
+  padding: 15px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  background: -webkit-linear-gradient(45deg, #FFF, #F9F9F9);
+  margin-bottom: 10px;
+}
 
+.journal .cover .description:after {
+  -webkit-transition: opacity 0.8s ease;
+  -moz-transition: opacity 0.8s ease;
+  -ms-transition: opacity 0.8s ease;
+  -o-transition: opacity 0.8s ease;
+  transform: opacity 0.8s ease;
+  opacity: 1;
+}
+
+.journal .expanded .cover .description:after {
+  opacity: 0;
+}
+
+.journal .moments {
+  -webkit-transition: max-height 40s ease, margin 0.8s ease;
+  -moz-transition: max-height 40s ease, margin 0.8s ease;
+  -ms-transition: max-height 40s ease, margin 0.8s ease;
+  -o-transition: max-height 40s ease, margin 0.8s ease;
+  transform: max-height 40s ease, margin 0.8s ease;
+
+  height: 0;
+  overflow: hidden
+}
+
+.journal .expanded .moments {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.journal .image {
+  width: 542px;
+  max-width: 100%;
+}
+
+.journal .thumbnail img {
+  width: 532px;
+}
+
+.journal .thumbnail {
+  width: 532px;
+  max-width: 100%;
+
+  -webkit-transition: none;
+  -moz-transition: none;
+  -ms-transition: none;
+  -o-transition: none;
+  transform: none;
+}
 
 /* > News page */
 /* > Discover page */
@@ -1013,6 +1071,17 @@ ul.with-separators li .btn-small {
   position:relative;
 }
 
+.final-description {
+  padding:15px;
+  margin:15px 0;
+  color:#333;
+  background:#eee;
+  /* css3 */
+  -webkit-border-radius:10px;
+  -moz-border-radius:10px;
+  border-radius:10px;
+}
+
 .day form {
   margin: 0;
 }
@@ -1040,6 +1109,14 @@ ul.with-separators li .btn-small {
 
 .day-controls-group {
   margin-bottom: 5px;
+}
+
+.day .moments {
+  -webkit-transition: max-height 0.4s ease;
+  -moz-transition: max-height 0.4s ease;
+  -ms-transition: max-height 0.4s ease;
+  -o-transition: max-height 0.4s ease;
+  transform: max-height 0.4s ease;
 }
 
 .day .moments .placeholder {
@@ -1113,16 +1190,16 @@ ul.with-separators li .btn-small {
   width: 40px;
 }
 
-.day .moments article .image {
+.day .moments article .image{
   width: 542px;
   max-width: 100%;
 }
 
-.day .moments article .thumbnail img {
+.day .moments article .thumbnail img{
   width: 532px;
 }
 
-.day .moments article .thumbnail {
+.day .moments article .thumbnail{
   width: 532px;
   max-width: 100%;
 
@@ -1137,7 +1214,8 @@ ul.with-separators li .btn-small {
   border-color:#ab0001;
 }
 
-.day .moments article .description {
+.day .moments article .description,
+.day .cover .description {
   margin-top: 25px;
   width: 570px;
   max-width: 100%;
