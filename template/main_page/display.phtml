@@ -78,7 +78,9 @@ $this->menu = 'journal';
               <div class="cover">
                 <div class="image block-center">
                   <div class="thumbnail">
-                    <img src="{$item->image_532}" />
+                    <a href="/pages/{$item->id}/day">
+                      <img src="{$item->image_532}" />
+                    </a>
                   </div>
                 </div>
                 <? if($item->final_description) { ?>
