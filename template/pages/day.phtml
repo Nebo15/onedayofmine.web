@@ -3,18 +3,6 @@ $this->title = $this->day->title;
 $this->day->is_gathering_enabled = false;
 ?>
 {{wrap with="layout.phtml"}}
-	{{into slot="css"}}
-		.final-description {
-			padding:15px;
-			margin:15px 0;
-			color:#333;
-			background:#eee;
-			/* css3 */
-			-webkit-border-radius:10px;
-			-moz-border-radius:10px;
-			border-radius:10px;
-		}
-	{{/into}}
   {{into slot="og_meta"}}
 		<head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# {$#facebook_app_namespace}: http://ogp.me/ns/fb/{$#facebook_app_namespace}#">
     <meta property="og:type" content="{$#facebook_app_namespace}:day" />
@@ -68,39 +56,13 @@ $this->day->is_gathering_enabled = false;
     </div>
   {{/template}}
 
-  {{template name='day_like_button'}}
-    <? if($this->toolkit->getUser()) { ?>
-      <div class="input-prepend small like<?= property_exists($this->day, 'is_liked') ? ($this->day->is_liked ? ' liked' : '')  : ' disabled' ?>">
-        <span class="add-on">
-          <span class="heart toggle">
-            <span class="state"><i class="icon icon-heart-empty"></i></span>
-            <span class="state"><i class="icon icon-heart"></i></span>
-          </span>
-          <span class="counter toggle">
-            <span class="state">{$this->day->likes_count}</span>
-          </span>
-        </span>
-        <button class="btn btn-small action-like" type="button"<?= !property_exists($this->day, 'is_liked') ? ' disabled' : '' ?>>
-          <span class="text toggle">
-            <span class="state">Like</span>
-            <span class="state">Unlike</span>
-          </span>
-        </button>
+  {{template name='day_comments_button'}}
+    <? if(!$this->is_import_preview) { ?>
+      <div class="input-prepend small with-tooltip" data-original-title="Scroll to comments">
+        <span class="add-on"><i class="icon-comments"></i> {$day->comments_count}</span>
+        <a class="btn btn-small scrollTo comments" href="/pages/{$day.id}/day#comments">Comments</a>
       </div>
     <? } ?>
-  {{/template}}
-
-  {{template name='day_share_button'}}
-    <button class="btn btn-small action-share with-tooltip" data-original-title="Share this day with your Facebook friends" type="button">
-      <i class="icon-share"></i> Share
-    </button>
-  {{/template}}
-
-  {{template name='day_report_button'}}
-    <button class="btn btn-small action-complain with-tooltip" data-original-title="Report about inappropriate content" type="button">
-      <i class="icon-warning-sign"></i>
-      <span class="hidden-phone">Complain</span>
-    </button>
   {{/template}}
 
   {{into slot="templates"}}
@@ -434,14 +396,9 @@ $this->day->is_gathering_enabled = false;
           <? } ?>
 
           <div class="btn-toolbar">
-            <? if(!$this->is_import_preview) { ?>
-              <div class="input-prepend small with-tooltip" data-original-title="Scroll to comments">
-                <span class="add-on"><i class="icon-comments"></i> {$this->day->comments_count}</span>
-                <button class="btn btn-small scrollTo comments" type="button">Comments</button>
-              </div>
-            <? } ?>
-            {{apply template="day_like_button" /}}
-            {{apply template="day_share_button" /}}
+            {{apply template="day_comments_button" day="$#day" /}}
+            {{apply template="day_like_button" day="$#day" /}}
+            {{apply template="day_share_button" day="$#day" /}}
           </div>
         </div>
 
@@ -594,9 +551,9 @@ $this->day->is_gathering_enabled = false;
 
         <div class="clearfix">
           <div class="btn-toolbar pull-right-on-tablet pull-right-on-desktop text-center">
-            {{apply template="day_like_button" /}}
-            {{apply template="day_share_button" /}}
-            {{apply template="day_report_button" /}}
+            {{apply template="day_like_button" day="$#day" /}}
+            {{apply template="day_share_button" day="$#day" /}}
+            {{apply template="day_report_button" day="$#day" /}}
           </div>
         </div>
 

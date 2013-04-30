@@ -940,7 +940,46 @@ ul.with-separators li .btn-small {
 }
 
 /* > Main page */
+.journal .day {
+  background: #FEFEFE;
+  border: 2px solid #FAFAFA;
+  box-shadow: 0 1px 2px rgba(34, 25, 25, 0.4);
+  padding: 15px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+  background: -webkit-linear-gradient(45deg, #FFF, #F9F9F9);
+  margin-bottom: 10px;
+}
 
+.journal .cover .description:after {
+  -webkit-transition: opacity 0.8s ease;
+  -moz-transition: opacity 0.8s ease;
+  -ms-transition: opacity 0.8s ease;
+  -o-transition: opacity 0.8s ease;
+  transform: opacity 0.8s ease;
+  opacity: 1;
+}
+
+.journal .expanded .cover .description:after {
+  opacity: 0;
+}
+
+.journal .moments {
+  -webkit-transition: max-height 40s ease, margin 0.8s ease;
+  -moz-transition: max-height 40s ease, margin 0.8s ease;
+  -ms-transition: max-height 40s ease, margin 0.8s ease;
+  -o-transition: max-height 40s ease, margin 0.8s ease;
+  transform: max-height 40s ease, margin 0.8s ease;
+
+  max-height: 0;
+  overflow: hidden
+}
+
+.journal .expanded .moments {
+  max-height: 100%;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
 
 /* > News page */
 /* > Discover page */
@@ -1013,6 +1052,17 @@ ul.with-separators li .btn-small {
   position:relative;
 }
 
+.final-description {
+  padding:15px;
+  margin:15px 0;
+  color:#333;
+  background:#eee;
+  /* css3 */
+  -webkit-border-radius:10px;
+  -moz-border-radius:10px;
+  border-radius:10px;
+}
+
 .day form {
   margin: 0;
 }
@@ -1040,6 +1090,14 @@ ul.with-separators li .btn-small {
 
 .day-controls-group {
   margin-bottom: 5px;
+}
+
+.day .moments {
+  -webkit-transition: max-height 0.4s ease;
+  -moz-transition: max-height 0.4s ease;
+  -ms-transition: max-height 0.4s ease;
+  -o-transition: max-height 0.4s ease;
+  transform: max-height 0.4s ease;
 }
 
 .day .moments .placeholder {
@@ -1113,16 +1171,19 @@ ul.with-separators li .btn-small {
   width: 40px;
 }
 
-.day .moments article .image {
+.day .moments article .image,
+.day .cover .image {
   width: 542px;
   max-width: 100%;
 }
 
-.day .moments article .thumbnail img {
+.day .moments article .thumbnail img,
+.day .cover .thumbnail img {
   width: 532px;
 }
 
-.day .moments article .thumbnail {
+.day .moments article .thumbnail,
+.day .cover .thumbnail {
   width: 532px;
   max-width: 100%;
 
@@ -1137,7 +1198,8 @@ ul.with-separators li .btn-small {
   border-color:#ab0001;
 }
 
-.day .moments article .description {
+.day .moments article .description,
+.day .cover .description {
   margin-top: 25px;
   width: 570px;
   max-width: 100%;
