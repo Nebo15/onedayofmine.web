@@ -20,6 +20,7 @@ $(function () {
         return false;
       }
       $btn.addClass('disabled');
+      $btn.showSpinner();
 
       var $day = findDayByContext(this);
       var $moments = $day.find('.moments');
@@ -37,17 +38,24 @@ $(function () {
 
         var $loaded_moments = $($.parseHTML(Template.compileElement(moments_template, {
           moments: moments
-        })));
+        }))).filter('article');
 
-        // console.log($loaded_moments.height());
+        $moments.append($loaded_moments);
+        $loaded_moments.imagesLoaded(function() {
+          var total_height = 0;
+          $loaded_moments.each(function() {
+            var current = $(this);
+            total_height += $(this).outerHeight(true);
+          });
 
-        // console.log($loaded_moments);
-        // $moments.animate({
-        //   height: 1000
-        // }, animations_speed);
-        $day.find('.cover').find('.image').slideUp(animations_speed, function() {
-          $day.addClass('expanded');
-          $moments.append($loaded_moments);
+          $moments.animate({
+            height: total_height
+          }, Math.max(total_height/10000, animations_speed));
+
+          $day.find('.cover').find('.image').slideUp(animations_speed, function() {
+            $day.addClass('expanded');
+            $btn.hideSpinner();
+          });
         });
       });
 

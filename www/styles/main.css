@@ -971,14 +971,36 @@ ul.with-separators li .btn-small {
   -o-transition: max-height 40s ease, margin 0.8s ease;
   transform: max-height 40s ease, margin 0.8s ease;
 
-  max-height: 0;
+  height: 0;
   overflow: hidden
 }
 
 .journal .expanded .moments {
-  max-height: 100%;
   margin-top: 20px;
   margin-bottom: 20px;
+}
+
+.journal .image {
+  width: 542px;
+  height: 542px;
+  max-width: 100%;
+}
+
+.journal .thumbnail img {
+  width: 532px;
+  height: 532px;
+}
+
+.journal .thumbnail {
+  width: 532px;
+  height: 532px;
+  max-width: 100%;
+
+  -webkit-transition: none;
+  -moz-transition: none;
+  -ms-transition: none;
+  -o-transition: none;
+  transform: none;
 }
 
 /* > News page */
@@ -1171,19 +1193,16 @@ ul.with-separators li .btn-small {
   width: 40px;
 }
 
-.day .moments article .image,
-.day .cover .image {
+.day .moments article .image{
   width: 542px;
   max-width: 100%;
 }
 
-.day .moments article .thumbnail img,
-.day .cover .thumbnail img {
+.day .moments article .thumbnail img{
   width: 532px;
 }
 
-.day .moments article .thumbnail,
-.day .cover .thumbnail {
+.day .moments article .thumbnail{
   width: 532px;
   max-width: 100%;
 

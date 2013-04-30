@@ -5,6 +5,7 @@ $this->menu = 'discover';
 {{wrap with="layout.phtml"}}
   {{into slot="js_include"}}
     <script src="/app/journal.js"></script>
+    <script src="/lib/vendor/jquery.imagesloaded.min.js"></script>
   {{/into}}
 
   {{into slot="js"}}
@@ -13,8 +14,14 @@ $this->menu = 'discover';
 
   {{template name='day_expand_button'}}
     <div class="input-prepend small with-tooltip" data-original-title="Read full day">
-      <span class="add-on"><i class="icon-eye-open"></i> {$day->views_count}</span>
-      <a class="btn btn-small action-expand" href="/pages/{$day.id}/day">Read this day &darr;</a>
+      <span class="add-on">
+        <i class="icon-eye-open"></i>
+        {$day->views_count}
+      </span>
+      <a class="btn btn-small has-spinner action-expand" href="/pages/{$day.id}/day">
+        <span class="spinner icon-spin icon-refresh"></span>
+        Read this day &darr;
+      </a>
     </div>
   {{/template}}
 
