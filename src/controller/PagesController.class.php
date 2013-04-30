@@ -79,11 +79,6 @@ class PagesController extends WebAppController
 		return;
 	}
 
-	function doDaysSearch()
-	{
-		return $this->doDaysDiscover();
-	}
-
 	function doMyDays()
 	{
 		if (!$user = lmbToolkit::instance()->getUser())
