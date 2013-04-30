@@ -22,6 +22,11 @@ $editor = array(array('title' => 'Контент', 'icon' => '/shared/cms/images
 		'url' => '/admin_invitation',
 		'icon' => '/shared/cms/images/icons/script.png',
 	],
+	[
+		'title' => 'Complaint',
+		'url' => '/admin_complaint',
+		'icon' => '/shared/cms/images/icons/pill.png',
+	],
 )));
 
 $only_admin = array(array('title' => 'Администрирование', 'icon' => '/shared/cms/images/icons/menu_service.png','children' => array(

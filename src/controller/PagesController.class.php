@@ -79,18 +79,6 @@ class PagesController extends WebAppController
 		return;
 	}
 
-  function doDaysSearch()
-  {
-    $this->redirect('/pages/days/discover');
-    return;
-  }
-
-  function doDiscover()
-	{
-    $this->redirect('/pages/days/discover');
-    return;
-	}
-
 	function doMyDays()
 	{
 		if (!$user = lmbToolkit::instance()->getUser())

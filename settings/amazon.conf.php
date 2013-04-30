@@ -8,5 +8,11 @@ $conf = array(
   'S3' => array(
     'bucket' => 'onedayofmine',
     'enabled' => true
-  )
+  ),
+	'SNS' => [
+		'enabled' => true,
+		'topics' => [
+			'alert@onedayofmine.com' => 'arn:aws:sns:us-east-1:361985507382:Critical'
+		]
+	]
 );

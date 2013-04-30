@@ -1,5 +1,6 @@
 <?php
 lmb_require('src/model/base/BaseModel.class.php');
+lmb_require('src/model/Day.class.php');
 
 /**
  * @api
@@ -18,6 +19,11 @@ class Complaint extends BaseModel
   {
     $this->day_id = $day->id;
   }
+
+	function getDay()
+	{
+		return Day::findById($this->day_id);
+	}
 
   function exportForApi(array $properties = null)
   {

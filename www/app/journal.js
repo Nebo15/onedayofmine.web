@@ -15,6 +15,8 @@ $(function () {
     var moments_template = Template.prepareTemplate($('#template_moments'));
 
     $journal.one('click', '.action-expand', function() {
+      return true; // Redirect to page
+
       var $btn = $(this);
       if($btn.hasClass('disabled')) {
         return false;

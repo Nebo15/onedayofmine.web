@@ -30,7 +30,7 @@ class DaysController extends BaseJsonController
 		if (!$this->request->isPost())
 			return $this->_answerNotPost();
 
-		$errors = $this->_checkPropertiesInRequest(array('title', 'type'));
+		$errors = $this->_checkPropertiesInRequest(array('title'));
 		if (count($errors))
 			return $this->_answerWithError($errors);
 
@@ -432,7 +432,7 @@ class DaysController extends BaseJsonController
 					->getMailService('complain')
 					->set('complain', $complaint)
 					->set('host', lmb_env_get('HOST_URL'))
-					->send('support@onedayofmine.com');
+					->send('alert@onedayofmine.com');
 			return $this->_answerOk($this->toolkit->getExportHelper()->exportComplaint($complaint));
 		}
 		else
