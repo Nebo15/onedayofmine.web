@@ -432,7 +432,7 @@ class DaysController extends BaseJsonController
 					->getMailService('complain')
 					->set('complain', $complaint)
 					->set('host', lmb_env_get('HOST_URL'))
-					->send('support@onedayofmine.com');
+					->send('alert@onedayofmine.com');
 			return $this->_answerOk($this->toolkit->getExportHelper()->exportComplaint($complaint));
 		}
 		else
