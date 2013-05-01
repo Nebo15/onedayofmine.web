@@ -32,27 +32,12 @@ class User extends BaseModel
   protected $_db_table_name = 'user';
 
 	public $invitation_id, $current_day_id, $user_settings_id;
-  public $name;
-  public $sex;
-  public $birthday;
-  public $occupation;
-  public $location;
-  public $email;
-  public $timezone;
-  public $facebook_uid;
-  public $facebook_access_token;
-  public $facebook_profile_utime;
-  public $twitter_uid;
-  public $twitter_access_token;
-  public $twitter_access_token_secret;
-	public $instagram_uid;
-	public $instagram_token;
-	public $flickr_uid;
-	public $flickr_token;
-
-  public $ctime;
-  public $utime;
-  public $cip;
+	public $is_editor, $name, $sex, $birthday, $occupation, $location, $email, $timezone;
+  public $facebook_uid, $facebook_access_token, $facebook_profile_utime;
+  public $twitter_uid, $twitter_access_token, $twitter_access_token_secret;
+	public $instagram_uid, $instagram_token;
+	public $flickr_uid, $flickr_token;
+  public $ctime, $utime, $cip;
 
   protected function _createValidator()
   {

@@ -1,6 +1,7 @@
 <?php
 lmb_require('src/controller/BaseJsonController.class.php');
 lmb_require('src/model/Moment.class.php');
+lmb_require('src/model/EditorAction.class.php');
 
 class MomentsController extends BaseJsonController
 {
@@ -15,8 +16,10 @@ class MomentsController extends BaseJsonController
       return $this->_answerModelNotFoundById('Moment', $this->request->id);
 
     $day = Day::findById($moment->day_id);
-    if($day->user_id != $this->_getUser()->id)
+    if(!$this->_canEditDay($day))
       return $this->_answerNotOwner();
+
+	  $orig_moment = clone($moment);
 
     if($this->request->has('image_content'))
       $moment->attachImage(base64_decode($this->request->get('image_content')));
@@ -39,6 +42,14 @@ class MomentsController extends BaseJsonController
     if($this->error_list->isEmpty())
     {
       $moment->saveSkipValidation();
+	    if($this->_getUser()->is_editor && $this->_getUser()->id != $day->user_id)
+	    {
+		    $action = new EditorAction();
+		    $action->setUser($this->_getUser());
+		    $action->moment_id = $moment->id;
+		    $action->fillAction($orig_moment, $moment);
+		    $action->save();
+	    }
       return $this->_answerOk($this->toolkit->getExportHelper()->exportMoment($moment));
     }
     else
@@ -77,12 +88,23 @@ class MomentsController extends BaseJsonController
     if(!$moment = Moment::findById($this->request->id))
       return $this->_answerOk(null, 'Already deleted');
 
+	  $orig_moment = clone($moment);
+
     $day = Day::findById($moment->day_id);
-    if($day->user_id != $this->_getUser()->id)
+    if(!$this->_canEditDay($day))
       return $this->_answerNotOwner();
 
     $moment->is_deleted = 1;
     $moment->save();
+
+	  if($this->_getUser()->is_editor && $this->_getUser()->id != $day->user_id)
+	  {
+		  $action = new EditorAction();
+		  $action->setUser($this->_getUser());
+		  $action->moment_id = $moment->id;
+		  $action->fillAction($orig_moment, $moment);
+		  $action->save();
+	  }
 
     $this->toolkit->doAsync('momentDelete', $moment->id);
 
@@ -174,5 +196,10 @@ class MomentsController extends BaseJsonController
 		$moment->save();
 
 		return $this->_answerOk();
+	}
+
+	function _canEditDay($day)
+	{
+		return $this->_getUser() && ($this->_getUser()->id != $day->user_id || $this->_getUser()->is_editor);
 	}
 }

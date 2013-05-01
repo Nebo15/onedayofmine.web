@@ -1,6 +1,5 @@
 <?php
 
-// Can be removed?
 class DayInterestRecord extends BaseModel
 {
   protected $_db_table_name = 'day_interest';

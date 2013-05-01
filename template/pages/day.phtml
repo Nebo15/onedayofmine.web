@@ -65,6 +65,34 @@ $this->day->is_gathering_enabled = false;
     <? } ?>
   {{/template}}
 
+  {{template name='day_journal_button'}}
+    <?
+      if($this->current_user_obj && $this->current_user_obj->is_editor) {
+        $in_journal = !is_null(DayJournalRecord::findByDayId($day->id));
+    ?>
+			<button class="btn btn-small add-journal-action <?= $in_journal ? 'hidden' : ''; ?>" type="button">
+				Add to journal
+			</button>
+			<button class="btn btn-small remove-journal-action <?= !$in_journal ? 'hidden' : ''; ?>" type="button">
+				Remove from journal
+			</button>
+		<? } ?>
+		<script>
+			$(document).ready(function() {
+				$('.add-journal-action').click(function() {
+					API.post('days/{$#day.id}/add_to_journal').send();
+					$('.remove-journal-action').removeClass('hidden');
+					$('.add-journal-action').addClass('hidden');
+				});
+				$('.remove-journal-action').click(function() {
+					API.post('days/{$#day.id}/remove_from_journal').send();
+					$('.add-journal-action').removeClass('hidden');
+					$('.remove-journal-action').addClass('hidden');
+				});
+			});
+		</script>
+	{{/template}}
+
   {{into slot="templates"}}
     <script id="template_comments" type="text/x-handlebars-template">
       [[#comments]]
@@ -324,6 +352,9 @@ $this->day->is_gathering_enabled = false;
   {{into slot="content"}}
     <div class="row-fluid">
       <article class="span8 offset2 day">
+        <? if($this->toolkit->getUser()->is_editor && $this->day['user_id'] != $this->toolkit->getUser()->id) { ?>
+        <div class="alert">godmode ON</div>
+        <? } ?>
         <? if($this->is_preview) { ?>
           <div class="alert">
             <h2>This is preview page</h2>
@@ -396,6 +427,7 @@ $this->day->is_gathering_enabled = false;
           <? } ?>
 
           <div class="btn-toolbar">
+	          {{apply template="day_journal_button" day="$#day" /}}
             {{apply template="day_comments_button" day="$#day" /}}
             {{apply template="day_like_button" day="$#day" /}}
             {{apply template="day_share_button" day="$#day" /}}

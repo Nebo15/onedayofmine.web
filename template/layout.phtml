@@ -9,6 +9,7 @@
 		$base_title .= '-'.lmb_app_mode();
 	$this->title = property_exists($this, 'title') ? $base_title.': '.$this->title : $base_title;
 
+	$this->current_user_obj = $this->toolkit->getUser();
 	$this->current_user = $this->toolkit->getUser()
 		? (array) $this->toolkit->getExportHelper()->exportUser($this->toolkit->getUser())
 		: [];
@@ -228,6 +229,7 @@
                 <? } else { ?>
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                       {$#current_user.name}
+	                    <?= !$this->toolkit->getUser()->is_editor ?: '<small class="muted">editor</small>'; ?>
                       <img src="{$#current_user.image_36}" width="24" height="24" class="img-rounded" />
                       <b class="caret"></b>
                   </a>
