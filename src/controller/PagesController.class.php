@@ -4,6 +4,7 @@ lmb_require('tests/src/odStaticObjectMother.class.php');
 lmb_require('src/service/InterestCalculator.class.php');
 lmb_require('src/model/Day.class.php');
 lmb_require('src/model/Moment.class.php');
+lmb_require('src/model/DayJournalRecord.class.php');
 
 class PagesController extends WebAppController
 {
@@ -120,20 +121,20 @@ class PagesController extends WebAppController
 		if ($day->is_deleted)
 			return $this->forwardTo404();
 
-		if (!$this->toolkit->getUser() || $this->toolkit->getUser()->id != $day->user_id)
+    $this->is_preview = false;
+    $this->is_owner = false;
+    if($this->request->has('preview'))
+      $this->is_preview = true;
+    else if ($this->_getUser() && ($this->_getUser()->id == $day->user_id || $this->_getUser()->is_editor))
+      $this->is_owner = true;
+
+		if (!$this->is_owner && !$this->is_preview)
 		{
 			$day->views_count = $day->views_count + 1;
 			$day->save();
 		}
 
-    $this->is_preview = false;
-    $this->is_owner = false;
-    if($this->request->has('preview'))
-      $this->is_preview = true;
-    else if ($this->toolkit->getUser() && $this->toolkit->getUser()->id == $day->user_id)
-      $this->is_owner = true;
-
-    $this->day = $this->toolkit->getExportHelper()->exportDay($day);
+		$this->day = $this->toolkit->getExportHelper()->exportDay($day);
 
     $this->day->utime = date('Y-m-d', $this->day->utime);
     $this->day->ctime = date('Y-m-d', $this->day->ctime);

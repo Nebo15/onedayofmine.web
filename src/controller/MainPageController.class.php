@@ -3,6 +3,7 @@ lmb_require('src/controller/WebAppController.class.php');
 lmb_require('src/service/InterestCalculator.class.php');
 lmb_require('tests/src/toolkit/odTestsTools.class.php');
 lmb_require('src/Json.class.php');
+lmb_require('src/model/DayJournalRecord.class.php');
 
 class MainPageController extends WebAppController
 {
@@ -24,19 +25,18 @@ class MainPageController extends WebAppController
 
 	function doDisplay()
 	{
-    $days_ratings = (new InterestCalculator())->getDaysRatings(null, null, $this->lists_limit);
+    $days_journal = DayJournalRecord::find()->paginate(0, $this->lists_limit);
 
     $days = [];
     $days_by_id = [];
-    foreach ($days_ratings as $day_rating) {
-      $days_by_id[$day_rating->day_id] = $days[] = $day_rating->getDay();
+    foreach ($days_journal as $journal_record) {
+      $days_by_id[$journal_record->day_id] = $days[] = $journal_record->getDay();
     }
 
     $this->days = $this->_toFlatArray($this->toolkit->getExportHelper()->exportDayItems($days));
 
     foreach ($this->days as $id => $day) {
       $day->date = date('Y-m-d', $day->utime);
-
       $day->final_description = $days_by_id[$day->id]->final_description;
     }
 	}

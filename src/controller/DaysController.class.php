@@ -3,8 +3,10 @@ lmb_require('src/controller/BaseJsonController.class.php');
 lmb_require('src/service/InterestCalculator.class.php');
 lmb_require('src/service/ExternalPhotosAnalyzer.class.php');
 lmb_require('src/model/Day.class.php');
+lmb_require('src/model/EditorAction.class.php');
 lmb_require('src/model/DayFavorite.class.php');
 lmb_require('src/model/Complaint.class.php');
+lmb_require('src/model/DayJournalRecord.class.php');
 
 class DaysController extends BaseJsonController
 {
@@ -58,8 +60,10 @@ class DaysController extends BaseJsonController
 		if (!$day = Day::findById($this->request->id))
 			return $this->_answerModelNotFoundById('Day', $this->request->id);
 
-		if ($this->_getUser()->id != $day->user_id)
+		if (!$this->_canEditDay($day))
 			return $this->_answerNotOwner();
+
+		$orig_day = clone($day);
 
 		if ($this->request->get('cover_content'))
 		{
@@ -76,6 +80,15 @@ class DaysController extends BaseJsonController
 		}
 
 		$this->_importSaveAndAnswer($day, array('title', 'occupation', 'location', 'type', 'final_description'));
+
+		if($this->_getUser()->is_editor && $this->_getUser()->id != $day->user_id)
+		{
+			$action = new EditorAction();
+			$action->setUser($this->_getUser());
+			$action->day_id = $day->id;
+			$action->fillAction($orig_day, $day);
+			$action->save();
+		}
 
 		return $this->_answerOk($this->toolkit->getExportHelper()->exportDay($day));
 	}
@@ -337,9 +350,7 @@ class DaysController extends BaseJsonController
 		if (!$day = Day::findById($this->request->id))
 			return $this->_answerModelNotFoundById('Day', $this->request->id);
 
-		$is_owner = $day->user_id == $this->_getUser()->id;
-		if (!$is_owner)
-			if(!$day->is_gathering_enabled || !UserFollowing::isUserFollowUser($day->user_id, $this->_getUser()))
+		if (!$this->_canEditDay($day))
 				return $this->_answerNotOwner();
 
 		if($this->request->get('image_content'))
@@ -378,6 +389,15 @@ class DaysController extends BaseJsonController
 
 		if(1 == count($day->getMoments()) && $day)
 			$this->toolkit->doAsync('shareDayStart', $day->id);
+
+		if($this->_getUser()->is_editor && $this->_getUser()->id != $day->user_id)
+		{
+			$action = new EditorAction();
+			$action->setUser($this->_getUser());
+			$action->moment_id = $moment->id;
+			$action->fillAction(new Moment(), $moment);
+			$action->save();
+		}
 
 		if ($this->error_list->isEmpty())
 		{
@@ -482,6 +502,35 @@ class DaysController extends BaseJsonController
 		return $this->_changeGatheringAction(0);
 	}
 
+	function doAddToJournal()
+	{
+		if (!$this->request->isPost())
+			return $this->_answerNotPost();
+
+		if(!$this->_getUser()->is_editor)
+			return $this->_answerNotFound();
+
+		$record = new DayJournalRecord();
+		$record->day_id = $this->request->getInteger('id');
+		$record->user_id = $this->_getUser()->id;
+		$record->save();
+
+		return $this->_answerOk();
+	}
+
+	function doRemoveFromJournal()
+	{
+		if (!$this->request->isPost())
+			return $this->_answerNotPost();
+
+		if(!$this->_getUser()->is_editor)
+			return $this->_answerNotFound();
+
+		DayJournalRecord::findByDayId($this->request->getInteger('id'))->destroy();
+
+		return $this->_answerOk();
+	}
+
 	protected function _changeGatheringAction($value)
 	{
 		if (!$this->request->isPost())
@@ -500,5 +549,10 @@ class DaysController extends BaseJsonController
 			$this->toolkit->doAsync('dayEnableGathering', $day->id);
 
 		return $this->_answerOk();
+	}
+
+	function _canEditDay($day)
+	{
+		return $this->_getUser() && ($this->_getUser()->id != $day->user_id || $this->_getUser()->is_editor);
 	}
 }
