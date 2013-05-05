@@ -6,7 +6,7 @@ class EditorAction extends BaseModel
 	protected $_default_sort_params = array('id'=>'DESC');
 
 	public $user_id, $day_id, $moment_id;
-	public $class_name, $action;
+	public $action;
 	public $ctime, $cip;
 
 	function setUser(User $user)
@@ -17,6 +17,16 @@ class EditorAction extends BaseModel
 	function getUser()
 	{
 		return User::findById($this->user_id);
+	}
+
+	function getDay()
+	{
+		return Day::findById($this->day_id);
+	}
+
+	function getMoment()
+	{
+		return Moment::findById($this->moment_id);
 	}
 
 	function fillAction(odStrictPropsObject $orig, odStrictPropsObject $modified)
