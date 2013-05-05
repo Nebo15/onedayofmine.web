@@ -150,6 +150,14 @@ class odObjectMother
     }
   }
 
+	function journalRecord(Day $day)
+	{
+		$record = new DayJournalRecord();
+		$record->user_id = $this->user()->id;
+		$record->day_id = $day->id;
+		return $record->save();
+	}
+
   /**
    * @param Day|null $day
    * @return Moment

@@ -58,52 +58,20 @@ $this->menu = 'journal';
   {{/into}}
 
   {{into slot="content"}}
+		<div class="row-fluid">
+			<div class="offset5 span2">
+				<select id="journal-type-action" class="block-center">
+					<option value="days/journal">Journal</option>
+					<option value="days/interesting">Users top</option>
+					<option value="days/new">New</option>
+					<option value="days/following">Following</option>
+				</select>
+			</div>
+		</div>
     {{list using="$#days"}}
       <div class="journal">
         {{list:item}}
-          <div class="row-fluid">
-            <article class="span8 offset2 day" data-id="{$item->id}" data-cover-image="{$item->image_532}">
-              <header>
-                <h1 class="title">{$item->title}</h1>
-                <div class="info muted">
-                  <time class="pull-right-on-tablet pull-right-on-desktop">
-                    <i class="icon icon-calendar hidden-phone"></i> {$item->date}
-                  </time>
-                  <div>
-                    by <b><a href="/pages/{$item->user->id}/user">{$item->user->name}</a></b>
-                  </div>
-                </div>
-              </header>
-
-              <div class="cover">
-                <div class="image block-center">
-                  <div class="thumbnail">
-                    <a href="/pages/{$item->id}/day">
-                      <img src="{$item->image_532}" />
-                    </a>
-                  </div>
-                </div>
-                <? if($item->final_description) { ?>
-                  <div class="description bubble block-center">
-                    <div class="no-overflow">
-                      {$item->final_description|nl2br}
-                    </div>
-                  </div>
-                <? } ?>
-              </div>
-
-              <section class="moments"></section>
-
-              <div class="clearfix">
-                <div class="btn-toolbar text-center">
-                  {{apply template="day_like_button" day="$item" /}}
-                  {{apply template="day_share_button" day="$item" /}}
-                  {{apply template="day_comments_button" day="$item" /}}
-                  {{apply template="day_expand_button" day="$item" /}}
-                </div>
-              </div>
-            </article>
-          </div>
+	        {{apply template="journal_item" item="$item" /}}
         {{/list:item}}
       </div>
 
