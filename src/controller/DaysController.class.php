@@ -252,6 +252,14 @@ class DaysController extends BaseJsonController
 		return $this->_answerOk();
 	}
 
+	function doJournal()
+	{
+		list($from, $to, $limit) = $this->_getFromToLimitations();
+		$days = DayJournalRecord::findDaysWithLimitation($from, $to, $limit);
+		$days = $this->toolkit->getExportHelper()->exportDayItems($days);
+		return $this->_answerOk($days);
+	}
+
 	function doFollowing()
 	{
 		list($from, $to, $limit) = $this->_getFromToLimitations();

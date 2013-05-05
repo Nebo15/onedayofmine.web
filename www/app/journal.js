@@ -13,6 +13,15 @@ $(function () {
   // Expand
   (function() {
     var moments_template = Template.prepareTemplate($('#template_moments'));
+		var journal_item_template = Template.prepareTemplate($('#journal_item_template'));
+
+		$('#journal-type-action').change(function() {
+			var url = $(this).val();
+			API.get(url).success(function(response) {
+				var days = response.data.result;
+				$journal.html(Template.compileElement(journal_item_template, {days: days}));
+			}).send();
+		});
 
     $journal.one('click', '.action-expand', function() {
       return true; // Redirect to page

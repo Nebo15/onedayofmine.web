@@ -951,6 +951,10 @@ ul.with-separators li .btn-small {
   margin-bottom: 10px;
 }
 
+.journal .day header .title, .journal .day header .info {
+	width: 532px;
+}
+
 .journal .cover .description:after {
   -webkit-transition: opacity 0.8s ease;
   -moz-transition: opacity 0.8s ease;

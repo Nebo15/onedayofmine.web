@@ -164,6 +164,97 @@
   [[/if]]
 </script>
 
+{{template name="journal_item"}}
+	<div class="row-fluid">
+		<article class="span8 offset2 day" data-id="{$item->id}" data-cover-image="{$item->image_532}">
+			<header>
+				<h1 class="title block-center">{$item->title}</h1>
+				<div class="info muted block-center">
+					<time class="pull-right-on-tablet pull-right-on-desktop">
+						<i class="icon icon-calendar hidden-phone"></i> {$item->date}
+					</time>
+					<div>
+						by <b><a href="/pages/{$item->user->id}/user">{$item->user->name}</a></b>
+					</div>
+				</div>
+			</header>
+
+			<div class="cover">
+				<div class="image block-center">
+					<div class="thumbnail">
+						<a href="/pages/{$item->id}/day">
+							<img src="{$item->image_532}" />
+						</a>
+					</div>
+				</div>
+				<? if($item->final_description) { ?>
+					<div class="description bubble block-center">
+						<div class="no-overflow">
+							{$item->final_description|nl2br}
+						</div>
+					</div>
+				<? } ?>
+			</div>
+
+			<section class="moments"></section>
+
+			<div class="clearfix">
+				<div class="btn-toolbar text-center">
+					{{apply template="day_like_button" day="$item" /}}
+					{{apply template="day_share_button" day="$item" /}}
+					{{apply template="day_comments_button" day="$item" /}}
+					{{apply template="day_expand_button" day="$item" /}}
+				</div>
+			</div>
+		</article>
+	</div>
+{{/template}}
+
+<script id="journal_item_template" type="text/x-handlebars-template">
+	[[#days]]
+	<div class="row-fluid">
+		<article class="span8 offset2 day" data-id="[[id]]" data-cover-image="[[image_532]]">
+			<header>
+				<h1 class="title block-center">[[title]]</h1>
+				<div class="info muted block-center">
+					<time class="pull-right-on-tablet pull-right-on-desktop">
+						<i class="icon icon-calendar hidden-phone"></i> [[date]]
+					</time>
+					<div>
+						by <b><a href="/pages/[[user.id]]/user">[[user.name]]</a></b>
+					</div>
+				</div>
+			</header>
+
+			<div class="cover">
+				<div class="image block-center">
+					<div class="thumbnail">
+						<a href="/pages/[[id]]/day">
+							<img src="[[image_532]]" />
+						</a>
+					</div>
+				</div>
+				[[#if final_description]]
+					<div class="description bubble block-center">
+						<div class="no-overflow">
+							[[final_description]]
+						</div>
+					</div>
+				[[/if]]
+			</div>
+
+			<section class="moments"></section>
+
+			<div class="clearfix">
+				<div class="btn-toolbar text-center">
+
+				</div>
+			</div>
+		</article>
+	</div>
+	[[/days]]
+</script>
+
 {{template name='following_thumb_list'}}
   <h3>Following&nbsp;&nbsp;<small><?= count($users) ?></small></h3>
   {{apply template="users_thumb_list" users="{$users}" empty_message="<p>You have no following users. But you can <a href=\'/pages/find_people\'>find</a> em!</p>" /}}
