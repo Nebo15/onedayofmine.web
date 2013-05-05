@@ -420,7 +420,7 @@ class User extends BaseModel
 	static function findWithUnreadNews($notification_period)
 	{
 		$criteria = lmbSQLCriteria::equal('user_settings.notifications_period_fb', $notification_period)
-			->add(lmbSQLCriteria::equal('news_recipient.is_read', 1));
+			->add(lmbSQLCriteria::equal('news_recipient.is_read', 0));
 
 		$query = new lmbSelectQuery('user_settings');
 		$query
