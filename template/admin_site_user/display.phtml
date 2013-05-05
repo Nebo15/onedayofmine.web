@@ -43,7 +43,7 @@
 		              <a href="https://facebook.com/profile.php?id={$item.facebook_uid}">facebook</a>
 	              <? } ?>
 	              <? if($item->instagram_uid) { ?>
-		              <a href="http://instagram.com/{$item.instagram_uid}">instagram</a>
+		              <a href="/admin_site_user/redirect_to_instagram/{$item.id}">instagram</a>
 	              <? } ?>
 	              <? if($item->flickr_uid) { ?>
 		              <a href="http://www.flickr.com/photos/{$item.flickr_uid}/">flickr</a>
