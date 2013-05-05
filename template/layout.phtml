@@ -229,7 +229,7 @@
                 <? } else { ?>
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                       {$#current_user.name}
-	                    <?= !$this->toolkit->getUser()->is_editor ?: '<small class="muted">editor</small>'; ?>
+	                    <?= $this->toolkit->getUser() && !$this->toolkit->getUser()->is_editor ?: '<small class="muted">editor</small>'; ?>
                       <img src="{$#current_user.image_36}" width="24" height="24" class="img-rounded" />
                       <b class="caret"></b>
                   </a>

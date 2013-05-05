@@ -1,4 +1,5 @@
 <?php
+lmb_require('src/model/Day.class.php');
 
 class DayJournalRecord extends BaseModel
 {

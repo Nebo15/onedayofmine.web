@@ -352,7 +352,7 @@ $this->day->is_gathering_enabled = false;
   {{into slot="content"}}
     <div class="row-fluid">
       <article class="span8 offset2 day">
-        <? if($this->toolkit->getUser()->is_editor && $this->day['user_id'] != $this->toolkit->getUser()->id) { ?>
+        <? if($this->toolkit->getUser() && $this->toolkit->getUser()->is_editor && $this->day['user_id'] != $this->toolkit->getUser()->id) { ?>
         <div class="alert">godmode ON</div>
         <? } ?>
         <? if($this->is_preview) { ?>
@@ -398,7 +398,7 @@ $this->day->is_gathering_enabled = false;
                 <i class="icon icon-calendar hidden-phone"></i> {$#day->date}
               </time>
               <div>
-                {$#day->type} by <b><a href="/pages/{$#day->user->id}/user">{$#day->user->name}</a></b>
+                by <b><a href="/pages/{$#day->user->id}/user">{$#day->user->name}</a></b>
               </div>
             </div>
             <? if($this->day->final_description) { ?>
