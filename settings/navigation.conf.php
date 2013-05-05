@@ -28,9 +28,14 @@ $editor = array(array('title' => 'Контент', 'icon' => '/shared/cms/images
 		'icon' => '/shared/cms/images/icons/pill.png',
 	],
 	[
+		'title' => 'Editors',
+		'url' => '/admin_editor/editors',
+		'icon' => '/shared/cms/images/icons/user_gray.png',
+	],
+	[
 		'title' => 'Editors actions',
 		'url' => '/admin_editor',
-		'icon' => '/shared/cms/images/icons/user_gray.png',
+		'icon' => '/shared/cms/images/icons/script.png',
 	],
 )));
 

@@ -8,4 +8,9 @@ class AdminEditorController extends lmbController
 	{
 		$this->items = EditorAction::find();
 	}
+
+	function doEditors()
+	{
+		$this->items = User::find(lmbSQLCriteria::equal('is_editor', 1));
+	}
 }
