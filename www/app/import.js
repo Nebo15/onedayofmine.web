@@ -1,5 +1,7 @@
 var ImportController = function($wizard, $steps_content) {
 	var _instance = this;
+
+	var user = null;
   // Creating import source
   var importer = new Importer('import');
   var importer_instagram = new Importer('instagram');
@@ -48,6 +50,10 @@ var ImportController = function($wizard, $steps_content) {
     });
   };
 
+	this.setUser = function(user) {
+		this.user = user;
+	};
+
   this.setStep = function(step) {
     console.log('Changing step to: ' + step);
     hideError();
@@ -72,7 +78,7 @@ var ImportController = function($wizard, $steps_content) {
 
     2: function() {
       $('.create-action').off().click(function() {
-        API.post('days/start', {title:'My day', type:'Working day'}).success(function(resp) {
+        API.post('days/start', {title:'One day of ' + _instance.user.name}).success(function(resp) {
           window.location.href= '/pages/'+resp.data.result.id+'/day';
         }).send();
       });
@@ -142,7 +148,7 @@ var ImportController = function($wizard, $steps_content) {
 
       // Create empty day
       $('.create-action').off().click(function() {
-        API.post('days/start', {title:'My day', type:'Working day'}).success(function(resp) {
+        API.post('days/start', {title:'One day of ' + _instance.user.name, type:'Working day'}).success(function(resp) {
           window.location.href= '/pages/'+resp.data.result.id+'/day';
         }).send();
       });
@@ -365,11 +371,6 @@ var ImportController = function($wizard, $steps_content) {
           //   step_container.find('.day-description-selector').removeClass('error');
           // }
 
-          if(!day_data.type) {
-            alert("Day type is not set");
-            invalid = true;
-          }
-
           if(invalid) {
             return false;
           }
@@ -391,6 +392,7 @@ var ImportController = function($wizard, $steps_content) {
             $.each(selected_shots, function(index, shot) {
               var shot_data = {
                 time:         Tools.getISODate(new Date(shot.time * 1000)),
+								position:			index,
                 image_url:    shot.image,
                 description:  shot.title
               };

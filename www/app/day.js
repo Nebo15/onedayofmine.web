@@ -70,12 +70,14 @@ $(function () {
       }
     });
 
-    $('.scrollTo.comments').click(function() {
+    $('.scrollTo.comments').click(function(event) {
       $(document).scrollTo($('a[name=comments]'), 200);
+      return false;
     });
 
     $('.scrollTo.top').click(function() {
       $(document).scrollTo(0, 200);
+      return false;
     });
   })();
 });

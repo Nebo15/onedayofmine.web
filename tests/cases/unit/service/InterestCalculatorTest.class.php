@@ -75,4 +75,25 @@ class InterestCalculatorTest extends odUnitTestCase
     if($this->assertEqual(1, count($days)))
       $this->assertEqual($day1->id, $days[0]->getDay()->id);
   }
+
+	function testRecalcWithPinnedDay()
+	{
+		$calc = new InterestCalculator();
+		$time = time();
+		$day = 86400;
+
+		$day1 = $this->generator->dayWithMoments();
+		$this->generator->dayLikes($day1, 10);
+		$day1->ctime = $time - $day;
+		$day1->save();
+		$day2 = $this->generator->dayWithMoments($this->main_user);
+		$day2->save();
+
+		$calc->pinDay($day2->id);
+		$calc->fillRating();
+
+		$days = $calc->getDaysRatings();
+		if($this->assertEqual(2, count($days)))
+			$this->assertEqual($day1->id, $days[0]->getDay()->id);
+	}
 }

@@ -2,6 +2,7 @@
 lmb_package_require('view');
 lmb_require('limb/core/src/lmbSet.class.php');
 lmb_require('limb/mail/src/lmbMailer.class.php');
+lmb_require('limb/mail/src/lmbFileMailer.class.php');
 lmb_require('limb/mail/src/lmbMemoryMailer.class.php');
 lmb_require('limb/mail/src/lmbResponseMailer.class.php');
 lmb_require('limb/macro/src/lmbMacroTemplate.class.php');
@@ -37,6 +38,7 @@ class lmbMailService
   function set($name, $value)
   {
     $this->dto->set($name, $value);
+	  return $this;
   }
 
   protected function _parseMailTemplate($postfix = '')
@@ -91,12 +93,17 @@ class lmbMailService
   function sendMailTo($email)
   {
     $this->mailer = lmbToolkit::instance()->getMailer();
-    $this->mailer->sendHtmlMail($email,
-                          $this->getDefaultSender(),
+    return $this->mailer->sendHtmlMail($email,
                           $this->getSubject(),
                           $this->getHtmlContent(),
                           $this->getTextContent());
   }
+
+	function send($email)
+	{
+		return $this->sendMailTo($email);
+
+	}
 
   function getMailer()
   {

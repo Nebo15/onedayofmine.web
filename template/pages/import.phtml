@@ -15,10 +15,11 @@ $this->menu = 'create_day';
   {{/into}}
   {{into slot="js_ready"}}
     var controller = new ImportController($('#import_wizard'), $('.step-content'));
+		controller.setUser({$#current_user_json|raw});
     if(window.location.hash.substring(1,5) == 'step') {
       controller.setStep(window.location.hash.substring(5));
     } else if(window.location.hash.substring(1) == 'create_empty_day') {
-      API.post('days/start', {title:'My day', type:'Working day'}).success(function(resp) {
+      API.post('days/start', {title:'One day of ' + controller.user.name}).success(function(resp) {
         window.location.href= '/pages/'+resp.data.result.id+'/day';
       }).send();
     } else {
@@ -174,18 +175,6 @@ $this->menu = 'create_day';
     					<label class="control-label">Title</label>
     					<div class="controls">
     						<input type="text" class="title input-xxlarge">
-    					</div>
-    				</div>
-
-    				<div class="control-group day-type-selector">
-    					<label class="control-label">Day type</label>
-    					<div class="controls">
-    						<div class="btn-group" data-toggle="buttons-radio">
-                  <button type="button" class="btn btn-small">Working day</button>
-                  <button type="button" class="btn btn-small active">Day off</button>
-                  <button type="button" class="btn btn-small">Holiday</button>
-                  <button type="button" class="btn btn-small">Trip</button>
-                </div>
     					</div>
     				</div>
 

@@ -1,0 +1,72 @@
+{{wrap with="admin_page_layout.phtml" in="content_zone"}}
+
+{{include file="_admin/selectors.phtml"/}}
+{{include file="_admin_object/actions.phtml"/}}
+
+<div id="header">
+	<h1>Editors</h1>
+	{{include file='_admin/pager.phtml' items='{$this->items}'/}}
+</div>
+
+<div id="body">
+
+	{{list using="{$this->items}" as="$item" counter="$counter" parity='$parity'}}
+
+	<div class='list'>
+		<table>
+			<tr>
+				<th>{{apply template="selectors_toggler"/}}</th>
+				<th>id {{include file='_admin/sort_by_column.phtml' field='id'/}}</th>
+				<th>Editor</th>
+				<th>Object</th>
+				<th>Action</th>
+				<th>Ctime</th>
+				<th>Действия</th>
+			</tr>
+			{{list:item}}
+			<tr class="{$parity}">
+				<td>{{apply template="selector" value="{$item.id}"/}}</td>
+				<td>{$item.id}</td>
+				<td>
+					<a href="/pages/{$item.user_id}/user/">
+						<img src="<?= lmbToolkit::instance()->getStaticUrl($item->getUser()->getImage(['width' => 36])); ?>"/>
+						{$item->getUser()->name}
+					</a>
+				</td>
+				<td>
+					<?
+						if($item->day_id)
+							echo "<a href='/pages/{$item->day_id}/day'>{$item->getDay()->title}</a>";
+						if($item->moment_id)
+							echo "<a href='/pages/{$item->getMoment()->getDay()->id}/day#moment-id={$item->moment_id}'>{$item->getMoment()->getDay()->title}</a>";
+					?>
+				</td>
+				<td>
+					<?
+						foreach(json_decode($item->action) as $action)
+						{
+							echo "<strong>original {$action->property}:</strong> {$action->orig}<br/>";
+							echo "<strong>modified {$action->property}:</strong> {$action->modified}<br/>";
+						}
+					?>
+				</td>
+				<td>
+					{$item.ctime|date:"d.m.Y H:i:s"}
+				</td>
+				<td class='actions'>
+					<a href='/admin_editor/log/{$item.id}' title="Actions" class="thickbox">
+						<img src='/shared/cms/images/icons/script.png'/>Show actions</a>
+				</td>
+			</tr>
+			{{/list:item}}
+			{{list:empty}}
+			<div class="empty_list">Пользователи отсутствуют</div>
+			{{/list:empty}}
+		</table>
+	</div>
+
+	{{/list}}
+
+</div>
+
+{{/wrap}}

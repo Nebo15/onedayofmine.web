@@ -8,6 +8,12 @@
 	if(LIMB_APP_PRODUCTION != lmb_app_mode())
 		$base_title .= '-'.lmb_app_mode();
 	$this->title = property_exists($this, 'title') ? $base_title.': '.$this->title : $base_title;
+
+	$this->current_user_obj = $this->toolkit->getUser();
+	$this->current_user = $this->toolkit->getUser()
+		? (array) $this->toolkit->getExportHelper()->exportUser($this->toolkit->getUser())
+		: [];
+	$this->current_user_json = json_encode($this->current_user);
 ?>
 <!DOCTYPE html>
 <html>
@@ -203,7 +209,7 @@
           <div class="nav-collapse collapse navbar-responsive-collapse">
             <ul class="nav">
 	              <li class="<?= ($this->menu == 'about') ? 'active' : '';?>">
-		              <a href="/pages/about"><i class="icon-large icon-question-sign"></i> Where am i</a>
+		              <a href="/pages/about"><i class="icon-large icon-question-sign"></i> About</a>
 	              </li>
                 <li class="<?= ($this->menu == 'create_day' || $this->menu == 'import') ? 'active' : '';?>">
                     <a href="/pages/import"><i class="icon-large icon-camera"></i> Add a day</a>
@@ -223,17 +229,15 @@
                 <? } else { ?>
                   <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                       {$#current_user.name}
+	                    <?= $this->toolkit->getUser()->is_editor ? '<small class="muted">editor</small>' : ''; ?>
                       <img src="{$#current_user.image_36}" width="24" height="24" class="img-rounded" />
                       <b class="caret"></b>
                   </a>
                   <ul class="dropdown-menu">
                       <li><a href="/pages/my_days"><i class="icon icon-camera"></i> My days</a></li>
-                      <li><a href="/pages/my_followers"><i class="icon icon-hand-right"></i> My followers &amp; following</a></li>
+	                    <li><a href="/pages/peoples"><i class="icon icon-user"></i> Peoples</a></li>
                       <li class="divider"></li>
                       <li><a href="/pages/profile"><i class="icon icon-cog"></i> Profile</a></li>
-                      <li class="divider"></li>
-                      <li><a href="/pages/find_people"><i class="icon icon-search"></i> Find and invite people</a></li>
-
                       <li class="divider"></li>
                       <li><a class="trigger_logout"><i class="icon icon-signout"></i> Logout</a></li>
                   </ul>

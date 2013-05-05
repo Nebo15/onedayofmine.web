@@ -1,8 +1,10 @@
 <?php
 lmb_require('src/controller/WebAppController.class.php');
+lmb_require('src/controller/DaysController.class.php');
 lmb_require('src/service/InterestCalculator.class.php');
 lmb_require('tests/src/toolkit/odTestsTools.class.php');
 lmb_require('src/Json.class.php');
+lmb_require('src/model/DayJournalRecord.class.php');
 
 class MainPageController extends WebAppController
 {
@@ -24,14 +26,11 @@ class MainPageController extends WebAppController
 
 	function doDisplay()
 	{
-		$days_ratings = (new InterestCalculator())->getDaysRatings(null, null, $this->lists_limit);
-
-		$days = [];
-		foreach ($days_ratings as $day_rating)
-			$days[] = $day_rating->getDay();
-
-		$this->days = $this->_toFlatArray($this->toolkit->getExportHelper()->exportDayItems($days));
+		$days = $this->toolkit->getExportHelper()->exportDayItems(
+			DayJournalRecord::findDaysWithLimitation(null, null, $this->lists_limit)
+		);
+		foreach($days as $i => $day)
+			$days[$i]->date = date('Y-m-d', $day->utime);
+		$this->days = $this->_toFlatArray($days);
 	}
-
-
 }

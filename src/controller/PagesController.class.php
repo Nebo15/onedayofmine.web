@@ -4,6 +4,7 @@ lmb_require('tests/src/odStaticObjectMother.class.php');
 lmb_require('src/service/InterestCalculator.class.php');
 lmb_require('src/model/Day.class.php');
 lmb_require('src/model/Moment.class.php');
+lmb_require('src/model/DayJournalRecord.class.php');
 
 class PagesController extends WebAppController
 {
@@ -79,11 +80,6 @@ class PagesController extends WebAppController
 		return;
 	}
 
-	function doDaysSearch()
-	{
-		return $this->doDaysDiscover();
-	}
-
 	function doMyDays()
 	{
 		if (!$user = lmbToolkit::instance()->getUser())
@@ -93,13 +89,21 @@ class PagesController extends WebAppController
 		$this->days = $this->_toFlatArray($this->toolkit->getExportHelper()->exportDayItems($user->getPublicDays()->paginate(0, $this->lists_limit)));
 	}
 
-	function doMyFollowers()
+	function doPeoples()
 	{
-		if (!$user = lmbToolkit::instance()->getUser())
-			return $this->forwardToUnauthorized();
+		if ($user = lmbToolkit::instance()->getUser())
+		{
+			$this->followers = $this->_sortUsersByNames($user->getFollowingUsers());
+			$this->following = $this->_sortUsersByNames($user->getFollowersUsers());
+		}
+	}
 
-		$this->followers = $this->_toFlatArray($this->toolkit->getExportHelper()->exportUserItems($user->getFollowersUsers()));
-		$this->following = $this->_toFlatArray($this->toolkit->getExportHelper()->exportUserItems($user->getFollowingUsers()));
+	protected function _sortUsersByNames($users)
+	{
+		$users = $this->_toFlatArray($this->toolkit->getExportHelper()->exportUserItems($users));
+		foreach($users as $i => $user)
+			$users[$i]->lower_name = strtolower($user->name);
+		return lmbArrayHelper::sortArray($users, ['lower_name' => 'ASC']);
 	}
 
 	function doProfile()
@@ -117,20 +121,20 @@ class PagesController extends WebAppController
 		if ($day->is_deleted)
 			return $this->forwardTo404();
 
-		if (!$this->toolkit->getUser() || $this->toolkit->getUser()->id != $day->user_id)
+    $this->is_preview = false;
+    $this->is_owner = false;
+    if($this->request->has('preview'))
+      $this->is_preview = true;
+    else if ($this->_getUser() && ($this->_getUser()->id == $day->user_id || $this->_getUser()->is_editor))
+      $this->is_owner = true;
+
+		if (!$this->is_owner && !$this->is_preview)
 		{
 			$day->views_count = $day->views_count + 1;
 			$day->save();
 		}
 
-    $this->is_preview = false;
-    $this->is_owner = false;
-    if($this->request->has('preview'))
-      $this->is_preview = true;
-    else if ($this->toolkit->getUser() && $this->toolkit->getUser()->id == $day->user_id)
-      $this->is_owner = true;
-
-    $this->day = $this->toolkit->getExportHelper()->exportDay($day);
+		$this->day = $this->toolkit->getExportHelper()->exportDay($day);
 
     $this->day->utime = date('Y-m-d', $this->day->utime);
     $this->day->ctime = date('Y-m-d', $this->day->ctime);
@@ -398,6 +402,34 @@ class PagesController extends WebAppController
 			$this->day->moments[] = $moment;
 		}
 
-		$this->setTemplate('pages/day.phtml');
-	}
+    $this->setTemplate('pages/day.phtml');
+  }
+
+  function doJournal()
+  {
+    $days_ratings = (new InterestCalculator())->getDaysRatings(null, null, $this->lists_limit);
+
+    $days = [];
+    foreach ($days_ratings as $day_rating)
+      $days[$day_rating->day_id] = $day_rating->getDay();
+
+    $this->days = $this->_toFlatArray($this->toolkit->getExportHelper()->exportDayItems($days));
+
+    foreach ($this->days as $id => $day) {
+      $day->date = date('Y-m-d', $day->utime);
+
+      $day->final_description = $days[$day->id]->final_description;
+    }
+  }
+
+  function doDaysDiscover()
+  {
+    $days_ratings = (new InterestCalculator())->getDaysRatings(null, null, $this->lists_limit);
+
+    $days = [];
+    foreach ($days_ratings as $day_rating)
+      $days[] = $day_rating->getDay();
+
+    $this->days = $this->_toFlatArray($this->toolkit->getExportHelper()->exportDayItems($days));
+  }
 }

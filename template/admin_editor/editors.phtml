@@ -1,0 +1,68 @@
+{{wrap with="admin_page_layout.phtml" in="content_zone"}}
+
+{{include file="_admin/selectors.phtml"/}}
+{{include file="_admin_object/actions.phtml"/}}
+
+<div id="header">
+	<h1>Editors</h1>
+	{{include file='_admin/pager.phtml' items='{$this->items}'/}}
+</div>
+
+<div id="body">
+
+	{{list using="{$this->items}" as="$item" counter="$counter" parity='$parity'}}
+
+	<div class='list'>
+		<table>
+			<tr>
+				<th>{{apply template="selectors_toggler"/}}</th>
+				<th>id {{include file='_admin/sort_by_column.phtml' field='id'/}}</th>
+				<th>Profile</th>
+				<th>Name {{include file='_admin/sort_by_column.phtml' field='facebook_uid'/}}</th>
+				<th>Times</th>
+				<th>Profiles</th>
+				<th>Sex</th>
+				<th>Действия</th>
+			</tr>
+			{{list:item}}
+			<tr class="{$parity}">
+				<td>{{apply template="selector" value="{$item.id}"/}}</td>
+				<td>{$item.id}</td>
+				<td>
+					<a href="/pages/{$item.id}/user/">
+						<img src="<?= lmbToolkit::instance()->getStaticUrl($item->getImage(['width' => 36])); ?>"/>
+					</a>
+				</td>
+				<td><a href="/pages/{$item.id}/user/">{$item.name}</a></td>
+				<td>
+					{$item.ctime|date:"d.m.Y H:i:s"} <br/>
+					{$item.utime|date:"d.m.Y H:i:s"}
+				</td>
+				<td>
+					<? if($item->facebook_uid) { ?>
+						<a href="https://facebook.com/profile.php?id={$item.facebook_uid}">facebook</a>
+					<? } ?>
+					<? if($item->instagram_uid) { ?>
+						<a href="/admin_site_user/redirect_to_instagram/{$item.id}">instagram</a>
+					<? } ?>
+					<? if($item->flickr_uid) { ?>
+						<a href="http://www.flickr.com/photos/{$item.flickr_uid}/">flickr</a>
+					<? } ?>
+				</td>
+				<td>{$item.sex}</td>
+				<td class='actions'>
+
+				</td>
+			</tr>
+			{{/list:item}}
+			{{list:empty}}
+			<div class="empty_list">Пользователи отсутствуют</div>
+			{{/list:empty}}
+		</table>
+	</div>
+
+	{{/list}}
+
+</div>
+
+{{/wrap}}
