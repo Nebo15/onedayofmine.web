@@ -255,8 +255,11 @@ class DaysController extends BaseJsonController
 	function doJournal()
 	{
 		list($from, $to, $limit) = $this->_getFromToLimitations();
-		$days = DayJournalRecord::findDaysWithLimitation($from, $to, $limit);
-		$days = $this->toolkit->getExportHelper()->exportDayItems($days);
+		$days = $this->toolkit->getExportHelper()->exportDayItems(
+			DayJournalRecord::findDaysWithLimitation($from, $to, $limit)
+		);
+		foreach($days as $i => $day)
+			$days[$i]->date = date('Y-m-d', $day->utime);
 		return $this->_answerOk($days);
 	}
 
