@@ -58,6 +58,9 @@ $this->menu = 'journal';
   {{/into}}
 
   {{into slot="content"}}
+		<div id="fullscreen-spinner" style="display:none;">
+			<i class="icon-spin icon-refresh"></i>
+		</div>
 		<div class="row-fluid">
 			<div class="offset5 span2">
 				<select id="journal-type-action" class="block-center">
@@ -69,10 +72,12 @@ $this->menu = 'journal';
 			</div>
 		</div>
     {{list using="$#days"}}
-      <div class="journal">
-        {{list:item}}
-	        {{apply template="journal_item" item="$item" /}}
-        {{/list:item}}
+      <div class="journal has-spinner">
+	      <div class="content">
+          {{list:item}}
+	          {{apply template="journal_item" item="$item" /}}
+          {{/list:item}}
+	      </div>
       </div>
 
       {{list:default}}
