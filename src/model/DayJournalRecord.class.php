@@ -37,9 +37,12 @@ class DayJournalRecord extends BaseModel
 		return User::findById($this->user_id);
 	}
 
-	static function findByDayId($day_id)
+	static function findByDayId($day_id_or_ids)
 	{
-		return self::findFirst(lmbSQLCriteria::equal('day_id', $day_id));
+		if(is_array($day_id_or_ids))
+			return self::find(lmbSQLCriteria::in('day_id', $day_id_or_ids));
+		else
+			return self::findFirst(lmbSQLCriteria::equal('day_id', $day_id_or_ids));
 	}
 
 	static function findDaysWithLimitation($from_day_id = null, $to_day_id = null, $limit = null)

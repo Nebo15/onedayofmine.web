@@ -174,7 +174,13 @@
 						<i class="icon icon-calendar hidden-phone"></i> {$item->date}
 					</time>
 					<div>
-						by <b><a href="/pages/{$item->user->id}/user">{$item->user->name}</a></b>
+						by <b>
+							<? if(property_exists($item, 'user')) { ?>
+								<a href="/pages/{$item->user->id}/user">{$item->user->name}</a>
+							<? } else { ?>
+								OneDayOfMine
+							<? } ?>
+						</b>
 					</div>
 				</div>
 			</header>
@@ -221,7 +227,13 @@
 						<i class="icon icon-calendar hidden-phone"></i> [[date]]
 					</time>
 					<div>
-						by <b><a href="/pages/[[user.id]]/user">[[user.name]]</a></b>
+						by <b>
+							[[#if user]]
+								<a href="/pages/[[user.id]]/user">[[user.name]]</a>
+							[[else]]
+								OneDayOfMine
+							[[/if]]
+						</b>
 					</div>
 				</div>
 			</header>

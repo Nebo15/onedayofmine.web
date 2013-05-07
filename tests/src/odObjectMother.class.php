@@ -1,4 +1,5 @@
 <?php
+lmb_require('src/model/DayJournalRecord.class.php');
 
 class odObjectMother
 {

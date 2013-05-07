@@ -101,7 +101,7 @@ class odExportHelperTest extends odUnitTestCase
 
     $this->db_connection->resetStats();
     $exported_days = $this->export_helper->exportDayItems($days);
-    $this->assertEqual(3, count($this->db_connection->getQueries()));
+    $this->assertEqual(4, count($this->db_connection->getQueries()));
     foreach($exported_days as $exported_day)
       $this->assertJsonDayListItem($exported_day, true);
   }
@@ -128,8 +128,26 @@ class odExportHelperTest extends odUnitTestCase
     $this->assertEqual($day2->id, $exported[1]->id);
     $this->assertFalse($exported[1]->is_favorite);
 
-    $this->assertEqual(4, count($this->db_connection->getQueries()));
+    $this->assertEqual(5, count($this->db_connection->getQueries()));
   }
+
+	function testExportDayItems_withEditorDayInJournal()
+	{
+		$this->main_user->is_editor = 1;
+		$this->main_user->save();
+
+		$day1 = $this->generator->day();
+		$this->generator->journalRecord($day1);
+		$day2 = $this->generator->day();
+
+		$export_helper = new odExportHelper($this->additional_user);
+
+		$exported = $export_helper->exportDayItems([$day1, $day2]);
+		$this->assertJsonDayListItem($exported[0], false, false);
+		$this->assertFalse(property_exists($exported[0], 'user'));
+		$this->assertJsonDayListItem($exported[1], false, false);
+		$this->assertTrue(property_exists($exported[1], 'user'));
+	}
 
   function testExportDayItem_forOwner()
   {
@@ -151,7 +169,7 @@ class odExportHelperTest extends odUnitTestCase
     $exported = $export_helper->exportDayItems([$day1, $day2]);
     $this->assertTrue($exported[0]->is_deleted);
 
-    $this->assertEqual(4, count($this->db_connection->getQueries()));
+    $this->assertEqual(5, count($this->db_connection->getQueries()));
   }
 
   function testExportDaySubentity()
