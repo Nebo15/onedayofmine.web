@@ -122,10 +122,11 @@ class odExportHelper
     foreach ($days as $day)
     {
       $is_day_in_journal = in_array($day->id, $days_in_journal_ids);
-	    $is_current_user_is_editor = $this->current_user && $this->current_user->is_editor;
+	    $current_user_is_editor = $this->current_user && $this->current_user->is_editor;
+	    $owner_is_editor = $day_users[$day->user_id]->is_editor;
 
 	    $exported_day = $day->exportForApi();
-	    if(!$is_day_in_journal || $is_current_user_is_editor)
+	    if(!$is_day_in_journal || $current_user_is_editor || !$owner_is_editor)
         $exported_day->user = $day_users[$day->user_id]->exportForApi();
       unset($exported_day->user_id);
 
