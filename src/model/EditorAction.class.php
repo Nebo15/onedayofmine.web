@@ -1,4 +1,6 @@
 <?php
+lmb_require('src/model/Day.class.php');
+lmb_require('src/model/Moment.class.php');
 
 class EditorAction extends BaseModel
 {
