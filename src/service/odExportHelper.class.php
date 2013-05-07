@@ -121,7 +121,7 @@ class odExportHelper
     $exported = [];
     foreach ($days as $day)
     {
-      $is_day_in_journal = !in_array($day->id, $days_in_journal_ids);
+      $is_day_in_journal = in_array($day->id, $days_in_journal_ids);
 	    $is_current_user_is_editor = $this->current_user && $this->current_user->is_editor;
 
 	    $exported_day = $day->exportForApi();
