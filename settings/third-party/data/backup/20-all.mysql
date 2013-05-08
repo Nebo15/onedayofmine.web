@@ -1,0 +1,8 @@
+### backupninja mysql config file ###
+
+databases   = odom-www
+backupdir   = /www/backups/mysql
+hotcopy     = no
+sqldump     = yes
+compress    = yes
+user        = root

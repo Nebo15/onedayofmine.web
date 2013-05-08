@@ -17,9 +17,12 @@ $(function () {
 
 		$('#journal-type-action').change(function() {
 			var url = $(this).val();
+			$journal.find('.content').html('');
+			$('#fullscreen-spinner').show();
 			API.get(url).success(function(response) {
 				var days = response.data.result;
-				$journal.html(Template.compileElement(journal_item_template, {days: days}));
+				$journal.find('.content').html(Template.compileElement(journal_item_template, {days: days}));
+				$('#fullscreen-spinner').hide();
 			}).send();
 		});
 
