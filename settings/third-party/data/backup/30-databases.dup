@@ -1,0 +1,17 @@
+options = --no-encryption --volsize 512 --archive-dir /www/backups/duplicity --name www.databases
+tmpdir = /www/backups/tmp
+
+[source]
+include = /www/backups/mysql/sqldump
+
+[dest]
+incremental = yes
+increments = 7
+keep = 7
+desturl = file:///www/backups/mysql
+
+[gpg]
+sign=no
+encryptkey=
+signkey=
+password=""

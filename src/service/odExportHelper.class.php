@@ -1,5 +1,6 @@
 <?php
 lmb_require('src/model/User.class.php');
+lmb_require('src/model/DayJournalRecord.class.php');
 
 class odExportHelper
 {
@@ -104,6 +105,9 @@ class odExportHelper
     $day_users = User::findByIds($day_users_ids);
     $day_users = lmbArrayHelper::makeKeysFromColumnValues('id', $day_users);
 
+	  $days_in_journal = DayJournalRecord::findByDayId($days_ids);
+	  $days_in_journal_ids = lmbArrayHelper::getColumnValues('day_id', $days_in_journal);
+
     if($this->current_user)
     {
       lmb_assert_true($this->current_user->id);
@@ -117,8 +121,13 @@ class odExportHelper
     $exported = [];
     foreach ($days as $day)
     {
-      $exported_day = $day->exportForApi();
-      $exported_day->user = $day_users[$day->user_id]->exportForApi();
+      $is_day_in_journal = in_array($day->id, $days_in_journal_ids);
+	    $current_user_is_editor = $this->current_user && $this->current_user->is_editor;
+	    $owner_is_editor = $day_users[$day->user_id]->is_editor;
+
+	    $exported_day = $day->exportForApi();
+	    if(!$is_day_in_journal || $current_user_is_editor || !$owner_is_editor)
+        $exported_day->user = $day_users[$day->user_id]->exportForApi();
       unset($exported_day->user_id);
 
       if($this->current_user)
