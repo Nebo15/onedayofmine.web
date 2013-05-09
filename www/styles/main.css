@@ -1459,8 +1459,6 @@ ul.previews {
 
   position: relative; /* important to hold the absolute element triangles */
   margin:0 0 10px;
-  float:left;
-  clear:left;
 }
 
 .previews > li:last-child {

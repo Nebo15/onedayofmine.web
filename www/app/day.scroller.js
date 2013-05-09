@@ -44,7 +44,7 @@ $(window).load(function() {
   var scroll_zone_margin_top = parseInt($scroller_scroll_zone.css('top'), 10);
   var scroll_zone_margin_bottom = parseInt($scroller_scroll_zone.css('bottom'), 10);
   var scroll_zone_height = $scroller_scroll_zone.height();
-  var previews_height = $scroller_scroll_zone[0].scrollHeight;
+  var previews_height = $scroller_previews.height();
 
   var moments_from = $moments_articles_first.offset().top;
   var moments_to = $moments_articles_last.offset().top + $moments_articles_last.height();
@@ -57,13 +57,17 @@ $(window).load(function() {
       offset = window_height / 2 - viewport_height / 2 - viewport_margin_top;
 
       if(tmp >= previews_height - window_height / 2 - viewport_height / 2 + scroll_zone_margin_top) {
-        offset = tmp - (previews_height - window_height + viewport_height / 2) - 13; // Magic number here, warning!
+        if(offset > previews_height - viewport_height) {
+          offset = previews_height - viewport_height;
+        } else {
+          offset = tmp - (previews_height - window_height + viewport_height / 2) - 13; // Magic number here, warning!
 
-        if(offset > window_height - viewport_height - viewport_margin_top - viewport_margin_bottom) {
-          offset = window_height - viewport_height - viewport_margin_top - viewport_margin_bottom;
+          if(offset > window_height - viewport_height - viewport_margin_top - viewport_margin_bottom) {
+            offset = window_height - viewport_height - viewport_margin_top - viewport_margin_bottom;
+          }
+
+          $scroller_previews.css('top', (scroll_zone_height - previews_height) + 'px');
         }
-
-        $scroller_previews.css('top', (scroll_zone_height - previews_height) + 'px');
       } else {
         $scroller_previews.css('top', (offset - tmp) + 'px');
       }
@@ -73,6 +77,10 @@ $(window).load(function() {
       }
 
       $scroller_previews.css('top', 0);
+    }
+
+    if(offset > previews_height - viewport_height) {
+      offset = previews_height - viewport_height;
     }
 
     $scroller_viewport.css('top', offset + 'px');
