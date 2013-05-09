@@ -1362,6 +1362,134 @@ ul.with-separators li .btn-small {
   max-width: 0 !important;
 }
 
+/* >> Scroll previews */
+body.scrolling {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.scroller {
+  width: 124px;
+  margin: 0;
+  position: fixed;
+  right: -124px;
+  top: 0;
+  bottom: 0;
+  z-index: 1;
+
+  -webkit-transition: right 0.65s;
+  -moz-transition: right 0.65s;
+  -o-transition: right 0.65s;
+  transition: right 0.65s;
+}
+
+.viewport {
+  width: 114px;
+  height: 94px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  background: rgba(0, 0, 0, 0.2);
+  z-index: 6;
+  margin-top: 28px;
+  margin-bottom: 28px;
+}
+
+.scroller .header,
+.scroller .footer {
+  background:#e2e2e2;
+  width:84px;
+  height:26px;
+  text-align: center;
+  font-size: 14.45px;
+  position: absolute;
+  margin: 0 10px 0 0;
+  right: 0;
+  z-index:5;
+}
+
+.scroller .header {
+  top: 0;
+}
+
+.scroller .footer {
+  bottom: 0;
+}
+
+.line {
+  height:100%;
+  position: absolute;
+  background:#e2e2e2;
+
+  right:10px;
+  width:2px;
+  margin-left:-1px; /* make it center */
+
+  bottom:10px;  /* margin-bottom space used by li element */
+
+  z-index:4;
+}
+
+.scroller .scroll_zone {
+  position: absolute;
+  top: 30px;
+  bottom: 30px;
+  right: 0;
+  overflow: hidden;
+  width: 94px;
+  z-index:3;
+}
+
+ul.previews {
+  list-style:none;
+  padding: 0;
+  margin: 0;
+  position: relative;
+  top: 0;
+}
+
+.previews > li {
+  width:74px;
+  height: 74px;
+  background:#e2e2e2;
+
+  position: relative; /* important to hold the absolute element triangles */
+  margin:0 0 10px;
+  float:left;
+  clear:left;
+}
+
+.previews > li:last-child {
+  margin: 0;
+}
+
+.previews > li:before {
+  border:7px solid;
+  content:'';
+  display: block;
+  position: absolute;
+  border-color:#f6f6f6 #f6f6f6 #f6f6f6 #e2e2e2;
+  left:100%;
+  top:6px; /* you can adjust */
+}
+
+.previews > li img {
+  width: 64px;
+  height: 64px;
+  margin: 5px;
+}
+
+
+
+
+
+
+
+
 /* > User page */
 .user-image-container {
   position: relative;

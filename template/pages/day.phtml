@@ -22,6 +22,7 @@ $this->day->is_gathering_enabled = false;
   {{/into}}
   {{into slot="js_include"}}
     <script src="/app/day.js"></script>
+    <script src="/app/day.scroller.js"></script>
     <? if($this->toolkit->getUser()) { ?>
       <script src="/app/day.user.js"></script>
       <? if($this->is_owner) { ?>
@@ -121,6 +122,22 @@ $this->day->is_gathering_enabled = false;
           </div>
         </article>
       [[/comments]]
+    </script>
+
+    <script id="template_scroller" type="text/x-handlebars-template">
+      <div class="scroller">
+        <div class="viewport"></div>
+        <div class="header"><a href="#top" class="scrollTo top">Top</a></div>
+        <div class="line"></div>
+        <div class="scroll_zone">
+          <ul class="previews">
+            [[#moments]]
+              <li data-moment-id="[[id]]"><a class="scrollTo moment" data-moment-id="[[id]]" href="#moment-[[id]]"><img src="[[image_266]]" /></a></li>
+            [[/moments]]
+          </ul>
+        </div>
+        <div class="footer"><a href="#comments" class="scrollTo comments">Comments</a></div>
+      </div>
     </script>
 
     <? if($this->is_owner) { ?>
