@@ -56,7 +56,7 @@
 
   <!-- Vendor scripts -->
   <?php if(!property_exists($this, 'fb_disabled') || !$this->fb_disabled) { ?>
-    <script src="//connect.facebook.net/en_US/all.js"></script>
+    <script async src="//connect.facebook.net/en_US/all.js"></script>
   <?php } ?>
   <script src="/lib/vendor/jquery.min.js"></script>
   <script src="/lib/vendor/bootstrap.min.js"></script>
@@ -66,14 +66,14 @@
   <script src="/lib/vendor/jquery.masonry.min.js"></script>
 
   <script>
-    $(function() {
+    window.fbAsyncInit = function() {
       FB.init({
         appId: <?= $this->facebook_app_id; ?>,
         status:true,
         cookie:true,
         xfbml:false
       });
-    });
+    };
   </script>
 
   <!-- Application scripts -->
