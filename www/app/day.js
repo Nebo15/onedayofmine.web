@@ -41,42 +41,18 @@ $(function () {
 
   // Scroll helpers
   (function() {
-    var $scrollContainer = $(document);
-    var $scrollHelper = $('.scrollHelper');
-    var helperHeight = $scrollHelper.height();
-    var helperDefaultOffset = -1*helperHeight;
-
-    function setBottomOffset(offset) {
-      var sign = offset ? offset < 0 ? -1 : 1 : 0;
-
-      $scrollHelper.css('bottom', sign + offset + 'px');
-    }
-
-    setBottomOffset(helperDefaultOffset);
-
-    $scrollContainer.on('scroll touchmove', function() {
-      var scrollTop = $scrollContainer.scrollTop();
-
-      if(scrollTop > 500) {
-        var diff = scrollTop - 500;
-        if(diff < helperHeight && !$.isMobile()) {
-          var shift = diff - helperHeight;
-          setBottomOffset(shift > helperDefaultOffset ? shift : helperDefaultOffset);
-        } else {
-          setBottomOffset(0);
-        }
-      } else {
-        setBottomOffset(helperDefaultOffset);
-      }
-    });
-
-    $('.scrollTo.comments').click(function(event) {
-      $(document).scrollTo($('a[name=comments]'), 200);
+    $(document).on('click', '.scrollTo.comments', function(event) {
+      $(document).scrollTo($('a[name=comments]'), 1000);
       return false;
     });
 
-    $('.scrollTo.top').click(function() {
-      $(document).scrollTo(0, 200);
+    $(document).on('click', '.scrollTo.top', function() {
+      $(document).scrollTo(0, 1000);
+      return false;
+    });
+
+    $(document).on('click', '.scrollTo.moment', function() {
+      $(document).scrollTo($('.moments article[data-moment-id=' + $(this).data('moment-id') + ']'), 1000);
       return false;
     });
   })();
