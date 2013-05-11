@@ -100,10 +100,10 @@ class lmbFs
     if(!$dir)
       throw new lmbFsException('Directory have no value');
 
-    if(is_dir($dir))
-      return;
-
     $dir = self :: normalizePath($dir);
+
+	  if(is_dir($dir))
+		  return;
 
     if(!$parents)
     {
