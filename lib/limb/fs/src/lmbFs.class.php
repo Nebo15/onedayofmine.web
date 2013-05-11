@@ -169,7 +169,7 @@ class lmbFs
       return;
 
     $oldumask = umask(0);
-    if(!mkdir($dir, $perm))
+    if(!@mkdir($dir, $perm) && !is_dir($dir))
     {
       umask($oldumask);
       throw new lmbFsException('failed to create directory', array('dir' => $dir));
