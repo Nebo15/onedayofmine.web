@@ -53,6 +53,7 @@ $(function () {
 
     $(document).on('click', '.scrollTo.moment', function() {
       $(document).scrollTo($('.moments article[data-moment-id=' + $(this).data('moment-id') + ']'), 1000);
+			document.location.hash = 'moment-id'+$(this).data('moment-id');
       return false;
     });
   })();
