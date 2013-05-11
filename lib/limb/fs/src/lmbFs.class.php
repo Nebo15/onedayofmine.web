@@ -100,10 +100,10 @@ class lmbFs
     if(!$dir)
       throw new lmbFsException('Directory have no value');
 
-    $dir = self :: normalizePath($dir);
+    if(is_dir($dir))
+      return;
 
-	  if(is_dir($dir))
-		  return;
+    $dir = self :: normalizePath($dir);
 
     if(!$parents)
     {
@@ -125,7 +125,7 @@ class lmbFs
     }
 
     $offset_path = '';
-    for($i=0; $i < $index; $i++)
+    for($i = 0; $i < $index; $i++)
     {
       $offset_path .= $path_elements[$i] . $separator;
     }
@@ -133,7 +133,8 @@ class lmbFs
     for($i=$index; $i < count($path_elements); $i++)
     {
       $offset_path .= $path_elements[$i] . $separator;
-      self :: _doMkdir($offset_path, $perm);
+	    //if(!is_dir($offset_path))
+        self :: _doMkdir($offset_path, $perm);
     }
   }
 
