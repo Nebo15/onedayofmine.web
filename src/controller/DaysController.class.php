@@ -398,9 +398,6 @@ class DaysController extends BaseJsonController
 
 		$moment->getDbConnection()->commitTransaction();
 
-		if(1 == count($day->getMoments()) && $day)
-			$this->toolkit->doAsync('shareDayStart', $day->id);
-
 		if($this->_getUser()->is_editor && $this->_getUser()->id != $day->user_id)
 		{
 			$action = new EditorAction();
