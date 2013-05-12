@@ -564,6 +564,6 @@ class DaysController extends BaseJsonController
 
 	function _canEditDay($day)
 	{
-		return $this->_getUser() && ($this->_getUser()->id != $day->user_id || $this->_getUser()->is_editor);
+		return $this->_getUser() && ($this->_getUser()->id == $day->user_id || $this->_getUser()->is_editor);
 	}
 }
