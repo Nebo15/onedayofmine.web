@@ -1,0 +1,5 @@
+SET FOREIGN_KEY_CHECKS = 0;
+
+ALTER TABLE `moment` MODIFY `description` varchar(2048) NOT NULL DEFAULT '';
+
+SET FOREIGN_KEY_CHECKS = 1;
