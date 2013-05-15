@@ -236,7 +236,7 @@ class TaskmanTask
 	  $lock_file = $this->getLockFilename();
 	  if(file_exists($lock_file) && !is_writable($lock_file))
 	  {
-		  taskman_sysmsg("Lock file have no write permissions. Check $lock_file");
+		  taskman_sysmsg("Lock file have no write permissions. Check $lock_file".PHP_EOL);
 		  exit(1);
 	  }
 
