@@ -63,7 +63,7 @@ class MysqliDbDriver extends DbDriver
 	function _get_tables($dsn)
 	{
 		$password = ($dsn['password']) ? '-p' . $dsn['password'] : '';
-		$cmd = "mysql -NB -u{$dsn['user']} {$dsn['password']} -h{$dsn['host']} -e\"SHOW TABLES\" {$dsn['database']}";
+		$cmd = "mysql -NB -u{$dsn['user']} $password -h{$dsn['host']} -e\"SHOW TABLES\" {$dsn['database']}";
 		$tables = array_filter(explode("\n", `$cmd`));
 		return $tables;
 	}
