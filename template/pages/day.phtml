@@ -22,7 +22,6 @@ $this->day->is_gathering_enabled = false;
   {{/into}}
   {{into slot="js_include"}}
     <script src="/app/day.js"></script>
-    <script src="/app/day.scroller.js"></script>
     <? if($this->toolkit->getUser()) { ?>
       <script src="/app/day.user.js"></script>
       <? if($this->is_owner) { ?>
@@ -32,6 +31,7 @@ $this->day->is_gathering_enabled = false;
         <script src="/lib/vendor/jquery.jcrop.js"></script>
         <script src="/lib/vendor/jquery.exif.js"></script>
         <script src="/lib/Importer.js"></script>
+        <script src="/app/day.scroller.js"></script>
         <script src="/app/day.owner.js"></script>
       <? } ?>
     <? } ?>
