@@ -90,7 +90,9 @@ class Moment extends BaseModel
 
 	function _onAfterDestroy()
 	{
-		foreach($this->getDay()->getMoments() as $pos => $moment)
+		if(!$day = $this->getDay())
+			return;
+		foreach($day->getMoments() as $pos => $moment)
 		{
 			if($moment->position == $this->position && $moment->id != $this->id)
 			{
