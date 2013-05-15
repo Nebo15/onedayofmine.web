@@ -16,7 +16,7 @@ exec { 'apt-get update':
 	command => '/usr/bin/apt-get update',
 }
 
-package { ['nginx', 'php5-fpm', 'php5-cli', 'php5-curl', 'php5-imagick', 'php5-memcached', 'php5-mysqlnd']:
+package { ['git', 'nginx', 'php5-fpm', 'php5-cli', 'php5-curl', 'php5-imagick', 'php5-memcached', 'php5-mysqlnd']:
 	ensure => present,
 	require => Exec['apt-get update'],
 }
@@ -66,11 +66,5 @@ mysql::db { 'one_day':
 	password => 'test',
 	host     => 'localhost',
 	grant    => ['all'],
-	require => Class['mysql::server'],
-}
-
-exec { "init_main_db":
-	command => '/www/onedayofmine/cli/update.sh',
-	user => 'www-data',
 	require => Class['mysql::server'],
 }
