@@ -1,3 +1,6 @@
+include apt
+include mysql
+
 group { 'puppet':
 	ensure => present,
 }
@@ -13,7 +16,7 @@ exec { 'apt-get update':
 	command => '/usr/bin/apt-get update',
 }
 
-package { ['nginx', 'mysql', 'php5-fpm', 'php5-cli', 'php5-curl', 'php5-imagick', 'php5-memcached', 'php5-mysqlnd']:
+package { ['nginx', 'php5-fpm', 'php5-cli', 'php5-curl', 'php5-imagick', 'php5-memcached', 'php5-mysqlnd']:
 	ensure => present,
 	require => Exec['apt-get update'],
 }
@@ -54,3 +57,20 @@ file { 'vagrant-nginx-enable':
 	],
 }
 
+class { 'mysql::server':
+  config_hash => { 'root_password' => 'test' }
+}
+
+mysql::db { 'one_day':
+	user     => 'root',
+	password => 'test',
+	host     => 'localhost',
+	grant    => ['all'],
+	require => Class['mysql::server'],
+}
+
+exec { "init_main_db":
+	command => '/www/onedayofmine/cli/update.sh',
+	user => 'www-data',
+	require => Class['mysql::server'],
+}
