@@ -23,7 +23,7 @@ package { ['git', 'nginx', 'php5-fpm', 'php5-cli', 'php5-curl', 'php5-imagick', 
 
 service { 'nginx':
 	ensure => running,
-	require => Package['nginx'],
+	require => Package['nginx']
 }
 
 service { 'php5-fpm':
@@ -31,30 +31,22 @@ service { 'php5-fpm':
 	require => Package['php5-fpm'],
 }
 
-file { 'vagrant-nginx':
-	path => '/etc/nginx/sites-available/vagrant',
-	ensure => file,
-  replace => true,
-	require => Package['nginx'],
-	source => '/www/onedayofmine/settings/third-party/front/nginx/oneday-dev.conf',
-  notify => Service['nginx'],
+file { '/etc/nginx/nginx.conf':
+	 target => '/www/onedayofmine/settings/third-party/front/nginx/nginx.conf',
+   ensure => 'link',
+   require => Package['nginx'],
+}
+
+file { '/etc/nginx/sites-enabled/onedayofmine':
+	 target => '/www/onedayofmine/settings/third-party/front/nginx/oneday-dev.conf',
+   ensure => 'link',
+   require => Package['nginx'],
 }
 
 file { 'default-nginx-disable':
 	path => '/etc/nginx/sites-enabled/default',
 	ensure => absent,
 	require => Package['nginx'],
-}
-
-file { 'vagrant-nginx-enable':
-	path => '/etc/nginx/sites-enabled/vagrant',
-	target => '/etc/nginx/sites-available/vagrant',
-	ensure => link,
-	notify => Service['nginx'],
-	require => [
-		File['vagrant-nginx'],
-		File['default-nginx-disable'],
-	],
 }
 
 class { 'mysql::server':
