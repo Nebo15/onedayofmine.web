@@ -1,4 +1,5 @@
 include apt
+include php
 include mysql
 
 group { 'puppet':
@@ -10,13 +11,17 @@ host { 'onedayofmine.dev':
     host_aliases => 'api.onedayofmine.dev',
 }
 
-apt::ppa { "ppa:ondrej/php5": }
-
 exec { 'apt-get update':
 	command => '/usr/bin/apt-get update',
 }
 
-package { ['git', 'nginx', 'php5-fpm', 'php5-cli', 'php5-curl', 'php5-imagick', 'php5-memcached', 'php5-mysqlnd']:
+package { 'git':
+	ensure => present,
+	require => Exec['apt-get update'],
+}
+
+###### nginx
+package { 'nginx':
 	ensure => present,
 	require => Exec['apt-get update'],
 }
@@ -24,11 +29,6 @@ package { ['git', 'nginx', 'php5-fpm', 'php5-cli', 'php5-curl', 'php5-imagick', 
 service { 'nginx':
 	ensure => running,
 	require => Package['nginx']
-}
-
-service { 'php5-fpm':
-	ensure => running,
-	require => Package['php5-fpm'],
 }
 
 file { '/etc/nginx/nginx.conf':
@@ -48,6 +48,44 @@ file { 'default-nginx-disable':
 	ensure => absent,
 	require => Package['nginx'],
 }
+
+###### php
+
+class php {
+
+	apt::ppa { "ppa:ondrej/php5": }
+
+	package { 'php5-fpm': ensure => installed }
+	package { 'php5-curl': ensure => installed }
+	package { 'php5-imagick': ensure => installed }
+	package { 'php5-memcached': ensure => installed }
+	package { 'php5-mysqlnd': ensure => installed }
+
+	class {
+		'php::cli': ensure => installed;
+		'php::dev': ensure => installed;
+		'php::pear': ensure => installed;
+	}
+
+	package { 'libcurl3-openssl-dev': ensure => installed }
+	package { 'pecl_http':
+		ensure   => installed,
+		provider => pecl;
+	}
+	file { "/etc/php5/conf.d/20-http.ini":
+      ensure  => "present",
+      content => "extension=http.so",
+      mode    => 644,
+      notify => Service['php5-fpm']
+  }
+
+	service { 'php5-fpm':
+		ensure => running,
+		require => Package['php5-fpm'],
+	}
+}
+
+######## mysql
 
 class { 'mysql::server':
   config_hash => { 'root_password' => 'test' }
