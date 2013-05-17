@@ -706,7 +706,12 @@ function task_od_repack_images()
 	{
 		try
 		{
-			$item->attachImage(file_get_contents(lmbToolkit::instance()->getStaticUrl($item->getImage())));
+			if(!$url = lmbToolkit::instance()->getStaticUrl($item->getImage()))
+			{
+				taskman_msg('NOT IMAGE'.PHP_EOL);
+				return;
+			}
+			$item->attachImage(file_get_contents($url));
 		}
 		catch (lmbException $e)
 		{
