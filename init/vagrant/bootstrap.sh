@@ -1,18 +1,7 @@
 #!/usr/bin/env bash
 
-rm -rf /var/www
 mkdir -p /www/
-ln -fs /vagrant/odom/ /www/onedayofmine
 chown -R www-data:www-data /www/onedayofmine/*
-
-# Need conditionals around `mesg n` so that Chef doesn't throw
-# `stdin: not a tty`
-sed -i '$d' /root/.profile
-cat << 'EOH' >> /root/.profile
-if `tty -s`; then
-  mesg n
-fi
-EOH
 
 echo '#!/bin/sh' > /bin/puppet-update.sh
 echo "cd /tmp/vagrant-puppet/manifests" >> /bin/puppet-update.sh
