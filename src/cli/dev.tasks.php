@@ -703,7 +703,7 @@ function task_repack_images()
 		taskman_msg('Resize moment #'.$moment->id.'...');
 		try
 		{
-			$moment->attachImage(file_get_contents($moment->getImagePath()));
+			$moment->attachImage(file_get_contents(lmbToolkit::instance()->getStaticUrl($moment->getImage())));
 		}
 		catch (lmbException $e)
 		{
