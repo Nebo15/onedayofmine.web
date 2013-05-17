@@ -692,6 +692,25 @@ function iCalDecoder($file)
 		];
 		unset($majorarray);
 	}
-
 	return $icalarray;
+}
+
+function task_repack_images()
+{
+	lmb_require('src/model/Moment.class.php');
+	foreach(Moment::find() as $moment)
+	{
+		taskman_msg('Resize moment #'.$moment->id.'...');
+		try
+		{
+			$moment->attachImage(file_get_contents($moment->getImagePath()));
+		}
+		catch (lmbException $e)
+		{
+			taskman_msg($e->getOriginalMessage().' ERROR'.PHP_EOL);
+			continue;
+		}
+		taskman_msg('DONE'.PHP_EOL);
+	}
+
 }
