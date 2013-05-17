@@ -695,21 +695,44 @@ function iCalDecoder($file)
 	return $icalarray;
 }
 
-function task_repack_images()
+/**
+ * @desc Resize images from original
+ */
+function task_od_repack_images()
 {
 	lmb_require('src/model/Moment.class.php');
-	foreach(Moment::find() as $moment)
+
+	function resize($item)
 	{
-		taskman_msg('Resize moment #'.$moment->id.'...');
 		try
 		{
-			$moment->attachImage(file_get_contents(lmbToolkit::instance()->getStaticUrl($moment->getImage())));
+			$item->attachImage(file_get_contents(lmbToolkit::instance()->getStaticUrl($item->getImage())));
 		}
 		catch (lmbException $e)
 		{
 			taskman_msg($e->getOriginalMessage().' ERROR'.PHP_EOL);
-			continue;
+			return;
 		}
+	}
+
+	foreach(User::find() as $user)
+	{
+		taskman_msg('Resize user #'.$user->id.'...');
+		resize($user);
+		taskman_msg('DONE'.PHP_EOL);
+	}
+
+	foreach(Day::find() as $day)
+	{
+		taskman_msg('Resize day #'.$day->id.'...');
+		resize($day);
+		taskman_msg('DONE'.PHP_EOL);
+	}
+
+	foreach(Moment::find() as $moment)
+	{
+		taskman_msg('Resize moment #'.$moment->id.'...');
+		resize($moment);
 		taskman_msg('DONE'.PHP_EOL);
 	}
 
