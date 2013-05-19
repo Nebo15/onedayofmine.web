@@ -146,40 +146,14 @@ $(window).load(function() {
     moments: day_data.moments
   }));
 
-  // Selectors
+  // Permanent selectors
   var $scroller = $('.day').find('.scroller');
   var $scroller_viewport = $scroller.find('.viewport');
   var $scroller_scroll_zone = $scroller.find('.scroll_zone');
   var $scroller_previews = $scroller.find('.previews');
-
   var $moments = $('.day').find('.moments');
-  var $moments_articles = $moments.children('article');
 
-  var $moments_articles_first = $moments_articles.first();
-  var $moments_articles_last = $moments_articles.last();
-
-  // Show scroller
-  // $scroller.imagesLoaded(function() {
-    setTimeout(function() {
-      $scroller.css('right', 0);
-    }, 1000);
-  // });
-
-  if(day_data.user.id == API.getCurrentUser().id) {
-    // Allow sorting
-    $scroller_previews.sortable({
-      handle: 'img'
-    });
-
-    $scroller_previews.on('sortupdate', function(event, moved) {
-      var $item = $(moved.item);
-      API.request('POST', '/moments/' + $item.data('moment-id') + '/update', {
-        position: $item.prevAll().length
-      }).send();
-    });
-  }
-
-  // Precalculate some values
+  // Permanent values
   var window_width = $(window).width();
   var window_height = $(window).height();
 
@@ -189,12 +163,19 @@ $(window).load(function() {
   var scroll_zone_margin_top = parseInt($scroller_scroll_zone.css('top'), 10);
   var scroll_zone_margin_bottom = parseInt($scroller_scroll_zone.css('bottom'), 10);
   var scroll_zone_height = $scroller_scroll_zone.height();
-  var previews_height = $scroller_previews.height();
 
-  var moments_from = $moments_articles_first.offset().top;
-  var moments_to = $moments_articles_last.offset().top + $moments_articles_last.height();
+  var scroller_active = false;
 
-  var scroller_scale_ratio = $moments.outerHeight() / previews_height;
+  // Selectors that can be changed
+  var $moments_articles,
+      $moments_articles_first,
+      $moments_articles_last;
+
+  // Values that can be changed
+  var previews_height,
+      moments_from,
+      moments_to,
+      scroller_scale_ratio;
 
   function moveViewport(offset) {
     if(offset + viewport_height / 2 + scroll_zone_margin_top >= window_height / 2) {
@@ -235,12 +216,54 @@ $(window).load(function() {
     $scroller_viewport.css('top', offset + 'px');
   }
 
-  // Fix scroller viewport ratio
-  // $scroller_viewport.height($scroller_viewport.width() / (window_width / window_height));
+  function updateScroller() {
+    // Show scroller
+    if(!scroller_active) {
+      scroller_active = true;
 
-  $(document).on('scroll touchmove', function() {
-    var scrollTop = $(this).scrollTop();
+      $(document).on('scroll.scroller touchmove.scroller', function() {
+        moveViewport(($(this).scrollTop() - moments_from) / scroller_scale_ratio);
+      });
 
-    moveViewport((scrollTop - moments_from) / scroller_scale_ratio);
-  });
+      // $scroller.imagesLoaded(function() {
+        setTimeout(function() {
+          $scroller.css('right', 0);
+        }, 1000);
+      // });
+    }
+
+    // Selectors
+    $moments_articles = $moments.children('article');
+    $moments_articles_first = $moments_articles.first();
+    $moments_articles_last = $moments_articles.last();
+
+    // Calculations
+    previews_height = $scroller_previews.height();
+    moments_from = $moments_articles_first.offset().top;
+    moments_to = $moments_articles_last.offset().top + $moments_articles_last.height();
+    scroller_scale_ratio = $moments.outerHeight() / previews_height;
+
+    // Fix scroller viewport ratio
+    // $scroller_viewport.height($scroller_viewport.width() / (window_width / window_height));
+  }
+
+  if(day_data.moments.length > 0) {
+    updateScroller();
+  }
+
+  if(day_data.user.id == API.getCurrentUser().id) {
+    // Allow sorting
+    $scroller_previews.sortable({
+      handle: 'img'
+    });
+
+    $scroller_previews.on('sortupdate', function(event, moved) {
+      var $item = $(moved.item);
+      API.request('POST', '/moments/' + $item.data('moment-id') + '/update', {
+        position: $item.prevAll().length
+      }).send();
+    });
+  }
+
+  $moments.on('momentschanged', updateScroller);
 });
