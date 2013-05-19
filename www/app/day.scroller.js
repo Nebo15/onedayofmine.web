@@ -193,25 +193,6 @@ $(window).load(function() {
 
   var scroller_scale_ratio = $moments.outerHeight() / previews_height;
 
-  var moments_minimal_height;
-  var moments_sizings = [];
-  $moments.children().each(function(index, moment) {
-    var $moment = $(moment);
-    var moment_height = $moment.outerHeight();
-
-    if(moments_minimal_height > moment_height || !moments_minimal_height) {
-      moments_minimal_height = moment_height;
-    }
-
-    moments_sizings.push({
-      id: $moment.data('moment-id'),
-      offset: $moment.offset().top,
-      height: moment_height
-    });
-  });
-
-  var moments_previews_height = $scroller_previews.find('li').first().outerHeight();
-
   function moveViewport(offset) {
     if(offset + viewport_height / 2 + scroll_zone_margin_top >= window_height / 2) {
       var tmp = offset;
@@ -256,18 +237,6 @@ $(window).load(function() {
 
   $(document).on('scroll touchmove', function() {
     var scrollTop = $(this).scrollTop();
-
-    // Fix proportions between thumb and real moments
-    var nearest;
-    $.each(moments_sizings, function(index, sizing) {
-      if(!nearest || sizing.offset < scrollTop) {
-        nearest = sizing;
-      } else {
-        return false;
-      }
-    });
-    console.log(moments_minimal_height);
-    console.log(moments_minimal_height / nearest.height);
 
     moveViewport((scrollTop - moments_from) / scroller_scale_ratio);
   });
