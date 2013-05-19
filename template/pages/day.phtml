@@ -132,12 +132,16 @@ $this->day->is_gathering_enabled = false;
         <div class="scroll_zone">
           <ul class="previews">
             [[#moments]]
-              <li data-moment-id="[[id]]"><a class="scrollTo moment" data-moment-id="[[id]]" href="#moment-[[id]]"><img src="[[image_532]]" /></a></li>
+              [[include 'template_scroller_previews']]
             [[/moments]]
           </ul>
         </div>
         <div class="footer"><a href="#comments" class="scrollTo comments">Comments</a></div>
       </div>
+    </script>
+
+    <script id="template_scroller_preview" type="text/x-handlebars-template">
+      <li><a class="scrollTo moment" data-moment-id="[[id]]" href="#moment-[[id]]"><img src="[[image_532]]" /></a></li>
     </script>
 
     <? if($this->is_owner) { ?>
