@@ -208,7 +208,11 @@ $(window).load(function() {
             offset = window_height - viewport_height - viewport_margin_top - viewport_margin_bottom;
           }
 
-          $scroller_previews.css('top', (scroll_zone_height - previews_height) + 'px');
+          if(scroll_zone_height > previews_height) {
+            $scroller_previews.css('top', 0);
+          } else {
+            $scroller_previews.css('top', (scroll_zone_height - previews_height) + 'px');
+          }
         }
       } else {
         $scroller_previews.css('top', (offset - tmp) + 'px');
