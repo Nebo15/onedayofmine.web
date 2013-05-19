@@ -1,4 +1,6 @@
 <?php
+lmb_require('limb/imagekit/src/lmbConvertImageHelper.class.php');
+
 trait Imageable
 {
   public $image_ext;

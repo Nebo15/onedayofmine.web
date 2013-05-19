@@ -8,8 +8,9 @@ Vagrant.configure("2") do |config|
 
   config.vm.network :public_network, mac: "0800272AFF18"
 
-  config.vm.synced_folder "../../", "/vagrant/odom", :extra => "dmode=777,fmode=777"
+  config.vm.synced_folder "../../", "/www/onedayofmine", :extra => "dmode=777,fmode=777"
   config.vm.provision :shell, :path => "bootstrap.sh"
+  config.vm.provision :shell, :inline => "sudo apt-get update && sudo apt-get install puppet -y"
 
   config.vm.provision :puppet do |puppet|
   	puppet.module_path = "modules"
@@ -17,7 +18,6 @@ Vagrant.configure("2") do |config|
   end
 
   config.vm.provider "virtualbox" do |v|
-    v.gui = true
     v.name = "ODOM-dev"
   end
 
