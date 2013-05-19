@@ -159,9 +159,12 @@ $(window).load(function() {
   var $moments_articles_last = $moments_articles.last();
 
   // Show scroller
-  setTimeout(function() {
-    $scroller.css('right', 0);
-  }, 1000);
+  // $scroller.imagesLoaded(function() {
+    setTimeout(function() {
+      $scroller.css('right', 0);
+    }, 1000);
+  // });
+
   if(day_data.user.id == API.getCurrentUser().id) {
     // Allow sorting
     $scroller_previews.sortable({
