@@ -1,3 +1,144 @@
+(function($) {
+  // TODO connected lists
+  var Sortable = function($elem, options) {
+    var $self = this;
+    var $items,
+        $placeholder;
+
+    var options = $.extend({
+      item: 'li',
+      handle: false
+    }, options);
+
+    this.enable = function() {
+      var $items = $elem.children(options.item);
+      var $placeholder = $($.parseHTML('<' + $items.get(0).tagName + ' class="sortable-placeholder"></' + $items.get(0).tagName + '>'));
+
+      var handleActive = false,
+          dragging_initial_index,
+          $dragging = false;
+
+      $items.attr('draggable', true);
+
+      $elem.on('mousedown.sortable', options.handle, function() {
+        handleActive = true;
+      })
+
+      $elem.on('mouseup.sortable', options.handle, function() {
+        handleActive = false;
+      });
+
+      $elem.on('dragstart.sortable', options.item, function(event) {
+        if(options.handle && !handleActive) {
+          return false;
+        }
+
+        event.originalEvent.dataTransfer.effectAllowed = 'move';
+        event.originalEvent.dataTransfer.setData('Text', "Drop element on it's new position");
+
+        handleActive = false;
+        $dragging = $(this).addClass('sortable-dragging');
+        dragging_initial_index = $dragging.index();
+
+        $placeholder.height($dragging.outerHeight());
+
+        $elem.trigger('sortstart', {item: $dragging});
+        if(typeof options.onSortStart === 'function') {
+          options.onSortStart($dragging);
+        }
+      });
+
+      $elem.on('dragend.sortable drop.sortable', options.item, function(event) {
+        if(!$dragging) {
+          return;
+        }
+
+        event.stopPropagation();
+        event.preventDefault();
+
+        $dragging.insertAfter($placeholder);
+        $dragging.removeClass('sortable-dragging');
+        $dragging.show();
+        $placeholder.detach();
+        if(dragging_initial_index != $dragging.index()) {
+          $elem.trigger('sortupdate', {item: $dragging});
+          if(typeof options.onSortUpdate === 'function') {
+            options.onSortUpdate($dragging);
+          }
+        }
+
+        $elem.trigger('sortend', {item: $dragging});
+        if(typeof options.onSortEnd === 'function') {
+          options.onSortEnd($dragging);
+        }
+
+        $dragging = null;
+
+        return false;
+      });
+
+      $elem.on('dragover.sortable dragenter.sortable', options.item, function(event) {
+        if(!$dragging) {
+          return true;
+        }
+
+        event.originalEvent.dataTransfer.dropEffect = 'move';
+
+        var $this = $(this);
+        if($items.is($this)) {
+          $dragging.hide();
+          $this[$placeholder.index() < $this.index() ? 'after' : 'before']($placeholder);
+        }
+      });
+
+      $elem.on('selectstart.sortable', '*', function(event) {
+        event.preventDefault();
+      })
+    };
+
+    this.disable = function() {
+      $elem.off('.sortable');
+      $elem.children(options.item).attr('draggable', false);
+    };
+
+    this.reload = function() {
+      $self.disable();
+      $self.enable();
+    };
+
+    this.destroy = function() {
+      $self.disable();
+      $elem.removeData('sortable-api');
+    };
+
+    // Init
+    this.enable();
+  };
+
+  $.fn.sortable = function(options) {
+    return this.each(function() {
+      var $this = $(this);
+      var api = $this.data('sortable-api');
+
+      if(typeof options === 'string') {
+        if(!api) {
+          console.error('Sortable methods called before init');
+          return;
+        }
+
+        api[options]();
+      } else {
+        if(!api) {
+          api = new Sortable($this, options);
+          $this.data('sortable-api', api);
+        } else {
+          console.error('Sortable is already initalized');
+        }
+      }
+    });
+  };
+})(jQuery);
+
 $(window).load(function() {
   // Inject scroller
   var scroller_template = Template.prepareTemplate($('#template_scroller'));
