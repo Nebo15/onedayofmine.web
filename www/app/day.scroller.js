@@ -162,6 +162,19 @@ $(window).load(function() {
   setTimeout(function() {
     $scroller.css('right', 0);
   }, 1000);
+  if(day_data.user.id == API.getCurrentUser().id) {
+    // Allow sorting
+    $scroller_previews.sortable({
+      handle: 'img'
+    });
+
+    $scroller_previews.on('sortupdate', function(event, moved) {
+      var $item = $(moved.item);
+      API.request('POST', '/moments/' + $item.data('moment-id') + '/update', {
+        position: $item.prevAll().length
+      }).send();
+    });
+  }
 
   // Precalculate some values
   var window_width = $(window).width();
