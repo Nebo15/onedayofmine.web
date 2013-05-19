@@ -12,7 +12,8 @@
 
     this.enable = function() {
       var $items = $elem.children(options.item);
-      var $placeholder = $($.parseHTML('<' + $items.get(0).tagName + ' class="sortable-placeholder"></' + $items.get(0).tagName + '>'));
+      var items_tag_name = $items.get(0) ? $items.get(0).tagName : 'div';
+      var $placeholder = $($.parseHTML('<' + items_tag_name + ' class="sortable-placeholder"></' + items_tag_name + '>'));
 
       var handleActive = false,
           dragging_initial_index,
@@ -142,8 +143,9 @@
 $(window).load(function() {
   // Inject scroller
   var scroller_template = Template.prepareTemplate($('#template_scroller'));
+  var scroller_preview_template = Template.prepareTemplate($('#template_scroller_preview'));
   $('article.day').append(Template.compileElement(scroller_template, {
-    moments: day_data.moments
+    moments: []
   }));
 
   // Permanent selectors
@@ -216,7 +218,38 @@ $(window).load(function() {
     $scroller_viewport.css('top', offset + 'px');
   }
 
+  $scroller_previews.on('click', 'li', function() {
+    console.log($(this).data('moment-attached'));
+  })
+
   function updateScroller() {
+    // Selectors
+    $moments_articles = $moments.children('article');
+    $moments_articles_first = $moments_articles.first();
+    $moments_articles_last = $moments_articles.last();
+
+    // Redraw moments previews list
+    $scroller_previews.html('');
+    $moments_articles.each(function() {
+      var $moment = $(this);
+      var preview = $($.parseHTML(Template.compileElement(scroller_preview_template, {
+        id: $moment.data('moment-id'),
+        image_532: $moment.find('.image img').attr('src')
+      })));
+      preview.data('moment-attached', $moment);
+      $scroller_previews.append(preview);
+    });
+    $scroller_previews.sortable('reload');
+
+    // Calculations
+    previews_height = $scroller_previews.height();
+    moments_from = $moments_articles_first.offset().top;
+    moments_to = $moments_articles_last.offset().top + $moments_articles_last.height();
+    scroller_scale_ratio = $moments.outerHeight() / previews_height;
+
+    // Fix scroller viewport ratio
+    // $scroller_viewport.height($scroller_viewport.width() / (window_width / window_height));
+
     // Show scroller
     if(!scroller_active) {
       scroller_active = true;
@@ -231,24 +264,6 @@ $(window).load(function() {
         }, 1000);
       // });
     }
-
-    // Selectors
-    $moments_articles = $moments.children('article');
-    $moments_articles_first = $moments_articles.first();
-    $moments_articles_last = $moments_articles.last();
-
-    // Calculations
-    previews_height = $scroller_previews.height();
-    moments_from = $moments_articles_first.offset().top;
-    moments_to = $moments_articles_last.offset().top + $moments_articles_last.height();
-    scroller_scale_ratio = $moments.outerHeight() / previews_height;
-
-    // Fix scroller viewport ratio
-    // $scroller_viewport.height($scroller_viewport.width() / (window_width / window_height));
-  }
-
-  if(day_data.moments.length > 0) {
-    updateScroller();
   }
 
   if(day_data.user.id == API.getCurrentUser().id) {
@@ -259,11 +274,25 @@ $(window).load(function() {
 
     $scroller_previews.on('sortupdate', function(event, moved) {
       var $item = $(moved.item);
-      API.request('POST', '/moments/' + $item.data('moment-id') + '/update', {
-        position: $item.prevAll().length
-      }).send();
+      var $moment = $item.data('moment-attached');
+      var moment_position = $item.prevAll().length;
+      var position_request = API.request('POST', '/moments/' + $moment.data('moment-id') + '/update', {
+        position: moment_position
+      })
+
+      position_request.success(function() {
+        $moments.trigger('sortupdate', {moment: $moment, position: moment_position})
+      });
+
+      position_request.send();
     });
   }
 
-  $moments.on('momentschanged', updateScroller);
+  if(day_data.moments.length > 0) {
+    updateScroller();
+  }
+
+  $moments.on('momentschanged', function(event, changes) {
+    updateScroller(changes.moment);
+  });
 });
