@@ -178,7 +178,7 @@ $(window).load(function() {
   var moments_from = $moments_articles_first.offset().top;
   var moments_to = $moments_articles_last.offset().top + $moments_articles_last.height();
 
-  var scroller_scale_ratio = ($moments.height() - moments_from) / previews_height;
+  var scroller_scale_ratio = $moments.outerHeight() / previews_height;
 
   function moveViewport(offset) {
     if(offset + viewport_height / 2 + scroll_zone_margin_top >= window_height / 2) {
