@@ -35,7 +35,7 @@
         }
 
         event.originalEvent.dataTransfer.effectAllowed = 'move';
-        event.originalEvent.dataTransfer.setData('Text', "Drop element on it's new position");
+        event.originalEvent.dataTransfer.setData('Text', "Drop element on it's new position"); // Hi, IE9
 
         handleActive = false;
         $dragging = $(this).addClass('sortable-dragging');
