@@ -710,6 +710,8 @@ $(function() {
 
       attachDatetimePickers();
 
+      $moments.trigger('momentschanged', {moment: $moment});
+
       return $moment;
     }
 

@@ -35,7 +35,7 @@ class MysqliConnection {
     static $connectionfunctions = array(1 => "mysql_pconnect", 0 => "mysql_connect");
 
     $this->_con = @$connectionfunctions[$persistent ? 1 : 0]($this->_hostname, $this->_username, $this->_password, true);
-    
+
     return isset($this->_con) && is_resource($this->_con);
   }
 
@@ -135,8 +135,11 @@ class MysqliConnection {
 
 
   function importSql($database, $file) {
-    $password = $this->_password ? ' -p' . $this->_password :'';
-    `mysql -h{$this->_hostname} -u{$this->_username}{$password} {$database} < $file`;
+    if($this->_password) {
+      putenv( 'MYSQL_PWD=' . $this->_password );
+    }
+
+    `mysql -h{$this->_hostname} -u{$this->_username} {$database} < $file`;
   }
 
   function listDatabases($numericindex = FALSE) {

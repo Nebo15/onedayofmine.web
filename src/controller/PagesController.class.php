@@ -312,11 +312,35 @@ class PagesController extends WebAppController
 		$this->day->moments = [];
 		$time = 480;
 		$delta = (1440 - 640) / count($moments);
+
+    $lj_image_sizes = [
+      'original',
+      '1000',
+      '900',
+      '640'
+    ];
+
 		foreach($moments as $i => $moment_data)
 		{
+      $parts = explode('/', $moment_data['img']);
+      $last = array_pop($parts);
+      $image_link = implode('/', $parts); // http://ic.pics.livejournal.com/vika_ntessa/10278374/62536/
+
+      list($file, $ext) = explode('.', $last);
+      list($img_id, $size) = explode('_', $file);
+
+      $biggest_image = $moment_data['img'];
+      foreach ($lj_image_sizes as $size) {
+        $tmp = "{$image_link}/{$img_id}_{$size}.{$ext}";
+        if($this->_removeFileExits($tmp)) {
+          $biggest_image = $tmp;
+          break;
+        }
+      }
+
       if($this->day->image_532 == '') {
-        $this->day->image_532 = $moment_data['img'];
-        $this->day->image_266 = $moment_data['img'];
+        $this->day->image_532 = $biggest_image;
+        $this->day->image_266 = $biggest_image;
       }
 
 			$time += rand($delta - 5, $delta + 5);
@@ -324,14 +348,23 @@ class PagesController extends WebAppController
 			$moment->id = 1;
 			$moment->datetime_iso = 1;
 			$moment->time = str_pad(floor($time / 60), 2, '0', STR_PAD_LEFT).":".str_pad($time - floor($time / 60) * 60, 2, '0', STR_PAD_LEFT);
-      $moment->image_532 = $moment_data['img'];
-			$moment->image_266 = $moment_data['img'];
+      $moment->image_532 = $biggest_image;
+			$moment->image_266 = $biggest_image;
 			$moment->description = $moment_data['description'];
 			$this->day->moments[] = $moment;
 		}
 
 		$this->setTemplate('pages/day.phtml');
 	}
+
+  function _removeFileExits($url) {
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_NOBODY, true);
+    curl_exec($ch);
+    $retcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    curl_close($ch);
+    return $retcode == 200;
+  }
 
 	function doDiaryPreview()
 	{

@@ -1397,6 +1397,8 @@ body.scrolling {
   z-index: 6;
   margin-top: 28px;
   margin-bottom: 28px;
+
+  pointer-events:none;
 }
 
 .scroller .header,

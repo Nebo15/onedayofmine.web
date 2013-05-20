@@ -22,7 +22,6 @@ $this->day->is_gathering_enabled = false;
   {{/into}}
   {{into slot="js_include"}}
     <script src="/app/day.js"></script>
-    <script src="/app/day.scroller.js"></script>
     <? if($this->toolkit->getUser()) { ?>
       <script src="/app/day.user.js"></script>
       <? if($this->is_owner) { ?>
@@ -32,6 +31,7 @@ $this->day->is_gathering_enabled = false;
         <script src="/lib/vendor/jquery.jcrop.js"></script>
         <script src="/lib/vendor/jquery.exif.js"></script>
         <script src="/lib/Importer.js"></script>
+        <script src="/app/day.scroller.js"></script>
         <script src="/app/day.owner.js"></script>
       <? } ?>
     <? } ?>
@@ -132,12 +132,16 @@ $this->day->is_gathering_enabled = false;
         <div class="scroll_zone">
           <ul class="previews">
             [[#moments]]
-              <li data-moment-id="[[id]]"><a class="scrollTo moment" data-moment-id="[[id]]" href="#moment-[[id]]"><img src="[[image_266]]" /></a></li>
+              [[include 'template_scroller_previews']]
             [[/moments]]
           </ul>
         </div>
         <div class="footer"><a href="#comments" class="scrollTo comments">Comments</a></div>
       </div>
+    </script>
+
+    <script id="template_scroller_preview" type="text/x-handlebars-template">
+      <li><a class="scrollTo moment" data-moment-id="[[id]]" href="#moment-[[id]]"><img src="[[image_532]]" /></a></li>
     </script>
 
     <? if($this->is_owner) { ?>
@@ -176,7 +180,7 @@ $this->day->is_gathering_enabled = false;
 
           <div class="image has-bage block-center">
             <div class="thumbnail">
-              <img src="[[#if moment.image]][[moment.image]][[else]]/img/moment-placeholder.gif[[/if]]" itemprop="contentUrl" />
+              <img src="/img/moment-placeholder.gif" itemprop="contentUrl" />
             </div>
 
             <span class="bage bage-large bage-bottom-right visible-desktop image-toolbar">

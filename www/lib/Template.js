@@ -1,6 +1,10 @@
 var Template = (function() {
   var templates_compiled = [];
 
+  function prepareTemplate(template) {
+    return template.html().split('[[').join('{{').split(']]').join('}}');
+  }
+
   $(function() {
 
 		Handlebars.registerHelper('raw', function(text, context) {
@@ -9,9 +13,8 @@ var Template = (function() {
 
     // Registering Handlebars helpers
     Handlebars.registerHelper('include', function(name, context) {
-      var subTemplate = Handlebars.compile($(name));
+      var subTemplate = Handlebars.compile(prepareTemplate($('#' + name)));
       var subTemplateContext = $.extend({}, this, context.hash);
-
       return new Handlebars.SafeString(subTemplate(subTemplateContext));
     });
 
@@ -58,9 +61,7 @@ var Template = (function() {
   });
 
   return {
-    prepareTemplate: function(template) {
-      return template.html().split('[[').join('{{').split(']]').join('}}');
-    },
+    prepareTemplate: prepareTemplate,
 
     compileElement: function(source, data, callback) {
       if(!templates_compiled[source.hashCode()]) {
