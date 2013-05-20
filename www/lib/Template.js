@@ -47,8 +47,12 @@ var Template = (function() {
       }
     });
 
-		Handlebars.registerHelper('datetime', function(timestamp, options) {
+		Handlebars.registerHelper('prettydate', function(timestamp, options) {
 			return Tools.prettyDate(timestamp * 1000);
+		});
+
+		Handlebars.registerHelper('date', function(timestamp, options) {
+			return Tools.getDate(timestamp);
 		});
 
   });
