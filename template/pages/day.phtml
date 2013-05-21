@@ -407,7 +407,11 @@ $this->day->is_gathering_enabled = false;
                          class="day-title input-large input-block-level"
                          placeholder="Write a day title"
                          style="font-size:32px;height:40px;line-height:40px"/>
-	                <textarea rows="5" name="description" class="input-block-level" placeholder="Enter description...">{$#day->final_description|default:""}</textarea>
+	                <div>
+		                <textarea rows="5" name="description" class="input-block-level" placeholder="Enter description...">{$#day->final_description|default:""}</textarea>
+		                <i class="icon icon-microphone speech-action hidden" style="position:absolute;right:30px;top:85px;cursor:hand"></i>
+	                </div>
+
 	                <? if($this->day->final_description) { ?>
 		                <button type="submit" class="btn btn-block disabled">Save</button>
 	                <? } else { ?>
