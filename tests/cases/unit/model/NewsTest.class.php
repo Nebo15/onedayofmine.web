@@ -20,4 +20,20 @@ class NewsTest extends odUnitTestCase
     $this->assertEqual(News::findFirst()->text, $news->text);
     $this->assertEqual(strip_tags(News::findFirst()->text), $creator->name . ' started to following ' . $recipient->name);
   }
+
+	function testFindUnreadFor()
+	{
+		$recipient = $this->generator->user();
+		$recipient->save();
+
+		$this->assertEqual(0, count(News::findUnreadFor($recipient)));
+
+		$this->generator->news($creator = null, $recipient, News::MSG_USER_FOLLOW);
+
+		$this->assertEqual(1, count(News::findUnreadFor($recipient)));
+
+		$recipient->markAllNewsAsRead();
+
+		$this->assertEqual(0, count(News::findUnreadFor($recipient)));
+	}
 }

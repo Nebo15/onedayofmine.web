@@ -95,6 +95,14 @@ class odom-mysql
 		grant    => ['all'],
 		require => Class['mysql::server'],
 	}
+
+	mysql::db { 'one_day_test':
+  		user     => 'root',
+  		password => 'test',
+  		host     => 'localhost',
+  		grant    => ['all'],
+  		require => Class['mysql::server'],
+  }
 }
 
 class odom-sphinx
