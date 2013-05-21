@@ -324,25 +324,30 @@
     </script>
 	<? } ?>
 
-  <script type="text/javascript">
-	  var reformalOptions = {
-		  project_id: 97235,
-		  project_host: "onedayofmine.reformal.ru",
-		  tab_orientation: "left",
-		  tab_indent: "50%",
-		  tab_bg_color: "#9c0001",
-		  tab_border_color: "#FFFFFF",
-		  tab_image_url: "http://tab.reformal.ru/T9GC0LfRi9Cy0Ysg0Lgg0L%252FRgNC10LTQu9C%252B0LbQtdC90LjRjw==/FFFFFF/4bfb34d91c8d7fb481972ca3c84aec38/left/0/tab.png",
-		  tab_border_width: 1
+  <script type='text/javascript'>
+
+	  var _ues = {
+		  host:'onedayofmine.userecho.com',
+		  forum:'20026',
+		  lang:'ru',
+		  tab_corner_radius:5,
+		  tab_font_size:20,
+		  tab_image_hash:'0L7RgdGC0LDQstC40YLRjCDQvtGC0LfRi9Cy',
+		  tab_chat_hash:'0YfQsNGC',
+		  tab_alignment:'left',
+		  tab_text_color:'#FFFFFF',
+		  tab_text_shadow_color:'#00000055',
+		  tab_bg_color:'#9C0001',
+		  tab_hover_color:'#F42532'
 	  };
 
 	  (function() {
-		  var script = document.createElement('script');
-		  script.type = 'text/javascript'; script.async = true;
-		  script.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'media.reformal.ru/widgets/v3/reformal.js';
-		  document.getElementsByTagName('head')[0].appendChild(script);
+		  var _ue = document.createElement('script'); _ue.type = 'text/javascript'; _ue.async = true;
+		  _ue.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'cdn.userecho.com/js/widget-1.4.gz.js';
+		  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(_ue, s);
 	  })();
-  </script><noscript><a href="http://reformal.ru"><img src="http://media.reformal.ru/reformal.png" /></a><a href="http://onedayofmine.reformal.ru">Oтзывы и предложения для OneDayOfMine</a></noscript>
+
+  </script>
 	<!-- <?= lmb_app_mode(); ?> -->
 </body>
 </html>
