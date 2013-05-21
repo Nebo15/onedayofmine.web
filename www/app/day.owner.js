@@ -251,7 +251,7 @@ $(function() {
 			Speech.recognition.onresult = function(event) {
 				Speech.onResultWriteToTextarea(event, $description_input);
 			}
-			Speech.buttonClick($description_speech_button);
+			$description_speech_button.click(function() { Speech.buttonClick($description_speech_button)} );
 		}
 
 		$title_input.attachValidator({
