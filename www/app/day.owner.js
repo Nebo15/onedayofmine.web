@@ -195,20 +195,33 @@ $(function() {
 
 			for (var i = event.resultIndex; i < event.results.length; ++i) {
 				if (event.results[i].isFinal) {
-					final_transcript += event.results[i][0].transcript;
+					final_transcript += this.replaceSpecialWords(event.results[i][0].transcript);
 					this.recognition.interim_length = 0;
 				} else {
-					interim_transcript += event.results[i][0].transcript;
+					interim_transcript += this.replaceSpecialWords(event.results[i][0].transcript);
 				}
 			}
 
 			$textarea.val($textarea.val() + final_transcript);
 			if(interim_transcript.length > 0)
 			{
-				interim_transcript += '...';
+				interim_transcript += '…';
 				$textarea.val($textarea.val() + interim_transcript);
 				this.recognition.interim_length = interim_transcript.length;
 			}
+		},
+
+		replaceSpecialWords: function(text) {
+			var replaces = [
+				['точка',  '.'],
+				['запятая',  ','],
+				['новая строка', "\n"]
+			]
+			$.each(replaces, function(i, replacement) {
+				var regexp = new RegExp(replacement[0], "i");
+				text = text.replace(regexp, replacement[1]);
+			});
+			return text;
 		},
 
 		buttonClick: function($button) {

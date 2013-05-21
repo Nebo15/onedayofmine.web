@@ -582,7 +582,8 @@ $this->day->is_gathering_enabled = false;
                   <div class="description bubble block-center">
                     <? if($this->is_owner) { ?>
                       <form name="moment_description_form">
-                        <textarea name="text" rows="4" class="input-block-level" placeholder="Enter moment description...">{$item->description|default:""}</textarea>
+                        <textarea name="text" rows="4" class="input-block-level" placeholder="Enter moment description..."
+		                        >{$item->description|default:""}</textarea>
                         <button type="submit" class="btn btn-block has-spinner disabled">
                           <span class="spinner icon-spin icon-refresh"></span>
                           Save description
