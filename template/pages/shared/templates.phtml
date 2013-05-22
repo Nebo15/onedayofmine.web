@@ -47,7 +47,7 @@
 <script id="days_list_template" type="text/x-handlebars-template">
   <ul class="days clearfix block-center">
     [[#days]]
-      [[#include days_list_elements_template]]
+      [[include 'days_list_elements_template']]
     [[/days]]
   </ul>
 </script>
@@ -224,7 +224,7 @@
 				<h1 class="title block-center">[[title]]</h1>
 				<div class="info muted block-center">
 					<time class="pull-right-on-tablet pull-right-on-desktop">
-						<i class="icon icon-calendar hidden-phone"></i> [[date]]
+						<i class="icon icon-calendar hidden-phone"></i> [[date datetime]]
 					</time>
 					<div>
 						by <b>

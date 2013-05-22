@@ -31,6 +31,7 @@ $this->day->is_gathering_enabled = false;
         <script src="/lib/vendor/jquery.jcrop.js"></script>
         <script src="/lib/vendor/jquery.exif.js"></script>
         <script src="/lib/Importer.js"></script>
+        <script src="/app/day.scroller.js"></script>
         <script src="/app/day.owner.js"></script>
       <? } ?>
     <? } ?>
@@ -123,6 +124,26 @@ $this->day->is_gathering_enabled = false;
       [[/comments]]
     </script>
 
+    <script id="template_scroller" type="text/x-handlebars-template">
+      <div class="scroller">
+        <div class="viewport"></div>
+        <div class="header"><a href="#top" class="scrollTo top">Top</a></div>
+        <div class="line"></div>
+        <div class="scroll_zone">
+          <ul class="previews">
+            [[#moments]]
+              [[include 'template_scroller_previews']]
+            [[/moments]]
+          </ul>
+        </div>
+        <div class="footer"><a href="#comments" class="scrollTo comments">Comments</a></div>
+      </div>
+    </script>
+
+    <script id="template_scroller_preview" type="text/x-handlebars-template">
+      <li><a class="scrollTo moment" data-moment-id="[[id]]" href="#moment-[[id]]"><img src="[[image_532]]" /></a></li>
+    </script>
+
     <? if($this->is_owner) { ?>
       <script id="template_moment" type="text/x-handlebars-template">
         <article class="well editable template [[#unless moment.image]]noimage[[/unless]]" itemscope itemtype="http://schema.org/ImageObject">
@@ -159,7 +180,7 @@ $this->day->is_gathering_enabled = false;
 
           <div class="image has-bage block-center">
             <div class="thumbnail">
-              <img src="[[#if moment.image]][[moment.image]][[else]]/img/moment-placeholder.gif[[/if]]" itemprop="contentUrl" />
+              <img src="/img/moment-placeholder.gif" itemprop="contentUrl" />
             </div>
 
             <span class="bage bage-large bage-bottom-right visible-desktop image-toolbar">
@@ -386,7 +407,11 @@ $this->day->is_gathering_enabled = false;
                          class="day-title input-large input-block-level"
                          placeholder="Write a day title"
                          style="font-size:32px;height:40px;line-height:40px"/>
-	                <textarea rows="5" name="description" class="input-block-level" placeholder="Enter description...">{$#day->final_description|default:""}</textarea>
+	                <div>
+		                <textarea rows="5" name="description" class="input-block-level" placeholder="Enter description...">{$#day->final_description|default:""}</textarea>
+		                <i class="icon icon-microphone speech-action hidden" style="position:absolute;right:30px;top:85px;cursor:hand"></i>
+	                </div>
+
 	                <? if($this->day->final_description) { ?>
 		                <button type="submit" class="btn btn-block disabled">Save</button>
 	                <? } else { ?>
@@ -449,9 +474,11 @@ $this->day->is_gathering_enabled = false;
             {{apply template="moment_item_placeholder" /}}
           <? } ?>
 
-          {{list using="$#day->moments"}}
+          {{list using="$#day->moments" counter="$counter"}}
             {{list:item}}
               <article class="well<? if($this->is_owner) {?> editable<? }?>" itemscope itemtype="http://schema.org/ImageObject" data-moment-id="{$item->id}">
+	              <div id="moment-pos{$counter}"></div>
+	              <div id="moment-id{$item.id}"></div>
                 <? if($this->is_owner) { ?>
                   <ul class="unstyled inline not-decorated controls controls-absolute visible-desktop">
                     <li>
@@ -555,7 +582,8 @@ $this->day->is_gathering_enabled = false;
                   <div class="description bubble block-center">
                     <? if($this->is_owner) { ?>
                       <form name="moment_description_form">
-                        <textarea name="text" rows="4" class="input-block-level" placeholder="Enter moment description...">{$item->description|default:""}</textarea>
+                        <textarea name="text" rows="4" class="input-block-level" placeholder="Enter moment description..."
+		                        >{$item->description|default:""}</textarea>
                         <button type="submit" class="btn btn-block has-spinner disabled">
                           <span class="spinner icon-spin icon-refresh"></span>
                           Save description
@@ -686,12 +714,6 @@ $this->day->is_gathering_enabled = false;
           </button>
         </div>
       </article>
-    </div>
-
-    <div class="scrollHelper visible-desktop visible-tablet">
-      <a href="#" class="scrollTo top">
-        Back to top <i class="icon-angle-up"></i>
-      </a>
     </div>
   {{/into}}
 {{/wrap}}

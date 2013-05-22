@@ -170,6 +170,71 @@ $(function() {
     }
   };
 
+	var Speech = {
+
+		recognition: null,
+
+		show: function($button) {
+			$button.removeClass('hidden');
+		},
+
+		createRecognizer: function() {
+			this.recognition = new webkitSpeechRecognition();
+			this.recognition.continuous = true;
+			this.recognition.interimResults = true;
+			this.recognition.lang = 'ru-RU';
+			this.recognition.interim_length = 0;
+			this.recognition.onerror = function(event) { console.log('speech error', event); }
+		},
+
+		onResultWriteToTextarea: function(event, $textarea) {
+			var final_transcript = '';
+			var interim_transcript = '';
+			var current_desc = $textarea.val();
+			$textarea.val(current_desc.substr(0, current_desc.length - this.recognition.interim_length));
+
+			for (var i = event.resultIndex; i < event.results.length; ++i) {
+				if (event.results[i].isFinal) {
+					final_transcript += this.replaceSpecialWords(event.results[i][0].transcript);
+					this.recognition.interim_length = 0;
+				} else {
+					interim_transcript += this.replaceSpecialWords(event.results[i][0].transcript);
+				}
+			}
+
+			$textarea.val($textarea.val() + final_transcript);
+			if(interim_transcript.length > 0)
+			{
+				interim_transcript += '…';
+				$textarea.val($textarea.val() + interim_transcript);
+				this.recognition.interim_length = interim_transcript.length;
+			}
+		},
+
+		replaceSpecialWords: function(text) {
+			var replaces = [
+				['точка',  '.'],
+				['запятая',  ','],
+				['новая строка', "\n"]
+			]
+			$.each(replaces, function(i, replacement) {
+				var regexp = new RegExp(replacement[0], "i");
+				text = text.replace(regexp, replacement[1]);
+			});
+			return text;
+		},
+
+		buttonClick: function($button) {
+			if($button.hasClass('icon-microphone')) {
+				this.recognition.start();
+				$button.removeClass('icon-microphone').addClass('icon-microphone-off');
+			} else {
+				this.recognition.stop();
+				$button.removeClass('icon-microphone-off').addClass('icon-microphone');
+			}
+		}
+	}
+
   // Main container selector
   var $day = $('.day');
 
@@ -190,7 +255,17 @@ $(function() {
 		var $day_form_submit = $day_form.find('button[type=submit]');
     var $title_input = $day_form.find('input[name=title]');
 		var $description_input = $day_form.find('textarea[name=description]');
+		var $description_speech_button = $day_form.find('i.speech-action');
 		var is_form_valid = true;
+
+		if ('webkitSpeechRecognition' in window) {
+			Speech.createRecognizer();
+			Speech.show($description_speech_button);
+			Speech.recognition.onresult = function(event) {
+				Speech.onResultWriteToTextarea(event, $description_input);
+			}
+			$description_speech_button.click(function() { Speech.buttonClick($description_speech_button)} );
+		}
 
 		$title_input.attachValidator({
       button: $day_form_submit,
@@ -709,6 +784,8 @@ $(function() {
       }
 
       attachDatetimePickers();
+
+      $moments.trigger('momentschanged', {moment: $moment});
 
       return $moment;
     }

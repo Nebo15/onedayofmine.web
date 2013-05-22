@@ -6,7 +6,7 @@ $this->menu = 'news';
 <script id="news_list_template" type="text/x-handlebars-template">
 	<ul class="news unstyled">
 		[[#news]]
-		[[#include news_list_elements_template]]
+  		[[include 'news_list_elements_template']]
 		[[/news]]
 	</ul>
 </script>
@@ -37,7 +37,7 @@ $this->menu = 'news';
 			[[#moment_comments]]
 			<blockquote>[[comment.text]]</blockquote>
 			[[/moment_comments]]
-			<small>[[datetime time]]</small>
+			<small>[[prettydate time]]</small>
 			</p>
 
 		</div>

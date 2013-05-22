@@ -5,8 +5,11 @@ class MysqliDbDriver extends DbDriver
 {
 	function _connect_string($dsn)
 	{
-		$password = ($dsn['password']) ? '-p' . $dsn['password'] : '';
-		return "mysql -h{$dsn['host']} -u{$dsn['user']} $password";
+    if($dsn['password']) {
+      putenv( 'MYSQL_PWD=' . $dsn['password'] );
+    }
+
+		return "mysql -h{$dsn['host']} -u{$dsn['user']} ";
 	}
 
 	function _nondb_exec($dsn, $cmd)
@@ -62,8 +65,11 @@ class MysqliDbDriver extends DbDriver
 
 	function _get_tables($dsn)
 	{
-		$password = ($dsn['password']) ? '-p' . $dsn['password'] : '';
-		$cmd = "mysql -NB -u{$dsn['user']} {$dsn['password']} -h{$dsn['host']} -e\"SHOW TABLES\" {$dsn['database']}";
+    if($dsn['password']) {
+      putenv( 'MYSQL_PWD=' . $dsn['password'] );
+    }
+
+		$cmd = "mysql -NB -u{$dsn['user']} -h{$dsn['host']} -e\"SHOW TABLES\" {$dsn['database']}";
 		$tables = array_filter(explode("\n", `$cmd`));
 		return $tables;
 	}
@@ -86,8 +92,11 @@ class MysqliDbDriver extends DbDriver
 
 	function _dump_schema($dsn, $file)
 	{
-		$password = ($dsn['password']) ? '-p' . $dsn['password'] : '';
-		$cmd = "mysqldump -u{$dsn['user']} $password -h{$dsn['host']} " .
+    if($dsn['password']) {
+      putenv( 'MYSQL_PWD=' . $dsn['password'] );
+    }
+
+		$cmd = "mysqldump -u{$dsn['user']} -h{$dsn['host']} " .
 				"-d --default-character-set={$dsn['charset']} " .
 				"--quote-names --allow-keywords --add-drop-table " .
 				"--set-charset --result-file=$file " .
@@ -98,7 +107,7 @@ class MysqliDbDriver extends DbDriver
 		system($cmd, $ret);
 
 		// dumping shema_info table data to schema_info
-		$cmd = "mysqldump -u{$dsn['user']} {$dsn['password']} -h{$dsn['host']} " .
+		$cmd = "mysqldump -u{$dsn['user']} -h{$dsn['host']} " .
 				"-t --default-character-set={$dsn['charset']} " .
 				"--add-drop-table --create-options --quick " .
 				"--allow-keywords --max_allowed_packet=16M --quote-names " .
@@ -115,8 +124,10 @@ class MysqliDbDriver extends DbDriver
 
 	function _dump_data($dsn, $file)
 	{
-		$password = ($dsn['password']) ? '-p' . $dsn['password'] : '';
-		$cmd = "mysqldump -u{$dsn['user']} $password -h{$dsn['host']} " .
+    if($dsn['password']) {
+      putenv( 'MYSQL_PWD=' . $dsn['password'] );
+    }
+		$cmd = "mysqldump -u{$dsn['user']} -h{$dsn['host']} " .
 				"-t --default-character-set={$dsn['charset']} " .
 				"--add-drop-table --create-options --quick " .
 				"--allow-keywords --max_allowed_packet=16M --quote-names " .
@@ -136,8 +147,10 @@ class MysqliDbDriver extends DbDriver
 
 	function _dump_load($dsn, $file)
 	{
-		$password = ($dsn['password']) ? '-p' . $dsn['password'] : '';
-		$cmd = "mysql -u{$dsn['user']} $password -h{$dsn['host']} --default-character-set={$dsn['charset']} {$dsn['database']} < $file";
+    if($dsn['password']) {
+      putenv( 'MYSQL_PWD=' . $dsn['password'] );
+    }
+		$cmd = "mysql -u{$dsn['user']} -h{$dsn['host']} --default-character-set={$dsn['charset']} {$dsn['database']} < $file";
 
 		$this->_log("Starting to load '$file' file to '{$dsn['database']}' DB...");
 
@@ -153,18 +166,17 @@ class MysqliDbDriver extends DbDriver
 	{
 		$tables = $this->_get_tables($dsn_src);
 
-		$src_password = ($dsn_src['password']) ? '-p' . $dsn_src['password'] : '';
-		$dst_password = ($dsn_dst['password']) ? '-p' . $dsn_dst['password'] : '';
-
 		$this->_log("Starting to clone schema from '{$dsn_src['database']}' DB to '{$dsn_dst['database']}' DB...\n");
 
 		foreach ($tables as $table)
 		{
-			$cmd = "mysql -NB -u{$dsn_src['user']} $src_password -h{$dsn_src['host']} -e\"SHOW CREATE TABLE $table\" {$dsn_src['database']}";
-			list(, $create_schema) = explode("\t", `$cmd`, 2);
+      putenv( 'MYSQL_PWD=' . $dsn_src['password']);
+      $cmd = "mysql -NB -u{$dsn_src['user']} -h{$dsn_src['host']} -e\"SHOW CREATE TABLE $table\" {$dsn_src['database']}";
+      list(, $create_schema) = explode("\t", `$cmd`, 2);
 
+      putenv( 'MYSQL_PWD=' . $dsn_dst['password']);
 			$create_schema = str_replace('\n', '', escapeshellarg(trim($create_schema)));
-			$cmd = "mysql -u{$dsn_dst['user']} $dst_password -h{$dsn_dst['host']} -e$create_schema {$dsn_dst['database']}";
+			$cmd = "mysql -u{$dsn_dst['user']} -h{$dsn_dst['host']} -e$create_schema {$dsn_dst['database']}";
 			system($cmd, $ret);
 			if (!$ret)
 				$this->_log("'$table' copied\n");
@@ -183,14 +195,12 @@ class MysqliDbDriver extends DbDriver
 	{
 		$tables = $this->_get_tables($dsn_src);
 
-		$src_password = ($dsn_src['password']) ? '-p' . $dsn_src['password'] : '';
-		$dst_password = ($dsn_dst['password']) ? '-p' . $dsn_dst['password'] : '';
-
 		$this->_log("Starting to clone schema from '{$dsn_src['database']}' DB to '{$dsn_dst['database']}' DB...\n");
 
 		foreach ($tables as $table)
 		{
-			$cmd = "mysql -NB -u{$dsn_src['user']} $src_password -h{$dsn_src['host']} -e\"SHOW CREATE TABLE $table\" {$dsn_src['database']}";
+      putenv( 'MYSQL_PWD=' . $dsn_src['password']);
+			$cmd = "mysql -NB -u{$dsn_src['user']} -h{$dsn_src['host']} -e\"SHOW CREATE TABLE $table\" {$dsn_src['database']}";
 			list(, $create_schema) = explode("\t", `$cmd`, 2);
 
 			$create_schema = str_replace('\n', '', escapeshellarg(trim($create_schema)));
@@ -198,7 +208,8 @@ class MysqliDbDriver extends DbDriver
 
 			$create_schema = str_replace(array(' longtext', ' blob', ' text'), ' varchar(255)', $create_schema);
 
-			$cmd = "mysql -u{$dsn_dst['user']} $dst_password -h{$dsn_dst['host']} -e$create_schema {$dsn_dst['database']}";
+      putenv( 'MYSQL_PWD=' . $dsn_dst['password']);
+			$cmd = "mysql -u{$dsn_dst['user']} -h{$dsn_dst['host']} -e$create_schema {$dsn_dst['database']}";
 			system($cmd, $ret);
 			if (!$ret)
 				$this->_log("'$table' copied\n");
@@ -225,10 +236,14 @@ class MysqliDbDriver extends DbDriver
 
 	function _drop_tables($dsn, $tables)
 	{
-		$password = ($dsn['password']) ? '-p' . $dsn['password'] : '';
-		foreach ($tables as $table)
-		{
-			$cmd = "mysql -u{$dsn['user']} $password -h{$dsn['host']} -e\"DROP TABLE $table\" {$dsn['database']}";
+    if($dsn['password']) {
+      putenv( 'MYSQL_PWD=' . $dsn['password'] );
+    }
+
+    foreach ($tables as $table)
+    {
+
+			$cmd = "mysql -u{$dsn['user']} -h{$dsn['host']} -e\"DROP TABLE $table\" {$dsn['database']}";
 			system($cmd, $ret);
 			if (!$ret)
 				$this->_log("'$table' removed\n");
@@ -239,10 +254,12 @@ class MysqliDbDriver extends DbDriver
 
 	function _truncate_tables($dsn, $tables)
 	{
-		$password = ($dsn['password']) ? '-p' . $dsn['password'] : '';
+    if($dsn['password']) {
+      putenv( 'MYSQL_PWD=' . $dsn['password'] );
+    }
 		foreach ($tables as $table)
 		{
-			$cmd = "mysql -u{$dsn['user']} $password -h{$dsn['host']} -e\"TRUNCATE TABLE $table\" {$dsn['database']}";
+			$cmd = "mysql -u{$dsn['user']} -h{$dsn['host']} -e\"TRUNCATE TABLE $table\" {$dsn['database']}";
 			system($cmd, $ret);
 			if (!$ret)
 				echo "'$table' truncated\n";

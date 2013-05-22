@@ -40,6 +40,8 @@ lmbToolkit :: merge(new odTools());
 lmb_require('limb/dbal/src/toolkit/lmbDbTools.class.php');
 lmbToolkit :: merge(new lmbDbTools());
 
+lmb_env_set('IMAGE_LIBRARY', 'im');
+
 lmb_require('limb/core/src/lmbSys.class.php');
 lmb_require('src/model/base/BaseModel.class.php');
 

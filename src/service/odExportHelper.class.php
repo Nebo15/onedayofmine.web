@@ -93,6 +93,15 @@ class odExportHelper
       ->fetch()->toFlatArray();
     $likes_count = lmbArrayHelper::makeKeysFromColumnValues('day_id', $likes_count);
 
+	  $days_times = lmbDBAL::selectQuery('moment')
+			  ->addField('day_id')
+			  ->addField('time')
+			  ->addGroupBy('day_id')
+			  ->addCriteria(lmbSQLCriteria::in('day_id', $days_ids))
+			  ->addCriteria(lmbSQLCriteria::equal('position', '0'))
+			  ->fetch()->toFlatArray();
+	  $days_times = lmbArrayHelper::makeKeysFromColumnValues('day_id', $days_times);
+
     $comments_count = lmbDBAL::selectQuery('day_comment')
       ->addField('day_id')
       ->addRawField('COUNT(id)', 'count')
@@ -142,6 +151,8 @@ class odExportHelper
         isset($likes_count[$day->id]) ? $likes_count[$day->id]['count'] : 0;
       $exported_day->comments_count =
         isset($comments_count[$day->id]) ? $comments_count[$day->id]['count'] : 0;
+	    $exported_day->datetime =
+			    isset($days_times[$day->id]) ? (int) $days_times[$day->id]['time'] : 0;
 
       $exported[] = $exported_day;
     }

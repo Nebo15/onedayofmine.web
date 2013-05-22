@@ -125,7 +125,7 @@ class lmbFs
     }
 
     $offset_path = '';
-    for($i=0; $i < $index; $i++)
+    for($i = 0; $i < $index; $i++)
     {
       $offset_path .= $path_elements[$i] . $separator;
     }
@@ -133,7 +133,8 @@ class lmbFs
     for($i=$index; $i < count($path_elements); $i++)
     {
       $offset_path .= $path_elements[$i] . $separator;
-      self :: _doMkdir($offset_path, $perm);
+	    //if(!is_dir($offset_path))
+        self :: _doMkdir($offset_path, $perm);
     }
   }
 
@@ -168,7 +169,7 @@ class lmbFs
       return;
 
     $oldumask = umask(0);
-    if(!mkdir($dir, $perm))
+    if(!@mkdir($dir, $perm) && !is_dir($dir))
     {
       umask($oldumask);
       throw new lmbFsException('failed to create directory', array('dir' => $dir));

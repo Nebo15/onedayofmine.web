@@ -11,66 +11,129 @@ host { 'onedayofmine.dev':
 }
 
 apt::ppa { "ppa:ondrej/php5": }
-
-exec { 'apt-get update':
-	command => '/usr/bin/apt-get update',
+class { 'apt':
+  always_apt_update => true,
 }
 
-package { ['nginx', 'php5-fpm', 'php5-cli', 'php5-curl', 'php5-imagick', 'php5-memcached', 'php5-mysqlnd']:
+package { 'git':
 	ensure => present,
 	require => Exec['apt-get update'],
 }
 
-service { 'nginx':
-	ensure => running,
-	require => Package['nginx'],
+class odom-nginx
+{
+	package { 'nginx':
+		ensure => present,
+		require => Exec['apt-get update'],
+	}
+
+	service { 'nginx':
+		ensure => running,
+		require => Package['nginx']
+	}
+
+	file { '/etc/nginx/nginx.conf':
+		 target => '/www/onedayofmine/settings/third-party/front/nginx/nginx.conf',
+		 ensure => 'link',
+		 require => Package['nginx'],
+		 notify => Service['nginx'],
+	}
+
+	file { '/etc/nginx/sites-enabled/onedayofmine':
+		 target => '/www/onedayofmine/settings/third-party/front/nginx/oneday-dev.conf',
+		 ensure => 'link',
+		 require => Package['nginx'],
+		 notify => Service['nginx'],
+	}
+
+	file { 'default-nginx-disable':
+		path => '/etc/nginx/sites-enabled/default',
+		ensure => absent,
+		require => Package['nginx'],
+		notify => Service['nginx'],
+	}
 }
 
-service { 'php5-fpm':
-	ensure => running,
-	require => Package['php5-fpm'],
+class odom-php
+{
+
+	package { ['php5', 'php5-fpm', 'php5-cli', 'php5-curl', 'php5-imagick', 'php5-mysqlnd', 'php-pear']:
+		ensure => installed,
+	}
+
+	package { 'libcurl3-openssl-dev': ensure => installed }
+	exec { 'install_pecl_http':
+		command => '/usr/bin/pecl install pecl_http',
+		onlyif => '/usr/bin/pecl shell-test pecl_http | !',
+		require => [Package['libcurl3-openssl-dev'], Package['php-pear']],
+	}
+	file { "/etc/php5/conf.d/20-http.ini":
+      ensure  => "present",
+      content => "extension=http.so",
+      mode    => 644,
+      notify => Service['php5-fpm'],
+      require => Exec['install_pecl_http'],
+  }
+
+	service { 'php5-fpm':
+		ensure => running,
+		require => Package['php5-fpm'],
+	}
 }
 
-file { 'vagrant-nginx':
-	path => '/etc/nginx/sites-available/vagrant',
-	ensure => file,
-  replace => true,
-	require => Package['nginx'],
-	source => '/www/onedayofmine/settings/third-party/front/nginx/oneday-dev.conf',
-  notify => Service['nginx'],
+
+class odom-mysql
+{
+	class { 'mysql::server':
+		config_hash => { 'root_password' => 'test' }
+	}
+
+	mysql::db { 'one_day':
+		user     => 'root',
+		password => 'test',
+		host     => 'localhost',
+		grant    => ['all'],
+		require => Class['mysql::server'],
+	}
+
+	mysql::db { 'one_day_test':
+  		user     => 'root',
+  		password => 'test',
+  		host     => 'localhost',
+  		grant    => ['all'],
+  		require => Class['mysql::server'],
+  }
 }
 
-file { 'default-nginx-disable':
-	path => '/etc/nginx/sites-enabled/default',
-	ensure => absent,
-	require => Package['nginx'],
+class odom-sphinx
+{
+	package { ['sphinxsearch', 'libsphinxbase-dev']:
+		ensure => present,
+		require => Exec['apt-get update'],
+	}
+
+	service { 'sphinxsearch':
+		ensure => running,
+		require => Package['sphinxsearch']
+	}
+
+	file { '/etc/sphinxsearch/sphinx.conf':
+		target => '/www/onedayofmine/settings/third-party/sphinx/sphinx.conf',
+		ensure => 'link',
+		require => Package['sphinxsearch'],
+		notify => Service['sphinxsearch'],
+  }
 }
 
-file { 'vagrant-nginx-enable':
-	path => '/etc/nginx/sites-enabled/vagrant',
-	target => '/etc/nginx/sites-available/vagrant',
-	ensure => link,
-	notify => Service['nginx'],
-	require => [
-		File['vagrant-nginx'],
-		File['default-nginx-disable'],
-	],
-}
+node default
+{
+	include odom-nginx
+	include odom-php
+	include odom-mysql
+	include odom-sphinx
 
-class { 'mysql::server':
-  config_hash => { 'root_password' => 'test' }
-}
-
-mysql::db { 'one_day':
-	user     => 'root',
-	password => 'test',
-	host     => 'localhost',
-	grant    => ['all'],
-	require => Class['mysql::server'],
-}
-
-exec { "init_main_db":
-	command => '/www/onedayofmine/cli/update.sh',
-	user => 'www-data',
-	require => Class['mysql::server'],
+	exec { 'install crons':
+  	command => '/usr/bin/php /www/onedayofmine/lib/limb/limb.php od_create_crontab /etc/cron.d/onedayofmine',
+  	require => Package['php5-cli'],
+  }
 }
