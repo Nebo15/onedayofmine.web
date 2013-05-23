@@ -162,8 +162,8 @@ $(window).load(function() {
   var viewport_height = $scroller_viewport.height();
   var viewport_margin_top = parseInt($scroller_viewport.css('margin-top'), 10);
   var viewport_margin_bottom = parseInt($scroller_viewport.css('margin-bottom'), 10);
-  var scroll_zone_margin_top = parseInt($scroller_scroll_zone.css('top'), 10);
-  var scroll_zone_margin_bottom = parseInt($scroller_scroll_zone.css('bottom'), 10);
+  var scroll_zone_offset_top = parseInt($scroller_scroll_zone.css('top'), 10);
+  var scroll_zone_offset_bottom = parseInt($scroller_scroll_zone.css('bottom'), 10);
   var scroll_zone_height = $scroller_scroll_zone.height();
 
   var scroller_active = false;
