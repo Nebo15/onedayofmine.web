@@ -177,50 +177,49 @@ $(window).load(function() {
   var previews_height,
       moments_from,
       moments_to,
-      scroller_scale_ratio;
+      scroller_scale_ratio,
+      scroll_zone_animated;
+
 
   function moveViewport(offset) {
-    if(offset + viewport_height / 2 + scroll_zone_margin_top >= window_height / 2) {
-      var tmp = offset;
-      offset = window_height / 2 - viewport_height / 2 - viewport_margin_top;
+    var scroll_zone_center = (scroll_zone_height + scroll_zone_offset_top + scroll_zone_offset_bottom) / 2;
+    var scroll_zone_end = scroll_zone_height + scroll_zone_offset_top - viewport_margin_top + scroll_zone_offset_bottom - viewport_margin_bottom;
+    var shift = 0;
 
-      if(tmp >= previews_height - window_height / 2 - viewport_height / 2 + scroll_zone_margin_top) {
-        if(offset > previews_height - viewport_height) {
-          offset = previews_height - viewport_height;
-        } else {
-          offset = tmp - (previews_height - window_height + viewport_height / 2) - 13; // Magic number here, warning!
+    if(scroll_zone_animated) {
+      var viewport_center = offset + viewport_height / 2 + viewport_margin_top;
+      var max_shift = previews_height - scroll_zone_height;
 
-          if(offset > window_height - viewport_height - viewport_margin_top - viewport_margin_bottom) {
-            offset = window_height - viewport_height - viewport_margin_top - viewport_margin_bottom;
-          }
+      if(viewport_center > scroll_zone_center) {
+        shift = viewport_center - scroll_zone_center;
+        offset = scroll_zone_height / 2 - viewport_height / 2 + scroll_zone_offset_top - viewport_margin_top;
 
-          if(scroll_zone_height > previews_height) {
-            $scroller_previews.css('top', 0);
-          } else {
-            $scroller_previews.css('top', (scroll_zone_height - previews_height) + 'px');
-          }
+        // Don't show empty space under previews
+        if(shift > max_shift) {
+          offset += shift - max_shift;
+          shift = max_shift;
         }
-      } else {
-        $scroller_previews.css('top', (offset - tmp) + 'px');
       }
-    } else {
-      if(offset < 0) {
-        offset = 0;
-      }
-
-      $scroller_previews.css('top', 0);
     }
 
-    if(offset > previews_height - viewport_height) {
+    // Limit viewport min offset to dont go out of scroll_zone
+    if(offset < 0) {
+      offset = 0;
+    }
+
+    // Limit viewport max offset to dont go out of scroll_zone
+    if(offset + viewport_height > scroll_zone_end) {
+      offset = scroll_zone_end - viewport_height;
+    }
+
+    // Limit viewport max offset to dont go out of previews zone
+    if(offset + viewport_height > previews_height) {
       offset = previews_height - viewport_height;
     }
 
+    $scroller_previews.css('top', (-1 * shift) + 'px');
     $scroller_viewport.css('top', offset + 'px');
   }
-
-  $scroller_previews.on('click', 'li', function() {
-    console.log($(this).data('moment-attached'));
-  })
 
   function updateScroller() {
     // Selectors
@@ -247,15 +246,18 @@ $(window).load(function() {
     moments_to = $moments_articles_last.offset().top + $moments_articles_last.height();
     scroller_scale_ratio = $moments.outerHeight() / previews_height;
 
-    // Fix scroller viewport ratio
-    // $scroller_viewport.height($scroller_viewport.width() / (window_width / window_height));
+    // Do we need to move scroll_zone due to too big previews_height?
+    scroll_zone_animated = window_height - viewport_margin_top - viewport_margin_bottom < previews_height ? 1 : 0;
 
     // Show scroller
     if(!scroller_active) {
       scroller_active = true;
 
       $(document).on('scroll.scroller touchmove.scroller', function() {
-        moveViewport(($(this).scrollTop() - moments_from) / scroller_scale_ratio);
+        var offsetTop = $(this).scrollTop();
+        var offsetMoments = offsetTop > moments_from ? offsetTop - moments_from : 0;
+
+        moveViewport(offsetMoments / scroller_scale_ratio);
       });
 
       // $scroller.imagesLoaded(function() {
