@@ -706,12 +706,14 @@ function task_od_repack_images()
 	{
 		try
 		{
+			taskman_msg('Resize '.get_class($item).' #'.$item->id.'...');
 			if(!$url = lmbToolkit::instance()->getStaticUrl($item->getImage()))
 			{
 				taskman_msg('NOT IMAGE'.PHP_EOL);
 				return;
 			}
 			$item->attachImage(file_get_contents($url));
+			taskman_msg('DONE'.PHP_EOL);
 		}
 		catch (lmbException $e)
 		{
@@ -720,25 +722,12 @@ function task_od_repack_images()
 		}
 	}
 
-	foreach(User::find() as $user)
-	{
-		taskman_msg('Resize user #'.$user->id.'...');
+	foreach(User::find(null, ['id' => 'DESC']) as $user)
 		resize($user);
-		taskman_msg('DONE'.PHP_EOL);
-	}
 
-	foreach(Day::find() as $day)
-	{
-		taskman_msg('Resize day #'.$day->id.'...');
+	foreach(Day::find(null, ['id' => 'DESC']) as $day)
 		resize($day);
-		taskman_msg('DONE'.PHP_EOL);
-	}
 
-	foreach(Moment::find() as $moment)
-	{
-		taskman_msg('Resize moment #'.$moment->id.'...');
+	foreach(Moment::find(null, ['id' => 'DESC']) as $moment)
 		resize($moment);
-		taskman_msg('DONE'.PHP_EOL);
-	}
-
 }
