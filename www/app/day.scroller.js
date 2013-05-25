@@ -164,7 +164,7 @@ $(window).load(function() {
   var viewport_margin_bottom = parseInt($scroller_viewport.css('margin-bottom'), 10);
   var scroll_zone_offset_top = parseInt($scroller_scroll_zone.css('top'), 10);
   var scroll_zone_offset_bottom = parseInt($scroller_scroll_zone.css('bottom'), 10);
-  var scroll_zone_height = $scroller_scroll_zone.height();
+  var scroll_zone_height = $scroller_scroll_zone.outerHeight();
 
   var scroller_active = false;
 
@@ -180,19 +180,40 @@ $(window).load(function() {
       scroller_scale_ratio,
       scroll_zone_animated;
 
+  // Fix scroller viewport ratio
+  var moment_height = 760;
+  var moment_preview_height = 74;
+  function fixViewportHeight() {
+    if($moments_articles_first) {
+      moment_height = $moments_articles_first.height();
+      moment_preview_height = $scroller_previews.find('li').first().height();
+    }
+
+    $scroller_viewport.height(moment_preview_height * window_height / moment_height);
+    viewport_height = $scroller_viewport.height();
+  };
+
+  $(window).resize(function() {
+    window_width = $(window).width();
+    window_height = $(window).height();
+
+    fixViewportHeight();
+  });
+  fixViewportHeight();
 
   function moveViewport(offset) {
-    var scroll_zone_center = (scroll_zone_height + scroll_zone_offset_top + scroll_zone_offset_bottom) / 2;
     var scroll_zone_end = scroll_zone_height + scroll_zone_offset_top - viewport_margin_top + scroll_zone_offset_bottom - viewport_margin_bottom;
     var shift = 0;
 
     if(scroll_zone_animated) {
+      var scroll_zone_center = (scroll_zone_height + scroll_zone_offset_top + scroll_zone_offset_bottom) / 2;
       var viewport_center = offset + viewport_height / 2 + viewport_margin_top;
+      var offset_center = scroll_zone_height / 2 - viewport_height / 2 + scroll_zone_offset_top - viewport_margin_top;
       var max_shift = previews_height - scroll_zone_height;
 
       if(viewport_center > scroll_zone_center) {
-        shift = viewport_center - scroll_zone_center;
-        offset = scroll_zone_height / 2 - viewport_height / 2 + scroll_zone_offset_top - viewport_margin_top;
+        shift = offset - offset_center;
+        offset = offset_center;
 
         // Don't show empty space under previews
         if(shift > max_shift) {
@@ -244,7 +265,7 @@ $(window).load(function() {
     previews_height = $scroller_previews.height();
     moments_from = $moments_articles_first.offset().top;
     moments_to = $moments_articles_last.offset().top + $moments_articles_last.height();
-    scroller_scale_ratio = $moments.outerHeight() / previews_height;
+    scroller_scale_ratio = (moments_to - moments_from) / previews_height;
 
     // Do we need to move scroll_zone due to too big previews_height?
     scroll_zone_animated = window_height - viewport_margin_top - viewport_margin_bottom < previews_height ? 1 : 0;
