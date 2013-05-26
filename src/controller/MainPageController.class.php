@@ -33,7 +33,7 @@ class MainPageController extends WebAppController
 		$popular_days = Day::findByIds(lmbArrayHelper::getColumnValues('day_id', $popular_days_ratings));
 		$this->popular_days = $this->_formatDaysForJournal($popular_days);
 
-		$new_days = Day::findNew(null, null, 3);
+		$new_days = Day::findNew(null, null, 1);
 		$this->new_days = $this->_formatDaysForJournal($new_days);
 	}
 
