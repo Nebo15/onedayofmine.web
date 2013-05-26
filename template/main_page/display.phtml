@@ -62,6 +62,16 @@ $this->menu = 'journal';
 			<i class="icon-spin icon-refresh"></i>
 		</div>
 		<div class="row-fluid">
+			<div class="journal-sidebar pull-right">
+				<div class="well">
+					<h2 class="text-center">Most popular</h2>
+					{{apply template="days_list" days="{$#popular_days}"/}}
+				</div>
+				<div class="well">
+					<h2 class="text-center">New days</h2>
+					{{apply template="days_list" days="{$#new_days}"/}}
+				</div>
+			</div>
 			<div class="span8">
 				{{list using="$#days"}}
 				<div class="journal has-spinner">
@@ -74,16 +84,7 @@ $this->menu = 'journal';
 					{{/list:default}}
 				{{/list}}
 			</div>
-			<div class="journal-sidebar span4">
-				<div class="well">
-					<h2 class="text-center">Most popular</h2>
-					{{apply template="days_list" days="{$#popular_days}"/}}
-				</div>
-				<div class="well">
-					<h2 class="text-center">New days</h2>
-					{{apply template="days_list" days="{$#new_days}"/}}
-				</div>
-			</div>
+
 		</div>
   {{/into}}
 {{/wrap}}
