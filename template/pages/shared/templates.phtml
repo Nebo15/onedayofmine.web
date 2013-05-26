@@ -165,8 +165,7 @@
 </script>
 
 {{template name="journal_item"}}
-	<div class="row-fluid">
-		<article class="span8 offset2 day" data-id="{$item->id}" data-cover-image="{$item->image_532}">
+		<article class="day" data-id="{$item->id}" data-cover-image="{$item->image_532}">
 			<header>
 				<h1 class="title block-center">{$item->title}</h1>
 				<div class="info muted block-center">
@@ -213,7 +212,6 @@
 				</div>
 			</div>
 		</article>
-	</div>
 {{/template}}
 
 <script id="journal_item_template" type="text/x-handlebars-template">

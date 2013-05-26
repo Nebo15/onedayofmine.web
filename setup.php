@@ -28,7 +28,7 @@ lmb_env_setor('APP_DIR', $app_dir);
 lmb_env_setor('LIBS_DIR', $libs_dir);
 lmb_env_setor('LIMB_VAR_DIR', $app_dir . '/var/');
 
-if(array_key_exists('HTTP_NAME', $_SERVER))
+if(array_key_exists('HTTP_HOST', $_SERVER))
   lmb_env_setor('HOST_URL', 'http://'.$_SERVER['HTTP_HOST'].'/');
 lmb_env_set('LIMB_HTTP_OFFSET_PATH', '');
 
