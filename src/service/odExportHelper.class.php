@@ -342,7 +342,7 @@ class odExportHelper
 	    $order_key = str_pad($moment->time.'', 10, '0', STR_PAD_LEFT).str_pad($moment->id, 8, '0', STR_PAD_LEFT);
       $result[$order_key] = $exported_moment;
     }
-	  ksort($result);
+	  // ksort($result);
     return array_values($result);
   }
 
