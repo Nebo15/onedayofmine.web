@@ -110,6 +110,9 @@ var Tools = {
 		if (obj === undefined) {
 			obj = new Date();
 		}
+		if (typeof obj === 'number') {
+			obj = new Date(obj * 1000);
+		}
 		var dd = Tools.addPrefixZeros(obj.getDate());
 		var mm = Tools.addPrefixZeros(obj.getMonth() + 1); //January is 0!
 		var yyyy = obj.getFullYear();

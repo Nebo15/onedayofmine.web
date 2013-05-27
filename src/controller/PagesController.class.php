@@ -314,7 +314,6 @@ class PagesController extends WebAppController
 		$delta = (1440 - 640) / count($moments);
 
     $lj_image_sizes = [
-      'original',
       '1000',
       '900',
       '640'

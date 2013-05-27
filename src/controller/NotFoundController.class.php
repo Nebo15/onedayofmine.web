@@ -1,10 +1,10 @@
 <?php
-lmb_require('src/controller/BaseJsonController.class.php');
+lmb_require('src/controller/WebAppController.class.php');
 
-class NotFoundController extends BaseJsonController
+class NotFoundController extends WebAppController
 {
-  function doGuestDisplay()
+  function doDisplay()
   {
-    return $this->_answerNotFound('Method not found');
+    return $this->forwardTo404();
   }
 }

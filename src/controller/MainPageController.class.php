@@ -26,11 +26,22 @@ class MainPageController extends WebAppController
 
 	function doDisplay()
 	{
-		$days = $this->toolkit->getExportHelper()->exportDayItems(
-			DayJournalRecord::findDaysWithLimitation(null, null, $this->lists_limit)
-		);
+		$days = DayJournalRecord::findDaysWithLimitation(null, null, $this->lists_limit);
+		$this->days = $this->_formatDaysForJournal($days);
+
+		$popular_days_ratings = (new InterestCalculator())->getDaysRatings(null, null, 3);
+		$popular_days = Day::findByIds(lmbArrayHelper::getColumnValues('day_id', $popular_days_ratings));
+		$this->popular_days = $this->_formatDaysForJournal($popular_days);
+
+		$new_days = Day::findNew(null, null, 1);
+		$this->new_days = $this->_formatDaysForJournal($new_days);
+	}
+
+	function _formatDaysForJournal($days)
+	{
+		$days = $this->toolkit->getExportHelper()->exportDayItems($days);
 		foreach($days as $i => $day)
 			$days[$i]->date = date('Y-m-d', $day->utime);
-		$this->days = $this->_toFlatArray($days);
+		return $this->_toFlatArray($days);
 	}
 }

@@ -173,4 +173,17 @@ class News extends BaseModel
 		$replace = ['/pages/$1/user', '/pages/$1/day'];
 		return preg_replace($search, $replace, $text);
 	}
+
+	static function findUnreadFor(User $user)
+	{
+		$query = new lmbSelectQuery('news_recipient');
+		$query
+				->addLeftJoin('news', 'id', 'news_recipient', 'news_id')
+				->addField('news.*')
+				->addCriteria(lmbSQLCriteria::equal('news_recipient.user_id', $user->id))
+				->addCriteria(lmbSQLCriteria::equal('is_read', 0));
+
+		return News::findByQuery($query);
+	}
+
 }
