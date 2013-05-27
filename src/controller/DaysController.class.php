@@ -351,7 +351,7 @@ class DaysController extends BaseJsonController
 		if (!$this->request->isPost())
 			return $this->_answerNotPost();
 
-		$errors = $this->_checkPropertiesInRequest(['time', 'position']);
+		$errors = $this->_checkPropertiesInRequest(['position']);
 		if (count($errors))
 			return $this->_answerWithError($errors);
 
