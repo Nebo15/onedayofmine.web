@@ -377,7 +377,11 @@ body {
 
 .tooltip-inner {
   max-width: 280px !important;
+}
+
+.day .moments .tooltip-inner {
   white-space: nowrap;
+  overflow: hidden;
 }
 
 .btn:hover,
@@ -1178,34 +1182,34 @@ ul.with-separators li .btn-small {
   border-color:rgb(30, 168, 77);
 }
 
-.day .moments article .time {
-  margin: -5px 0 5px 0;
+.input-spinner .spinner-up,
+.input-spinner .spinner-down {
+  line-height: 17px;
+  padding: 0 9px;
 }
 
-.day .moments article .time form {
-  margin: 0;
-}
-
-.day .moments article .time input[subtype=date],
-.day .moments article .time input[subtype=time] {
+.input-spinner .spinner-value {
+  width: 26px;
   text-align: center;
 }
 
-.day .moments article .time input[type=date] {
-  max-width: 130px;
+/*.move-carets {
+  position: relative;
 }
 
-.day .moments article .time input[type=time] {
-  max-width: 70px;
+.move-carets .action-move-up,
+.move-carets .action-move-down {
+  position: absolute;
+  right: 0;
 }
 
-.day .moments article .time input[subtype=date] {
-  width: 85px;
+.move-carets .action-move-up {
+  top: -2px;
 }
 
-.day .moments article .time input[subtype=time] {
-  width: 40px;
-}
+.move-carets .action-move-down {
+  top: 8px;
+}*/
 
 .day .moments article .image{
   width: 542px;
@@ -1243,7 +1247,7 @@ ul.with-separators li .btn-small {
 }
 
 .day ul.controls li {
-  padding-right: 3px;
+  padding-right: 8px;
   padding-left: 0;
 }
 
@@ -1483,13 +1487,6 @@ ul.previews {
   margin: 5px;
 }
 
-
-
-
-
-
-
-
 /* > User page */
 .user-image-container {
   position: relative;
@@ -1518,22 +1515,6 @@ ul.previews {
     margin-right: 0 !important;
     max-width: 208px;
     display: block;
-  }
-}
-
-@media (max-width: 612px) { /* Small Phone screens */
-  .form-inline .btn,
-  .moments .time .btn[type=submit] {
-    padding-left: 6px !important;
-    padding-right: 6px !important;
-  }
-
-  .day .moments article .time input[type="date"] {
-    max-width: 100px;
-  }
-
-  .day .moments article .time input[type="time"] {
-    max-width: 50px;
   }
 }
 
@@ -1566,13 +1547,6 @@ ul.previews {
     margin-bottom: -2px;
   }
 
-  .day .moments .time form .input-append input,
-  .day .moments .time form .input-prepend input {
-    -webkit-border-radius: 4px 4px 4px 4px;
-    -moz-border-radius: 4px 4px 4px 4px;
-    border-radius: 4px 4px 4px 4px;
-  }
-
   .btn-toolbar > .btn + .btn, .btn-toolbar > .btn-group + .btn, .btn-toolbar > .btn + .btn-group {
     margin-left: 5px !important;
   }
@@ -1598,18 +1572,6 @@ ul.previews {
 
   .pull-left-on-tablet {
     float: left;
-  }
-}
-
-@media (min-width: 768px) and (max-width: 1024px) { /* iPad */
-  .time .add-on {
-    padding: 1px 5px !important;
-    height: 24px !important;
-  }
-
-  .time .btn {
-    padding: 1px 5px !important;
-    height: 28px !important;
   }
 }
 

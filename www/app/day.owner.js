@@ -285,12 +285,10 @@ $(function() {
     var image_container_selector = ".image";
     var image_selector = ".thumbnail img";
 
-    var datetime_form_selector = 'form[name=datetime_form]';
-    var datetime_form_date_input_selector = 'input[name=date]';
-    var datetime_form_time_input_selector = 'input[name=time]';
-    var datetime_form_seconds_input_selector = 'input[name=seconds]';
-    var datetime_form_timezone_selector = 'input[name=timezone]';
-    var datetime_form_submit_btn_selector = '.btn[type=submit]';
+    var position_form_selector = '.action-position';
+    var position_form_increment_selector = '.spinner-up';
+    var position_form_decrement_selector = '.spinner-down';
+    var position_form_indicator_selector = '.spinner-value';
 
     var description_form_selector = 'form[name=moment_description_form]';
     var description_form_input_selector = 'textarea[name=text]';
@@ -331,20 +329,25 @@ $(function() {
     var image_select_popover_mobile_template = $('#template_image_select_popover_mobile').html();
     var image_upload_progress_template = $('#template_image_upload_progress').html();
 
-    // Init
-    attachDatetimePickers();
-
     // Lookup methods
     function getMomentByContext(context) {
       return $(context).closest(moment_selector);
     }
 
+    function findNextMoments(moment) {
+      return $(moment).nextAll(moment_selector);
+    }
+
     function findNextMoment(moment) {
-      return $(moment).nextAll(moment_selector).first();
+      return findNextMoments(moment).first();
+    }
+
+    function findPrevMoments(moment) {
+      return $(moment).prevAll(moment_selector);
     }
 
     function findPrevMoment(moment) {
-      return $(moment).prevAll(moment_selector).first();
+      return findPrevMoments(moment).first();
     }
 
     function findNextNewMoment(moment) {
@@ -386,74 +389,12 @@ $(function() {
       return false;
     }
 
-    // Date- and timepicker methods
-    function attachDatetimePickers() {
-      if($.isMobile()) {
-        return; // We don't want costum date- and timepickers on mobile devices
-      }
-
-      // Datepickers
-      $moments.find(datetime_form_date_input_selector).each(function(index, input) {
-        var $this = $(input);
-        if($this.hasClass('has-datepicker')) {
-          return;
-        }
-
-        $this.addClass('has-datepicker');
-        $this.attr('type', 'text');
-        $this.attr('subtype', 'date');
-
-        $this.datepicker({
-          format: 'yyyy-mm-dd',
-          startDate: '2000-01-01',
-          endDate: Tools.getDate(), // Today
-          weekStart: 1,
-          todayBtn: true,
-          todayHighlight: true
-        });
-      });
-
-      // Timepickers
-      $moments.find(datetime_form_time_input_selector).each(function(index, input) {
-        var $this = $(input);
-        if($this.hasClass('has-timepicker')) {
-          return;
-        }
-
-        $this.addClass('has-timepicker');
-        $this.attr('type', 'text');
-        $this.attr('subtype', 'time');
-
-        $this.timepicker({
-          minuteStep: 5,
-          template: false,
-          isOpen: true,
-          showMeridian: false
-        });
-      });
-    }
-
-    // Date and time helpers
-    function getDatetime(moment) {
+    // Position helpers
+    function getPosition(moment) {
       var $moment = $(moment);
-      var $form = $moment.find(datetime_form_selector);
-      var $date_input = $form.find(datetime_form_date_input_selector);
-      var $time_input = $form.find(datetime_form_time_input_selector);
-      var $seconds_input = $form.find(datetime_form_seconds_input_selector);
-      var $timezone_input = $form.find(datetime_form_timezone_selector);
+      var $value = $moment.find(position_form_selector).find(position_form_indicator_selector);
 
-      return Tools.createDateObject($date_input.val(), $time_input.val() + ':' + $seconds_input.val(), $timezone_input.val());
-    }
-
-    function getDatetimeISOString(moment) {
-      var $moment = $(moment);
-      var $form = $moment.find(datetime_form_selector);
-      var $date_input = $form.find(datetime_form_date_input_selector);
-      var $time_input = $form.find(datetime_form_time_input_selector);
-      var $seconds_input = $form.find(datetime_form_seconds_input_selector);
-      var $timezone_input = $form.find(datetime_form_timezone_selector);
-
-      return $date_input.val() + 'T' + $time_input.val() + ':' + $seconds_input.val() + $timezone_input.val();
+      return parseInt($value.val(), 10);
     }
 
     // Image transformations
@@ -685,7 +626,7 @@ $(function() {
       }
 
       var $moment_and_placeholder = addPlaceholderToMomentSelector($moment);
-      var moment_datetime = getDatetime($moment);
+      var moment_position = getPosition($moment);
 
       var found = false;
       $moments.find(moment_selector).each(function() {
@@ -694,9 +635,9 @@ $(function() {
           return;
         }
 
-        var sibling_moment_datetime = getDatetime($sibling_moment);
+        var sibling_moment_position = getPosition($sibling_moment);
 
-        if(moment_datetime < sibling_moment_datetime) {
+        if(moment_position <= sibling_moment_position) {
           $moment_and_placeholder.insertBefore($sibling_moment);
 
           found = true;
@@ -708,7 +649,10 @@ $(function() {
         $moments.append($moment_and_placeholder);
       }
 
-      attachDatetimePickers();
+      findNextMoments($moment).each(function() {
+        var indicator = $(this).find(position_form_selector).find(position_form_indicator_selector);
+        indicator.val(parseInt(indicator.val(), 10) + 1);
+      });
 
       $moments.trigger('momentschanged', {moment: $moment});
 
@@ -726,6 +670,15 @@ $(function() {
         }
       });
     }
+
+    // React on previews reordering
+    (function() {
+      $moments.on('sortupdate', function(event, data) {
+        var $moment = $(data.moment);
+        insertMoment($moment);
+        scrollToMoment($moment);
+      });
+    })();
 
     // Editing existing moments
     (function() {
@@ -858,59 +811,37 @@ $(function() {
         }
       });
 
-      // Editing time
-      $moments.on('change keyup', datetime_form_selector + ' ' + datetime_form_date_input_selector, function() {
-        $(this).closest(datetime_form_selector).find(datetime_form_submit_btn_selector).removeClass('disabled').addClass('btn-success');
+      // Editing position
+      $moments.on('click', position_form_selector + ' ' + position_form_increment_selector, function() {
+        var indicator = $(this).closest(position_form_selector).find(position_form_indicator_selector);
+        indicator.val(parseInt(indicator.val(), 10) + 1).trigger('change');
       });
 
-      $moments.on('change keyup', datetime_form_selector + ' ' + datetime_form_time_input_selector, function() {
-        $(this).closest(datetime_form_selector).find(datetime_form_submit_btn_selector).removeClass('disabled').addClass('btn-success');
+      $moments.on('click', position_form_selector + ' ' + position_form_decrement_selector, function() {
+        var indicator = $(this).closest(position_form_selector).find(position_form_indicator_selector);
+        indicator.val(parseInt(indicator.val(), 10) - 1).trigger('change');
       });
 
-      $moments.on('submit', datetime_form_selector, function() {
-        var $form = $(this);
-        var $submit_btn = $form.find(datetime_form_submit_btn_selector);
+      var update_request_timeout;
 
-        if($submit_btn.hasClass('disabled')) {
-          return false;
-        }
+      $moments.on('change keyup', position_form_selector + ' ' + position_form_indicator_selector, function() {
+        var $indicator = $(this);
+        var $moment = getMomentByContext($indicator);
 
-        $submit_btn.addClass('disabled');
-        $submit_btn.showSpinner();
+        var position_request = API.request('POST', '/moments/' + $moment.data('moment-id') + '/update', {
+          position: $indicator.val()
+        })
 
-        var $date_input = $form.find(datetime_form_date_input_selector);
-        var $time_input = $form.find(datetime_form_time_input_selector);
-
-        var $date_and_time_inputs = $date_input.add($time_input);
-
-        $date_and_time_inputs.prop('disabled', true);
-
-        var $moment = getMomentByContext($form);
-        var moment_id = $moment.data('moment-id');
-
-        var moment_datetime_request = API.request('POST', '/moments/' + moment_id + '/update', {
-          time: getDatetimeISOString($moment)
+        position_request.success(function() {
+          $moments.trigger('sortupdate', {moment: $moment, position: $indicator.val()})
         });
 
-        moment_datetime_request.success(function() {
-          $submit_btn.hideSpinner();
-          $moment.trigger('datetimechange');
-          $date_and_time_inputs.prop('disabled', false);
-          $submit_btn.addClass('disabled').removeClass('btn-success btn-danger');
-        });
-
-        moment_datetime_request.error(function() {
-          $submit_btn.hideSpinner();
-          $submit_btn.addClass('btn-danger').removeClass('btn-success');
-        });
-
-        moment_datetime_request.send();
+        clearTimeout(update_request_timeout);
+        update_request_timeout = setTimeout(function() {
+          position_request.send();
+        }, 1000);
 
         return false;
-      });
-
-      $moments.on('datetimechange', moment_selector, function() {
-        scrollToMoment(insertMoment($(this)));
       });
 
       // Editing image itself
@@ -993,6 +924,7 @@ $(function() {
           var popover_params = {
             html: true,
             trigger: 'manual',
+            position: 1,
             title: 'Select file',
             content: is_mobile ? image_select_popover_mobile_template : image_select_popover_template,
             placement: is_mobile ? 'bottom' : 'right'
@@ -1061,7 +993,10 @@ $(function() {
 
           // Selectors
           var $delete_btn = $moment.find(delete_btn_selector);
-          var $datetime_form = $moment.find(datetime_form_selector);
+          var $position_form = $moment.find(position_form_selector);
+          var $position_form_indicator = $position_form.find(position_form_indicator_selector);
+          var $position_form_increment_btn = $position_form.find(position_form_increment_selector);
+          var $position_form_decrement_btn = $position_form.find(position_form_decrement_selector);
           var $description_form = $moment.find(description_form_selector);
           var $description_form_input = $moment.find(description_form_input_selector);
           var $description_form_submit_btn = $description_form.find(description_form_submit_btn_selector);
@@ -1071,7 +1006,7 @@ $(function() {
           var $image_wrap = $image.parent();
 
           // Elements with overrided event handlers
-          var $has_event_handlers = $moment.add($datetime_form).add($description_form).add($delete_btn).add($image).add($description_form_input);
+          var $has_event_handlers = $moment.add($position_form).add($position_form_increment_btn).add($position_form_decrement_btn).add($description_form).add($delete_btn).add($image).add($description_form_input);
 
           // Attach moment template events
           (function() {
@@ -1113,21 +1048,19 @@ $(function() {
               }
             });
 
-            // Edit date or time
-            $datetime_form.on('submit.adder', function(event) {
-              event.stopPropagation(); // Event don't hit delegated handlers
+            // Edit position
+            $position_form_increment_btn.on('click.adder', function() {
+              event.stopPropagation();
 
-              var $form = $(this);
-              var $submit_btn = $form.find(datetime_form_submit_btn_selector);
+              var indicator = $(this).closest(position_form_selector).find(position_form_indicator_selector);
+              indicator.val(parseInt(indicator.val(), 10) + 1);
+            });
 
-              if($submit_btn.hasClass('disabled')) {
-                return false;
-              }
+            $position_form_decrement_btn.on('click.adder', function() {
+              event.stopPropagation();
 
-              $submit_btn.addClass('disabled').removeClass('btn-success btn-danger');
-              $moment.trigger('datetimechange');
-
-              return false;
+              var indicator = $(this).closest(position_form_selector).find(position_form_indicator_selector);
+              indicator.val(parseInt(indicator.val(), 10) - 1);
             });
 
             $moment.on('imageselect.adder', function(event, image_or_data_url) {
@@ -1176,14 +1109,11 @@ $(function() {
               $description_form_submit_btn.addClass('disabled');
               $description_form_submit_btn.showSpinner();
 
-              var $datetime_form = $moment.find(datetime_form_selector);
               var $popover = $image_container.find(image_select_popover_selector);
 
               // Inputs to be disabled
-              var $datetime_form_date_input = $datetime_form.find(datetime_form_date_input_selector);
-              var $datetime_form_time_input = $datetime_form.find(datetime_form_time_input_selector);
               var $file_input = $popover.find(image_select_popover_file_input_selector);
-              var $inputs = $description_form_input.add($datetime_form_date_input).add($datetime_form_time_input).add($file_input);
+              var $inputs = $description_form_input.add($file_input);
 
               // Buttons to be disabled
               var $popover_btns = $popover.find(image_select_popover_btns_selector);
@@ -1197,7 +1127,8 @@ $(function() {
               $popover_btns.addClass('disabled');
               $inputs.prop('disabled', true);
               $image_toolbar.addClass(image_toolbar_hidden_class);
-              $datetime_form.find(datetime_form_submit_btn_selector).addClass('disabled');
+              $position_form.find(position_form_decrement_selector).addClass('disabled');
+              $position_form.find(position_form_increment_selector).addClass('disabled');
 
               // Don't use default save event handler
               $moment.on('imagesave.adder', function(save_event) {
@@ -1212,8 +1143,7 @@ $(function() {
                 ImageTools.Convert.dataURLToBase64($image.attr('src')).done(function(base64) {
                   var create_request_params = {
                     description: $description_form_input.val(),
-                    time: getDatetimeISOString($moment),
-										position: $moments.find('article.well').index($moment),
+										position: $position_form_indicator.val(),
                     image_content: base64
                   };
 
@@ -1272,6 +1202,9 @@ $(function() {
 
                       // Let user select image as day cover
                       $moment.find(image_action_use_as_cover_btn_selector).removeClass('disabled');
+
+                      // Notify about changes
+                      $moments.trigger('momentschanged', {moment: $moment});
                     });
                   });
 
@@ -1287,6 +1220,8 @@ $(function() {
                     $image_toolbar.removeClass(image_toolbar_hidden_class);
                     $image_container.removeClass(image_has_crop_tool_class);
                     $image_container.removeClass(image_has_changes_class);
+                    $position_form.find(position_form_decrement_selector).removeClass('disabled');
+                    $position_form.find(position_form_increment_selector).removeClass('disabled');
                   });
 
                   $image.animate({
@@ -1328,43 +1263,9 @@ $(function() {
         var $prev_moment = findPrevMoment($placeholder);
         var $next_moment = findNextMoment($placeholder);
 
-        var current_moment_datetime = {
-          date: Tools.getDate(),
-          time: Tools.getTime(),
-          time_seconds: Tools.getSeconds(),
-          timezone: Tools.getTimezone()
-        };
-
-        if($next_moment.length !== 0) {
-          var next_datetime = getDatetime($next_moment);
-          var next_timestamp = next_datetime.getTime();
-
-          if($prev_moment.length !== 0) {
-            var prev_timestamp = getDatetime($prev_moment).getTime();
-
-            var average_moment_datetime = new Date();
-            average_moment_datetime.setTime(Math.ceil((prev_timestamp + next_timestamp)/2));
-
-            current_moment_datetime = {
-              date: Tools.getDate(average_moment_datetime),
-              time: Tools.getTime(average_moment_datetime),
-              time_seconds: Tools.getSeconds(average_moment_datetime),
-              timezone: $prev_moment.find(datetime_form_selector).find(datetime_form_timezone_selector).val()
-            };
-          } else {
-            next_datetime.setMinutes(next_datetime.getMinutes() - 15);
-
-            current_moment_datetime = {
-              date: Tools.getDate(next_datetime),
-              time: Tools.getTime(next_datetime),
-              time_seconds: Tools.getSeconds(next_datetime),
-              timezone: $next_moment.find(datetime_form_selector).find(datetime_form_timezone_selector).val()
-            };
-          }
-        }
-
-        // Creating moment
-        createMoment(current_moment_datetime);
+        createMoment({
+          position: $prev_moment.length > 0 ? getPosition($prev_moment) + 1 : getPosition($next_moment)
+        });
       });
 
       // Drag and drop
@@ -1385,6 +1286,10 @@ $(function() {
           event.stopPropagation();
           event.preventDefault();
 
+          var $placeholder = $(this).closest(placeholder_selector);
+          var $prev_moment = findPrevMoment($placeholder);
+          var $next_moment = findNextMoment($placeholder);
+
           $(this).removeClass('success');
           $moments.find(placeholder_selector).removeClass('info');
 
@@ -1403,23 +1308,8 @@ $(function() {
 
           function onDataURLRetrieved(file, data_url) {
             ImageTools.Convert.dataURLToExif(data_url).done(function(exif) {
-              var datetime = exif.DateTimeOriginal || exif.DateTime;
-              var moment_datetime;
-
-              if(datetime) {
-                var parts = datetime.split(' ');
-                moment_datetime = Tools.createDateObject(parts[0].split(':').join('-'), parts[1], Tools.getTimezone());
-              } else if(file && file.lastModifiedDate) {
-                moment_datetime = file.lastModifiedDate;
-              } else {
-                moment_datetime = new Date();
-              }
-
               createMoment({
-                date:Tools.getDate(moment_datetime),
-                time:Tools.getTime(moment_datetime),
-                time_seconds:Tools.getSeconds(moment_datetime),
-                timezone:Tools.getTimezone(moment_datetime),
+                position: $prev_moment.length > 0 ? getPosition($prev_moment) + 1 : getPosition($next_moment),
                 image: data_url
               }, onMomentCreated);
             });
@@ -1531,9 +1421,7 @@ $(function() {
             $moment.data(importer.getSourceName() + '_id', data.id);
 
             if(data.title) {
-              console.log(data.title);
               var $description_form_input = $moment.find(description_form_selector).find(description_form_input_selector);
-              console.log($description_form_input.val());
               if(!$description_form_input.val()) {
                 $description_form_input.val(data.title);
               }
@@ -1593,18 +1481,9 @@ $(function() {
             }
           }
 
-          // Init
-          var $moments_articles = $moments.find(moment_selector);
-
-          var first_moment_date = getDatetime($moments_articles.first());
-          first_moment_date.setDate(first_moment_date.getDate()-3);
-
-          var last_moment_date  = getDatetime($moments_articles.last());
-          last_moment_date.setDate(last_moment_date.getDate()+3);
-
           var request_params = {
-            from: Math.floor(last_moment_date.getTime()/1000),
-            to:   Math.floor(first_moment_date.getTime()/1000)
+            // from: Math.floor(last_moment_date.getTime()/1000), TODO daydate
+            // to:   Math.floor(first_moment_date.getTime()/1000)
           };
 
           // Callbacks

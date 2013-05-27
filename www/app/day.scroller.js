@@ -298,16 +298,16 @@ $(window).load(function() {
     $scroller_previews.on('sortupdate', function(event, moved) {
       var $item = $(moved.item);
       var $moment = $item.data('moment-attached');
-      var moment_position = $item.prevAll().length;
-      var position_request = API.request('POST', '/moments/' + $moment.data('moment-id') + '/update', {
-        position: moment_position
-      })
 
-      position_request.success(function() {
-        $moments.trigger('sortupdate', {moment: $moment, position: moment_position})
-      });
+      var getPosition = function($search) {
+        return parseInt($search.find('.action-position').find('.spinner-value').val(), 10);
+      };
 
-      position_request.send();
+      var $prev_moment = $item.prevAll().first();
+      var $next_moment = $item.nextAll().first();
+      var new_position = $prev_moment.length > 0 ? getPosition($prev_moment.data('moment-attached')) + 1 : getPosition($next_moment.data('moment-attached'));
+
+      $moment.find('.action-position').find('.spinner-value').val(new_position).trigger('change');
     });
   }
 
