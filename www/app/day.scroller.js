@@ -281,8 +281,13 @@ $(window).load(function() {
         moveViewport(offsetMoments / scroller_scale_ratio);
       });
 
+      // Disable global scroll helper
+      var $scrollHelper = $('.scrollHelper');
+      $(document).off('.scrollHelper');
+
       // $scroller.imagesLoaded(function() {
         setTimeout(function() {
+          $scrollHelper.css('bottom','-100%');
           $scroller.css('right', 0);
         }, 1000);
       // });
