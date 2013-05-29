@@ -35,7 +35,7 @@ class MainPageController extends WebAppController
       $this->journal_days = [];
     }
 
-		$popular_days_ratings = (new InterestCalculator())->getDaysRatings(null, null, 3);
+		$popular_days_ratings = (new InterestCalculator())->getDaysRatings(null, null, 12);
 		$popular_days = Day::findByIds(lmbArrayHelper::getColumnValues('day_id', $popular_days_ratings));
 		$this->popular_days = $this->_formatDaysForJournal($popular_days);
 
