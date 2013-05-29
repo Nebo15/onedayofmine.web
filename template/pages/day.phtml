@@ -25,7 +25,6 @@ $this->day->is_gathering_enabled = false;
     <? if($this->toolkit->getUser()) { ?>
       <script src="/app/day.user.js"></script>
       <? if($this->is_owner) { ?>
-        <script src="/lib/vendor/bootstrap-datepicker.js"></script>
         <script src="/lib/vendor/jquery.ajax-progress.js"></script>
         <script src="/lib/vendor/jquery.jcrop.js"></script>
         <script src="/lib/vendor/jquery.exif.js"></script>
@@ -40,7 +39,6 @@ $this->day->is_gathering_enabled = false;
   {{/into}}
   {{into slot="css_include"}}
     <? if($this->is_owner) { ?>
-      <link href="/styles/vendor/bootstrap-datepicker.css" rel="stylesheet">
       <link href="/styles/vendor/jquery.jcrop.min.css" rel="stylesheet">
     <? } ?>
   {{/into}}
@@ -385,10 +383,12 @@ $this->day->is_gathering_enabled = false;
                          class="day-title input-large input-block-level"
                          placeholder="Write a day title"
                          style="font-size:32px;height:40px;line-height:40px"/>
-	                <div>
-		                <textarea rows="5" name="description" class="input-block-level" placeholder="Enter description...">{$#day->final_description|default:""}</textarea>
-		                <i class="icon icon-microphone speech-action hidden" style="position:absolute;right:30px;top:85px;cursor:hand"></i>
-	                </div>
+                  <input type="date" name="date" value="{$#day->date}" class="input-large input-block-level" />
+                  <div>
+                    <textarea rows="5" name="description" class="input-block-level" placeholder="Enter description...">{$#day->final_description|default:""}</textarea>
+                    <i class="icon icon-microphone speech-action hidden" style="position:absolute;right:30px;top:125px;cursor:hand"></i>
+                  </div>
+
 
 	                <? if($this->day->final_description) { ?>
 		                <button type="submit" class="btn btn-block disabled">Save</button>

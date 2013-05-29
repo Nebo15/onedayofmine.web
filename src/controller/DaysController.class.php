@@ -41,6 +41,7 @@ class DaysController extends BaseJsonController
 		$day->title = $this->request->getPostFiltered('title', FILTER_SANITIZE_STRING);
 		$day->type = $this->request->getPost('type');
 		$day->final_description = $this->request->getPostFiltered('final_description', FILTER_SANITIZE_STRING);
+    $day->date = date('Y-m-d', strtotime($this->request->get('date')));
 		$day->save();
 
 		$user = $this->_getUser();
@@ -80,6 +81,12 @@ class DaysController extends BaseJsonController
 		}
 
 		$this->_importSaveAndAnswer($day, array('title', 'occupation', 'location', 'type', 'final_description'));
+
+    if ($this->request->has('date'))
+    {
+      $day->date = date('Y-m-d', strtotime($this->request->get('date')));
+      $day->save();
+    }
 
 		if($this->_getUser()->is_editor && $this->_getUser()->id != $day->user_id)
 		{

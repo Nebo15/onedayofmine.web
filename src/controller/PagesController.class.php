@@ -139,12 +139,8 @@ class PagesController extends WebAppController
     $this->day->utime = date('Y-m-d', $this->day->utime);
     $this->day->ctime = date('Y-m-d', $this->day->ctime);
 
-    $min_timestamp = time();
     foreach ($this->day->moments as $moment) {
       $time = strtotime($moment->time);
-
-      if($min_timestamp > $time)
-        $min_timestamp = $time;
 
 			$moment->time = date('H:i', $time);
       $moment->time_seconds = date('s', $time);
@@ -154,8 +150,6 @@ class PagesController extends WebAppController
       $moment->datetime_w3c = date(DATE_W3C, $time);
       $moment->datetime_iso = date(DATE_ISO8601, $time);
     }
-
-    $this->day->date = date('Y-m-d', $min_timestamp);
 
 		$this->day = $this->_toFlatArray($this->day);
 		$this->day_obj = $day;
