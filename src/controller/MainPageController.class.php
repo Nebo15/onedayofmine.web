@@ -26,12 +26,13 @@ class MainPageController extends WebAppController
 
 	function doDisplay()
 	{
-		$days = DayJournalRecord::findDaysWithLimitation(null, null, $this->lists_limit);
+		$days = DayJournalRecord::findDaysWithLimitation(null, null, 5);
 
     if(count($days) > 0) {
   		$this->featured_day = $this->toolkit->getExportHelper()->exportDay(array_shift($days));
       $this->journal_days = $this->_formatDaysForJournal($days);
     } else {
+	    $this->featured_day = $this->toolkit->getExportHelper()->exportDay(new Day());
       $this->journal_days = [];
     }
 
@@ -39,10 +40,12 @@ class MainPageController extends WebAppController
 		$popular_days = Day::findByIds(lmbArrayHelper::getColumnValues('day_id', $popular_days_ratings));
 		$this->popular_days = $this->_formatDaysForJournal($popular_days);
 
+		$this->popular_days = $this->_formatDaysForJournal($popular_days);
+
 		$new_days = Day::findNew(null, null, 12);
 		$this->new_days = $this->_formatDaysForJournal($new_days);
 
-		$this->new_users_objs = User::find()->paginate(0, 6);
+		$this->new_users_objs = User::findNew()->paginate(0, 5);
 		$this->new_users = $this->_toFlatArray($this->toolkit->getExportHelper()->exportUserItems($this->new_users_objs));
 	}
 

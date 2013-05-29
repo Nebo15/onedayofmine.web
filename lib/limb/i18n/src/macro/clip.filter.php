@@ -6,7 +6,7 @@
  * @copyright  Copyright &copy; 2004-2009 BIT(http://bit-creative.com)
  * @license    LGPL http://www.gnu.org/copyleft/lesser.html
  */
-
+lmb_require('limb/macro/src/compiler/lmbMacroFilter.class.php');
 /**
  * Filter i18n_clip for macro templates
  * @filter i18n_clip
