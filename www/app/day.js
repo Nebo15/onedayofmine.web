@@ -80,15 +80,15 @@ $(function () {
       return false;
     });
 
-    // $(document).on('click', '.scrollTo.moment', function() {
-    //   var $this = $(this);
+    $(document).on('click', '.scrollTo.moment', function() {
+      var $this = $(this);
 
-    //   $(document).scrollTo($('.moments article[data-moment-id=' + $this.data('moment-id') + ']'), 1000, {
-    //     onAfter: function() {
-    // 			document.location.hash = 'moment-id'+$this.data('moment-id');
-    //     }
-    //   });
-    //   return false;
-    // });
+      $(document).scrollTo($('.moments article[data-moment-id=' + $this.data('moment-id') + ']'), 0, {
+        onAfter: function() {
+    			document.location.hash = 'moment-id'+$this.data('moment-id');
+        }
+      });
+      return false;
+    });
   })();
 });

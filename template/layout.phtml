@@ -54,17 +54,6 @@
 		}
 	</script>
 
-  <!-- Vendor scripts -->
-  <?php if(!property_exists($this, 'fb_disabled') || !$this->fb_disabled) { ?>
-    <script async src="//connect.facebook.net/en_US/all.js"></script>
-  <?php } ?>
-  <script src="/lib/vendor/jquery.min.js"></script>
-  <script src="/lib/vendor/bootstrap.min.js"></script>
-  <script src="/lib/vendor/handlebars.js"></script>
-  <script src="/lib/vendor/jquery.scrollTo-1.4.3.1-min.js"></script>
-  <script src="/lib/vendor/jquery.cookie.js"></script>
-  <script src="/lib/vendor/jquery.masonry.min.js"></script>
-
   <script>
     window.fbAsyncInit = function() {
       FB.init({
@@ -75,6 +64,17 @@
       });
     };
   </script>
+
+  <!-- Vendor scripts -->
+  <?php if(!property_exists($this, 'fb_disabled') || !$this->fb_disabled) { ?>
+    <script async src="//connect.facebook.net/en_US/all.js"></script>
+  <?php } ?>
+  <script src="/lib/vendor/jquery.min.js"></script>
+  <script src="/lib/vendor/bootstrap.min.js"></script>
+  <script src="/lib/vendor/handlebars.js"></script>
+  <script src="/lib/vendor/jquery.scrollTo-1.4.3.1-min.js"></script>
+  <script src="/lib/vendor/jquery.cookie.js"></script>
+  <script src="/lib/vendor/jquery.masonry.min.js"></script>
 
   <!-- Application scripts -->
   <script src="/lib/Tools.js"></script>

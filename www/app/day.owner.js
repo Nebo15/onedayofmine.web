@@ -447,8 +447,8 @@ $(function() {
     }
 
     // Scroll helpers
-    function scrollToMoment(moment) {
-      $(window).scrollTo($(moment), scroll_speed);
+    function scrollToMoment(moment, instant) {
+      $(window).scrollTo($(moment), instant == true ? 0 : scroll_speed);
     }
 
     // Get FileList from input
@@ -468,8 +468,14 @@ $(function() {
     function getPosition(moment) {
       var $moment = $(moment);
       var $value = $moment.find(position_form_selector).find(position_form_indicator_selector);
+      var position = parseInt($value.val(), 10);
 
-      return parseInt($value.val(), 10);
+      return isNaN(position) || !position || position < 0 ? 0 : position;
+    }
+
+    function setPosition(moment, position) {
+      var $moment = $(moment);
+      $moment.find(position_form_selector).find(position_form_indicator_selector).val(parseInt(position, 10));
     }
 
     // Image transformations
@@ -508,6 +514,7 @@ $(function() {
           }
 
           $moment.trigger('imagechanged', url_or_data_url, is_converted);
+          $moments.trigger('momentschanged', {moment: $moment});
         });
 
         $image.attr('src', url_or_data_url).each(function() {
@@ -725,8 +732,8 @@ $(function() {
       }
 
       findNextMoments($moment).each(function() {
-        var indicator = $(this).find(position_form_selector).find(position_form_indicator_selector);
-        indicator.val(parseInt(indicator.val(), 10) + 1);
+        var $next_moment = $(this);
+        setPosition($next_moment, getPosition($next_moment) + 1);
       });
 
       $moments.trigger('momentschanged', {moment: $moment});
@@ -740,20 +747,27 @@ $(function() {
       $moment_and_placeholder.animate({opacity: 0}, animations_speed, function() {
         $moment_and_placeholder.remove();
 
+        $moments.trigger('momentschanged', {moment: $(moment)});
+
         if(callback !== undefined) {
           callback();
         }
       });
     }
 
-    // React on previews reordering
-    (function() {
-      $moments.on('sortupdate', function(event, data) {
-        var $moment = $(data.moment);
-        insertMoment($moment);
-        scrollToMoment($moment);
-      });
-    })();
+    function moveMoment(moment, position, callback) {
+      var $moment = $(moment);
+      setPosition($moment, position);
+
+      var offset = $(window).scrollTop() - $moment.offset().top;
+      insertMoment($moment);
+      offset += $moment.offset().top;
+
+      $(window).scrollTop(offset);
+      if(typeof callback === 'function') {
+        callback($moment, position);
+      }
+    }
 
     // Editing existing moments
     (function() {
@@ -887,37 +901,60 @@ $(function() {
       });
 
       // Editing position
-      $moments.on('click', position_form_selector + ' ' + position_form_increment_selector, function() {
-        var indicator = $(this).closest(position_form_selector).find(position_form_indicator_selector);
-        indicator.val(parseInt(indicator.val(), 10) + 1).trigger('change');
-      });
+      (function() {
+        var saveMomentPosition = (function() {
+          var request_timeouts = {};
 
-      $moments.on('click', position_form_selector + ' ' + position_form_decrement_selector, function() {
-        var indicator = $(this).closest(position_form_selector).find(position_form_indicator_selector);
-        indicator.val(parseInt(indicator.val(), 10) - 1).trigger('change');
-      });
+          return function(moment, position) {
+            var $moment = $(moment);
+            var moment_id = $moment.data('moment-id');
 
-      var update_request_timeout;
+            if(!moment_id) {
+              return;
+            }
 
-      $moments.on('change keyup', position_form_selector + ' ' + position_form_indicator_selector, function() {
-        var $indicator = $(this);
-        var $moment = getMomentByContext($indicator);
+            if(!position) {
+              position = getPosition($moment);
+            }
 
-        var position_request = API.request('POST', '/moments/' + $moment.data('moment-id') + '/update', {
-          position: $indicator.val()
-        })
+            var position_request = API.request('POST', '/moments/' + moment_id + '/update', {
+              position: position
+            })
 
-        position_request.success(function() {
-          $moments.trigger('sortupdate', {moment: $moment, position: $indicator.val()})
+            position_request.error(function() {
+              alert("Can't save moment position, try to reload the page and move it again");
+            });
+
+            clearTimeout(request_timeouts[moment_id]);
+            request_timeouts[moment_id] = setTimeout(function() {
+              position_request.send();
+            }, 1000);
+          };
+        })();
+
+        $moments.on('click', position_form_selector + ' ' + position_form_increment_selector, function() {
+          var $moment = getMomentByContext(this);
+          var $next_moment = findNextMoment($moment);
+
+          moveMoment($moment, getPosition($next_moment) + 1, saveMomentPosition);
         });
 
-        clearTimeout(update_request_timeout);
-        update_request_timeout = setTimeout(function() {
-          position_request.send();
-        }, 1000);
+        $moments.on('click', position_form_selector + ' ' + position_form_decrement_selector, function() {
+          var $moment = getMomentByContext(this);
+          var $prev_moment = findPrevMoment($moment);
 
-        return false;
-      });
+          moveMoment($moment, getPosition($prev_moment), saveMomentPosition);
+        });
+
+        // React on previews reordering
+        $moments.on('sortupdate', function(event, data) {
+          var $moment = $(data.moment);
+          var position = data.position ? data.position : getPosition($moment);
+          setPosition($moment, position);
+          saveMomentPosition($moment, position);
+          insertMoment($moment);
+        });
+      })();
 
       // Editing image itself
       (function() {
@@ -1123,21 +1160,6 @@ $(function() {
               }
             });
 
-            // Edit position
-            $position_form_increment_btn.on('click.adder', function() {
-              event.stopPropagation();
-
-              var indicator = $(this).closest(position_form_selector).find(position_form_indicator_selector);
-              indicator.val(parseInt(indicator.val(), 10) + 1);
-            });
-
-            $position_form_decrement_btn.on('click.adder', function() {
-              event.stopPropagation();
-
-              var indicator = $(this).closest(position_form_selector).find(position_form_indicator_selector);
-              indicator.val(parseInt(indicator.val(), 10) - 1);
-            });
-
             $moment.on('imageselect.adder', function(event, image_or_data_url) {
               var converter = ImageTools.Convert.imageToDataURL(image_or_data_url);
               converter.done(function(data_url) {
@@ -1258,7 +1280,7 @@ $(function() {
                       $image.animate({opacity: 1}, animations_speed);
 
                       // Re-enable everything
-                      $description_form_submit_btn.removeClass('btn-danger').addClass('btn-success');
+                      $description_form_submit_btn.removeClass('btn-danger btn-success');
                       $moment.removeClass('template');
 
                       // Remove template class
@@ -1284,7 +1306,7 @@ $(function() {
                   });
 
                   save_request.error(function() {
-                    $description_form_submit_btn.addClass('btn-danger').removeClass('btn-success disabled');
+                    $description_form_submit_btn.addClass('btn-danger').removeClass('disabled btn-success');
                   });
 
                   save_request.complete(function() {

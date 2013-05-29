@@ -155,6 +155,19 @@ $(window).load(function() {
   var $scroller_previews = $scroller.find('.previews');
   var $moments = $('.day').find('.moments');
 
+  // Scroll helper for unsaved moments
+  $scroller.on('click', '.scrollTo.moment', function(event) {
+    var $this = $(this);
+    var $moment = $this.closest('li').data('moment-attached');
+
+    if(!$moment.data('moment-id')) {
+      event.stopPropagation();
+      document.location.hash = '';
+      $(document).scrollTo($this.closest('li').data('moment-attached'));
+      return false;
+    }
+  });
+
   // Permanent values
   var window_width = $(window).width();
   var window_height = $(window).height();
@@ -312,7 +325,7 @@ $(window).load(function() {
       var $next_moment = $item.nextAll().first();
       var new_position = $prev_moment.length > 0 ? getPosition($prev_moment.data('moment-attached')) + 1 : getPosition($next_moment.data('moment-attached'));
 
-      $moment.find('.action-position').find('.spinner-value').val(new_position).trigger('change');
+      $moments.trigger('sortupdate', {moment: $moment, position: new_position});
     });
   }
 
