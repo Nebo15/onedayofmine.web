@@ -417,4 +417,9 @@ class User extends BaseModel
 
 		return User::findByQuery($query);
 	}
+
+	static function findNew()
+	{
+		return User::find(null, ['id' => 'DESC']);
+	}
 }

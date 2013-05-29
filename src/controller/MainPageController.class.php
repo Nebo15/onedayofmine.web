@@ -27,21 +27,31 @@ class MainPageController extends WebAppController
 	function doDisplay()
 	{
 		$days = DayJournalRecord::findDaysWithLimitation(null, null, $this->lists_limit);
-		$this->days = $this->_formatDaysForJournal($days);
 
-		$popular_days_ratings = (new InterestCalculator())->getDaysRatings(null, null, 3);
+    if(count($days) > 0) {
+  		$this->featured_day = $this->toolkit->getExportHelper()->exportDay(array_shift($days));
+      $this->journal_days = $this->_formatDaysForJournal($days);
+    } else {
+      $this->journal_days = [];
+    }
+
+		$popular_days_ratings = (new InterestCalculator())->getDaysRatings(null, null, 12);
 		$popular_days = Day::findByIds(lmbArrayHelper::getColumnValues('day_id', $popular_days_ratings));
 		$this->popular_days = $this->_formatDaysForJournal($popular_days);
 
 		$new_days = Day::findNew(null, null, 1);
 		$this->new_days = $this->_formatDaysForJournal($new_days);
+
+		$this->new_users_objs = User::find()->paginate(0, 6);
+		$this->new_users = $this->_toFlatArray($this->toolkit->getExportHelper()->exportUserItems($this->new_users_objs));
 	}
 
-	function _formatDaysForJournal($days)
+	function _formatDaysForJournal($raw_days)
 	{
-		$days = $this->toolkit->getExportHelper()->exportDayItems($days);
+		$days = $this->toolkit->getExportHelper()->exportDayItems($raw_days);
 		foreach($days as $i => $day)
 			$days[$i]->date = date('Y-m-d', $day->utime);
+
 		return $this->_toFlatArray($days);
 	}
 }

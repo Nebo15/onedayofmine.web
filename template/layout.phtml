@@ -32,7 +32,7 @@
   {{slot id='og_meta'/}}
 
   <!-- Vendor style sheets -->
-  <link href="/styles/vendor/bootstrap.min.css" rel="stylesheet">
+  <link href="/styles/vendor/bootstrap.css" rel="stylesheet">
   <link href="/styles/vendor/bootstrap-responsive.min.css" rel="stylesheet">
   <link href="//netdna.bootstrapcdn.com/font-awesome/3.1.1/css/font-awesome.css" rel="stylesheet">
   <link href="/styles/social-icons.css" rel="stylesheet">
@@ -66,9 +66,6 @@
   </script>
 
   <!-- Vendor scripts -->
-  <?php if(!property_exists($this, 'fb_disabled') || !$this->fb_disabled) { ?>
-    <script async src="//connect.facebook.net/en_US/all.js"></script>
-  <?php } ?>
   <script src="/lib/vendor/jquery.min.js"></script>
   <script src="/lib/vendor/bootstrap.min.js"></script>
   <script src="/lib/vendor/handlebars.js"></script>
@@ -188,7 +185,14 @@
 </head>
 <body>
   <?php if(!property_exists($this, 'fb_disabled') || !$this->fb_disabled) { ?>
-    <div id="fb-root"></div>
+	  <div id="fb-root"></div>
+	  <script>(function(d, s, id) {
+			  var js, fjs = d.getElementsByTagName(s)[0];
+			  if (d.getElementById(id)) return;
+			  js = d.createElement(s); js.id = id;
+			  js.src = "//connect.facebook.net/ru_RU/all.js#xfbml=1&appId=497853536928946";
+			  fjs.parentNode.insertBefore(js, fjs);
+		  }(document, 'script', 'facebook-jssdk'));</script>
   <?php } ?>
   <div class="container">
 	  <?php if(!property_exists($this, 'menu_disabled') || !$this->menu_disabled) { ?>
@@ -267,8 +271,8 @@
 	  <? } ?>
 
     <div class="content">
-      {{slot id='content'/}}
-      {{slot id='content_zone'/}}
+			    {{slot id='content'/}}
+			    {{slot id='content_zone'/}}
     </div>
   </div>
 

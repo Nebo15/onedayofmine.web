@@ -13,24 +13,8 @@ h1, h2, h3, h4, h5, h6 {
   line-height: normal;
 }
 
-h1 {
-  font-size: 29.75px;
-}
-
 h1.big {
   font-size: 38.25px;
-}
-
-h2 {
-  font-size: 21.25px;
-}
-
-h3 {
-  font-size: 17px;
-}
-
-h4 {
-  font-size: 14.45px;
 }
 
 /* Blocks */
@@ -565,7 +549,6 @@ textarea.info:focus {
 .input-prepend.small input,
 .input-append.small input {
   padding: 2px 7px;
-  height: 26px;
   font-size: 14.45px;
 }
 
@@ -675,6 +658,7 @@ hr {
 
 /* Main style */
 .content {
+	width:960px;
   padding-top: 20px;
 }
 
