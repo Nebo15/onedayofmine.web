@@ -481,6 +481,16 @@ $this->day->is_gathering_enabled = false;
                   </div>
                 <? } ?>
 
+                <div class="btn-group input-spinner action-position hidden-desktop text-center" style="margin-bottom: 5px">
+                  <button type="button" class="btn btn-link btn-mini text-gray spinner-down">
+                    <i class="icon-chevron-up"></i>
+                  </button>
+                  <input type="string" disabled name="position" value="{$item->position}" class="spinner-value" />
+                  <button type="button" class="btn btn-link btn-mini text-gray spinner-up">
+                    <i class="icon-chevron-down"></i>
+                  </button>
+                </div>
+
                 <div class="image has-bage block-center">
                   <div class="thumbnail">
                     <img src="{$item->image_532}" itemprop="contentUrl" />
