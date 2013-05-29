@@ -388,8 +388,8 @@ $this->day->is_gathering_enabled = false;
                     <div class="span6">
                       <input type="date" name="date" value="{$#day->date}" class="input-large input-block-level" />
                     </div>
-                    <div style="margin-top: -2px; text-align: right;" class="span6">
-                      <div class="action-select-type btn-group" data-toggle="buttons-radio" style="white-space: nowrap;">
+                    <div style="margin-top: -2px; margin-bottom: 7px" class="span6">
+                      <div class="action-select-type btn-group pull-right-on-desktop" data-toggle="buttons-radio">
                         <button type="button" class="btn type btn-small<? if($this->day->type == 'Working day') {?> active<? } ?>">Working day</button>
                         <button type="button" class="btn type btn-small<? if($this->day->type == 'Day off') {?> active<? } ?>">Day off</button>
                         <button type="button" class="btn type btn-small<? if($this->day->type == 'Holiday') {?> active<? } ?>">Holiday</button>
