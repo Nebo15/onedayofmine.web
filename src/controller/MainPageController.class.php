@@ -37,11 +37,9 @@ class MainPageController extends WebAppController
 		$this->new_days = $this->_formatDaysForJournal($new_days);
 	}
 
-	function _formatDaysForJournal($days)
-	{
-		$days = $this->toolkit->getExportHelper()->exportDayItems($days);
-		foreach($days as $i => $day)
-			$days[$i]->date = date('Y-m-d', $day->utime);
-		return $this->_toFlatArray($days);
-	}
+  function _formatDaysForJournal($days)
+  {
+    $days = $this->toolkit->getExportHelper()->exportDayItems($days);
+    return $this->_toFlatArray($days);
+  }
 }
