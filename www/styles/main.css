@@ -658,6 +658,7 @@ hr {
 
 /* Main style */
 .content {
+	width:960px;
   padding-top: 20px;
 }
 

@@ -27,7 +27,7 @@ class MainPageController extends WebAppController
 	function doDisplay()
 	{
 		$days = DayJournalRecord::findDaysWithLimitation(null, null, $this->lists_limit);
-		$this->days = $this->_formatDaysForJournal($days);
+		$this->journal_days = $this->_formatDaysForJournal($days);
 
 		$popular_days_ratings = (new InterestCalculator())->getDaysRatings(null, null, 3);
 		$popular_days = Day::findByIds(lmbArrayHelper::getColumnValues('day_id', $popular_days_ratings));
@@ -35,6 +35,9 @@ class MainPageController extends WebAppController
 
 		$new_days = Day::findNew(null, null, 1);
 		$this->new_days = $this->_formatDaysForJournal($new_days);
+
+		$this->new_users_objs = User::find()->paginate(0, 6);
+		$this->new_users = $this->_toFlatArray($this->toolkit->getExportHelper()->exportUserItems($this->new_users_objs));
 	}
 
 	function _formatDaysForJournal($days)
