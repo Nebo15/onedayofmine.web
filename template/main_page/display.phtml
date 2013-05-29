@@ -4,34 +4,28 @@ $this->menu = 'journal';
 ?>
 {{wrap with="layout.phtml"}}
 {{into slot="content"}}
-<h2><span class="muted">Today</span></h2>
-<div>
-	<a href="/" class="pull-left" style="margin-right:20px;padding-bottom: 20px">
-		<img src="http://onedayofmine.s3.amazonaws.com/days/7c325799164f92668b4090a6f970f47b2da9461b_266.jpeg"/>
-	</a>
-	<div>
-		<h3><a href="/">Один день эрготерапевта</a></h3>
-		<p>Всем привет! Меня зовут Женя, мне 33, я живу и работаю в Мюнхене, в Баварии. Вообще-то я еще не совсем
-			эрготерапевт — я практикантка, и диплом у меня будет только через год. Но все равно я уже работаю по
-			специальности. О том, кто такой эрготерапевт и что он делает, я написала здесь. А теперь, кому интересно
-			— добро пожаловать в Мой День! Под катом ровно 54 фотографии про 24 апреля этого года.</p>
-	</div>
-	<ul class="inline">
-		<li>
-			<img style="width:124px" src="http://onedayofmine.s3.amazonaws.com/days/7c325799164f92668b4090a6f970f47b2da9461b_266.jpeg"/>
-		</li>
-		<li>
-			<img style="width:124px" src="http://onedayofmine.s3.amazonaws.com/days/7c325799164f92668b4090a6f970f47b2da9461b_266.jpeg"/>
-		</li>
-		<li>
-			<img style="width:124px" src="http://onedayofmine.s3.amazonaws.com/days/7c325799164f92668b4090a6f970f47b2da9461b_266.jpeg"/>
-		</li>
-		<li>
-			<img style="width:124px" src="http://onedayofmine.s3.amazonaws.com/days/7c325799164f92668b4090a6f970f47b2da9461b_266.jpeg"/>
-		</li>
-	</ul>
-</div>
-<br style="clear:both"/>
+  <?php if($this->featured_day) { ?>
+    <h2><span class="muted">Featured</span></h2>
+    <div class="clearfix">
+    	<a href="/pages/{$#featured_day->id}/day" class="pull-left" style="margin-right:20px;padding-bottom: 20px">
+    		<img src="{$#featured_day->image_266|default:'/img/no_photo.png'}" alt="{$#featured_day->final_description}" />
+    	</a>
+    	<div>
+    		<h3><a href="/pages/{$#featured_day->id}/day">{$#featured_day->title}</a></h3>
+    		<p>{$#featured_day->final_description}</p>
+    	</div>
+      {{list using="$#featured_day->moments" counter="$counter"}}
+        <? if($counter > 4) break; ?>
+        <ul class="inline">
+          {{list:item}}
+            <li>
+              <a href="/pages/{$#featured_day->id}/day#moment-id{$item->id}"><img style="width:124px" src="{$item->image_532}" alt="{$item->description}" /></a>
+            </li>
+          {{/list:item}}
+        </ul>
+      {{/list}}
+    </div>
+  <?php } ?>
 
 <div class="row-fluid">
 	<h2><span class="muted">Journal</span></h2>
