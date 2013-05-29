@@ -398,10 +398,9 @@ $this->day->is_gathering_enabled = false;
                     </div>
                   </div>
 
-
-                  <div>
+                  <div style="position: relative">
                     <textarea rows="5" name="description" class="input-block-level" placeholder="Enter description...">{$#day->final_description|default:""}</textarea>
-                    <i class="icon icon-microphone speech-action hidden" style="position:absolute;right:30px;top:125px;cursor:hand"></i>
+                    <i class="icon icon-microphone speech-action hidden" style="position:absolute;right:10px;top:10px;cursor:hand"></i>
                   </div>
 
 	                <? if($this->day->final_description) { ?>
