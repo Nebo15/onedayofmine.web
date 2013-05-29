@@ -383,12 +383,25 @@ $this->day->is_gathering_enabled = false;
                          class="day-title input-large input-block-level"
                          placeholder="Write a day title"
                          style="font-size:32px;height:40px;line-height:40px"/>
-                  <input type="date" name="date" value="{$#day->date}" class="input-large input-block-level" />
-                  <div>
-                    <textarea rows="5" name="description" class="input-block-level" placeholder="Enter description...">{$#day->final_description|default:""}</textarea>
-                    <i class="icon icon-microphone speech-action hidden" style="position:absolute;right:30px;top:125px;cursor:hand"></i>
+
+                  <div class="row-fluid">
+                    <div class="span6">
+                      <input type="date" name="date" value="{$#day->date}" class="input-large input-block-level" />
+                    </div>
+                    <div style="margin-top: -2px; margin-bottom: 7px" class="span6">
+                      <div class="action-select-type btn-group pull-right-on-desktop" data-toggle="buttons-radio">
+                        <button type="button" class="btn type btn-small<? if($this->day->type == 'Working day') {?> active<? } ?>">Working day</button>
+                        <button type="button" class="btn type btn-small<? if($this->day->type == 'Day off') {?> active<? } ?>">Day off</button>
+                        <button type="button" class="btn type btn-small<? if($this->day->type == 'Holiday') {?> active<? } ?>">Holiday</button>
+                        <button type="button" class="btn type btn-small<? if($this->day->type == 'Trip') {?> active<? } ?>">Trip</button>
+                      </div>
+                    </div>
                   </div>
 
+                  <div style="position: relative">
+                    <textarea rows="5" name="description" class="input-block-level" placeholder="Enter description...">{$#day->final_description|default:""}</textarea>
+                    <i class="icon icon-microphone speech-action hidden" style="position:absolute;right:10px;top:10px;cursor:hand"></i>
+                  </div>
 
 	                <? if($this->day->final_description) { ?>
 		                <button type="submit" class="btn btn-block disabled">Save</button>
@@ -405,7 +418,7 @@ $this->day->is_gathering_enabled = false;
                 <i class="icon icon-calendar hidden-phone"></i> {$#day->date}
               </time>
               <div>
-	              by <b>
+	              {$#day->type} by <b>
 	              <? if(property_exists($this->day, 'user')) { ?>
                   <a href="/pages/{$#day->user->id}/user">{$#day->user->name}</a>
 	              <? } else { ?>
@@ -467,6 +480,16 @@ $this->day->is_gathering_enabled = false;
                     </button>
                   </div>
                 <? } ?>
+
+                <div class="btn-group input-spinner action-position hidden-desktop text-center" style="margin-bottom: 5px">
+                  <button type="button" class="btn btn-link btn-mini text-gray spinner-down">
+                    <i class="icon-chevron-up"></i>
+                  </button>
+                  <input type="string" disabled name="position" value="{$item->position}" class="spinner-value" />
+                  <button type="button" class="btn btn-link btn-mini text-gray spinner-up">
+                    <i class="icon-chevron-down"></i>
+                  </button>
+                </div>
 
                 <div class="image has-bage block-center">
                   <div class="thumbnail">

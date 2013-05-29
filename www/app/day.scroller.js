@@ -141,6 +141,10 @@
 })(jQuery);
 
 $(window).load(function() {
+  if($.isMobile() || $(window).width() < 1200) {
+    return;
+  }
+
   // Inject scroller
   var scroller_template = Template.prepareTemplate($('#template_scroller'));
   var scroller_preview_template = Template.prepareTemplate($('#template_scroller_preview'));

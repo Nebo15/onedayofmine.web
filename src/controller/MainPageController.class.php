@@ -46,12 +46,9 @@ class MainPageController extends WebAppController
 		$this->new_users = $this->_toFlatArray($this->toolkit->getExportHelper()->exportUserItems($this->new_users_objs));
 	}
 
-	function _formatDaysForJournal($raw_days)
-	{
-		$days = $this->toolkit->getExportHelper()->exportDayItems($raw_days);
-		foreach($days as $i => $day)
-			$days[$i]->date = date('Y-m-d', $day->utime);
-
-		return $this->_toFlatArray($days);
-	}
+  function _formatDaysForJournal($days)
+  {
+    $days = $this->toolkit->getExportHelper()->exportDayItems($days);
+    return $this->_toFlatArray($days);
+  }
 }

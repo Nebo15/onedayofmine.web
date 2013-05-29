@@ -171,12 +171,31 @@ $this->menu = 'create_day';
           </div>
 
           <form class="form-horizontal" style="display:none">
-    				<div class="control-group day-title-selector">
-    					<label class="control-label">Title</label>
+            <div class="control-group day-title-selector">
+              <label class="control-label">Title</label>
+              <div class="controls">
+                <input type="text" class="title input-xxlarge" required>
+              </div>
+            </div>
+
+            <div class="control-group day-date-selector">
+    					<label class="control-label">Date</label>
     					<div class="controls">
-    						<input type="text" class="title input-xxlarge">
+    						<input type="date" class="date input-xxlarge" required>
     					</div>
     				</div>
+
+            <div class="control-group day-type-selector">
+              <label class="control-label">Day type</label>
+              <div class="controls">
+                <div class="btn-group" data-toggle="buttons-radio">
+                  <button type="button" class="btn btn-small">Working day</button>
+                  <button type="button" class="btn btn-small active">Day off</button>
+                  <button type="button" class="btn btn-small">Holiday</button>
+                  <button type="button" class="btn btn-small">Trip</button>
+                </div>
+              </div>
+            </div>
 
     				<div class="control-group day-description-selector">
     					<label class="control-label">Description</label>

@@ -7,6 +7,7 @@ lmb_require('src/model/EditorAction.class.php');
 lmb_require('src/model/DayFavorite.class.php');
 lmb_require('src/model/Complaint.class.php');
 lmb_require('src/model/DayJournalRecord.class.php');
+lmb_require('limb/datetime/src/lmbDateTime.class.php');
 
 class DaysController extends BaseJsonController
 {
@@ -32,16 +33,20 @@ class DaysController extends BaseJsonController
 		if (!$this->request->isPost())
 			return $this->_answerNotPost();
 
-		$errors = $this->_checkPropertiesInRequest(array('title'));
+		$errors = $this->_checkPropertiesInRequest(array('title', 'type'));
 		if (count($errors))
 			return $this->_answerWithError($errors);
+
+    $date = (string) $this->request->getPostFiltered('date', FILTER_SANITIZE_STRING);
+    if(!lmbDateTime :: validate($date))
+      return $this->_answerWithError('Date format is incorrect, valid format is Y-m-d');
 
 		$day = new Day();
 		$day->setUser($this->_getUser());
 		$day->title = $this->request->getPostFiltered('title', FILTER_SANITIZE_STRING);
 		$day->type = $this->request->getPost('type');
 		$day->final_description = $this->request->getPostFiltered('final_description', FILTER_SANITIZE_STRING);
-    $day->date = date('Y-m-d', strtotime($this->request->get('date')));
+    $day->date = $date ?: date('Y-m-d');
 		$day->save();
 
 		$user = $this->_getUser();
@@ -84,7 +89,11 @@ class DaysController extends BaseJsonController
 
     if ($this->request->has('date'))
     {
-      $day->date = date('Y-m-d', strtotime($this->request->get('date')));
+      $date = (string) $this->request->getPostFiltered('date', FILTER_SANITIZE_STRING);
+      if(!lmbDateTime :: validate($date))
+        return $this->_answerWithError('Date format is incorrect, valid format is Y-m-d');
+
+      $day->date = $date;
       $day->save();
     }
 
