@@ -249,13 +249,14 @@ $(function() {
     var $controls = $day.find('header .day-controls-group');
     var $toolbar = $day.find('.day-toolbar');
 
-
     // Day form
     var $day_form = $controls.find('form[name=day]');
 		var $day_form_submit = $day_form.find('button[type=submit]');
     var $title_input = $day_form.find('input[name=title]');
 		var $description_input = $day_form.find('textarea[name=description]');
     var $date_input = $day_form.find('input[name=date]');
+    var $type_select = $day_form.find('.action-select-type');
+    var $type_select_options = $type_select.find('.type');
 		var $description_speech_button = $day_form.find('i.speech-action');
 		var is_form_valid = true;
 
@@ -288,8 +289,14 @@ $(function() {
       }
     });
 
-		$day_form.find(':input').on('keyup', function() {
-			$day_form_submit.removeClass('disabled').addClass('btn-success');
+    $type_select_options.click(function() {
+      if(!$(this).hasClass('active')) {
+  			$day_form_submit.removeClass('disabled').addClass('btn-success');
+      }
+    });
+
+    $day_form.find(':input').on('keyup', function() {
+      $day_form_submit.removeClass('disabled').addClass('btn-success');
 		});
 
 		$day_form.submit(function(event)
@@ -307,6 +314,7 @@ $(function() {
       var day_title_request = API.request('POST', '/days/' + day_data.id + '/update', {
         title: $title_input.val(),
         date: $date_input.val(),
+        type: $type_select_options.filter('.active').text(),
 				final_description: $description_input.val()
       });
 

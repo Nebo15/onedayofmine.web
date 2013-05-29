@@ -44,7 +44,7 @@ class Day extends BaseModel
     $validator->addRequiredRule('user_id');
     $validator->addRequiredRule('title');
     $validator->addRequiredRule('date');
-    //$validator->addRequiredRule('type');
+    $validator->addRequiredRule('type');
     $validator->addRule(new lmbValidValueRule('type', self::getTypes()));
     return $validator;
   }

@@ -33,7 +33,7 @@ class DaysController extends BaseJsonController
 		if (!$this->request->isPost())
 			return $this->_answerNotPost();
 
-		$errors = $this->_checkPropertiesInRequest(array('title'));
+		$errors = $this->_checkPropertiesInRequest(array('title', 'type'));
 		if (count($errors))
 			return $this->_answerWithError($errors);
 
@@ -46,7 +46,7 @@ class DaysController extends BaseJsonController
 		$day->title = $this->request->getPostFiltered('title', FILTER_SANITIZE_STRING);
 		$day->type = $this->request->getPost('type');
 		$day->final_description = $this->request->getPostFiltered('final_description', FILTER_SANITIZE_STRING);
-    $day->date = $date;
+    $day->date = $date ?: date('Y-m-d');
 		$day->save();
 
 		$user = $this->_getUser();
