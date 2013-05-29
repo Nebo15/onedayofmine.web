@@ -146,19 +146,15 @@ $this->day->is_gathering_enabled = false;
     <? if($this->is_owner) { ?>
       <script id="template_moment" type="text/x-handlebars-template">
         <article class="well editable template [[#unless moment.image]]noimage[[/unless]]" itemscope itemtype="http://schema.org/ImageObject">
-          <ul class="unstyled inline not-decorated controls controls-absolute visible-desktop">
-            <li class="with-tooltip" data-original-title="Moment position">
-              <div class="btn-group btn-group-vertical input-spinner action-position">
-                <button type="button" class="btn btn-link btn-mini text-gray spinner-down">
-                  <i class="icon-chevron-up"></i>
-                </button>
-                <input type="string" disabled name="position" value="[[moment.position]]" class="spinner-value" />
-                <button type="button" class="btn btn-link btn-mini text-gray spinner-up">
-                  <i class="icon-chevron-down"></i>
-                </button>
-              </div>
-            </li>
-          </ul>
+          <div class="btn-group btn-group-vertical input-spinner action-position controls controls-absolute visible-desktop with-tooltip" data-original-title="Moment position">
+            <button type="button" class="btn btn-link btn-mini text-gray spinner-down">
+              <i class="icon-chevron-up"></i>
+            </button>
+            <input type="string" disabled name="position" value="[[moment.position]]" class="spinner-value" />
+            <button type="button" class="btn btn-link btn-mini text-gray spinner-up">
+              <i class="icon-chevron-down"></i>
+            </button>
+          </div>
 
           <div class="image has-bage block-center">
             <div class="thumbnail">
@@ -461,19 +457,15 @@ $this->day->is_gathering_enabled = false;
               <article class="well<? if($this->is_owner) {?> editable<? }?>" itemscope itemtype="http://schema.org/ImageObject" data-moment-id="{$item->id}">
                 <a name="moment-{$item->id}"></a>
                 <? if($this->is_owner) { ?>
-                  <ul class="unstyled inline not-decorated controls controls-absolute visible-desktop">
-                    <li class="with-tooltip" data-original-title="Moment position">
-                      <div class="btn-group btn-group-vertical input-spinner action-position">
-                        <button type="button" class="btn btn-link btn-mini text-gray spinner-down">
-                          <i class="icon-chevron-up"></i>
-                        </button>
-                        <input type="string" disabled name="position" value="{$item->position}" class="spinner-value" />
-                        <button type="button" class="btn btn-link btn-mini text-gray spinner-up">
-                          <i class="icon-chevron-down"></i>
-                        </button>
-                      </div>
-                    </li>
-                  </ul>
+                  <div class="btn-group btn-group-vertical input-spinner action-position controls controls-absolute visible-desktop with-tooltip" data-original-title="Moment position">
+                    <button type="button" class="btn btn-link btn-mini text-gray spinner-down">
+                      <i class="icon-chevron-up"></i>
+                    </button>
+                    <input type="string" disabled name="position" value="{$item->position}" class="spinner-value" />
+                    <button type="button" class="btn btn-link btn-mini text-gray spinner-up">
+                      <i class="icon-chevron-down"></i>
+                    </button>
+                  </div>
                 <? } ?>
 
                 <div class="image has-bage block-center">
