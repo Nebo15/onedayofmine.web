@@ -116,10 +116,10 @@ $this->menu = 'journal';
 	<ul class="items-list">
 		<li class="big-item">
 			<ul class="items-list">
-				{{apply template="medium_day" day="{$#popular_days[0]}" title="Best working day" icon="cogs"/}}
-				{{apply template="medium_day" day="{$#popular_days[1]}" title="Best day off" additional_class="last-item" icon="calendar-empty"/}}
-				{{apply template="medium_day" day="{$#popular_days[2]}" title="Best holiday" icon="gift"/}}
-				{{apply template="medium_day" day="{$#popular_days[3]}" title="Best trip" additional_class="last-item" icon="rocket"/}}
+				{{apply template="medium_day" day="{$#top_working}" title="Best working day" icon="cogs"/}}
+				{{apply template="medium_day" day="{$#top_dayoff}" title="Best day off" additional_class="last-item" icon="calendar-empty"/}}
+				{{apply template="medium_day" day="{$#top_holiday}" title="Best holiday" icon="gift"/}}
+				{{apply template="medium_day" day="{$#top_trip}" title="Best trip" additional_class="last-item" icon="rocket"/}}
 			</ul>
 		</li>
 		<li class="medium-item">

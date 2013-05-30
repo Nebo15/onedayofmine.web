@@ -5,6 +5,7 @@ lmb_require('src/service/InterestCalculator.class.php');
 lmb_require('tests/src/toolkit/odTestsTools.class.php');
 lmb_require('src/Json.class.php');
 lmb_require('src/model/DayJournalRecord.class.php');
+lmb_require('src/model/Day.class.php');
 
 class MainPageController extends WebAppController
 {
@@ -26,32 +27,88 @@ class MainPageController extends WebAppController
 
 	function doDisplay()
 	{
-		$days = DayJournalRecord::findDaysWithLimitation(null, null, 6);
+		$cache = $this->toolkit->getCache();
+		$view = [];
 
-    if(count($days) > 0) {
-  		$this->featured_day = $this->toolkit->getExportHelper()->exportDay(array_shift($days));
-      $this->journal_days = $this->_formatDaysForJournal($days);
-    } else {
-	    $this->featured_day = $this->toolkit->getExportHelper()->exportDay(new Day());
-      $this->journal_days = [];
-    }
+		if(!$journal_data = $cache->get('main_page_journal_days'))
+		{
+			$journal_data = $this->_getJournalDaysData();
+			$cache->set('main_page_journal_days', $journal_data, 600);
+		}
+		$this->view->addVariables($journal_data);
 
-		$popular_days_ratings = (new InterestCalculator())->getDaysRatings(null, null, 12);
-		$popular_days = Day::findByIds(lmbArrayHelper::getColumnValues('day_id', $popular_days_ratings));
-		$this->popular_days = $this->_formatDaysForJournal($popular_days);
+		if(!$popular_days_data = $cache->get('main_page_popular_days'))
+		{
+			$popular_days_data = $this->_getPopularDaysData();
+			$cache->set('main_page_popular_days', $popular_days_data, 600);
+		}
+		$this->view->addVariables($popular_days_data);
 
-		$this->popular_days = $this->_formatDaysForJournal($popular_days);
+		if(!$this->new_days = $cache->get('main_page_new_days'))
+		{
+			$this->new_days = $this->_formatDaysForJournal(Day::findNew(null, null, 12));
+			$cache->set('main_page_new_days', $this->new_days, 600);
+		}
 
-		$new_days = Day::findNew(null, null, 12);
-		$this->new_days = $this->_formatDaysForJournal($new_days);
+		if(!$this->new_users = $cache->get('main_page_new_users'))
+		{
+			$new_users_objs = User::findNew()->paginate(0, 5);
+			$this->new_users = $this->_toFlatArray($this->toolkit->getExportHelper()->exportUserItems($new_users_objs));
+			$cache->set('main_page_new_users', $this->new_users, 600);
+		}
 
-		$this->new_users_objs = User::findNew()->paginate(0, 5);
-		$this->new_users = $this->_toFlatArray($this->toolkit->getExportHelper()->exportUserItems($this->new_users_objs));
 	}
 
-  function _formatDaysForJournal($days)
+	protected function _getJournalDaysData()
+	{
+		$result = [];
+		$journal_days = DayJournalRecord::findDaysWithLimitation(null, null, 6);
+		if(count($journal_days) > 0) {
+			$result['featured_day'] = $this->_formatDaysForJournal(array_shift($journal_days));
+			$result['journal_days'] = $this->_formatDaysForJournal($journal_days);
+		} else {
+			$result['featured_day'] = $this->_formatDaysForJournal(new Day());
+			$result['journal_days'] = [];
+		}
+
+		return $result;
+	}
+
+	protected function _getPopularDaysData()
+	{
+		$export_helper = $this->toolkit->getExportHelper();
+		$result = [
+			'top_working' => null,
+			'top_dayoff' => null,
+			'top_holiday' => null,
+			'top_trip' => null,
+		];
+		$popular_days_ratings = (new InterestCalculator())->getDaysRatings();
+		$popular_days = Day::findByIds(lmbArrayHelper::getColumnValues('day_id', $popular_days_ratings));
+		foreach($popular_days as $day)
+		{
+			if(!$result['top_working'] && $day->type == Day::TYPE_WORKING)
+				$result['top_working'] = $this->_formatDaysForJournal($day);
+			if(!$result['top_dayoff'] && $day->type == Day::TYPE_DAYOFF)
+				$result['top_dayoff'] = $this->_formatDaysForJournal($day);
+			if(!$result['top_holiday'] && $day->type == Day::TYPE_HOLIDAY)
+				$result['top_holiday'] = $this->_formatDaysForJournal($day);
+			if(!$result['top_trip'] && $day->type == Day::TYPE_TRIP)
+				$result['top_trip'] = $this->_formatDaysForJournal($day);
+		}
+
+		$popular_days->paginate(0, 12);
+		$result['popular_days'] = $this->_formatDaysForJournal($popular_days);
+
+		return $result;
+	}
+
+  protected function _formatDaysForJournal($days_or_day)
   {
-    $days = $this->toolkit->getExportHelper()->exportDayItems($days);
-    return $this->_toFlatArray($days);
+	  if(is_array($days_or_day) || (is_object($days_or_day) && $days_or_day instanceof lmbCollectionInterface))
+		  $days_or_day = $this->toolkit->getExportHelper()->exportDayItems($days_or_day);
+	  else
+		  $days_or_day = $this->toolkit->getExportHelper()->exportDay($days_or_day);
+    return $this->_toFlatArray($days_or_day);
   }
 }
