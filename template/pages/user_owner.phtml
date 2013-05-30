@@ -5,12 +5,8 @@ $this->menu = 'me';
 {{wrap with="layout.phtml"}}
 {{into slot="content"}}
 <? $user = $this->current_user; ?>
-<div class="row">
-	<div class="span2"><h1>Profile</h1></div>
-	<div class="span5"></div>
-	<div class="span3"><h3>Connected accounts:</h3></div>
-</div>
-<div class="row">
+<h1 class="muted">Profile</h1>
+<div class="row-fluid">
 	<div class="span2">
 		<div class="user-image-container friend">
 			<img id="userpic" src="{$user.image_192}" width="192" height="192" class="pull-left img-rounded"/>
@@ -20,7 +16,7 @@ $this->menu = 'me';
 			</button>
 		</div>
 	</div>
-	<div class="span5">
+	<div class="span7">
 		<form id="profile-form" class="form-horizontal">
 
 			<div class="control-group <?= $user['name'] ?: 'error' ?>">
@@ -52,7 +48,7 @@ $this->menu = 'me';
 			</div>
 
 			<div class="control-group">
-				<label class="control-label" for="notifications_period">Facebook notifications</label>
+				<label class="control-label" for="notifications_period">Notifications</label>
 				<div class="controls">
 					<?
 						$options = [
@@ -87,6 +83,8 @@ $this->menu = 'me';
 		</form>
 	</div>
 	<div class="span3">
+		<h4>Connected accounts</h4>
+		<br/>
 		<button class="btn <?= $user['instagram_connected'] ? 'btn-danger' : '' ?> btn-large instagram-action">
 			<i class="icon icon-sign<?= $user['instagram_connected'] ? 'out' : 'in' ?>"></i> Instagram
 		</button>
