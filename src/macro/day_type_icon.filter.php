@@ -1,4 +1,5 @@
 <?php
+lmb_require('limb/macro/src/compiler/lmbMacroFunctionBasedFilter.class.php');
 /**
  * @filter day_type_icon
  */
