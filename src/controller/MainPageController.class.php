@@ -26,7 +26,7 @@ class MainPageController extends WebAppController
 
 	function doDisplay()
 	{
-		$days = DayJournalRecord::findDaysWithLimitation(null, null, 5);
+		$days = DayJournalRecord::findDaysWithLimitation(null, null, 6);
 
     if(count($days) > 0) {
   		$this->featured_day = $this->toolkit->getExportHelper()->exportDay(array_shift($days));
