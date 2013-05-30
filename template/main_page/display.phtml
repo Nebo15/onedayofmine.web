@@ -15,6 +15,10 @@ $this->menu = 'journal';
 			<li class="muted"><i class="icon icon-eye-open"></i>&nbsp;{$day.views_count}</li>
 			<li class="muted"><i class="icon icon-heart"></i>&nbsp;{$day.likes_count}</li>
 			<li class="muted"><i class="icon icon-comments"></i>&nbsp;{$day.comments_count}</li>
+			<li class="muted"><small>
+					<i class="icon {$day.type|daytypeicon}"></i>
+					&nbsp;{$day.type|lowercase|default:'working day'}
+			</small></li>
 		</ul>
 		<a href="/pages/{$day.id}/day">
 			<h4>{$day.title|i18n_clip:30}</h4>

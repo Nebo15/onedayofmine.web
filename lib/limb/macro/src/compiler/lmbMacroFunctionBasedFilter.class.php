@@ -32,12 +32,11 @@ abstract class lmbMacroFunctionBasedFilter extends lmbMacroFilter
     $res = '';
 
     if(is_array($this->function))
-    {
-      $res .= $this->function[0].'::';
-      $this->function = $this->function[1];
-    }
+      $res .= $this->function[0].'::'.$this->function[1].'(';
+	  else
+			$res .= $this->function .'(';
 
-    $res .= $this->function .'(' . $this->_getBaseValue();
+    $res .= $this->_getBaseValue();
     foreach($this->params as $param)
       $res .= ',' . $param;
 
