@@ -6,8 +6,13 @@ $this->menu = 'journal';
 {{template name="medium_day"}}
 	<? $additional_class = isset($additional_class) ? $additional_class : ''; ?>
 	<li class="medium-item {$additional_class}">
-		<? if(isset($additional_title)) { ?>
-			<h3 class="muted">{$additional_title}</h3>
+		<? if(isset($title)) { ?>
+			<h3 class="muted">
+				{$title}
+				<? if(isset($icon)) { ?>
+					<i class="icon icon-{$icon}"></i>&nbsp;
+				<? } ?>
+			</h3>
 		<? } ?>
 		<a href="/pages/{$day.id}/day">
 			<img src="{$day.image_266}">
@@ -42,6 +47,10 @@ $this->menu = 'journal';
 				<li class="muted"><i class="icon icon-eye-open"></i>&nbsp;{$day.views_count}</li>
 				<li class="muted"><i class="icon icon-heart"></i>&nbsp;{$day.likes_count}</li>
 				<li class="muted"><i class="icon icon-comments"></i>&nbsp;{$day.comments_count}</li>
+				<li class="muted"><small>
+						<i class="icon {$day.type|day_type_icon}"></i>
+						&nbsp;{$day.type|lowercase|default:'working day'}
+				</small></li>
 			</ul>
 		</small>
 	</li>
@@ -103,14 +112,14 @@ $this->menu = 'journal';
 </div>
 
 <div class="row-fluid">
-	<h2><a href="#"><span class="muted">Users top</span></a></h2>
+	<h2 class="muted">Users top</h2>
 	<ul class="items-list">
 		<li class="big-item">
 			<ul class="items-list">
-				{{apply template="medium_day" day="{$#popular_days[0]}" additional_title="Best working day"/}}
-				{{apply template="medium_day" day="{$#popular_days[1]}" additional_title="Best day off" additional_class="last-item"/}}
-				{{apply template="medium_day" day="{$#popular_days[2]}" additional_title="Best holiday"/}}
-				{{apply template="medium_day" day="{$#popular_days[3]}" additional_title="Best trip" additional_class="last-item"/}}
+				{{apply template="medium_day" day="{$#popular_days[0]}" title="Best working day" icon="cogs"/}}
+				{{apply template="medium_day" day="{$#popular_days[1]}" title="Best day off" additional_class="last-item" icon="calendar-empty"/}}
+				{{apply template="medium_day" day="{$#popular_days[2]}" title="Best holiday" icon="gift"/}}
+				{{apply template="medium_day" day="{$#popular_days[3]}" title="Best trip" additional_class="last-item" icon="rocket"/}}
 			</ul>
 		</li>
 		<li class="medium-item">
@@ -128,7 +137,7 @@ $this->menu = 'journal';
 </div>
 
 <div class="row-fluid">
-	<h2><a href="#"><span class="muted">New users</span></a></h2>
+	<h2 class="muted">New users</h2>
 	<ul class="items-list">
 		<li class="user-item">
 			<?php $default_userpic = lmbToolkit::instance()->getStaticUrl("users/default_image_192.png"); ?>
@@ -151,7 +160,7 @@ $this->menu = 'journal';
 </div>
 
 <div class="row-fluid">
-	<h2><a href="#"><span class="muted">New days</span></a></h2>
+	<h2 class="muted">New days</h2>
 	<ul class="items-list">
 		{{list using="{$#new_days}"}}
 			{{list:item}}
