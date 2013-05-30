@@ -62,17 +62,20 @@ $this->menu = 'journal';
     <h2><span class="muted">Featured</span></h2>
     <div class="clearfix">
     	<a href="/pages/{$#featured_day->id}/day" class="pull-left" style="margin-right:20px;padding-bottom: 20px">
-    		<img src="{$#featured_day->image_266|default:'/img/no_photo.png'}" alt="{$#featured_day->final_description}" />
+    		<img id="featured_day_image" src="{$#featured_day->image_266|default:'/img/no_photo.png'}" alt="{$#featured_day->final_description}" />
     	</a>
     	<div>
     		<h3><a href="/pages/{$#featured_day->id}/day">{$#featured_day->title|i18n_clip:40,0,"&hellip;"}</a></h3>
-    		<p>{$#featured_day->final_description|i18n_clip:300,0,"&hellip;"}</p>
+    		<p>{$#featured_day->final_description|i18n_clip:280,0,"&hellip;"}</p>
     	</div>
-      {{list using="$#featured_day->moments" counter="$counter"}}
-        <ul class="inline">
+	    <?php $moments = array_slice($this->featured_day->moments, 0, 4); ?>
+      {{list using="$moments"}}
+        <ul id="preview-list" class="items-list" style="position:relative;bottom:0px">
           {{list:item}}
-            <li>
-              <a href="/pages/{$#featured_day->id}/day#moment-id{$item->id}"><img style="width:124px" src="{$item->image_532}" alt="{$item->description}" /></a>
+            <li class="small-item">
+              <a href="/pages/{$#featured_day->id}/day#moment-id{$item.id}">
+	              <img style="width:124px" src="{$item->image_266}" alt="{$item->description}" />
+              </a>
             </li>
           {{/list:item}}
         </ul>
@@ -212,5 +215,20 @@ h5 {
 p {
 	font-size: 15px;
 }
+{{/into}}
+{{into slot="js_ready"}}
+
+	var original_featured_img_src = '{$#featured_day.image_266|default:'/img/no_photo.png'}';
+	var $featured_day_image = $('#featured_day_image');
+	$('#preview-list img').hover(
+		//in
+		function(event) {
+			$featured_day_image.attr('src', $(this).attr('src'));
+		},
+		//out
+		function(event) {
+			$featured_day_image.attr('src', $(this).attr('src'));
+		}
+	);
 {{/into}}
 {{/wrap}}
