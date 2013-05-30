@@ -344,6 +344,7 @@ class PagesController extends WebAppController
       $moment->image_532 = $biggest_image;
 			$moment->image_266 = $biggest_image;
 			$moment->description = $moment_data['description'];
+			$moment->position = $i;
 			$this->day->moments[] = $moment;
 		}
 
