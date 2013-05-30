@@ -139,11 +139,6 @@ $this->menu = 'journal';
 <div class="row-fluid">
 	<h2 class="muted">New users</h2>
 	<ul class="items-list">
-		<li class="user-item">
-			<?php $default_userpic = lmbToolkit::instance()->getStaticUrl("users/default_image_192.png"); ?>
-			<img class="img-circle" src="{$default_userpic}">
-			<h5>Want to be here?</h5>
-		</li>
 		{{list using="$#new_users"}}
 			{{list:item}}
 				<li class="user-item">

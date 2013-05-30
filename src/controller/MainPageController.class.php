@@ -52,7 +52,7 @@ class MainPageController extends WebAppController
 
 		if(!$this->new_users = $cache->get('main_page_new_users'))
 		{
-			$new_users_objs = User::findNew()->paginate(0, 5);
+			$new_users_objs = User::findNew()->paginate(0, 6);
 			$this->new_users = $this->_toFlatArray($this->toolkit->getExportHelper()->exportUserItems($new_users_objs));
 			$cache->set('main_page_new_users', $this->new_users, 600);
 		}
