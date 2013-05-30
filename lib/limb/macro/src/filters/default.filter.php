@@ -18,10 +18,20 @@ class lmbMacroDefaultFilter extends lmbMacroFunctionBasedFilter
 {
   protected $function = 'lmb_macro_apply_default';
   protected $include_file = 'limb/macro/src/filters/lmbMacroDefaultFilter.inc.php';
+	protected $value_var_name;
+
+	/**
+	 * @param lmbMacroCodeWriter $code
+	 */
+	function preGenerate($code)
+	{
+		parent :: preGenerate($code);
+		$this->value_var_name = $code->generateVar();
+		$code->writePHP($this->value_var_name.' = '.parent::_getBaseValue().'; ');
+	}
 
   protected function _getBaseValue()
   {
-    $base_value = parent::_getBaseValue();
-    return "isset($base_value) ? $base_value : null";
+    return "isset({$this->value_var_name}) ? {$this->value_var_name} : null";
   }
 } 
