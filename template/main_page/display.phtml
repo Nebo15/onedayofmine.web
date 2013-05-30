@@ -16,7 +16,7 @@ $this->menu = 'journal';
 			<li class="muted"><i class="icon icon-heart"></i>&nbsp;{$day.likes_count}</li>
 			<li class="muted"><i class="icon icon-comments"></i>&nbsp;{$day.comments_count}</li>
 			<li class="muted"><small>
-					<i class="icon {$day.type|daytypeicon}"></i>
+					<i class="icon {$day.type|day_type_icon}"></i>
 					&nbsp;{$day.type|lowercase|default:'working day'}
 			</small></li>
 		</ul>
