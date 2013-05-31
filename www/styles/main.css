@@ -17,6 +17,11 @@ h1.big {
   font-size: 38.25px;
 }
 
+/* Layout */
+footer {
+
+}
+
 /* Blocks */
 .block-center {
   margin-right: auto !important;

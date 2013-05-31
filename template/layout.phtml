@@ -275,7 +275,6 @@
 		    {{slot id='content_zone'/}}
   </div>
 
-
   {{slot id='content_fullwidth'/}}
 
   <? if(!$this->toolkit->getUser()) { ?>
@@ -305,7 +304,19 @@
     </div>
   <? } ?>
 
-	<? if('production' == lmb_app_mode()) { ?>
+  <!-- Footer ================================================== -->
+  <hr>
+  <div class="content">
+	  <footer id="footer">
+		  <p class="pull-right"><a href="#top">Back to top</a></p>
+		  <ul class="inline">
+			  <li><a href="http://onedayofmine.userecho.com/forum/20026-obschij/">Feedback & support</a></li>
+			  <li><a href="/pages/about/">About</a></li>
+		  </ul>
+	  </footer>
+  </div>
+
+  <? if('production' == lmb_app_mode()) { ?>
     <script type="text/javascript">
       var _gaq = _gaq || [];
       _gaq.push(['_setAccount', 'UA-38881120-1']);
