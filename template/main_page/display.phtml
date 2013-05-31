@@ -74,8 +74,12 @@ $this->menu = 'journal';
 <div class="row-fluid">
 	<h2><span class="muted">Journal</span></h2>
 	<ul class="items-list">
-		{{apply template="medium_day" day="{$#journal_days[0]}"/}}
-		{{apply template="medium_day" day="{$#journal_days[1]}"/}}
+    <?php if(count($this->journal_days) > 0) { ?>
+      {{apply template="medium_day" day="{$#journal_days[0]}"/}}
+    <? } ?>
+    <?php if(count($this->journal_days) > 1) { ?>
+      {{apply template="medium_day" day="{$#journal_days[1]}"/}}
+    <? } ?>
 		<li class="medium-item">
 			<div style="border:1px solid #999;padding:10px;">
 				<center>
