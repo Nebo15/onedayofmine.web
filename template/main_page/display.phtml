@@ -274,11 +274,14 @@ $this->menu = 'journal';
               </div>
 				    <li class="medium-day">
               <h3 class="muted">VKontakte</h3>
-              <script type="text/javascript" src="//vk.com/js/api/openapi.js?96"></script>
+					    <script type="text/javascript">
+						    $(function() {
+							    $.getScript("//vk.com/js/api/openapi.js?96", function() {
+								    VK.Widgets.Group("vk_groups", {mode: 0, width: "240", height: "150"}, 53796872);
+							    });
+						    });
+					    </script>
               <div id="vk_groups"></div>
-              <script type="text/javascript">
-                VK.Widgets.Group("vk_groups", {mode: 0, width: "240", height: "150"}, 53796872);
-              </script>
 				    </li>
 				    {{apply template="medium_day" day="{$#top_working}" title="Best working day" icon="cogs"/}}
 				    {{apply template="medium_day" day="{$#top_dayoff}" title="Best day off" icon="calendar-empty"/}}
