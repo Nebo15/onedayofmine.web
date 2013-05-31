@@ -1202,24 +1202,33 @@ ul.with-separators li .btn-small {
   top: 8px;
 }*/
 
-.day .moments article .image{
+.day .moments article .image {
   width: 542px;
   max-width: 100%;
 }
 
-.day .moments article .thumbnail img{
-  width: 532px;
+.day .moments article .thumbnail {
+	width: 532px;
+	height: 532px;
+	overflow: hidden;
+	text-align: center;
+	max-width: 100%;
+
+	-webkit-transition: none;
+	-moz-transition: none;
+	-ms-transition: none;
+	-o-transition: none;
+	transform: none;
 }
 
-.day .moments article .thumbnail{
-  width: 532px;
-  max-width: 100%;
+.day .moments article .thumbnail > span {
+	display: block;
+	width: 1032px;
+	margin-left: -250px;
+}
 
-  -webkit-transition: none;
-  -moz-transition: none;
-  -ms-transition: none;
-  -o-transition: none;
-  transform: none;
+.day .moments article .thumbnail img {
+	display: inline-block;
 }
 
 .day .moments article .thumbnail.error {
@@ -1663,8 +1672,9 @@ ul.previews {
 
 @media (min-width: 1224px) { /* Desktop */
   .content {
-    padding-right: 20px;
-    padding-left: 20px;
+		margin-right: auto;
+		margin-left: auto;
+		max-width: 868px;
   }
 
   .pull-right-on-desktop {

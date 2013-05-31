@@ -156,7 +156,7 @@ $this->day->is_gathering_enabled = false;
 
           <div class="image has-bage block-center">
             <div class="thumbnail">
-              <img src="/img/moment-placeholder.gif" itemprop="contentUrl" />
+              <span><img src="/img/moment-placeholder.gif" itemprop="contentUrl" /></span>
             </div>
 
             <span class="bage bage-large bage-bottom-right visible-desktop image-toolbar">
@@ -474,7 +474,6 @@ $this->day->is_gathering_enabled = false;
                     <button type="button" class="btn btn-link btn-mini text-gray spinner-down">
                       <i class="icon-chevron-up"></i>
                     </button>
-                    <input type="string" disabled name="position" value="{$item->position}" class="spinner-value" />
                     <button type="button" class="btn btn-link btn-mini text-gray spinner-up">
                       <i class="icon-chevron-down"></i>
                     </button>
@@ -493,7 +492,7 @@ $this->day->is_gathering_enabled = false;
 
                 <div class="image has-bage block-center">
                   <div class="thumbnail">
-                    <img src="{$item->image_532}" itemprop="contentUrl" />
+                    <span><img src="{$item->image_532}" itemprop="contentUrl" /></span>
                   </div>
 
                   <? if($this->is_owner) { ?>
