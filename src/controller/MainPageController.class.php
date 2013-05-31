@@ -64,7 +64,7 @@ class MainPageController extends WebAppController
 		$result = [];
 		$journal_days = DayJournalRecord::findDaysWithLimitation(null, null, 6);
 		if(count($journal_days) > 0) {
-			$result['featured_day'] = $this->_formatDaysForJournal(array_shift($journal_days));
+			$result['featured_day'] = $this->_formatFeaturedDay(array_shift($journal_days));
 			$result['journal_days'] = $this->_formatDaysForJournal($journal_days);
 		} else {
 			$result['featured_day'] = $this->_formatDaysForJournal(new Day());
@@ -110,5 +110,19 @@ class MainPageController extends WebAppController
 	  else
 		  $days_or_day = $this->toolkit->getExportHelper()->exportDay($days_or_day);
     return $this->_toFlatArray($days_or_day);
+  }
+
+  protected function _formatFeaturedDay($featured_day) {
+    $featured_day = $this->_formatDaysForJournal($featured_day);
+
+    foreach ($featured_day->moments as $index => $moment) {
+      if($moment['image_266'] == $featured_day['image_266']) {
+        unset($featured_day->moments[$index]);
+      }
+    }
+
+    $featured_day->moments = array_slice($featured_day->moments, 0, 4);
+
+    return $featured_day;
   }
 }

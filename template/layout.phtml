@@ -194,87 +194,87 @@
 			  fjs.parentNode.insertBefore(js, fjs);
 		  }(document, 'script', 'facebook-jssdk'));</script>
   <?php } ?>
-  <div class="container">
-	  <?php if(!property_exists($this, 'menu_disabled') || !$this->menu_disabled) { ?>
-    <header class="navbar navbar-static-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-responsive-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </a>
-          <a class="brand" href="/">
-	          OneDayOfMine
-            <?= 'devel' == lmb_app_mode() ? '<span style="font-size:12px;color:#ab0001">devel</span>' : '' ?>
-            <?= 'testing' == lmb_app_mode() ? '<span style="font-size:12px;color:#006cbb">stage</span>' : '' ?>
-	          <?= 'production' == lmb_app_mode() ? '<span style="font-size:12px;color:#692c2b">alpha</span>' : '' ?>
-          </a>
-          <div class="nav-collapse collapse navbar-responsive-collapse">
-            <ul class="nav">
-	              <li class="<?= ($this->menu == 'about') ? 'active' : '';?>">
-		              <a href="/pages/about"><i class="icon-large icon-question-sign"></i> About</a>
-	              </li>
-                <li class="<?= ($this->menu == 'create_day' || $this->menu == 'import') ? 'active' : '';?>">
-                    <a href="/pages/import"><i class="icon-large icon-camera"></i> Add a day</a>
-                </li>
-	              <li class="<?= ($this->menu == 'news') ? 'active' : '';?>">
-		              <a href="/pages/news"><i class="icon-large icon-group"></i> Connect</a>
-	              </li>
-            </ul>
-            <ul class="nav pull-right">
-              <li class="dropdown <?= ($this->menu == 'me') ? 'active' : '';?>">
-                <? if(!$this->toolkit->getUser()) { ?>
-                  <a class="trigger_login has-spinner" href="#">
-                    <i class="icon-large icon-facebook-sign"></i>
-                    <span class="spinner icon-spin icon-refresh"></span>
-                    Login with Facebook
-                  </a>
-                <? } else { ?>
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                      {$#current_user.name}
-	                    <?= $this->toolkit->getUser()->is_editor ? '<small class="muted">editor</small>' : ''; ?>
-                      <img src="{$#current_user.image_36}" width="24" height="24" class="img-rounded" />
-                      <b class="caret"></b>
-                  </a>
-                  <ul class="dropdown-menu">
-                      <li><a href="/pages/my_days"><i class="icon icon-camera"></i> My days</a></li>
-	                    <li><a href="/pages/peoples"><i class="icon icon-user"></i> Peoples</a></li>
-                      <li class="divider"></li>
-                      <li><a href="/pages/profile"><i class="icon icon-cog"></i> Profile</a></li>
-                      <li class="divider"></li>
-                      <li><a class="trigger_logout"><i class="icon icon-signout"></i> Logout</a></li>
-                  </ul>
-                <? } ?>
+
+  <?php if(!property_exists($this, 'menu_disabled') || !$this->menu_disabled) { ?>
+  <header class="navbar navbar-static-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <a class="btn btn-navbar" data-toggle="collapse" data-target=".navbar-responsive-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </a>
+        <a class="brand" href="/">
+          OneDayOfMine
+          <?= 'devel' == lmb_app_mode() ? '<span style="font-size:12px;color:#ab0001">devel</span>' : '' ?>
+          <?= 'testing' == lmb_app_mode() ? '<span style="font-size:12px;color:#006cbb">stage</span>' : '' ?>
+          <?= 'production' == lmb_app_mode() ? '<span style="font-size:12px;color:#692c2b">alpha</span>' : '' ?>
+        </a>
+        <div class="nav-collapse collapse navbar-responsive-collapse">
+          <ul class="nav">
+              <li class="<?= ($this->menu == 'news') ? 'active' : '';?>">
+                <a href="/pages/news" class="trigger_login"><i class="icon-large icon-group"></i> Connect</a>
               </li>
-            </ul>
-          </div><!-- /.nav-collapse -->
-        </div>
-      </div><!-- /navbar-inner -->
-    </header><!-- /navbar -->
-	  <?php } ?>
-
-	  <?php if(!property_exists($this, 'menu_disabled') || !$this->menu_disabled) { ?>
-		  <? if(($cu = $this->toolkit->getUser()) && !$cu->getImage()) { ?>
-			  <div class="alert sitewide-notification no-userpic-tooltip">
-				  Upload a <a href="/pages/profile">profile</a> picture so your friends know it's you.
-			  </div>
-		  <? } ?>
-		  <? if(($cu = $this->current_user) && (!$cu['occupation'] || !$cu['birthday'] || !$cu['location'])) { ?>
-			  <div class="alert sitewide-notification no-userdata-tooltip">
-				  Update a <a href="/pages/profile">profile</a> so we can make a better recommendations for you.
-			  </div>
-		  <? } ?>
-      <div class="alert sitewide-notification visible-phone">
-        Currently we are working on apps for iOS and Android, web version is not fully supported on mobile devices.
+              <li class="<?= ($this->menu == 'create_day' || $this->menu == 'import') ? 'active' : '';?>">
+                  <a href="/pages/import"><i class="icon-large icon-camera"></i> Add a day</a>
+              </li>
+              <li class="<?= ($this->menu == 'about') ? 'active' : '';?>">
+	              <a href="/pages/about"><i class="icon-large icon-question-sign"></i> About</a>
+              </li>
+          </ul>
+          <ul class="nav pull-right">
+            <li class="dropdown <?= ($this->menu == 'me') ? 'active' : '';?>">
+              <? if(!$this->toolkit->getUser()) { ?>
+                <a class="trigger_login has-spinner" href="#">
+                  <i class="icon-large icon-facebook-sign"></i>
+                  <span class="spinner icon-spin icon-refresh"></span>
+                  Login with Facebook
+                </a>
+              <? } else { ?>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                    {$#current_user.name}
+                    <?= $this->toolkit->getUser()->is_editor ? '<small class="muted">editor</small>' : ''; ?>
+                    <img src="{$#current_user.image_36}" width="24" height="24" class="img-rounded" />
+                    <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="/pages/my_days"><i class="icon icon-camera"></i> My days</a></li>
+                    <li><a href="/pages/peoples"><i class="icon icon-user"></i> Peoples</a></li>
+                    <li class="divider"></li>
+                    <li><a href="/pages/profile"><i class="icon icon-cog"></i> Profile</a></li>
+                    <li class="divider"></li>
+                    <li><a class="trigger_logout"><i class="icon icon-signout"></i> Logout</a></li>
+                </ul>
+              <? } ?>
+            </li>
+          </ul>
+        </div><!-- /.nav-collapse -->
       </div>
-	  <? } ?>
+    </div><!-- /navbar-inner -->
+  </header><!-- /navbar -->
+  <?php } ?>
 
-    <div class="content">
-			    {{slot id='content'/}}
-			    {{slot id='content_zone'/}}
+  <?php if(!property_exists($this, 'menu_disabled') || !$this->menu_disabled) { ?>
+	  <? if(($cu = $this->toolkit->getUser()) && !$cu->getImage()) { ?>
+		  <div class="alert sitewide-notification no-userpic-tooltip">
+			  Upload a <a href="/pages/profile">profile</a> picture so your friends know it's you.
+		  </div>
+	  <? } ?>
+	  <? if(($cu = $this->current_user) && (!$cu['occupation'] || !$cu['birthday'] || !$cu['location'])) { ?>
+		  <div class="alert sitewide-notification no-userdata-tooltip">
+			  Update a <a href="/pages/profile">profile</a> so we can make a better recommendations for you.
+		  </div>
+	  <? } ?>
+    <div class="alert sitewide-notification visible-phone">
+      Currently we are working on apps for iOS and Android, web version is not fully supported on mobile devices.
     </div>
+  <? } ?>
+
+  <div class="content">
+		    {{slot id='content'/}}
+		    {{slot id='content_zone'/}}
   </div>
+
 
   {{slot id='content_fullwidth'/}}
 
