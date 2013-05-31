@@ -64,7 +64,7 @@ class MainPageController extends WebAppController
 		$result = [];
 		$journal_days = DayJournalRecord::findDaysWithLimitation(null, null, 6);
 		if(count($journal_days) > 0) {
-			$result['featured_day'] = $this->_formatDaysForJournal(array_shift($journal_days));
+			$result['featured_day'] = $this->_formatFeaturedDay(array_shift($journal_days));
 			$result['journal_days'] = $this->_formatDaysForJournal($journal_days);
 		} else {
 			$result['featured_day'] = $this->_formatDaysForJournal(new Day());
