@@ -121,7 +121,7 @@ class MainPageController extends WebAppController
       }
     }
 
-    $featured_day->moments = array_slice($featured_day->moments, 0, 3);
+    $featured_day->moments = array_slice($featured_day->moments, 0, 4);
 
     return $featured_day;
   }
