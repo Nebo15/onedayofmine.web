@@ -170,7 +170,7 @@ $this->menu = 'journal';
             {$#featured_day->final_description|i18n_clip:280,0,"&hellip;"}
           </p>
       	</div>
-        <a class="call-to-action">›</a>
+        <a class="call-to-action" href="/pages/{$#featured_day->id}/day">›</a>
         {{list using="$#featured_day->moments"}}
           <ul id="preview-list" class="items-list" style="position:absolute;bottom:0px;left:288px;margin:0;height: 122px;white-space: nowrap;overflow: hidden;max-width: 560px;">
             {{list:item}}
