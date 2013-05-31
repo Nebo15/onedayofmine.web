@@ -111,4 +111,16 @@ class MainPageController extends WebAppController
 		  $days_or_day = $this->toolkit->getExportHelper()->exportDay($days_or_day);
     return $this->_toFlatArray($days_or_day);
   }
+
+  protected function _formatFeaturedDay($featured_day) {
+    $featured_day = $this->_formatDaysForJournal($featured_day);
+
+    foreach ($featured_day->moments as $index => $moment) {
+      if($moment['image_266'] == $featured_day['image_266']) {
+        unset($featured_day->moments[$index]);
+      }
+    }
+
+    return $featured_day;
+  }
 }
