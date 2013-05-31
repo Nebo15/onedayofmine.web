@@ -144,7 +144,7 @@ $this->menu = 'journal';
         </div>
       	<div>
       		<h3><a href="/pages/{$#featured_day->id}/day">{$#featured_day->title|i18n_clip:40,0,"&hellip;"}</a></h3>
-      		<p>{$#featured_day->final_description|i18n_clip:280,0,"&hellip;"}</p>
+      		<div style="max-height: 100px;overflow: hidden;margin-bottom: 8px;">{$#featured_day->final_description|i18n_clip:280,0,"&hellip;"}</div>
       	</div>
         {{list using="$#featured_day->moments"}}
           <ul id="preview-list" class="items-list" style="position:absolute;bottom:0px;left:288px;margin:0;height: 122px;white-space: nowrap;overflow: hidden;max-width: 560px;">
