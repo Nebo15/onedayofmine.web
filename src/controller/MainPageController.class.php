@@ -37,7 +37,7 @@ class MainPageController extends WebAppController
 		}
 		$this->view->set('featured_day', $featured_day);
 
-		$journal_days_limit = 2;
+		$journal_days_limit = 8;
 		$from = (int) $this->request->get('from', $featured_day['id']);
 		if(!$journal_days = $cache->get('main_page_journal_days_'.$from))
 		{
