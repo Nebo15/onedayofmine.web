@@ -28,14 +28,25 @@ class MainPageController extends WebAppController
 	function doDisplay()
 	{
 		$cache = $this->toolkit->getCache();
-		$view = [];
 
-		if(!$journal_data = $cache->get('main_page_journal_days'))
+		if(!$featured_day = $cache->get('main_page_featured_day'))
 		{
-			$journal_data = $this->_getJournalDaysData();
-			$cache->set('main_page_journal_days', $journal_data, 600);
+			$featured_day_raw = DayJournalRecord::findDaysWithLimitation(null, null, 1);
+			$featured_day = $this->_formatDaysForJournal(count($featured_day_raw) ? $featured_day_raw[0] : new Day() );
+			$cache->set('main_page_featured_day', $featured_day, 600);
 		}
-		$this->view->addVariables($journal_data);
+		$this->view->set('featured_day', $featured_day);
+
+		$journal_days_limit = 2;
+		$from = (int) $this->request->get('from', $featured_day['id']);
+		if(!$journal_days = $cache->get('main_page_journal_days_'.$from))
+		{
+			$journal_days = $this->_formatDaysForJournal(
+				DayJournalRecord::findDaysWithLimitation($from, null, $journal_days_limit)
+			);
+			$cache->set('main_page_journal_days_'.$from, $journal_days, 600);
+		}
+		$this->view->set('journal_days', $journal_days);
 
 		if(!$popular_days_data = $cache->get('main_page_popular_days'))
 		{
@@ -57,21 +68,12 @@ class MainPageController extends WebAppController
 			$cache->set('main_page_new_users', $this->new_users, 600);
 		}
 
-	}
+		$this->first_link = $this->request->has('from');
+		if(count($journal_days) == $journal_days_limit)
+			$this->view->set('next_link', '/?from='.($journal_days[count($journal_days) - 1]->id));
+		else
+			$this->view->set('next_link', null);
 
-	protected function _getJournalDaysData()
-	{
-		$result = [];
-		$journal_days = DayJournalRecord::findDaysWithLimitation(null, null, 6);
-		if(count($journal_days) > 0) {
-			$result['featured_day'] = $this->_formatFeaturedDay(array_shift($journal_days));
-			$result['journal_days'] = $this->_formatDaysForJournal($journal_days);
-		} else {
-			$result['featured_day'] = $this->_formatDaysForJournal(new Day());
-			$result['journal_days'] = [];
-		}
-
-		return $result;
 	}
 
 	protected function _getPopularDaysData()
@@ -97,7 +99,7 @@ class MainPageController extends WebAppController
 				$result['top_trip'] = $this->_formatDaysForJournal($day);
 		}
 
-		$popular_days->paginate(0, 6);
+		$popular_days->paginate(0, 3);
 		$result['popular_days'] = $this->_formatDaysForJournal($popular_days);
 
 		return $result;

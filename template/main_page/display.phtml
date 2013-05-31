@@ -27,7 +27,7 @@ $this->menu = 'journal';
 			</small></li>
 	</ul>
 	<a href="/pages/{$day.id}/day">
-		<h4>{$day.title|i18n_clip:30}</h4>
+		<h4>{$day.title}</h4>
 	</a>
 	<p>{$day.final_description}</p>
 </li>
@@ -229,7 +229,7 @@ $this->menu = 'journal';
         {{list using="$#featured_day->moments"}}
           <ul id="preview-list" class="items-list" style="position:absolute;bottom:0px;left:288px;margin:0;height: 122px;white-space: nowrap;overflow: hidden;max-width: 560px;">
             {{list:item}}
-              <li class="small-item">
+              <li class="small-item padded">
                 <a href="/pages/{$#featured_day->id}/day#moment-id{$item.id}">
   	              <img style="width:124px" src="{$item->image_266}" alt="{$item->description}" />
                 </a>
@@ -251,6 +251,18 @@ $this->menu = 'journal';
 				      {{/list:item}}
 				    {{/list}}
 				   </ul>
+			    <ul class="pager">
+				    <? if($this->first_link) { ?>
+					    <li class="previous">
+						    <a href="/">&larr; Today</a>
+					    </li>
+				    <? } ?>
+				    <? if($this->next_link) { ?>
+					    <li class="next">
+						    <a href="{$#next_link}">Older &rarr;</a>
+					    </li>
+				    <? } ?>
+			    </ul>
 		    </li>
     		<li class="medium-item padded">
 			    <h2><span class="muted">Popular</span></h2>
@@ -305,7 +317,6 @@ $this->menu = 'journal';
 				    {{/list}}
 			    </ul>
 		    </li>
-
     	</ul>
     </div>
   {{/into}}
