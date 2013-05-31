@@ -243,7 +243,7 @@ $this->menu = 'journal';
     <div class="row-fluid">
     	<ul class="items-list">
 		    <li class="big-item padded">
-		      <h2><span class="muted">Journal</span></h2>
+		      <h2 id="journal"><span class="muted">Journal</span></h2>
 			    <ul class="items-list">
 				    {{list using="{$#journal_days}"}}
 				      {{list:item}}
@@ -259,7 +259,7 @@ $this->menu = 'journal';
 				    <? } ?>
 				    <? if($this->next_link) { ?>
 					    <li class="next">
-						    <a href="{$#next_link}">Older &rarr;</a>
+						    <a href="{$#next_link}#journal">Older &rarr;</a>
 					    </li>
 				    <? } ?>
 			    </ul>
