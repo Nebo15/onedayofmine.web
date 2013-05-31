@@ -242,30 +242,6 @@ $this->menu = 'journal';
 
     <div class="row-fluid">
     	<ul class="items-list">
-		    <li class="small-item padded">
-			    <h2><span class="muted">New</span></h2>
-			    <ul class="items-list">
-				    <li><h4 class="muted">&hellip;users</h4></li>
-				    {{list using="$#new_users"}}
-				    {{list:item}}
-				    <li class="user-item">
-					    <a href="/pages/{$item.id}/user">
-						    <img class="img-circle pull-left" src="{$item.image_192}">
-					    </a>
-					    <a href="/pages/{$item.id}/user">
-						    <h5>{$item.name}</h5>
-					    </a>
-				    </li>
-				    {{/list:item}}
-				    {{/list}}
-				    <li><h4 class="muted">&hellip;days</h4></li>
-				    {{list using="{$#new_days}"}}
-				      {{list:item}}
-				        {{apply template="small_day" day="{$item}"/}}
-				      {{/list:item}}
-				    {{/list}}
-			    </ul>
-		    </li>
 		    <li class="big-item padded">
 		      <h2><span class="muted">Journal</span></h2>
 			    <ul class="items-list">
@@ -276,7 +252,7 @@ $this->menu = 'journal';
 				    {{/list}}
 				   </ul>
 		    </li>
-    		<li class="medium-item last-col">
+    		<li class="medium-item padded">
 			    <h2><span class="muted">Popular</span></h2>
 			    <ul class="items-list">
 				    <li class="medium-day">
@@ -305,6 +281,30 @@ $this->menu = 'journal';
 				    {{/list}}
 			    </ul>
     		</li>
+		    <li class="small-item">
+			    <h2><span class="muted">New</span></h2>
+			    <ul class="items-list">
+				    <li><h4 class="muted">&hellip;users</h4></li>
+				    {{list using="$#new_users"}}
+				    {{list:item}}
+				    <li class="user-item">
+					    <a href="/pages/{$item.id}/user">
+						    <img class="img-circle pull-left" src="{$item.image_192}">
+					    </a>
+					    <a href="/pages/{$item.id}/user">
+						    <h5>{$item.name}</h5>
+					    </a>
+				    </li>
+				    {{/list:item}}
+				    {{/list}}
+				    <li><h4 class="muted">&hellip;days</h4></li>
+				    {{list using="{$#new_days}"}}
+				    {{list:item}}
+				    {{apply template="small_day" day="{$item}"/}}
+				    {{/list:item}}
+				    {{/list}}
+			    </ul>
+		    </li>
 
     	</ul>
     </div>
