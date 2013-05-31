@@ -108,6 +108,28 @@ $this->menu = 'journal';
     #preview-list li {
       padding-bottom: 0
     }
+
+    .call-to-action {
+      position: absolute;
+      top: 40%;
+      right: 15px;
+      width: 40px;
+      height: 40px;
+      margin-top: -20px;
+      font-size: 60px;
+      font-weight: 100;
+      line-height: 30px;
+      color: #ffffff;
+      text-align: center;
+      background: #222222;
+      border: 3px solid #ffffff;
+      -webkit-border-radius: 23px;
+      -moz-border-radius: 23px;
+      border-radius: 23px;
+      opacity: 0.5;
+      filter: alpha(opacity=50);
+      text-decoration: none !important;
+    }
   {{/into}}
   <script type="text/javascript">
   {{into slot="js_ready"}}
@@ -144,8 +166,11 @@ $this->menu = 'journal';
         </div>
       	<div>
       		<h3><a href="/pages/{$#featured_day->id}/day">{$#featured_day->title|i18n_clip:40,0,"&hellip;"}</a></h3>
-      		<div style="max-height: 100px;overflow: hidden;margin-bottom: 8px;">{$#featured_day->final_description|i18n_clip:280,0,"&hellip;"}</div>
+      		<p>
+            {$#featured_day->final_description|i18n_clip:280,0,"&hellip;"}
+          </p>
       	</div>
+        <a class="call-to-action">›</a>
         {{list using="$#featured_day->moments"}}
           <ul id="preview-list" class="items-list" style="position:absolute;bottom:0px;left:288px;margin:0;height: 122px;white-space: nowrap;overflow: hidden;max-width: 560px;">
             {{list:item}}
