@@ -97,7 +97,7 @@ class MainPageController extends WebAppController
 				$result['top_trip'] = $this->_formatDaysForJournal($day);
 		}
 
-		$popular_days->paginate(0, 12);
+		$popular_days->paginate(0, 6);
 		$result['popular_days'] = $this->_formatDaysForJournal($popular_days);
 
 		return $result;

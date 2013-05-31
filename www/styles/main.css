@@ -658,7 +658,7 @@ hr {
 
 /* Main style */
 .content {
-	width:960px;
+	width:980px;
   padding-top: 20px;
 }
 
@@ -1674,7 +1674,7 @@ ul.previews {
   .content {
 		margin-right: auto;
 		margin-left: auto;
-		max-width: 868px;
+		max-width: 980px;
   }
 
   .pull-right-on-desktop {
