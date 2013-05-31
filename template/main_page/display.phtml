@@ -109,27 +109,39 @@ $this->menu = 'journal';
       padding-bottom: 0
     }
   {{/into}}
+  <script type="text/javascript">
   {{into slot="js_ready"}}
     var original_featured_img_src = '{$#featured_day.image_266|default:'/img/no_photo.png'}';
+    var $featured_day_image_cover = $('#featured_day_image_cover');
     var $featured_day_image = $('#featured_day_image');
     $('#preview-list img').hover(
       //in
       function(event) {
-        $featured_day_image.attr('src', $(this).attr('src'));
+        var $this = $(this);
+        $featured_day_image_cover.stop(true, true).animate({opacity: 0}, 'fast', function() {
+          $featured_day_image.attr('src', $this.attr('src'));
+          $featured_day_image_cover.stop(true, true).animate({opacity: 1}, 'fast');
+        });
       },
       //out
       function(event) {
-        $featured_day_image.attr('src', $(this).attr('src'));
+        $featured_day_image_cover.stop(true, true).animate({opacity: 0}, 'fast', function() {
+          $featured_day_image.attr('src', original_featured_img_src);
+          $featured_day_image_cover.stop(true, true).animate({opacity: 1}, 'fast');
+        });
       }
     );
   {{/into}}
+  </script>
   {{into slot="content"}}
     <?php if($this->featured_day) { ?>
       <h2><span class="muted">Featured</span></h2>
       <div class="clearfix" style="position:relative">
-      	<a href="/pages/{$#featured_day->id}/day" class="pull-left" style="margin-right:20px;">
-      		<img id="featured_day_image" src="{$#featured_day->image_266|default:'/img/no_photo.png'}" alt="{$#featured_day->final_description}" />
-      	</a>
+        <div id="featured_day_image_cover">
+        	<a href="/pages/{$#featured_day->id}/day" class="pull-left" style="margin-right:20px;">
+        		<img id="featured_day_image" src="{$#featured_day->image_266|default:'/img/no_photo.png'}" alt="{$#featured_day->final_description}" />
+        	</a>
+        </div>
       	<div>
       		<h3><a href="/pages/{$#featured_day->id}/day">{$#featured_day->title|i18n_clip:40,0,"&hellip;"}</a></h3>
       		<p>{$#featured_day->final_description|i18n_clip:280,0,"&hellip;"}</p>
