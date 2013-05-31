@@ -212,14 +212,14 @@
         </a>
         <div class="nav-collapse collapse navbar-responsive-collapse">
           <ul class="nav">
-              <li class="<?= ($this->menu == 'about') ? 'active' : '';?>">
-	              <a href="/pages/about"><i class="icon-large icon-question-sign"></i> About</a>
+              <li class="<?= ($this->menu == 'news') ? 'active' : '';?>">
+                <a href="/pages/news" class="trigger_login"><i class="icon-large icon-group"></i> Connect</a>
               </li>
               <li class="<?= ($this->menu == 'create_day' || $this->menu == 'import') ? 'active' : '';?>">
                   <a href="/pages/import"><i class="icon-large icon-camera"></i> Add a day</a>
               </li>
-              <li class="<?= ($this->menu == 'news') ? 'active' : '';?>">
-	              <a href="/pages/news"><i class="icon-large icon-group"></i> Connect</a>
+              <li class="<?= ($this->menu == 'about') ? 'active' : '';?>">
+	              <a href="/pages/about"><i class="icon-large icon-question-sign"></i> About</a>
               </li>
           </ul>
           <ul class="nav pull-right">
