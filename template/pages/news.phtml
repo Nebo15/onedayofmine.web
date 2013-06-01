@@ -46,34 +46,33 @@ $this->menu = 'news';
 </script>
 {{/into}}
 {{into slot="js_include"}}
-<script src="/lib/InfiniteScroll.js"></script>
+	<script src="/lib/InfiniteScroll.js"></script>
 {{/into}}
 {{into slot="css"}}
-.bubble small:before { content:''; }
-.bubble small { float:right; }
+	.bubble small:before { content:''; }
+	.bubble small { float:right; }
 {{/into}}
 {{into slot="js_ready"}}
-// Init paginator
-var template_list = Template.prepareTemplate($('#news_list_elements_template'));
-$('.news').infiniteScroll({
-request: API.get('my/news'),
-success: function(response)
-{
-var news = Template.compileElement(template_list, {
-news: response.data.result
-});
-news = $($.trim(news));
-$(this).find('.infiniteScroll_button_container').before(news);
+	// Init paginator
+	var template_list = Template.prepareTemplate($('#news_list_elements_template'));
 
-var news_ids = [];
-for (var i in response.data.result)
-news_ids.push(response.data.result[i].id);
-API.post('my/mark_news_as_read', {news_ids: news_ids}).send();
-}
-});
+	$('.news').infiniteScroll({
+		request: API.get('my/news'),
+		success: function(response)
+		{
+			var news = Template.compileElement(template_list, {news: response.data.result});
+			news = $($.trim(news));
+			$(this).find('.infiniteScroll_button_container').before(news);
+
+			var news_ids = [];
+			for (var i in response.data.result)
+				news_ids.push(response.data.result[i].id);
+			API.post('my/mark_news_as_read', {news_ids: news_ids}).send();
+		}
+	});
 {{/into}}
 {{into slot="content"}}
-<div class="row">
+<div class="row-fluid">
 	<div class="span8">
 		<h1>News</h1>
 		{{list using="$#news"}}
@@ -123,11 +122,10 @@ API.post('my/mark_news_as_read', {news_ids: news_ids}).send();
 		{{/list}}
 	</div>
 
-	<div class="span3 hidden-phone">
+	<div class="span4">
 		<div>
 			{{apply template="following_thumb_list" users="{$#following}" /}}
 		</div>
-
 		<div>
 			{{apply template="followers_thumb_list" users="{$#followers}" /}}
 		</div>
