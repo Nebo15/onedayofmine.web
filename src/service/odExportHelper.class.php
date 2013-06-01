@@ -12,8 +12,11 @@ class odExportHelper
   }
 
   ############### Day ###############
-  function exportDay(Day $day)
+  function exportDay(Day $day, $comments_count = null)
   {
+	  if(is_null($comments_count))
+		  $comments_count = lmbToolkit::instance()->getConf('common')->default_comments_count;
+
     $exported_day = $this->exportDayItems([$day])[0];
 	  $exported_day->is_gathering_enabled = false;
 
@@ -23,7 +26,7 @@ class odExportHelper
     $exported_day->moments  = $this->exportMomentItems($moments);
 
     $comments = $day->getComments();
-    $comments->paginate(0, lmbToolkit::instance()->getConf('common')->default_comments_count);
+    $comments->paginate(0, $comments_count);
     $exported_day->comments = $this->exportDayCommentItems($comments);
 
     $likes = $day->getLikes();
@@ -387,7 +390,7 @@ class odExportHelper
     return $exported;
   }
 
-  function exportDayCommentItems($comments)
+  function exportDayCommentItems($comments, $comments_count = 20)
   {
     if(!count($comments))
       return [];

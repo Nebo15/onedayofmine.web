@@ -134,7 +134,7 @@ class PagesController extends WebAppController
 			$day->save();
 		}
 
-		$this->day = $this->toolkit->getExportHelper()->exportDay($day);
+		$this->day = $this->toolkit->getExportHelper()->exportDay($day, $comments_count = 50);
 
     $this->day->utime = date('Y-m-d', $this->day->utime);
     $this->day->ctime = date('Y-m-d', $this->day->ctime);
