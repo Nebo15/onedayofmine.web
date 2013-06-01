@@ -193,6 +193,12 @@ class PagesController extends WebAppController
 		$this->user = (array) $this->toolkit->getExportHelper()->exportUser($user);
 
 		$this->user['days'] = $this->_toFlatArray($this->toolkit->getExportHelper()->exportDayItems($user->getPublicDays()->paginate(0, $this->lists_limit)));
+		foreach($this->user['days'] as $i => $day)
+		{
+			if(!$day->comments_count)
+				unset($this->user['days'][$i]);
+		}
+
 		$followers = $user->getFollowersUsers();
 		$this->user['users_followers'] = $this->_toFlatArray($this->toolkit->getExportHelper()->exportUserItems($followers));
 
