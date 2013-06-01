@@ -59,7 +59,7 @@ $this->menu = '';
     });
   {{/into}}
   {{into slot="content"}}
-  	<div class="row">
+  	<div class="row-fluid">
   		<div class="span" style="width:192px">
         <div class="user-image-container">
           <img src="{$#user.image_192}" width="192" class="img-rounded"/>
@@ -101,7 +101,7 @@ $this->menu = '';
           </p>
         <? } ?>
 
-        <h3>Day<?= $this->user['days_count'] == 1 ? '' : 's'; ?>&nbsp;&nbsp;<small>{$#user.days_count}</small></h3>
+        <h3>Day<?= $this->user['days_count'] == 1 ? '' : 's'; ?>&nbsp;&nbsp;<small><?= count($this->user['days']); ?></small></h3>
         {{apply template="days_list" days="$#user.days"/}}
   		</div>
 		</div>
