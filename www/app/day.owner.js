@@ -511,7 +511,7 @@ $(function() {
 
 				if(tmp.width < min_width || tmp.height < min_height)
 				{
-					alert('Too small image. We need at least 532x532 pixels.');
+					alert('Too small image - ' + tmp.width + 'x' + tmp.height + '. We need at least 532x532 pixels.');
 					return;
 				}
 
