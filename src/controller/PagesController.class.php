@@ -315,19 +315,21 @@ class PagesController extends WebAppController
 
 		foreach($moments as $i => $moment_data)
 		{
-      $parts = explode('/', $moment_data['img']);
-      $last = array_pop($parts);
-      $image_link = implode('/', $parts); // http://ic.pics.livejournal.com/vika_ntessa/10278374/62536/
-
-      list($file, $ext) = explode('.', $last);
-      list($img_id, $size) = explode('_', $file);
-
       $biggest_image = $moment_data['img'];
-      foreach ($lj_image_sizes as $size) {
-        $tmp = "{$image_link}/{$img_id}_{$size}.{$ext}";
-        if($this->_removeFileExits($tmp)) {
-          $biggest_image = $tmp;
-          break;
+      if(strpos('pics.livejournal.com/', $moment_data['img']) !== false) {
+        $parts = explode('/', $moment_data['img']);
+        $last = array_pop($parts);
+        $image_link = implode('/', $parts); // http://ic.pics.livejournal.com/vika_ntessa/10278374/62536/
+
+        list($file, $ext) = explode('.', $last);
+        list($img_id, $size) = explode('_', $file);
+
+        foreach ($lj_image_sizes as $size) {
+          $tmp = "{$image_link}/{$img_id}_{$size}.{$ext}";
+          if($this->_removeFileExits($tmp)) {
+            $biggest_image = $tmp;
+            break;
+          }
         }
       }
 
