@@ -72,7 +72,7 @@ $this->menu = 'me';
 					<?
 						$full_info = $user['name'] && $user['occupation'] && $user['location'] && $user['birthday'];
 					?>
-					<button type="submit" class="btn btn-large update-action" <?= $full_info ?: 'disabled' ?>>
+					<button type="submit" class="btn update-action" <?= $full_info ?: 'disabled' ?>>
 						<i class="icon icon-ok"></i> Update
 					</button>
           <a href="/pages/{$user.id}/user?preview" class="btn btn-small">
@@ -85,12 +85,12 @@ $this->menu = 'me';
 	<div class="span3">
 		<h4>Connected accounts</h4>
 		<br/>
-		<button class="btn <?= $user['instagram_connected'] ? 'btn-danger' : '' ?> btn-large instagram-action">
+		<button class="btn <?= $user['instagram_connected'] ? 'btn-danger' : '' ?> instagram-action">
 			<i class="icon icon-sign<?= $user['instagram_connected'] ? 'out' : 'in' ?>"></i> Instagram
 		</button>
 
 		<br/><br/>
-		<button class="btn <?= $user['flickr_connected'] ? 'btn-danger' : '' ?> btn-large flickr-action">
+		<button class="btn <?= $user['flickr_connected'] ? 'btn-danger' : '' ?> flickr-action">
 			<i class="icon icon-sign<?= $user['flickr_connected'] ? 'out' : 'in' ?>"></i> Flickr
 		</button>
 	</div>
