@@ -78,7 +78,7 @@ var ImportController = function($wizard, $steps_content) {
 
     2: function() {
       $('.create-action').off().click(function() {
-        API.post('days/start', {title:'One day of ' + _instance.user.name}).success(function(resp) {
+        API.post('days/start', {title:'One day of ' + _instance.user.name, type: 'Working day'}).success(function(resp) {
           window.location.href= '/pages/'+resp.data.result.id+'/day';
         }).send();
       });
@@ -148,7 +148,7 @@ var ImportController = function($wizard, $steps_content) {
 
       // Create empty day
       $('.create-action').off().click(function() {
-        API.post('days/start', {title:'One day of ' + _instance.user.name, type:'Working day'}).success(function(resp) {
+        API.post('days/start', {title:'One day of ' + _instance.user.name, type: 'Working day'}).success(function(resp) {
           window.location.href= '/pages/'+resp.data.result.id+'/day';
         }).send();
       });
