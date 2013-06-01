@@ -610,7 +610,7 @@ $this->day->is_gathering_enabled = false;
             <? if($this->day->comments && $this->day->comments_count > 0) { ?>
               <span class="pull-right not-decorated text-gray">
                 <i class="icon-comments"></i>
-                <span class="counter"><? if($this->day->comments_count > 3) { ?>3/<? } ?>{$this->day->comments_count}</span>
+                <span class="counter">{$this->day->comments_count}</span>
               </span>
             <? } ?>
             <h2>Comments:</h2>
