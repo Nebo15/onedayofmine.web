@@ -51,6 +51,11 @@ abstract class lmbView
     $this->variables[$variable_name] = $value;
   }
 
+	function addVariables($vars)
+	{
+		$this->variables = array_merge($this->variables, $vars);
+	}
+
   function setVariables($vars)
   {
     $this->variables = $vars;

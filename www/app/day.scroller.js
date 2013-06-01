@@ -35,7 +35,7 @@
         }
 
         event.originalEvent.dataTransfer.effectAllowed = 'move';
-        event.originalEvent.dataTransfer.setData('Text', "Drop element on it's new position");
+        event.originalEvent.dataTransfer.setData('Text', "Drop element on it's new position"); // Hi, IE9
 
         handleActive = false;
         $dragging = $(this).addClass('sortable-dragging');
@@ -141,6 +141,10 @@
 })(jQuery);
 
 $(window).load(function() {
+  if($.isMobile() || $(window).width() < 1200) {
+    return;
+  }
+
   // Inject scroller
   var scroller_template = Template.prepareTemplate($('#template_scroller'));
   var scroller_preview_template = Template.prepareTemplate($('#template_scroller_preview'));
@@ -155,6 +159,19 @@ $(window).load(function() {
   var $scroller_previews = $scroller.find('.previews');
   var $moments = $('.day').find('.moments');
 
+  // Scroll helper for unsaved moments
+  $scroller.on('click', '.scrollTo.moment', function(event) {
+    var $this = $(this);
+    var $moment = $this.closest('li').data('moment-attached');
+
+    if(!$moment.data('moment-id')) {
+      event.stopPropagation();
+      document.location.hash = '';
+      $(document).scrollTo($this.closest('li').data('moment-attached'));
+      return false;
+    }
+  });
+
   // Permanent values
   var window_width = $(window).width();
   var window_height = $(window).height();
@@ -162,9 +179,9 @@ $(window).load(function() {
   var viewport_height = $scroller_viewport.height();
   var viewport_margin_top = parseInt($scroller_viewport.css('margin-top'), 10);
   var viewport_margin_bottom = parseInt($scroller_viewport.css('margin-bottom'), 10);
-  var scroll_zone_margin_top = parseInt($scroller_scroll_zone.css('top'), 10);
-  var scroll_zone_margin_bottom = parseInt($scroller_scroll_zone.css('bottom'), 10);
-  var scroll_zone_height = $scroller_scroll_zone.height();
+  var scroll_zone_offset_top = parseInt($scroller_scroll_zone.css('top'), 10);
+  var scroll_zone_offset_bottom = parseInt($scroller_scroll_zone.css('bottom'), 10);
+  var scroll_zone_height = $scroller_scroll_zone.outerHeight();
 
   var scroller_active = false;
 
@@ -177,50 +194,70 @@ $(window).load(function() {
   var previews_height,
       moments_from,
       moments_to,
-      scroller_scale_ratio;
+      scroller_scale_ratio,
+      scroll_zone_animated;
 
-  function moveViewport(offset) {
-    if(offset + viewport_height / 2 + scroll_zone_margin_top >= window_height / 2) {
-      var tmp = offset;
-      offset = window_height / 2 - viewport_height / 2 - viewport_margin_top;
-
-      if(tmp >= previews_height - window_height / 2 - viewport_height / 2 + scroll_zone_margin_top) {
-        if(offset > previews_height - viewport_height) {
-          offset = previews_height - viewport_height;
-        } else {
-          offset = tmp - (previews_height - window_height + viewport_height / 2) - 13; // Magic number here, warning!
-
-          if(offset > window_height - viewport_height - viewport_margin_top - viewport_margin_bottom) {
-            offset = window_height - viewport_height - viewport_margin_top - viewport_margin_bottom;
-          }
-
-          if(scroll_zone_height > previews_height) {
-            $scroller_previews.css('top', 0);
-          } else {
-            $scroller_previews.css('top', (scroll_zone_height - previews_height) + 'px');
-          }
-        }
-      } else {
-        $scroller_previews.css('top', (offset - tmp) + 'px');
-      }
-    } else {
-      if(offset < 0) {
-        offset = 0;
-      }
-
-      $scroller_previews.css('top', 0);
+  // Fix scroller viewport ratio
+  var moment_height = 760;
+  var moment_preview_height = 74;
+  function fixViewportHeight() {
+    if($moments_articles_first) {
+      moment_height = $moments_articles_first.height();
+      moment_preview_height = $scroller_previews.find('li').first().height();
     }
 
-    if(offset > previews_height - viewport_height) {
+    $scroller_viewport.height(moment_preview_height * window_height / moment_height);
+    viewport_height = $scroller_viewport.height();
+  };
+
+  $(window).resize(function() {
+    window_width = $(window).width();
+    window_height = $(window).height();
+
+    fixViewportHeight();
+  });
+  fixViewportHeight();
+
+  function moveViewport(offset) {
+    var scroll_zone_end = scroll_zone_height + scroll_zone_offset_top - viewport_margin_top + scroll_zone_offset_bottom - viewport_margin_bottom;
+    var shift = 0;
+
+    if(scroll_zone_animated) {
+      var scroll_zone_center = (scroll_zone_height + scroll_zone_offset_top + scroll_zone_offset_bottom) / 2;
+      var viewport_center = offset + viewport_height / 2 + viewport_margin_top;
+      var offset_center = scroll_zone_height / 2 - viewport_height / 2 + scroll_zone_offset_top - viewport_margin_top;
+      var max_shift = previews_height - scroll_zone_height;
+
+      if(viewport_center > scroll_zone_center) {
+        shift = offset - offset_center;
+        offset = offset_center;
+
+        // Don't show empty space under previews
+        if(shift > max_shift) {
+          offset += shift - max_shift;
+          shift = max_shift;
+        }
+      }
+    }
+
+    // Limit viewport min offset to dont go out of scroll_zone
+    if(offset < 0) {
+      offset = 0;
+    }
+
+    // Limit viewport max offset to dont go out of scroll_zone
+    if(offset + viewport_height > scroll_zone_end) {
+      offset = scroll_zone_end - viewport_height;
+    }
+
+    // Limit viewport max offset to dont go out of previews zone
+    if(offset + viewport_height > previews_height) {
       offset = previews_height - viewport_height;
     }
 
+    $scroller_previews.css('top', (-1 * shift) + 'px');
     $scroller_viewport.css('top', offset + 'px');
   }
-
-  $scroller_previews.on('click', 'li', function() {
-    console.log($(this).data('moment-attached'));
-  })
 
   function updateScroller() {
     // Selectors
@@ -245,21 +282,29 @@ $(window).load(function() {
     previews_height = $scroller_previews.height();
     moments_from = $moments_articles_first.offset().top;
     moments_to = $moments_articles_last.offset().top + $moments_articles_last.height();
-    scroller_scale_ratio = $moments.outerHeight() / previews_height;
+    scroller_scale_ratio = (moments_to - moments_from) / previews_height;
 
-    // Fix scroller viewport ratio
-    // $scroller_viewport.height($scroller_viewport.width() / (window_width / window_height));
+    // Do we need to move scroll_zone due to too big previews_height?
+    scroll_zone_animated = window_height - viewport_margin_top - viewport_margin_bottom < previews_height ? 1 : 0;
 
     // Show scroller
     if(!scroller_active) {
       scroller_active = true;
 
       $(document).on('scroll.scroller touchmove.scroller', function() {
-        moveViewport(($(this).scrollTop() - moments_from) / scroller_scale_ratio);
+        var offsetTop = $(this).scrollTop();
+        var offsetMoments = offsetTop > moments_from ? offsetTop - moments_from : 0;
+
+        moveViewport(offsetMoments / scroller_scale_ratio);
       });
+
+      // Disable global scroll helper
+      var $scrollHelper = $('.scrollHelper');
+      $(document).off('.scrollHelper');
 
       // $scroller.imagesLoaded(function() {
         setTimeout(function() {
+          $scrollHelper.css('bottom','-100%');
           $scroller.css('right', 0);
         }, 1000);
       // });
@@ -275,16 +320,16 @@ $(window).load(function() {
     $scroller_previews.on('sortupdate', function(event, moved) {
       var $item = $(moved.item);
       var $moment = $item.data('moment-attached');
-      var moment_position = $item.prevAll().length;
-      var position_request = API.request('POST', '/moments/' + $moment.data('moment-id') + '/update', {
-        position: moment_position
-      })
 
-      position_request.success(function() {
-        $moments.trigger('sortupdate', {moment: $moment, position: moment_position})
-      });
+      var getPosition = function($search) {
+        return parseInt($search.find('.action-position').find('.spinner-value').val(), 10);
+      };
 
-      position_request.send();
+      var $prev_moment = $item.prevAll().first();
+      var $next_moment = $item.nextAll().first();
+      var new_position = $prev_moment.length > 0 ? getPosition($prev_moment.data('moment-attached')) + 1 : getPosition($next_moment.data('moment-attached'));
+
+      $moments.trigger('sortupdate', {moment: $moment, position: new_position});
     });
   }
 

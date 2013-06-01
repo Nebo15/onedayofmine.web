@@ -328,6 +328,7 @@ var ImportController = function($wizard, $steps_content) {
 
         var submit_button = step_container.find('button[type=submit]');
         var day_title_input = step_container.find('.day-title-selector input');
+        var day_date_input = step_container.find('.day-date-selector input');
         var day_type_buttongroup = step_container.find('.day-type-selector button');
         var day_description_textarea = step_container.find('.day-description-selector textarea');
 
@@ -346,6 +347,7 @@ var ImportController = function($wizard, $steps_content) {
           var day_data = {
             title: $.trim(day_title_input.val()),
             type:  day_type_buttongroup.filter('.active').text(),
+            date: day_date_input.val(),
             final_description: $.trim(day_description_textarea.val())
           };
 
@@ -360,6 +362,11 @@ var ImportController = function($wizard, $steps_content) {
 
           if(selected_shots.length < 1) {
             alert("There are no selected moments given");
+            invalid = true;
+          }
+
+          if(!day_data.type) {
+            alert("Day type is not set");
             invalid = true;
           }
 

@@ -33,6 +33,7 @@ class Day extends BaseModel
   public $is_deleted;
   public $facebook_share_id;
   public $twitter_share_id;
+  public $date;
   public $ctime;
   public $utime;
 	public $cip;
@@ -42,7 +43,8 @@ class Day extends BaseModel
     $validator = new lmbValidator();
     $validator->addRequiredRule('user_id');
     $validator->addRequiredRule('title');
-    //$validator->addRequiredRule('type');
+    $validator->addRequiredRule('date');
+    $validator->addRequiredRule('type');
     $validator->addRule(new lmbValidValueRule('type', self::getTypes()));
     return $validator;
   }
@@ -57,6 +59,7 @@ class Day extends BaseModel
 	  $this->showImages($export);
     $export->final_description = $this->final_description;
     $export->views_count = $this->views_count ?: 0;
+    $export->date = $this->date;
 	  $export->ctime = (int) $this->ctime;
 	  $export->utime = (int) $this->utime;
 
@@ -91,7 +94,7 @@ class Day extends BaseModel
 		$criteria = lmbSQLCriteria::equal('day_id', $this->id)
 				->add(lmbSQLCriteria::equal('is_deleted', 0));
 
-		return Moment::find($criteria, ['id' => 'DESC']);
+		return Moment::find($criteria, ['position' => 'ASC']);
 	}
 
   function getComments()

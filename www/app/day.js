@@ -41,6 +41,35 @@ $(function () {
 
   // Scroll helpers
   (function() {
+    var $scrollContainer = $(document);
+    var $scrollHelper = $('.scrollHelper');
+    var helperHeight = $scrollHelper.height();
+    var helperDefaultOffset = -1*helperHeight;
+
+    function setBottomOffset(offset) {
+      var sign = offset ? offset < 0 ? -1 : 1 : 0;
+
+      $scrollHelper.css('bottom', sign + offset + 'px');
+    }
+
+    setBottomOffset(helperDefaultOffset);
+
+    $scrollContainer.on('scroll.scrollHelper touchmove.scrollHelper', function() {
+      var scrollTop = $scrollContainer.scrollTop();
+
+      if(scrollTop > 500) {
+        var diff = scrollTop - 500;
+        if(diff < helperHeight && !$.isMobile()) {
+          var shift = diff - helperHeight;
+          setBottomOffset(shift > helperDefaultOffset ? shift : helperDefaultOffset);
+        } else {
+          setBottomOffset(0);
+        }
+      } else {
+        setBottomOffset(helperDefaultOffset);
+      }
+    });
+
     $(document).on('click', '.scrollTo.comments', function(event) {
       $(document).scrollTo($('a[name=comments]'), 1000);
       return false;
@@ -52,8 +81,13 @@ $(function () {
     });
 
     $(document).on('click', '.scrollTo.moment', function() {
-      $(document).scrollTo($('.moments article[data-moment-id=' + $(this).data('moment-id') + ']'), 1000);
-			document.location.hash = 'moment-id'+$(this).data('moment-id');
+      var $this = $(this);
+
+      $(document).scrollTo($('.moments article[data-moment-id=' + $this.data('moment-id') + ']'), 0, {
+        onAfter: function() {
+    			document.location.hash = 'moment-id'+$this.data('moment-id');
+        }
+      });
       return false;
     });
   })();

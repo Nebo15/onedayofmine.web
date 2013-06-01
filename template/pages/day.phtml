@@ -25,9 +25,7 @@ $this->day->is_gathering_enabled = false;
     <? if($this->toolkit->getUser()) { ?>
       <script src="/app/day.user.js"></script>
       <? if($this->is_owner) { ?>
-        <script src="/lib/vendor/bootstrap-datepicker.js"></script>
         <script src="/lib/vendor/jquery.ajax-progress.js"></script>
-        <script src="/lib/vendor/bootstrap-timepicker.min.js"></script>
         <script src="/lib/vendor/jquery.jcrop.js"></script>
         <script src="/lib/vendor/jquery.exif.js"></script>
         <script src="/lib/Importer.js"></script>
@@ -41,13 +39,26 @@ $this->day->is_gathering_enabled = false;
   {{/into}}
   {{into slot="css_include"}}
     <? if($this->is_owner) { ?>
-      <link href="/styles/vendor/bootstrap-datepicker.css" rel="stylesheet">
-      <link href="/styles/vendor/bootstrap-timepicker.min.css" rel="stylesheet">
       <link href="/styles/vendor/jquery.jcrop.min.css" rel="stylesheet">
     <? } ?>
   {{/into}}
   {{into slot="js"}}
     var day_data = <?= json_encode($this->day); ?>;
+
+    <? if($this->current_user_obj && $this->current_user_obj->is_editor) { ?>
+      $(document).ready(function() {
+        $('.add-journal-action').click(function() {
+          API.post('days/{$#day.id}/add_to_journal').send();
+          $('.remove-journal-action').removeClass('hidden');
+          $('.add-journal-action').addClass('hidden');
+        });
+        $('.remove-journal-action').click(function() {
+          API.post('days/{$#day.id}/remove_from_journal').send();
+          $('.add-journal-action').removeClass('hidden');
+          $('.remove-journal-action').addClass('hidden');
+        });
+      });
+    <? } ?>
   {{/into}}
   {{template name='moment_item_placeholder'}}
     <div class="well placeholder">
@@ -70,7 +81,7 @@ $this->day->is_gathering_enabled = false;
     <?
       if($this->current_user_obj && $this->current_user_obj->is_editor) {
         $in_journal = !is_null(DayJournalRecord::findByDayId($day->id));
-    ?>
+      ?>
 			<button class="btn btn-small add-journal-action <?= $in_journal ? 'hidden' : ''; ?>" type="button">
 				Add to journal
 			</button>
@@ -78,20 +89,6 @@ $this->day->is_gathering_enabled = false;
 				Remove from journal
 			</button>
 		<? } ?>
-		<script>
-			$(document).ready(function() {
-				$('.add-journal-action').click(function() {
-					API.post('days/{$#day.id}/add_to_journal').send();
-					$('.remove-journal-action').removeClass('hidden');
-					$('.add-journal-action').addClass('hidden');
-				});
-				$('.remove-journal-action').click(function() {
-					API.post('days/{$#day.id}/remove_from_journal').send();
-					$('.add-journal-action').removeClass('hidden');
-					$('.remove-journal-action').addClass('hidden');
-				});
-			});
-		</script>
 	{{/template}}
 
   {{into slot="templates"}}
@@ -147,40 +144,19 @@ $this->day->is_gathering_enabled = false;
     <? if($this->is_owner) { ?>
       <script id="template_moment" type="text/x-handlebars-template">
         <article class="well editable template [[#unless moment.image]]noimage[[/unless]]" itemscope itemtype="http://schema.org/ImageObject">
-          <ul class="unstyled inline not-decorated controls controls-absolute visible-desktop">
-            <li>
-              <a class="text-gray with-tooltip action-delete" data-original-title="Delete moment">
-                <i class="icon-trash"></i>
-              </a>
-            </li>
-          </ul>
-
-          <div class="time text-center text-gray">
-            <form name="datetime_form" class="form-inline">
-              <span class="input-prepend small">
-                <span class="add-on hidden-phone"><i class="icon-calendar"></i></span>
-                <input type="date" name="date" value="[[moment.date]]" min="2001-01-01" max="<?php date("Y-m-d"); ?>" required="required" />
-              </span>
-
-              <span class="input-prepend small">
-                <span class="add-on hidden-phone"><i class="icon-time"></i></span>
-                <input type="time" name="time" value="[[moment.time]]" required="required" />
-
-                <input type="hidden" name="seconds" value="[[moment.time_seconds]]" required="required" />
-              </span>
-
-              <input type="hidden" name="timezone" value="[[moment.timezone]]" required="required" />
-
-              <button class="btn btn-small has-spinner disabled" type="submit">
-                <span class="spinner icon-spin icon-refresh hidden-phone"></span>
-                Save
-              </button>
-            </form>
+          <div class="btn-group btn-group-vertical input-spinner action-position controls controls-absolute visible-desktop with-tooltip" data-original-title="Moment position">
+            <button type="button" class="btn btn-link btn-mini text-gray spinner-down">
+              <i class="icon-chevron-up"></i>
+            </button>
+            <input type="string" disabled name="position" value="[[moment.position]]" class="spinner-value" />
+            <button type="button" class="btn btn-link btn-mini text-gray spinner-up">
+              <i class="icon-chevron-down"></i>
+            </button>
           </div>
 
           <div class="image has-bage block-center">
             <div class="thumbnail">
-              <img src="/img/moment-placeholder.gif" itemprop="contentUrl" />
+              <span><img src="/img/moment-placeholder.gif" itemprop="contentUrl" /></span>
             </div>
 
             <span class="bage bage-large bage-bottom-right visible-desktop image-toolbar">
@@ -245,7 +221,7 @@ $this->day->is_gathering_enabled = false;
                 Create moment
               </button>
             </form>
-            <button type="button" class="btn btn-block btn-danger action-delete visible-phone visible-tablet">
+            <button type="button" class="btn btn-block btn-danger action-delete">
               Delete moment
             </button>
           </div>
@@ -407,10 +383,25 @@ $this->day->is_gathering_enabled = false;
                          class="day-title input-large input-block-level"
                          placeholder="Write a day title"
                          style="font-size:32px;height:40px;line-height:40px"/>
-	                <div>
-		                <textarea rows="5" name="description" class="input-block-level" placeholder="Enter description...">{$#day->final_description|default:""}</textarea>
-		                <i class="icon icon-microphone speech-action hidden" style="position:absolute;right:30px;top:85px;cursor:hand"></i>
-	                </div>
+
+                  <div class="row-fluid">
+                    <div class="span6">
+                      <input type="date" name="date" value="{$#day->date}" class="input-large input-block-level" />
+                    </div>
+                    <div style="margin-top: -2px; margin-bottom: 7px" class="span6">
+                      <div class="action-select-type btn-group pull-right-on-desktop" data-toggle="buttons-radio">
+                        <button type="button" class="btn type btn-small<? if($this->day->type == 'Working day') {?> active<? } ?>">Working day</button>
+                        <button type="button" class="btn type btn-small<? if($this->day->type == 'Day off') {?> active<? } ?>">Day off</button>
+                        <button type="button" class="btn type btn-small<? if($this->day->type == 'Holiday') {?> active<? } ?>">Holiday</button>
+                        <button type="button" class="btn type btn-small<? if($this->day->type == 'Trip') {?> active<? } ?>">Trip</button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div style="position: relative">
+                    <textarea rows="5" name="description" class="input-block-level" placeholder="Enter description...">{$#day->final_description|default:""}</textarea>
+                    <i class="icon icon-microphone speech-action hidden" style="position:absolute;right:10px;top:10px;cursor:hand"></i>
+                  </div>
 
 	                <? if($this->day->final_description) { ?>
 		                <button type="submit" class="btn btn-block disabled">Save</button>
@@ -427,7 +418,7 @@ $this->day->is_gathering_enabled = false;
                 <i class="icon icon-calendar hidden-phone"></i> {$#day->date}
               </time>
               <div>
-	              by <b>
+	              {$#day->type} by <b>
 	              <? if(property_exists($this->day, 'user')) { ?>
                   <a href="/pages/{$#day->user->id}/user">{$#day->user->name}</a>
 	              <? } else { ?>
@@ -477,47 +468,31 @@ $this->day->is_gathering_enabled = false;
           {{list using="$#day->moments" counter="$counter"}}
             {{list:item}}
               <article class="well<? if($this->is_owner) {?> editable<? }?>" itemscope itemtype="http://schema.org/ImageObject" data-moment-id="{$item->id}">
-	              <div id="moment-pos{$counter}"></div>
-	              <div id="moment-id{$item.id}"></div>
+                <a name="moment-{$item->id}"></a>
                 <? if($this->is_owner) { ?>
-                  <ul class="unstyled inline not-decorated controls controls-absolute visible-desktop">
-                    <li>
-                      <a class="text-gray with-tooltip action-delete" data-original-title="Delete moment">
-                        <i class="icon-trash"></i>
-                      </a>
-                    </li>
-                  </ul>
+                  <div class="btn-group btn-group-vertical input-spinner action-position controls controls-absolute visible-desktop with-tooltip" data-original-title="Moment position">
+                    <button type="button" class="btn btn-link btn-mini text-gray spinner-down">
+                      <i class="icon-chevron-up"></i>
+                    </button>
+                    <button type="button" class="btn btn-link btn-mini text-gray spinner-up">
+                      <i class="icon-chevron-down"></i>
+                    </button>
+                  </div>
                 <? } ?>
 
-                <div class="time text-center text-gray">
-                  <? if($this->is_owner) { ?>
-                    <form name="datetime_form" class="form-inline">
-                      <span class="input-prepend small">
-                        <span class="add-on hidden-phone"><i class="icon-calendar"></i></span>
-                        <input type="date" name="date" value="{$item->date}" min="2001-01-01" max="<?php date("Y-m-d"); ?>" required="required" />
-                      </span>
-
-                      <span class="input-prepend small">
-                        <span class="add-on hidden-phone"><i class="icon-time"></i></span>
-                        <input type="time" name="time" value="{$item->time}" required="required" />
-                        <input type="hidden" name="seconds" value="{$item->time_seconds}" required="required" />
-                      </span>
-
-                      <input type="hidden" name="timezone" value="{$item->timezone}" required="required" />
-
-                      <button class="btn btn-small has-spinner disabled" type="submit">
-                        <span class="spinner icon-spin icon-refresh hidden-phone"></span>
-                        Save
-                      </button>
-                    </form>
-                  <? } else { ?>
-                    <time class="text-center text-gray" datetime="{$item->datetime_iso}"><i class="icon-time"></i> {$item->time}</time>
-                  <? } ?>
+                <div class="btn-group input-spinner action-position hidden-desktop text-center" style="margin-bottom: 5px">
+                  <button type="button" class="btn btn-link btn-mini text-gray spinner-down">
+                    <i class="icon-chevron-up"></i>
+                  </button>
+                  <input type="string" disabled name="position" value="{$item->position}" class="spinner-value" />
+                  <button type="button" class="btn btn-link btn-mini text-gray spinner-up">
+                    <i class="icon-chevron-down"></i>
+                  </button>
                 </div>
 
                 <div class="image has-bage block-center">
                   <div class="thumbnail">
-                    <img src="{$item->image_532}" itemprop="contentUrl" />
+                    <span><img src="{$item->image_532}" itemprop="contentUrl" /></span>
                   </div>
 
                   <? if($this->is_owner) { ?>
@@ -589,7 +564,7 @@ $this->day->is_gathering_enabled = false;
                           Save description
                         </button>
                       </form>
-                      <button type="button" class="btn btn-block btn-danger action-delete visible-phone visible-tablet">
+                      <button type="button" class="btn btn-block btn-danger action-delete">
                         Delete moment
                       </button>
                     <? } else { ?>
@@ -714,6 +689,12 @@ $this->day->is_gathering_enabled = false;
           </button>
         </div>
       </article>
+    </div>
+
+    <div class="scrollHelper visible-desktop visible-tablet">
+      <a href="#" class="scrollTo top">
+        Back to top <i class="icon-angle-up"></i>
+      </a>
     </div>
   {{/into}}
 {{/wrap}}

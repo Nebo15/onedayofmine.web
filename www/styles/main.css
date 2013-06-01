@@ -1,3 +1,5 @@
+@import url(http://fonts.googleapis.com/css?family=PT+Serif:400,700&subset=latin,cyrillic);
+
 /* Text */
 .text-white {
   color: #FFF;
@@ -11,28 +13,27 @@
 h1, h2, h3, h4, h5, h6 {
   margin-bottom: 0;
   line-height: normal;
-}
-
-h1 {
-  font-size: 29.75px;
+	font-family: "PT Serif";
 }
 
 h1.big {
   font-size: 38.25px;
 }
 
-h2 {
-  font-size: 21.25px;
-}
-
-h3 {
-  font-size: 17px;
-}
+h3 { font-size: 26px; }
 
 h4 {
-  font-size: 14.45px;
+	font-weight:normal;
 }
 
+h5 {
+	font-size: 16px;
+	font-weight:normal;
+}
+
+p {
+	font-size: 14px;
+}
 /* Blocks */
 .block-center {
   margin-right: auto !important;
@@ -377,7 +378,11 @@ body {
 
 .tooltip-inner {
   max-width: 280px !important;
+}
+
+.day .moments .tooltip-inner {
   white-space: nowrap;
+  overflow: hidden;
 }
 
 .btn:hover,
@@ -561,7 +566,6 @@ textarea.info:focus {
 .input-prepend.small input,
 .input-append.small input {
   padding: 2px 7px;
-  height: 26px;
   font-size: 14.45px;
 }
 
@@ -671,6 +675,7 @@ hr {
 
 /* Main style */
 .content {
+	width:980px;
   padding-top: 20px;
 }
 
@@ -1185,53 +1190,62 @@ ul.with-separators li .btn-small {
   border-color:rgb(30, 168, 77);
 }
 
-.day .moments article .time {
-  margin: -5px 0 5px 0;
+.input-spinner .spinner-up,
+.input-spinner .spinner-down {
+  line-height: 17px;
+  padding: 0 9px;
 }
 
-.day .moments article .time form {
-  margin: 0;
-}
-
-.day .moments article .time input[subtype=date],
-.day .moments article .time input[subtype=time] {
+.input-spinner .spinner-value {
+  width: 26px;
   text-align: center;
 }
 
-.day .moments article .time input[type=date] {
-  max-width: 130px;
+/*.move-carets {
+  position: relative;
 }
 
-.day .moments article .time input[type=time] {
-  max-width: 70px;
+.move-carets .action-move-up,
+.move-carets .action-move-down {
+  position: absolute;
+  right: 0;
 }
 
-.day .moments article .time input[subtype=date] {
-  width: 85px;
+.move-carets .action-move-up {
+  top: -2px;
 }
 
-.day .moments article .time input[subtype=time] {
-  width: 40px;
-}
+.move-carets .action-move-down {
+  top: 8px;
+}*/
 
-.day .moments article .image{
+.day .moments article .image {
   width: 542px;
   max-width: 100%;
 }
 
-.day .moments article .thumbnail img{
-  width: 532px;
+.day .moments article .thumbnail {
+	width: 532px;
+	height: 532px;
+	overflow: hidden;
+	text-align: center;
+	max-width: 100%;
+
+	-webkit-transition: none;
+	-moz-transition: none;
+	-ms-transition: none;
+	-o-transition: none;
+	transform: none;
 }
 
-.day .moments article .thumbnail{
-  width: 532px;
-  max-width: 100%;
+.day .moments article .thumbnail > span {
+	display: block;
+	width: 1032px;
+	margin-left: -250px;
+}
 
-  -webkit-transition: none;
-  -moz-transition: none;
-  -ms-transition: none;
-  -o-transition: none;
-  transform: none;
+.day .moments article .thumbnail img {
+	display: inline-block;
 }
 
 .day .moments article .thumbnail.error {
@@ -1250,7 +1264,7 @@ ul.with-separators li .btn-small {
 }
 
 .day ul.controls li {
-  padding-right: 3px;
+  padding-right: 8px;
   padding-left: 0;
 }
 
@@ -1490,13 +1504,6 @@ ul.previews {
   margin: 5px;
 }
 
-
-
-
-
-
-
-
 /* > User page */
 .user-image-container {
   position: relative;
@@ -1525,22 +1532,6 @@ ul.previews {
     margin-right: 0 !important;
     max-width: 208px;
     display: block;
-  }
-}
-
-@media (max-width: 612px) { /* Small Phone screens */
-  .form-inline .btn,
-  .moments .time .btn[type=submit] {
-    padding-left: 6px !important;
-    padding-right: 6px !important;
-  }
-
-  .day .moments article .time input[type="date"] {
-    max-width: 100px;
-  }
-
-  .day .moments article .time input[type="time"] {
-    max-width: 50px;
   }
 }
 
@@ -1573,13 +1564,6 @@ ul.previews {
     margin-bottom: -2px;
   }
 
-  .day .moments .time form .input-append input,
-  .day .moments .time form .input-prepend input {
-    -webkit-border-radius: 4px 4px 4px 4px;
-    -moz-border-radius: 4px 4px 4px 4px;
-    border-radius: 4px 4px 4px 4px;
-  }
-
   .btn-toolbar > .btn + .btn, .btn-toolbar > .btn-group + .btn, .btn-toolbar > .btn + .btn-group {
     margin-left: 5px !important;
   }
@@ -1605,18 +1589,6 @@ ul.previews {
 
   .pull-left-on-tablet {
     float: left;
-  }
-}
-
-@media (min-width: 768px) and (max-width: 1024px) { /* iPad */
-  .time .add-on {
-    padding: 1px 5px !important;
-    height: 24px !important;
-  }
-
-  .time .btn {
-    padding: 1px 5px !important;
-    height: 28px !important;
   }
 }
 
@@ -1717,8 +1689,9 @@ ul.previews {
 
 @media (min-width: 1224px) { /* Desktop */
   .content {
-    padding-right: 20px;
-    padding-left: 20px;
+		margin-right: auto;
+		margin-left: auto;
+		max-width: 980px;
   }
 
   .pull-right-on-desktop {
