@@ -1,4 +1,4 @@
-@import url(http://fonts.googleapis.com/css?family=PT+Serif:400,700&subset=latin,cyrillic);
+@import url(//fonts.googleapis.com/css?family=PT+Serif:400,700&subset=latin,cyrillic);
 
 /* Text */
 .text-white {
@@ -31,9 +31,12 @@ h5 {
 	font-weight:normal;
 }
 
-p {
-	font-size: 14px;
+p, body {
+	font-family: "PT Serif";
+	font-size: 15px;
+	line-height: 20px;
 }
+
 /* Blocks */
 .block-center {
   margin-right: auto !important;
