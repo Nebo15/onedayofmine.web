@@ -285,25 +285,28 @@
 </script>
 
 {{template name='day_like_button'}}
-  <? if($this->toolkit->getUser()) { ?>
-    <div class="input-prepend small like<?= property_exists($day, 'is_liked') ? ($day->is_liked ? ' liked' : '')  : ' disabled' ?>">
-      <span class="add-on">
-        <span class="heart toggle">
-          <span class="state"><i class="icon icon-heart-empty"></i></span>
-          <span class="state"><i class="icon icon-heart"></i></span>
-        </span>
-        <span class="counter toggle">
-          <span class="state">{$day->likes_count}</span>
-        </span>
+	<?
+		$can_like = !property_exists($day, 'is_liked') || !$day->is_liked;
+		$button_class = $can_like ? '' : 'disabled';
+	?>
+
+  <div class="input-prepend small like" {$button_class}>
+    <span class="add-on">
+      <span class="heart toggle">
+        <span class="state"><i class="icon icon-heart-empty"></i></span>
+        <span class="state"><i class="icon icon-heart"></i></span>
       </span>
-      <button class="btn btn-small action-like" type="button"<?= !property_exists($day, 'is_liked') ? ' disabled' : '' ?>>
-        <span class="text toggle">
-          <span class="state">Like</span>
-          <span class="state">Unlike</span>
-        </span>
-      </button>
-    </div>
-  <? } ?>
+      <span class="counter toggle">
+        <span class="state">{$day->likes_count}</span>
+      </span>
+    </span>
+    <button class="btn btn-small action-like" type="button" {$button_class}>
+      <span class="text toggle">
+        <span class="state">Like</span>
+        <span class="state">Unlike</span>
+      </span>
+    </button>
+  </div>
 {{/template}}
 
 {{template name='day_share_button'}}
