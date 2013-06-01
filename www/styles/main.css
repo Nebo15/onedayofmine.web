@@ -1,4 +1,4 @@
-@import url(http://fonts.googleapis.com/css?family=PT+Serif:400,700&subset=latin,cyrillic);
+@import url(//fonts.googleapis.com/css?family=PT+Serif:400,700&subset=latin,cyrillic);
 
 /* Text */
 .text-white {
@@ -31,9 +31,12 @@ h5 {
 	font-weight:normal;
 }
 
-p {
-	font-size: 14px;
+p, body {
+	font-family: "PT Serif";
+	font-size: 15px;
+	line-height: 20px;
 }
+
 /* Blocks */
 .block-center {
   margin-right: auto !important;
@@ -1227,7 +1230,6 @@ ul.with-separators li .btn-small {
 .day .moments article .thumbnail {
 	width: 532px;
 	height: 532px;
-	overflow: hidden;
 	text-align: center;
 	max-width: 100%;
 
@@ -1236,16 +1238,9 @@ ul.with-separators li .btn-small {
 	-ms-transition: none;
 	-o-transition: none;
 	transform: none;
-}
 
-.day .moments article .thumbnail > span {
-	display: block;
-	width: 1032px;
-	margin-left: -250px;
-}
-
-.day .moments article .thumbnail img {
-	display: inline-block;
+	background-position: center center;
+	background-repeat: no-repeat;
 }
 
 .day .moments article .thumbnail.error {
