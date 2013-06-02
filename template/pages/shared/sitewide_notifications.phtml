@@ -1,5 +1,5 @@
 <?php if(!property_exists($this, 'menu_disabled') || !$this->menu_disabled) { ?>
-	<? if($this->toolkit->getUser()->is_editor) { ?>
+	<? if($this->toolkit->getUser() && $this->toolkit->getUser()->is_editor) { ?>
 			<div class="alert sitewide-notification no-userpic-tooltip">
 				Editor mode ON
 			</div>
