@@ -346,13 +346,6 @@ $this->day->is_gathering_enabled = false;
   {{into slot="content"}}
     <div class="row-fluid">
       <article class="span8 offset2 day">
-        <?
-          $is_editor_on_another_user_day = $this->toolkit->getUser() && $this->toolkit->getUser()->is_editor &&
-		          property_exists($this->day, 'user') && $this->day->user->id != $this->toolkit->getUser()->id;
-          if($is_editor_on_another_user_day) {
-	      ?>
-          <div class="alert">godmode ON</div>
-        <? } ?>
         <? if($this->is_preview) { ?>
           <div class="alert">
             <h2>This is preview page</h2>

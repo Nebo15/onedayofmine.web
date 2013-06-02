@@ -677,8 +677,19 @@ hr {
 }
 
 /* Main style */
-.content {
+.content, .navbar {
 	width:980px;
+  padding-top: 20px;
+	margin-left:auto;
+	margin-right:auto;
+}
+
+.navbar-inner {
+	padding:0;
+}
+
+.navbar .nav > li > a {
+	font-size: 17px;
 }
 
 .sitewide-notification {
@@ -1682,11 +1693,6 @@ ul.previews {
 }
 
 @media (min-width: 1224px) { /* Desktop */
-  .content {
-		margin-right: auto;
-		margin-left: auto;
-		max-width: 980px;
-  }
 
   .pull-right-on-desktop {
     float: right;
