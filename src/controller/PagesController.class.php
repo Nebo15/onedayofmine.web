@@ -134,12 +134,12 @@ class PagesController extends WebAppController
 			$day->save();
 		}
 
-		$this->day = $this->toolkit->getExportHelper()->exportDay($day, $comments_count = 50);
+		$exported_day = $this->toolkit->getExportHelper()->exportDay($day, $comments_count = 50);
 
-    $this->day->utime = date('Y-m-d', $this->day->utime);
-    $this->day->ctime = date('Y-m-d', $this->day->ctime);
+		$exported_day->utime = date('Y-m-d', $exported_day->utime);
+		$exported_day->ctime = date('Y-m-d', $exported_day->ctime);
 
-    foreach ($this->day->moments as $moment) {
+    foreach ($exported_day->moments as $moment) {
       $time = strtotime($moment->time);
 
 			$moment->time = date('H:i', $time);
@@ -151,8 +151,11 @@ class PagesController extends WebAppController
       $moment->datetime_iso = date(DATE_ISO8601, $time);
     }
 
-		$this->day = $this->_toFlatArray($this->day);
 		$this->day_obj = $day;
+		$this->day = $this->_toFlatArray($exported_day);
+
+
+		$this->similar_days = $this->_toFlatArray($this->toolkit->getExportHelper()->exportDayItems(Day::findTwoSimilar($day)));
 	}
 
 	function doMoment()

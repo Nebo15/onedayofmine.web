@@ -592,6 +592,13 @@ $this->day->is_gathering_enabled = false;
           </div>
         </div>
 
+        <? if(count($this->similar_days)) { ?>
+	        <section class="similar_days">
+		        <h2 class="muted">Similar days:</h2>
+		        {{apply template="days_list" days="$#similar_days"/}}
+	        </section>
+        <? } ?>
+
         <? if(!$this->is_import_preview) { ?>
           <hr />
           <section class="comments">

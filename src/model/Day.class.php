@@ -195,4 +195,47 @@ class Day extends BaseModel
 				->add(lmbSQLCriteria::less('utime', time() - 30 * 24 * 60 * 60));
 		return Day::find($criteria);
 	}
+
+	static function findTwoSimilar(Day $day)
+	{
+		$count = 2;
+		if($journal_day_record = DayJournalRecord::findByDayId($day->id))
+		{
+			$bottom_id_limit = ($journal_day_record->id > $count * 2) ? $journal_day_record->id - $count * 2 : 1;
+			$top_id_limit = $journal_day_record->id + $count * 2;
+			$similar_days_records = DayJournalRecord::findByIds(range($bottom_id_limit, $top_id_limit), ['id' => 'asc']);
+			foreach($similar_days_records as $i => $similar_days_record)
+			{
+				if($journal_day_record->id == $similar_days_record->id)
+				{
+					$result = [];
+					if($i > 1 && isset($similar_days_records[$i - 2]))
+						$result[] = Day::findById($similar_days_records[$i - 2]->day_id);
+					if(isset($similar_days_records[$i]))
+						$result[] = Day::findById($similar_days_records[$i]->day_id);
+					return array_reverse($result);
+				}
+			}
+			return [];
+		}
+		else
+		{
+			$bottom_id_limit = ($day->id > $count * 2) ? $day->id - $count * 2 : 1;
+			$top_id_limit = $day->id + $count * 2;
+			$similar_days = Day::findByIds(range($bottom_id_limit, $top_id_limit), ['id' => 'asc']);
+			foreach($similar_days as $i => $one_similar_day)
+			{
+				if($day->id == $one_similar_day->id)
+				{
+					$result = [];
+					if($i > 1 && isset($similar_days[$i - 2]))
+						$result[] = $similar_days[$i - 2];
+					if(isset($similar_days[$i]))
+						$result[] = $similar_days[$i];
+					return array_reverse($result);
+				}
+			}
+			return [];
+		}
+	}
 }
