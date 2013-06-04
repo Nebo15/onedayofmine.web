@@ -1,4 +1,5 @@
 {{template name='days_list'}}
+	<? if(!isset($empty_message)) $empty_message = 'User don\'t have any days yet.'; ?>
 	{{list using="$days"}}
 		<ul class="days clearfix block-center">
 	    {{list:item}}
@@ -40,7 +41,7 @@
 	    {{/list:item}}
 		</ul>
 		{{list:default}}
-			User don't have any days yet.
+			{$empty_message}
 		{{/list:default}}
 	{{/list}}
 {{/template}}
