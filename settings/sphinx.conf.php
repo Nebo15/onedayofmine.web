@@ -1,4 +1,6 @@
 <?php
+if(!defined('SPH_MATCH_EXTENDED2'))
+	lmb_require('sphinx/sphinxapi.php');
 
 $conf = [
 	'enabled' => true,

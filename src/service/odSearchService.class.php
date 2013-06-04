@@ -1,4 +1,5 @@
 <?php
+lmb_require('sphinx/sphinxapi.php');
 
 class odSearchService extends SphinxClient
 {

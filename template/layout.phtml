@@ -210,18 +210,15 @@
         <?= 'production' == lmb_app_mode() ? '<span style="font-size:12px;color:#692c2b">alpha</span>' : '' ?>
       </a>
       <ul class="nav">
-          <li class="<?= ($this->menu == 'news') ? 'active' : '';?>">
-            <a href="/pages/news" class="trigger_login"><i class="icon-large icon-group"></i> Connect</a>
-          </li>
-          <li class="<?= ($this->menu == 'create_day' || $this->menu == 'import') ? 'active' : '';?>">
-              <a href="/pages/import"><i class="icon-large icon-camera"></i> Add a day</a>
-          </li>
-          <li class="<?= ($this->menu == 'about') ? 'active' : '';?>">
-            <a href="/pages/about"><i class="icon-large icon-question-sign"></i> About</a>
-          </li>
 		      <li class="<?= ($this->menu == 'about') ? 'active' : '';?>">
-			      <a href="/pages/about"><i class="icon-large icon-search"></i> Search</a>
+			      <a href="/pages/about"><i class="icon-large icon-question-sign"></i> About</a>
 		      </li>
+		      <li class="<?= ($this->menu == 'search') ? 'active' : '';?>">
+			      <a href="/pages/search"><i class="icon-large icon-search"></i> Search</a>
+		      </li>
+	        <li class="<?= ($this->menu == 'create_day' || $this->menu == 'import') ? 'active' : '';?>">
+		        <a href="/pages/import"><i class="icon-large icon-camera"></i> Add a day</a>
+	        </li>
       </ul>
       <ul class="nav pull-right">
         <li class="dropdown <?= ($this->menu == 'me') ? 'active' : '';?>">
@@ -238,6 +235,7 @@
                 <b class="caret"></b>
             </a>
             <ul class="dropdown-menu">
+	              <li><a href="/pages/news"><i class="icon icon-group"></i> News</a></li>
                 <li><a href="/pages/my_days"><i class="icon icon-camera"></i> My days</a></li>
                 <li><a href="/pages/peoples"><i class="icon icon-user"></i> Peoples</a></li>
                 <li class="divider"></li>
@@ -294,8 +292,9 @@
 	  <footer id="footer">
 		  <p class="pull-right"><a href="#top">Back to top</a></p>
 		  <ul class="inline">
-			  <li><a href="http://onedayofmine.userecho.com/forum/20026-obschij/">Feedback & support</a></li>
 			  <li><a href="/pages/about/">About</a></li>
+			  <li><a href="http://onedayofmine.userecho.com/forum/20026-obschij/">Feedback & support</a></li>
+			  <li><a href="/pages/about/">Search</a></li>
 		  </ul>
 	  </footer>
   </div>
