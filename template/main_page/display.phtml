@@ -17,18 +17,22 @@ $this->menu = 'journal';
 	<a href="/pages/{$day.id}/day">
 		<div class="img" style="background:url({$day.image_532}) no-repeat center center;"></div>
 	</a>
-	<ul class="inline">
-		<li class="muted"><i class="icon icon-eye-open"></i>&nbsp;{$day.views_count}</li>
-		<li class="muted"><i class="icon icon-heart"></i>&nbsp;{$day.likes_count}</li>
-		<li class="muted"><i class="icon icon-comments"></i>&nbsp;{$day.comments_count}</li>
-		<li class="muted"><small>
-				<i class="icon {$day.type|day_type_icon}"></i>
-				&nbsp;{$day.type|lowercase|default:'working day'}
-			</small></li>
-	</ul>
-	<a href="/pages/{$day.id}/day">
-		<h4>{$day.title}</h4>
-	</a>
+  <div class="pull-up">
+    <div class="pull-up-inner">
+      <a href="/pages/{$day.id}/day">
+        <h4>{$day.title}</h4>
+      </a>
+      <ul class="inline text-center">
+        <li class="muted"><i class="icon icon-eye-open"></i>&nbsp;{$day.views_count}</li>
+        <li class="muted"><i class="icon icon-heart"></i>&nbsp;{$day.likes_count}</li>
+        <li class="muted"><i class="icon icon-comments"></i>&nbsp;{$day.comments_count}</li>
+        <li class="muted"><small>
+            <i class="icon {$day.type|day_type_icon}"></i>
+            &nbsp;{$day.type|lowercase|default:'working day'}
+          </small></li>
+      </ul>
+    </div>
+  </div>
 	<p>{$day.final_description}</p>
 </li>
 {{/template}}
@@ -87,7 +91,34 @@ $this->menu = 'journal';
 {{/template}}
 
 {{wrap with="layout.phtml"}}
+  <style>
   {{into slot="css"}}
+    .pull-up {
+      margin-right: 40px;
+      margin-left: 40px;
+      margin-top: -55px;
+      text-align: center;
+      background: #ffffff;
+      background: -webkit-linear-gradient(bottom, #FFF, #F9F9F9);
+      -webkit-border-top-left-radius:10px;
+      -webkit-border-top-right-radius:10px;
+      -moz-border-top-left-radius:10px;
+      -moz-border-top-right-radius:10px;
+      border-top-left-radius:10px;
+      border-top-right-radius:10px;
+      /*box-shadow: 0 1px 2px rgba(34, 25, 25, 0.4);*/
+    }
+
+    .pull-up-inner {
+      padding-top: 5px;
+      margin-right: auto;
+      margin-left: auto;
+    }
+
+    .pull-up-inner h4 {
+      padding-bottom: 5px;
+    }
+
 		h4 {
 			padding: 5px 0 10px 0;
 		}
@@ -182,7 +213,8 @@ $this->menu = 'journal';
       text-decoration: none !important;
     }
   {{/into}}
-  <script type="text/javascript">
+  </style>
+
   {{into slot="js_ready"}}
     var original_featured_img_src = '{$#featured_day.image_266|default:'/img/no_photo.png'}';
     var $featured_day_image_cover = $('#featured_day_image_cover');
@@ -205,7 +237,6 @@ $this->menu = 'journal';
       }
     );
   {{/into}}
-  </script>
   {{into slot="content"}}
     <?php if($this->featured_day) { ?>
       <h2><span class="muted">Featured</span></h2>

@@ -460,14 +460,13 @@ class PagesController extends WebAppController
     }
   }
 
-  function doDaysDiscover()
+  function doSearch()
   {
-    $days_ratings = (new InterestCalculator())->getDaysRatings(null, null, $this->lists_limit);
+	  if(!$this->request->has('q'))
+		  return;
 
-    $days = [];
-    foreach ($days_ratings as $day_rating)
-      $days[] = $day_rating->getDay();
-
-    $this->days = $this->_toFlatArray($this->toolkit->getExportHelper()->exportDayItems($days));
+	  $this->query = $this->request->getFiltered('q', FILTER_SANITIZE_STRING);
+	  $days = Day::findByString($this->query);
+		$this->days = $this->_toFlatArray($this->toolkit->getExportHelper()->exportDayItems($days));
   }
 }
