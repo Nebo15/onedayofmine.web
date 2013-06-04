@@ -259,6 +259,19 @@
 
   {{slot id='content_fullwidth'/}}
 
+  <!-- Footer ================================================== -->
+  <div class="content">
+	  <hr>
+	  <footer id="footer">
+		  <p class="pull-right"><a href="#top">Back to top</a></p>
+		  <ul class="inline">
+			  <li><a href="/pages/about/">About</a></li>
+			  <li><a href="http://onedayofmine.userecho.com/forum/20026-obschij/">Feedback & support</a></li>
+			  <li><a href="/pages/about/">Search</a></li>
+		  </ul>
+	  </footer>
+  </div>
+
   <? if(!$this->toolkit->getUser()) { ?>
     <div id="invite_modal" class="modal hide fade import-modal" tabindex="-1" role="dialog" aria-labelledby="invite_modal_label" aria-hidden="true">
       <div class="modal-header">
@@ -274,7 +287,7 @@
           Enter your invitation code to sign in:
         </p>
         <input type="text" class="input-block-level" placeholder="Invitation code">
-	      <small>Write about yourself to <a href="mailto:welcome@onedayofmine.com">welcome@onedayofmine.com</a> and we will give you an invitation code.</small>
+        <small>Write about yourself to <a href="mailto:welcome@onedayofmine.com">welcome@onedayofmine.com</a> and we will give you an invitation code.</small>
       </div>
       <div class="modal-footer">
         <button class="btn action-close" data-dismiss="modal" aria-hidden="true">Cancel</button>
@@ -285,19 +298,6 @@
       </div>
     </div>
   <? } ?>
-
-  <!-- Footer ================================================== -->
-  <div class="content">
-	  <hr>
-	  <footer id="footer">
-		  <p class="pull-right"><a href="#top">Back to top</a></p>
-		  <ul class="inline">
-			  <li><a href="/pages/about/">About</a></li>
-			  <li><a href="http://onedayofmine.userecho.com/forum/20026-obschij/">Feedback & support</a></li>
-			  <li><a href="/pages/about/">Search</a></li>
-		  </ul>
-	  </footer>
-  </div>
 
   <? if('production' == lmb_app_mode()) { ?>
     <script type="text/javascript">
