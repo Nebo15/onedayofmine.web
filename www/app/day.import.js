@@ -45,30 +45,37 @@ $(function() {
         var day = resp.data.result;
         var step_percentage = 100/(day_data.moments.length+1);
         setProgress(step_percentage, messages[Math.floor(Math.random()*messages.length)]);
-        var requests = [];
         var finished_count = 1;
 
-        $.each(day_data.moments, function(index, moment) {
-          var moment_data = {
-            time:         day_data.date + 'T' + moment.time + ':' + '00' + Tools.getTimezone(),
-						position:     index,
-            image_url:    moment.image_532,
-            description:  moment.description
-          };
+        var index = 0;
+        var iterative_resuest = function() {
+          console.log('importing');
+          if(day_data.moments.length > 0) {
+            var moment = day_data.moments.shift();
+            console.log(moment);
 
-          var moment_create_request = API.request('POST', 'days/' + day.id + '/add_moment', moment_data);
+            var moment_create_request = API.request('POST', 'days/' + day.id + '/add_moment', {
+              time:         day_data.date + 'T' + moment.time + ':' + '00' + Tools.getTimezone(),
+              position:     index,
+              image_url:    moment.image_532,
+              description:  moment.description
+            });
 
-          moment_create_request.success(function (response) {
-            finished_count++;
-            setProgress(finished_count*step_percentage+1, messages[Math.floor(Math.random()*messages.length)]);
-          });
+            moment_create_request.success(function (response) {
+              finished_count++;
+              setProgress(finished_count*step_percentage+1, messages[Math.floor(Math.random()*messages.length)]);
+              index++;
+              iterative_resuest();
+            });
 
-          requests.push(moment_create_request.send());
-        });
+            moment_create_request.send();
+          } else {
+            window.location.href = "/pages/" + day.id + '/day';
+          }
+        };
 
-        $.when.apply($, requests).then(function() {
-          window.location.href = "/pages/" + day.id + '/day';
-        });
+        // Start importing
+        iterative_resuest();
       }).send();
     });
   }
