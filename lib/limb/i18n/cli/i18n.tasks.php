@@ -18,7 +18,7 @@ function task_i18n_scan($args = array())
 {
   if(count($args)<2)
   {
-    taskman_msg("usage: " . basename(__FILE__) . " folder/for/scan path/to/ts/file.ts folder_for_scan1 folder2 fold3 ...");
+    taskman_msg("usage: " . basename(__FILE__) . " path/to/ts/file.ts folder_for_scan1 folder2 fold3 ...");
     exit(1);
   } 
   
@@ -31,6 +31,25 @@ function task_i18n_scan($args = array())
   _write_new_messages_in_ts_file($ts_file, $scanner);
 }
 
+function task_i18n_create_ts_file($args)
+{
+	if(count($args) < 1)
+	{
+		taskman_msg("usage: " . basename(__FILE__) . " path/to/ts/file.ts");
+		exit(1);
+	}
+
+	$ts_file = array_shift($args);
+	$content =<<<EOD
+<?xml version="1.0" encoding="utf-8"?>
+<TS>
+	<context>
+	</context>
+</TS>
+EOD;
+	file_put_contents($ts_file, $content);
+}
+
 /**
  *
  * @deprecated 
@@ -40,7 +59,7 @@ function  task_scan($args = array())
   task_i18n_scan($args);
 }
 
-function _exclude_existing_messages($file,$scanner)
+function _exclude_existing_messages($file, $scanner)
 {
   $doc = new DOMDocument;
   $doc->preserveWhiteSpace = false;
@@ -62,7 +81,7 @@ function _exclude_existing_messages($file,$scanner)
 function _write_new_messages_in_ts_file($file,$scanner)
 {  
   $doc = new lmbTSDocument;
-  $doc->preserveWhiteSpace = false;
+  $doc->preserveWhiteSpace = true;
   $error = !$doc->load($file,LIBXML_NONET );
   if($error)
   {

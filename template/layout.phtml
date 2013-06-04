@@ -211,13 +211,13 @@
       </a>
       <ul class="nav">
 		      <li class="<?= ($this->menu == 'about') ? 'active' : '';?>">
-			      <a href="/pages/about"><i class="icon-large icon-question-sign"></i> About</a>
+			      <a href="/pages/about"><i class="icon-large icon-question-sign"></i> {{__ text="About"}}</a>
 		      </li>
 		      <li class="<?= ($this->menu == 'search') ? 'active' : '';?>">
-			      <a href="/pages/search"><i class="icon-large icon-search"></i> Search</a>
+			      <a href="/pages/search"><i class="icon-large icon-search"></i> {{__ text="Search"}}</a>
 		      </li>
 	        <li class="<?= ($this->menu == 'create_day' || $this->menu == 'import') ? 'active' : '';?>">
-		        <a href="/pages/import"><i class="icon-large icon-camera"></i> Add a day</a>
+		        <a href="/pages/import"><i class="icon-large icon-camera"></i> {{__ text="Add a day"}}</a>
 	        </li>
       </ul>
       <ul class="nav pull-right">
@@ -226,22 +226,22 @@
             <a class="trigger_login has-spinner" href="#">
               <i class="icon-large icon-facebook-sign"></i>
               <span class="spinner icon-spin icon-refresh"></span>
-              Login with Facebook
+	            {{__ text="Login with Facebook"}}
             </a>
           <? } else { ?>
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <small>{$#current_user.name|i18n_clip:23,"&hellip;"}</small>
+                {$#current_user.name|i18n_clip:23,"&hellip;"}
                 <img src="{$#current_user.image_36}" width="24" height="24" class="img-rounded" />
                 <b class="caret"></b>
             </a>
             <ul class="dropdown-menu">
-	              <li><a href="/pages/news"><i class="icon icon-group"></i> News</a></li>
-                <li><a href="/pages/my_days"><i class="icon icon-camera"></i> My days</a></li>
-                <li><a href="/pages/peoples"><i class="icon icon-user"></i> Peoples</a></li>
+	              <li><a href="/pages/news"><i class="icon icon-group"></i> {{__ text="News"}}</a></li>
+                <li><a href="/pages/my_days"><i class="icon icon-camera"></i> {{__ text="My days"}}</a></li>
+                <li><a href="/pages/peoples"><i class="icon icon-user"></i> {{__ text="Peoples"}}</a></li>
                 <li class="divider"></li>
-                <li><a href="/pages/profile"><i class="icon icon-cog"></i> Profile</a></li>
+                <li><a href="/pages/profile"><i class="icon icon-cog"></i> {{__ text="Profile"}}</a></li>
                 <li class="divider"></li>
-                <li><a class="trigger_logout"><i class="icon icon-signout"></i> Logout</a></li>
+                <li><a class="trigger_logout"><i class="icon icon-signout"></i> {{__ text="Logout"}}</a></li>
             </ul>
           <? } ?>
         </li>
@@ -263,24 +263,27 @@
     <div id="invite_modal" class="modal hide fade import-modal" tabindex="-1" role="dialog" aria-labelledby="invite_modal_label" aria-hidden="true">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="import_modal_label">Enter invitation code</h3>
+        <h3 id="import_modal_label">{{__ text="Enter invitation code"}}</h3>
       </div>
       <div class="modal-body modal-body-main">
         <div class="alert alert-error hide">
           <strong>Error!</strong>
-          Invitation code is already used or invalid.
+	        {{__ text="Invitation code is already used or invalid"}}.
         </div>
         <p>
-          Enter your invitation code to sign in:
+	        {{__ text="Enter your invitation code to sign in"}}:
         </p>
         <input type="text" class="input-block-level" placeholder="Invitation code">
-	      <small>Write about yourself to <a href="mailto:welcome@onedayofmine.com">welcome@onedayofmine.com</a> and we will give you an invitation code.</small>
+	      <small>
+		      <?= lmb_i18n("Write about yourself to {arg} and we will give you an invitation code.",
+			      ['arg' => '<a href="mailto:welcome@onedayofmine.com">welcome@onedayofmine.com</a>']); ?>
+	      </small>
       </div>
       <div class="modal-footer">
-        <button class="btn action-close" data-dismiss="modal" aria-hidden="true">Cancel</button>
+        <button class="btn action-close" data-dismiss="modal" aria-hidden="true">{{__ text="Cancel"}}</button>
         <button class="btn btn-primary btn-success has-spinner action-sign-in">
           <span class="spinner icon-spin icon-refresh"></span>
-          Sign in
+	        {{__ text="Sign in"}}
         </button>
       </div>
     </div>
@@ -290,11 +293,25 @@
   <div class="content">
 	  <hr>
 	  <footer id="footer">
-		  <p class="pull-right"><a href="#top">Back to top</a></p>
+		  <p class="pull-right">
+			  <? if('ru_RU' != $this->toolkit->getLocale()) { ?>
+			    <a href="#" class="change_locale" data-locale="ru_RU">Ru</a>
+			  <? } else { ?>
+					Ru
+			  <? }  ?>
+			  |
+			  <? if('en_US' != $this->toolkit->getLocale()) { ?>
+				  <a href="#" class="change_locale" data-locale="en_US">En</a>
+			  <? } else { ?>
+				  En
+			  <? }  ?>
+			  &nbsp;&nbsp;&nbsp;
+			  <a href="#top">{{__ text="Back to top"}}</a>
+		  </p>
 		  <ul class="inline">
-			  <li><a href="/pages/about/">About</a></li>
-			  <li><a href="http://onedayofmine.userecho.com/forum/20026-obschij/">Feedback & support</a></li>
-			  <li><a href="/pages/about/">Search</a></li>
+			  <li><a href="/pages/about/">{{__ text="About"}}</a></li>
+			  <li><a href="http://onedayofmine.userecho.com/forum/20026-obschij/">{{__ text="Feedback and support"}}</a></li>
+			  <li><a href="/pages/about/">{{__ text="Search"}}</a></li>
 		  </ul>
 	  </footer>
   </div>
