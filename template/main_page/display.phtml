@@ -21,14 +21,14 @@ $this->menu = 'journal';
     <h4>{$day.title}</h4>
   </a>
 	<p>{$day.final_description}</p>
-	<ul class="inline text-center">
+	<ul class="inline text-center pull-right">
 		<li class="muted"><i class="icon icon-eye-open"></i>&nbsp;{$day.views_count}</li>
 		<li class="muted"><i class="icon icon-heart"></i>&nbsp;{$day.likes_count}</li>
 		<li class="muted"><i class="icon icon-comments"></i>&nbsp;{$day.comments_count}</li>
-		<li class="muted"><small>
-				<i class="icon {$day.type|day_type_icon}"></i>
-				&nbsp;{$day.type|lowercase|default:'working day'}
-			</small></li>
+		<li class="muted">
+			<i class="icon {$day.type|day_type_icon}"></i>
+			&nbsp;{$day.type|lowercase|default:'working day'}
+		</li>
 	</ul>
 </li>
 {{/template}}
@@ -47,19 +47,19 @@ $this->menu = 'journal';
 		<a href="/pages/{$day.id}/day">
 			<img src="{$day.image_266}">
 		</a>
-		<ul class="inline">
-			<li class="muted"><i class="icon icon-eye-open"></i>&nbsp;{$day.views_count}</li>
-			<li class="muted"><i class="icon icon-heart"></i>&nbsp;{$day.likes_count}</li>
-			<li class="muted"><i class="icon icon-comments"></i>&nbsp;{$day.comments_count}</li>
-			<li class="muted"><small>
-					<i class="icon {$day.type|day_type_icon}"></i>
-					&nbsp;{$day.type|lowercase|default:'working day'}
-			</small></li>
-		</ul>
 		<a href="/pages/{$day.id}/day">
 			<h4>{$day.title|i18n_clip:30}</h4>
 		</a>
 		<p>{$day.final_description|i18n_clip:350,0,"&hellip;"}</p>
+		<ul class="inline pull-right">
+			<li class="muted"><i class="icon icon-eye-open"></i>&nbsp;{$day.views_count}</li>
+			<li class="muted"><i class="icon icon-heart"></i>&nbsp;{$day.likes_count}</li>
+			<li class="muted"><i class="icon icon-comments"></i>&nbsp;{$day.comments_count}</li>
+			<li class="muted">
+				<i class="icon {$day.type|day_type_icon}"></i>
+				&nbsp;{$day.type|lowercase|default:'working day'}
+				</li>
+		</ul>
 	</li>
 {{/template}}
 
@@ -77,10 +77,10 @@ $this->menu = 'journal';
 				<li class="muted"><i class="icon icon-eye-open"></i>&nbsp;{$day.views_count}</li>
 				<li class="muted"><i class="icon icon-heart"></i>&nbsp;{$day.likes_count}</li>
 				<li class="muted"><i class="icon icon-comments"></i>&nbsp;{$day.comments_count}</li>
-				<li class="muted"><small>
+				<li class="muted">
 						<i class="icon {$day.type|day_type_icon}"></i>
 						&nbsp;{$day.type|lowercase|default:'working day'}
-				</small></li>
+				</li>
 			</ul>
 		</small>
 	</li>
