@@ -1,0 +1,20 @@
+<?php if(!property_exists($this, 'menu_disabled') || !$this->menu_disabled) { ?>
+	<? if($this->toolkit->getUser() && $this->toolkit->getUser()->is_editor) { ?>
+			<div class="alert sitewide-notification no-userpic-tooltip">
+				Editor mode ON
+			</div>
+	<? } ?>
+	<? if(($cu = $this->toolkit->getUser()) && !$cu->getImage()) { ?>
+		<div class="alert sitewide-notification no-userpic-tooltip">
+			Upload a <a href="/pages/profile">profile</a> picture so your friends know it's you.
+		</div>
+	<? } ?>
+	<? if(($cu = $this->current_user) && (!$cu['occupation'] || !$cu['birthday'] || !$cu['location'])) { ?>
+		<div class="alert sitewide-notification no-userdata-tooltip">
+			Update a <a href="/pages/profile">profile</a> so we can make a better recommendations for you.
+		</div>
+	<? } ?>
+	<div class="alert sitewide-notification visible-phone">
+		Currently we are working on apps for iOS and Android, web version is not fully supported on mobile devices.
+	</div>
+<? } ?>

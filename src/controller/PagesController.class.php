@@ -134,12 +134,12 @@ class PagesController extends WebAppController
 			$day->save();
 		}
 
-		$this->day = $this->toolkit->getExportHelper()->exportDay($day);
+		$exported_day = $this->toolkit->getExportHelper()->exportDay($day, $comments_count = 50);
 
-    $this->day->utime = date('Y-m-d', $this->day->utime);
-    $this->day->ctime = date('Y-m-d', $this->day->ctime);
+		$exported_day->utime = date('Y-m-d', $exported_day->utime);
+		$exported_day->ctime = date('Y-m-d', $exported_day->ctime);
 
-    foreach ($this->day->moments as $moment) {
+    foreach ($exported_day->moments as $moment) {
       $time = strtotime($moment->time);
 
 			$moment->time = date('H:i', $time);
@@ -151,8 +151,11 @@ class PagesController extends WebAppController
       $moment->datetime_iso = date(DATE_ISO8601, $time);
     }
 
-		$this->day = $this->_toFlatArray($this->day);
 		$this->day_obj = $day;
+		$this->day = $this->_toFlatArray($exported_day);
+
+
+		$this->similar_days = $this->_toFlatArray($this->toolkit->getExportHelper()->exportDayItems(Day::findTwoSimilar($day)));
 	}
 
 	function doMoment()
@@ -193,6 +196,12 @@ class PagesController extends WebAppController
 		$this->user = (array) $this->toolkit->getExportHelper()->exportUser($user);
 
 		$this->user['days'] = $this->_toFlatArray($this->toolkit->getExportHelper()->exportDayItems($user->getPublicDays()->paginate(0, $this->lists_limit)));
+		foreach($this->user['days'] as $i => $day)
+		{
+			if(!$day->comments_count)
+				unset($this->user['days'][$i]);
+		}
+
 		$followers = $user->getFollowersUsers();
 		$this->user['users_followers'] = $this->_toFlatArray($this->toolkit->getExportHelper()->exportUserItems($followers));
 
@@ -451,14 +460,13 @@ class PagesController extends WebAppController
     }
   }
 
-  function doDaysDiscover()
+  function doSearch()
   {
-    $days_ratings = (new InterestCalculator())->getDaysRatings(null, null, $this->lists_limit);
+	  if(!$this->request->has('q'))
+		  return;
 
-    $days = [];
-    foreach ($days_ratings as $day_rating)
-      $days[] = $day_rating->getDay();
-
-    $this->days = $this->_toFlatArray($this->toolkit->getExportHelper()->exportDayItems($days));
+	  $this->query = $this->request->getFiltered('q', FILTER_SANITIZE_STRING);
+	  $days = Day::findByString($this->query);
+		$this->days = $this->_toFlatArray($this->toolkit->getExportHelper()->exportDayItems($days));
   }
 }

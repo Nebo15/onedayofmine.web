@@ -1,0 +1,96 @@
+<?
+$this->title = "Live the life through other people's eyes";
+$this->menu = 'search';
+?>
+{{wrap with="layout.phtml"}}
+{{into slot="css"}}
+{{/into}}
+
+{{into slot="js_ready"}}
+(function() {
+	var $search_form = $('.form-search');
+	var $search_form_query = $search_form.find('.search-query');
+	var $search_form_submit = $search_form.find('button');
+	var $search_result = $('.days');
+
+	function clearAndSpin()
+	{
+		$('.nav-pills li.active').removeClass('active');
+		$search_form_query.val('');
+		$search_result.html('');
+		$('.has-spinner').showSpinner();
+	}
+
+	function show_days_by_response(response)
+	{
+		$('.has-spinner').hideSpinner();
+		if(response.data.result.length === 0)
+		{
+			$search_result.html("<center><p>We can't find any days by your query</p></center>");
+		}
+		else
+		{
+			var template_list = Template.prepareTemplate($('#days_list_elements_template'));
+			var days = Template.compileElement(template_list, {
+				days: response.data.result
+			});
+
+			days = $($.trim(days));
+			$($search_result).hide().html(days).show('slow');
+		}
+	}
+
+	$search_form_query.attachValidator({
+		button: $search_form_submit,
+		maxLength: 100,
+		minLength: 3,
+		messages: {
+			empty: 'Search query is empty',
+			minLength: 'Search query is too short',
+			maxLength: 'Search query is too long'
+		}
+	});
+
+	$search_form.submit(function(event) {
+		$search_form_submit.addClass('disabled');
+		var search_request = API.request('POST', 'days/search', {
+			query: $search_form_query.val()
+		});
+
+		search_request.success(function(response) {
+			var title = 'OneDayOfMine: search "' + $search_form_query.val() + '"';
+			var url = '/pages/search?q='+$search_form_query.val();
+			console.log(title, url);
+			history.pushState(null, title, url);
+			show_days_by_response(response);
+
+		});
+		search_request.send();
+		return false;
+	});
+
+})();
+{{/into}}
+
+{{into slot="content"}}
+<div class="row-fluid">
+  <center>
+    <form class="form-search days-search-form">
+      <input type="search" autofocus class="input-xlarge search-query span5"
+             placeholder="Occupation, place or something else" value="{$#query}">
+      <button type="submit" class="btn">Discover!</button>
+    </form>
+  </center>
+</div>
+<div class="has-spinner clearfix">
+  <i class="spinner icon-spin icon-refresh"></i>
+  <ul class="days clearfix block-center">
+    <div class="popular">
+	    <? $empty_message = $this->request->has('q') ? 'We can\'t find any days by your query' : ' '; ?>
+      {{apply template="days_list" days="$#days" empty_message="$empty_message"/}}
+    </div>
+  </ul>
+</div>
+
+{{/into}}
+{{/wrap}}

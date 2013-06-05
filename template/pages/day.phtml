@@ -22,16 +22,13 @@ $this->day->is_gathering_enabled = false;
   {{/into}}
   {{into slot="js_include"}}
     <script src="/app/day.js"></script>
-    <? if($this->toolkit->getUser()) { ?>
-      <script src="/app/day.user.js"></script>
-      <? if($this->is_owner) { ?>
-        <script src="/lib/vendor/jquery.ajax-progress.js"></script>
-        <script src="/lib/vendor/jquery.jcrop.js"></script>
-        <script src="/lib/vendor/jquery.exif.js"></script>
-        <script src="/lib/Importer.js"></script>
-        <script src="/app/day.scroller.js"></script>
-        <script src="/app/day.owner.js"></script>
-      <? } ?>
+    <? if($this->toolkit->getUser() && $this->is_owner) { ?>
+      <script src="/lib/vendor/jquery.ajax-progress.js"></script>
+      <script src="/lib/vendor/jquery.jcrop.js"></script>
+      <script src="/lib/vendor/jquery.exif.js"></script>
+      <script src="/lib/Importer.js"></script>
+      <script src="/app/day.scroller.js"></script>
+      <script src="/app/day.owner.js"></script>
     <? } ?>
     <? if($this->is_import_preview) { ?>
       <script src="/app/day.import.js"></script>
@@ -349,13 +346,6 @@ $this->day->is_gathering_enabled = false;
   {{into slot="content"}}
     <div class="row-fluid">
       <article class="span8 offset2 day">
-        <?
-          $is_editor_on_another_user_day = $this->toolkit->getUser() && $this->toolkit->getUser()->is_editor &&
-		          property_exists($this->day, 'user') && $this->day->user->id != $this->toolkit->getUser()->id;
-          if($is_editor_on_another_user_day) {
-	      ?>
-          <div class="alert">godmode ON</div>
-        <? } ?>
         <? if($this->is_preview) { ?>
           <div class="alert">
             <h2>This is preview page</h2>
@@ -602,18 +592,24 @@ $this->day->is_gathering_enabled = false;
           </div>
         </div>
 
+        <? if(count($this->similar_days)) { ?>
+	        <section class="similar_days">
+		        <h2 class="muted">Similar days:</h2>
+		        {{apply template="days_list" days="$#similar_days"/}}
+	        </section>
+        <? } ?>
+
         <? if(!$this->is_import_preview) { ?>
           <hr />
-
           <section class="comments">
             <a name="comments"></a>
             <? if($this->day->comments && $this->day->comments_count > 0) { ?>
               <span class="pull-right not-decorated text-gray">
                 <i class="icon-comments"></i>
-                <span class="counter"><? if($this->day->comments_count > 3) { ?>3/<? } ?>{$this->day->comments_count}</span>
+                <span class="counter">{$this->day->comments_count}</span>
               </span>
             <? } ?>
-            <h2>Comments:</h2>
+            <h2 class="muted">Comments:</h2>
 
             <div class="articles">
               <? if(property_exists($this->day, 'comments')) { ?>
@@ -643,7 +639,6 @@ $this->day->is_gathering_enabled = false;
                     </article>
                   {{/list:item}}
                   {{list:default}}
-                    <? if($this->toolkit->getUser()){ ?>
                       <article class="template">
                         <img src="/users/default_image_72.png" width="72" class="pull-left img-rounded" />
                         <div class="bubble left">
@@ -653,32 +648,26 @@ $this->day->is_gathering_enabled = false;
                           </p>
                         </div>
                       </article>
-                    <? } ?>
                   {{/list:default}}
                 {{/list}}
               <? } ?>
             </div>
 
             <div class="loader-wrap">
-              <button class="btn btn-block action-load-next has-spinner<? if(!$this->day->comments || $this->day->comments_count < 4) { ?> disabled" style="opacity:0<? } ?>">
+              <button class="btn btn-block action-load-next has-spinner<? if(!$this->day->comments || $this->day->comments_count <= 20) { ?> disabled" style="opacity:0<? } ?>">
                 <span class="spinner icon-spin icon-refresh"></span>
                 Load more comments
               </button>
             </div>
 
-            <? if($this->toolkit->getUser()) { ?>
-              <form name="add_comment_form">
-                <textarea rows="3" class="input-block-level text"></textarea>
-                <button type="submit" class="btn btn-block has-spinner disabled">
-                  <span class="spinner icon-spin icon-refresh"></span>
-                  Send comment
-                </button>
-              </form>
-            <? } else { ?>
-              <div class="alert alert-block">
-                <a href="#" class="trigger_login">Sign up</a> to write comment
-              </div>
-            <? } ?>
+            <form name="add_comment_form">
+              <textarea rows="3" class="input-block-level text"></textarea>
+              <button type="submit" class="btn btn-block has-spinner disabled">
+                <span class="spinner icon-spin icon-refresh"></span>
+                Send comment
+              </button>
+            </form>
+
           </section>
         <? } ?>
 
@@ -689,12 +678,6 @@ $this->day->is_gathering_enabled = false;
           </button>
         </div>
       </article>
-    </div>
-
-    <div class="scrollHelper visible-desktop visible-tablet">
-      <a href="#" class="scrollTo top">
-        Back to top <i class="icon-angle-up"></i>
-      </a>
     </div>
   {{/into}}
 {{/wrap}}

@@ -1,4 +1,6 @@
 <?php
+lmb_require('limb/macro/src/compiler/lmbMacroTag.class.php');
+
 /*
  * Limb PHP Framework
  *
