@@ -375,11 +375,8 @@ $this->day->is_gathering_enabled = false;
                          style="font-size:32px;height:40px;line-height:40px"/>
 
                   <div class="row-fluid">
-                    <div class="span6">
-                      <input type="date" name="date" value="{$#day->date}" class="input-large input-block-level" />
-                    </div>
-                    <div style="margin-top: -2px; margin-bottom: 7px" class="span6">
-                      <div class="action-select-type btn-group pull-right-on-desktop" data-toggle="buttons-radio">
+                      <input type="date" name="date" value="{$#day->date}" class="" />
+                      <div class="action-select-type btn-group pull-right" data-toggle="buttons-radio">
                         <button type="button" class="btn type btn-small<? if($this->day->type == 'Working day') {?> active<? } ?>">
 	                        {{__ text="Working day"}}
                         </button>
@@ -392,7 +389,6 @@ $this->day->is_gathering_enabled = false;
                         <button type="button" class="btn type btn-small<? if($this->day->type == 'Trip') {?> active<? } ?>">
 	                        {{__ text="Trip"}}
                         </button>
-                      </div>
                     </div>
                   </div>
 
@@ -435,9 +431,9 @@ $this->day->is_gathering_enabled = false;
           <? } ?>
         </header>
 
-        <div class="day-toolbar">
+        <div class="day-toolbar clearfix">
           <? if($this->is_owner) { ?>
-            <div class="pull-right-on-desktop day-controls-group btn-toolbar">
+            <div class="pull-right day-controls-group btn-toolbar">
               <div class="input-prepend small">
                 <span class="add-on"><i class="icon-eye-open"></i> {$this->day->views_count}</span>
                 <a href="/pages/{$#day->id}/day?preview" class="btn btn-small with-tooltip" data-original-title="Enter preview mode">
@@ -450,13 +446,16 @@ $this->day->is_gathering_enabled = false;
             </div>
           <? } ?>
 
-          <div class="btn-toolbar">
-	          {{apply template="day_journal_button" day="$#day" /}}
-            {{apply template="day_comments_button" day="$#day" /}}
-            {{apply template="day_like_button" day="$#day" /}}
-            {{apply template="day_share_button" day="$#day" /}}
-          </div>
+	        <? if(!$this->is_owner || $this->is_preview) { ?>
+	          <div class="btn-toolbar">
+		            {{apply template="day_journal_button" day="$#day" /}}
+	              {{apply template="day_comments_button" day="$#day" /}}
+	              {{apply template="day_like_button" day="$#day" /}}
+	              {{apply template="day_share_button" day="$#day" /}}
+	          </div>
+	        <? } ?>
         </div>
+
 
         <section class="moments">
           <? if($this->is_owner) { ?>
@@ -592,15 +591,17 @@ $this->day->is_gathering_enabled = false;
 	        </div>
         <? } ?>
 
-        <div class="clearfix">
-          <div class="btn-toolbar pull-right-on-tablet pull-right-on-desktop text-center">
-            {{apply template="day_like_button" day="$#day" /}}
-            {{apply template="day_share_button" day="$#day" /}}
-            {{apply template="day_report_button" day="$#day" /}}
-          </div>
-        </div>
+        <? if(!$this->is_owner || $this->is_preview) { ?>
+	        <div class="clearfix">
+	          <div class="btn-toolbar pull-right pull-right text-center">
+	            {{apply template="day_like_button" day="$#day" /}}
+	            {{apply template="day_share_button" day="$#day" /}}
+	            {{apply template="day_report_button" day="$#day" /}}
+	          </div>
+	        </div>
+        <? } ?>
 
-        <? if(count($this->similar_days)) { ?>
+        <? if(count($this->similar_days) && !$this->is_owner) { ?>
 	        <section class="similar_days">
 		        <h2 class="muted">{{__ text="Similar days"}}:</h2>
 		        {{apply template="days_list" days="$#similar_days"/}}
