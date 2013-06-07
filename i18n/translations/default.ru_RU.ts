@@ -113,8 +113,7 @@
     </message>
     <message>
         <source>Best working day</source>
-        <translation>Лучший
-рабочий день</translation>
+        <translation>Лучший рабочий день</translation>
     </message>
     <message>
         <source>Best day off</source>
@@ -127,6 +126,363 @@
     <message>
         <source>Best trip</source>
         <translation>Лучшее путешествие</translation>
+    </message>
+    <message>
+        <source>Photos without story is just beautiful pictures, we like to share stories, best moments of your life: travels, birthday, parties and other meaningfull events</source>
+        <translation>Фотографии без истории — просто красивые картинки. Мы хотим рассказать в своих историях о лучших моментах вашей жизни: путешествиях, праздниках, вечеринках и других значимых событиях</translation>
+    </message>
+    <message>
+        <source>Live the life through other people\&apos;s eyes</source>
+        <translation>Посмотри на жизнь чужими глазами</translation>
+    </message>
+    <message>
+        <source>Our main features</source>
+        <translation>Наши основные идеи</translation>
+    </message>
+    <message>
+        <source>Share a story, not photo</source>
+        <translation>Делитесь историями, а не просто фотографиями</translation>
+    </message>
+    <message>
+        <source>Photos without a story are just beautiful pictures, we like to share stories, best moments of our life: travels, birthdays, parties and other meaningfull events.</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Give new life to old photos</source>
+        <translation>Дайте жизнь старым фотографиям</translation>
+    </message>
+    <message>
+        <source>People have tons of photos that are lost in time, give them new life, make stories out of them and share them with friends.</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Magic</source>
+        <translation>Магия
+</translation>
+    </message>
+    <message>
+        <source>It’s an easy-to-use tool, just connect your social profiles and enjoy the magic.</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>How does it work?</source>
+        <translation>Как это работает?</translation>
+    </message>
+    <message>
+        <source>Sign up</source>
+        <translation>Вход</translation>
+    </message>
+    <message>
+        <source>No need to enter any information, we will use your Facebook profile</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Create day</source>
+        <translation>Создание дня</translation>
+    </message>
+    <message>
+        <source>Editing days is simple as never before</source>
+        <translation>Максимально упрощенное редактирование дней</translation>
+    </message>
+    <message>
+        <source>You can arrange moments by changing time, selecting cover, editing images and many other.</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Add moments</source>
+        <translation>Добавление моментов</translation>
+    </message>
+    <message>
+        <source>You can upload pictures from PC, your cell phone, or import them from Flickr, Instagram and Facebook. You can even upload image by dragging it from your desktop onto empty moment.</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Add moments descriptions</source>
+        <translation>Описание моментов</translation>
+    </message>
+    <message>
+        <source>You can leave a short description for the greater expression emotions of the moment.</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Share it</source>
+        <translation>Поделись этим</translation>
+    </message>
+    <message>
+        <source>Post your day on Facebook</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Get interest</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Likes! Everybody loves them.</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Awesome! I have stories to tell!</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Live the life through other people&apos;s eyes</source>
+        <translation>Посмотри на жизнь чужими глазами</translation>
+    </message>
+    <message>
+        <source>One day of </source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>We can&apos;t find any days by your query</source>
+        <translation>Мы ничего не нашли. Искали. Но не нашли. Но искали. А у нас точно такое было?</translation>
+    </message>
+    <message>
+        <source>Search query is empty</source>
+        <translation>Строка для поиска пуста</translation>
+    </message>
+    <message>
+        <source>Search query is too short</source>
+        <translation>А можно строку для поиска подлиннее? </translation>
+    </message>
+    <message>
+        <source>Search query is too long</source>
+        <translation>Ну это слишком длинная строка для поиска. Покороче бы</translation>
+    </message>
+    <message>
+        <source>Occupation, place or something else</source>
+        <translation>Профессия автора, город, что-то из текста, что угодно</translation>
+    </message>
+    <message>
+        <source>Create moment</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Delete moment</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>From PC</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Import from</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Instagram</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Flickr</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Facebook</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Select image</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Earlier</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Later</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Import</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Retrieving data</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>This is preview page</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Here you can see how your day is displayed for other users!</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Back to edit</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>This is import preview page</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Import!</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Working day</source>
+        <translation>Рабочий день</translation>
+    </message>
+    <message>
+        <source>Day off</source>
+        <translation>Выходной</translation>
+    </message>
+    <message>
+        <source>Holiday</source>
+        <translation>Отпуск</translation>
+    </message>
+    <message>
+        <source>Trip</source>
+        <translation>Путешествие</translation>
+    </message>
+    <message>
+        <source>Enter description...</source>
+        <translation>Введите описание дня...</translation>
+    </message>
+    <message>
+        <source>Save</source>
+        <translation>Сохранить</translation>
+    </message>
+    <message>
+        <source>Preview</source>
+        <translation>Предварительный просмотр</translation>
+    </message>
+    <message>
+        <source>Delete day</source>
+        <translation>Удалить день</translation>
+    </message>
+    <message>
+        <source>Cover</source>
+        <translation>Обложка</translation>
+    </message>
+    <message>
+        <source>Crop</source>
+        <translation>Обрезание</translation>
+    </message>
+    <message>
+        <source>Save description</source>
+        <translation>Сохранить описание</translation>
+    </message>
+    <message>
+        <source>Similar days</source>
+        <translation>Другие дни</translation>
+    </message>
+    <message>
+        <source>You can be first, who wrote comment for this day!</source>
+        <translation>Вы можете быть первым, кто оставит комментарий</translation>
+    </message>
+    <message>
+        <source>Load more comments</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Send comment</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Connect social profiles</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Select a day</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Publish</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>First of all you need to create account via Facebook</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Sign up with Facebook</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>You can use magic import feature, just connect social profiles</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Connect to instagram</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Connect to Flickr</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Facebook already connected</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Find days</source>
+        <translation>Найти дни</translation>
+    </message>
+    <message>
+        <source>Or create empty day and fill it manually</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Create day from scratch</source>
+        <translation>Создать пустой день</translation>
+    </message>
+    <message>
+        <source>You can create empty day and add moments manually</source>
+        <translation>Вы можете создать пустой день и добавить моменты вручную</translation>
+    </message>
+    <message>
+        <source>Load more</source>
+        <translation>Загрузить еще</translation>
+    </message>
+    <message>
+        <source>Description</source>
+        <translation>Описание</translation>
+    </message>
+    <message>
+        <source>Back</source>
+        <translation>Назад</translation>
+    </message>
+    <message>
+        <source>Unfollow</source>
+        <translation>Отписаться</translation>
+    </message>
+    <message>
+        <source>Follow</source>
+        <translation>Подписаться</translation>
+    </message>
+    <message>
+        <source>by</source>
+        <translation>от</translation>
+    </message>
+    <message>
+        <source>Like</source>
+        <translation>Нравится</translation>
+    </message>
+    <message>
+        <source>Unlike</source>
+        <translation>Не нравится</translation>
+    </message>
+    <message>
+        <source>Share this day with your Facebook friends</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Share</source>
+        <translation>Поделиться</translation>
+    </message>
+    <message>
+        <source>Report about inappropriate content</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Complain</source>
+        <translation>Пожаловаться</translation>
+    </message>
+    <message>
+        <source>Empty</source>
+        <translation>Пусто</translation>
     </message>
 </context>
 </TS>
