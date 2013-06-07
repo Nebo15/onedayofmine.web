@@ -17,23 +17,19 @@ $this->menu = 'journal';
 	<a href="/pages/{$day.id}/day">
 		<div class="img" style="background:url({$day.image_532}) no-repeat center center;"></div>
 	</a>
-  <div class="pull-up">
-    <div class="pull-up-inner">
-      <a href="/pages/{$day.id}/day">
-        <h4>{$day.title}</h4>
-      </a>
-      <ul class="inline text-center">
-        <li class="muted"><i class="icon icon-eye-open"></i>&nbsp;{$day.views_count}</li>
-        <li class="muted"><i class="icon icon-heart"></i>&nbsp;{$day.likes_count}</li>
-        <li class="muted"><i class="icon icon-comments"></i>&nbsp;{$day.comments_count}</li>
-        <li class="muted"><small>
-            <i class="icon {$day.type|day_type_icon}"></i>
-            &nbsp;{$day.type|lowercase|default:'working day'}
-          </small></li>
-      </ul>
-    </div>
-  </div>
+  <a href="/pages/{$day.id}/day">
+    <h4>{$day.title}</h4>
+  </a>
 	<p>{$day.final_description}</p>
+	<ul class="inline text-center pull-right">
+		<li class="muted"><i class="icon icon-eye-open"></i>&nbsp;{$day.views_count}</li>
+		<li class="muted"><i class="icon icon-heart"></i>&nbsp;{$day.likes_count}</li>
+		<li class="muted"><i class="icon icon-comments"></i>&nbsp;{$day.comments_count}</li>
+		<li class="muted">
+			<i class="icon {$day.type|day_type_icon}"></i>
+			&nbsp;{$day.type|lowercase|default:'working day'}
+		</li>
+	</ul>
 </li>
 {{/template}}
 
@@ -42,28 +38,28 @@ $this->menu = 'journal';
 	<li class="medium-day {$additional_class}">
 		<? if(isset($title)) { ?>
 			<h3 class="muted">
-				{$title}
+				{$title}&nbsp;
 				<? if(isset($icon)) { ?>
-					<i class="icon icon-{$icon}"></i>&nbsp;
+					<i class="icon icon-{$icon}"></i>
 				<? } ?>
 			</h3>
 		<? } ?>
 		<a href="/pages/{$day.id}/day">
 			<img src="{$day.image_266}">
 		</a>
-		<ul class="inline">
-			<li class="muted"><i class="icon icon-eye-open"></i>&nbsp;{$day.views_count}</li>
-			<li class="muted"><i class="icon icon-heart"></i>&nbsp;{$day.likes_count}</li>
-			<li class="muted"><i class="icon icon-comments"></i>&nbsp;{$day.comments_count}</li>
-			<li class="muted"><small>
-					<i class="icon {$day.type|day_type_icon}"></i>
-					&nbsp;{$day.type|lowercase|default:'working day'}
-			</small></li>
-		</ul>
 		<a href="/pages/{$day.id}/day">
 			<h4>{$day.title|i18n_clip:30}</h4>
 		</a>
 		<p>{$day.final_description|i18n_clip:350,0,"&hellip;"}</p>
+		<ul class="inline pull-right">
+			<li class="muted"><i class="icon icon-eye-open"></i>&nbsp;{$day.views_count}</li>
+			<li class="muted"><i class="icon icon-heart"></i>&nbsp;{$day.likes_count}</li>
+			<li class="muted"><i class="icon icon-comments"></i>&nbsp;{$day.comments_count}</li>
+			<li class="muted">
+				<i class="icon {$day.type|day_type_icon}"></i>
+				&nbsp;{$day.type|lowercase|default:'working day'}
+				</li>
+		</ul>
 	</li>
 {{/template}}
 
@@ -81,10 +77,10 @@ $this->menu = 'journal';
 				<li class="muted"><i class="icon icon-eye-open"></i>&nbsp;{$day.views_count}</li>
 				<li class="muted"><i class="icon icon-heart"></i>&nbsp;{$day.likes_count}</li>
 				<li class="muted"><i class="icon icon-comments"></i>&nbsp;{$day.comments_count}</li>
-				<li class="muted"><small>
+				<li class="muted">
 						<i class="icon {$day.type|day_type_icon}"></i>
 						&nbsp;{$day.type|lowercase|default:'working day'}
-				</small></li>
+				</li>
 			</ul>
 		</small>
 	</li>
@@ -93,32 +89,6 @@ $this->menu = 'journal';
 {{wrap with="layout.phtml"}}
   <style>
   {{into slot="css"}}
-    .pull-up {
-      margin-right: 40px;
-      margin-left: 40px;
-      margin-top: -55px;
-      text-align: center;
-      background: #ffffff;
-      background: -webkit-linear-gradient(bottom, #FFF, #F9F9F9);
-      -webkit-border-top-left-radius:10px;
-      -webkit-border-top-right-radius:10px;
-      -moz-border-top-left-radius:10px;
-      -moz-border-top-right-radius:10px;
-      border-top-left-radius:10px;
-      border-top-right-radius:10px;
-      /*box-shadow: 0 1px 2px rgba(34, 25, 25, 0.4);*/
-    }
-
-    .pull-up-inner {
-      padding-top: 5px;
-      margin-right: auto;
-      margin-left: auto;
-    }
-
-    .pull-up-inner h4 {
-      padding-bottom: 5px;
-    }
-
 		h4 {
 			padding: 5px 0 10px 0;
 		}
@@ -239,7 +209,7 @@ $this->menu = 'journal';
   {{/into}}
   {{into slot="content"}}
     <?php if($this->featured_day) { ?>
-      <h2><span class="muted">Featured</span></h2>
+      <h2><span class="muted">{{__ text="Featured"}}</span></h2>
       <div class="featured_day clearfix">
         <div id="featured_day_image_cover">
         	<a href="/pages/{$#featured_day->id}/day" class="pull-left" style="margin-right:20px;">
@@ -270,7 +240,7 @@ $this->menu = 'journal';
     <div class="row-fluid">
     	<ul class="items-list">
 		    <li class="big-item padded">
-		      <h2 id="journal"><span class="muted">Journal</span></h2>
+		      <h2 id="journal"><span class="muted">{{__ text="Journal"}}</span></h2>
 			    <ul class="items-list">
 				    {{list using="{$#journal_days}"}}
 				      {{list:item}}
@@ -281,41 +251,47 @@ $this->menu = 'journal';
 			    <ul class="pager">
 				    <? if($this->first_link) { ?>
 					    <li class="previous">
-						    <a href="/">&larr; Today</a>
+						    <a href="/">&larr; {{__ text="Today"}}</a>
 					    </li>
 				    <? } ?>
 				    <? if($this->next_link) { ?>
 					    <li class="next">
-						    <a href="{$#next_link}#journal">Older &rarr;</a>
+						    <a href="{$#next_link}#journal">{{__ text="Older"}} &rarr;</a>
 					    </li>
 				    <? } ?>
 			    </ul>
 		    </li>
     		<li class="medium-item padded">
-			    <h2><span class="muted">Popular</span></h2>
+			    <h2><span class="muted">{{__ text="Popular"}}</span></h2>
 			    <ul class="items-list">
 				    <li class="medium-day">
               <h3 class="muted">Facebook</h3>
               <div class="fb-like-box" data-href="https://www.facebook.com/Onedayofmine" data-width="240" data-height="230"
                    data-show-faces="true" data-stream="false" data-show-border="false" data-header="false">
               </div>
-				    <li class="medium-day">
-              <h3 class="muted">VKontakte</h3>
-					    <script type="text/javascript">
-						    $(function() {
-							    $.getScript("//vk.com/js/api/openapi.js?96", function() {
-								    VK.Widgets.Group("vk_groups", {mode: 0, width: "240", height: "150"}, 53796872);
+					  <? if('ru_RU' == $this->toolkit->getLocale()) { ?>
+					    <li class="medium-day">
+	              <h3 class="muted">VKontakte</h3>
+						    <script type="text/javascript">
+							    $(function() {
+								    $.getScript("//vk.com/js/api/openapi.js?96", function() {
+									    VK.Widgets.Group("vk_groups", {mode: 0, width: "240", height: "150"}, 53796872);
+								    });
 							    });
-						    });
-					    </script>
-              <div id="vk_groups"></div>
-				    </li>
-				    {{apply template="medium_day" day="{$#top_working}" title="Best working day" icon="cogs"/}}
-				    {{apply template="medium_day" day="{$#top_dayoff}" title="Best day off" icon="calendar-empty"/}}
-				    {{apply template="medium_day" day="{$#top_holiday}" title="Best holiday"  icon="gift"/}}
-				    {{apply template="medium_day" day="{$#top_trip}" title="Best trip" icon="rocket"/}}
+						    </script>
+	              <div id="vk_groups"></div>
+					    </li>
+				    <? } ?>
+				    <? $title = lmb_i18n('Best working day'); ?>
+				    {{apply template="medium_day" day="{$#top_working}" title="$title" icon="cogs"/}}
+				    <? $title = lmb_i18n('Best day off'); ?>
+				    {{apply template="medium_day" day="{$#top_dayoff}" title="$title" icon="calendar-empty"/}}
+				    <? $title = lmb_i18n('Best holiday'); ?>
+				    {{apply template="medium_day" day="{$#top_holiday}" title="$title"  icon="gift"/}}
+				    <? $title = lmb_i18n('Best trip'); ?>
+				    {{apply template="medium_day" day="{$#top_trip}" title="$title" icon="rocket"/}}
 
-		        <li><h3 class="muted">Top days</h3></li>
+		        <li><h3 class="muted">{{__ text="Top days"}}</h3></li>
 				    {{list using="$#popular_days" counter="$counter"}}
 					    {{list:item}}
 						    {{apply template="medium_day" day="$item" additional_class="last-item" /}}
@@ -324,26 +300,26 @@ $this->menu = 'journal';
 			    </ul>
     		</li>
 		    <li class="small-item">
-			    <h2><span class="muted">New</span></h2>
+			    <h2><span class="muted">{{__ text="New"}}</span></h2>
 			    <ul class="items-list">
-				    <li><h4 class="muted">&hellip;users</h4></li>
+				    <li><h3 class="muted">&hellip;{{__ text="users"}}</h3></li>
 				    {{list using="$#new_users"}}
-				    {{list:item}}
-				    <li class="user-item">
-					    <a href="/pages/{$item.id}/user">
-						    <img class="img-circle pull-left" src="{$item.image_192}">
-					    </a>
-					    <a href="/pages/{$item.id}/user">
-						    <h5>{$item.name}</h5>
-					    </a>
-				    </li>
-				    {{/list:item}}
+					    {{list:item}}
+					    <li class="user-item">
+						    <a href="/pages/{$item.id}/user">
+							    <img class="img-circle pull-left" src="{$item.image_192}">
+						    </a>
+						    <a href="/pages/{$item.id}/user">
+							    <h5>{$item.name}</h5>
+						    </a>
+					    </li>
+					    {{/list:item}}
 				    {{/list}}
-				    <li><h4 class="muted">&hellip;days</h4></li>
+				    <li><h3 class="muted">&hellip;{{__ text="days"}}</h3></li>
 				    {{list using="{$#new_days}"}}
-				    {{list:item}}
-				    {{apply template="small_day" day="{$item}"/}}
-				    {{/list:item}}
+				      {{list:item}}
+				        {{apply template="small_day" day="{$item}"/}}
+				      {{/list:item}}
 				    {{/list}}
 			    </ul>
 		    </li>

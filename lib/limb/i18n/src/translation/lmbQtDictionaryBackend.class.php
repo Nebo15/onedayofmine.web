@@ -20,22 +20,11 @@ lmb_env_setor('LIMB_TRANSLATIONS_INCLUDE_PATH', 'i18n/translations;limb/*/i18n/t
  */
 class lmbQtDictionaryBackend //extends lmbDictionaryBackend ???
 {
-  protected $use_cache = false;
-  protected $cache_dir;
+	protected $cache_name = 'i18n';
 
   function __construct()
   {
     $this->search_path = lmb_env_get('LIMB_TRANSLATIONS_INCLUDE_PATH');
-  }
-
-  function setCacheDir($dir)
-  {
-    $this->cache_dir = $dir;
-  }
-
-  function useCache($flag = true)
-  {
-    $this->use_cache = $flag;
   }
 
   function setSearchPath($path)
@@ -169,36 +158,35 @@ class lmbQtDictionaryBackend //extends lmbDictionaryBackend ???
     $this->getDOMDocument($dictionary)->save($file);
   }
 
-  protected function _isFileCachingOn()
+  protected function _isCachingOn()
   {
-    return $this->use_cache && $this->cache_dir;
+    return lmbToolkit::instance()->hasConf('cache') && lmbToolkit::instance()->hasCache($this->cache_name);
   }
+
+	protected function _createCacheKey($dict_file)
+	{
+		return md5($dict_file).'_'.basename($dict_file);
+	}
 
   protected function _loadFromCache($dictionary, $file)
   {
-    if(!$this->_isFileCachingOn())
+    if(!$this->_isCachingOn())
       return false;
 
-    if(!file_exists($cache = $this->_getCacheFile($file)))
+	  $cache = lmbToolkit::instance()->getCache($this->cache_name);
+    if(!$cached_value = $cache->get($this->_createCacheKey($file)))
       return false;
 
-    $dictionary->setTranslations(unserialize(file_get_contents($cache)));
+    $dictionary->setTranslations(unserialize($cached_value));
     return true;
   }
 
   protected function _saveToCache($dictionary, $file)
   {
-    if(!$this->_isFileCachingOn())
+    if(!$this->_isCachingOn())
       return;
 
-    $cache = $this->_getCacheFile($file);
-    if(!is_dir($dir = dirname($cache)))
-      lmbFs::mkdir($dir);
-    file_put_contents($this->_getCacheFile($file), serialize($dictionary->getTranslations()), LOCK_EX);
-  }
-
-  protected function _getCacheFile($file)
-  {
-    return $this->cache_dir . '/i18n-qt/' . md5(realpath($file));
+	  $cache = lmbToolkit::instance()->getCache($this->cache_name);
+    $cache->set($this->_createCacheKey($file), serialize($dictionary->getTranslations()));
   }
 }

@@ -69,7 +69,7 @@ $this->day->is_gathering_enabled = false;
     <? if(!$this->is_import_preview) { ?>
       <div class="input-prepend small with-tooltip" data-original-title="Scroll to comments">
         <span class="add-on"><i class="icon-comments"></i> {$day->comments_count}</span>
-        <a class="btn btn-small scrollTo comments" href="/pages/{$day.id}/day#comments">Comments</a>
+        <a class="btn btn-small scrollTo comments" href="/pages/{$day.id}/day#comments">{{__ text="Comments"}}</a>
       </div>
     <? } ?>
   {{/template}}
@@ -121,7 +121,7 @@ $this->day->is_gathering_enabled = false;
     <script id="template_scroller" type="text/x-handlebars-template">
       <div class="scroller">
         <div class="viewport"></div>
-        <div class="header"><a href="#top" class="scrollTo top">Top</a></div>
+        <div class="header"><a href="#top" class="scrollTo top">{{__ text="Top"}}</a></div>
         <div class="line"></div>
         <div class="scroll_zone">
           <ul class="previews">
@@ -130,7 +130,7 @@ $this->day->is_gathering_enabled = false;
             [[/moments]]
           </ul>
         </div>
-        <div class="footer"><a href="#comments" class="scrollTo comments">Comments</a></div>
+        <div class="footer"><a href="#comments" class="scrollTo comments">{{__ text="Comments"}}</a></div>
       </div>
     </script>
 
@@ -195,7 +195,7 @@ $this->day->is_gathering_enabled = false;
 
            <div class="btn-toolbar text-center hidden-desktop image-btn-toolbar">
             <a class="btn btn-small action-use-as-cover">
-              <i class="icon-picture"></i> Cover
+              <i class="icon-picture"></i> {{__ text="Cover"}}
             </a>
             <span class="btn-group action-rotate">
               <a class="btn btn-small action-rotate-left">
@@ -206,26 +206,26 @@ $this->day->is_gathering_enabled = false;
               </a>
             </span>
             <a class="btn btn-small action-upload">
-              <i class="icon-upload-alt"></i> Upload
+              <i class="icon-upload-alt"></i> {{__ text="Upload"}}
             </a>
             <a class="btn btn-small action-crop">
-              <i class="icon-crop"></i> Crop
+              <i class="icon-crop"></i> {{__ text="Crop"}}
             </a>
             <a class="btn btn-small btn-success disabled action-edit-confirm">
-              <i class="icon-ok"></i> Save
+              <i class="icon-ok"></i> {{__ text="Save"}}
             </a>
           </div>
 
           <div class="description bubble block-center">
             <form name="moment_description_form">
-              <textarea name="text" rows="4" class="input-block-level" placeholder="Enter moment description...">[[moment.description]]</textarea>
+              <textarea name="text" rows="4" class="input-block-level" placeholder="{{__ text="Enter moment description..."}}">[[moment.description]]</textarea>
               <button type="submit" class="btn btn-block has-spinner disabled">
                 <span class="spinner icon-spin icon-refresh"></span>
-                Create moment
+	              {{__ text="Create moment"}}
               </button>
             </form>
             <button type="button" class="btn btn-block btn-danger action-delete">
-              Delete moment
+	            {{__ text="Delete moment"}}
             </button>
           </div>
         </article>
@@ -235,14 +235,14 @@ $this->day->is_gathering_enabled = false;
 
       <script id="template_image_select_popover" type="text/x-handlebars-template">
         <div class="file-selector">
-          <h5>From PC:</h5>
+          <h5>{{__ text="From PC"}}:</h5>
           <div class="text-center">
             <div class="fileupload fileupload-new" data-provides="fileupload">
               <div>
                 <button class="btn btn-file">
                   <span class="fileupload-new">
                     <i class="icon icon-large icon-cloud-upload"></i>
-                    Select image
+                    {{__ text="Select image"}}
                   </span>
                   <input type="file" />
                 </button>
@@ -250,19 +250,19 @@ $this->day->is_gathering_enabled = false;
             </div>
           </div>
 
-          <h5>Import from:</h5>
+          <h5>{{__ text="Import from"}}:</h5>
           <div class="text-center">
             <button class="btn action-import" data-source="instagram">
                 <i class="icon-instagram"></i>
-                Instagram
+	              {{__ text="Instagram"}}
             </button>
             <button class="btn action-import" data-source="flickr">
                 <i class="icon-flickr"></i>
-                Flickr
+	              {{__ text="Flickr"}}
             </button>
             <button class="btn action-import" data-source="facebook">
                 <i class="icon-facebook-sign"></i>
-                Facebook
+	              {{__ text="Facebook"}}
             </button>
           </div>
         </div>
@@ -276,7 +276,7 @@ $this->day->is_gathering_enabled = false;
                 <button class="btn btn-file">
                   <span class="fileupload-new">
                     <i class="icon icon-large icon-cloud-upload"></i>
-                    Select image
+                    {{__ text="Select image"}}
                   </span>
                   <input type="file" />
                 </button>
@@ -298,11 +298,11 @@ $this->day->is_gathering_enabled = false;
         <div class="modal hide fade import-modal" tabindex="-1" role="dialog" aria-labelledby="import_modal_label" aria-hidden="true">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="import_modal_label">Import</h3>
+            <h3 id="import_modal_label">{{__ text="Import"}}</h3>
           </div>
           <div class="modal-body">
             <div class="import-progress" style="display:none">
-              <div class="text text-center">Retrieving data...</div>
+              <div class="text text-center">{{__ text="Retrieving data..."}}</div>
               <div class="progress progress-striped active">
                 <div class="bar" style="width: 1%;"></div>
               </div>
@@ -310,12 +310,12 @@ $this->day->is_gathering_enabled = false;
             <div class="import-container" style="display:none">
               <button class="btn btn-block action-paginate-prev has-spinner" style="margin-bottom:25px;">
                 <span class="spinner icon-spin icon-refresh"></span>
-                Earlier
+	              {{__ text="Earlier"}}
               </button>
               <ul class="thumbnails inline unstyled"></ul>
               <button class="btn btn-block action-paginate-next has-spinner" style="margin-top:-15px;">
                 <span class="spinner icon-spin icon-refresh"></span>
-                Later
+	              {{__ text="Later"}}
               </button>
             </div>
           </div>
@@ -335,11 +335,11 @@ $this->day->is_gathering_enabled = false;
         <div class="modal hide fade day-import-modal" tabindex="-1" role="dialog" aria-labelledby="day_import_modal_label" aria-hidden="true">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="day_import_modal_label">Import</h3>
+            <h3 id="day_import_modal_label">{{__ text="Import"}}</h3>
           </div>
           <div class="modal-body">
             <div class="import-progress" style="display:none">
-              <div class="text text-center">Retrieving data...</div>
+              <div class="text text-center">{{__ text="Retrieving data"}}...</div>
               <div class="progress progress-striped active">
                 <div class="bar" style="width: 1%;"></div>
               </div>
@@ -354,18 +354,18 @@ $this->day->is_gathering_enabled = false;
       <article class="span8 offset2 day">
         <? if($this->is_preview) { ?>
           <div class="alert">
-            <h2>This is preview page</h2>
-            Here you can see how your day is displayed for other users! <br />
+            <h2>{{__ text="This is preview page"}}</h2>
+	          {{__ text="Here you can see how your day is displayed for other users!"}}<br />
             <a href="/pages/{$#day->id}/day" class="btn btn-small btn-success with-tooltip" data-original-title="Leave preview mode">
-              &larr; Back to edit
+              &larr; {{__ text="Back to edit"}}
             </a>
           </div>
         <? } elseif($this->is_import_preview) { ?>
           <div class="alert">
-            <h2>This is import preview page</h2>
+            <h2>{{__ text="This is import preview page"}}</h2>
             Here you can take look how your <a href="{$#import_from}">story</a> would look like in OneDayOfMine.<br />
             <a class="btn btn-block btn-success action-import">
-              Import!
+	            {{__ text="Import!"}}
             </a>
           </div>
         <? } ?>
@@ -381,28 +381,36 @@ $this->day->is_gathering_enabled = false;
                          style="font-size:32px;height:40px;line-height:40px"/>
 
                   <div class="row-fluid">
-                    <div class="span6">
+                    <div class="span5">
                       <input type="date" name="date" value="{$#day->date}" class="input-large input-block-level" />
                     </div>
                     <div style="margin-top: 1px; margin-bottom: 7px" class="span6">
-                      <div class="action-select-type btn-group pull-right-on-desktop" data-toggle="buttons-radio">
-                        <button type="button" class="btn type btn-small<? if($this->day->type == 'Working day') {?> active<? } ?>">Working day</button>
-                        <button type="button" class="btn type btn-small<? if($this->day->type == 'Day off') {?> active<? } ?>">Day off</button>
-                        <button type="button" class="btn type btn-small<? if($this->day->type == 'Holiday') {?> active<? } ?>">Holiday</button>
-                        <button type="button" class="btn type btn-small<? if($this->day->type == 'Trip') {?> active<? } ?>">Trip</button>
+                      <div class="action-select-type btn-group" data-toggle="buttons-radio">
+                        <button type="button" class="btn type btn-small<? if($this->day->type == 'Working day') {?> active<? } ?>">
+                          {{__ text="Working day"}}
+                        </button>
+                        <button type="button" class="btn type btn-small<? if($this->day->type == 'Day off') {?> active<? } ?>">
+                          {{__ text="Day off"}}
+                        </button>
+                        <button type="button" class="btn type btn-small<? if($this->day->type == 'Holiday') {?> active<? } ?>">
+                          {{__ text="Holiday"}}
+                        </button>
+                        <button type="button" class="btn type btn-small<? if($this->day->type == 'Trip') {?> active<? } ?>">
+                          {{__ text="Trip"}}
+                        </button>
                       </div>
                     </div>
                   </div>
 
                   <div style="position: relative">
-                    <textarea rows="5" name="description" class="input-block-level" placeholder="Enter description...">{$#day->final_description|default:""}</textarea>
+                    <textarea rows="5" name="description" class="input-block-level" placeholder="{{__ text="Enter description..."}}">{$#day->final_description|default:""}</textarea>
                     <i class="icon icon-microphone speech-action hidden" style="position:absolute;right:10px;top:10px;cursor:hand"></i>
                   </div>
 
 	                <? if($this->day->final_description) { ?>
-		                <button type="submit" class="btn btn-block disabled">Save</button>
+		                <button type="submit" class="btn btn-block disabled">{{__ text="Save"}}</button>
 	                <? } else { ?>
-		                <button type="submit" class="btn btn-block<? if(count($this->day->moments) > 1) { ?> disabled<? } ?>">Save</button>
+		                <button type="submit" class="btn btn-block<? if(count($this->day->moments) > 1) { ?> disabled<? } ?>">{{__ text="Save"}}</button>
 	                <? } ?>
                 </form>
               </div>
@@ -433,28 +441,31 @@ $this->day->is_gathering_enabled = false;
           <? } ?>
         </header>
 
-        <div class="day-toolbar">
+        <div class="day-toolbar clearfix">
           <? if($this->is_owner) { ?>
-            <div class="pull-right-on-desktop day-controls-group btn-toolbar">
+            <div class="pull-right day-controls-group btn-toolbar">
               <div class="input-prepend small">
                 <span class="add-on"><i class="icon-eye-open"></i> {$this->day->views_count}</span>
                 <a href="/pages/{$#day->id}/day?preview" class="btn btn-small with-tooltip" data-original-title="Enter preview mode">
-                  Preview
+	                {{__ text="Preview"}}
                 </a>
               </div>
               <button type="button" class="btn btn-small btn-danger with-tooltip action-delete" data-original-title="Delete day">
-                Delete day
+	              {{__ text="Delete day"}}
               </button>
             </div>
           <? } ?>
 
-          <div class="btn-toolbar">
-	          {{apply template="day_journal_button" day="$#day" /}}
-            {{apply template="day_comments_button" day="$#day" /}}
-            {{apply template="day_like_button" day="$#day" /}}
-            {{apply template="day_share_button" day="$#day" /}}
-          </div>
+	        <? if(!$this->is_owner || $this->is_preview) { ?>
+	          <div class="btn-toolbar">
+		            {{apply template="day_journal_button" day="$#day" /}}
+	              {{apply template="day_comments_button" day="$#day" /}}
+	              {{apply template="day_like_button" day="$#day" /}}
+	              {{apply template="day_share_button" day="$#day" /}}
+	          </div>
+	        <? } ?>
         </div>
+
 
         <section class="moments">
           <? if($this->is_owner) { ?>
@@ -532,7 +543,7 @@ $this->day->is_gathering_enabled = false;
                   <? if($this->is_owner) { ?>
                     <div class="btn-toolbar text-center hidden-desktop image-btn-toolbar">
                       <a class="btn btn-small action-use-as-cover">
-                        <i class="icon-picture"></i> Cover
+                        <i class="icon-picture"></i> {{__ text="Cover"}}
                       </a>
                       <span class="btn-group action-rotate">
                         <a class="btn btn-small action-rotate-left">
@@ -543,13 +554,13 @@ $this->day->is_gathering_enabled = false;
                         </a>
                       </span>
                       <a class="btn btn-small action-upload">
-                        <i class="icon-upload-alt"></i> Upload
+                        <i class="icon-upload-alt"></i> {{__ text="Upload"}}
                       </a>
                       <a class="btn btn-small action-crop">
-                        <i class="icon-crop"></i> Crop
+                        <i class="icon-crop"></i> {{__ text="Crop"}}
                       </a>
                       <a class="btn btn-small btn-success disabled action-edit-confirm">
-                        <i class="icon-ok"></i> Save
+                        <i class="icon-ok"></i> {{__ text="Save"}}
                       </a>
                     </div>
                   <? } ?>
@@ -563,11 +574,11 @@ $this->day->is_gathering_enabled = false;
 		                        >{$item->description|default:""}</textarea>
                         <button type="submit" class="btn btn-block has-spinner disabled">
                           <span class="spinner icon-spin icon-refresh"></span>
-                          Save description
+	                        {{__ text="Save description"}}
                         </button>
                       </form>
                       <button type="button" class="btn btn-block btn-danger action-delete">
-                        Delete moment
+	                      {{__ text="Delete moment"}}
                       </button>
                     <? } else { ?>
                       <div class="no-overflow" itemprop="description">
@@ -587,26 +598,28 @@ $this->day->is_gathering_enabled = false;
         <? if($this->is_import_preview) { ?>
           <br />
 	        <div class="alert alert-block">
-		        <h2>This is import preview page</h2>
+		        <h2>{{__ text="This is import preview page"}}</h2>
 		        Here you can take look how your <a href="{$#import_from}">story</a> would look like in OneDayOfMine.<br />
 		        <br/>
 		        <a class="btn btn-block btn-success action-import">
-			        Import!
+			        {{__ text="Import!"}}
 		        </a>
 	        </div>
         <? } ?>
 
-        <div class="clearfix">
-          <div class="btn-toolbar pull-right-on-tablet pull-right-on-desktop text-center">
-            {{apply template="day_like_button" day="$#day" /}}
-            {{apply template="day_share_button" day="$#day" /}}
-            {{apply template="day_report_button" day="$#day" /}}
-          </div>
-        </div>
+        <? if(!$this->is_owner || $this->is_preview) { ?>
+	        <div class="clearfix">
+	          <div class="btn-toolbar pull-right pull-right text-center">
+	            {{apply template="day_like_button" day="$#day" /}}
+	            {{apply template="day_share_button" day="$#day" /}}
+	            {{apply template="day_report_button" day="$#day" /}}
+	          </div>
+	        </div>
+        <? } ?>
 
-        <? if(count($this->similar_days)) { ?>
+        <? if(count($this->similar_days) && !$this->is_owner) { ?>
 	        <section class="similar_days">
-		        <h2 class="muted">Similar days:</h2>
+		        <h2 class="muted">{{__ text="Similar days"}}:</h2>
 		        {{apply template="days_list" days="$#similar_days"/}}
 	        </section>
         <? } ?>
@@ -621,7 +634,7 @@ $this->day->is_gathering_enabled = false;
                 <span class="counter">{$this->day->comments_count}</span>
               </span>
             <? } ?>
-            <h2 class="muted">Comments:</h2>
+            <h2 class="muted">{{__ text="Comments"}}:</h2>
 
             <div class="articles">
               <? if(property_exists($this->day, 'comments')) { ?>
@@ -655,8 +668,8 @@ $this->day->is_gathering_enabled = false;
                         <img src="/users/default_image_72.png" width="72" class="pull-left img-rounded" />
                         <div class="bubble left">
                           <p class="text">
-                            You can be first, who wrote comment for this day!
-                            <small>by <b><a>Anonymous</a></b></small>
+	                          {{__ text="You can be first, who wrote comment for this day!"}}
+                            <small>{{__ text="by"}} <b><a>Anonymous</a></b></small>
                           </p>
                         </div>
                       </article>
@@ -668,7 +681,7 @@ $this->day->is_gathering_enabled = false;
             <div class="loader-wrap">
               <button class="btn btn-block action-load-next has-spinner<? if(!$this->day->comments || $this->day->comments_count <= 20) { ?> disabled" style="opacity:0<? } ?>">
                 <span class="spinner icon-spin icon-refresh"></span>
-                Load more comments
+	              {{__ text="Load more comments"}}
               </button>
             </div>
 
@@ -676,26 +689,12 @@ $this->day->is_gathering_enabled = false;
               <textarea rows="3" class="input-block-level text"></textarea>
               <button type="submit" class="btn btn-block has-spinner disabled">
                 <span class="spinner icon-spin icon-refresh"></span>
-                Send comment
+	              {{__ text="Send comment"}}
               </button>
             </form>
-
           </section>
         <? } ?>
-
-        <div class="visible-phone scrollHelperMobile">
-          <hr />
-          <button class="btn btn-block scrollTo top">
-            Back to top
-          </button>
-        </div>
       </article>
-    </div>
-
-    <div class="scrollHelper visible-desktop visible-tablet">
-      <a href="#" class="scrollTo top">
-        Back to top <i class="icon-angle-up"></i>
-      </a>
     </div>
   {{/into}}
 {{/wrap}}

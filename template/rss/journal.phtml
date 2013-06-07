@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>OneDayOfMine - Journal</title>
+		<link>https://onedayofmine.com/</link>
+		<description>Journal of OneDayOfMine</description>
+		<language>en-us</language>
+		<lastBuildDate>{$#build_time}</lastBuildDate>
+		<webMaster>support@onedayofmine.com (OneDayOfMine support)</webMaster>
+		<atom:link href="<?= lmb_env_get('HOST_URL'); ?>rss/journal/" rel="self" type="application/rss+xml" />
+
+		{{list using="{$#items}"}}
+			{{list:item}}
+				<item>
+					<title>{$item.title}</title>
+					<link><?= lmbToolkit::instance()->getPageUrl($item); ?></link>
+					<description>{$item.final_description}</description>
+					<pubDate>{$item.ctime|date:"r"}</pubDate>
+					<guid><?= lmbToolkit::instance()->getPageUrl($item); ?></guid>
+				</item>
+			{{/list:item}}
+		{{/list}}
+	</channel>
+</rss>
