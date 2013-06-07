@@ -30,13 +30,7 @@ class lmbI18NTools extends lmbAbstractTools
     if(!is_object($this->dict_backend))
     {
       $this->dict_backend = new lmbQtDictionaryBackend();
-      if(lmb_env_get('LIMB_VAR_DIR'))
-      {
-        $this->dict_backend->setCacheDir(lmb_env_get('LIMB_VAR_DIR'));
-        $this->dict_backend->useCache();
-      }
     }
-
     return $this->dict_backend;
   }
 
