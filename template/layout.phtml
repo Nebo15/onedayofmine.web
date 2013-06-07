@@ -178,7 +178,7 @@
 
 	    $('.change-locale-action').click(function() {
 		    var locale = $(this).data('locale');
-		    Tools.setCookie('locale', locale);
+		    Tools.setCookie('locale', locale, 60 * 60 * 24 * 30);
 		    window.location.reload();
 	    });
 
@@ -301,9 +301,6 @@
 	  <hr>
 	  <footer id="footer">
 		  <p class="pull-right">
-			  <script>
-				  console.log("<?= $this->toolkit->getLocale(); ?>");
-			  </script>
 			  <? if('ru_RU' != $this->toolkit->getLocale()) { ?>
 			    <a href="" class="change-locale-action" data-locale="ru_RU">Ru</a>
 			  <? } else { ?>
