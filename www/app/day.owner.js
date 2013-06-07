@@ -171,7 +171,6 @@ $(function() {
   };
 
 	var Speech = {
-
 		recognition: null,
 
 		show: function($button) {
@@ -244,7 +243,6 @@ $(function() {
 
   // Day info editing
   (function() {
-
     // Controls containers
     var $controls = $day.find('header .day-controls-group');
     var $toolbar = $day.find('.day-toolbar');
@@ -649,7 +647,6 @@ $(function() {
             crop_api.redraw(function() {
               crop_api.setSelect(calculateSelectionInitialCoords(image_width, image_height));
             });
-            // crop_api.setImage(data_url); // This is right, but produce bugs
           } else {
             $moment.off('.cropper');
             $crop_btn.off('.cropper');
