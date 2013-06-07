@@ -175,6 +175,13 @@
         }
       });
 
+
+	    $('.change-locale-action').click(function() {
+		    var locale = $(this).data('locale');
+		    Tools.setCookie('locale', locale);
+		    window.location.reload();
+	    });
+
       {{slot id="js_ready"/}}
     });
   </script>
@@ -294,17 +301,20 @@
 	  <hr>
 	  <footer id="footer">
 		  <p class="pull-right">
+			  <script>
+				  console.log("<?= $this->toolkit->getLocale(); ?>");
+			  </script>
 			  <? if('ru_RU' != $this->toolkit->getLocale()) { ?>
-			    <a href="#" class="change_locale" data-locale="ru_RU">Ru</a>
+			    <a href="" class="change-locale-action" data-locale="ru_RU">Ru</a>
 			  <? } else { ?>
 					Ru
-			  <? }  ?>
+			  <? } ?>
 			  |
 			  <? if('en_US' != $this->toolkit->getLocale()) { ?>
-				  <a href="#" class="change_locale" data-locale="en_US">En</a>
+				  <a href="" class="change-locale-action" data-locale="en_US">En</a>
 			  <? } else { ?>
 				  En
-			  <? }  ?>
+			  <? } ?>
 			  &nbsp;&nbsp;&nbsp;
 			  <a href="#top">{{__ text="Back to top"}}</a>
 		  </p>
