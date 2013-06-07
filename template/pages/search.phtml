@@ -1,5 +1,5 @@
 <?
-$this->title = "Live the life through other people's eyes";
+$this->title = lmb_i18n("Search");
 $this->menu = 'search';
 ?>
 {{wrap with="layout.phtml"}}
@@ -26,7 +26,7 @@ $this->menu = 'search';
 		$('.has-spinner').hideSpinner();
 		if(response.data.result.length === 0)
 		{
-			$search_result.html("<center><p>We can't find any days by your query</p></center>");
+			$search_result.html("<center><p>{{__ text="We can\'t find any days by your query"}}</p></center>");
 		}
 		else
 		{
@@ -45,9 +45,9 @@ $this->menu = 'search';
 		maxLength: 100,
 		minLength: 3,
 		messages: {
-			empty: 'Search query is empty',
-			minLength: 'Search query is too short',
-			maxLength: 'Search query is too long'
+			empty: '{{__ text="Search query is empty"}}',
+			minLength: '{{__ text="Search query is too short"}}',
+			maxLength: '{{__ text="Search query is too long"}}'
 		}
 	});
 
@@ -58,12 +58,11 @@ $this->menu = 'search';
 		});
 
 		search_request.success(function(response) {
-			var title = 'OneDayOfMine: search "' + $search_form_query.val() + '"';
+			var title = 'OneDayOfMine: {{__ text="Search"}} "' + $search_form_query.val() + '"';
 			var url = '/pages/search?q='+$search_form_query.val();
 			console.log(title, url);
 			history.pushState(null, title, url);
 			show_days_by_response(response);
-
 		});
 		search_request.send();
 		return false;
@@ -77,8 +76,8 @@ $this->menu = 'search';
   <center>
     <form class="form-search days-search-form">
       <input type="search" autofocus class="input-xlarge search-query span5"
-             placeholder="Occupation, place or something else" value="{$#query}">
-      <button type="submit" class="btn">Discover!</button>
+             placeholder="{{__ text="Occupation, place or something else"}}" value="{$#query}">
+      <button type="submit" class="btn">{{__ text="Search"}}</button>
     </form>
   </center>
 </div>
@@ -86,7 +85,7 @@ $this->menu = 'search';
   <i class="spinner icon-spin icon-refresh"></i>
   <ul class="days clearfix block-center">
     <div class="popular">
-	    <? $empty_message = $this->request->has('q') ? 'We can\'t find any days by your query' : ' '; ?>
+	    <? $empty_message = $this->request->has('q') ? lmb_i18n("We can't find any days by your query") : ' '; ?>
       {{apply template="days_list" days="$#days" empty_message="$empty_message"/}}
     </div>
   </ul>

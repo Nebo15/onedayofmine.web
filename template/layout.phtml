@@ -26,6 +26,12 @@
 
   <!-- Ajust to mobile devices -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta property="description" content="{{__ text="Photos without story is just beautiful pictures, we like to share stories, best moments of your life: travels, birthday, parties and other meaningfull events"}}"/>
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:domain" content="OneDayOfMine.com" />
+	<meta name="twitter:title" content="OneDayOfMine.com" />
+	<meta name="twitter:description" content="{{__ text="Live the life through other people\'s eyes"}}" />
+	<meta name="twitter:twitter:creator" content="OneDayOfMine" />
 
   <!-- Open Graph integration -->
   <meta property="fb:app_id" content="{$#facebook_app_id}" />
@@ -176,7 +182,7 @@
       });
 
 
-	    $('.change-locale-action').click(function() {
+	    $('.change-locale-action').click(function(event) {
 		    var locale = $(this).data('locale');
 		    Tools.setCookie('locale', locale, 60 * 60 * 24 * 30);
 		    window.location.reload();
@@ -302,13 +308,13 @@
 	  <footer id="footer">
 		  <p class="pull-right">
 			  <? if('ru_RU' != $this->toolkit->getLocale()) { ?>
-			    <a href="" class="change-locale-action" data-locale="ru_RU">Ru</a>
+			    <a href="#" class="change-locale-action" data-locale="ru_RU">Рус</a>
 			  <? } else { ?>
-					Ru
+					Рус
 			  <? } ?>
 			  |
 			  <? if('en_US' != $this->toolkit->getLocale()) { ?>
-				  <a href="" class="change-locale-action" data-locale="en_US">En</a>
+				  <a href="#" class="change-locale-action" data-locale="en_US">En</a>
 			  <? } else { ?>
 				  En
 			  <? } ?>
