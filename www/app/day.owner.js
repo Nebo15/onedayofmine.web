@@ -398,6 +398,7 @@ $(function() {
     var image_action_edit_confirm_btn_selector = '.action-edit-confirm';
 
     var image_action_use_as_cover_btn_selector = '.action-use-as-cover';
+    var image_action_upload_btn_selector = '.action-upload';
     var image_action_rotate_left_btn_selector = '.action-rotate-left';
     var image_action_rotate_right_btn_selector = '.action-rotate-right';
     var image_action_crop_btn_selector = '.action-crop';
@@ -515,7 +516,7 @@ $(function() {
 
         // Changing image
         $image.first().one('load', function() {
-          $image.width($image.width());
+          $image.width($image.width() > image_width ? image_width : image_width);
           $image.height($image.height());
 
           if(!is_converted) {
@@ -561,6 +562,82 @@ $(function() {
       converter.fail(function() {
         alert("Can't convert image");
       });
+    }
+
+    function showImagePicker(moment) {
+      var $moment = $(moment);
+      var $moment_upload_btn = $moment.find(image_action_upload_btn_selector);
+      var $image_container = $moment.find(image_container_selector);
+      var $image = $image_container.find(image_selector).first();
+
+      if($moment_upload_btn.hasClass('disabled')) {
+        $image.popover('hide');
+        return;
+      }
+
+      $image_container.addClass('has-upload-tool');
+      $moment_upload_btn.addClass('disabled');
+
+      var is_mobile = $(window).width() < 800 || $.isMobile();
+
+      var popover_params = {
+        html: true,
+        trigger: 'manual',
+        position: 1,
+        title: 'Select file',
+        content: is_mobile ? image_select_popover_mobile_template : image_select_popover_template,
+        placement: is_mobile ? 'bottom' : 'right'
+      };
+
+      $image.popover(popover_params);
+
+      $image.on('shown.filepicker', function() {
+        var $file_input = $image_container.find(image_select_popover_file_input_selector);
+
+        $file_input.on('change', function() {
+          if(is_mobile) {
+            // On small screens popover take too many place to let user select images multiply times
+            $image.popover('hide');
+          }
+
+          var files = getInputFiles($file_input);
+          if(files && files.length > 0) {
+            var converter =  ImageTools.Convert.fileToDataURL(files[0]);
+            converter.done(function(data_url) {
+              setImage($moment, data_url);
+            });
+
+            converter.fail(function() {
+              alert("Can't receive local image contents, try again later or try to pick different image");
+            });
+          } else {
+            console.log('File not selected');
+          }
+        });
+      });
+
+      $image.one('hidden.filepicker', function() {
+        $image.off('.filepicker');
+        $moment.off('.filepicker');
+        $moment_upload_btn.removeClass('disabled');
+        $image_container.removeClass('has-upload-tool')
+        $image.popover('destroy');
+      });
+
+      $moment.one('imagesaved.filepicker', function() {
+        $image.popover('hide');
+      });
+
+      // Fix image popover position
+      $moment.on('imagechanged.filepicker', function() {
+        var $popover = $image_container.find(image_select_popover_selector);
+        $popover.css('top', ($image.height()/2 - $popover.height()/2) + 'px');
+      });
+
+      var tmp_display = $image.css('display'); // Hack to use $.offset() on elements with display:none
+      $image.css('display', 'block');
+      $image.popover('show');
+      $image.css('display', tmp_display);
     }
 
     function showCropTool(moment) {
@@ -1037,58 +1114,17 @@ $(function() {
         $moments.on('click', image_action_rotate_left_btn_selector, function() {
           rotateImage(getMomentByContext(this), 'left');
         });
+
+        // Select new image
+        $moments.on('click', image_action_upload_btn_selector, function() {
+          showImagePicker(getMomentByContext(this));
+        });
       })();
     })();
 
     // Creating new moments
     (function() {
       function createMoment(params, callback) {
-        function createImageSelectPopover($moment) {
-          var is_mobile = $(window).width() < 800 || $.isMobile();
-
-          var popover_params = {
-            html: true,
-            trigger: 'manual',
-            position: 1,
-            title: 'Select file',
-            content: is_mobile ? image_select_popover_mobile_template : image_select_popover_template,
-            placement: is_mobile ? 'bottom' : 'right'
-          };
-
-          var $image_container = $moment.find(image_container_selector);
-          var $image = $image_container.find(image_selector);
-          $image.popover(popover_params);
-
-          $image.on('shown', function() {
-            var $file_input = $image_container.find(image_select_popover_file_input_selector);
-
-            $file_input.on('change', function() {
-              if(is_mobile) {
-                // On small screens popover take too many place to let user select images multiply times
-                $image.popover('hide');
-              }
-
-              var files = getInputFiles($file_input);
-              if(files && files.length > 0) {
-                var converter =  ImageTools.Convert.fileToDataURL(files[0]);
-                converter.done(function(data_url) {
-                  setImage($moment, data_url);
-                });
-
-                converter.fail(function() {
-                  alert("Can't receive local image contents, try again later or try to pick different image");
-                });
-              } else {
-                console.log('File not selected');
-              }
-            });
-          });
-
-          $image.one('load', function() {
-            $image.popover('show');
-          });
-        }
-
         // Default data
         params = $.extend({
           date: Tools.getDate(),
@@ -1148,10 +1184,6 @@ $(function() {
               }
 
               $moment.find(image_action_edit_confirm_btn_selector).addClass('disabled');
-
-              // Fix image popover position
-              var $popover = $image_container.find(image_select_popover_selector);
-              $popover.css('top', ($image.height()/2 - $popover.height()/2) + 'px');
             });
 
 
@@ -1308,7 +1340,7 @@ $(function() {
                       $description_form_submit_btn.addClass('disabled');
 
                       // Destroy file select popover
-                      $image.popover('destroy');
+                      $image.popover('hide');
 
                       // Let user select image as day cover
                       $moment.find(image_action_use_as_cover_btn_selector).removeClass('disabled');
@@ -1353,11 +1385,13 @@ $(function() {
 
           if(!params.image) {
             // Popover for selecting moment image
-            createImageSelectPopover($moment);
+            $image.one('load', function() {
+              showImagePicker($moment);
+            });
           } else {
             setImage($moment, params.image);
             // if(!$.isMobile()) {
-            //   createImageSelectPopover($moment);
+            //   showImagePicker($moment);
             // }
           }
 
