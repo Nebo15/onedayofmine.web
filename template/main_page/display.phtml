@@ -269,17 +269,19 @@ $this->menu = 'journal';
               <div class="fb-like-box" data-href="https://www.facebook.com/Onedayofmine" data-width="240" data-height="230"
                    data-show-faces="true" data-stream="false" data-show-border="false" data-header="false">
               </div>
-				    <li class="medium-day">
-              <h3 class="muted">VKontakte</h3>
-					    <script type="text/javascript">
-						    $(function() {
-							    $.getScript("//vk.com/js/api/openapi.js?96", function() {
-								    VK.Widgets.Group("vk_groups", {mode: 0, width: "240", height: "150"}, 53796872);
+					  <? if('ru_RU' == $this->toolkit->getLocale()) { ?>
+					    <li class="medium-day">
+	              <h3 class="muted">VKontakte</h3>
+						    <script type="text/javascript">
+							    $(function() {
+								    $.getScript("//vk.com/js/api/openapi.js?96", function() {
+									    VK.Widgets.Group("vk_groups", {mode: 0, width: "240", height: "150"}, 53796872);
+								    });
 							    });
-						    });
-					    </script>
-              <div id="vk_groups"></div>
-				    </li>
+						    </script>
+	              <div id="vk_groups"></div>
+					    </li>
+				    <? } ?>
 				    <? $title = lmb_i18n('Best working day'); ?>
 				    {{apply template="medium_day" day="{$#top_working}" title="$title" icon="cogs"/}}
 				    <? $title = lmb_i18n('Best day off'); ?>
