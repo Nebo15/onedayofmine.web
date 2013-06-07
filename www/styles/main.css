@@ -1718,7 +1718,6 @@ ul.previews {
 }
 
 @media (min-width: 1224px) { /* Desktop */
-
   .pull-right-on-desktop {
     float: right;
   }
@@ -1750,7 +1749,7 @@ ul.previews {
   }
 
   .days > li:hover dl dd {
-    height: 95px;
+    height: 72px;
   }
 
   .days dd a {
