@@ -133,7 +133,7 @@ abstract class BaseJsonController extends lmbController
         $item->set($property, $this->request->get($property));
 
     foreach ($raw_properties as $key => $value)
-      $item->set($key, $value);
+      $item->set($key, trim($value));
 
     $item->validate($this->error_list);
     if($this->error_list->isValid())
