@@ -120,8 +120,8 @@
         <translation>Лучший выходной</translation>
     </message>
     <message>
-        <source>Best holiday</source>
-        <translation>Лучший праздник</translation>
+        <source>Best event</source>
+        <translation>Лучшее событие</translation>
     </message>
     <message>
         <source>Best trip</source>
@@ -345,9 +345,13 @@
         <translation>Выходной</translation>
     </message>
     <message>
-        <source>Holiday</source>
-        <translation>Отпуск</translation>
+        <source>Event</source>
+        <translation>Событие</translation>
     </message>
+		<message>
+			<source>Holiday</source>
+			<translation>Праздник</translation>
+		</message>
     <message>
         <source>Trip</source>
         <translation>Путешествие</translation>
