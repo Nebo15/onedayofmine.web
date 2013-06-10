@@ -48,7 +48,7 @@ $this->menu = 'journal';
 			<img src="{$day.image_266}">
 		</a>
 		<a href="/pages/{$day.id}/day">
-			<h4>{$day.title|i18n_clip:30}</h4>
+			<h4>{$day.title|i18n_clip:30,0,"&hellip;"}</h4>
 		</a>
 		<p>{$day.final_description|i18n_clip:350,0,"&hellip;"}</p>
 		<ul class="inline pull-right">
