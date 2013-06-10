@@ -111,7 +111,7 @@ abstract class lmbCacheAbstractConnection implements lmbCacheConnection
     return $this->delete($this->_getLockName($key, $lock_name));
   }
 
-  function increment($key, $value = 1, $ttl = false)
+  function increment($key, $value = 1)
   {
     if(is_null($current_value = $this->get($key)))
       return false;
@@ -127,14 +127,14 @@ abstract class lmbCacheAbstractConnection implements lmbCacheConnection
 
     $new_value = $current_value + $value;
 
-    $this->set($key, $new_value, $ttl);
+    $this->set($key, $new_value);
 
     $this->unlock($key, self::LOCK_NAME_INC_DEC);
 
     return $new_value;
   }
 
-  function decrement($key, $value = 1, $ttl = false)
+  function decrement($key, $value = 1)
   {
     if(is_null($current_value = $this->get($key)))
       return false;
@@ -147,7 +147,7 @@ abstract class lmbCacheAbstractConnection implements lmbCacheConnection
     if($new_value < 0)
       $new_value = 0;
 
-    $this->set($key, $new_value, $ttl);
+    $this->set($key, $new_value);
 
     $this->unlock($key, self::LOCK_NAME_INC_DEC);
 

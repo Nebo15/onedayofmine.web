@@ -83,11 +83,9 @@ $this->menu = 'search';
 </div>
 <div class="has-spinner clearfix">
   <i class="spinner icon-spin icon-refresh"></i>
-  <ul class="days clearfix block-center">
-    <div class="popular">
+  <ul class="clearfix">
 	    <? $empty_message = $this->request->has('q') ? lmb_i18n("We can't find any days by your query") : ' '; ?>
       {{apply template="days_list" days="$#days" empty_message="$empty_message"/}}
-    </div>
   </ul>
 </div>
 
