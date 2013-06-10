@@ -455,4 +455,9 @@ class odTools extends lmbAbstractTools
 		  return call_user_func_array(['odAsyncJobs', '_'.$function_name], $params);
 	  }
   }
+
+	function getLocaleLang()
+	{
+		return substr(lmbToolkit::instance()->getLocale(), 0, 2);
+	}
 }
