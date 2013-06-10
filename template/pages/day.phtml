@@ -121,7 +121,7 @@ $this->day->is_gathering_enabled = false;
     <script id="template_scroller" type="text/x-handlebars-template">
       <div class="scroller">
         <div class="viewport"></div>
-        <div class="header"><a href="#top" class="scrollTo top">Top</a></div>
+        <div class="header"><a href="#top" class="scrollTo top">{{__ text="Top"}}</a></div>
         <div class="line"></div>
         <div class="scroll_zone">
           <ul class="previews">
@@ -130,7 +130,7 @@ $this->day->is_gathering_enabled = false;
             [[/moments]]
           </ul>
         </div>
-        <div class="footer"><a href="#comments" class="scrollTo comments">Comments</a></div>
+        <div class="footer"><a href="#comments" class="scrollTo comments">{{__ text="Comments"}}</a></div>
       </div>
     </script>
 
@@ -167,6 +167,9 @@ $this->day->is_gathering_enabled = false;
                   <i class="icon-picture"></i>
                   <i class="overlap icon-ok"></i>
                 </a>
+                <a class="with-tooltip action-upload" data-original-title="Select diffrent image">
+                  <i class="icon-upload-alt"></i>
+                </a>
                 <span class="actions-block">
                   <a class="with-tooltip action-rotate-left" data-original-title="Rotate left">
                     <i class="icon-undo"></i>
@@ -176,7 +179,7 @@ $this->day->is_gathering_enabled = false;
                   </a>
                 </span>
                 <a class="with-tooltip action-crop" data-original-title="Crop this image">
-                  <i class="icon-cut"></i>
+                  <i class="icon-crop"></i>
                 </a>
               </span>
 
@@ -192,7 +195,7 @@ $this->day->is_gathering_enabled = false;
 
            <div class="btn-toolbar text-center hidden-desktop image-btn-toolbar">
             <a class="btn btn-small action-use-as-cover">
-              <i class="icon-picture"></i> Cover
+              <i class="icon-picture"></i> {{__ text="Cover"}}
             </a>
             <span class="btn-group action-rotate">
               <a class="btn btn-small action-rotate-left">
@@ -202,17 +205,20 @@ $this->day->is_gathering_enabled = false;
                 <i class="icon-repeat"></i>
               </a>
             </span>
+            <a class="btn btn-small action-upload">
+              <i class="icon-upload-alt"></i> {{__ text="Upload"}}
+            </a>
             <a class="btn btn-small action-crop">
-              <i class="icon-cut"></i> Crop
+              <i class="icon-crop"></i> {{__ text="Crop"}}
             </a>
             <a class="btn btn-small btn-success disabled action-edit-confirm">
-              <i class="icon-ok"></i> Save
+              <i class="icon-ok"></i> {{__ text="Save"}}
             </a>
           </div>
 
           <div class="description bubble block-center">
             <form name="moment_description_form">
-              <textarea name="text" rows="4" class="input-block-level" placeholder="Enter moment description...">[[moment.description]]</textarea>
+              <textarea name="text" rows="4" class="input-block-level" placeholder="{{__ text="Enter moment description..."}}">[[moment.description]]</textarea>
               <button type="submit" class="btn btn-block has-spinner disabled">
                 <span class="spinner icon-spin icon-refresh"></span>
 	              {{__ text="Create moment"}}
@@ -236,7 +242,7 @@ $this->day->is_gathering_enabled = false;
                 <button class="btn btn-file">
                   <span class="fileupload-new">
                     <i class="icon icon-large icon-cloud-upload"></i>
-                    Select image
+                    {{__ text="Select image"}}
                   </span>
                   <input type="file" />
                 </button>
@@ -292,11 +298,11 @@ $this->day->is_gathering_enabled = false;
         <div class="modal hide fade import-modal" tabindex="-1" role="dialog" aria-labelledby="import_modal_label" aria-hidden="true">
           <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="import_modal_label">Import</h3>
+            <h3 id="import_modal_label">{{__ text="Import"}}</h3>
           </div>
           <div class="modal-body">
             <div class="import-progress" style="display:none">
-              <div class="text text-center">Retrieving data...</div>
+              <div class="text text-center">{{__ text="Retrieving data..."}}</div>
               <div class="progress progress-striped active">
                 <div class="bar" style="width: 1%;"></div>
               </div>
@@ -375,20 +381,24 @@ $this->day->is_gathering_enabled = false;
                          style="font-size:32px;height:40px;line-height:40px"/>
 
                   <div class="row-fluid">
-                      <input type="date" name="date" value="{$#day->date}" class="" />
-                      <div class="action-select-type btn-group pull-right" data-toggle="buttons-radio">
+                    <div class="span5">
+                      <input type="date" name="date" value="{$#day->date}" class="input-large input-block-level" />
+                    </div>
+                    <div style="margin-top: 1px; margin-bottom: 7px" class="span6">
+                      <div class="action-select-type btn-group" data-toggle="buttons-radio">
                         <button type="button" class="btn type btn-small<? if($this->day->type == 'Working day') {?> active<? } ?>">
-	                        {{__ text="Working day"}}
+                          {{__ text="Working day"}}
                         </button>
                         <button type="button" class="btn type btn-small<? if($this->day->type == 'Day off') {?> active<? } ?>">
-	                        {{__ text="Day off"}}
+                          {{__ text="Day off"}}
                         </button>
                         <button type="button" class="btn type btn-small<? if($this->day->type == 'Holiday') {?> active<? } ?>">
-	                        {{__ text="Holiday"}}
+                          {{__ text="Holiday"}}
                         </button>
                         <button type="button" class="btn type btn-small<? if($this->day->type == 'Trip') {?> active<? } ?>">
-	                        {{__ text="Trip"}}
+                          {{__ text="Trip"}}
                         </button>
+                      </div>
                     </div>
                   </div>
 
@@ -504,6 +514,9 @@ $this->day->is_gathering_enabled = false;
                           <i class="icon-picture"></i>
                           <i class="overlap icon-ok"></i>
                         </a>
+                        <a class="with-tooltip action-upload" data-original-title="Select diffrent image">
+                          <i class="icon-upload-alt"></i>
+                        </a>
                         <span class="actions-block">
                           <a class="with-tooltip action-rotate-left" data-original-title="Rotate left">
                             <i class="icon-undo"></i>
@@ -513,7 +526,7 @@ $this->day->is_gathering_enabled = false;
                           </a>
                         </span>
                         <a class="with-tooltip action-crop" data-original-title="Crop this image">
-                          <i class="icon-cut"></i>
+                          <i class="icon-crop"></i>
                         </a>
                       </span>
 
@@ -540,8 +553,11 @@ $this->day->is_gathering_enabled = false;
                           <i class="icon-repeat"></i>
                         </a>
                       </span>
+                      <a class="btn btn-small action-upload">
+                        <i class="icon-upload-alt"></i> {{__ text="Upload"}}
+                      </a>
                       <a class="btn btn-small action-crop">
-                        <i class="icon-cut"></i> {{__ text="Crop"}}
+                        <i class="icon-crop"></i> {{__ text="Crop"}}
                       </a>
                       <a class="btn btn-small btn-success disabled action-edit-confirm">
                         <i class="icon-ok"></i> {{__ text="Save"}}
@@ -618,7 +634,7 @@ $this->day->is_gathering_enabled = false;
                 <span class="counter">{$this->day->comments_count}</span>
               </span>
             <? } ?>
-            <h2 class="muted">Comments:</h2>
+            <h2 class="muted">{{__ text="Comments"}}:</h2>
 
             <div class="articles">
               <? if(property_exists($this->day, 'comments')) { ?>
@@ -653,7 +669,7 @@ $this->day->is_gathering_enabled = false;
                         <div class="bubble left">
                           <p class="text">
 	                          {{__ text="You can be first, who wrote comment for this day!"}}
-                            <small>by <b><a>Anonymous</a></b></small>
+                            <small>{{__ text="by"}} <b><a>Anonymous</a></b></small>
                           </p>
                         </div>
                       </article>
@@ -676,7 +692,6 @@ $this->day->is_gathering_enabled = false;
 	              {{__ text="Send comment"}}
               </button>
             </form>
-
           </section>
         <? } ?>
       </article>

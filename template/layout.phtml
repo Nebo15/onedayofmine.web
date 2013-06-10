@@ -30,7 +30,7 @@
 	<meta name="twitter:card" content="summary" />
 	<meta name="twitter:domain" content="OneDayOfMine.com" />
 	<meta name="twitter:title" content="OneDayOfMine.com" />
-	<meta name="twitter:description" content="{{__ text="Live the life through other people\'s eyes"}}" />
+	<meta name="twitter:description" content="{{__ text="Live the life through other peoples eyes"}}" />
 	<meta name="twitter:twitter:creator" content="OneDayOfMine" />
 
   <!-- Open Graph integration -->
@@ -62,16 +62,19 @@
 
   <script>
     window.fbAsyncInit = function() {
-      FB.init({
-        appId: <?= $this->facebook_app_id; ?>,
-        status:true,
-        cookie:true,
-        xfbml:false
+      $(function() {
+        FB.init({
+          appId: <?= $this->facebook_app_id; ?>,
+          status:true,
+          cookie:true,
+          xfbml:true
+        });
       });
     };
   </script>
 
   <!-- Vendor scripts -->
+  <script src="//connect.facebook.net/ru_RU/all.js" async></script>
   <script src="/lib/vendor/jquery.min.js"></script>
   <script src="/lib/vendor/bootstrap.min.js"></script>
   <script src="/lib/vendor/handlebars.js"></script>
@@ -156,7 +159,6 @@
         };
 
         $('.trigger_login').click(doLogin);
-
       <? } ?>
 
       // Init mansory for all days lists
@@ -181,7 +183,6 @@
         }
       });
 
-
 	    $('.change-locale-action').click(function(event) {
 		    var locale = $(this).data('locale');
 		    Tools.setCookie('locale', locale, 60 * 60 * 24 * 30);
@@ -197,16 +198,7 @@
   {{slot id='templates'/}}
 </head>
 <body>
-  <?php if(!property_exists($this, 'fb_disabled') || !$this->fb_disabled) { ?>
-	  <div id="fb-root"></div>
-	  <script>(function(d, s, id) {
-			  var js, fjs = d.getElementsByTagName(s)[0];
-			  if (d.getElementById(id)) return;
-			  js = d.createElement(s); js.id = id;
-			  js.src = "//connect.facebook.net/ru_RU/all.js#xfbml=1&appId={$#facebook_app_id}";
-			  fjs.parentNode.insertBefore(js, fjs);
-		  }(document, 'script', 'facebook-jssdk'));</script>
-  <?php } ?>
+  <div id="fb-root"></div>
 
   <?php if(!property_exists($this, 'menu_disabled') || !$this->menu_disabled) { ?>
   <header class="navbar navbar-static-top">

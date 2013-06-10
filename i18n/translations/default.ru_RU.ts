@@ -253,6 +253,18 @@
         <translation>Профессия автора, город, что-то из текста, что угодно</translation>
     </message>
     <message>
+        <source>Top</source>
+        <translation>Вверх</translation>
+    </message>
+    <message>
+        <source>Import</source>
+        <translation>Импорт</translation>
+    </message>
+    <message>
+        <source>Retrieving data...</source>
+        <translation>Получение данных...</translation>
+    </message>
+    <message>
         <source>Create moment</source>
         <translation></translation>
     </message>
@@ -263,6 +275,10 @@
     <message>
         <source>From PC</source>
         <translation></translation>
+    </message>
+    <message>
+        <source>Select image</source>
+        <translation>Выберите изображение</translation>
     </message>
     <message>
         <source>Import from</source>
@@ -357,12 +373,20 @@
         <translation>Обложка</translation>
     </message>
     <message>
+        <source>Upload</source>
+        <translation>Загрузить</translation>
+    </message>
+    <message>
         <source>Crop</source>
-        <translation>Обрезание</translation>
+        <translation>Обрезать</translation>
     </message>
     <message>
         <source>Save description</source>
         <translation>Сохранить описание</translation>
+    </message>
+    <message>
+        <source>Enter moment description...</source>
+        <translation>Введите описание момента...</translation>
     </message>
     <message>
         <source>Similar days</source>
@@ -371,6 +395,14 @@
     <message>
         <source>You can be first, who wrote comment for this day!</source>
         <translation>Вы можете быть первым, кто оставит комментарий</translation>
+    </message>
+    <message>
+        <source>Comments</source>
+        <translation>Комментарии</translation>
+    </message>
+    <message>
+        <source>by</source>
+        <translation>от</translation>
     </message>
     <message>
         <source>Load more comments</source>
