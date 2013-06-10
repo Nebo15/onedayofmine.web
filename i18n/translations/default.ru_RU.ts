@@ -2,7 +2,7 @@
 <!DOCTYPE TS>
 <TS version="2.0" language="ru" sourcelanguage="en">
 <context>
-    <name></name>
+    <name/>
     <message>
         <source>Remove day from interesting</source>
         <translation>Удалить день из избранного</translation>
@@ -132,7 +132,7 @@
         <translation>Фотографии без истории — просто красивые картинки. Мы хотим рассказать в своих историях о лучших моментах вашей жизни: путешествиях, праздниках, вечеринках и других значимых событиях</translation>
     </message>
     <message>
-        <source>Live the life through other people\&apos;s eyes</source>
+        <source>Live the life through other people\'s eyes</source>
         <translation>Посмотри на жизнь чужими глазами</translation>
     </message>
     <message>
@@ -145,7 +145,7 @@
     </message>
     <message>
         <source>Photos without a story are just beautiful pictures, we like to share stories, best moments of our life: travels, birthdays, parties and other meaningfull events.</source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>Give new life to old photos</source>
@@ -153,7 +153,7 @@
     </message>
     <message>
         <source>People have tons of photos that are lost in time, give them new life, make stories out of them and share them with friends.</source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>Magic</source>
@@ -162,7 +162,7 @@
     </message>
     <message>
         <source>It’s an easy-to-use tool, just connect your social profiles and enjoy the magic.</source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>How does it work?</source>
@@ -174,7 +174,7 @@
     </message>
     <message>
         <source>No need to enter any information, we will use your Facebook profile</source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>Create day</source>
@@ -186,7 +186,7 @@
     </message>
     <message>
         <source>You can arrange moments by changing time, selecting cover, editing images and many other.</source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>Add moments</source>
@@ -194,7 +194,7 @@
     </message>
     <message>
         <source>You can upload pictures from PC, your cell phone, or import them from Flickr, Instagram and Facebook. You can even upload image by dragging it from your desktop onto empty moment.</source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>Add moments descriptions</source>
@@ -202,7 +202,7 @@
     </message>
     <message>
         <source>You can leave a short description for the greater expression emotions of the moment.</source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>Share it</source>
@@ -210,30 +210,30 @@
     </message>
     <message>
         <source>Post your day on Facebook</source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>Get interest</source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>Likes! Everybody loves them.</source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>Awesome! I have stories to tell!</source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
-        <source>Live the life through other people&apos;s eyes</source>
+        <source>Live the life through other people's eyes</source>
         <translation>Посмотри на жизнь чужими глазами</translation>
     </message>
     <message>
         <source>One day of </source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
-        <source>We can&apos;t find any days by your query</source>
+        <source>We can't find any days by your query</source>
         <translation>Мы ничего не нашли. Искали. Но не нашли. Но искали. А у нас точно такое было?</translation>
     </message>
     <message>
@@ -266,15 +266,15 @@
     </message>
     <message>
         <source>Create moment</source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>Delete moment</source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>From PC</source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>Select image</source>
@@ -282,59 +282,59 @@
     </message>
     <message>
         <source>Import from</source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>Instagram</source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>Flickr</source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>Facebook</source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>Select image</source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>Earlier</source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>Later</source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>Import</source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>Retrieving data</source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>This is preview page</source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>Here you can see how your day is displayed for other users!</source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>Back to edit</source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>This is import preview page</source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>Import!</source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>Working day</source>
@@ -410,47 +410,47 @@
     </message>
     <message>
         <source>Load more comments</source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>Send comment</source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>Connect social profiles</source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>Select a day</source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>Publish</source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>First of all you need to create account via Facebook</source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>Sign up with Facebook</source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>You can use magic import feature, just connect social profiles</source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>Connect to instagram</source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>Connect to Flickr</source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>Facebook already connected</source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>Find days</source>
@@ -458,7 +458,7 @@
     </message>
     <message>
         <source>Or create empty day and fill it manually</source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>Create day from scratch</source>
@@ -502,7 +502,7 @@
     </message>
     <message>
         <source>Share this day with your Facebook friends</source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>Share</source>
@@ -510,7 +510,7 @@
     </message>
     <message>
         <source>Report about inappropriate content</source>
-        <translation></translation>
+        <translation/>
     </message>
     <message>
         <source>Complain</source>
@@ -520,5 +520,5 @@
         <source>Empty</source>
         <translation>Пусто</translation>
     </message>
-</context>
+<message><source>Live the life through other peoples eyes</source></message><message><source>Best holiday</source></message><message><source>We can\'t find any days by your query</source></message></context>
 </TS>
