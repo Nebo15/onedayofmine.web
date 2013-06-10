@@ -297,6 +297,10 @@ $(function() {
       $day_form_submit.removeClass('disabled').addClass('btn-success');
 		});
 
+		$date_input.on('change', function() {
+			$day_form_submit.removeClass('disabled').addClass('btn-success');
+		});
+
 		$day_form.submit(function(event)
 		{
       if($day_form_submit.hasClass('disabled')) {
