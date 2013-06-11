@@ -346,7 +346,7 @@ var ImportController = function($wizard, $steps_content) {
 
           var day_data = {
             title: $.trim(day_title_input.val()),
-            type:  day_type_buttongroup.filter('.active').text(),
+            type:  day_type_buttongroup.filter('.active').data('type'),
             date: day_date_input.val(),
             final_description: $.trim(day_description_textarea.val())
           };
