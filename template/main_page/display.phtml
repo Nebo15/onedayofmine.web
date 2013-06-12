@@ -20,7 +20,7 @@ $this->menu = 'journal';
   <a href="/pages/{$day.id}/day">
     <h4>{$day.title}</h4>
   </a>
-	<p>{$day.final_description}</p>
+	<p>{$day.final_description|nl2br}</p>
 	<ul class="inline text-center pull-right">
 		<li class="muted"><i class="icon icon-eye-open"></i>&nbsp;{$day.views_count}</li>
 		<li class="muted"><i class="icon icon-heart"></i>&nbsp;{$day.likes_count}</li>
@@ -48,9 +48,9 @@ $this->menu = 'journal';
 			<img src="{$day.image_266}">
 		</a>
 		<a href="/pages/{$day.id}/day">
-			<h4>{$day.title|i18n_clip:30}</h4>
+			<h4>{$day.title|i18n_clip:30,0,"&hellip;"}</h4>
 		</a>
-		<p>{$day.final_description|i18n_clip:350,0,"&hellip;"}</p>
+		<p>{$day.final_description|nl2br|i18n_clip:350,0,"&hellip;"}</p>
 		<ul class="inline pull-right">
 			<li class="muted"><i class="icon icon-eye-open"></i>&nbsp;{$day.views_count}</li>
 			<li class="muted"><i class="icon icon-heart"></i>&nbsp;{$day.likes_count}</li>
@@ -219,7 +219,7 @@ $this->menu = 'journal';
       	<div>
       		<h3><a href="/pages/{$#featured_day->id}/day">{$#featured_day->title|i18n_clip:40,0,"&hellip;"}</a></h3>
       		<p>
-            {$#featured_day->final_description|i18n_clip:280,0,"&hellip;"}
+            {$#featured_day->final_description|nl2br|i18n_clip:280,0,"&hellip;"}
           </p>
       	</div>
         <a class="call-to-action" href="/pages/{$#featured_day->id}/day">›</a>

@@ -297,6 +297,10 @@ $(function() {
       $day_form_submit.removeClass('disabled').addClass('btn-success');
 		});
 
+		$date_input.on('change', function() {
+			$day_form_submit.removeClass('disabled').addClass('btn-success');
+		});
+
 		$day_form.submit(function(event)
 		{
       if($day_form_submit.hasClass('disabled')) {
@@ -312,7 +316,7 @@ $(function() {
       var day_title_request = API.request('POST', '/days/' + day_data.id + '/update', {
         title: $title_input.val(),
         date: $date_input.val(),
-        type: $type_select_options.filter('.active').text(),
+        type: $type_select_options.filter('.active').data('type'),
 				final_description: $description_input.val()
       });
 
