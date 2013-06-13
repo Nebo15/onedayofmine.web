@@ -223,12 +223,16 @@ $this->menu = 'journal';
           </p>
       	</div>
         <a class="call-to-action" href="/pages/{$#featured_day->id}/day">›</a>
-        {{list using="$#featured_day->moments"}}
+	      <?
+	        $moments = array_slice($this->featured_day->moments, 2, -1);
+	        $moments_chunks = array_chunk($moments, count($moments) / 4);
+	      ?>
+        {{list using="$moments_chunks"}}
           <ul id="preview-list" class="items-list" style="position:absolute;bottom:0px;left:288px;margin:0;height: 122px;white-space: nowrap;overflow: hidden;max-width: 560px;">
             {{list:item}}
               <li class="small-item padded">
-                <a href="/pages/{$#featured_day->id}/day#moment-id{$item.id}">
-  	              <img style="width:124px" src="{$item->image_266}" alt="{$item->description}" />
+                <a href="/pages/{$#featured_day->id}/day#moment-id{$item[0].id}">
+  	              <img style="width:124px" src="{$item[0].image_266}" alt="{$item[0].description}" />
                 </a>
               </li>
             {{/list:item}}
