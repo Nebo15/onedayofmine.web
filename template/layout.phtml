@@ -60,19 +60,6 @@
 		}
 	</script>
 
-  <script>
-    window.fbAsyncInit = function() {
-      $(function() {
-        FB.init({
-          appId: <?= $this->facebook_app_id; ?>,
-          status:true,
-          cookie:true,
-          xfbml:true
-        });
-      });
-    };
-  </script>
-
   <!-- Vendor scripts -->
   <script src="//connect.facebook.net/ru_RU/all.js" async></script>
   <script src="/lib/vendor/jquery.min.js"></script>
@@ -81,6 +68,19 @@
   <script src="/lib/vendor/jquery.scrollTo-1.4.3.1-min.js"></script>
   <script src="/lib/vendor/jquery.cookie.js"></script>
   <script src="/lib/vendor/jquery.masonry.min.js"></script>
+
+	<script>
+		window.fbAsyncInit = function() {
+			$(function() {
+				FB.init({
+					appId: <?= $this->facebook_app_id; ?>,
+					status:true,
+					cookie:true,
+					xfbml:true
+				});
+			});
+		};
+	</script>
 
   <!-- Application scripts -->
   <script src="/lib/Tools.js"></script>

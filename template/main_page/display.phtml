@@ -234,13 +234,18 @@ $this->menu = 'journal';
         </div>
       	<div>
       		<h3><a href="/pages/{$#featured_day->id}/day">{$#featured_day->title|i18n_clip:40,0,"&hellip;"}</a></h3>
-      		<p>
+      		<p style="height:94px;overflow: hidden">
             {$#featured_day->final_description|nl2br|i18n_clip:280,0,"&hellip;"}
           </p>
       	</div>
 	      <?
-	        $moments = array_slice($this->featured_day->moments, 2, -1);
-	        $moments_chunks = array_slice(array_chunk($moments, count($moments) / 5), 0, 5);
+	        if(count($this->featured_day->moments) >= 8)
+		      {
+			      $moments = array_slice($this->featured_day->moments, 2, -1);
+	          $moments_chunks = array_slice(array_chunk($moments, count($moments) / 5), 0, 5);
+		      }
+	        else
+		        $moments_chunks = array_slice(array_chunk($this->featured_day->moments, 1), 0, 5);
 	      ?>
         {{list using="$moments_chunks"}}
           <ul id="preview-list" class="items-list">
