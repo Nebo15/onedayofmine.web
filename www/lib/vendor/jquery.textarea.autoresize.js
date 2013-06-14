@@ -1,22 +1,44 @@
 (function($) {
   "use strict";
 
+  var mirrorred_styles = [
+    'padding',
+    'paddingTop',
+    'paddingBottom',
+    'paddingRight',
+    'paddingLeft',
+    'border',
+    'borderTop',
+    'borderBottom',
+    'borderRight',
+    'borderLeft',
+    'borderTopWidth',
+    'borderRightWidth',
+    'borderBottomWidth',
+    'borderLeftWidth',
+    'fontFamily',
+    'fontSize',
+    'lineHeight',
+    'box-sizing',
+  ];
+
   var Obj = function(element, params) {
     this.$element = $(element);
+    this.$element.data('autoresize-api', this);
     params = params || {};
 
-    if(params.defaultHeight && params.defaultHeight == 'min') {
-      params.defaultHeight = params.minHeight ? params.minHeight : this.$element.height();
-    }
-
-    var maxHeight = parseInt(this.$element.css('max-height'), 10);
-
-    this.params = $.extend(true, {
+    this.params = $.extend({
       minHeight: this.$element.height(),
-      maxHeight: isNaN(maxHeight) ? false : maxHeight,
+      maxHeight: ~~parseInt(this.$element.css('max-height'), 10),
       defaultHeight: false,
+      animated: true,
+      heightCompensation: this.$element.outerHeight() - this.$element.height(),
       onResize: $.noop
-    }, params);
+    }, this.$element.data(), params);
+
+    if(this.params.defaultHeight && this.params.defaultHeight == 'min') {
+      this.params.defaultHeight = this.params.minHeight;
+    }
 
     this.init();
   };
@@ -33,36 +55,78 @@
         return;
       }
 
-      $element.css('resize', 'none');
+      $element.addClass('autoresize');
       if($self.params.maxHeight == false) {
         $element.css('overflow', 'hidden');
       }
 
       if($self.params.defaultHeight) {
-        $element.on('focusout', function() {
-          setTimeout(function() {
-            $element.height($self.params.defaultHeight);
-            $self.params.onResize($element);
-          }, 0);
+        $element.on('focus.autoresize', function() {
+          $self.setHeight($self.getContentHeight(), $self.params.animated);
+        });
+
+        $element.on('focusout.autoresize', function() {
+          $self.setHeight($self.params.defaultHeight, $self.params.animated);
         });
       }
 
-      $element.on('keydown cut paste drop focus', function() {
+      $element.on('keydown.autoresize', function() { //cut paste drop
         setTimeout(function() {
-          var height = $self.resetHeight();
-          $element.finish().height(height);
-          $self.params.onResize($element);
+          $self.setHeight($self.getContentHeight());
+        }, 0);
+      });
+
+      $element.on('resize.autoresize', function() {
+        setTimeout(function() {
+          $self.getMirror().width($element.width());
+          $self.setHeight($self.getContentHeight());
         }, 0);
       });
     },
 
-    resetHeight: function() {
-      var tmp = this.$element.height();
-      this.$element.height(1);
-      var scrollHeight = this.$element.get(0).scrollHeight;
-      this.$element.height(tmp);
+    destroy: function() {
+      this.getMirror().remove();
+      this.$element.removeData('autoresize-api');
+      this.$element.off('.autoresize');
+      this.$element.removeClass('autoresize');
+      this.$element.css('overflow', '');
+      this.$element.css('height', '');
+      this.$element.removeAttr('style');
+    },
 
-      return this.limitValue(scrollHeight, this.params.minHeight, this.params.maxHeight);
+    getMirror: function() {
+      var mirror_tag = this.$element.nextAll('.autoresize-mirror').first();
+      if(!mirror_tag.length) {
+        mirror_tag = $('<div/>').addClass('autoresize-mirror');
+        for(var i = 0; i < mirrorred_styles.length; i++) {
+          mirror_tag.css(mirrorred_styles[i], this.$element.css(mirrorred_styles[i]));
+        }
+        mirror_tag.width(this.$element.width());
+
+        this.$element.after(mirror_tag);
+      }
+
+      mirror_tag.html(this.$element.val().replace(/&/g, '&amp;').
+                                     replace(/"/g, '&quot;').
+                                     replace(/'/g, '&#39;').
+                                     replace(/</g, '&lt;').
+                                     replace(/>/g, '&gt;').
+                                     replace(/\n/g, '<br />') + '<br />');
+
+      return mirror_tag;
+    },
+
+    getContentHeight: function() {
+      return this.limitValue(this.getMirror().height(), this.params.minHeight, this.params.maxHeight);
+    },
+
+    setHeight: function(height, animated) {
+      if(animated) {
+        this.$element.stop(true).animate({height: height + this.params.heightCompensation + 'px'}, 'slow');
+      } else {
+        this.$element.height(height);
+      }
+      this.params.onResize(this.$element, {height: height});
     },
 
     limitValue: function(value, min, max) {
@@ -75,13 +139,19 @@
 
   $.fn.autoresize = function(params) {
     return this.each(function() {
-      new Obj(this, params);
+      if(params == 'destroy')  {
+        var api;
+        if(api = $(this).data('autoresize-api')) {
+          api.destroy();
+        } else {
+          console.error("Can't destroy autoresize api, it's not initialized.");
+        }
+      } else {
+        new Obj(this, params);
+      }
     });
   };
-})(jQuery);
 
-$(function() {
-  $('textarea').autoresize({
-    defaultHeight: 'min'
-  });
-});
+  // Instert plugin styles
+  $('html > head').append($('<style>.autoresize-mirror { display: none; word-wrap: break-word; white-space: pre-wrap; } .autoresize { resize: none; }</style>'));
+})(jQuery);
