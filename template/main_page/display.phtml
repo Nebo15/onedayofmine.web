@@ -98,6 +98,22 @@ $this->menu = 'journal';
 			margin-bottom:40px;
 		}
 
+    #preview-list {
+	    position:absolute;
+	    width:701px;
+	    bottom:0px;
+	    left:276px;
+	    margin:0;
+	    height:133px;
+	    white-space:nowrap;
+    }
+
+	  #preview-list li {
+		  white-space: nowrap;
+		  width:133px;
+		  margin:0 6px 0 0;
+	  }
+
     .big-item, .comments-item, .big-day  {
       width:532px;
     }
@@ -212,23 +228,31 @@ $this->menu = 'journal';
       <h2><span class="muted">{{__ text="Featured"}}</span></h2>
       <div class="featured_day clearfix">
         <div id="featured_day_image_cover">
-        	<a href="/pages/{$#featured_day->id}/day" class="pull-left" style="margin-right:20px;">
+        	<a href="/pages/{$#featured_day->id}/day" class="pull-left" style="margin-right:10px;">
         		<img id="featured_day_image" src="{$#featured_day->image_266|default:'/img/no_photo.png'}" alt="{$#featured_day->final_description}" />
         	</a>
         </div>
       	<div>
-      		<h3><a href="/pages/{$#featured_day->id}/day">{$#featured_day->title|i18n_clip:40,0,"&hellip;"}</a></h3>
-      		<p>
+      		<h3><a href="/pages/{$#featured_day->id}/day">{$#featured_day->title|i18n_clip:58,0,"&hellip;"}</a></h3>
+      		<p style="height:82px;overflow: hidden">
             {$#featured_day->final_description|nl2br|i18n_clip:280,0,"&hellip;"}
           </p>
       	</div>
-        <a class="call-to-action" href="/pages/{$#featured_day->id}/day">›</a>
-        {{list using="$#featured_day->moments"}}
-          <ul id="preview-list" class="items-list" style="position:absolute;bottom:0px;left:288px;margin:0;height: 122px;white-space: nowrap;overflow: hidden;max-width: 560px;">
+	      <?
+	        if(count($this->featured_day->moments) >= 8)
+		      {
+			      $moments = array_slice($this->featured_day->moments, 2, -1);
+	          $moments_chunks = array_slice(array_chunk($moments, count($moments) / 5), 0, 5);
+		      }
+	        else
+		        $moments_chunks = array_slice(array_chunk($this->featured_day->moments, 1), 0, 5);
+	      ?>
+        {{list using="$moments_chunks"}}
+          <ul id="preview-list" class="items-list">
             {{list:item}}
-              <li class="small-item padded">
-                <a href="/pages/{$#featured_day->id}/day#moment-id{$item.id}">
-  	              <img style="width:124px" src="{$item->image_266}" alt="{$item->description}" />
+              <li>
+                <a href="/pages/{$#featured_day->id}/day#moment-id{$item[0].id}">
+  	              <img src="{$item[0].image_266}" alt="{$item[0].description}" />
                 </a>
               </li>
             {{/list:item}}

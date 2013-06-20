@@ -1,0 +1,58 @@
+<html>
+<head> <meta name="viewport" content="width=1000"/>
+</head>
+<style>
+	body { margin:0px;}
+	img {
+		width:30px; padding:0; margin:0;
+		float:left;
+	}
+	img.s22 { width: 3.226% }
+	img.h {
+		filter:alpha(opacity=100);
+		-moz-opacity:1;
+		-khtml-opacity: 1;
+		opacity:1;
+		-webkit-filter: blur(1px);
+	}
+</style>
+<body>
+<?php
+$rows_count = 10;
+$cols_count = 48;
+$moments = [];
+while(count($moments) < $cols_count * $rows_count)
+	foreach(Day::findNew() as $day)
+		$moments = array_merge($moments, lmbArrayHelper::convertToFlatArray($day->getMoments()));
+shuffle($moments);
+$moments = array_slice($moments,0, $rows_count * $cols_count);
+?>
+{{list using="$moments" counter="$counter"}}
+	{{list:item}}<!--
+		<?
+			$url = lmbToolkit::instance()->getStaticUrl($item->getImage(['width'=>266,'height'=>266]));
+			$highlights = [
+			];
+			$x = ($counter) % $cols_count;
+			$y = ($counter - $x) / $cols_count;
+			$class = in_array([$x, $y + 1], $highlights) ? 'h' : '';
+		?>
+			--><img src="{$url}" data-pos="{$counter}" class="{$class}"/>{{/list:item}}
+{{/list}}
+
+<br/>
+<br/>
+<br/>
+<script src="/lib/vendor/jquery.min.js"></script>
+<script>
+	$(function() {
+		$('img').click(function() {
+			var pos = parseInt($(this).data('pos'));
+			var y = Math.ceil(pos / {$cols_count});
+			var x = pos % {$cols_count};
+			var val = $('textarea').val();
+			$('textarea').val(val + '['+x+','+y+'], ');
+		});
+	}());
+</script>
+<textarea cols="{$cols_count}" rows="3"></textarea>

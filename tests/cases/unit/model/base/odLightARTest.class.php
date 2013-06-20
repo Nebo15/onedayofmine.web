@@ -180,6 +180,19 @@ class odLightARTest extends BaseLightARTest
     $this->assertEqual($found->export(), $object2->export());
   }
 
+	function testFindByIds()
+	{
+		$object1 = $this->createSampleAR();
+		$object2 = $this->createSampleAR();
+		$object3 = $this->createSampleAR();
+		$object4 = $this->createSampleAR();
+
+		$found = TestLightAR :: findByIds(array($object3->id, $object1->id, $object2->id));
+		$this->assertEqual($found[0]->id, $object3->id);
+		$this->assertEqual($found[1]->id, $object1->id);
+		$this->assertEqual($found[2]->id, $object2->id);
+	}
+
   function testFindByIdThrowsExceptionIfNotFound()
   {
     try

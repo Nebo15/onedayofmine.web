@@ -437,7 +437,12 @@ abstract class odLightAR extends odDirtableObject implements ArrayAccess
 
   public static function findByIds(array $ids, $order = null, $with_lazy_attributes = false)
   {
-    return self::find(lmbSQLCriteria::in('id', $ids), $order, $with_lazy_attributes);
+	  if(!count($ids))
+		  return new lmbCollection();
+	  if(!$order)
+		  $order = 'FIELD(id, '.implode(',', $ids).')';
+    $records = self::find(lmbSQLCriteria::in('id', $ids), $order, $with_lazy_attributes);
+	  return $records;
   }
 
   /**
@@ -538,7 +543,12 @@ abstract class odLightAR extends odDirtableObject implements ArrayAccess
       $query->addCriteria($criteria);
 
     if($order)
-      $query->addOrder($order);
+    {
+	    if(is_string($order))
+        $query->addRawOrder($order);
+	    else
+		    $query->addOrder($order);
+    }
     elseif(count($this->_default_sort_params))
       $query->addOrder($this->_default_sort_params);
 
