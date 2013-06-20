@@ -28,7 +28,7 @@ class InterestCalculator
 
     $query = new lmbSelectQuery('day');
     $query->addField('day.id');
-	  $query->addRawField("(SELECT COUNT(*) FROM `day_like` WHERE `day_like`.`day_id` = `day`.`id`)/(1+SQRT(($current_time-`day`.`ctime`)/86400)) as rating");
+	  $query->addRawField("((SELECT COUNT(*) FROM `day_like` WHERE `day_like`.`day_id` = `day`.`id`)*1000 + day.views_count)/(1+SQRT(FLOOR($current_time-`day`.`ctime`)/86400)) as rating");
     $query->addLeftJoin('day_interest', 'day_id', 'day', 'id');
 	  $query->addLeftJoin('user', 'id', 'day', 'user_id');
     $query->addCriteria(
@@ -36,6 +36,8 @@ class InterestCalculator
 			    ->add(lmbSQLCriteria::notIn('day.id', $current_days_ids))
     );
     $query->addRawOrder("rating DESC, day.id DESC");
+
+	  var_dump($query->getStatement()->getSQL());
 
     $days_rating = lmbArrayHelper::convertToFlatArray($query->fetch()->paginate(0, 100));
 
