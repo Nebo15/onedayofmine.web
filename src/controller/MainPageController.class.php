@@ -53,7 +53,7 @@ class MainPageController extends WebAppController
 			$popular_days_data = $this->_getPopularDaysData();
 			$cache->set('main_page_popular_days', $popular_days_data, 600);
 		}
-		$this->view->addVariables($popular_days_data);
+		$this->view->set('top', $popular_days_data);
 
 		if(!$this->new_days = $cache->get('main_page_new_days'))
 		{
@@ -80,27 +80,21 @@ class MainPageController extends WebAppController
 	{
 		$export_helper = $this->toolkit->getExportHelper();
 		$result = [
-			'top_working' => null,
-			'top_dayoff' => null,
-			'top_holiday' => null,
-			'top_trip' => null,
+			Day::TYPE_WORKING => null,
+			Day::TYPE_DAYOFF => null,
+			Day::TYPE_HOLIDAY => null,
+			Day::TYPE_TRIP => null,
+			'popular_days' => []
 		];
 		$popular_days_ratings = (new InterestCalculator())->getDaysRatings();
 		$popular_days = Day::findByIds(lmbArrayHelper::getColumnValues('day_id', $popular_days_ratings));
 		foreach($popular_days as $day)
 		{
-			if(!$result['top_working'] && $day->type == Day::TYPE_WORKING)
-				$result['top_working'] = $this->_formatDaysForJournal($day);
-			if(!$result['top_dayoff'] && $day->type == Day::TYPE_DAYOFF)
-				$result['top_dayoff'] = $this->_formatDaysForJournal($day);
-			if(!$result['top_holiday'] && $day->type == Day::TYPE_HOLIDAY)
-				$result['top_holiday'] = $this->_formatDaysForJournal($day);
-			if(!$result['top_trip'] && $day->type == Day::TYPE_TRIP)
-				$result['top_trip'] = $this->_formatDaysForJournal($day);
+			if(!$result[$day->type])
+				$result[$day->type] = $this->_formatDaysForJournal($day);
+			elseif(count($result['popular_days']) < 3)
+				$result['popular_days'][] = $this->_formatDaysForJournal($day);
 		}
-
-		$popular_days->paginate(0, 3);
-		$result['popular_days'] = $this->_formatDaysForJournal($popular_days);
 
 		return $result;
 	}
