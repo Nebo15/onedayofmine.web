@@ -25,6 +25,7 @@
             <th>Day</th>
             <th>User</th>
             <th>Title</th>
+	          <th>Type</th>
             <th>Likes</th>
 	          <th>Age</th>
             <th>Rating</th>
@@ -38,6 +39,7 @@
               <td>{$item.id}</td>
               <td><a href="/pages/{$item->getDay()->getUser()->id}/user">{$item->getDay()->getUser()->name}</a></td>
 	            <td><a href="/pages/{$item->getDay().id}/day">{$item->getDay().title}</a></td>
+	            <td>{$item->getDay().type}</td>
               <td>{$item->getDay()->getLikes()->count()|default:0}</td>
 	            <td>{$item->getDay().ctime}</td>
               <td>{$item.rating}</td>

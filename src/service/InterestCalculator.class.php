@@ -37,8 +37,6 @@ class InterestCalculator
     );
     $query->addRawOrder("rating DESC, day.id DESC");
 
-	  var_dump($query->getStatement()->getSQL());
-
     $days_rating = lmbArrayHelper::convertToFlatArray($query->fetch()->paginate(0, 100));
 
     foreach($days_rating as $day_rating)
