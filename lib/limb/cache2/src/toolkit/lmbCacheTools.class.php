@@ -29,9 +29,19 @@ class lmbCacheTools extends lmbAbstractTools
     return $this->getCacheByName($name);
   }
 
-  function hasCache($name)
+	function hasCache($name)
   {
-    return array_key_exists($name, $this->_cache);
+	  try
+	  {
+      if(array_key_exists($name, $this->_cache))
+	      return true;
+		  else
+			  return (bool) $this->getCache($name);
+	  }
+	  catch(lmbNoSuchPropertyException $e)
+	  {
+		  return false;
+	  }
   }
 
   function getCacheByName($name)

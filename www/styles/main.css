@@ -1,5 +1,18 @@
 @import url(//fonts.googleapis.com/css?family=PT+Serif:400,700&subset=latin,cyrillic);
 
+@font-face {
+	font-family: 'News Cycle';
+	font-style: normal;
+	font-weight: 400;
+	src: url(/font/newscycle-regular.ttf);
+}
+@font-face {
+	font-family: 'News Cycle';
+	font-style: normal;
+	font-weight: 700;
+	src: url(/font/newscycle-bold.ttf);
+}
+
 /* Text */
 .text-white {
   color: #FFF;
@@ -13,26 +26,27 @@
 h1, h2, h3, h4, h5, h6 {
   margin-bottom: 0;
   line-height: normal;
-	font-family: "PT Serif";
 }
 
-h1.big {
-  font-size: 38.25px;
+h1, h2, h3 {
+	font-family: "News Cycle", "Arial Narrow Bold", sans-serif;
+	font-weight: normal; /* we have no bold for cyrillic */
 }
 
+h4, h5, h6 {
+	font-family: "PT Serif", "Arial Narrow Bold", sans-serif;
+}
+
+h1.big { font-size: 38.25px; }
 h3 { font-size: 26px; }
-
-h4 {
-	font-weight:normal;
-}
-
+h4 { font-weight:normal; }
 h5 {
-	font-size: 16px;
+	font-size: 15px;
 	font-weight:normal;
 }
 
 p, body {
-	font-family: "PT Serif";
+	font-family: "PT Serif", "Arial Narrow Bold", sans-serif;
 	font-size: 15px;
 	line-height: 20px;
 }
@@ -677,9 +691,27 @@ hr {
 }
 
 /* Main style */
+.content, .navbar {
+  width:980px;
+  margin-left:auto;
+  margin-right:auto;
+}
+
 .content {
-	width:980px;
   padding-top: 20px;
+}
+
+.navbar-inner {
+	padding:0;
+}
+
+.navbar .nav > li > a {
+	font-weight: normal;
+}
+
+.navbar .dropdown-menu a {
+	font-size: 15px;
+	font-weight: normal;
 }
 
 .sitewide-notification {
@@ -1229,7 +1261,7 @@ ul.with-separators li .btn-small {
 
 .day .moments article .thumbnail {
 	width: 532px;
-	height: 532px;
+	height: auto;
 	text-align: center;
 	max-width: 100%;
 
@@ -1338,19 +1370,22 @@ ul.with-separators li .btn-small {
 .image-toolbar.expanded .hover-toggler,
 .image-toolbar:hover .hover-toggler,
 .image.has-crop-tool .hover-toggler,
+.image.has-upload-tool .hover-toggler,
 .image.edited .hover-toggler {
   opacity: 0.3;
 }
 
 .image-toolbar.expanded,
 .image.edited .image-toolbar,
-.image.has-crop-tool .image-toolbar {
+.image.has-crop-tool .image-toolbar,
+.image.has-upload-tool .image-toolbar {
   background: rgba(0, 0, 0, 0.9);
 }
 
 .image-toolbar.expanded .hover-bar,
 .image-toolbar:hover .hover-bar,
 .image.has-crop-tool .hover-bar,
+.image.has-upload-tool .hover-bar,
 .image.edited .hover-bar,
 .image.edited .confirm-bar,
 .image.has-crop-tool .confirm-bar {
@@ -1488,7 +1523,7 @@ ul.previews {
   content:'';
   display: block;
   position: absolute;
-  border-color:#f6f6f6 #f6f6f6 #f6f6f6 #e2e2e2;
+  border-color:#FFF #FFF #FFF #e2e2e2;
   left:100%;
   top:6px; /* you can adjust */
 }
@@ -1683,12 +1718,6 @@ ul.previews {
 }
 
 @media (min-width: 1224px) { /* Desktop */
-  .content {
-		margin-right: auto;
-		margin-left: auto;
-		max-width: 980px;
-  }
-
   .pull-right-on-desktop {
     float: right;
   }
@@ -1720,7 +1749,7 @@ ul.previews {
   }
 
   .days > li:hover dl dd {
-    height: 95px;
+    height: 72px;
   }
 
   .days dd a {

@@ -16,7 +16,7 @@ lmb_require('limb/core/src/lmbCollectionInterface.interface.php');
  */
 class lmbCollectionDecorator implements lmbCollectionInterface
 {
-  protected $iterator;
+  public $iterator;
 
   function __construct($iterator)
   {

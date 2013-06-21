@@ -106,7 +106,7 @@ class odTools extends lmbAbstractTools
   function resetUser()
   {
     $this->user = null;
-    $this->getSessionStorage()->delete($this->getSessidFromRequest());
+	  $storage = $this->getSessionStorage()->delete($this->getSessidFromRequest());
   }
 
   /**
@@ -418,15 +418,7 @@ class odTools extends lmbAbstractTools
 
   function getSessionStorage()
   {
-    if(lmbToolkit::instance()->getConf('cache')['cache_enabled'])
-      return lmbToolkit::instance()->getCache('session');
-    else
-    {
-      $session = lmbToolkit::instance()->getSession();
-      if(!$session->isStarted())
-        $session->start();
-      return $session;
-    }
+    return lmbToolkit::instance()->getCache('session');
   }
 
   function setJobQueueClient($client)
@@ -455,4 +447,9 @@ class odTools extends lmbAbstractTools
 		  return call_user_func_array(['odAsyncJobs', '_'.$function_name], $params);
 	  }
   }
+
+	function getLocaleLang()
+	{
+		return substr(lmbToolkit::instance()->getLocale(), 0, 2);
+	}
 }

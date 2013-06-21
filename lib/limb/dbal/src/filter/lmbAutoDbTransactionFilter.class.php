@@ -27,12 +27,12 @@ class lmbAutoDbTransactionFilter
     {
       $chain->next();
       $conn->commitTransaction();
-      $toolkit->setDefaultDbConnection($old_conn);
+      $conn->disconnect();
     }
     catch(Exception $e)
     {
       $conn->rollbackTransaction();
-      $toolkit->setDefaultDbConnection($old_conn);
+	    $conn->disconnect();
       throw $e;
     }
   }

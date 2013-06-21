@@ -263,3 +263,13 @@ function task_od_notify($args = array())
 	}
 	taskman_msg("Sended ".$notifications_count." notifications.\n");
 }
+
+function task_od_clear_caches()
+{
+	foreach(lmbToolkit::instance()->getConf('cache')->export() as $cache_option_name => $cache_option)
+	{
+		if('_cache_dsn' != substr($cache_option_name, -10))
+			continue;
+		lmbToolkit::instance()->getCache(substr($cache_option_name, 0, -10))->flush();
+	}
+}
