@@ -307,16 +307,16 @@ $this->menu = 'journal';
 					    </li>
 				    <? } ?>
 				    <? $title = lmb_i18n('Best working day'); ?>
-				    {{apply template="medium_day" day="{$#top_working}" title="$title" icon="cogs"/}}
+				    {{apply template="medium_day" day="{$#top['Working day']}" title="$title" icon="cogs"/}}
 				    <? $title = lmb_i18n('Best day off'); ?>
-				    {{apply template="medium_day" day="{$#top_dayoff}" title="$title" icon="calendar-empty"/}}
+				    {{apply template="medium_day" day="{$#top['Day off']}" title="$title" icon="calendar-empty"/}}
 				    <? $title = lmb_i18n('Best holiday'); ?>
-				    {{apply template="medium_day" day="{$#top_holiday}" title="$title"  icon="gift"/}}
+				    {{apply template="medium_day" day="{$#top['Holiday']}" title="$title"  icon="gift"/}}
 				    <? $title = lmb_i18n('Best trip'); ?>
-				    {{apply template="medium_day" day="{$#top_trip}" title="$title" icon="rocket"/}}
+				    {{apply template="medium_day" day="{$#top['Trip']}" title="$title" icon="rocket"/}}
 
 		        <li><h3 class="muted">{{__ text="Top days"}}</h3></li>
-				    {{list using="$#popular_days" counter="$counter"}}
+				    {{list using="$#top['popular_days']" counter="$counter"}}
 					    {{list:item}}
 						    {{apply template="medium_day" day="$item" additional_class="last-item" /}}
 					    {{/list:item}}
