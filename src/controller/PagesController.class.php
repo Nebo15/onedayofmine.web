@@ -198,7 +198,7 @@ class PagesController extends WebAppController
 		$this->user['days'] = $this->_toFlatArray($this->toolkit->getExportHelper()->exportDayItems($user->getPublicDays()->paginate(0, $this->lists_limit)));
 		foreach($this->user['days'] as $i => $day)
 		{
-			if(!$day->comments_count)
+			if(!$day->image_266)
 				unset($this->user['days'][$i]);
 		}
 
