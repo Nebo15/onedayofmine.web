@@ -90,7 +90,7 @@ class MainPageController extends WebAppController
 		$popular_days = Day::findByIds(lmbArrayHelper::getColumnValues('day_id', $popular_days_ratings));
 		foreach($popular_days as $day)
 		{
-			if(!array_key_exists($day->type, $result))
+			if(is_null($result[$day->type]))
 				$result[$day->type] = $this->_formatDaysForJournal($day);
 			elseif(count($result['popular_days']) < 3)
 				$result['popular_days'][] = $this->_formatDaysForJournal($day);
