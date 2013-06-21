@@ -287,11 +287,12 @@
 
 {{template name='day_like_button'}}
 	<?
-		$can_like = !property_exists($day, 'is_liked') || !$day->is_liked;
-		$button_class = $can_like ? '' : 'liked';
+		$can_like = property_exists($day, 'is_liked');
+		$button_class = $can_like && $day->is_liked ? 'liked' : '';
+    $disabled_class = $can_like ? '' : 'disabled'
 	?>
 
-  <div class="input-prepend small like" {$button_class}>
+  <div class="input-prepend small like {$button_class} {$disabled_class}">
     <span class="add-on">
       <span class="heart toggle">
         <span class="state"><i class="icon icon-heart-empty"></i></span>
@@ -301,7 +302,7 @@
         <span class="state">{$day->likes_count}</span>
       </span>
     </span>
-    <button class="btn btn-small action-like" type="button">
+    <button class="btn btn-small action-like {$disabled_class}" type="button">
       <span class="text toggle">
         <span class="state">{{__ text="Like"}}</span>
         <span class="state">{{__ text="Unlike"}}</span>
