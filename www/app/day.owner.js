@@ -241,6 +241,11 @@ $(function() {
   var day_description_form_input_selector = 'input[name=description]';
   var day_description_form_submit_btn_selector = '.btn[type=submit]';
 
+  // Allow auto-resizing for textareas
+  $day.find('textarea').autoresize({
+    defaultHeight: 'min'
+  });
+
   // Day info editing
   (function() {
     // Controls containers
@@ -1170,6 +1175,11 @@ $(function() {
           var $image = $image_container.find(image_selector);
           var $image_wrap = $image.parent();
 
+          // Allow autoresizing for new elements
+          $description_form_input.autoresize({
+            defaultHeight: 'min'
+          });
+
           // Elements with overrided event handlers
           var $has_event_handlers = $moment.add($position_form).add($position_form_increment_btn).add($position_form_decrement_btn).add($description_form).add($delete_btn).add($image).add($description_form_input);
 
@@ -1337,7 +1347,7 @@ $(function() {
 
                       // Detach all tmp events
                       $moment.find('*').addBack().off('.adder');
-                      $has_event_handlers.off();
+                      $has_event_handlers.off('.adder');
 
                       // Change button text
                       $description_form_submit_btn.html('<span class="spinner icon-spin icon-refresh"></span> Save description');
