@@ -277,6 +277,8 @@ $(function () {
 			$this.hover(showLikes, hideLikes);
 			$this.mousemove(showLikes);
 
+      var likeSaveTimeout;
+
 			$this.click(function() {
 				if($this.hasClass('disabled')) {
 					return;
@@ -285,7 +287,12 @@ $(function () {
 				like_request.error(function() {
   				alert("Can't save like information, try to reload page and try again");
         });
-        like_request.send();
+
+        clearTimeout(likeSaveTimeout);
+        likeSaveTimeout = setTimeout(function() {
+          like_request.send();
+        }, 1000);
+
         likes.is_liked = !likes.is_liked;
         updateLikes();
 			});
