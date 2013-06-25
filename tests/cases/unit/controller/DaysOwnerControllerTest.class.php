@@ -223,14 +223,32 @@ class DaysOwnerControllerTest extends odControllerTestCase
     lmbToolkit::instance()->setUser($this->main_user);
     $response = $this->post('add_moment', [
       'description'   => $description = $this->generator->string(200),
+      'image_content' => $image       = base64_encode(file_get_contents(lmb_env_get('APP_DIR').'/tests/init/image_with_exif.jpeg')),
+      'position' => 1
+    ], $day->id);
+
+    $this->assertResponse(200);
+  }
+
+  function testAddMoment_WithoutPosition()
+  {
+    $this->main_user->timezone = $this->generator->integer(3);
+    $this->main_user->save();
+
+    $day = $this->generator->day($this->main_user);
+    $day->save();
+
+    lmbToolkit::instance()->setUser($this->main_user);
+    $response = $this->post('add_moment', [
+      'description'   => $description = $this->generator->string(200),
       'image_content' => $image       = base64_encode(file_get_contents(lmb_env_get('APP_DIR').'/tests/init/image_with_exif.jpeg'))
     ], $day->id);
 
     if($this->assertResponse(400))
-      $this->assertEqual("Property 'time' not found in request", $response->errors[0]);
+      $this->assertEqual("Property 'position' not found in request", $response->errors[0]);
   }
 
-	function testAddMoment_WrongTime()
+	function testAddMoment_WithExifTime()
 	{
 		$this->main_user->timezone = $this->generator->integer(3);
 		$this->main_user->save();
@@ -241,11 +259,18 @@ class DaysOwnerControllerTest extends odControllerTestCase
 		lmbToolkit::instance()->setUser($this->main_user);
 		$response = $this->post('add_moment', [
 			'description'   => $description = $this->generator->string(200),
-			'image_content' => $image       = base64_encode(file_get_contents(lmb_env_get('APP_DIR').'/tests/init/image_with_exif.jpeg'))
+			'image_content' => $image       = base64_encode(file_get_contents(lmb_env_get('APP_DIR').'/tests/init/image_with_exif.jpeg')),
+      'position' => 1
 		], $day->id);
 
-		if($this->assertResponse(400))
-			$this->assertEqual("Property 'time' not found in request", $response->errors[0]);
+    if($this->assertResponse(200))
+    {
+      $moment = $response->result;
+      $new_moment = $day->getMoments()->at(0);
+      $this->assertJsonMoment($moment, true);
+      $this->assertEqual($new_moment->id, $moment->id);
+      $this->assertEqual($new_moment->time, 1330600003);
+    }
 	}
 
   function testAddMoment_CoverOnFirstMoment()
@@ -656,6 +681,24 @@ class DaysOwnerControllerTest extends odControllerTestCase
 
       $this->assertEqual(1, count($response->errors));
       $this->assertEqual("Current user don't have permission to perform this action", $response->errors[0]);
+    }
+  }
+
+  function testLike()
+  {
+    $day = $this->generator->day($this->main_user);
+    $day->save();
+
+    $this->assertEqual(DayLike::find()->count(), 0);
+
+    lmbToolkit::instance()->setUser($this->main_user);
+
+    $response = $this->post('like', [], $day->id);
+    if ($this->assertResponse(200)) {
+      $this->assertEqual($response->result, "You can't like your own day");
+      $this->assertTrue($response->result);
+      $this->assertEqual(DayLike::find()->count(), 0);
+      $this->assertEqual(Day::findFirst()->getLikes()->count(), 0);
     }
   }
 }
