@@ -24,6 +24,7 @@ www/shared
 www/pages
 www/days
 www/off.html
+www/*ForTests*
 
 www/lib/Override.js
 
