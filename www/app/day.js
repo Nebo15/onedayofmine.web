@@ -281,7 +281,7 @@ $(function () {
 				if($this.hasClass('disabled')) {
 					return;
 				}
-				var like_request = API.request('POST', '/days/' + day_data.id + '/' + (day_data.is_liked == false ? 'like' : 'unlike'));
+				var like_request = API.request('POST', '/days/' + day_data.id + '/' + (day_data.is_liked == true ? 'unlike' : 'like'));
 				like_request.error(function() {
 					alert("Can't submit like state, try to reload the page");
 				});
