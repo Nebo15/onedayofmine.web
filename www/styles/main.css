@@ -339,9 +339,12 @@ p, body {
   width: auto;
 }
 
+/* Textareas */
+textarea {
+  resize: vertical;
+}
+
 /* Speech bubbles */
-
-
 .bubble {
   position:relative;
   padding:15px;
