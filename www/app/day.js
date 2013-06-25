@@ -229,7 +229,7 @@ $(function () {
 			if(current_user)
 				title += '<a href="/pages/' + current_user.id + '/user" class="current-user"><img src="' + current_user.image_36 + '" /></a>';
 			$.each(likes.recent, function(index, like) {
-				if(like && current_user && like.user.id != current_user.id) {
+				if(like && (!current_user || like.user.id != current_user.id)) {
 					title += '<a href="/pages/' + like.user.id + '/user"><img src="' + like.user.image_36 + '" /></a>';
 				}
 			});
