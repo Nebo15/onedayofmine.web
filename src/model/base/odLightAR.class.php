@@ -437,11 +437,12 @@ abstract class odLightAR extends odDirtableObject implements ArrayAccess
 
   public static function findByIds(array $ids, $order = null, $with_lazy_attributes = false)
   {
+	  $ids = array_filter($ids);
 	  if(!count($ids))
 		  return new lmbCollection();
 	  if(!$order)
-		  $order = 'FIELD(id, '.implode(',', array_filter($ids)).')';
-    $records = self::find(lmbSQLCriteria::in('id', array_filter($ids)), $order, $with_lazy_attributes);
+		  $order = 'FIELD(id, '.implode(',', $ids).')';
+    $records = self::find(lmbSQLCriteria::in('id', $ids), $order, $with_lazy_attributes);
 	  return $records;
   }
 
