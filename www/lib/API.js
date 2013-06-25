@@ -119,15 +119,22 @@ var API = (function() {
       makeTry();
     },
 
-    logout: function(callback) {
+    logout: function(onLogoutSuccces, onLogoutFailed) {
       console.log('Logging out');
-      (new Request('GET', 'auth/logout', {async:false}).complete(function() {
+      var logout_request = new Request('GET', 'auth/logout', {async:false});
+
+      logout_request.success(function() {
         API.setCurrentUser(undefined);
         Storage.clear();
         $.removeCookie('token', {path: '/'});
-        Auth.logout();
-        callback();
-      })).send();
+        Auth.logout(onLogoutSuccces);
+      });
+
+      logout_request.error(function() {
+        onLogoutFailed();
+      });
+
+      logout_request.send();
     },
 
     setCurrentUser: function(user) {
