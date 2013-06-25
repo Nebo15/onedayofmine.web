@@ -401,6 +401,7 @@ $(function() {
 
     var image_toolbar_selector = '.image-toolbar';
     var image_has_changes_class = 'edited';
+    var image_has_upload_tool_class = 'has-upload-tool';
     var image_has_crop_tool_class = 'has-crop-tool';
     var image_toolbar_expanded_class = 'expanded';
     var image_toolbar_hidden_class = 'hide';
@@ -584,7 +585,7 @@ $(function() {
         return;
       }
 
-      $image_container.addClass('has-upload-tool');
+      $image_container.addClass(image_has_upload_tool_class);
       $moment_upload_btn.addClass('disabled');
 
       var is_mobile = $(window).width() < 800 || $.isMobile();
@@ -629,7 +630,7 @@ $(function() {
         $image.off('.filepicker');
         $moment.off('.filepicker');
         $moment_upload_btn.removeClass('disabled');
-        $image_container.removeClass('has-upload-tool')
+        $image_container.removeClass(image_has_upload_tool_class)
         $image.popover('destroy');
       });
 
@@ -1128,6 +1129,46 @@ $(function() {
         $moments.on('click', image_action_upload_btn_selector, function() {
           showImagePicker(getMomentByContext(this));
         });
+
+        // Select new image by drag-end-drop
+        $moments.on('drop', image_selector, function(event) {
+          event.stopPropagation();
+          event.preventDefault();
+
+          var $moment = getMomentByContext(this);
+          var $image_container = $moment.find(image_container_selector);
+          if($image_container.hasClass(image_has_upload_tool_class)) {
+            $image_container.removeClass('drop-ready');
+
+            var files = event.originalEvent.dataTransfer.files; // FileList object.
+            if(files.length > 0) {
+              ImageTools.Convert.fileToDataURL(files[0]).done(function(data_url) {
+                setImage($moment, data_url);
+              });
+            }
+          }
+        });
+
+        $moments.on('dragover', image_selector, function(event) {
+          event.stopPropagation();
+          event.preventDefault();
+          event.originalEvent.dataTransfer.dropEffect = 'none';
+
+          var $moment = getMomentByContext(this);
+          var $image_container = $moment.find(image_container_selector);
+          if($image_container.hasClass(image_has_upload_tool_class)) {
+            event.originalEvent.dataTransfer.dropEffect = 'move';
+            $image_container.addClass('drop-ready');
+          }
+        });
+
+        $moments.on('dragleave', image_selector, function(event) {
+          var $moment = getMomentByContext(this);
+          var $image_container = $moment.find(image_container_selector);
+          if($image_container.hasClass(image_has_upload_tool_class)) {
+            $image_container.removeClass('drop-ready');
+          }
+        });
       })();
     })();
 
@@ -1465,12 +1506,12 @@ $(function() {
           }
 
           function onDataURLRetrieved(file, data_url) {
-            ImageTools.Convert.dataURLToExif(data_url).done(function(exif) {
+            // ImageTools.Convert.dataURLToExif(data_url).done(function(exif) {
               createMoment({
                 position: $prev_moment.length > 0 ? getPosition($prev_moment) + 1 : getPosition($next_moment),
                 image: data_url
               }, onMomentCreated);
-            });
+            // });
           }
 
           if(files && files.length > 0) {
