@@ -283,13 +283,11 @@ $(function () {
 				}
 				var like_request = API.request('POST', '/days/' + day.id + '/' + (likes.is_liked == true ? 'unlike' : 'like'));
 				like_request.error(function() {
-					alert("Can't submit like state, try to reload the page");
-				});
-				like_request.success(function() {
-					updateLikes();
-				});
-				like_request.send();
-				likes.is_liked = !likes.is_liked;
+  				alert("Can't save like information, try to reload page and try again");
+        });
+        like_request.send();
+        likes.is_liked = !likes.is_liked;
+        updateLikes();
 			});
 		});
 	})();
