@@ -287,9 +287,8 @@
 
 {{template name='day_like_button'}}
 	<?
-		$can_like = property_exists($day, 'is_liked');
-		$button_class = $can_like && $day->is_liked ? 'liked' : '';
-    $disabled_class = $can_like ? '' : 'disabled'
+		$button_class = property_exists($day, 'is_liked') && $day->is_liked ? 'liked' : '';
+    $disabled_class = $this->is_owner ? 'disabled' : '';
 	?>
 
   <div class="input-prepend small like {$button_class} {$disabled_class}">
