@@ -449,7 +449,7 @@ $this->description = '';
               <div class="input-prepend small">
                 <span class="add-on"><i class="icon-eye-open"></i> {$this->day->views_count}</span>
                 <a href="/pages/{$#day->id}/day?preview" class="btn btn-small with-tooltip" data-original-title="Enter preview mode">
-	                {{__ text="Preview"}}
+                  {{__ text="Preview"}}
                 </a>
               </div>
               <button type="button" class="btn btn-small btn-danger with-tooltip action-delete" data-original-title="Delete day">
@@ -458,16 +458,13 @@ $this->description = '';
             </div>
           <? } ?>
 
-	        <? if(!$this->is_owner || $this->is_preview) { ?>
-	          <div class="btn-toolbar">
-		            {{apply template="day_journal_button" day="$#day" /}}
-	              {{apply template="day_comments_button" day="$#day" /}}
-	              {{apply template="day_like_button" day="$#day" /}}
-	              {{apply template="day_share_button" day="$#day" /}}
-	          </div>
-	        <? } ?>
+          <div class="btn-toolbar">
+	            {{apply template="day_journal_button" day="$#day" /}}
+              {{apply template="day_comments_button" day="$#day" /}}
+              {{apply template="day_like_button" day="$#day" /}}
+              {{apply template="day_share_button" day="$#day" /}}
+          </div>
         </div>
-
 
         <section class="moments">
           <? if($this->is_owner) { ?>
