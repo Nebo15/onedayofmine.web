@@ -127,6 +127,9 @@ var API = (function() {
         API.setCurrentUser(undefined);
         Storage.clear();
         $.removeCookie('token', {path: '/'});
+        $.event.trigger({
+          type: 'logout'
+        });
         Auth.logout(onLogoutSuccces);
       });
 
