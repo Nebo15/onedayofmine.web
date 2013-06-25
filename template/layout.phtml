@@ -111,11 +111,17 @@
   </script>
 
   <!-- Per-page scripts -->
-  {{slot id="js_include"/}}
-
   <script>
     {{slot id="js"/}}
   </script>
+
+  <script>
+    $(function() {
+      {{slot id="js_ready"/}}
+    });
+  </script>
+
+  {{slot id="js_include"/}}
 
   <script>
     function bindTooltips(selector) {
@@ -129,40 +135,6 @@
     }
 
     $(function() {
-      <? if($this->toolkit->getUser()) { ?>
-        $('.trigger_logout').click(function() {
-          API.logout(function() {
-            window.location.reload();
-          });
-        });
-      <? } else { ?>
-
-        var doLogin = function() {
-          var $this = $(this);
-
-          if($this.hasClass('has-spinner')) {
-            $this.showSpinner();
-          }
-
-          API.login(function() {
-            if($this.attr('href') && $this.attr('href') != '#') {
-              window.location.href = $this.attr('href');
-            } else {
-              window.location.reload();
-            }
-          }, function() {
-            if($this.hasClass('has-spinner')) {
-              $this.hideSpinner();
-            }
-            $('.trigger_login').click(doLogin);
-          });
-
-          return false;
-        };
-
-        $('.trigger_login').click(doLogin);
-      <? } ?>
-
       // Init mansory for all days lists
       $('.days').masonry({
         itemSelector: '.days > li',
@@ -190,8 +162,6 @@
 		    Tools.setCookie('locale', locale, 60 * 60 * 24 * 30);
 		    window.location.reload();
 	    });
-
-      {{slot id="js_ready"/}}
     });
   </script>
 
@@ -254,7 +224,7 @@
       <ul class="nav pull-right">
         <li class="dropdown <?= ($this->menu == 'me') ? 'active' : '';?>">
           <? if(!$this->toolkit->getUser()) { ?>
-            <a class="trigger_login has-spinner" href="#">
+            <a class="action-login has-spinner" href="#">
               <i class="icon-large icon-facebook-sign"></i>
               <span class="spinner icon-spin icon-refresh"></span>
 	            {{__ text="Login with Facebook"}}
@@ -272,7 +242,7 @@
                 <li class="divider"></li>
                 <li><a href="/pages/profile"><i class="icon icon-cog"></i> {{__ text="Profile"}}</a></li>
                 <li class="divider"></li>
-                <li><a class="trigger_logout"><i class="icon icon-signout"></i> {{__ text="Logout"}}</a></li>
+                <li><a class="action-logout"><i class="icon icon-signout"></i> {{__ text="Logout"}}</a></li>
             </ul>
           <? } ?>
         </li>

@@ -920,7 +920,7 @@ ul.with-separators li .btn-small {
 
 .like .heart,
 .like .heart .state {
-  width: 14px;
+  width: 15px;
 }
 
 .like .text,
@@ -1746,7 +1746,7 @@ ul.previews {
     background: rgba(0, 0, 0, 0.6);
     margin:0;
     padding: 5px;
-    height: 48px;
+    height: 52px;
     color:#FFF;
     overflow: hidden;
   }

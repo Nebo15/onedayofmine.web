@@ -9,11 +9,15 @@ $(function() {
     },
 
     showSpinner: function() {
-      $(this).addClass('show-spinner');
+      $(this).each(function() {
+        $(this).addClass('show-spinner');
+      });
     },
 
     hideSpinner: function() {
-      $(this).removeClass('show-spinner');
+      $(this).each(function() {
+        $(this).removeClass('show-spinner');
+      });
     },
 
     makeInvisible: function() {

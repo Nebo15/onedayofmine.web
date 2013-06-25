@@ -318,7 +318,7 @@ $(function() {
 			$day_form_submit.addClass('disabled');
 			$day_form_submit.showSpinner();
 
-      var day_title_request = API.request('POST', '/days/' + day_data.id + '/update', {
+      var day_title_request = API.request('POST', '/days/' + day.id + '/update', {
         title: $title_input.val(),
         date: $date_input.val(),
         type: $type_select_options.filter('.active').data('type'),
@@ -352,7 +352,7 @@ $(function() {
 
     $delete_btn.click(function() {
       if(confirm("Do you really want to delete this day?")) {
-        var delete_request = API.request('POST', '/days/' + day_data.id + '/delete');
+        var delete_request = API.request('POST', '/days/' + day.id + '/delete');
 
         delete_request.success(function() {
           window.location = '/pages/my_days';
@@ -976,7 +976,7 @@ $(function() {
           $cover_btn.addClass('disabled');
           $image_toolbar.addClass(image_toolbar_expanded_class);
 
-          var cover_request = API.request('POST', '/days/' + day_data.id + '/update', {
+          var cover_request = API.request('POST', '/days/' + day.id + '/update', {
             cover_moment_id: moment_id
           });
 
@@ -1310,7 +1310,7 @@ $(function() {
                     }
                   });
 
-                  var save_request = API.request('POST', '/days/' + day_data.id + '/add_moment', create_request_params);
+                  var save_request = API.request('POST', '/days/' + day.id + '/add_moment', create_request_params);
 
                   $image.after($upload_progress);
                   $upload_progress.css('top', (($image.height()-10)/2) + 'px');
