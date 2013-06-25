@@ -57,7 +57,7 @@ $(function () {
 			$comments_load_next_btn.showSpinner();
 			$comments_load_next_btn.addClass('disabled');
 
-			var comments_request = API.request('GET', '/days/' + day_data.id + '/comments', {
+			var comments_request = API.request('GET', '/days/' + day.id + '/comments', {
 				from: $comments_list.children().last().data('comment-id')
 			});
 
@@ -91,7 +91,7 @@ $(function () {
 		var $editor_form_submit_btn = $comments.find('button[type=submit]');
 
 		// We store comment text for page-reload accidents
-		var storage_key = "days/" + day_data.id + "/comment";
+		var storage_key = "days/" + day.id + "/comment";
 
 		// Getting saved data
 		var saved_input = Storage.get(storage_key);
@@ -121,7 +121,7 @@ $(function () {
 			$editor_form_submit_btn.addClass('disabled');
 			$editor_form_submit_btn.showSpinner();
 
-			var comments_request = API.request('POST', '/days/' + day_data.id + '/comment', {
+			var comments_request = API.request('POST', '/days/' + day.id + '/comment', {
 				text: $editor_form_input.val()
 			});
 
@@ -195,7 +195,7 @@ $(function () {
 		var current_user = API.getCurrentUser();
 
 		function slideLikes($likes, length) {
-			if(day_data.is_liked) {
+			if(likes.is_liked) {
 				$likes.addClass(like_active_class);
 			} else {
 				$likes.removeClass(like_active_class);
@@ -203,7 +203,7 @@ $(function () {
 			$likes.find(like_counter_selector).find(like_counter_state_selector).css("transform", "translateX(" + length + "px)");
 		}
 
-		day_data.likes_count = parseInt(day_data.likes_count, 10);
+		likes.count = parseInt(likes.count, 10);
 
 		var $likes = $(like_selector);
 
@@ -213,23 +213,23 @@ $(function () {
 			var $counter_count = $counter.find(like_counter_state_selector);
 			var $counter_count_addon = $counter_count.clone();
 
-			if(day_data.is_liked) {
-				$counter.prepend($counter_count_addon.text(day_data.likes_count-1));
+			if(likes.is_liked) {
+				$counter.prepend($counter_count_addon.text(likes.count-1));
 			} else {
-				$counter.append($counter_count_addon.text(day_data.likes_count+1));
+				$counter.append($counter_count_addon.text(likes.count+1));
 			}
 
 			var counters_width = Math.max($counter_count.width(), $counter_count_addon.width());
 			var $states = $counter_count.add($counter_count_addon);
 			$states.add($counter).width(counters_width);
 
-			slideLikes($likes, day_data.is_liked ?  -1*(counters_width+5) : 0);
+			slideLikes($likes, likes.is_liked ?  -1*(counters_width+5) : 0);
 
 			var title = '';
 			if(current_user)
 				title += '<a href="/pages/' + current_user.id + '/user" class="current-user"><img src="' + current_user.image_36 + '" /></a>';
-			$.each(day_data.likes, function(index, like) {
-				if(like && current_user && like.user.id != current_user.id) {
+			$.each(likes.recent, function(index, like) {
+				if(like && (!current_user || like.user.id != current_user.id)) {
 					title += '<a href="/pages/' + like.user.id + '/user"><img src="' + like.user.image_36 + '" /></a>';
 				}
 			});
@@ -257,10 +257,10 @@ $(function () {
 			};
 
 			var updateLikes = function() {
-				day_data.likes_count = parseInt(day_data.likes_count, 10) + (day_data.is_liked ? 1 : -1);
-				slideLikes($likes, day_data.is_liked ? -1*(counters_width+5) : 0);
+				likes.count = parseInt(likes.count, 10) + (likes.is_liked ? 1 : -1);
+				slideLikes($likes, likes.is_liked ? -1*(counters_width+5) : 0);
 				showLikes();
-				if(day_data.likes_count < 1) {
+				if(likes.count < 1) {
 					$this.tooltip('hide');
 				}
 			};
@@ -277,19 +277,24 @@ $(function () {
 			$this.hover(showLikes, hideLikes);
 			$this.mousemove(showLikes);
 
+      var likeSaveTimeout;
+
 			$this.click(function() {
 				if($this.hasClass('disabled')) {
 					return;
 				}
-				var like_request = API.request('POST', '/days/' + day_data.id + '/' + (day_data.is_liked == false ? 'like' : 'unlike'));
+				var like_request = API.request('POST', '/days/' + day.id + '/' + (likes.is_liked == true ? 'unlike' : 'like'));
 				like_request.error(function() {
-					alert("Can't submit like state, try to reload the page");
-				});
-				like_request.success(function() {
-					updateLikes();
-				});
-				like_request.send();
-				day_data.is_liked = !day_data.is_liked;
+  				alert("Can't save like information, try to reload page and try again");
+        });
+
+        clearTimeout(likeSaveTimeout);
+        likeSaveTimeout = setTimeout(function() {
+          like_request.send();
+        }, 1000);
+
+        likes.is_liked = !likes.is_liked;
+        updateLikes();
 			});
 		});
 	})();
@@ -343,7 +348,7 @@ $(function () {
 
 				var message = prompt("Why do you think this day should be deleted?");
 
-				var complain_request = API.request('POST', '/days/' + day_data.id + '/complain', {
+				var complain_request = API.request('POST', '/days/' + day.id + '/complain', {
 					text: message
 				});
 

@@ -52,6 +52,7 @@ class odObjectMother
 
     $day->title = $title ?: $this->string(25);
     $day->setUser($user ?: $this->user());
+    $day->date = $this->date_sql();
 
     $types = Day::getTypes();
     if(!$this->generate_random)

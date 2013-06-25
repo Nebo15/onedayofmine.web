@@ -42,7 +42,21 @@ $this->description = '';
     <? } ?>
   {{/into}}
   {{into slot="js"}}
-    var day_data = <?= json_encode($this->day); ?>;
+    var day = {
+      id: <?= $this->day->id ?: 0; ?>,
+      owned_by_me: <?= $this->is_owner ? 'true' : 'false'; ?>,
+      moments_count: <?= count($this->day->moments); ?>
+    };
+
+    var likes = {
+      count: <?= (int) $this->day->likes_count; ?>,
+      is_liked: <?= property_exists($this->day, 'is_liked') && $this->day->is_liked ? 'true' : 'false'; ?>,
+      recent: <?= json_encode($this->day->likes); ?>,
+    };
+
+    <? if($this->is_import_preview) { ?>
+      var import_data = <?= json_encode($this->day); ?>;
+    <? } ?>
 
     <? if($this->current_user_obj && $this->current_user_obj->is_editor) { ?>
       $(document).ready(function() {
@@ -155,7 +169,7 @@ $this->description = '';
 
           <div class="image has-bage block-center">
             <div class="thumbnail">
-              <img src="/img/moment-placeholder.gif" itemprop="contentUrl" />
+              <img src="/img/moment-placeholder.gif" itemprop="contentUrl" draggable="false" />
             </div>
 
             <span class="bage bage-large bage-bottom-right visible-desktop image-toolbar">
@@ -449,7 +463,7 @@ $this->description = '';
               <div class="input-prepend small">
                 <span class="add-on"><i class="icon-eye-open"></i> {$this->day->views_count}</span>
                 <a href="/pages/{$#day->id}/day?preview" class="btn btn-small with-tooltip" data-original-title="Enter preview mode">
-	                {{__ text="Preview"}}
+                  {{__ text="Preview"}}
                 </a>
               </div>
               <button type="button" class="btn btn-small btn-danger with-tooltip action-delete" data-original-title="Delete day">
@@ -458,16 +472,13 @@ $this->description = '';
             </div>
           <? } ?>
 
-	        <? if(!$this->is_owner || $this->is_preview) { ?>
-	          <div class="btn-toolbar">
-		            {{apply template="day_journal_button" day="$#day" /}}
-	              {{apply template="day_comments_button" day="$#day" /}}
-	              {{apply template="day_like_button" day="$#day" /}}
-	              {{apply template="day_share_button" day="$#day" /}}
-	          </div>
-	        <? } ?>
+          <div class="btn-toolbar">
+	            {{apply template="day_journal_button" day="$#day" /}}
+              {{apply template="day_comments_button" day="$#day" /}}
+              {{apply template="day_like_button" day="$#day" /}}
+              {{apply template="day_share_button" day="$#day" /}}
+          </div>
         </div>
-
 
         <section class="moments">
           <? if($this->is_owner) { ?>
@@ -501,7 +512,7 @@ $this->description = '';
 
                 <div class="image has-bage block-center">
                   <div class="thumbnail">
-                    <img src="{$item->image_532}" itemprop="contentUrl" />
+                    <img src="{$item->image_532}" itemprop="contentUrl" draggable="false" />
                   </div>
 
                   <? if($this->is_owner) { ?>
