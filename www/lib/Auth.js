@@ -29,6 +29,7 @@ var Auth = {
 $(function(){
   // Logout
   var onLogoutSuccess = function($target) {
+    API.setCurrentUser(undefined);
     $target.click();
     setTimeout(function() {
       console.log('Logged out');
@@ -42,6 +43,10 @@ $(function(){
   };
 
   var doLogout = function(event) {
+    if(!API.getCurrentUser()) {
+      return;
+    }
+
     event.stopImmediatePropagation();
     var $this = $(this);
     var $spinner = $this.findSpinner();
@@ -76,6 +81,10 @@ $(function(){
   };
 
   var doLogin = function(event) {
+    if(API.getCurrentUser()) {
+      return;
+    }
+
     event.stopImmediatePropagation();
     var $this = $(this);
     var $spinner = $this.findSpinner();
