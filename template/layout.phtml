@@ -111,11 +111,17 @@
   </script>
 
   <!-- Per-page scripts -->
-  {{slot id="js_include"/}}
-
   <script>
     {{slot id="js"/}}
   </script>
+
+  <script>
+    $(function() {
+      {{slot id="js_ready"/}}
+    });
+  </script>
+
+  {{slot id="js_include"/}}
 
   <script>
     function bindTooltips(selector) {
@@ -156,8 +162,6 @@
 		    Tools.setCookie('locale', locale, 60 * 60 * 24 * 30);
 		    window.location.reload();
 	    });
-
-      {{slot id="js_ready"/}}
     });
   </script>
 

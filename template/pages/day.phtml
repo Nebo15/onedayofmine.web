@@ -42,7 +42,21 @@ $this->description = '';
     <? } ?>
   {{/into}}
   {{into slot="js"}}
-    var day_data = <?= json_encode($this->day); ?>;
+    var day = {
+      id: <?= $this->day->id ?: 0; ?>,
+      owned_by_me: <?= $this->is_owner ? 'true' : 'false'; ?>,
+      moments_count: <?= count($this->day->moments); ?>
+    };
+
+    var likes = {
+      count: <?= (int) $this->day->likes_count; ?>,
+      is_liked: <?= property_exists($this->day, 'is_liked') && $this->day->is_liked ? 'true' : 'false'; ?>,
+      recent: <?= json_encode($this->day->likes); ?>,
+    };
+
+    <? if($this->is_import_preview) { ?>
+      var import_data = <?= json_encode($this->day); ?>;
+    <? } ?>
 
     <? if($this->current_user_obj && $this->current_user_obj->is_editor) { ?>
       $(document).ready(function() {
