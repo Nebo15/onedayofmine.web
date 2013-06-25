@@ -311,7 +311,7 @@ $(window).load(function() {
     }
   }
 
-  if(day_data.user.id == API.getCurrentUser().id) {
+  if(day.owned_by_me) {
     // Allow sorting
     $scroller_previews.sortable({
       handle: 'img'
@@ -333,7 +333,7 @@ $(window).load(function() {
     });
   }
 
-  if(day_data.moments.length > 0) {
+  if(day.moments_count > 0) {
     updateScroller();
   }
 
