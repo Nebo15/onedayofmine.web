@@ -8,6 +8,8 @@ class odFakeSearchService
 
 	public function find($query, $from_id = null, $to_id = null, $limit = null)
 	{
+		if($query == 'none')
+			return [];
 		$model_name = $this->model_name;
 		$result = [];
 		foreach($model_name::find() as $day)
