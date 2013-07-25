@@ -20,5 +20,5 @@ test -d ./var/logs || mkdir ./var/logs
 ./limb migrate_run
 ./limb od_calc_interest
 ./limb od_deploy
-./limb od_clear_cache
+./limb od_clear_caches
 rm ./www/off.html
