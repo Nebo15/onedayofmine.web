@@ -3,15 +3,13 @@ $this->title = lmb_i18n("Search");
 $this->menu = 'search';
 ?>
 {{wrap with="layout.phtml"}}
-{{into slot="css"}}
-{{/into}}
 
 {{into slot="js_ready"}}
 (function() {
 	var $search_form = $('.form-search');
 	var $search_form_query = $search_form.find('.search-query');
 	var $search_form_submit = $search_form.find('button');
-	var $search_result = $('.days');
+	var $search_result = $('.result');
 
 	function clearAndSpin()
 	{
@@ -30,13 +28,13 @@ $this->menu = 'search';
 		}
 		else
 		{
-			var template_list = Template.prepareTemplate($('#days_list_elements_template'));
+			var template_list = Template.prepareTemplate($('#days_list_template'));
 			var days = Template.compileElement(template_list, {
 				days: response.data.result
 			});
-
+			console.log(days);
 			days = $($.trim(days));
-			$($search_result).hide().html(days).show('slow');
+			$search_result.hide().html(days).show('slow');
 		}
 	}
 
@@ -60,7 +58,7 @@ $this->menu = 'search';
 		search_request.success(function(response) {
 			var title = 'OneDayOfMine: {{__ text="Search"}} "' + $search_form_query.val() + '"';
 			var url = '/pages/search?q='+$search_form_query.val();
-			console.log(title, url);
+			console.log(title, url, response.data);
 			history.pushState(null, title, url);
 			show_days_by_response(response);
 		});
@@ -83,10 +81,10 @@ $this->menu = 'search';
 </div>
 <div class="has-spinner clearfix">
   <i class="spinner icon-spin icon-refresh"></i>
-  <ul class="clearfix">
+	<div class="result">
 	    <? $empty_message = $this->request->has('q') ? lmb_i18n("We can't find any days by your query") : ' '; ?>
       {{apply template="days_list" days="$#days" empty_message="$empty_message"/}}
-  </ul>
+	</div>
 </div>
 
 {{/into}}
