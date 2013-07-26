@@ -1,0 +1,13 @@
+<div>
+	<center>
+		<?
+			$tags_conf = lmbToolkit::instance()->getConf('tags');
+			$tags = array_merge($tags_conf->get('locations'), $tags_conf->get('occupations'));
+		?>
+		{{list using="$tags"}}
+			{{list:item}}
+				<a href="/pages/search/?q={$item}"><span class="label">{$item}</span></a>
+			{{/list:item}}
+		{{/list}}
+	</center>
+</div>

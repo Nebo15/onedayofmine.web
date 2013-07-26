@@ -95,7 +95,7 @@ $this->menu = 'journal';
 
 		.featured_day {
 			position:relative;
-			margin-bottom:40px;
+			margin-bottom:20px;
 		}
 
     #preview-list {
@@ -229,7 +229,7 @@ $this->menu = 'journal';
       <div class="featured_day clearfix">
         <div id="featured_day_image_cover">
         	<a href="/pages/{$#featured_day->id}/day" class="pull-left" style="margin-right:10px;">
-        		<img id="featured_day_image" src="{$#featured_day->image_266|default:'/img/no_photo.png'}" alt="{$#featured_day->final_description}" />
+        		<img id="featured_day_image" src="{$#featured_day->image_266|default:'/img/no_photo.png'}" alt="{$#featured_day->final_description}"/>
         	</a>
         </div>
       	<div>
@@ -239,20 +239,14 @@ $this->menu = 'journal';
           </p>
       	</div>
 	      <?
-	        if(count($this->featured_day->moments) >= 8)
-		      {
-			      $moments = array_slice($this->featured_day->moments, 2, -1);
-	          $moments_chunks = array_slice(array_chunk($moments, count($moments) / 5), 0, 5);
-		      }
-	        else
-		        $moments_chunks = array_slice(array_chunk($this->featured_day->moments, 1), 0, 5);
+
 	      ?>
-        {{list using="$moments_chunks"}}
+        {{list using="$#featured_day->top_moments"}}
           <ul id="preview-list" class="items-list">
             {{list:item}}
               <li>
-                <a href="/pages/{$#featured_day->id}/day#moment-id{$item[0].id}">
-  	              <img src="{$item[0].image_266}" alt="{$item[0].description}" />
+                <a href="/pages/{$#featured_day->id}/day#moment-id{$item.id}">
+  	              <img src="{$item.image_266}" alt="{$item.description}" />
                 </a>
               </li>
             {{/list:item}}
