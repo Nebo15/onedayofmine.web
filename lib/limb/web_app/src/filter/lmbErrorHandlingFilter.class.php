@@ -147,6 +147,8 @@ class lmbErrorHandlingFilter implements lmbInterceptingFilter
 
     $trace = $trace->toString();
 
+	  $params_str = lmb_var_dump($params);
+
     $body = <<<EOD
 <html>
 <head>
@@ -198,7 +200,7 @@ class lmbErrorHandlingFilter implements lmbInterceptingFilter
 
 <div id="Params">
 <h3>Params:</h3>
-<pre>{$params}</pre>
+<pre>{$params_str}</pre>
 </div>
 
 <div id="Context" style="display: block;">
