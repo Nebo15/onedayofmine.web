@@ -1,10 +1,10 @@
 <?php
-lmb_require('limb/cms/src/controller/lmbAdminObjectController.class.php');
+lmb_require('src/controller/AdminObjectController.class.php');
 lmb_require('src/model/Day.class.php');
 lmb_require('src/model/DayInterestRecord.class.php');
 lmb_require('src/service/InterestCalculator.class.php');
 
-class AdminDayController extends lmbAdminObjectController
+class AdminDayController extends AdminObjectController
 {
   protected $_object_class_name = 'Day';
 	/**

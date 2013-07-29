@@ -61,6 +61,7 @@
               <td>{$item.is_deleted}</td>
               <td class='actions'>
                 {{apply template="object_action_delete" item="{$item}"/}}
+	              {{apply template="object_action_edit" item="{$item}"/}}
               </td>
             </tr>
           {{/list:item}}

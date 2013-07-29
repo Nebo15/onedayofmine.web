@@ -29,6 +29,9 @@ class Day extends BaseModel
   public $title;
   public $final_description;
   public $views_count;
+	public $location_str;
+	public $location_lat;
+	public $location_long;
 	public $is_gathering_enabled;
   public $is_deleted;
   public $facebook_share_id;
@@ -62,6 +65,9 @@ class Day extends BaseModel
     $export->date = $this->date;
 	  $export->ctime = (int) $this->ctime;
 	  $export->utime = (int) $this->utime;
+	  $export->location_str = $this->location_str;
+	  $export->location_lat = (float) $this->location_lat;
+	  $export->location_long = (float) $this->location_long;
 
     return $export;
   }

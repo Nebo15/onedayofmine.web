@@ -3,6 +3,8 @@ lmb_require('limb/cms/src/controller/lmbAdminObjectController.class.php');
 
 class AdminObjectController extends lmbAdminObjectController
 {
+	protected $_default_sort = ['id', 'DESC'];
+
 	function doDisplay()
 	{
 		$this->items = call_user_func_array([$this->_object_class_name, 'find'], [null, $this->_getSortParams()]);
@@ -17,5 +19,17 @@ class AdminObjectController extends lmbAdminObjectController
 		$direction = $this->toolkit->getRequest()->getGet('direction', $default_direction);
 
 		return [$sort => $direction];
+	}
+
+	protected function _getObjectByRequestedId($throw_exception = false)
+	{
+		if(!$id = $this->request->getInteger('id'))
+			return false;
+
+
+		if(!$item = call_user_func_array([$this->_object_class_name, 'findById'], [$id, $throw_exception]))
+			return false;
+
+		return $item;
 	}
 }

@@ -234,6 +234,10 @@ $(function() {
 		}
 	}
 
+	var LocationsAutocomplete = {
+
+	}
+
   // Main container selector
   var $day = $('.day');
 
@@ -260,6 +264,7 @@ $(function() {
     var $date_input = $day_form.find('input[name=date]');
     var $type_select = $day_form.find('.action-select-type');
     var $type_select_options = $type_select.find('.type');
+		var $location_str_input = $day_form.find('.day-location');
 		var $description_speech_button = $day_form.find('i.speech-action');
 		var is_form_valid = true;
 
@@ -306,6 +311,42 @@ $(function() {
 			$day_form_submit.removeClass('disabled').addClass('btn-success');
 		});
 
+		var typeahead_location_timeout;
+		var locations = [];
+		$location_str_input.typeahead({
+			source: function(query, process_callback) {
+				if (typeahead_location_timeout) {
+					clearTimeout(typeahead_location_timeout);
+				}
+				typeahead_location_timeout = setTimeout(function() {
+					$.getJSON('http://geocode-maps.yandex.ru/1.x/?format=json&results=5&geocode='+query, function(data) {
+						locations = [];
+						$.each(data.response.GeoObjectCollection.featureMember, function(index, member) {
+							var coords = member.GeoObject.Point.pos.split(' ');
+							if(member.GeoObject.metaDataProperty.GeocoderMetaData.kind != 'locality')
+								return;
+							var country_name = member.GeoObject.metaDataProperty.GeocoderMetaData.AddressDetails.Country.CountryName;
+							var locations_str = country_name + ', ' + member.GeoObject.name;
+							locations.push({name: locations_str, long:coords[0], lat: coords[1]});
+						});
+						process_callback($.map(locations, function(val, i) { return val.name}));
+					});
+				}, 300);
+			},
+			updater: function(item)
+			{
+				$.each(locations, function(i, location) {
+					if(location.name == item)
+					{
+						$.data($location_str_input, 'lat', location.lat);
+						$.data($location_str_input, 'long', location.long);
+					}
+				});
+				return item;
+			},
+			minLength: 3
+		});
+
 		$day_form.submit(function(event)
 		{
       if($day_form_submit.hasClass('disabled')) {
@@ -322,6 +363,9 @@ $(function() {
         title: $title_input.val(),
         date: $date_input.val(),
         type: $type_select_options.filter('.active').data('type'),
+				location_str: $location_str_input.val(),
+				location_lat: $.data($location_str_input, 'lat'),
+				location_long: $.data($location_str_input, 'long'),
 				final_description: $description_input.val()
       });
 

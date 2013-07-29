@@ -418,6 +418,12 @@ $this->description = '';
                     </div>
                   </div>
 
+	                <div class="row-fluid">
+		                <input type="text" name="location_str" value="{$#day->location_str}"
+		                       class="day-location input input-block-level"
+		                       placeholder="Write a day location"/>
+		              </div>
+
                   <div style="position: relative">
                     <textarea rows="5" name="description" class="input-block-level" placeholder="{{__ text="Enter description..."}}">{$#day->final_description|default:""}</textarea>
                     <i class="icon icon-microphone speech-action hidden" style="position:absolute;right:10px;top:10px;cursor:hand"></i>

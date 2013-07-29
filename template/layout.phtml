@@ -214,6 +214,9 @@
 		      <li class="<?= ($this->menu == 'about') ? 'active' : '';?>">
 			      <a href="/pages/about"><i class="icon-large icon-question-sign"></i> {{__ text="About"}}</a>
 		      </li>
+		      <li class="<?= ($this->menu == 'map') ? 'active' : '';?>">
+			      <a href="/pages/map"><i class="icon-large icon-globe"></i> {{__ text="Map"}}</a>
+		      </li>
 		      <li class="<?= ($this->menu == 'search') ? 'active' : '';?>">
 			      <a href="/pages/search"><i class="icon-large icon-search"></i> {{__ text="Search"}}</a>
 		      </li>
@@ -317,28 +320,30 @@
 	  </footer>
   </div>
 
-  <script type='text/javascript'>
-	  var _ues = {
-		  host:'onedayofmine.userecho.com',
-		  forum:'20026',
-		  lang:'<?= $this->toolkit->getLocaleLang(); ?>',
-		  tab_corner_radius:5,
-		  tab_font_size:20,
-		  tab_image_hash:'0L7RgdGC0LDQstC40YLRjCDQvtGC0LfRi9Cy',
-		  tab_chat_hash:'0YfQsNGC',
-		  tab_alignment:'right',
-		  tab_text_color:'#FFFFFF',
-		  tab_text_shadow_color:'#00000055',
-		  tab_bg_color:'#9C0001',
-		  tab_hover_color:'#F42532'
-	  };
+  <? if(lmb_app_mode() != LIMB_APP_DEVELOPMENT) { ?>
+	  <script type='text/javascript'>
+		  var _ues = {
+			  host:'onedayofmine.userecho.com',
+			  forum:'20026',
+			  lang:'<?= $this->toolkit->getLocaleLang(); ?>',
+			  tab_corner_radius:5,
+			  tab_font_size:20,
+			  tab_image_hash:'0L7RgdGC0LDQstC40YLRjCDQvtGC0LfRi9Cy',
+			  tab_chat_hash:'0YfQsNGC',
+			  tab_alignment:'right',
+			  tab_text_color:'#FFFFFF',
+			  tab_text_shadow_color:'#00000055',
+			  tab_bg_color:'#9C0001',
+			  tab_hover_color:'#F42532'
+		  };
 
-	  (function() {
-		  var _ue = document.createElement('script'); _ue.type = 'text/javascript'; _ue.async = true;
-		  _ue.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'cdn.userecho.com/js/widget-1.4.gz.js';
-		  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(_ue, s);
-	  })();
-  </script>
+		  (function() {
+			  var _ue = document.createElement('script'); _ue.type = 'text/javascript'; _ue.async = true;
+			  _ue.src = ('https:' == document.location.protocol ? 'https://' : 'http://') + 'cdn.userecho.com/js/widget-1.4.gz.js';
+			  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(_ue, s);
+		  })();
+	  </script>
+  <? } ?>
 	<!-- <?= lmb_app_mode(); ?> -->
 </body>
 </html>

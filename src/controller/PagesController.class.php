@@ -469,4 +469,21 @@ class PagesController extends WebAppController
 	  $days = Day::findByString($this->query);
 		$this->days = $this->_toFlatArray($this->toolkit->getExportHelper()->exportDayItems($days));
   }
+
+	function doMap()
+	{
+		$days_ratings = (new InterestCalculator())->getDaysRatings(null, null, 100);
+
+		$days = [];
+		foreach ($days_ratings as $day_rating)
+		{
+			$day = $day_rating->getDay();
+			if($day->location_str)
+				$days[] = $day;
+		}
+
+		$days = $this->toolkit->getExportHelper()->exportDayItems($days);
+
+		$this->days_json = json_encode($days);
+	}
 }
