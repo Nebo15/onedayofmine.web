@@ -1,0 +1,24 @@
+<site xmlns="http://interactive-answers.webmaster.yandex.ru/schemas/site/0.0.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://interactive-answers.webmaster.yandex.ru/schemas/site/0.0.1 http://interactive-answers.webmaster.yandex.ru/schemas/site-0.0.1.xsd">
+	<rootUrl>https://onedayofmine.com</rootUrl>
+	<protocol>HTTPS</protocol>
+	<title>Один день из жизни</title>
+	<description>Photos without story is just beautiful pictures, we like to share stories, best moments of your life: travels, birthday, parties and other meaningfull events.</description>
+	<resource>
+		<fixed name="onedayofmine.com/pages/search/?q=">
+		</fixed>
+	</resource>
+	<filters>
+		<dropDown>
+			<description caption="Город">
+				<setParameter name="location"/>
+			</description>
+			<dropDownValue key="Берлин" caption="Берлин"/>
+		</dropDown>
+		<dropDown>
+			<description caption="Профессия">
+				<setParameter name="occupation"/>
+			</description>
+			<dropDownValue key="Физик" caption="Физик"/>
+		</dropDown>
+	</filters>
+</site>
