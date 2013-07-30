@@ -12,7 +12,7 @@ class odFakeSearchService
 			return [];
 		$model_name = $this->model_name;
 		$result = [];
-		foreach($model_name::find() as $day)
+		foreach($model_name::find('is_deleted = 0') as $day)
 			$result[] = $day->id;
 		return $result;
 	}
