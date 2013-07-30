@@ -462,28 +462,34 @@ class PagesController extends WebAppController
 
   function doSearch()
   {
-	  if(!$this->request->has('q'))
-		  return;
-
 	  $this->query = $this->request->getFiltered('q', FILTER_SANITIZE_STRING);
-	  $days = Day::findByString($this->query);
-		$this->days = $this->_toFlatArray($this->toolkit->getExportHelper()->exportDayItems($days));
+
+	  if(!$this->request->has('q'))
+		  $days  = $this->_getJournalAndInterest();
+		else
+			$days = Day::findByString($this->query);
+
+
+	  $this->days_json = json_encode($this->toolkit->getExportHelper()->exportDayItems($days));
   }
 
-	function doMap()
+	protected function _getJournalAndInterest()
 	{
-		$days_ratings = (new InterestCalculator())->getDaysRatings(null, null, 100);
-
 		$days = [];
+		$days_ratings = (new InterestCalculator())->getDaysRatings(null, null, 100);
 		foreach ($days_ratings as $day_rating)
 		{
 			$day = $day_rating->getDay();
 			if($day->location_str)
-				$days[] = $day;
+				$days[$day->id] = $day;
 		}
 
-		$days = $this->toolkit->getExportHelper()->exportDayItems($days);
-
-		$this->days_json = json_encode($days);
+		$days_from_journal = DayJournalRecord::findDaysWithLimitation(null, null, 100);
+		foreach ($days_from_journal as $day)
+		{
+			if($day->location_str)
+				$days[$day->id] = $day;
+		}
+		return $days;
 	}
 }

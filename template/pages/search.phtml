@@ -4,39 +4,21 @@ $this->menu = 'search';
 ?>
 {{wrap with="layout.phtml"}}
 
-{{into slot="js_ready"}}
-(function() {
-	var $search_form = $('.form-search');
-	var $search_form_query = $search_form.find('.search-query');
-	var $search_form_submit = $search_form.find('button');
-	var $search_result = $('.result');
+{{into slot="js_include"}}
+<? $locale = str_replace('_', '-', lmbToolkit::instance()->getLocale()); ?>
+<script src="//api-maps.yandex.ru/2.0/?load=package.standard,package.geoObjects,package.clusters&lang={$locale}"
+        type="text/javascript"></script>
 
-	function clearAndSpin()
-	{
-		$('.nav-pills li.active').removeClass('active');
-		$search_form_query.val('');
-		$search_result.html('');
-		$('.has-spinner').showSpinner();
-	}
+<script type="text/javascript">
+	$(function () {
 
-	function show_days_by_response(response)
-	{
-		$('.has-spinner').hideSpinner();
-		if(response.data.result.length === 0)
-		{
-			$search_result.html("<center><p>{{__ text="We can\'t find any days by your query"}}</p></center>");
-		}
-		else
-		{
-			var template_list = Template.prepareTemplate($('#days_list_template'));
-			var days = Template.compileElement(template_list, {
-				days: response.data.result
-			});
-			console.log(days);
-			days = $($.trim(days));
-			$search_result.hide().html(days).show('slow');
-		}
-	}
+	var days = {$#days_json|raw};
+	var map;
+	var clusterer;
+	var $search_form = $('.days-search-form');
+	var $search_form_query = $search_form.find('input[type=search]');
+	var $search_form_submit = $search_form.find('button[type=submit]');
+	var $search_form_reset = $search_form.find('.clear-action');
 
 	$search_form_query.attachValidator({
 		button: $search_form_submit,
@@ -49,42 +31,149 @@ $this->menu = 'search';
 		}
 	});
 
-	$search_form.submit(function(event) {
-		$search_form_submit.addClass('disabled');
+	$search_form_submit.click(function (event) {
+		$search_form_submit.button('loading');
 		var search_request = API.request('POST', 'days/search', {
 			query: $search_form_query.val()
 		});
 
-		search_request.success(function(response) {
+		search_request.success(function (response) {
 			var title = 'OneDayOfMine: {{__ text="Search"}} "' + $search_form_query.val() + '"';
-			var url = '/pages/search?q='+$search_form_query.val();
-			console.log(title, url, response.data);
+			var url = '/pages/search?q=' + $search_form_query.val();
 			history.pushState(null, title, url);
-			show_days_by_response(response);
+			show_days(response.data.result);
+			$search_form_submit.button('reset');
 		});
 		search_request.send();
 		return false;
 	});
 
-})();
+	$search_form_reset.click(function() {
+		history.pushState(null, 'OneDayOfMine: {{__ text="Search"}} "', '/pages/search');
+		$search_form_query.val('');
+		show_days(days);
+		return false;
+	})
+
+	ymaps.ready(function () {
+		drawMap(ymaps);
+		show_days(days);
+	});
+
+	function getBody(day) {
+		var str = '<div class=map-entry>' +
+				'<div class=author>' + day.date + '</div>';
+		str += '<a href="/pages/' + day.id + '/day"><img src="' + day.image_266 + '" class="pull-left img-polaroid"/></a>';
+		str += '<div>' + day.final_description.replace(/([^>])\n/g, '$1<br/><br/>') + '</div>' +
+				'<br/><a href="/pages/' + day.id + '/day">Read more &rarr;</a>' +
+				'</div>';
+		return str;
+	}
+
+	function drawMap(ymaps)
+	{
+		var user_coords = [ymaps.geolocation.latitude, ymaps.geolocation.longitude];
+		map = new ymaps.Map("map", {
+			center: user_coords,
+			zoom: 2,
+			behaviors: ['default', 'scrollZoom']
+		}, {
+			geoObjectClusterDisableClickZoom: true,
+			minZoom: 2
+		});
+		map.controls.add('zoomControl', { left: 5, top: 5 });
+
+		clusterer = new ymaps.Clusterer({
+			clusterBalloonContentBodyLayout: "cluster#balloonAccordionContent",
+			clusterBalloonWidth: 500,
+			clusterBalloonHeight: 250
+		});
+	}
+
+	function randomizeCoords(lat, long) {
+		var delta = 0.1;
+		return [
+			lat + Math.random() * delta - delta / 2,
+			long + Math.random() * delta - delta / 2,
+		];
+	}
+
+	function show_days(days) {
+		clusterer.removeAll();
+		var placemarks = [];
+		$.each(days, function (index, day) {
+			console.log(day);
+			placemarks[index] = new ymaps.Placemark(
+					randomizeCoords(day.location_lat, day.location_long),
+					{
+						clusterCaption: day.title,
+						balloonContentHeader: day.title,
+						balloonContentBody: getBody(day)
+					},
+					{
+						iconImageHref: day.image_266,
+						iconImageSize: [30, 30]
+					}
+			);
+		});
+
+		clusterer.add(placemarks);
+		map.geoObjects.add(clusterer);
+	}
+});
+
+</script>
 {{/into}}
 
 {{into slot="content"}}
+<style>
+	#map {
+		width: 980px;
+		height: 600px;
+	}
+
+	.map-entry {
+		padding: 10px 20px 10px 15px;
+	}
+
+	.map-entry img {
+		width: 100px;
+		height: 100px;
+		margin: 0 5px 5px 0;
+	}
+
+	.author {
+		text-align: right;
+		font-style: italic;
+		font-size: .8em;
+		line-height: .8em;
+		margin-right: 5px;
+		margin-bottom: 5px;
+	}
+
+	.ymaps-b-cluster-accordion__item-caption, .ymaps-b-cluster-accordion__item {
+		font-family: "PT Serif", "Arial Narrow Bold", sans-serif;
+		font-size: 15px;
+	}
+
+	.ymaps-b-cluster-accordion__item-caption {
+		color: #777777;
+		text-decoration: none;
+	}
+</style>
+
 <div class="row-fluid">
-  <center>
-    <form class="form-search days-search-form">
-      <input type="search" autofocus class="input-xlarge search-query span5"
-             placeholder="{{__ text="Occupation, place or something else"}}" value="{$#query}">
-      <button type="submit" class="btn">{{__ text="Search"}}</button>
-    </form>
-  </center>
-</div>
-<div class="has-spinner clearfix">
-  <i class="spinner icon-spin icon-refresh"></i>
-	<div class="result">
-	    <? $empty_message = $this->request->has('q') ? lmb_i18n("We can't find any days by your query") : ' '; ?>
-      {{apply template="days_list" days="$#days" empty_message="$empty_message"/}}
-	</div>
+	<center>
+		<form class="days-search-form">
+			<div class="input-append">
+				<input type="search" autofocus class="input-xlarge"
+				       placeholder="{{__ text=" Occupation, place or something else"}}" value="{$#query}">
+				<button type="submit" class="btn" data-loading-text="Loading...">{{__ text="Search"}}</button>
+			</div>
+			<button class="btn clear-action">Show popular</button>
+		</form>
+		<div id="map"></div>
+	</center>
 </div>
 
 {{/into}}
