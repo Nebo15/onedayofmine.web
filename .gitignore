@@ -12,6 +12,7 @@
 .tags_sorted_by_file
 composer.lock
 .vagrant
+robots.txt
 
 var/*
 init/lj_data
