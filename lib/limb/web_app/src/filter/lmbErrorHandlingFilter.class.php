@@ -50,7 +50,12 @@ class lmbErrorHandlingFilter implements lmbInterceptingFilter
     header('HTTP/1.x 500 Server Error');
 
     if($this->toolkit->isWebAppDebugEnabled())
-      $this->_echoErrorBacktrace($error);
+      $this->_echoErrorBacktrace(array(
+	      'type' => $type,
+	      'message' => $message,
+	      'file' => $file,
+	      'line' => $line
+      ));
     else
       $this->_echoErrorPage();
 

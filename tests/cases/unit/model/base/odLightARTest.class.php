@@ -180,17 +180,12 @@ class odLightARTest extends BaseLightARTest
     $this->assertEqual($found->export(), $object2->export());
   }
 
-	function testFindByIds()
+	function testFindById_ByNull()
 	{
 		$object1 = $this->createSampleAR();
-		$object2 = $this->createSampleAR();
-		$object3 = $this->createSampleAR();
-		$object4 = $this->createSampleAR();
 
-		$found = TestLightAR :: findByIds(array($object3->id, $object1->id, $object2->id));
-		$this->assertEqual($found[0]->id, $object3->id);
-		$this->assertEqual($found[1]->id, $object1->id);
-		$this->assertEqual($found[2]->id, $object2->id);
+		$found = TestLightAR :: findById(null);
+		$this->assertEqual(null, null);
 	}
 
   function testFindByIdThrowsExceptionIfNotFound()
@@ -210,6 +205,36 @@ class odLightARTest extends BaseLightARTest
   {
     $this->assertNull(TestLightAR :: findById(-1000));
   }
+
+	function testFindByIds()
+	{
+		$object1 = $this->createSampleAR();
+		$object2 = $this->createSampleAR();
+		$object3 = $this->createSampleAR();
+		$object4 = $this->createSampleAR();
+
+		$found = TestLightAR :: findByIds(array($object3->id, $object1->id, $object2->id));
+		$this->assertEqual($found[0]->id, $object3->id);
+		$this->assertEqual($found[1]->id, $object1->id);
+		$this->assertEqual($found[2]->id, $object2->id);
+	}
+
+	function testFindByIds_withNulls()
+	{
+		$object1 = $this->createSampleAR();
+		$found = TestLightAR :: findByIds(array($object1->id, null));
+		$this->assertEqual(1, count($found));
+		$this->assertEqual($found[0]->id, $object1->id);
+	}
+
+	function testFindByIds_withNotFoundedValues()
+	{
+		$object1 = $this->createSampleAR();
+
+		$found = TestLightAR :: findByIds(array(-1000, $object1->id));
+		$this->assertEqual(1, count($found));
+		$this->assertEqual($found[0]->id, $object1->id);
+	}
 
   function testFindFirst()
   {

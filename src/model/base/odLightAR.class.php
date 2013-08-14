@@ -437,6 +437,7 @@ abstract class odLightAR extends odDirtableObject implements ArrayAccess
 
   public static function findByIds(array $ids, $order = null, $with_lazy_attributes = false)
   {
+	  $ids = array_filter($ids);
 	  if(!count($ids))
 		  return new lmbCollection();
 	  if(!$order)

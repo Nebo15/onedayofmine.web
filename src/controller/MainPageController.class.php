@@ -32,10 +32,10 @@ class MainPageController extends WebAppController
 		if(!$featured_day = $cache->get('main_page_featured_day'))
 		{
 			$featured_day_raw = DayJournalRecord::findDaysWithLimitation(null, null, 1);
-			$featured_day = $this->_formatDaysForJournal(count($featured_day_raw) ? $featured_day_raw[0] : new Day() );
+			$featured_day = $this->_formatFeaturedDay(count($featured_day_raw) ? $featured_day_raw[0] : new Day());
 			$cache->set('main_page_featured_day', $featured_day, 600);
 		}
-		$this->view->set('featured_day', $featured_day);
+		$this->featured_day = $featured_day;
 
 		$journal_days_limit = 8;
 		$from = (int) $this->request->get('from', $featured_day['id']);
@@ -105,10 +105,12 @@ class MainPageController extends WebAppController
 		  $days_or_day = $this->toolkit->getExportHelper()->exportDayItems($days_or_day);
 	  else
 		  $days_or_day = $this->toolkit->getExportHelper()->exportDay($days_or_day);
-    return $this->_toFlatArray($days_or_day);
+    $flat = $this->_toFlatArray($days_or_day);
+	  return $flat;
   }
 
-  protected function _formatFeaturedDay($featured_day) {
+  protected function _formatFeaturedDay($featured_day)
+  {
     $featured_day = $this->_formatDaysForJournal($featured_day);
 
     foreach ($featured_day->moments as $index => $moment) {
@@ -117,7 +119,17 @@ class MainPageController extends WebAppController
       }
     }
 
-    $featured_day->moments = array_slice($featured_day->moments, 0, 4);
+	  if(count($featured_day->moments) >= 8)
+	  {
+		  $moments = array_slice($featured_day->moments, 2, -1);
+		  $moments_chunks = array_slice(array_chunk($moments, count($moments) / 5), 0, 5);
+	  }
+	  else
+		  $moments_chunks = array_slice(array_chunk($featured_day->moments, 1), 0, 5);
+
+	  $featured_day->top_moments = [];
+	  foreach($moments_chunks as $chunk)
+			$featured_day->top_moments[] = $chunk[0];
 
     return $featured_day;
   }

@@ -462,10 +462,17 @@ class PagesController extends WebAppController
 
   function doSearch()
   {
-	  if(!$this->request->has('q'))
+	  $this->query = $this->request->getFiltered('q', FILTER_SANITIZE_STRING);
+
+	  if($this->request->has('location'))
+		  $this->query .= ' '.$this->request->get('location');
+
+	  if($this->request->has('occupation'))
+		  $this->query .= ' '.$this->request->get('occupation');
+
+	  if(!$this->query)
 		  return;
 
-	  $this->query = $this->request->getFiltered('q', FILTER_SANITIZE_STRING);
 	  $days = Day::findByString($this->query);
 		$this->days = $this->_toFlatArray($this->toolkit->getExportHelper()->exportDayItems($days));
   }
