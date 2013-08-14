@@ -26,7 +26,7 @@
 
   <!-- Use edge version of IE rendering engine, of Google Chome Frame rendering engine, if exists -->
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<meta name="description" content="<?= ($this->day && $this->day->final_description) ?: $this->description; ?>" />
+	<meta name="description" content="<?= ($this->day && $this->day->final_description) ? $this->day->final_description : $this->description; ?>" />
 
   <!-- Ajust to mobile devices -->
 	<meta name="viewport" content="width=1000"/>
