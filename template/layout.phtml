@@ -26,7 +26,7 @@
 
   <!-- Use edge version of IE rendering engine, of Google Chome Frame rendering engine, if exists -->
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<meta name="description" content="{$#description}" />
+	<meta name="description" content="<?= ($this->day && $this->day->final_description) ?: $this->description; ?>" />
 
   <!-- Ajust to mobile devices -->
 	<meta name="viewport" content="width=1000"/>
@@ -184,6 +184,7 @@
     </script>
 
     <!-- Yandex.Metrika counter -->
+    <meta name='yandex-verification' content='7ded8b3afd12fbb4' />
     <script type="text/javascript">
     (function (d, w, c) {
         (w[c] = w[c] || []).push(function() {
